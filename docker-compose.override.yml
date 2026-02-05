@@ -1,0 +1,22 @@
+# Localhost development ortamı için otomatik overrides
+# Bu dosya otomatik olarak docker-compose.yml ile birlikte yüklenir
+# Production'da bu dosya OLMAMALI veya ignore edilmeli
+
+services:
+  backend:
+    # Localhost'ta backend portunu expose et
+    ports:
+      - "3000:3000"
+
+  admin-front:
+    environment:
+      NODE_ENV: development
+      VITE_API_URL: http://localhost:3000
+      USE_PRODUCTION_HMR: "false" # Localhost için false
+
+  user-front:
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+      NEXT_PUBLIC_ADMIN_URL: http://localhost:5173/admin
+      NEXTAUTH_URL: http://localhost:3001
