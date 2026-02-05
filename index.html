@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work | Yapım Aşamasında</title>
-    <meta name="description" content="Bu proje şu an yapım aşamasındadır. Çok yakında buradayız.">
+    <title>Islamic Windows | Yapım Aşamasında</title>
+    <meta name="description" content="Islamic Windows şu an yapım aşamasındadır. Çok yakında buradayız.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
@@ -37,7 +38,8 @@
         }
 
         /* Animated Background Gradients */
-        body::before, body::after {
+        body::before,
+        body::after {
             content: '';
             position: absolute;
             width: 500px;
@@ -63,8 +65,13 @@
         }
 
         @keyframes move {
-            from { transform: translate(0, 0); }
-            to { transform: translate(100px, 100px); }
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                transform: translate(100px, 100px);
+            }
         }
 
         .container {
@@ -130,9 +137,20 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.5); opacity: 0.5; }
-            100% { transform: scale(1); opacity: 1; }
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.5);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .loader {
@@ -153,24 +171,38 @@
         }
 
         @keyframes load {
-            0% { width: 0%; margin-left: 0%; }
-            50% { width: 40%; margin-left: 30%; }
-            100% { width: 0%; margin-left: 100%; }
+            0% {
+                width: 0%;
+                margin-left: 0%;
+            }
+
+            50% {
+                width: 40%;
+                margin-left: 30%;
+            }
+
+            100% {
+                width: 0%;
+                margin-left: 100%;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="status-badge">
             <div class="dot"></div>
             Yapım Aşamasında
         </div>
-        <div class="logo">Work</div>
+        <div class="logo">Islamic Windows</div>
         <h1>Çok Yakında Buradayız</h1>
-        <p>Projemiz üzerinde titizlikle çalışmaya devam ediyoruz. En iyi deneyimi sunmak için hazırlıklarımızı tamamlamak üzereyiz.</p>
+        <p>Projemiz üzerinde titizlikle çalışmaya devam ediyoruz. En iyi deneyimi sunmak için hazırlıklarımızı
+            tamamlamak üzereyiz.</p>
         <div class="loader">
             <div class="loader-fill"></div>
         </div>
     </div>
 </body>
+
 </html>
