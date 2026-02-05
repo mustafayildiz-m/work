@@ -11,9 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #6366f1;
-            --secondary: #a855f7;
-            --bg: #0f172a;
+            --primary: #059669;
+            --secondary: #10b981;
+            --bg: #061110;
             --text: #f8fafc;
             --glass: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.1);
@@ -91,14 +91,28 @@
             transform: translateY(-5px);
         }
 
-        .logo {
-            font-size: 3rem;
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .logo-img {
+            max-width: 240px;
+            height: auto;
+            filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.3));
+        }
+
+        .logo-text {
+            font-size: 2.2rem;
             font-weight: 600;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(to right, #818cf8, #c084fc);
+            background: linear-gradient(to right, #10b981, #34d399);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
+            letter-spacing: -0.5px;
         }
 
         h1 {
@@ -119,10 +133,10 @@
             align-items: center;
             gap: 8px;
             padding: 8px 16px;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.2);
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
             border-radius: 100px;
-            color: #818cf8;
+            color: #34d399;
             font-size: 0.9rem;
             font-weight: 500;
             margin-bottom: 2rem;
@@ -131,7 +145,7 @@
         .dot {
             width: 8px;
             height: 8px;
-            background: #818cf8;
+            background: #10b981;
             border-radius: 50%;
             animation: pulse 1.5s infinite;
         }
@@ -195,7 +209,10 @@
             <div class="dot"></div>
             Yapım Aşamasında
         </div>
-        <div class="logo">Islamic Windows</div>
+        <div class="logo-container">
+            <img src="image.png" alt="Islamic Windows Logo" class="logo-img">
+            <div class="logo-text">islamicwindows.com</div>
+        </div>
         <h1>Çok Yakında Buradayız</h1>
         <p>Projemiz üzerinde titizlikle çalışmaya devam ediyoruz. En iyi deneyimi sunmak için hazırlıklarımızı
             tamamlamak üzereyiz.</p>
