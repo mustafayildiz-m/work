@@ -1,0 +1,264 @@
+.comment-section {
+  .comment-input-container {
+    background: #f8f9fa;
+    border-radius: 20px;
+    padding: 0.75rem;
+    padding-bottom: 3rem;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:hover {
+      background: #e9ecef;
+      border-color: #dee2e6;
+    }
+
+    &:focus-within {
+      background: #fff;
+      border-color: #667eea;
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+  }
+
+  .comment-textarea {
+    border: none;
+    background: transparent;
+    resize: none;
+    outline: none;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    min-height: 20px;
+    max-height: 120px;
+
+    &::placeholder {
+      color: #6c757d;
+      font-style: italic;
+    }
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  .comment-send-button {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border: none;
+    border-radius: 12px;
+    padding: 0.5rem 1.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: white;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+
+    &:hover {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    &:disabled {
+      background: #6c757d;
+      transform: none;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .avatar-xs {
+    width: 32px;
+    height: 32px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    img {
+      object-fit: cover;
+    }
+  }
+
+  // Animation for comment input
+  .comment-input-container {
+    animation: slideInUp 0.3s ease-out;
+  }
+
+  @keyframes slideInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  // Character counter styling
+  .char-counter {
+    font-size: 0.75rem;
+    color: #6c757d;
+    text-align: right;
+    margin-top: 0.25rem;
+
+    &.near-limit {
+      color: #ffc107;
+    }
+
+    &.at-limit {
+      color: #dc3545;
+    }
+  }
+
+  // Comments list styling
+  .comments-list {
+    border-top: 1px solid #e9ecef;
+    padding-top: 1rem;
+
+    .comment-item {
+      padding: 0.5rem;
+      border-radius: 12px;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #f8f9fa;
+      }
+
+      .avatar-xs {
+        flex-shrink: 0;
+      }
+
+      .comment-content {
+        min-width: 0; // Prevent flex item from overflowing
+      }
+
+      .comment-header {
+        .fw-bold {
+          color: #495057;
+          font-size: 0.875rem;
+        }
+
+        small {
+          font-size: 0.75rem;
+        }
+      }
+
+      .comment-text {
+        color: #212529;
+        font-size: 0.875rem;
+        line-height: 1.4;
+        word-wrap: break-word;
+      }
+    }
+
+    .text-center {
+      padding: 1rem 0;
+
+      small {
+        font-size: 0.8rem;
+        color: #6c757d;
+      }
+    }
+  }
+}
+
+// Dark mode support
+[data-bs-theme="dark"] .comment-section {
+  .comment-input-container {
+    background: #4a5568;
+
+    &:hover {
+      background: #718096;
+      border-color: #718096;
+    }
+
+    &:focus-within {
+      background: #2d3748;
+      border-color: #667eea;
+    }
+  }
+
+  .comment-textarea {
+    color: #e2e8f0;
+
+    &::placeholder {
+      color: #a0aec0;
+    }
+  }
+
+  .avatar-xs {
+    border-color: #2d3748;
+  }
+
+  .comments-list {
+    border-top-color: #4a5568;
+
+    .comment-item {
+      &:hover {
+        background-color: #4a5568;
+      }
+
+      .comment-header .fw-bold {
+        color: #e2e8f0;
+      }
+
+      .comment-text {
+        color: #e2e8f0;
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 576px) {
+  .comment-section {
+    .comment-input-container {
+      padding: 0.5rem;
+    }
+
+    .comment-textarea {
+      font-size: 0.85rem;
+    }
+
+    .comment-send-button {
+      padding: 0.4rem 1rem;
+      font-size: 0.8rem;
+      bottom: 0.4rem;
+      right: 0.4rem;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    .comments-list {
+      .comment-item {
+        padding: 0.25rem;
+
+        .comment-header .fw-bold {
+          font-size: 0.8rem;
+        }
+
+        .comment-text {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}

@@ -35,20 +35,14 @@ let WarehousesService = class WarehousesService {
             queryBuilder.andWhere('warehouse.name LIKE :name', { name: `%${name}%` });
         }
         if (location) {
-            queryBuilder.andWhere('warehouse.location LIKE :location', {
-                location: `%${location}%`,
-            });
+            queryBuilder.andWhere('warehouse.location LIKE :location', { location: `%${location}%` });
         }
         if (isActive !== undefined && isActive !== '') {
             if (isActive === 'true') {
-                queryBuilder.andWhere('warehouse.isActive = :isActive', {
-                    isActive: true,
-                });
+                queryBuilder.andWhere('warehouse.isActive = :isActive', { isActive: true });
             }
             else if (isActive === 'false') {
-                queryBuilder.andWhere('warehouse.isActive = :isActive', {
-                    isActive: false,
-                });
+                queryBuilder.andWhere('warehouse.isActive = :isActive', { isActive: false });
             }
         }
         queryBuilder.orderBy('warehouse.id', 'DESC');
@@ -67,13 +61,16 @@ let WarehousesService = class WarehousesService {
             throw new common_1.NotFoundException(`Warehouse with ID ${id} not found`);
         }
         const stockTransfers = await this.stockTransferRepository.find({
-            where: [{ fromWarehouse: { id } }, { toWarehouse: { id } }],
+            where: [
+                { fromWarehouse: { id } },
+                { toWarehouse: { id } }
+            ]
         });
         if (stockTransfers.length > 0) {
             await this.stockTransferRepository.remove(stockTransfers);
         }
         const stocks = await this.stockRepository.find({
-            where: { warehouse: { id } },
+            where: { warehouse: { id } }
         });
         if (stocks.length > 0) {
             await this.stockRepository.remove(stocks);

@@ -26,23 +26,14 @@ let UserScholarFollowService = class UserScholarFollowService {
         this.userRepository = userRepository;
     }
     async follow(user_id, scholar_id) {
-        const existing = await this.userScholarFollowRepository.findOneBy({
-            user_id,
-            scholar_id,
-        });
+        const existing = await this.userScholarFollowRepository.findOneBy({ user_id, scholar_id });
         if (existing)
             return existing;
-        const follow = this.userScholarFollowRepository.create({
-            user_id,
-            scholar_id,
-        });
+        const follow = this.userScholarFollowRepository.create({ user_id, scholar_id });
         return this.userScholarFollowRepository.save(follow);
     }
     async unfollow(user_id, scholar_id) {
-        const follow = await this.userScholarFollowRepository.findOneBy({
-            user_id,
-            scholar_id,
-        });
+        const follow = await this.userScholarFollowRepository.findOneBy({ user_id, scholar_id });
         if (!follow)
             throw new common_1.NotFoundException('Takip ilişkisi bulunamadı.');
         await this.userScholarFollowRepository.remove(follow);
@@ -64,14 +55,14 @@ let UserScholarFollowService = class UserScholarFollowService {
             'scholar.lineage',
             'scholar.birthDate',
             'scholar.deathDate',
-            'scholar.locationName',
+            'scholar.locationName'
         ])
             .where('follow.user_id = :userId', { userId })
             .orderBy('follow.id', 'DESC')
             .limit(limit)
             .offset(offset)
             .getMany();
-        return following.map((follow) => ({
+        return following.map(follow => ({
             id: follow.scholar.id,
             fullName: follow.scholar.fullName,
             photoUrl: follow.scholar.photoUrl,
@@ -81,12 +72,12 @@ let UserScholarFollowService = class UserScholarFollowService {
             deathDate: follow.scholar.deathDate,
             locationName: follow.scholar.locationName,
             followId: follow.id,
-            followedAt: follow.id,
+            followedAt: follow.id
         }));
     }
     async getFollowingScholarsCount(userId) {
         return this.userScholarFollowRepository.count({
-            where: { user_id: userId },
+            where: { user_id: userId }
         });
     }
     async getScholarFollowers(scholarId, limit = 20, offset = 0) {
@@ -101,7 +92,7 @@ let UserScholarFollowService = class UserScholarFollowService {
             'user.username',
             'user.photoUrl',
             'user.role',
-            'user.isActive',
+            'user.isActive'
         ])
             .where('follow.scholar_id = :scholarId', { scholarId })
             .andWhere('user.isActive = :isActive', { isActive: true })
@@ -109,7 +100,7 @@ let UserScholarFollowService = class UserScholarFollowService {
             .limit(limit)
             .offset(offset)
             .getMany();
-        return followers.map((follow) => ({
+        return followers.map(follow => ({
             id: follow.user.id,
             firstName: follow.user.firstName,
             lastName: follow.user.lastName,
@@ -117,12 +108,12 @@ let UserScholarFollowService = class UserScholarFollowService {
             photoUrl: follow.user.photoUrl,
             role: follow.user.role,
             followId: follow.id,
-            followedAt: follow.id,
+            followedAt: follow.id
         }));
     }
     async getScholarFollowersCount(scholarId) {
         return this.userScholarFollowRepository.count({
-            where: { scholar_id: scholarId },
+            where: { scholar_id: scholarId }
         });
     }
 };

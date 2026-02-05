@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner } from "typeorm";
 export declare class CreateScholarStoriesTable1759498383957 implements MigrationInterface {
     name: string;
     private safeDropColumn;

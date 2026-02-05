@@ -54,13 +54,11 @@ const scholar_post_translation_entity_1 = require("./entities/scholar-post-trans
 const scholar_entity_1 = require("./entities/scholar.entity");
 const fs = __importStar(require("fs"));
 const path_1 = require("path");
-const cache_service_1 = require("../services/cache.service");
 let ScholarPostsService = class ScholarPostsService {
-    constructor(scholarPostRepository, translationRepository, scholarRepository, cacheService) {
+    constructor(scholarPostRepository, translationRepository, scholarRepository) {
         this.scholarPostRepository = scholarPostRepository;
         this.translationRepository = translationRepository;
         this.scholarRepository = scholarRepository;
-        this.cacheService = cacheService;
     }
     async create(createScholarPostDto) {
         const scholar = await this.scholarRepository.findOne({
@@ -74,9 +72,8 @@ let ScholarPostsService = class ScholarPostsService {
             scholar,
         });
         const savedPost = await this.scholarPostRepository.save(post);
-        if (createScholarPostDto.translations &&
-            createScholarPostDto.translations.length > 0) {
-            const translations = createScholarPostDto.translations.map((translationDto) => {
+        if (createScholarPostDto.translations && createScholarPostDto.translations.length > 0) {
+            const translations = createScholarPostDto.translations.map(translationDto => {
                 const { status, translatedBy, approvedBy, ...rest } = translationDto;
                 return this.translationRepository.create({
                     ...rest,
@@ -96,26 +93,16 @@ let ScholarPostsService = class ScholarPostsService {
         if (!result) {
             throw new common_1.NotFoundException('Post not found');
         }
-        await this.clearTimelineCacheForScholar(createScholarPostDto.scholarId);
         return result;
-    }
-    async clearTimelineCacheForScholar(scholarId) {
-        try {
-            const pattern = 'user-posts:timeline:*';
-            await this.cacheService.delPattern(pattern);
-        }
-        catch (error) {
-            console.error('Cache temizleme hatası:', error);
-        }
     }
     async findAll(scholarId, language) {
         const posts = await this.scholarPostRepository.find({
             where: { scholarId },
             relations: ['translations', 'scholar'],
-            order: { createdAt: 'DESC' },
+            order: { createdAt: 'DESC' }
         });
         if (language) {
-            posts.forEach((post) => {
+            posts.forEach(post => {
                 if (post.translations) {
                     post.translations.sort((a, b) => {
                         if (a.language === language)
@@ -132,7 +119,7 @@ let ScholarPostsService = class ScholarPostsService {
     async findOne(id, language) {
         const post = await this.scholarPostRepository.findOne({
             where: { id },
-            relations: ['translations', 'scholar'],
+            relations: ['translations', 'scholar']
         });
         if (!post) {
             throw new common_1.NotFoundException('Post not found');
@@ -157,7 +144,7 @@ let ScholarPostsService = class ScholarPostsService {
     async update(id, updateDto) {
         const post = await this.scholarPostRepository.findOne({
             where: { id },
-            relations: ['translations'],
+            relations: ['translations']
         });
         if (!post) {
             throw new common_1.NotFoundException('Post not found');
@@ -186,8 +173,8 @@ let ScholarPostsService = class ScholarPostsService {
             const oldMediaUrls = translation.mediaUrls || [];
             const newFileUrls = translationData.fileUrls || [];
             const newMediaUrls = translationData.mediaUrls || [];
-            const filesToDelete = oldFileUrls.filter((url) => !newFileUrls.includes(url));
-            const mediaToDelete = oldMediaUrls.filter((url) => !newMediaUrls.includes(url));
+            const filesToDelete = oldFileUrls.filter(url => !newFileUrls.includes(url));
+            const mediaToDelete = oldMediaUrls.filter(url => !newMediaUrls.includes(url));
             const allToDelete = [...filesToDelete, ...mediaToDelete];
             for (const filePath of allToDelete) {
                 const absolutePath = (0, path_1.join)(process.cwd(), filePath);
@@ -249,7 +236,6 @@ exports.ScholarPostsService = ScholarPostsService = __decorate([
     __param(2, (0, typeorm_1.InjectRepository)(scholar_entity_1.Scholar)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         typeorm_2.Repository,
-        typeorm_2.Repository,
-        cache_service_1.CacheService])
+        typeorm_2.Repository])
 ], ScholarPostsService);
 //# sourceMappingURL=scholar-posts.service.js.map

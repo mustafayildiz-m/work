@@ -67,7 +67,7 @@ let UsersSeeder = class UsersSeeder {
                 photoUrl: 'uploads/coverImage/coverImage.jpg',
                 biography: 'İslami ilimlerle ilgilenen bir öğrenci. Hadis ve fıkıh konularında araştırmalar yapıyorum.',
                 role: 'user',
-                isActive: true,
+                isActive: true
             },
             {
                 email: 'fatma.kaya@example.com',
@@ -76,9 +76,9 @@ let UsersSeeder = class UsersSeeder {
                 firstName: 'Fatma',
                 lastName: 'Kaya',
                 photoUrl: 'uploads/coverImage/coverImage.jpg',
-                biography: "Tasavvuf ve ahlak konularında kendimi geliştirmeye çalışıyorum. Mevlana'nın eserlerini okuyorum.",
+                biography: 'Tasavvuf ve ahlak konularında kendimi geliştirmeye çalışıyorum. Mevlana\'nın eserlerini okuyorum.',
                 role: 'user',
-                isActive: true,
+                isActive: true
             },
             {
                 email: 'mehmet.demir@example.com',
@@ -87,9 +87,9 @@ let UsersSeeder = class UsersSeeder {
                 firstName: 'Mehmet',
                 lastName: 'Demir',
                 photoUrl: 'uploads/coverImage/coverImage.jpg',
-                biography: "Kur'an-ı Kerim tefsiri ve Arapça dil öğrenimi konularında çalışıyorum.",
+                biography: 'Kur\'an-ı Kerim tefsiri ve Arapça dil öğrenimi konularında çalışıyorum.',
                 role: 'user',
-                isActive: true,
+                isActive: true
             },
             {
                 email: 'ayse.ozturk@example.com',
@@ -100,7 +100,7 @@ let UsersSeeder = class UsersSeeder {
                 photoUrl: 'uploads/coverImage/coverImage.jpg',
                 biography: 'İslam tarihi ve İslam medeniyeti konularında araştırmalar yapıyorum.',
                 role: 'user',
-                isActive: true,
+                isActive: true
             },
             {
                 email: 'ali.celik@example.com',
@@ -111,7 +111,7 @@ let UsersSeeder = class UsersSeeder {
                 photoUrl: 'uploads/coverImage/coverImage.jpg',
                 biography: 'Fıkıh ve İslam hukuku konularında uzmanlaşmaya çalışıyorum.',
                 role: 'user',
-                isActive: true,
+                isActive: true
             },
             {
                 email: 'zeynep.arslan@example.com',
@@ -122,7 +122,7 @@ let UsersSeeder = class UsersSeeder {
                 photoUrl: 'uploads/coverImage/coverImage.jpg',
                 biography: 'Hadis ilmi ve sünnet konularında derinlemesine çalışıyorum.',
                 role: 'user',
-                isActive: true,
+                isActive: true
             },
             {
                 email: 'ibrahim.koc@example.com',
@@ -133,7 +133,7 @@ let UsersSeeder = class UsersSeeder {
                 photoUrl: 'uploads/coverImage/coverImage.jpg',
                 biography: 'İslam felsefesi ve kelam ilmi konularında araştırmalar yapıyorum.',
                 role: 'user',
-                isActive: true,
+                isActive: true
             },
             {
                 email: 'hatice.sahin@example.com',
@@ -142,9 +142,9 @@ let UsersSeeder = class UsersSeeder {
                 firstName: 'Hatice',
                 lastName: 'Şahin',
                 photoUrl: 'uploads/coverImage/coverImage.jpg',
-                biography: "Tefsir ve Kur'an ilimleri konularında kendimi geliştiriyorum.",
+                biography: 'Tefsir ve Kur\'an ilimleri konularında kendimi geliştiriyorum.',
                 role: 'user',
-                isActive: true,
+                isActive: true
             },
             {
                 email: 'osman.yildirim@example.com',
@@ -155,7 +155,7 @@ let UsersSeeder = class UsersSeeder {
                 photoUrl: 'uploads/coverImage/coverImage.jpg',
                 biography: 'İslami sanatlar ve edebiyat konularında çalışıyorum.',
                 role: 'user',
-                isActive: true,
+                isActive: true
             },
             {
                 email: 'emine.akbas@example.com',
@@ -166,13 +166,16 @@ let UsersSeeder = class UsersSeeder {
                 photoUrl: 'uploads/coverImage/coverImage.jpg',
                 biography: 'İslami eğitim ve öğretim metodları konularında araştırmalar yapıyorum.',
                 role: 'user',
-                isActive: true,
-            },
+                isActive: true
+            }
         ];
         for (const userData of users) {
             try {
                 const existingUser = await this.userRepository.findOne({
-                    where: [{ email: userData.email }, { username: userData.username }],
+                    where: [
+                        { email: userData.email },
+                        { username: userData.username }
+                    ]
                 });
                 if (existingUser) {
                     console.log(`⚠️  User already exists: ${userData.email} or ${userData.username}`);
@@ -181,7 +184,7 @@ let UsersSeeder = class UsersSeeder {
                 const hashedPassword = await bcrypt.hash(userData.password, 10);
                 const user = this.userRepository.create({
                     ...userData,
-                    password: hashedPassword,
+                    password: hashedPassword
                 });
                 await this.userRepository.save(user);
                 console.log(`✅ Added user: ${userData.firstName} ${userData.lastName} (${userData.email})`);

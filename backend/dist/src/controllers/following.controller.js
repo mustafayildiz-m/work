@@ -31,9 +31,9 @@ let FollowingController = class FollowingController {
         if (followType === 'all' || followType === 'users') {
             const [users, userCount] = await Promise.all([
                 this.userFollowService.getFollowingUsers(userId, Math.ceil(limitNumber / 2), offsetNumber),
-                this.userFollowService.getFollowingCount(userId),
+                this.userFollowService.getFollowingCount(userId)
             ]);
-            const userItems = users.map((user) => ({
+            const userItems = users.map(user => ({
                 id: user.id,
                 name: `${user.firstName} ${user.lastName}`,
                 photoUrl: user.photoUrl,
@@ -48,9 +48,9 @@ let FollowingController = class FollowingController {
         if (followType === 'all' || followType === 'scholars') {
             const [scholars, scholarCount] = await Promise.all([
                 this.userScholarFollowService.getFollowingScholars(userId, Math.ceil(limitNumber / 2), offsetNumber),
-                this.userScholarFollowService.getFollowingScholarsCount(userId),
+                this.userScholarFollowService.getFollowingScholarsCount(userId)
             ]);
-            const scholarItems = scholars.map((scholar) => ({
+            const scholarItems = scholars.map(scholar => ({
                 id: scholar.id,
                 name: scholar.fullName,
                 photoUrl: scholar.photoUrl,
@@ -66,22 +66,20 @@ let FollowingController = class FollowingController {
         const finalResult = result.slice(0, limitNumber);
         const [totalUserCount, totalScholarCount] = await Promise.all([
             this.userFollowService.getFollowingCount(userId),
-            this.userScholarFollowService.getFollowingScholarsCount(userId),
+            this.userScholarFollowService.getFollowingScholarsCount(userId)
         ]);
-        const totalCount = followType === 'users'
-            ? totalUserCount
-            : followType === 'scholars'
-                ? totalScholarCount
-                : totalUserCount + totalScholarCount;
+        const totalCount = followType === 'users' ? totalUserCount :
+            followType === 'scholars' ? totalScholarCount :
+                totalUserCount + totalScholarCount;
         return {
             items: finalResult,
             totalCount,
-            hasMore: offsetNumber + limitNumber < totalCount,
+            hasMore: (offsetNumber + limitNumber) < totalCount,
             stats: {
                 usersCount: totalUserCount,
                 scholarsCount: totalScholarCount,
-                totalCount,
-            },
+                totalCount
+            }
         };
     }
     async getFollowingUsers(limit, offset, req) {
@@ -90,12 +88,12 @@ let FollowingController = class FollowingController {
         const offsetNumber = offset ? parseInt(offset, 10) : 0;
         const [users, totalCount] = await Promise.all([
             this.userFollowService.getFollowingUsers(userId, limitNumber, offsetNumber),
-            this.userFollowService.getFollowingCount(userId),
+            this.userFollowService.getFollowingCount(userId)
         ]);
         return {
             users,
             totalCount,
-            hasMore: offsetNumber + limitNumber < totalCount,
+            hasMore: (offsetNumber + limitNumber) < totalCount
         };
     }
     async getFollowingScholars(limit, offset, req) {
@@ -104,12 +102,12 @@ let FollowingController = class FollowingController {
         const offsetNumber = offset ? parseInt(offset, 10) : 0;
         const [scholars, totalCount] = await Promise.all([
             this.userScholarFollowService.getFollowingScholars(userId, limitNumber, offsetNumber),
-            this.userScholarFollowService.getFollowingScholarsCount(userId),
+            this.userScholarFollowService.getFollowingScholarsCount(userId)
         ]);
         return {
             scholars,
             totalCount,
-            hasMore: offsetNumber + limitNumber < totalCount,
+            hasMore: (offsetNumber + limitNumber) < totalCount
         };
     }
     async getFollowingStats(req) {
@@ -117,13 +115,13 @@ let FollowingController = class FollowingController {
         const [userFollowingCount, userFollowersCount, scholarFollowingCount] = await Promise.all([
             this.userFollowService.getFollowingCount(userId),
             this.userFollowService.getFollowersCount(userId),
-            this.userScholarFollowService.getFollowingScholarsCount(userId),
+            this.userScholarFollowService.getFollowingScholarsCount(userId)
         ]);
         return {
             followingUsersCount: userFollowingCount,
             followersCount: userFollowersCount,
             followingScholarsCount: scholarFollowingCount,
-            totalFollowingCount: userFollowingCount + scholarFollowingCount,
+            totalFollowingCount: userFollowingCount + scholarFollowingCount
         };
     }
     async getRecentPostsFromFollowing(limit, language, req) {
@@ -135,7 +133,7 @@ let FollowingController = class FollowingController {
             return {
                 posts: recentPosts,
                 totalCount: recentPosts.length,
-                message: `Takip edilen ${recentPosts.length} son post getirildi`,
+                message: `Takip edilen ${recentPosts.length} son post getirildi`
             };
         }
         catch (error) {

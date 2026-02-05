@@ -79,7 +79,7 @@ let CacheService = CacheService_1 = class CacheService {
         try {
             return {
                 message: 'Cache stats not available in memory store',
-                store: 'memory',
+                store: 'memory'
             };
         }
         catch (error) {

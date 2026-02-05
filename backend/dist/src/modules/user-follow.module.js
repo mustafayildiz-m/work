@@ -22,15 +22,7 @@ let UserFollowModule = class UserFollowModule {
 exports.UserFollowModule = UserFollowModule;
 exports.UserFollowModule = UserFollowModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            typeorm_1.TypeOrmModule.forFeature([
-                user_follow_entity_1.UserFollow,
-                user_entity_1.User,
-                user_post_entity_1.UserPost,
-                scholar_post_entity_1.ScholarPost,
-                user_scholar_follow_entity_1.UserScholarFollow,
-            ]),
-        ],
+        imports: [typeorm_1.TypeOrmModule.forFeature([user_follow_entity_1.UserFollow, user_entity_1.User, user_post_entity_1.UserPost, scholar_post_entity_1.ScholarPost, user_scholar_follow_entity_1.UserScholarFollow])],
         providers: [user_follow_service_1.UserFollowService, cache_service_1.CacheService],
         controllers: [user_follow_controller_1.UserFollowController],
         exports: [user_follow_service_1.UserFollowService],

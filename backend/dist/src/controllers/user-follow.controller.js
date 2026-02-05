@@ -32,12 +32,12 @@ let UserFollowController = class UserFollowController {
         const offsetNumber = offset ? parseInt(offset, 10) : 0;
         const [users, totalCount] = await Promise.all([
             this.userFollowService.getFollowingUsers(userId, limitNumber, offsetNumber),
-            this.userFollowService.getFollowingCount(userId),
+            this.userFollowService.getFollowingCount(userId)
         ]);
         return {
             users,
             totalCount,
-            hasMore: offsetNumber + limitNumber < totalCount,
+            hasMore: (offsetNumber + limitNumber) < totalCount
         };
     }
     async getFollowers(limit, offset, req) {
@@ -46,23 +46,23 @@ let UserFollowController = class UserFollowController {
         const offsetNumber = offset ? parseInt(offset, 10) : 0;
         const [users, totalCount] = await Promise.all([
             this.userFollowService.getFollowers(userId, limitNumber, offsetNumber),
-            this.userFollowService.getFollowersCount(userId),
+            this.userFollowService.getFollowersCount(userId)
         ]);
         return {
             users,
             totalCount,
-            hasMore: offsetNumber + limitNumber < totalCount,
+            hasMore: (offsetNumber + limitNumber) < totalCount
         };
     }
     async getFollowStats(req) {
         const userId = req?.user?.id;
         const [followingCount, followersCount] = await Promise.all([
             this.userFollowService.getFollowingCount(userId),
-            this.userFollowService.getFollowersCount(userId),
+            this.userFollowService.getFollowersCount(userId)
         ]);
         return {
             followingCount,
-            followersCount,
+            followersCount
         };
     }
 };

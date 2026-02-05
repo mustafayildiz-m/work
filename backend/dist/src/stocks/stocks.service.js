@@ -43,15 +43,10 @@ let StocksService = class StocksService {
     }
     async findAll(bookName, languageId, warehouseId, lowStock) {
         try {
-            const queryBuilder = this.stockRepository
-                .createQueryBuilder('stock')
+            const queryBuilder = this.stockRepository.createQueryBuilder('stock')
                 .leftJoinAndSelect('stock.book', 'book')
                 .leftJoin('book.translations', 'bookTranslations')
-                .addSelect([
-                'bookTranslations.id',
-                'bookTranslations.title',
-                'bookTranslations.languageId',
-            ])
+                .addSelect(['bookTranslations.id', 'bookTranslations.title', 'bookTranslations.languageId'])
                 .leftJoinAndSelect('stock.language', 'language')
                 .leftJoinAndSelect('stock.warehouse', 'warehouse')
                 .leftJoinAndSelect('stock.transfers', 'transfers')
@@ -60,27 +55,23 @@ let StocksService = class StocksService {
                 queryBuilder.andWhere('(bookTranslations.title LIKE :bookName OR book.title LIKE :bookName)', { bookName: `%${bookName}%` });
             }
             if (languageId && languageId !== 'all') {
-                queryBuilder.andWhere('stock.languageId = :languageId', {
-                    languageId: +languageId,
-                });
+                queryBuilder.andWhere('stock.languageId = :languageId', { languageId: +languageId });
             }
             if (warehouseId && warehouseId !== 'all') {
-                queryBuilder.andWhere('stock.warehouseId = :warehouseId', {
-                    warehouseId: +warehouseId,
-                });
+                queryBuilder.andWhere('stock.warehouseId = :warehouseId', { warehouseId: +warehouseId });
             }
             if (lowStock === 'true') {
                 queryBuilder.andWhere('stock.quantity < 10');
             }
             queryBuilder.orderBy('stock.id', 'DESC');
             const stocks = await queryBuilder.getMany();
-            return stocks.map((stock) => {
+            return stocks.map(stock => {
                 const safeStock = {
                     ...stock,
                     book: stock.book || null,
                     language: stock.language || null,
                     warehouse: stock.warehouse || null,
-                    pendingTransfers: stock.transfers?.filter((t) => t && t.status === 'pending') || [],
+                    pendingTransfers: stock.transfers?.filter(t => t && t.status === 'pending') || [],
                     transfers: undefined,
                 };
                 return safeStock;
@@ -90,12 +81,7 @@ let StocksService = class StocksService {
             console.error('Error in StocksService.findAll:', error);
             console.error('Error message:', error.message);
             console.error('Error stack:', error.stack);
-            console.error('Query parameters:', {
-                bookName,
-                languageId,
-                warehouseId,
-                lowStock,
-            });
+            console.error('Query parameters:', { bookName, languageId, warehouseId, lowStock });
             throw new Error(`Stocks listesi alınırken hata oluştu: ${error.message}`);
         }
     }

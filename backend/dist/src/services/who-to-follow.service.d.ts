@@ -13,7 +13,6 @@ export interface WhoToFollowItem {
     username?: string;
     fullName?: string;
     isFollowing?: boolean;
-    role?: string;
 }
 export declare class WhoToFollowService {
     private readonly userRepository;

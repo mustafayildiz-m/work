@@ -78,21 +78,7 @@ exports.AppModule = AppModule = __decorate([
                 migrationsRun: false,
                 synchronize: false,
             }),
-            typeorm_1.TypeOrmModule.forFeature([
-                scholar_entity_1.Scholar,
-                book_entity_1.Book,
-                scholar_post_entity_1.ScholarPost,
-                language_entity_1.Language,
-                islamic_news_entity_1.IslamicNews,
-                scholar_story_entity_1.ScholarStory,
-                story_view_entity_1.StoryView,
-                story_like_entity_1.StoryLike,
-                book_translation_entity_1.BookTranslation,
-                book_category_entity_1.BookCategory,
-                article_entity_1.Article,
-                article_translation_entity_1.ArticleTranslation,
-                user_entity_1.User,
-            ]),
+            typeorm_1.TypeOrmModule.forFeature([scholar_entity_1.Scholar, book_entity_1.Book, scholar_post_entity_1.ScholarPost, language_entity_1.Language, islamic_news_entity_1.IslamicNews, scholar_story_entity_1.ScholarStory, story_view_entity_1.StoryView, story_like_entity_1.StoryLike, book_translation_entity_1.BookTranslation, book_category_entity_1.BookCategory, article_entity_1.Article, article_translation_entity_1.ArticleTranslation, user_entity_1.User]),
             books_module_1.BooksModule,
             articles_module_1.ArticlesModule,
             upload_module_1.UploadModule,
@@ -119,14 +105,7 @@ exports.AppModule = AppModule = __decorate([
             translation_module_1.TranslationModule,
         ],
         controllers: [app_controller_1.AppController],
-        providers: [
-            cron_service_1.CronService,
-            languages_seeder_1.LanguagesSeeder,
-            regional_books_seeder_1.RegionalBooksSeeder,
-            religious_books_seeder_1.ReligiousBooksSeeder,
-            multilanguage_books_seeder_1.MultiLanguageBooksSeeder,
-            multilanguage_articles_seeder_1.MultiLanguageArticlesSeeder,
-        ],
+        providers: [cron_service_1.CronService, languages_seeder_1.LanguagesSeeder, regional_books_seeder_1.RegionalBooksSeeder, religious_books_seeder_1.ReligiousBooksSeeder, multilanguage_books_seeder_1.MultiLanguageBooksSeeder, multilanguage_articles_seeder_1.MultiLanguageArticlesSeeder],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

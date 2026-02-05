@@ -3,15 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SeedPodcasts1730730000000 = void 0;
 class SeedPodcasts1730730000000 {
     async up(queryRunner) {
-        const categories = [
-            'Hadis',
-            'Fıkıh',
-            'Tefsir',
-            'Siyer',
-            'Akaid',
-            'Tasavvuf',
-            'Genel',
-        ];
+        const categories = ['Hadis', 'Fıkıh', 'Tefsir', 'Siyer', 'Akaid', 'Tasavvuf', 'Genel'];
         const languages = [
             { code: 'tr', name: 'Türkçe' },
             { code: 'en', name: 'English' },
@@ -37,12 +29,12 @@ class SeedPodcasts1730730000000 {
         ];
         const turkishTitles = [
             'Sahabenin Hayatından İbretler',
-            "Kur'an'da Aile Hayatı",
+            'Kur\'an\'da Aile Hayatı',
             'Peygamber Efendimizin Şefkati',
             'Namazın Manevi Boyutu',
-            "Allah'ın İsimleri ve Sıfatları",
+            'Allah\'ın İsimleri ve Sıfatları',
             'Sahih Hadislerden Seçmeler',
-            "İslam'da Kardeşlik Bağı",
+            'İslam\'da Kardeşlik Bağı',
             'Ramazan Ayının Faziletleri',
             'Hac İbadeti ve Hikmeti',
             'Zekat ve Sosyal Dayanışma',
@@ -89,9 +81,9 @@ class SeedPodcasts1730730000000 {
         const descriptions = [
             'İslami ilimler alanında derinlemesine bir inceleme ve açıklama serisi.',
             'Günlük hayatta karşılaşılan dini meselelerin çözümleri ve önerileri.',
-            "Kutsal kitabımız Kur'an-ı Kerim'in muhteşem ayetlerinin tefsiri.",
-            "İslam'ın temel prensiplerini anlatan kapsamlı bir anlatım.",
-            "Peygamber Efendimiz'in hayatından ilham verici hikayeler.",
+            'Kutsal kitabımız Kur\'an-ı Kerim\'in muhteşem ayetlerinin tefsiri.',
+            'İslam\'ın temel prensiplerini anlatan kapsamlı bir anlatım.',
+            'Peygamber Efendimiz\'in hayatından ilham verici hikayeler.',
             'An in-depth exploration of Islamic sciences and their practical applications.',
             'Contemporary issues addressed from an Islamic perspective with scholarly insight.',
             'Understanding the Quran through thematic and contextual analysis.',
@@ -104,8 +96,7 @@ class SeedPodcasts1730730000000 {
         const sampleCoverImage = '/uploads/1762288119484-8aa12c1a-cec3-4ae0-a467-c9ed066997d5.jpg';
         for (let i = 0; i < 20; i++) {
             podcasts.push({
-                title: turkishTitles[i % turkishTitles.length] +
-                    (i > 14 ? ` - Bölüm ${i - 14}` : ''),
+                title: turkishTitles[i % turkishTitles.length] + (i > 14 ? ` - Bölüm ${i - 14}` : ''),
                 description: descriptions[i % descriptions.length],
                 audioUrl: sampleAudioUrl,
                 coverImage: sampleCoverImage,
@@ -123,8 +114,7 @@ class SeedPodcasts1730730000000 {
         }
         for (let i = 0; i < 15; i++) {
             podcasts.push({
-                title: englishTitles[i % englishTitles.length] +
-                    (i > 14 ? ` - Part ${i - 14}` : ''),
+                title: englishTitles[i % englishTitles.length] + (i > 14 ? ` - Part ${i - 14}` : ''),
                 description: descriptions[(i + 3) % descriptions.length],
                 audioUrl: sampleAudioUrl,
                 coverImage: sampleCoverImage,
@@ -142,8 +132,7 @@ class SeedPodcasts1730730000000 {
         }
         for (let i = 0; i < 12; i++) {
             podcasts.push({
-                title: arabicTitles[i % arabicTitles.length] +
-                    (i > 14 ? ` - ${i - 14} جزء` : ''),
+                title: arabicTitles[i % arabicTitles.length] + (i > 14 ? ` - ${i - 14} جزء` : ''),
                 description: descriptions[(i + 5) % descriptions.length],
                 audioUrl: sampleAudioUrl,
                 coverImage: sampleCoverImage,
@@ -159,20 +148,10 @@ class SeedPodcasts1730730000000 {
             });
             podcastId++;
         }
-        const germanTitles = [
-            'Islamische Ethik',
-            'Der Quran',
-            'Propheten Geschichten',
-            'Islamische Wissenschaft',
-            'Fiqh Grundlagen',
-            'Hadith Studien',
-            'Islamische Geschichte',
-            'Spiritualität im Islam',
-        ];
+        const germanTitles = ['Islamische Ethik', 'Der Quran', 'Propheten Geschichten', 'Islamische Wissenschaft', 'Fiqh Grundlagen', 'Hadith Studien', 'Islamische Geschichte', 'Spiritualität im Islam'];
         for (let i = 0; i < 8; i++) {
             podcasts.push({
-                title: germanTitles[i % germanTitles.length] +
-                    (i > 7 ? ` - Teil ${i - 7}` : ''),
+                title: germanTitles[i % germanTitles.length] + (i > 7 ? ` - Teil ${i - 7}` : ''),
                 description: 'Islamische Themen für deutschsprachige Muslime erklärt.',
                 audioUrl: sampleAudioUrl,
                 coverImage: sampleCoverImage,
@@ -188,20 +167,11 @@ class SeedPodcasts1730730000000 {
             });
             podcastId++;
         }
-        const frenchTitles = [
-            "L'Islam et la Science",
-            'Les Prophètes',
-            'La Vie du Prophète',
-            'Le Coran',
-            'La Prière',
-            'Le Jeûne',
-            "L'Éthique Islamique",
-        ];
+        const frenchTitles = ['L\'Islam et la Science', 'Les Prophètes', 'La Vie du Prophète', 'Le Coran', 'La Prière', 'Le Jeûne', 'L\'Éthique Islamique'];
         for (let i = 0; i < 7; i++) {
             podcasts.push({
-                title: frenchTitles[i % frenchTitles.length] +
-                    (i > 6 ? ` - Partie ${i - 6}` : ''),
-                description: "Comprendre l'Islam à travers des sujets variés et enrichissants.",
+                title: frenchTitles[i % frenchTitles.length] + (i > 6 ? ` - Partie ${i - 6}` : ''),
+                description: 'Comprendre l\'Islam à travers des sujets variés et enrichissants.',
                 audioUrl: sampleAudioUrl,
                 coverImage: sampleCoverImage,
                 duration: Math.floor(Math.random() * 2000) + 700,
@@ -216,17 +186,10 @@ class SeedPodcasts1730730000000 {
             });
             podcastId++;
         }
-        const japaneseTitles = [
-            'イスラム入門',
-            'コーランの教え',
-            '預言者の生涯',
-            'イスラム法学',
-            'イスラムの倫理',
-        ];
+        const japaneseTitles = ['イスラム入門', 'コーランの教え', '預言者の生涯', 'イスラム法学', 'イスラムの倫理'];
         for (let i = 0; i < 5; i++) {
             podcasts.push({
-                title: japaneseTitles[i % japaneseTitles.length] +
-                    (i > 4 ? ` - 第${i - 4}部` : ''),
+                title: japaneseTitles[i % japaneseTitles.length] + (i > 4 ? ` - 第${i - 4}部` : ''),
                 description: '日本語でイスラムについて学ぶポッドキャストシリーズ',
                 audioUrl: sampleAudioUrl,
                 coverImage: sampleCoverImage,
@@ -245,8 +208,7 @@ class SeedPodcasts1730730000000 {
         const russianTitles = ['Основы Ислама', 'Пророк Мухаммад', 'Коран и наука'];
         for (let i = 0; i < 3; i++) {
             podcasts.push({
-                title: russianTitles[i % russianTitles.length] +
-                    (i > 2 ? ` - Часть ${i - 2}` : ''),
+                title: russianTitles[i % russianTitles.length] + (i > 2 ? ` - Часть ${i - 2}` : ''),
                 description: 'Исламские уроки на русском языке для всех желающих.',
                 audioUrl: sampleAudioUrl,
                 coverImage: sampleCoverImage,

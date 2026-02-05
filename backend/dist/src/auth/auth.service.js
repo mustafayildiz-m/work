@@ -47,43 +47,10 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const users_service_1 = require("../users/users.service");
 const bcrypt = __importStar(require("bcrypt"));
-const google_auth_library_1 = require("google-auth-library");
-const crypto_1 = require("crypto");
 let AuthService = class AuthService {
     constructor(usersService, jwtService) {
         this.usersService = usersService;
         this.jwtService = jwtService;
-    }
-    getGoogleClientId() {
-        const clientId = process.env.GOOGLE_CLIENT_ID;
-        if (!clientId) {
-            throw new common_1.UnauthorizedException('Google OAuth yapılandırması eksik (GOOGLE_CLIENT_ID)');
-        }
-        return clientId;
-    }
-    sanitizeUsernameBase(input) {
-        const cleaned = (input || '')
-            .trim()
-            .toLowerCase()
-            .replace(/[^a-z0-9._-]/g, '')
-            .replace(/^[._-]+|[._-]+$/g, '');
-        if (cleaned.length >= 3)
-            return cleaned.slice(0, 24);
-        return 'user';
-    }
-    async generateUniqueUsername(preferredBase) {
-        const base = this.sanitizeUsernameBase(preferredBase);
-        const existing = await this.usersService.findByUsername(base);
-        if (!existing)
-            return base;
-        for (let i = 0; i < 20; i++) {
-            const suffix = (0, crypto_1.randomBytes)(3).toString('hex');
-            const candidate = `${base}_${suffix}`.slice(0, 30);
-            const taken = await this.usersService.findByUsername(candidate);
-            if (!taken)
-                return candidate;
-        }
-        return `user_${(0, crypto_1.randomBytes)(4).toString('hex')}`.slice(0, 30);
     }
     async validateUser(email, password) {
         const user = await this.usersService.findByEmail(email);
@@ -153,72 +120,6 @@ let AuthService = class AuthService {
             isActive: true,
         });
         return { message: 'Kayıt başarılı', user };
-    }
-    async loginWithGoogleIdToken(idToken) {
-        if (!idToken) {
-            throw new common_1.UnauthorizedException('Google token gerekli');
-        }
-        const clientId = this.getGoogleClientId();
-        const client = new google_auth_library_1.OAuth2Client(clientId);
-        let payload;
-        try {
-            const ticket = await client.verifyIdToken({
-                idToken,
-                audience: clientId,
-            });
-            payload = ticket.getPayload();
-        }
-        catch (err) {
-            throw new common_1.UnauthorizedException('Geçersiz Google token');
-        }
-        const email = payload?.email;
-        const emailVerified = payload?.email_verified;
-        if (!email) {
-            throw new common_1.UnauthorizedException('Google hesabından email alınamadı');
-        }
-        if (emailVerified === false) {
-            throw new common_1.UnauthorizedException('Google email doğrulanmamış');
-        }
-        const existingUser = await this.usersService.findByEmail(email);
-        if (existingUser) {
-            if (!existingUser.isActive) {
-                throw new common_1.UnauthorizedException('Hesabınız devre dışı bırakılmış. Lütfen yönetici ile iletişime geçin.');
-            }
-            const updates = {};
-            if (!existingUser.firstName && payload?.given_name)
-                updates.firstName = payload.given_name;
-            if (!existingUser.lastName && payload?.family_name)
-                updates.lastName = payload.family_name;
-            if (!existingUser.photoUrl && payload?.picture)
-                updates.photoUrl = payload.picture;
-            if (Object.keys(updates).length) {
-                await this.usersService.update(existingUser.id, updates);
-                const refreshed = await this.usersService.findByEmail(email);
-                return this.login(refreshed || existingUser);
-            }
-            return this.login(existingUser);
-        }
-        const givenName = payload?.given_name || '';
-        const familyName = payload?.family_name || '';
-        const fullName = payload?.name || '';
-        const nameParts = fullName.trim().split(/\s+/).filter(Boolean);
-        const firstName = givenName || nameParts[0] || 'User';
-        const lastName = familyName || nameParts.slice(1).join(' ') || 'Google';
-        const photoUrl = payload?.picture || undefined;
-        const preferredBase = email.split('@')[0] || `${firstName}${lastName}`;
-        const username = await this.generateUniqueUsername(preferredBase);
-        const randomPassword = (0, crypto_1.randomBytes)(32).toString('hex');
-        const user = await this.usersService.create({
-            username,
-            email,
-            password: randomPassword,
-            firstName,
-            lastName,
-            photoUrl,
-            role: 'user',
-            isActive: true,
-        });
-        return this.login(user);
     }
 };
 exports.AuthService = AuthService;

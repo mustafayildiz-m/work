@@ -127,12 +127,15 @@ let LanguagesSeeder = class LanguagesSeeder {
             { name: 'Somalice', code: 'so' },
             { name: 'Fon', code: 'fon' },
             { name: 'Esperanto', code: 'eo' },
-            { name: 'Baskça', code: 'eu' },
+            { name: 'Baskça', code: 'eu' }
         ];
         for (const languageData of languages) {
             try {
                 const existingLanguage = await this.languageRepository.findOne({
-                    where: [{ name: languageData.name }, { code: languageData.code }],
+                    where: [
+                        { name: languageData.name },
+                        { code: languageData.code }
+                    ]
                 });
                 if (existingLanguage) {
                     console.log(`⚠️  Language already exists: ${languageData.name} (${languageData.code})`);
@@ -140,7 +143,7 @@ let LanguagesSeeder = class LanguagesSeeder {
                 }
                 const language = this.languageRepository.create({
                     ...languageData,
-                    isActive: true,
+                    isActive: true
                 });
                 await this.languageRepository.save(language);
                 console.log(`✅ Added language: ${languageData.name} (${languageData.code})`);

@@ -28,9 +28,7 @@ __decorate([
     __metadata("design:type", String)
 ], Source.prototype, "url", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => scholar_entity_1.Scholar, (scholar) => scholar.sources, {
-        onDelete: 'CASCADE',
-    }),
+    (0, typeorm_1.ManyToOne)(() => scholar_entity_1.Scholar, scholar => scholar.sources, { onDelete: 'CASCADE' }),
     (0, typeorm_1.JoinColumn)({ name: 'scholar_id' }),
     __metadata("design:type", scholar_entity_1.Scholar)
 ], Source.prototype, "scholar", void 0);

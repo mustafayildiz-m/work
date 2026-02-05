@@ -26,34 +26,30 @@ let ScholarsController = class ScholarsController {
         this.userScholarFollowService = userScholarFollowService;
     }
     async create(createScholarDto, files, req) {
-        const photoFile = files.find((f) => f.fieldname === 'photo');
+        const photoFile = files.find(f => f.fieldname === 'photo');
         if (photoFile) {
-            createScholarDto.photoUrl =
-                await this.uploadService.uploadFile(photoFile);
+            createScholarDto.photoUrl = await this.uploadService.uploadFile(photoFile);
         }
         else {
             createScholarDto.photoUrl = 'uploads/coverImage/coverImage.jpg';
         }
-        const coverImageFile = files.find((f) => f.fieldname === 'coverImage');
+        const coverImageFile = files.find(f => f.fieldname === 'coverImage');
         if (coverImageFile) {
-            createScholarDto.coverImage =
-                await this.uploadService.uploadFile(coverImageFile);
+            createScholarDto.coverImage = await this.uploadService.uploadFile(coverImageFile);
         }
         else {
             createScholarDto.coverImage = 'uploads/coverImage/coverImage.jpg';
         }
         if (createScholarDto.ownBooks && Array.isArray(createScholarDto.ownBooks)) {
             createScholarDto.ownBooks = await Promise.all(createScholarDto.ownBooks.map(async (book, idx) => {
-                const coverFile = files.find((f) => f.fieldname === `ownBooks[${idx}][cover]`);
-                const pdfFile = files.find((f) => f.fieldname === `ownBooks[${idx}][pdf]`);
-                const processedBook = { ...book };
+                const coverFile = files.find(f => f.fieldname === `ownBooks[${idx}][cover]`);
+                const pdfFile = files.find(f => f.fieldname === `ownBooks[${idx}][pdf]`);
+                let processedBook = { ...book };
                 if (coverFile) {
-                    processedBook.coverUrl =
-                        await this.uploadService.uploadFile(coverFile);
+                    processedBook.coverUrl = await this.uploadService.uploadFile(coverFile);
                 }
                 else {
-                    processedBook.coverUrl =
-                        book.coverUrl || '/uploads/coverImage/coverImage.jpg';
+                    processedBook.coverUrl = book.coverUrl || '/uploads/coverImage/coverImage.jpg';
                 }
                 if (pdfFile) {
                     processedBook.pdfUrl = await this.uploadService.uploadFile(pdfFile);
@@ -70,14 +66,14 @@ let ScholarsController = class ScholarsController {
         const limitNumber = limit ? parseInt(limit, 10) : 10;
         const [scholars, totalCount] = await Promise.all([
             this.scholarsService.findAll(userId, pageNumber, limitNumber, search),
-            this.scholarsService.getTotalCount(search),
+            this.scholarsService.getTotalCount(search)
         ]);
         return {
             scholars,
             totalCount,
             currentPage: pageNumber,
             totalPages: Math.ceil(totalCount / limitNumber),
-            hasMore: pageNumber * limitNumber < totalCount,
+            hasMore: (pageNumber * limitNumber) < totalCount
         };
     }
     findOne(id, queryUserId, req) {
@@ -85,30 +81,27 @@ let ScholarsController = class ScholarsController {
         return this.scholarsService.findOne(+id, userId);
     }
     async update(id, updateScholarDto, files, req) {
-        const photoFile = files.find((f) => f.fieldname === 'photo');
+        const photoFile = files.find(f => f.fieldname === 'photo');
         if (photoFile) {
-            updateScholarDto.photoUrl =
-                await this.uploadService.uploadFile(photoFile);
+            updateScholarDto.photoUrl = await this.uploadService.uploadFile(photoFile);
         }
         else if (!updateScholarDto.photoUrl) {
             updateScholarDto.photoUrl = 'uploads/coverImage/coverImage.jpg';
         }
-        const coverImageFile = files.find((f) => f.fieldname === 'coverImage');
+        const coverImageFile = files.find(f => f.fieldname === 'coverImage');
         if (coverImageFile) {
-            updateScholarDto.coverImage =
-                await this.uploadService.uploadFile(coverImageFile);
+            updateScholarDto.coverImage = await this.uploadService.uploadFile(coverImageFile);
         }
         else if (!updateScholarDto.coverImage) {
             updateScholarDto.coverImage = 'uploads/coverImage/coverImage.jpg';
         }
         if (updateScholarDto.ownBooks && Array.isArray(updateScholarDto.ownBooks)) {
             updateScholarDto.ownBooks = await Promise.all(updateScholarDto.ownBooks.map(async (book, idx) => {
-                const coverFile = files.find((f) => f.fieldname === `ownBooks[${idx}][cover]`);
-                const pdfFile = files.find((f) => f.fieldname === `ownBooks[${idx}][pdf]`);
-                const processedBook = { ...book };
+                const coverFile = files.find(f => f.fieldname === `ownBooks[${idx}][cover]`);
+                const pdfFile = files.find(f => f.fieldname === `ownBooks[${idx}][pdf]`);
+                let processedBook = { ...book };
                 if (coverFile) {
-                    processedBook.coverUrl =
-                        await this.uploadService.uploadFile(coverFile);
+                    processedBook.coverUrl = await this.uploadService.uploadFile(coverFile);
                 }
                 else if (!book.coverUrl) {
                     processedBook.coverUrl = 'uploads/coverImage/coverImage.jpg';
@@ -123,7 +116,7 @@ let ScholarsController = class ScholarsController {
         return this.scholarsService.update(+id, updateScholarDto, userId);
     }
     async updateCoverImage(id, files, req) {
-        const coverImageFile = files.find((f) => f.fieldname === 'coverImage');
+        const coverImageFile = files.find(f => f.fieldname === 'coverImage');
         if (!coverImageFile) {
             throw new common_1.BadRequestException('Cover image file is required');
         }
@@ -140,12 +133,12 @@ let ScholarsController = class ScholarsController {
         const offsetNumber = offset ? parseInt(offset, 10) : 0;
         const [users, totalCount] = await Promise.all([
             this.userScholarFollowService.getScholarFollowers(scholarId, limitNumber, offsetNumber),
-            this.userScholarFollowService.getScholarFollowersCount(scholarId),
+            this.userScholarFollowService.getScholarFollowersCount(scholarId)
         ]);
         return {
             users,
             totalCount,
-            hasMore: offsetNumber + limitNumber < totalCount,
+            hasMore: (offsetNumber + limitNumber) < totalCount
         };
     }
     async getScholarFollowStats(id) {

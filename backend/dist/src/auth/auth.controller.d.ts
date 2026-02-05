@@ -11,9 +11,6 @@ export declare class RegisterDto {
     lastName?: string;
     photoUrl?: string;
 }
-export declare class GoogleLoginDto {
-    idToken: string;
-}
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
@@ -77,17 +74,5 @@ export declare class AuthController {
         status: number;
         user?: undefined;
         access_token?: undefined;
-    }>;
-    googleCallback(body: GoogleLoginDto): Promise<{
-        access_token: string;
-        user: {
-            id: any;
-            email: any;
-            username: any;
-            firstName: any;
-            lastName: any;
-            role: any;
-            photoUrl: any;
-        };
     }>;
 }

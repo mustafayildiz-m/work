@@ -31,40 +31,34 @@ let WhoToFollowController = class WhoToFollowController {
         }
         const [users, totalCount] = await Promise.all([
             this.whoToFollowService.getWhoToFollowUsers(userId, pageNumber, limitNumber),
-            this.whoToFollowService.getUsersCount(userId),
+            this.whoToFollowService.getUsersCount(userId)
         ]);
         return {
             users,
             totalCount,
             currentPage: pageNumber,
             totalPages: Math.ceil(totalCount / limitNumber),
-            hasMore: pageNumber * limitNumber < totalCount,
+            hasMore: (pageNumber * limitNumber) < totalCount
         };
     }
     async searchWhoToFollow(searchQuery, page, limit, req) {
         if (!searchQuery || searchQuery.trim() === '') {
-            return {
-                users: [],
-                totalCount: 0,
-                totalPages: 0,
-                currentPage: 1,
-                hasMore: false,
-            };
+            return { users: [], totalCount: 0, totalPages: 0, currentPage: 1, hasMore: false };
         }
         const pageNumber = page ? parseInt(page, 10) : 1;
         const limitNumber = limit ? parseInt(limit, 10) : 10;
         const userId = req?.user?.id;
         const [users, totalCount] = await Promise.all([
             this.whoToFollowService.searchUsers(searchQuery.trim(), userId, pageNumber, limitNumber),
-            this.whoToFollowService.searchUsersCount(searchQuery.trim(), userId),
+            this.whoToFollowService.searchUsersCount(searchQuery.trim(), userId)
         ]);
         return {
             users,
             totalCount,
             currentPage: pageNumber,
             totalPages: Math.ceil(totalCount / limitNumber),
-            hasMore: pageNumber * limitNumber < totalCount,
-            searchQuery: searchQuery.trim(),
+            hasMore: (pageNumber * limitNumber) < totalCount,
+            searchQuery: searchQuery.trim()
         };
     }
 };

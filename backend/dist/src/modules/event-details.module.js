@@ -19,9 +19,7 @@ let EventDetailsModule = class EventDetailsModule {
 exports.EventDetailsModule = EventDetailsModule;
 exports.EventDetailsModule = EventDetailsModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            typeorm_1.TypeOrmModule.forFeature([event_details_entity_1.EventDetails, user_follow_entity_1.UserFollow, user_scholar_follow_entity_1.UserScholarFollow]),
-        ],
+        imports: [typeorm_1.TypeOrmModule.forFeature([event_details_entity_1.EventDetails, user_follow_entity_1.UserFollow, user_scholar_follow_entity_1.UserScholarFollow])],
         controllers: [event_details_controller_1.EventDetailsController],
         providers: [event_details_service_1.EventDetailsService],
         exports: [event_details_service_1.EventDetailsService],

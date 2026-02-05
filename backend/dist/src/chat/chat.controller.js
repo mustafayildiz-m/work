@@ -52,7 +52,7 @@ let ChatController = class ChatController {
                 : 'Conversation deleted successfully',
             wasHardDeleted: result.wasHardDeleted,
             deletedBy: result.deletedBy,
-            deletedByUsername: result.deletedByUsername,
+            deletedByUsername: result.deletedByUsername
         };
     }
 };

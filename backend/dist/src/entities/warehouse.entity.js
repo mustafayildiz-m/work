@@ -36,7 +36,7 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Warehouse.prototype, "isActive", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => stock_entity_1.Stock, (stock) => stock.warehouse),
+    (0, typeorm_1.OneToMany)(() => stock_entity_1.Stock, stock => stock.warehouse),
     __metadata("design:type", Array)
 ], Warehouse.prototype, "stocks", void 0);
 __decorate([

@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner } from "typeorm";
 export declare class RemoveTitleFromBooks1762190500000 implements MigrationInterface {
     name: string;
     up(queryRunner: QueryRunner): Promise<void>;

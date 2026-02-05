@@ -20,9 +20,7 @@ let SearchModule = class SearchModule {
 exports.SearchModule = SearchModule;
 exports.SearchModule = SearchModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            typeorm_1.TypeOrmModule.forFeature([user_entity_1.User, scholar_entity_1.Scholar, user_follow_entity_1.UserFollow, user_scholar_follow_entity_1.UserScholarFollow]),
-        ],
+        imports: [typeorm_1.TypeOrmModule.forFeature([user_entity_1.User, scholar_entity_1.Scholar, user_follow_entity_1.UserFollow, user_scholar_follow_entity_1.UserScholarFollow])],
         providers: [search_service_1.SearchService],
         controllers: [search_controller_1.SearchController],
         exports: [search_service_1.SearchService],

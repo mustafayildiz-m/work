@@ -26,9 +26,7 @@ let UserPostShareController = class UserPostShareController {
         if (body.post_type === 1 || body.post_type === '1') {
             postType = 'scholar';
         }
-        else if (body.post_type === 2 ||
-            body.post_type === '2' ||
-            body.post_type === 'user') {
+        else if (body.post_type === 2 || body.post_type === '2' || body.post_type === 'user') {
             postType = 'user';
         }
         return await this.userPostShareService.sharePost(userId, body.post_id, postType);

@@ -183,7 +183,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)('user/:userId'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    __param(0, (0, common_1.Param)('userId', common_1.ParseIntPipe)),
+    __param(0, (0, common_1.Param)('userId')),
     __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Object]),

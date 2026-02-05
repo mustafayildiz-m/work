@@ -1,0 +1,130 @@
+// 
+// toasts.scss
+// Extended from Bootstrap
+// 
+
+// 
+// Additional style for theme
+//
+
+// toast chat
+.toast-chat{
+  position: fixed;
+  right: calc($offcanvas-horizontal-width + 1rem);
+  bottom: 0;
+  z-index: 11;
+}
+
+// toast breakpoint
+@include media-breakpoint-down(sm){
+  .toast{
+    width: 288px;
+  }
+}
+
+// Enhanced notification toasts
+.toast {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+  
+  &.border-success {
+    border-left: 5px solid #198754 !important;
+  }
+  
+  &.border-danger {
+    border-left: 5px solid #dc3545 !important;
+  }
+  
+  &.border-warning {
+    border-left: 5px solid #ffc107 !important;
+  }
+  
+  &.border-info {
+    border-left: 5px solid #0dcaf0 !important;
+  }
+  
+  .toast-header {
+    background: transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 0.75rem 1rem 0.5rem;
+    
+    .btn-close {
+      opacity: 0.5;
+      transition: opacity 0.2s ease;
+      
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+  
+  .toast-body {
+    padding: 0.5rem 1rem 1rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+}
+
+// Dark mode support
+[data-bs-theme="dark"] .toast {
+  background: rgba(33, 37, 41, 0.95);
+  color: #fff;
+  
+  .toast-header {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+// Animation classes
+.toast-enter {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: all 0.3s ease-out;
+}
+
+.toast-enter-active {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.toast-exit {
+  transform: translateX(0);
+  opacity: 1;
+  transition: all 0.3s ease-in;
+}
+
+.toast-exit-active {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+// Success toast specific styling
+.toast.border-success {
+  .text-success {
+    color: #198754 !important;
+  }
+}
+
+// Danger toast specific styling
+.toast.border-danger {
+  .text-danger {
+    color: #dc3545 !important;
+  }
+}
+
+// Warning toast specific styling
+.toast.border-warning {
+  .text-warning {
+    color: #ffc107 !important;
+  }
+}
+
+// Info toast specific styling
+.toast.border-info {
+  .text-info {
+    color: #0dcaf0 !important;
+  }
+}

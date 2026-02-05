@@ -38,18 +38,15 @@ __decorate([
     __metadata("design:type", Date)
 ], Book.prototype, "publishDate", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => book_translation_entity_1.BookTranslation, (translation) => translation.book, {
-        cascade: true,
-        eager: true,
-    }),
+    (0, typeorm_1.OneToMany)(() => book_translation_entity_1.BookTranslation, (translation) => translation.book, { cascade: true, eager: true }),
     __metadata("design:type", Array)
 ], Book.prototype, "translations", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => scholar_entity_1.Scholar, (scholar) => scholar.relatedBooks),
+    (0, typeorm_1.ManyToMany)(() => scholar_entity_1.Scholar, scholar => scholar.relatedBooks),
     __metadata("design:type", Array)
 ], Book.prototype, "scholars", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => stock_entity_1.Stock, (stock) => stock.book),
+    (0, typeorm_1.OneToMany)(() => stock_entity_1.Stock, stock => stock.book),
     __metadata("design:type", Array)
 ], Book.prototype, "stocks", void 0);
 __decorate([

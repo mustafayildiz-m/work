@@ -61,7 +61,7 @@ let ScholarPostsController = class ScholarPostsController {
         return this.scholarPostsService.findOne(id, language);
     }
     async create(files, body) {
-        const fileUrls = files?.map((file) => `/uploads/posts/${file.filename}`) || [];
+        const fileUrls = files?.map(file => `/uploads/posts/${file.filename}`) || [];
         const translation = {
             language: body.language || 'tr',
             content: body.content,
@@ -84,20 +84,15 @@ let ScholarPostsController = class ScholarPostsController {
         return this.scholarPostsService.remove(id);
     }
     async addOrUpdateTranslation(postId, language, files, body) {
-        const fileUrls = files?.map((file) => `/uploads/posts/${file.filename}`) || [];
+        const fileUrls = files?.map(file => `/uploads/posts/${file.filename}`) || [];
         let allFileUrls = fileUrls;
         if (body.fileUrls) {
-            const existingFiles = typeof body.fileUrls === 'string'
-                ? JSON.parse(body.fileUrls)
-                : body.fileUrls;
+            const existingFiles = typeof body.fileUrls === 'string' ? JSON.parse(body.fileUrls) : body.fileUrls;
             allFileUrls = [...existingFiles, ...fileUrls];
         }
         let mediaUrls = [];
         if (body.mediaUrls) {
-            mediaUrls =
-                typeof body.mediaUrls === 'string'
-                    ? JSON.parse(body.mediaUrls)
-                    : body.mediaUrls;
+            mediaUrls = typeof body.mediaUrls === 'string' ? JSON.parse(body.mediaUrls) : body.mediaUrls;
         }
         const translationData = {
             content: body.content,

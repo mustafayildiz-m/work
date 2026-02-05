@@ -67,10 +67,7 @@ let BooksService = class BooksService {
         const book = this.bookRepository.create(bookData);
         const savedBook = await this.bookRepository.save(book);
         if (category && Array.isArray(category)) {
-            const bookCategories = category.map((catName) => this.bookCategoryRepository.create({
-                bookId: savedBook.id,
-                categoryName: catName,
-            }));
+            const bookCategories = category.map((catName) => this.bookCategoryRepository.create({ bookId: savedBook.id, categoryName: catName }));
             await this.bookCategoryRepository.save(bookCategories);
         }
         if (translations && Array.isArray(translations)) {
@@ -78,7 +75,7 @@ let BooksService = class BooksService {
                 ...trans,
                 book: savedBook,
                 bookId: savedBook.id,
-                languageId: trans.languageId,
+                languageId: trans.languageId
             }));
             await this.bookTranslationRepository.save(translationEntities);
             savedBook.translations = translationEntities;
@@ -92,9 +89,7 @@ let BooksService = class BooksService {
             .leftJoin('book.translations', 'bookTranslations')
             .leftJoin('bookTranslations.language', 'language');
         if (languageId) {
-            subQuery = subQuery.andWhere('language.id = :languageId', {
-                languageId: parseInt(languageId),
-            });
+            subQuery = subQuery.andWhere('language.id = :languageId', { languageId: parseInt(languageId) });
         }
         if (search && search.trim()) {
             const searchTerm = `%${search.trim().toLowerCase()}%`;
@@ -103,26 +98,22 @@ let BooksService = class BooksService {
         if (category && category.trim()) {
             subQuery = subQuery
                 .leftJoin('book_categories', 'bookCategories', 'bookCategories.bookId = book.id')
-                .andWhere('bookCategories.categoryName = :category', {
-                category: category.trim(),
-            });
+                .andWhere('bookCategories.categoryName = :category', { category: category.trim() });
         }
         subQuery = subQuery.orderBy('book.id', 'DESC');
         const bookIds = await subQuery.getRawMany();
-        let ids = bookIds.map((item) => item.book_id || item.id || item.bookId);
-        if (ids.some((id) => id === undefined)) {
+        let ids = bookIds.map(item => item.book_id || item.id || item.bookId);
+        if (ids.some(id => id === undefined)) {
             if (languageId) {
                 const directQuery = await this.bookRepository
                     .createQueryBuilder('book')
                     .select('book.id')
                     .leftJoin('book.translations', 'bookTranslations')
                     .leftJoin('bookTranslations.language', 'language')
-                    .where('language.id = :languageId', {
-                    languageId: parseInt(languageId),
-                })
+                    .where('language.id = :languageId', { languageId: parseInt(languageId) })
                     .orderBy('book.id', 'DESC')
                     .getMany();
-                ids = directQuery.map((book) => book.id);
+                ids = directQuery.map(book => book.id);
             }
         }
         ids = ids.sort((a, b) => b - a);
@@ -150,10 +141,8 @@ let BooksService = class BooksService {
             .orderBy('book.id', 'DESC')
             .getMany();
         await Promise.all(books.map(async (book) => {
-            const bookCategories = await this.bookCategoryRepository.find({
-                where: { bookId: book.id },
-            });
-            book.categories = bookCategories.map((bc) => bc.categoryName);
+            const bookCategories = await this.bookCategoryRepository.find({ where: { bookId: book.id } });
+            book.categories = bookCategories.map(bc => bc.categoryName);
         }));
         return {
             data: books,
@@ -177,17 +166,15 @@ let BooksService = class BooksService {
         INNER JOIN languages l ON l.id = bt.languageId
         WHERE l.id = ?
       `;
-            const results = await this.bookCategoryRepository.query(query, [
-                parseInt(languageId),
-            ]);
-            return results.map((r) => r.categoryName).filter(Boolean);
+            const results = await this.bookCategoryRepository.query(query, [parseInt(languageId)]);
+            return results.map(r => r.categoryName).filter(Boolean);
         }
         else {
             const results = await this.bookCategoryRepository
                 .createQueryBuilder('bookCategory')
                 .select('DISTINCT bookCategory.categoryName', 'categoryName')
                 .getRawMany();
-            return results.map((r) => r.categoryName).filter(Boolean);
+            return results.map(r => r.categoryName).filter(Boolean);
         }
     }
     async findOne(id) {
@@ -197,17 +184,15 @@ let BooksService = class BooksService {
         });
         if (!book)
             return null;
-        const bookCategories = await this.bookCategoryRepository.find({
-            where: { bookId: book.id },
-        });
-        book.categories = bookCategories.map((bc) => bc.categoryName);
+        const bookCategories = await this.bookCategoryRepository.find({ where: { bookId: book.id } });
+        book.categories = bookCategories.map(bc => bc.categoryName);
         return book;
     }
     async findOnePublic(id, lang) {
         const book = await this.bookRepository.findOne({
             where: { id },
             relations: ['translations', 'translations.language'],
-            select: ['id', 'author', 'coverUrl', 'coverImage', 'createdAt'],
+            select: ['id', 'author', 'coverUrl', 'coverImage', 'createdAt']
         });
         if (!book) {
             return null;
@@ -215,15 +200,15 @@ let BooksService = class BooksService {
         let selectedTranslation = null;
         if (lang && book.translations) {
             const langMap = {
-                tr: 1,
-                en: 2,
-                ar: 3,
-                de: 4,
-                fr: 5,
-                ja: 6,
+                'tr': 1,
+                'en': 2,
+                'ar': 3,
+                'de': 4,
+                'fr': 5,
+                'ja': 6
             };
             const targetLangId = langMap[lang];
-            selectedTranslation = book.translations.find((t) => t.languageId === targetLangId);
+            selectedTranslation = book.translations.find(t => t.languageId === targetLangId);
         }
         if (!selectedTranslation && book.translations?.length > 0) {
             selectedTranslation = book.translations[0];
@@ -235,7 +220,7 @@ let BooksService = class BooksService {
             description: selectedTranslation?.description || '',
             coverUrl: book.coverUrl || book.coverImage,
             pdfUrl: selectedTranslation?.pdfUrl,
-            createdAt: book.createdAt,
+            createdAt: book.createdAt
         };
     }
     async update(id, updateBookDto) {
@@ -250,10 +235,7 @@ let BooksService = class BooksService {
         const updatedBook = await this.bookRepository.save(existingBook);
         if (category && Array.isArray(category)) {
             await this.bookCategoryRepository.delete({ bookId: id });
-            const newCategories = category.map((catName) => this.bookCategoryRepository.create({
-                bookId: id,
-                categoryName: catName,
-            }));
+            const newCategories = category.map((catName) => this.bookCategoryRepository.create({ bookId: id, categoryName: catName }));
             await this.bookCategoryRepository.save(newCategories);
         }
         if (translations && Array.isArray(translations)) {
@@ -261,14 +243,14 @@ let BooksService = class BooksService {
             const updatedTranslations = [];
             for (const trans of translations) {
                 if (trans.id) {
-                    const existing = existingTranslations.find((t) => t.id === trans.id);
+                    const existing = existingTranslations.find(t => t.id === trans.id);
                     if (existing) {
                         const pdfUrl = trans.pdfUrl || existing.pdfUrl;
                         this.bookTranslationRepository.merge(existing, {
                             ...trans,
                             pdfUrl,
                             bookId: id,
-                            languageId: trans.languageId,
+                            languageId: trans.languageId
                         });
                         const saved = await this.bookTranslationRepository.save(existing);
                         updatedTranslations.push(saved);
@@ -279,14 +261,14 @@ let BooksService = class BooksService {
                         ...trans,
                         bookId: id,
                         book: updatedBook,
-                        languageId: trans.languageId,
+                        languageId: trans.languageId
                     });
                     const saved = await this.bookTranslationRepository.save(newTrans);
                     updatedTranslations.push(saved);
                 }
             }
-            const sentIds = translations.filter((t) => t.id).map((t) => t.id);
-            const toDelete = existingTranslations.filter((t) => !sentIds.includes(t.id));
+            const sentIds = translations.filter(t => t.id).map(t => t.id);
+            const toDelete = existingTranslations.filter(t => !sentIds.includes(t.id));
             for (const trans of toDelete) {
                 await this.bookTranslationRepository.delete(trans.id);
             }
@@ -295,10 +277,7 @@ let BooksService = class BooksService {
         return this.findOne(id);
     }
     async remove(id) {
-        const book = await this.bookRepository.findOne({
-            where: { id },
-            relations: ['translations'],
-        });
+        const book = await this.bookRepository.findOne({ where: { id }, relations: ['translations'] });
         if (!book)
             return;
         if (book.coverImage) {
@@ -307,8 +286,7 @@ let BooksService = class BooksService {
                 try {
                     fs.unlinkSync(coverPath);
                 }
-                catch (e) {
-                }
+                catch (e) { }
             }
         }
         if (book.translations && Array.isArray(book.translations)) {
@@ -319,8 +297,7 @@ let BooksService = class BooksService {
                         try {
                             fs.unlinkSync(pdfPath);
                         }
-                        catch (e) {
-                        }
+                        catch (e) { }
                     }
                 }
             }
@@ -347,10 +324,10 @@ let BooksService = class BooksService {
     `;
         const params = languageId ? [parseInt(languageId)] : [];
         const results = await this.bookRepository.query(query, params);
-        return results.map((result) => ({
+        return results.map(result => ({
             id: result.id,
             title: result.title,
-            articleCount: parseInt(result.articleCount) || 0,
+            articleCount: parseInt(result.articleCount) || 0
         }));
     }
 };

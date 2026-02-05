@@ -87,41 +87,35 @@ let UserPostsService = class UserPostsService {
             where: { follower_id: userId },
             select: ['following_id'],
         });
-        const followingIds = following.map((f) => f.following_id);
+        const followingIds = following.map(f => f.following_id);
         const scholarFollowing = await this.userScholarFollowRepository.find({
             where: { user_id: userId },
             select: ['scholar_id'],
         });
-        const scholarIds = scholarFollowing.map((f) => f.scholar_id);
+        const scholarIds = scholarFollowing.map(f => f.scholar_id);
         const allUserIds = [userId, ...followingIds];
         let allUserPosts = [];
         if (allUserIds.length > 0) {
             allUserPosts = await this.userPostRepository.find({
                 where: {
                     user_id: (0, typeorm_2.In)(allUserIds),
-                    status: user_post_entity_1.PostStatus.APPROVED,
+                    status: user_post_entity_1.PostStatus.APPROVED
                 },
                 order: { created_at: 'DESC' },
                 take: 100,
             });
         }
         allUserPosts.sort((a, b) => {
-            const aDate = a.shared_at
-                ? new Date(a.shared_at)
-                : new Date(a.created_at);
-            const bDate = b.shared_at
-                ? new Date(b.shared_at)
-                : new Date(b.created_at);
+            const aDate = a.shared_at ? new Date(a.shared_at) : new Date(a.created_at);
+            const bDate = b.shared_at ? new Date(b.shared_at) : new Date(b.created_at);
             return bDate.getTime() - aDate.getTime();
         });
-        const scholarPosts = scholarIds.length > 0
-            ? await this.scholarPostRepository.find({
-                where: { scholarId: (0, typeorm_2.In)(scholarIds) },
-                relations: ['scholar', 'translations'],
-                order: { createdAt: 'DESC' },
-                take: 50,
-            })
-            : [];
+        const scholarPosts = scholarIds.length > 0 ? await this.scholarPostRepository.find({
+            where: { scholarId: (0, typeorm_2.In)(scholarIds) },
+            relations: ['scholar', 'translations'],
+            order: { createdAt: 'DESC' },
+            take: 50,
+        }) : [];
         const sharedPosts = await this.userPostShareRepository.find({
             where: { user_id: (0, typeorm_2.In)(allUserIds) },
             relations: ['user'],
@@ -131,50 +125,50 @@ let UserPostsService = class UserPostsService {
         const sharedUserPosts = [];
         const sharedScholarPosts = [];
         const sharedUserPostIds = sharedPosts
-            .filter((share) => share.post_type === 'user')
-            .map((share) => Number(share.post_id));
+            .filter(share => share.post_type === 'user')
+            .map(share => Number(share.post_id));
         const sharedScholarPostIds = sharedPosts
-            .filter((share) => share.post_type === 'scholar')
-            .map((share) => share.post_id);
+            .filter(share => share.post_type === 'scholar')
+            .map(share => share.post_id);
         let originalUserPosts = [];
         if (sharedUserPostIds.length > 0) {
             originalUserPosts = await this.userPostRepository.find({
                 where: {
                     id: (0, typeorm_2.In)(sharedUserPostIds),
-                    status: user_post_entity_1.PostStatus.APPROVED,
+                    status: user_post_entity_1.PostStatus.APPROVED
                 },
-                relations: ['user'],
+                relations: ['user']
             });
         }
         let originalScholarPosts = [];
         if (sharedScholarPostIds.length > 0) {
             originalScholarPosts = await this.scholarPostRepository.find({
                 where: { id: (0, typeorm_2.In)(sharedScholarPostIds) },
-                relations: ['scholar', 'translations'],
+                relations: ['scholar', 'translations']
             });
         }
         for (const share of sharedPosts) {
             if (share.post_type === 'user') {
-                const originalPost = originalUserPosts.find((p) => p.id === Number(share.post_id));
+                const originalPost = originalUserPosts.find(p => p.id === Number(share.post_id));
                 if (originalPost) {
                     sharedUserPosts.push({
                         ...originalPost,
                         isShared: true,
                         shared_at: share.created_at,
                         shared_by_user: share.user,
-                        original_user: originalPost.user,
+                        original_user: originalPost.user
                     });
                 }
             }
             else if (share.post_type === 'scholar') {
-                const originalPost = originalScholarPosts.find((p) => p.id === share.post_id);
+                const originalPost = originalScholarPosts.find(p => p.id === share.post_id);
                 if (originalPost) {
                     sharedScholarPosts.push({
                         ...originalPost,
                         isShared: true,
                         shared_at: share.created_at,
                         shared_by_user: share.user,
-                        original_scholar: originalPost.scholar,
+                        original_scholar: originalPost.scholar
                     });
                 }
             }
@@ -182,33 +176,23 @@ let UserPostsService = class UserPostsService {
         allUserPosts.push(...sharedUserPosts);
         scholarPosts.push(...sharedScholarPosts);
         scholarPosts.sort((a, b) => {
-            const aDate = a.shared_at
-                ? new Date(a.shared_at)
-                : new Date(a.createdAt);
-            const bDate = b.shared_at
-                ? new Date(b.shared_at)
-                : new Date(b.createdAt);
+            const aDate = a.shared_at ? new Date(a.shared_at) : new Date(a.createdAt);
+            const bDate = b.shared_at ? new Date(b.shared_at) : new Date(b.createdAt);
             return bDate.getTime() - aDate.getTime();
         });
-        const userIds = [...new Set(allUserPosts.map((p) => p.user_id))];
-        const users = userIds.length > 0
-            ? await this.userRepository.find({
-                where: { id: (0, typeorm_2.In)(userIds) },
-                select: ['id', 'firstName', 'lastName', 'photoUrl', 'username', 'role'],
-            })
-            : [];
-        const userMap = new Map(users.map((u) => [u.id, u]));
-        const scholarIdsForPosts = [
-            ...new Set(scholarPosts.map((p) => p.scholarId)),
-        ];
-        const scholars = scholarIdsForPosts.length > 0
-            ? await this.scholarRepository.find({
-                where: { id: (0, typeorm_2.In)(scholarIdsForPosts) },
-                select: ['id', 'fullName', 'photoUrl'],
-            })
-            : [];
-        const scholarMap = new Map(scholars.map((s) => [s.id, s]));
-        const userPostIds = allUserPosts.map((p) => p.id);
+        const userIds = [...new Set(allUserPosts.map(p => p.user_id))];
+        const users = userIds.length > 0 ? await this.userRepository.find({
+            where: { id: (0, typeorm_2.In)(userIds) },
+            select: ['id', 'firstName', 'lastName', 'photoUrl', 'username']
+        }) : [];
+        const userMap = new Map(users.map(u => [u.id, u]));
+        const scholarIdsForPosts = [...new Set(scholarPosts.map(p => p.scholarId))];
+        const scholars = scholarIdsForPosts.length > 0 ? await this.scholarRepository.find({
+            where: { id: (0, typeorm_2.In)(scholarIdsForPosts) },
+            select: ['id', 'fullName', 'photoUrl']
+        }) : [];
+        const scholarMap = new Map(scholars.map(s => [s.id, s]));
+        const userPostIds = allUserPosts.map(p => p.id);
         let commentCounts = new Map();
         if (userPostIds.length > 0) {
             const commentCountResults = await this.userPostCommentRepository
@@ -218,7 +202,7 @@ let UserPostsService = class UserPostsService {
                 .where('comment.post_id IN (:...postIds)', { postIds: userPostIds })
                 .groupBy('comment.post_id')
                 .getRawMany();
-            commentCounts = new Map(commentCountResults.map((r) => [r.post_id, parseInt(r.count)]));
+            commentCounts = new Map(commentCountResults.map(r => [r.post_id, parseInt(r.count)]));
         }
         const getTimeAgo = (date) => {
             const now = new Date();
@@ -240,7 +224,7 @@ let UserPostsService = class UserPostsService {
                 return `${Math.floor(diffInDays / 30)} ay önce`;
             return `${Math.floor(diffInDays / 365)} yıl önce`;
         };
-        const normalizedUserPosts = allUserPosts.map((p) => {
+        const normalizedUserPosts = allUserPosts.map(p => {
             const user = userMap.get(p.user_id);
             const commentCount = commentCounts.get(p.id) || 0;
             return {
@@ -258,7 +242,6 @@ let UserPostsService = class UserPostsService {
                 user_name: user ? `${user.firstName} ${user.lastName}` : null,
                 user_username: user ? user.username : null,
                 user_photo_url: user ? user.photoUrl : null,
-                user_role: user ? user.role : null,
                 ownPost: p.user_id === userId,
                 comment_count: commentCount,
                 isShared: p.isShared || false,
@@ -271,11 +254,11 @@ let UserPostsService = class UserPostsService {
                 shared_article_id: p.shared_article_id || null,
             };
         });
-        const normalizedScholarPosts = scholarPosts.map((p) => {
+        const normalizedScholarPosts = scholarPosts.map(p => {
             const scholar = p.scholar || scholarMap.get(p.scholarId);
-            const translation = p.translations?.find((t) => t.language === language) ||
-                p.translations?.find((t) => t.language === 'tr') ||
-                p.translations?.[0];
+            const translation = p.translations?.find(t => t.language === language)
+                || p.translations?.find(t => t.language === 'tr')
+                || p.translations?.[0];
             return {
                 type: 'scholar',
                 id: p.id,
@@ -302,12 +285,8 @@ let UserPostsService = class UserPostsService {
         });
         const allPosts = [...normalizedUserPosts, ...normalizedScholarPosts];
         allPosts.sort((a, b) => {
-            const aDate = a.shared_at
-                ? new Date(a.shared_at)
-                : new Date(a.created_at);
-            const bDate = b.shared_at
-                ? new Date(b.shared_at)
-                : new Date(b.created_at);
+            const aDate = a.shared_at ? new Date(a.shared_at) : new Date(a.created_at);
+            const bDate = b.shared_at ? new Date(b.shared_at) : new Date(b.created_at);
             return bDate.getTime() - aDate.getTime();
         });
         await this.cacheService.set(cacheKey, allPosts, 600);
@@ -325,61 +304,13 @@ let UserPostsService = class UserPostsService {
             where: whereCondition,
             order: { created_at: 'DESC' },
         });
-        const shares = await this.userPostShareRepository.find({
-            where: { user_id: userId },
-            relations: ['user'],
-            order: { created_at: 'DESC' },
-        });
-        const sharedUserPostIds = shares
-            .filter((share) => share.post_type === 'user')
-            .map((share) => Number(share.post_id));
-        let originalSharedPosts = [];
-        if (sharedUserPostIds.length > 0) {
-            originalSharedPosts = await this.userPostRepository.find({
-                where: {
-                    id: (0, typeorm_2.In)(sharedUserPostIds),
-                    status: user_post_entity_1.PostStatus.APPROVED,
-                },
-                relations: ['user'],
-            });
-        }
-        const sharedPostsMapped = shares
-            .map((share) => {
-            if (share.post_type === 'user') {
-                const original = originalSharedPosts.find((p) => p.id === Number(share.post_id));
-                if (original) {
-                    return {
-                        ...original,
-                        isShared: true,
-                        shared_at: share.created_at,
-                        shared_by_user: share.user,
-                        original_user: original.user,
-                        created_at: original.created_at,
-                    };
-                }
-            }
-            return null;
-        })
-            .filter((post) => post !== null);
-        const allPosts = [...posts, ...sharedPostsMapped];
-        allPosts.sort((a, b) => {
-            const dateA = a.shared_at
-                ? new Date(a.shared_at)
-                : new Date(a.created_at);
-            const dateB = b.shared_at
-                ? new Date(b.shared_at)
-                : new Date(b.created_at);
-            return dateB.getTime() - dateA.getTime();
-        });
-        const profileUser = await this.userRepository.findOne({
+        const user = await this.userRepository.findOne({
             where: { id: userId },
-            select: ['id', 'firstName', 'lastName', 'photoUrl', 'username', 'role'],
+            select: ['id', 'firstName', 'lastName', 'photoUrl', 'username']
         });
         const getTimeAgo = (date) => {
             const now = new Date();
-            if (!date)
-                return '';
-            const diffInMs = now.getTime() - new Date(date).getTime();
+            const diffInMs = now.getTime() - date.getTime();
             const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
             const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
             const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
@@ -397,55 +328,33 @@ let UserPostsService = class UserPostsService {
                 return `${Math.floor(diffInDays / 30)} ay önce`;
             return `${Math.floor(diffInDays / 365)} yıl önce`;
         };
-        return allPosts.map((post) => {
-            const isShared = post.isShared;
-            const author = isShared ? post.original_user : profileUser;
-            const displayDate = isShared ? post.shared_at : post.created_at;
-            return {
-                id: post.id,
-                user_id: post.user_id,
-                type: post.type || null,
-                content: post.content,
-                title: post.title,
-                image_url: post.image_url,
-                video_url: post.video_url,
-                created_at: post.created_at,
-                updated_at: post.updated_at,
-                timeAgo: getTimeAgo(displayDate),
-                status: post.status,
-                user_name: author ? `${author.firstName} ${author.lastName}` : null,
-                user_username: author ? author.username : null,
-                user_photo_url: author ? author.photoUrl : null,
-                user_role: author ? author.role : null,
-                ownPost: !isShared,
-                isShared: isShared || false,
-                shared_at: post.shared_at || null,
-                shared_by_user: post.shared_by_user
-                    ? {
-                        name: `${post.shared_by_user.firstName} ${post.shared_by_user.lastName}`,
-                        photoUrl: post.shared_by_user.photoUrl,
-                    }
-                    : null,
-                original_user: post.original_user || null,
-                shared_profile_type: post.shared_profile_type || null,
-                shared_profile_id: post.shared_profile_id || null,
-                shared_book_id: post.shared_book_id || null,
-                shared_article_id: post.shared_article_id || null,
-            };
-        });
+        return posts.map(post => ({
+            id: post.id,
+            user_id: post.user_id,
+            type: post.type || null,
+            content: post.content,
+            title: post.title,
+            image_url: post.image_url,
+            video_url: post.video_url,
+            created_at: post.created_at,
+            updated_at: post.updated_at,
+            timeAgo: getTimeAgo(post.created_at),
+            status: post.status,
+            user_name: user ? `${user.firstName} ${user.lastName}` : null,
+            user_username: user ? user.username : null,
+            user_photo_url: user ? user.photoUrl : null,
+            ownPost: true,
+            shared_profile_type: post.shared_profile_type || null,
+            shared_profile_id: post.shared_profile_id || null,
+            shared_book_id: post.shared_book_id || null,
+            shared_article_id: post.shared_article_id || null,
+        }));
     }
     async getSharedProfileData(profileType, profileId) {
         if (profileType === 'user') {
             const user = await this.userRepository.findOne({
                 where: { id: profileId },
-                select: [
-                    'id',
-                    'firstName',
-                    'lastName',
-                    'photoUrl',
-                    'username',
-                    'biography',
-                ],
+                select: ['id', 'firstName', 'lastName', 'photoUrl', 'username', 'biography']
             });
             if (!user) {
                 throw new common_1.NotFoundException('User not found');
@@ -462,14 +371,7 @@ let UserPostsService = class UserPostsService {
         else if (profileType === 'scholar') {
             const scholar = await this.scholarRepository.findOne({
                 where: { id: profileId },
-                select: [
-                    'id',
-                    'fullName',
-                    'photoUrl',
-                    'biography',
-                    'birthDate',
-                    'deathDate',
-                ],
+                select: ['id', 'fullName', 'photoUrl', 'biography', 'birthDate', 'deathDate']
             });
             if (!scholar) {
                 throw new common_1.NotFoundException('Scholar not found');

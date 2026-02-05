@@ -45,12 +45,12 @@ __decorate([
     __metadata("design:type", String)
 ], BookTranslation.prototype, "pdfUrl", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => book_entity_1.Book, (book) => book.id, { onDelete: 'CASCADE' }),
+    (0, typeorm_1.ManyToOne)(() => book_entity_1.Book, book => book.id, { onDelete: 'CASCADE' }),
     (0, typeorm_1.JoinColumn)({ name: 'bookId' }),
     __metadata("design:type", book_entity_1.Book)
 ], BookTranslation.prototype, "book", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => language_entity_1.Language, (language) => language.id),
+    (0, typeorm_1.ManyToOne)(() => language_entity_1.Language, language => language.id),
     (0, typeorm_1.JoinColumn)({ name: 'languageId' }),
     __metadata("design:type", language_entity_1.Language)
 ], BookTranslation.prototype, "language", void 0);

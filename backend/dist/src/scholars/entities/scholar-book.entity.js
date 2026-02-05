@@ -36,9 +36,7 @@ __decorate([
     __metadata("design:type", String)
 ], ScholarBook.prototype, "pdfUrl", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => scholar_entity_1.Scholar, (scholar) => scholar.ownBooks, {
-        onDelete: 'CASCADE',
-    }),
+    (0, typeorm_1.ManyToOne)(() => scholar_entity_1.Scholar, scholar => scholar.ownBooks, { onDelete: 'CASCADE' }),
     (0, typeorm_1.JoinColumn)({ name: 'scholar_id' }),
     __metadata("design:type", scholar_entity_1.Scholar)
 ], ScholarBook.prototype, "scholar", void 0);

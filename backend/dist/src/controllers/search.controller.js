@@ -29,13 +29,13 @@ let SearchController = class SearchController {
         const offsetNumber = offset ? parseInt(offset, 10) : 0;
         const [users, totalCount] = await Promise.all([
             this.searchService.searchUsers(searchQuery.trim(), limitNumber, offsetNumber, userId),
-            this.searchService.getSearchUsersCount(searchQuery.trim(), userId),
+            this.searchService.getSearchUsersCount(searchQuery.trim(), userId)
         ]);
         return {
             users,
             totalCount,
-            hasMore: offsetNumber + limitNumber < totalCount,
-            searchQuery: searchQuery.trim(),
+            hasMore: (offsetNumber + limitNumber) < totalCount,
+            searchQuery: searchQuery.trim()
         };
     }
     async searchFollowers(searchQuery, limit, offset, req) {
@@ -47,13 +47,13 @@ let SearchController = class SearchController {
         const offsetNumber = offset ? parseInt(offset, 10) : 0;
         const [users, totalCount] = await Promise.all([
             this.searchService.searchFollowers(searchQuery.trim(), limitNumber, offsetNumber, userId),
-            this.searchService.getSearchFollowersCount(searchQuery.trim(), userId),
+            this.searchService.getSearchFollowersCount(searchQuery.trim(), userId)
         ]);
         return {
             users,
             totalCount,
-            hasMore: offsetNumber + limitNumber < totalCount,
-            searchQuery: searchQuery.trim(),
+            hasMore: (offsetNumber + limitNumber) < totalCount,
+            searchQuery: searchQuery.trim()
         };
     }
     async searchFollowing(searchQuery, limit, offset, req) {
@@ -65,24 +65,18 @@ let SearchController = class SearchController {
         const offsetNumber = offset ? parseInt(offset, 10) : 0;
         const [users, totalCount] = await Promise.all([
             this.searchService.searchFollowing(searchQuery.trim(), limitNumber, offsetNumber, userId),
-            this.searchService.getSearchFollowingCount(searchQuery.trim(), userId),
+            this.searchService.getSearchFollowingCount(searchQuery.trim(), userId)
         ]);
         return {
             users,
             totalCount,
-            hasMore: offsetNumber + limitNumber < totalCount,
-            searchQuery: searchQuery.trim(),
+            hasMore: (offsetNumber + limitNumber) < totalCount,
+            searchQuery: searchQuery.trim()
         };
     }
     async searchScholars(searchQuery, page, limit, req) {
         if (!searchQuery || searchQuery.trim() === '') {
-            return {
-                scholars: [],
-                totalCount: 0,
-                totalPages: 0,
-                currentPage: 1,
-                hasMore: false,
-            };
+            return { scholars: [], totalCount: 0, totalPages: 0, currentPage: 1, hasMore: false };
         }
         const userId = req?.user?.id;
         const pageNumber = page ? parseInt(page, 10) : 1;
@@ -90,15 +84,15 @@ let SearchController = class SearchController {
         const offsetNumber = (pageNumber - 1) * limitNumber;
         const [scholars, totalCount] = await Promise.all([
             this.searchService.searchScholars(searchQuery.trim(), limitNumber, offsetNumber, userId),
-            this.searchService.getSearchScholarsCount(searchQuery.trim(), userId),
+            this.searchService.getSearchScholarsCount(searchQuery.trim(), userId)
         ]);
         return {
             scholars,
             totalCount,
             currentPage: pageNumber,
             totalPages: Math.ceil(totalCount / limitNumber),
-            hasMore: pageNumber * limitNumber < totalCount,
-            searchQuery: searchQuery.trim(),
+            hasMore: (pageNumber * limitNumber) < totalCount,
+            searchQuery: searchQuery.trim()
         };
     }
     async generalSearch(searchQuery, type, limit, offset, req) {

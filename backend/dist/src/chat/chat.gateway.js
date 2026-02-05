@@ -28,10 +28,7 @@ let ChatGateway = class ChatGateway {
             if (client.user) {
                 this.connectedUsers.set(client.user.id, client.id);
                 await this.chatService.setUserOnline(client.user.id, true);
-                this.server.emit('userOnline', {
-                    userId: client.user.id,
-                    username: client.user.username,
-                });
+                this.server.emit('userOnline', { userId: client.user.id, username: client.user.username });
             }
             else {
                 const token = client.handshake.auth.token || client.handshake.headers.authorization;
@@ -41,10 +38,7 @@ let ChatGateway = class ChatGateway {
                         client.user = user;
                         this.connectedUsers.set(user.id, client.id);
                         await this.chatService.setUserOnline(user.id, true);
-                        this.server.emit('userOnline', {
-                            userId: user.id,
-                            username: user.username,
-                        });
+                        this.server.emit('userOnline', { userId: user.id, username: user.username });
                     }
                 }
             }
@@ -58,10 +52,7 @@ let ChatGateway = class ChatGateway {
         if (client.user) {
             this.connectedUsers.delete(client.user.id);
             await this.chatService.setUserOnline(client.user.id, false);
-            this.server.emit('userOffline', {
-                userId: client.user.id,
-                username: client.user.username,
-            });
+            this.server.emit('userOffline', { userId: client.user.id, username: client.user.username });
         }
     }
     async handleMessage(data, client) {
@@ -82,7 +73,7 @@ let ChatGateway = class ChatGateway {
                 timestamp: message.createdAt,
                 status: message.status,
                 senderName: client.user.username,
-                conversationId: message.conversationId,
+                conversationId: message.conversationId
             };
             const receiverSocketId = this.connectedUsers.get(data.receiverId);
             if (receiverSocketId) {
@@ -91,7 +82,7 @@ let ChatGateway = class ChatGateway {
             client.emit('messageSent', messageData);
             this.server.emit('messageUpdate', {
                 type: 'new',
-                message: messageData,
+                message: messageData
             });
             return { success: true, messageId: message.id };
         }
@@ -181,7 +172,7 @@ let ChatGateway = class ChatGateway {
                 message: result.wasHardDeleted
                     ? 'Conversation permanently deleted'
                     : 'Conversation deleted successfully',
-                wasHardDeleted: result.wasHardDeleted,
+                wasHardDeleted: result.wasHardDeleted
             };
         }
         catch (error) {

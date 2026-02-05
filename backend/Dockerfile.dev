@@ -1,0 +1,25 @@
+# Backend Development Dockerfile
+FROM node:20-alpine
+
+# Install dependencies
+RUN apk add --no-cache libc6-compat wget curl netcat-openbsd
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy source code (will be mounted as volume in docker-compose)
+COPY . .
+
+# Create uploads directory
+RUN mkdir -p uploads
+
+EXPOSE 3000
+
+# Use nest start --watch for hot reload
+CMD ["npm", "run", "start:dev"]
+

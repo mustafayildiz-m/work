@@ -32,7 +32,7 @@ export declare class UserPostsService {
     getUserPosts(userId: number, includePending?: boolean): Promise<{
         id: number;
         user_id: number;
-        type: any;
+        type: string | null;
         content: string;
         title: string;
         image_url: string;
@@ -42,17 +42,9 @@ export declare class UserPostsService {
         timeAgo: string;
         status: PostStatus;
         user_name: string | null;
-        user_username: any;
-        user_photo_url: any;
-        user_role: any;
+        user_username: string | null;
+        user_photo_url: string | null;
         ownPost: boolean;
-        isShared: any;
-        shared_at: any;
-        shared_by_user: {
-            name: string;
-            photoUrl: any;
-        } | null;
-        original_user: any;
         shared_profile_type: any;
         shared_profile_id: any;
         shared_book_id: any;

@@ -35,23 +35,19 @@ let ScholarsService = class ScholarsService {
         this.userScholarFollowService = userScholarFollowService;
     }
     async create(createScholarDto, userId) {
-        if (typeof createScholarDto.birthDate === 'string' &&
-            (createScholarDto.birthDate === '' ||
-                createScholarDto.birthDate === 'null'))
+        if (typeof createScholarDto.birthDate === 'string' && (createScholarDto.birthDate === '' || createScholarDto.birthDate === 'null'))
             createScholarDto.birthDate = undefined;
-        if (typeof createScholarDto.deathDate === 'string' &&
-            (createScholarDto.deathDate === '' ||
-                createScholarDto.deathDate === 'null'))
+        if (typeof createScholarDto.deathDate === 'string' && (createScholarDto.deathDate === '' || createScholarDto.deathDate === 'null'))
             createScholarDto.deathDate = undefined;
         const { ownBooks, sources, relatedBooks, ...scholarData } = createScholarDto;
         const scholar = this.scholarRepository.create(scholarData);
         const savedScholar = await this.scholarRepository.save(scholar);
         if (ownBooks && ownBooks.length > 0) {
-            const books = ownBooks.map((book) => this.scholarBookRepository.create({ ...book, scholar: savedScholar }));
+            const books = ownBooks.map(book => this.scholarBookRepository.create({ ...book, scholar: savedScholar }));
             await this.scholarBookRepository.save(books);
         }
         if (sources && sources.length > 0) {
-            const sourceEntities = sources.map((source) => this.sourceRepository.create({ ...source, scholar: savedScholar }));
+            const sourceEntities = sources.map(source => this.sourceRepository.create({ ...source, scholar: savedScholar }));
             await this.sourceRepository.save(sourceEntities);
         }
         if (relatedBooks && relatedBooks.length > 0) {
@@ -74,9 +70,7 @@ let ScholarsService = class ScholarsService {
             .take(limit);
         if (search && search.trim()) {
             const searchTerm = `${search.trim().toUpperCase()}%`;
-            queryBuilder.where('UPPER(scholar.fullName) LIKE :search', {
-                search: searchTerm,
-            });
+            queryBuilder.where('UPPER(scholar.fullName) LIKE :search', { search: searchTerm });
         }
         const scholars = await queryBuilder.getMany();
         for (const scholar of scholars) {
@@ -86,7 +80,7 @@ let ScholarsService = class ScholarsService {
                         where: { book: { id: book.id } },
                         relations: ['language'],
                     });
-                    book.translations = bookTranslations.map((bt) => ({
+                    book.translations = bookTranslations.map(bt => ({
                         id: bt.id,
                         bookId: book.id,
                         languageId: bt.language.id,
@@ -142,7 +136,7 @@ let ScholarsService = class ScholarsService {
                     where: { book: { id: book.id } },
                     relations: ['language'],
                 });
-                book.translations = bookTranslations.map((bt) => ({
+                book.translations = bookTranslations.map(bt => ({
                     id: bt.id,
                     bookId: book.id,
                     languageId: bt.language.id,
@@ -170,20 +164,15 @@ let ScholarsService = class ScholarsService {
         return scholar;
     }
     async update(id, updateScholarDto, userId) {
-        const nullify = (val) => val === '' || val === 'null' ? undefined : val;
+        const nullify = (val) => (val === '' || val === 'null' ? undefined : val);
         updateScholarDto.birthDate = nullify(updateScholarDto.birthDate);
         updateScholarDto.deathDate = nullify(updateScholarDto.deathDate);
         const { relatedBooks, ownBooks, sources, ...scholarData } = updateScholarDto;
-        const scholar = await this.scholarRepository.findOne({
-            where: { id },
-            relations: ['relatedBooks'],
-        });
+        const scholar = await this.scholarRepository.findOne({ where: { id }, relations: ['relatedBooks'] });
         if (!scholar) {
             throw new common_1.NotFoundException(`Scholar with id ${id} not found`);
         }
-        if (scholarData.coverImage &&
-            scholar.coverImage &&
-            scholar.coverImage !== scholarData.coverImage) {
+        if (scholarData.coverImage && scholar.coverImage && scholar.coverImage !== scholarData.coverImage) {
             try {
                 const fs = require('fs');
                 const path = require('path');
@@ -205,12 +194,12 @@ let ScholarsService = class ScholarsService {
         }
         if (ownBooks) {
             await this.scholarBookRepository.delete({ scholar: { id } });
-            const newBooks = ownBooks.map((book) => this.scholarBookRepository.create({ ...book, scholar }));
+            const newBooks = ownBooks.map(book => this.scholarBookRepository.create({ ...book, scholar }));
             await this.scholarBookRepository.save(newBooks);
         }
         if (sources) {
             await this.sourceRepository.delete({ scholar: { id } });
-            const newSources = sources.map((source) => this.sourceRepository.create({ ...source, scholar }));
+            const newSources = sources.map(source => this.sourceRepository.create({ ...source, scholar }));
             await this.sourceRepository.save(newSources);
         }
         return this.findOne(id, userId);
@@ -258,16 +247,7 @@ let ScholarsService = class ScholarsService {
     async findOnePublic(id) {
         return this.scholarRepository.findOne({
             where: { id },
-            select: [
-                'id',
-                'fullName',
-                'photoUrl',
-                'biography',
-                'birthDate',
-                'deathDate',
-                'locationName',
-                'createdAt',
-            ],
+            select: ['id', 'fullName', 'photoUrl', 'biography', 'birthDate', 'deathDate', 'locationName', 'createdAt']
         });
     }
 };

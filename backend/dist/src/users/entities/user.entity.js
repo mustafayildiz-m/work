@@ -43,7 +43,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "photoUrl", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true, length: 300 }),
+    (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], User.prototype, "biography", void 0);
 __decorate([

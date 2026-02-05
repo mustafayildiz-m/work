@@ -38,7 +38,7 @@ let SearchService = class SearchService {
             'user.username',
             'user.photoUrl',
             'user.role',
-            'user.isActive',
+            'user.isActive'
         ])
             .where('user.isActive = :isActive', { isActive: true })
             .andWhere('(UPPER(user.firstName) LIKE :searchQuery OR UPPER(user.lastName) LIKE :searchQuery)', { searchQuery: `%${searchTerm}%` })
@@ -49,14 +49,14 @@ let SearchService = class SearchService {
             queryBuilder.andWhere('user.id != :currentUserId', { currentUserId });
         }
         const users = await queryBuilder.getMany();
-        return users.map((user) => ({
+        return users.map(user => ({
             id: user.id,
             firstName: user.firstName,
             lastName: user.lastName,
             username: user.username,
             photoUrl: user.photoUrl,
             role: user.role,
-            fullName: `${user.firstName} ${user.lastName}`,
+            fullName: `${user.firstName} ${user.lastName}`
         }));
     }
     async getSearchUsersCount(searchQuery, currentUserId) {
@@ -83,7 +83,7 @@ let SearchService = class SearchService {
             'user.username',
             'user.photoUrl',
             'user.role',
-            'user.isActive',
+            'user.isActive'
         ])
             .where('follow.following_id = :userId', { userId })
             .andWhere('user.isActive = :isActive', { isActive: true })
@@ -92,7 +92,7 @@ let SearchService = class SearchService {
             .limit(limit)
             .offset(offset)
             .getMany();
-        return followers.map((follow) => ({
+        return followers.map(follow => ({
             id: follow.follower.id,
             firstName: follow.follower.firstName,
             lastName: follow.follower.lastName,
@@ -101,7 +101,7 @@ let SearchService = class SearchService {
             role: follow.follower.role,
             followId: follow.id,
             followedAt: follow.id,
-            fullName: `${follow.follower.firstName} ${follow.follower.lastName}`,
+            fullName: `${follow.follower.firstName} ${follow.follower.lastName}`
         }));
     }
     async getSearchFollowersCount(searchQuery, userId) {
@@ -127,7 +127,7 @@ let SearchService = class SearchService {
             'user.username',
             'user.photoUrl',
             'user.role',
-            'user.isActive',
+            'user.isActive'
         ])
             .where('follow.follower_id = :userId', { userId })
             .andWhere('user.isActive = :isActive', { isActive: true })
@@ -136,7 +136,7 @@ let SearchService = class SearchService {
             .limit(limit)
             .offset(offset)
             .getMany();
-        return following.map((follow) => ({
+        return following.map(follow => ({
             id: follow.following.id,
             firstName: follow.following.firstName,
             lastName: follow.following.lastName,
@@ -145,7 +145,7 @@ let SearchService = class SearchService {
             role: follow.following.role,
             followId: follow.id,
             followedAt: follow.id,
-            fullName: `${follow.following.firstName} ${follow.following.lastName}`,
+            fullName: `${follow.following.firstName} ${follow.following.lastName}`
         }));
     }
     async getSearchFollowingCount(searchQuery, userId) {
@@ -172,11 +172,9 @@ let SearchService = class SearchService {
             'scholar.birthDate',
             'scholar.deathDate',
             'scholar.locationName',
-            'scholar.biography',
+            'scholar.biography'
         ])
-            .where('UPPER(scholar.fullName) LIKE :searchQuery', {
-            searchQuery: `%${searchTerm}%`,
-        })
+            .where('UPPER(scholar.fullName) LIKE :searchQuery', { searchQuery: `%${searchTerm}%` })
             .orderBy('scholar.fullName', 'ASC')
             .limit(limit)
             .offset(offset);
@@ -186,11 +184,11 @@ let SearchService = class SearchService {
             console.log('🔍 First scholar:', scholars[0].fullName);
         }
         if (userId) {
-            const scholarIds = scholars.map((s) => s.id);
+            const scholarIds = scholars.map(s => s.id);
             if (scholarIds.length === 0) {
-                return scholars.map((scholar) => ({
+                return scholars.map(scholar => ({
                     ...scholar,
-                    isFollowed: false,
+                    isFollowed: false
                 }));
             }
             const followedScholars = await this.userScholarFollowRepository
@@ -199,10 +197,10 @@ let SearchService = class SearchService {
                 .where('follow.user_id = :userId', { userId })
                 .andWhere('follow.scholar_id IN (:...scholarIds)', { scholarIds })
                 .getMany();
-            const followedScholarIds = followedScholars.map((f) => f.scholar_id);
-            return scholars.map((scholar) => ({
+            const followedScholarIds = followedScholars.map(f => f.scholar_id);
+            return scholars.map(scholar => ({
                 ...scholar,
-                isFollowed: followedScholarIds.includes(scholar.id),
+                isFollowed: followedScholarIds.includes(scholar.id)
             }));
         }
         return scholars;
@@ -211,9 +209,7 @@ let SearchService = class SearchService {
         const searchTerm = searchQuery.trim().toUpperCase();
         return this.scholarRepository
             .createQueryBuilder('scholar')
-            .where('UPPER(scholar.fullName) LIKE :searchQuery', {
-            searchQuery: `%${searchTerm}%`,
-        })
+            .where('UPPER(scholar.fullName) LIKE :searchQuery', { searchQuery: `%${searchTerm}%` })
             .getCount();
     }
     async generalSearch(searchQuery, type, limit = 20, offset = 0, userId) {
@@ -222,11 +218,11 @@ let SearchService = class SearchService {
         if (type === 'all' || type === 'users') {
             const [users, userCount] = await Promise.all([
                 this.searchUsers(searchQuery, Math.ceil(limit / 2), offset, userId),
-                this.getSearchUsersCount(searchQuery, userId),
+                this.getSearchUsersCount(searchQuery, userId)
             ]);
-            const userResults = users.map((user) => ({
+            const userResults = users.map(user => ({
                 ...user,
-                type: 'user',
+                type: 'user'
             }));
             results.push(...userResults);
             totalCount += userCount;
@@ -234,11 +230,11 @@ let SearchService = class SearchService {
         if (type === 'all' || type === 'scholars') {
             const [scholars, scholarCount] = await Promise.all([
                 this.searchScholars(searchQuery, Math.ceil(limit / 2), offset, userId),
-                this.getSearchScholarsCount(searchQuery, userId),
+                this.getSearchScholarsCount(searchQuery, userId)
             ]);
-            const scholarResults = scholars.map((scholar) => ({
+            const scholarResults = scholars.map(scholar => ({
                 ...scholar,
-                type: 'scholar',
+                type: 'scholar'
             }));
             results.push(...scholarResults);
             totalCount += scholarCount;
@@ -248,8 +244,8 @@ let SearchService = class SearchService {
         return {
             results: finalResults,
             totalCount,
-            hasMore: offset + limit < totalCount,
-            searchQuery,
+            hasMore: (offset + limit) < totalCount,
+            searchQuery
         };
     }
 };

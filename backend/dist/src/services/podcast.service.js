@@ -45,9 +45,7 @@ let PodcastService = PodcastService_1 = class PodcastService {
                 isActive: isActive,
                 isFeatured: isFeatured,
                 category: createPodcastDto.category,
-                publishDate: createPodcastDto.publishDate
-                    ? new Date(createPodcastDto.publishDate)
-                    : undefined,
+                publishDate: createPodcastDto.publishDate ? new Date(createPodcastDto.publishDate) : undefined,
             });
             return await this.podcastRepository.save(podcast);
         }
@@ -70,9 +68,7 @@ let PodcastService = PodcastService_1 = class PodcastService {
                 queryBuilder.andWhere('podcast.category = :category', { category });
             }
             if (isFeatured !== undefined) {
-                queryBuilder.andWhere('podcast.isFeatured = :isFeatured', {
-                    isFeatured,
-                });
+                queryBuilder.andWhere('podcast.isFeatured = :isFeatured', { isFeatured });
             }
             if (language) {
                 queryBuilder.andWhere('podcast.language = :language', { language });
@@ -100,22 +96,19 @@ let PodcastService = PodcastService_1 = class PodcastService {
     async update(id, updatePodcastDto, audioFile, coverFile) {
         const podcast = await this.findOne(id);
         if (updatePodcastDto.duration !== undefined) {
-            podcast.duration =
-                typeof updatePodcastDto.duration === 'string'
-                    ? parseInt(updatePodcastDto.duration, 10)
-                    : updatePodcastDto.duration;
+            podcast.duration = typeof updatePodcastDto.duration === 'string'
+                ? parseInt(updatePodcastDto.duration, 10)
+                : updatePodcastDto.duration;
         }
         if (updatePodcastDto.isActive !== undefined) {
-            podcast.isActive =
-                typeof updatePodcastDto.isActive === 'string'
-                    ? updatePodcastDto.isActive === 'true'
-                    : updatePodcastDto.isActive;
+            podcast.isActive = typeof updatePodcastDto.isActive === 'string'
+                ? updatePodcastDto.isActive === 'true'
+                : updatePodcastDto.isActive;
         }
         if (updatePodcastDto.isFeatured !== undefined) {
-            podcast.isFeatured =
-                typeof updatePodcastDto.isFeatured === 'string'
-                    ? updatePodcastDto.isFeatured === 'true'
-                    : updatePodcastDto.isFeatured;
+            podcast.isFeatured = typeof updatePodcastDto.isFeatured === 'string'
+                ? updatePodcastDto.isFeatured === 'true'
+                : updatePodcastDto.isFeatured;
         }
         if (updatePodcastDto.title)
             podcast.title = updatePodcastDto.title;

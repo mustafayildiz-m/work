@@ -28,7 +28,7 @@ __decorate([
     __metadata("design:type", String)
 ], Book.prototype, "description", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => book_language_entity_1.BookLanguage, (bookLanguage) => bookLanguage.book),
+    (0, typeorm_1.OneToMany)(() => book_language_entity_1.BookLanguage, bookLanguage => bookLanguage.book),
     __metadata("design:type", Array)
 ], Book.prototype, "bookLanguages", void 0);
 exports.Book = Book = __decorate([

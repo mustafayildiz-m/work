@@ -1,0 +1,9 @@
+/* Language Filter Dropdown Styles */
+/* Hide Bootstrap's default dropdown arrow since we're using React Icons */
+#language-dropdown::after {
+  display: none !important;
+}
+
+#language-dropdown::before {
+  display: none !important;
+}

@@ -29,13 +29,13 @@ let UserPostShareService = class UserPostShareService {
         let postExists = false;
         if (postType === 'user') {
             const post = await this.userPostRepository.findOne({
-                where: { id: parseInt(postId) },
+                where: { id: parseInt(postId) }
             });
             postExists = !!post;
         }
         else if (postType === 'scholar') {
             const post = await this.scholarPostRepository.findOne({
-                where: { id: postId },
+                where: { id: postId }
             });
             postExists = !!post;
         }
@@ -43,7 +43,7 @@ let UserPostShareService = class UserPostShareService {
             throw new Error('Gönderi bulunamadı');
         }
         const existingShare = await this.userPostShareRepository.findOne({
-            where: { user_id: userId, post_id: postId, post_type: postType },
+            where: { user_id: userId, post_id: postId, post_type: postType }
         });
         if (existingShare) {
             throw new Error('Bu gönderiyi zaten paylaştınız');
@@ -51,18 +51,14 @@ let UserPostShareService = class UserPostShareService {
         const share = this.userPostShareRepository.create({
             user_id: userId,
             post_id: postId,
-            post_type: postType,
+            post_type: postType
         });
         const savedShare = await this.userPostShareRepository.save(share);
-        return {
-            success: true,
-            message: 'Gönderi başarıyla paylaşıldı',
-            share: savedShare,
-        };
+        return { success: true, message: 'Gönderi başarıyla paylaşıldı', share: savedShare };
     }
     async unsharePost(userId, postId, postType = 'user') {
         const share = await this.userPostShareRepository.findOne({
-            where: { user_id: userId, post_id: postId, post_type: postType },
+            where: { user_id: userId, post_id: postId, post_type: postType }
         });
         if (!share) {
             throw new Error('Bu gönderiyi paylaşmamışsınız');
@@ -76,22 +72,22 @@ let UserPostShareService = class UserPostShareService {
             relations: ['post', 'post.user'],
             take: limit,
             skip: offset,
-            order: { created_at: 'DESC' },
+            order: { created_at: 'DESC' }
         });
         return {
             shares,
             total,
-            hasMore: offset + limit < total,
+            hasMore: (offset + limit) < total
         };
     }
     async getPostShareCount(postId, postType = 'user') {
         return await this.userPostShareRepository.count({
-            where: { post_id: postId, post_type: postType },
+            where: { post_id: postId, post_type: postType }
         });
     }
     async isPostSharedByUser(userId, postId, postType = 'user') {
         const share = await this.userPostShareRepository.findOne({
-            where: { user_id: userId, post_id: postId, post_type: postType },
+            where: { user_id: userId, post_id: postId, post_type: postType }
         });
         return !!share;
     }

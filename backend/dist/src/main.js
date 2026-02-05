@@ -55,7 +55,7 @@ async function bootstrap() {
         'http://46.62.255.65:5173',
         'https://islamicwindows.com',
         'https://www.islamicwindows.com',
-        'https://admin.islamicwindows.com',
+        'https://admin.islamicwindows.com'
     ];
     app.enableCors({
         origin: (origin, callback) => {
@@ -86,7 +86,7 @@ async function bootstrap() {
         setHeaders: (res, path) => {
             res.set('Cache-Control', 'public, max-age=31536000');
             res.set('Last-Modified', new Date().toUTCString());
-        },
+        }
     }));
     const port = process.env.PORT ?? 3000;
     await app.listen(port);

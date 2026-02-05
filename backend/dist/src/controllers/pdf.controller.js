@@ -22,10 +22,7 @@ const class_transformer_1 = require("class-transformer");
 class UploadPDFDto {
 }
 __decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'Enable alternative name support (parantez içi isimler)',
-        default: true,
-    }),
+    (0, swagger_1.ApiProperty)({ description: 'Enable alternative name support (parantez içi isimler)', default: true }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
     (0, class_transformer_1.Transform)(({ value }) => {
@@ -38,12 +35,7 @@ __decorate([
     __metadata("design:type", Boolean)
 ], UploadPDFDto.prototype, "alternativeNameSupport", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'Confidence threshold (40-100)',
-        default: 40,
-        minimum: 40,
-        maximum: 100,
-    }),
+    (0, swagger_1.ApiProperty)({ description: 'Confidence threshold (40-100)', default: 40, minimum: 40, maximum: 100 }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.Min)(40),
@@ -52,12 +44,7 @@ __decorate([
     __metadata("design:type", Number)
 ], UploadPDFDto.prototype, "confidenceThreshold", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'Minimum name length',
-        default: 3,
-        minimum: 1,
-        maximum: 50,
-    }),
+    (0, swagger_1.ApiProperty)({ description: 'Minimum name length', default: 3, minimum: 1, maximum: 50 }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.Min)(1),
@@ -66,12 +53,7 @@ __decorate([
     __metadata("design:type", Number)
 ], UploadPDFDto.prototype, "minNameLength", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'Maximum name length',
-        default: 120,
-        minimum: 10,
-        maximum: 200,
-    }),
+    (0, swagger_1.ApiProperty)({ description: 'Maximum name length', default: 120, minimum: 10, maximum: 200 }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.Min)(10),
@@ -80,12 +62,7 @@ __decorate([
     __metadata("design:type", Number)
 ], UploadPDFDto.prototype, "maxNameLength", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'Minimum word count',
-        default: 2,
-        minimum: 1,
-        maximum: 5,
-    }),
+    (0, swagger_1.ApiProperty)({ description: 'Minimum word count', default: 2, minimum: 1, maximum: 5 }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.Min)(1),
@@ -94,12 +71,7 @@ __decorate([
     __metadata("design:type", Number)
 ], UploadPDFDto.prototype, "minWordCount", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'Maximum word count',
-        default: 10,
-        minimum: 5,
-        maximum: 20,
-    }),
+    (0, swagger_1.ApiProperty)({ description: 'Maximum word count', default: 10, minimum: 5, maximum: 20 }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.Min)(5),
@@ -110,10 +82,7 @@ __decorate([
 class ParseDirectDto {
 }
 __decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'Path to PDF file',
-        example: '/path/to/file.pdf',
-    }),
+    (0, swagger_1.ApiProperty)({ description: 'Path to PDF file', example: '/path/to/file.pdf' }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], ParseDirectDto.prototype, "filePath", void 0);
@@ -157,7 +126,7 @@ let PDFController = class PDFController {
                 filePath: file.path,
                 originalName: file.originalname,
                 size: file.size,
-                config: config,
+                config: config
             };
         }
         catch (error) {
@@ -182,7 +151,7 @@ let PDFController = class PDFController {
                 success: true,
                 scholarCount: result.scholars.length,
                 scholars: result.scholars.slice(0, 10),
-                metadata: result.metadata,
+                metadata: result.metadata
             };
         }
         catch (error) {
@@ -205,7 +174,7 @@ let PDFController = class PDFController {
             const result = await this.pdfParsingService.cleanJobs();
             return {
                 message: 'Jobs cleaned successfully',
-                ...result,
+                ...result
             };
         }
         catch (error) {
@@ -232,12 +201,12 @@ let PDFController = class PDFController {
                 'Lineage information extraction',
                 'Biography text processing',
                 'Pattern-based filtering',
-                'Batch processing support',
+                'Batch processing support'
             ],
             supportedFormats: [
                 'PDF files with Turkish/Arabic text',
                 'Scholar biographies in specific format',
-                'Mixed content with dates and lineage info',
+                'Mixed content with dates and lineage info'
             ],
             datePatterns: [
                 '243 (m. 857) - Hijri (Miladi)',
@@ -246,32 +215,11 @@ let PDFController = class PDFController {
                 'vefât 767 - Death date',
             ],
             lineageKeywords: [
-                'İbn',
-                'Ebu',
-                'Ebû',
-                'bin',
-                'el-',
-                'ed-',
-                'en-',
-                'er-',
-                'es-',
-                'et-',
-                'ez-',
-                'Abd',
-                'Künyesi',
-                'Adı',
+                'İbn', 'Ebu', 'Ebû', 'bin', 'el-', 'ed-', 'en-', 'er-', 'es-', 'et-', 'ez-', 'Abd', 'Künyesi', 'Adı'
             ],
             excludePatterns: [
-                'SAYFA',
-                'İÇİNDEKİLER',
-                'KAYNAKLAR',
-                'BÖLÜM',
-                'FASIL',
-                'KISIM',
-                'ÖZET',
-                'GİRİŞ',
-                'SONUÇ',
-            ],
+                'SAYFA', 'İÇİNDEKİLER', 'KAYNAKLAR', 'BÖLÜM', 'FASIL', 'KISIM', 'ÖZET', 'GİRİŞ', 'SONUÇ'
+            ]
         };
     }
 };
@@ -289,50 +237,50 @@ __decorate([
                 file: {
                     type: 'string',
                     format: 'binary',
-                    description: 'PDF file containing scholar biographies',
+                    description: 'PDF file containing scholar biographies'
                 },
                 alternativeNameSupport: {
                     type: 'boolean',
                     description: 'Enable alternative name support',
-                    default: true,
+                    default: true
                 },
                 confidenceThreshold: {
                     type: 'number',
                     description: 'Confidence threshold (40-100)',
                     default: 40,
                     minimum: 40,
-                    maximum: 100,
+                    maximum: 100
                 },
                 minNameLength: {
                     type: 'number',
                     description: 'Minimum name length',
                     default: 3,
                     minimum: 1,
-                    maximum: 50,
+                    maximum: 50
                 },
                 maxNameLength: {
                     type: 'number',
                     description: 'Maximum name length',
                     default: 120,
                     minimum: 10,
-                    maximum: 200,
+                    maximum: 200
                 },
                 minWordCount: {
                     type: 'number',
                     description: 'Minimum word count',
                     default: 2,
                     minimum: 1,
-                    maximum: 5,
+                    maximum: 5
                 },
                 maxWordCount: {
                     type: 'number',
                     description: 'Maximum word count',
                     default: 10,
                     minimum: 5,
-                    maximum: 20,
-                },
-            },
-        },
+                    maximum: 20
+                }
+            }
+        }
     }),
     (0, swagger_1.ApiOperation)({ summary: 'Upload and parse PDF for scholars' }),
     (0, swagger_1.ApiResponse)({
@@ -344,14 +292,11 @@ __decorate([
                 message: { type: 'string' },
                 jobId: { type: 'string' },
                 filePath: { type: 'string' },
-                config: { type: 'object' },
-            },
-        },
+                config: { type: 'object' }
+            }
+        }
     }),
-    (0, swagger_1.ApiResponse)({
-        status: 400,
-        description: 'Bad request - invalid file or parameters',
-    }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'Bad request - invalid file or parameters' }),
     (0, swagger_1.ApiResponse)({ status: 500, description: 'Internal server error' }),
     __param(0, (0, common_1.UploadedFile)()),
     __param(1, (0, common_1.Body)()),
@@ -376,9 +321,9 @@ __decorate([
                 failedReason: { type: 'string' },
                 data: { type: 'object' },
                 processedOn: { type: 'number' },
-                finishedOn: { type: 'number' },
-            },
-        },
+                finishedOn: { type: 'number' }
+            }
+        }
     }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Job not found' }),
     __param(0, (0, common_1.Param)('jobId')),
@@ -400,11 +345,11 @@ __decorate([
                 scholarCount: { type: 'number' },
                 scholars: {
                     type: 'array',
-                    items: { type: 'object' },
+                    items: { type: 'object' }
                 },
-                metadata: { type: 'object' },
-            },
-        },
+                metadata: { type: 'object' }
+            }
+        }
     }),
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Bad request - invalid file path' }),
     (0, swagger_1.ApiResponse)({ status: 500, description: 'Internal server error' }),
@@ -430,10 +375,10 @@ __decorate([
                     data: { type: 'object' },
                     processedOn: { type: 'number' },
                     finishedOn: { type: 'number' },
-                    failedReason: { type: 'string' },
-                },
-            },
-        },
+                    failedReason: { type: 'string' }
+                }
+            }
+        }
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
@@ -450,9 +395,9 @@ __decorate([
             type: 'object',
             properties: {
                 message: { type: 'string' },
-                cleaned: { type: 'number' },
-            },
-        },
+                cleaned: { type: 'number' }
+            }
+        }
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
@@ -472,12 +417,12 @@ __decorate([
                 scholarCount: { type: 'number' },
                 scholars: {
                     type: 'array',
-                    items: { type: 'object' },
+                    items: { type: 'object' }
                 },
                 testText: { type: 'string' },
-                error: { type: 'string' },
-            },
-        },
+                error: { type: 'string' }
+            }
+        }
     }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -500,9 +445,9 @@ __decorate([
                 supportedFormats: { type: 'array' },
                 datePatterns: { type: 'array' },
                 lineageKeywords: { type: 'array' },
-                excludePatterns: { type: 'array' },
-            },
-        },
+                excludePatterns: { type: 'array' }
+            }
+        }
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),

@@ -1,0 +1,157 @@
+import * as fs from 'fs';
+import mysql from 'mysql2/promise';
+
+async function parseAndImport() {
+    console.log('🚀 Separator-Based Scholar Parser');
+    console.log('===================================\n');
+
+    const txtPath = '/Users/mustafayildiz/Documents/IW_Developments/alimler.txt';
+    console.log(`📄 Reading: ${txtPath}`);
+    const content = fs.readFileSync(txtPath, 'utf8');
+    console.log(`✅ File loaded\n`);
+
+    // Split by separator pattern
+    console.log('🔍 Splitting by separators...');
+    const blocks = content.split(/\n-{10,}/);
+    console.log(`✅ Found ${blocks.length} blocks\n`);
+
+    // Parse each block
+    console.log('🔍 Parsing scholars...');
+    const scholars: any[] = [];
+
+    for (const block of blocks) {
+        const lines = block.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        if (lines.length === 0) continue;
+
+        // Find first ALL UPPERCASE line as scholar name
+        let scholarName: string | null = null;
+        let bioStartIndex = 0;
+
+        for (let i = 0; i < Math.min(lines.length, 10); i++) {
+            const line = lines[i];
+
+            // Check if line is uppercase and looks like a name
+            const isUppercase = line === line.toUpperCase() && /^[A-ZÇĞİÖŞÜÂÎÛ]/.test(line);
+            const words = line.split(/\s+/).filter(w => w.length > 1);
+            const notPageNum = !/^\d+$/.test(line);
+            const notReference = !(/^\d+\)/.test(line) || /^[A-Z]\)/.test(line));
+
+            if (isUppercase && words.length >= 2 && words.length <= 12 &&
+                line.length >= 3 && line.length <= 150 && notPageNum && notReference) {
+                scholarName = line;
+                bioStartIndex = i + 1;
+                break;
+            }
+        }
+
+        if (!scholarName) continue;
+
+        // Collect biography (skip reference lines)
+        const bioLines = [];
+        for (let i = bioStartIndex; i < lines.length; i++) {
+            const line = lines[i];
+
+            // Stop if we hit references section
+            if (/^\d+\)/.test(line) || /^[A-Z]\)/.test(line)) break;
+
+            bioLines.push(line);
+        }
+
+        const biography = bioLines.join(' ').trim();
+
+        if (biography.length >= 30) {
+            scholars.push({
+                fullName: scholarName,
+                biography: biography
+            });
+        }
+    }
+
+    console.log(`✅ Found ${scholars.length} scholars\n`);
+
+    // Connect to database
+    console.log('🔌 Connecting to database...');
+    const connection = await mysql.createConnection({
+        host: 'localhost',
+        port: 3315,
+        user: 'root',
+        password: 'root',
+        database: 'islamic_windows',
+    });
+    console.log('✅ Connected\n');
+
+    // Clear existing
+    console.log('🗑️  Clearing existing scholars...');
+    await connection.execute('DELETE FROM scholars');
+    console.log('✅ Cleared\n');
+
+    // Import
+    console.log('💾 Importing scholars...');
+    const batchSize = 500;
+    let imported = 0;
+
+    for (let i = 0; i < scholars.length; i += batchSize) {
+        const batch = scholars.slice(i, i + batchSize);
+
+        const values = batch.map(s => [
+            s.fullName,
+            null, // lineage
+            null, // birthDate
+            null, // deathDate
+            s.biography,
+            '/uploads/coverImage/coverImage.jpg', // photoUrl
+            '/uploads/coverImage/coverImage.jpg', // coverImage
+            null, // latitude
+            null, // longitude
+            null, // locationName
+            null  // locationDescription
+        ]);
+
+        const placeholders = values.map(() => '(?,?,?,?,?,?,?,?,?,?,?)').join(',');
+        await connection.execute(
+            `INSERT INTO scholars 
+      (fullName, lineage, birthDate, deathDate, biography, photoUrl, coverImage, latitude, longitude, locationName, locationDescription) 
+      VALUES ${placeholders}`,
+            values.flat()
+        );
+
+        imported += batch.length;
+        process.stdout.write(`\r   Progress: ${imported}/${scholars.length} (${((imported / scholars.length) * 100).toFixed(1)}%)`);
+    }
+
+    console.log('\n\n✅ Import completed!');
+
+    // Verify
+    const [result] = await connection.execute('SELECT COUNT(*) as count FROM scholars');
+    console.log(`📊 Total in DB: ${(result as any)[0].count}`);
+
+    // Sample
+    const [samples] = await connection.execute('SELECT id, fullName FROM scholars LIMIT 10');
+    console.log('\n📋 Sample scholars:');
+    (samples as any[]).forEach((s, i) => {
+        console.log(`${i + 1}. ${s.fullName} (ID: ${s.id})`);
+    });
+
+    // Check specific scholars
+    const [abbas] = await connection.execute("SELECT COUNT(*) as count FROM scholars WHERE fullName LIKE 'ABBÂS%'");
+    console.log(`\n🎯 ABBÂS scholars: ${(abbas as any)[0].count}`);
+
+    const [ferec] = await connection.execute("SELECT fullName FROM scholars WHERE fullName LIKE '%FEREC%'");
+    if ((ferec as any[]).length > 0) {
+        console.log(`\n📋 FEREC scholars:`);
+        (ferec as any[]).forEach((s, i) => {
+            console.log(`${i + 1}. ${s.fullName}`);
+        });
+    }
+
+    // Check for merged biographies
+    const [abdurrahman] = await connection.execute("SELECT fullName FROM scholars WHERE fullName LIKE 'ABDURRAHMÂN BİN EBÎ%'");
+    if ((abdurrahman as any[]).length > 0) {
+        console.log(`\n✅ ABDURRAHMÂN BİN EBÎ ZİNÂD found!`);
+    }
+
+    await connection.end();
+    console.log('\n🔌 Connection closed');
+}
+
+parseAndImport().catch(console.error);

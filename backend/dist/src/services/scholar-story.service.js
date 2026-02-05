@@ -74,7 +74,7 @@ let ScholarStoryService = ScholarStoryService_1 = class ScholarStoryService {
                 total,
                 totalPages,
                 page: page,
-                limit: limit,
+                limit: limit
             };
             this.logger.log(`Returning ${stories.length} stories for page ${page}`);
             return result;
@@ -149,12 +149,12 @@ let ScholarStoryService = ScholarStoryService_1 = class ScholarStoryService {
     async incrementViewCount(id, userId) {
         try {
             const existingView = await this.storyViewRepository.findOne({
-                where: { story_id: id, user_id: userId },
+                where: { story_id: id, user_id: userId }
             });
             if (!existingView) {
                 const storyView = this.storyViewRepository.create({
                     story_id: id,
-                    user_id: userId,
+                    user_id: userId
                 });
                 await this.storyViewRepository.save(storyView);
                 await this.scholarStoryRepository.increment({ id }, 'view_count', 1);
@@ -172,12 +172,12 @@ let ScholarStoryService = ScholarStoryService_1 = class ScholarStoryService {
     async incrementLikeCount(id, userId) {
         try {
             const existingLike = await this.storyLikeRepository.findOne({
-                where: { story_id: id, user_id: userId },
+                where: { story_id: id, user_id: userId }
             });
             if (!existingLike) {
                 const storyLike = this.storyLikeRepository.create({
                     story_id: id,
-                    user_id: userId,
+                    user_id: userId
                 });
                 await this.storyLikeRepository.save(storyLike);
                 await this.scholarStoryRepository.increment({ id }, 'like_count', 1);

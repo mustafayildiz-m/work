@@ -1,0 +1,21 @@
+{
+  "USER.MENU.PUBLIC_PROFILE": "Genel Profil",
+  "USER.MENU.MY_PROFILE": "Profilim",
+  "USER.MENU.MY_ACCOUNT": "Hesabım",
+  "USER.MENU.GET_STARTED": "Başlangıç",
+  "USER.MENU.BILLING": "Fatura",
+  "USER.MENU.SECURITY": "Güvenlik",
+  "USER.MENU.MEMBERS_&_ROLES": "Üyeler ve Roller",
+  "USER.MENU.INTEGRATIONS": "Entegrasyonlar",
+  "USER.MENU.NOTIFICATIONS": "Bildirimler",
+  "USER.MENU.DEV_FORUM": "Geliştirici Forumu",
+  "USER.MENU.PAYMENT_&_SUBSCRIPTION_INFO": "Ödeme ve Abonelik Bilgileri",
+  "USER.MENU.DARK_MODE": "Karanlık Mod",
+  "USER.MENU.LOGOUT": "Çıkış Yap",
+  "USER.MENU.LANGUAGE": "Dil",
+  "AUTH.ACCOUNT_DISABLED": "Hesabınız devre dışı bırakılmış. Lütfen yönetici ile iletişime geçin.",
+  "AUTH.INVALID_CREDENTIALS": "Geçersiz email veya şifre",
+  "AUTH.LOGIN_SUCCESS": "Giriş başarılı",
+  "AUTH.LOGIN_ERROR": "Giriş başarısız"
+}
+

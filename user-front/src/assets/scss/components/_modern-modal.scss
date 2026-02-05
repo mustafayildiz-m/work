@@ -1,0 +1,207 @@
+// Modern Modal Styles
+.modern-modal {
+  .modal-content {
+    border-radius: 16px !important;
+    overflow: hidden;
+  }
+
+  .modal-header {
+    padding: 1.5rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 1) 100%);
+    
+    .btn-close {
+      font-size: 0.875rem;
+      opacity: 0.5;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      
+      &:hover {
+        opacity: 1;
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+    max-height: 70vh;
+    overflow-y: auto;
+    
+    // Custom scrollbar
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 10px;
+      
+      &:hover {
+        background: #a8a8a8;
+      }
+    }
+  }
+
+  .modal-footer {
+    padding: 1.5rem;
+    background: rgba(248, 249, 250, 0.5);
+  }
+
+  // Icon shapes
+  .icon-shape {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    &.icon-sm {
+      width: 36px;
+      height: 36px;
+    }
+    
+    &.icon-md {
+      width: 48px;
+      height: 48px;
+    }
+    
+    &.icon-xl {
+      width: 64px;
+      height: 64px;
+    }
+  }
+
+  // Upload section
+  .upload-section {
+    transition: all 0.3s ease;
+    
+    &:hover {
+      border-color: #0d6efd !important;
+      background-color: rgba(13, 110, 253, 0.05) !important;
+      transform: translateY(-2px);
+    }
+    
+    label {
+      transition: all 0.2s ease;
+      
+      &:hover {
+        .icon-shape {
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+
+  // File preview card
+  .file-preview-card {
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef !important;
+    
+    &:hover {
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+      transform: translateY(-2px);
+    }
+    
+    video, img {
+      border: 2px solid #f8f9fa;
+      // Prevent flicker/shake during re-renders
+      will-change: auto;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+  }
+
+  // Smooth transitions
+  textarea.form-control {
+    transition: none !important; // Prevent transition on every keystroke
+    will-change: auto !important;
+    
+    &:focus {
+      border-color: transparent !important;
+      box-shadow: none !important;
+      outline: none !important;
+    }
+  }
+  
+  // Prevent modal content shake during typing
+  .modal-content {
+    will-change: auto;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  // Loading button improvements
+  .btn {
+    font-weight: 600;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    
+    &:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+  }
+}
+
+// Avatar improvements
+.avatar-md {
+  width: 48px;
+  height: 48px;
+  
+  .avatar-img {
+    transition: all 0.3s ease;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Badge variants
+.badge {
+  &.bg-success-soft {
+    background-color: rgba(25, 135, 84, 0.1);
+    color: #198754;
+  }
+  
+  &.bg-warning-soft {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+  }
+  
+  &.bg-info-soft {
+    background-color: rgba(13, 202, 240, 0.1);
+    color: #0dcaf0;
+  }
+}
+
+// Modal backdrop
+.modal-backdrop {
+  &.show {
+    opacity: 0.7;
+    backdrop-filter: blur(2px);
+  }
+}
+
+// Animation for modal entrance
+@keyframes modalSlideIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modern-modal .modal-content {
+  animation: modalSlideIn 0.2s ease-out;
+}
+

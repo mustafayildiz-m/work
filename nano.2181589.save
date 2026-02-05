@@ -1,0 +1,8 @@
+    server {
+        listen 80;
+        server_name islamicwindows.com www.islamicwindows.com admin.islamicwindows.com api.islamicwindows.com;
+        location /.well-known/acme-challenge/ {
+            root /var/www/certbot;
+        }
+        location / { return 301 https://$host$request_uri; }
+    }
