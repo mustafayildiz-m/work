@@ -1,0 +1,177 @@
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: islamic_windows_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-islamic_windows}
+      MYSQL_USER: ${MYSQL_USER:-islamic_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-islamic_pass}
+    ports:
+      - "${MYSQL_PORT:-3315}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/mysql/init:/docker-entrypoint-initdb.d:ro
+    restart: unless-stopped
+    networks:
+      - islamic_windows_network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: islamic_windows_redis
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    networks:
+      - islamic_windows_network
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: islamic_windows_backend
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: ${BACKEND_PORT:-3000}
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: ${MYSQL_USER:-islamic_user}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-islamic_pass}
+      DB_DATABASE: ${MYSQL_DATABASE:-islamic_windows}
+      JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-in-production}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      DEEPL_API_KEY: ${DEEPL_API_KEY}
+      DEEPL_API_URL: ${DEEPL_API_URL:-https://api-free.deepl.com/v2/translate}
+    volumes:
+      - ./backend/uploads:/app/uploads
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - islamic_windows_network
+    stdin_open: true
+    tty: true
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/health || curl -f http://localhost:3000/health || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Admin Frontend
+  admin-front:
+    build:
+      context: ./admin-front
+      dockerfile: Dockerfile.dev
+    container_name: islamic_windows_admin_front
+    environment:
+      NODE_ENV: development
+      VITE_API_URL: https://islamicwindows.com/api
+      USE_PRODUCTION_HMR: "false"
+      WATCHPACK_POLLING: "true"
+      CHOKIDAR_USEPOLLING: "true"
+    ports:
+      - "${ADMIN_FRONT_PORT:-5173}:5173"
+    command: npm run dev -- --host 0.0.0.0
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - islamic_windows_network
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:80/health || curl -f http://localhost:80/health || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # User Frontend
+  user-front:
+    build:
+      context: ./user-front
+      dockerfile: Dockerfile.dev
+    container_name: islamic_windows_user_front
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+      NEXT_PUBLIC_ADMIN_URL: http://localhost:80/health/admin
+      BACKEND_API_URL: http://backend:3000
+      NEXTAUTH_URL: http://localhost:3001
+      NEXTAUTH_SECRET: ${JWT_SECRET:-your-secret-key}
+      WATCHPACK_POLLING: "true"
+      CHOKIDAR_USEPOLLING: "true"
+    ports:
+      - "${USER_FRONT_PORT:-3001}:3001"
+    command: npm run dev
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - islamic_windows_network
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3001 || curl -f http://localhost:3001 || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Servisi
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: islamic_windows_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+      - ./backend/uploads:/app/uploads:ro
+    restart: unless-stopped
+    networks:
+      - islamic_windows_network
+    depends_on:
+      - backend
+      - user-front
+      - admin-front
+
+  # Certbot Servisi
+  certbot:
+    image: certbot/certbot
+    container_name: islamic_windows_certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    networks:
+      - islamic_windows_network
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  islamic_windows_network:
+    driver: bridge

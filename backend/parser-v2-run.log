@@ -1,0 +1,37 @@
+/Users/mustafayildiz/.nvm/versions/node/v22.19.0/lib/node_modules/ts-node/src/index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: ⨯ Unable to compile TypeScript:
+src/services/pdf-scholar-parser-v2.ts(232,33): error TS2304: Cannot find name 'rm'.
+src/services/pdf-scholar-parser-v2.ts(232,39): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/services/pdf-scholar-parser-v2.ts(232,53): error TS2552: Cannot find name 'scholar'. Did you mean 'scholars'?
+src/services/pdf-scholar-parser-v2.ts(232,61): error TS2304: Cannot find name 'parser'.
+src/services/pdf-scholar-parser-v2.ts(232,68): error TS2304: Cannot find name 'v2'.
+src/services/pdf-scholar-parser-v2.ts(293,29): error TS2304: Cannot find name 'rm'.
+src/services/pdf-scholar-parser-v2.ts(293,35): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/services/pdf-scholar-parser-v2.ts(293,49): error TS2552: Cannot find name 'scholar'. Did you mean 'scholars'?
+src/services/pdf-scholar-parser-v2.ts(293,57): error TS2304: Cannot find name 'parser'.
+src/services/pdf-scholar-parser-v2.ts(293,64): error TS2304: Cannot find name 'v2'.
+src/services/pdf-scholar-parser-v2.ts(232,36): error TS1005: ',' expected.
+src/services/pdf-scholar-parser-v2.ts(232,39): error TS1005: ',' expected.
+src/services/pdf-scholar-parser-v2.ts(293,32): error TS1005: ',' expected.
+src/services/pdf-scholar-parser-v2.ts(293,35): error TS1005: ',' expected.
+
+    at createTSError (/Users/mustafayildiz/.nvm/versions/node/v22.19.0/lib/node_modules/ts-node/src/index.ts:859:12)
+    at reportTSError (/Users/mustafayildiz/.nvm/versions/node/v22.19.0/lib/node_modules/ts-node/src/index.ts:863:19)
+    at getOutput (/Users/mustafayildiz/.nvm/versions/node/v22.19.0/lib/node_modules/ts-node/src/index.ts:1077:36)
+    at Object.compile (/Users/mustafayildiz/.nvm/versions/node/v22.19.0/lib/node_modules/ts-node/src/index.ts:1433:41)
+    at Module.m._compile (/Users/mustafayildiz/.nvm/versions/node/v22.19.0/lib/node_modules/ts-node/src/index.ts:1617:30)
+    at node:internal/modules/cjs/loader:1839:10
+    at Object.require.extensions.<computed> [as .ts] (/Users/mustafayildiz/.nvm/versions/node/v22.19.0/lib/node_modules/ts-node/src/index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14) {
+  diagnosticCodes: [
+    2304, 2362, 2552,
+    2304, 2304, 2304,
+    2362, 2552, 2304,
+    2304, 1005, 1005,
+    1005, 1005
+  ]
+}
