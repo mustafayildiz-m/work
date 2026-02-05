@@ -33,7 +33,7 @@ let UserPostCommentsService = class UserPostCommentsService {
         const savedComment = await this.userPostCommentRepository.save(comment);
         const user = await this.userRepository.findOne({
             where: { id: userId },
-            select: ['id', 'firstName', 'lastName', 'username', 'photoUrl'],
+            select: ['id', 'firstName', 'lastName', 'username', 'photoUrl']
         });
         return {
             ...savedComment,
@@ -50,7 +50,7 @@ let UserPostCommentsService = class UserPostCommentsService {
         const commentsWithUserInfo = await Promise.all(comments.map(async (comment) => {
             const user = await this.userRepository.findOne({
                 where: { id: comment.user_id },
-                select: ['id', 'firstName', 'lastName', 'username', 'photoUrl'],
+                select: ['id', 'firstName', 'lastName', 'username', 'photoUrl']
             });
             return {
                 ...comment,
@@ -77,7 +77,7 @@ let UserPostCommentsService = class UserPostCommentsService {
         const updatedComment = await this.userPostCommentRepository.save(comment);
         const user = await this.userRepository.findOne({
             where: { id: userId },
-            select: ['id', 'firstName', 'lastName', 'username', 'photoUrl'],
+            select: ['id', 'firstName', 'lastName', 'username', 'photoUrl']
         });
         return {
             ...updatedComment,
@@ -96,7 +96,7 @@ let UserPostCommentsService = class UserPostCommentsService {
     }
     async getCommentCount(postId) {
         return await this.userPostCommentRepository.count({
-            where: { post_id: postId },
+            where: { post_id: postId }
         });
     }
 };

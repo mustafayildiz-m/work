@@ -74,7 +74,7 @@ let TranslationService = class TranslationService {
             throw new common_1.HttpException('Hedef dil kodu belirtilmelidir', common_1.HttpStatus.BAD_REQUEST);
         }
         if (!this.DEEPL_API_KEY) {
-            throw new common_1.HttpException("DeepL API key yapılandırılmamış. Lütfen DEEPL_API_KEY environment variable'ını ayarlayın.", common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new common_1.HttpException('DeepL API key yapılandırılmamış. Lütfen DEEPL_API_KEY environment variable\'ını ayarlayın.', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
         const targetLang = this.mapLanguageCode(targetLangCode);
         const sourceLang = sourceLangCode
@@ -94,7 +94,7 @@ let TranslationService = class TranslationService {
                 }
                 const response = await axios_1.default.post(this.DEEPL_API_URL, params.toString(), {
                     headers: {
-                        Authorization: `DeepL-Auth-Key ${this.DEEPL_API_KEY}`,
+                        'Authorization': `DeepL-Auth-Key ${this.DEEPL_API_KEY}`,
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
                     timeout: 30000,
@@ -113,8 +113,7 @@ let TranslationService = class TranslationService {
                 if (axios_1.default.isAxiosError(error)) {
                     const status = error.response?.status;
                     const statusText = error.response?.statusText || '';
-                    const errorMessage = error.response?.data?.message ||
-                        error.response?.data?.error?.message;
+                    const errorMessage = error.response?.data?.message || error.response?.data?.error?.message;
                     if (status === 429 ||
                         status === 456 ||
                         statusText.includes('Too Many Requests') ||
@@ -129,7 +128,9 @@ let TranslationService = class TranslationService {
                         continue;
                     }
                     if (error.response) {
-                        const errorMsg = errorMessage || error.response.statusText || 'Bilinmeyen hata';
+                        const errorMsg = errorMessage ||
+                            error.response.statusText ||
+                            'Bilinmeyen hata';
                         throw new common_1.HttpException(`DeepL API hatası: ${errorMsg}`, error.response.status || common_1.HttpStatus.INTERNAL_SERVER_ERROR);
                     }
                     else if (error.request) {

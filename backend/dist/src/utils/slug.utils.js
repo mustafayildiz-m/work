@@ -8,7 +8,7 @@ exports.slugToUrl = slugToUrl;
 function createSlug(text) {
     if (!text)
         return '';
-    return (text
+    return text
         .toString()
         .toLowerCase()
         .trim()
@@ -22,7 +22,7 @@ function createSlug(text) {
         .replace(/[^\w\-]+/g, '')
         .replace(/\-\-+/g, '-')
         .replace(/^-+/, '')
-        .replace(/-+$/, ''));
+        .replace(/-+$/, '');
 }
 function createUniqueSlug(baseText, existingSlugs = []) {
     let slug = createSlug(baseText);

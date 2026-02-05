@@ -18,7 +18,10 @@ let PodcastModule = class PodcastModule {
 exports.PodcastModule = PodcastModule;
 exports.PodcastModule = PodcastModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([podcast_entity_1.Podcast]), upload_module_1.UploadModule],
+        imports: [
+            typeorm_1.TypeOrmModule.forFeature([podcast_entity_1.Podcast]),
+            upload_module_1.UploadModule,
+        ],
         controllers: [podcast_controller_1.PodcastController],
         providers: [podcast_service_1.PodcastService],
         exports: [podcast_service_1.PodcastService],

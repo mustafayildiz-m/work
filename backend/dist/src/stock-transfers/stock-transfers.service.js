@@ -50,8 +50,7 @@ let StockTransfersService = class StockTransfersService {
         return this.transferRepository.save(transfer);
     }
     async findAll(filters) {
-        const query = this.transferRepository
-            .createQueryBuilder('transfer')
+        const query = this.transferRepository.createQueryBuilder('transfer')
             .leftJoinAndSelect('transfer.stock', 'stock')
             .leftJoinAndSelect('stock.book', 'book')
             .leftJoinAndSelect('book.translations', 'bookTranslations')
@@ -64,32 +63,22 @@ let StockTransfersService = class StockTransfersService {
             query.andWhere('(fromWarehouse.id = :warehouseId OR toWarehouse.id = :warehouseId)', { warehouseId: filters.warehouseId });
         }
         if (filters.fromWarehouseId) {
-            query.andWhere('fromWarehouse.id = :fromWarehouseId', {
-                fromWarehouseId: filters.fromWarehouseId,
-            });
+            query.andWhere('fromWarehouse.id = :fromWarehouseId', { fromWarehouseId: filters.fromWarehouseId });
         }
         if (filters.toWarehouseId) {
-            query.andWhere('toWarehouse.id = :toWarehouseId', {
-                toWarehouseId: filters.toWarehouseId,
-            });
+            query.andWhere('toWarehouse.id = :toWarehouseId', { toWarehouseId: filters.toWarehouseId });
         }
         if (filters.cargoCompany) {
-            query.andWhere('transfer.cargoCompany LIKE :cargoCompany', {
-                cargoCompany: `%${filters.cargoCompany}%`,
-            });
+            query.andWhere('transfer.cargoCompany LIKE :cargoCompany', { cargoCompany: `%${filters.cargoCompany}%` });
         }
         if (filters.status) {
             query.andWhere('transfer.status = :status', { status: filters.status });
         }
         if (filters.startDate) {
-            query.andWhere('transfer.createdAt >= :startDate', {
-                startDate: filters.startDate,
-            });
+            query.andWhere('transfer.createdAt >= :startDate', { startDate: filters.startDate });
         }
         if (filters.endDate) {
-            query.andWhere('transfer.createdAt <= :endDate', {
-                endDate: filters.endDate,
-            });
+            query.andWhere('transfer.createdAt <= :endDate', { endDate: filters.endDate });
         }
         query.orderBy('transfer.id', 'DESC');
         return query.getMany();
@@ -117,11 +106,7 @@ let StockTransfersService = class StockTransfersService {
             throw new common_1.NotFoundException('Stock not found');
         }
         const targetStock = await this.stockRepository.findOne({
-            where: {
-                book: { id: stock.book.id },
-                language: { id: stock.language.id },
-                warehouse: { id: transfer.toWarehouse.id },
-            },
+            where: { book: { id: stock.book.id }, language: { id: stock.language.id }, warehouse: { id: transfer.toWarehouse.id } },
         });
         if (targetStock) {
             await this.stockRepository.update({ id: targetStock.id }, { quantity: targetStock.quantity + transfer.quantity });
@@ -144,10 +129,7 @@ let StockTransfersService = class StockTransfersService {
             throw new common_1.BadRequestException('Only pending transfers can be cancelled');
         }
         const stock = await this.stockRepository.findOne({
-            where: {
-                id: transfer.stock.id,
-                warehouse: { id: transfer.fromWarehouse.id },
-            },
+            where: { id: transfer.stock.id, warehouse: { id: transfer.fromWarehouse.id } },
         });
         if (stock) {
             await this.stockRepository.update({ id: stock.id }, { quantity: stock.quantity + transfer.quantity });

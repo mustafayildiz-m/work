@@ -67,7 +67,7 @@ let ArticlesService = class ArticlesService {
             .select('translation.slug')
             .where('translation.slug IS NOT NULL')
             .getMany();
-        return translations.map((t) => t.slug);
+        return translations.map(t => t.slug);
     }
     async create(createArticleDto) {
         const { translations, ...articleData } = createArticleDto;
@@ -110,7 +110,7 @@ let ArticlesService = class ArticlesService {
             subQuery = subQuery.andWhere('LOWER(articleTranslations.title) LIKE :search', { search: searchTerm });
         }
         const articleIds = await subQuery.getRawMany();
-        const ids = articleIds.map((item) => item.article_id || item.id || item.articleId);
+        let ids = articleIds.map((item) => item.article_id || item.id || item.articleId);
         if (ids.length === 0) {
             return {
                 data: [],
@@ -162,21 +162,14 @@ let ArticlesService = class ArticlesService {
             });
         }
         if (bookIds && bookIds.trim()) {
-            const bookIdArray = bookIds
-                .split(',')
-                .map((id) => parseInt(id.trim()))
-                .filter((id) => !isNaN(id));
+            const bookIdArray = bookIds.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
             if (bookIdArray.length > 0) {
-                query = query.andWhere('article.bookId IN (:...bookIds)', {
-                    bookIds: bookIdArray,
-                });
+                query = query.andWhere('article.bookId IN (:...bookIds)', { bookIds: bookIdArray });
             }
         }
         if (search && search.trim()) {
             const searchTerm = `%${search.trim().toLowerCase()}%`;
-            query = query.andWhere('LOWER(articleTranslations.title) LIKE :search', {
-                search: searchTerm,
-            });
+            query = query.andWhere('LOWER(articleTranslations.title) LIKE :search', { search: searchTerm });
         }
         const totalCount = await query.getCount();
         const skip = (page - 1) * limit;
@@ -201,12 +194,7 @@ let ArticlesService = class ArticlesService {
     async findOne(id) {
         const article = await this.articleRepository.findOne({
             where: { id },
-            relations: [
-                'translations',
-                'translations.language',
-                'book',
-                'book.translations',
-            ],
+            relations: ['translations', 'translations.language', 'book', 'book.translations'],
         });
         if (!article) {
             throw new common_1.NotFoundException(`Article with ID ${id} not found`);
@@ -229,13 +217,11 @@ let ArticlesService = class ArticlesService {
             const existingSlugs = await this.getExistingSlugs();
             const updatedTranslations = [];
             for (const trans of translations) {
-                const transId = trans.id
-                    ? parseInt(trans.id.toString(), 10)
-                    : undefined;
+                const transId = trans.id ? parseInt(trans.id.toString(), 10) : undefined;
                 console.log(`🔍 Translation ID: ${trans.id} → ${transId}`);
-                console.log(`📋 Existing IDs: [${existingTranslations.map((t) => t.id).join(', ')}]`);
+                console.log(`📋 Existing IDs: [${existingTranslations.map(t => t.id).join(', ')}]`);
                 if (transId) {
-                    const existing = existingTranslations.find((t) => t.id === transId);
+                    const existing = existingTranslations.find(t => t.id === transId);
                     console.log(`${existing ? '✅ FOUND' : '❌ NOT FOUND'} - Translation ${transId}`);
                     if (existing) {
                         const pdfUrl = trans.pdfUrl || existing.pdfUrl;
@@ -264,16 +250,16 @@ let ArticlesService = class ArticlesService {
                         slug,
                         articleId: id,
                         article: updatedArticle,
-                        languageId: trans.languageId,
+                        languageId: trans.languageId
                     });
                     const saved = await this.articleTranslationRepository.save(newTrans);
                     updatedTranslations.push(saved);
                 }
             }
             const sentIds = translations
-                .filter((t) => t.id)
-                .map((t) => parseInt(t.id.toString(), 10));
-            const toDelete = existingTranslations.filter((t) => !sentIds.includes(t.id));
+                .filter(t => t.id)
+                .map(t => parseInt(t.id.toString(), 10));
+            const toDelete = existingTranslations.filter(t => !sentIds.includes(t.id));
             for (const trans of toDelete) {
                 if (trans.pdfUrl) {
                     const pdfPath = path.join(process.cwd(), trans.pdfUrl);

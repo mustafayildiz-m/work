@@ -5,39 +5,21 @@ const typeorm_1 = require("typeorm");
 class CreateUserPostSavesTable1751000000002 {
     async up(queryRunner) {
         await queryRunner.createTable(new typeorm_1.Table({
-            name: 'user_post_saves',
+            name: "user_post_saves",
             columns: [
-                {
-                    name: 'id',
-                    type: 'int',
-                    isPrimary: true,
-                    isGenerated: true,
-                    generationStrategy: 'increment',
-                },
-                { name: 'user_id', type: 'int' },
-                { name: 'post_id', type: 'int' },
-                {
-                    name: 'created_at',
-                    type: 'datetime',
-                    default: 'CURRENT_TIMESTAMP',
-                },
+                { name: "id", type: "int", isPrimary: true, isGenerated: true, generationStrategy: "increment" },
+                { name: "user_id", type: "int" },
+                { name: "post_id", type: "int" },
+                { name: "created_at", type: "datetime", default: "CURRENT_TIMESTAMP" }
             ],
             foreignKeys: [
-                {
-                    columnNames: ['user_id'],
-                    referencedTableName: 'users',
-                    referencedColumnNames: ['id'],
-                },
-                {
-                    columnNames: ['post_id'],
-                    referencedTableName: 'user_posts',
-                    referencedColumnNames: ['id'],
-                },
-            ],
+                { columnNames: ["user_id"], referencedTableName: "users", referencedColumnNames: ["id"] },
+                { columnNames: ["post_id"], referencedTableName: "user_posts", referencedColumnNames: ["id"] }
+            ]
         }));
     }
     async down(queryRunner) {
-        await queryRunner.dropTable('user_post_saves');
+        await queryRunner.dropTable("user_post_saves");
     }
 }
 exports.CreateUserPostSavesTable1751000000002 = CreateUserPostSavesTable1751000000002;

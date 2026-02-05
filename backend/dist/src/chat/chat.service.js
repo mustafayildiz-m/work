@@ -47,16 +47,12 @@ let ChatService = class ChatService {
     }
     async createMessage(createMessageDto) {
         const { senderId, receiverId, content } = createMessageDto;
-        const sender = await this.userRepository.findOne({
-            where: { id: senderId },
-        });
-        const receiver = await this.userRepository.findOne({
-            where: { id: receiverId },
-        });
+        const sender = await this.userRepository.findOne({ where: { id: senderId } });
+        const receiver = await this.userRepository.findOne({ where: { id: receiverId } });
         if (!sender || !receiver) {
             throw new common_1.NotFoundException('Sender or receiver not found');
         }
-        const conversation = await this.findOrCreateConversation(senderId, receiverId);
+        let conversation = await this.findOrCreateConversation(senderId, receiverId);
         const message = this.messageRepository.create({
             content,
             senderId,
@@ -78,12 +74,8 @@ let ChatService = class ChatService {
         });
         if (conversation) {
             const isUser1Participant1 = conversation.participant1Id === user1Id;
-            const isDeletedByUser1 = isUser1Participant1
-                ? conversation.deletedByParticipant1
-                : conversation.deletedByParticipant2;
-            const isDeletedByUser2 = isUser1Participant1
-                ? conversation.deletedByParticipant2
-                : conversation.deletedByParticipant1;
+            const isDeletedByUser1 = isUser1Participant1 ? conversation.deletedByParticipant1 : conversation.deletedByParticipant2;
+            const isDeletedByUser2 = isUser1Participant1 ? conversation.deletedByParticipant2 : conversation.deletedByParticipant1;
             if (isDeletedByUser1 || isDeletedByUser2) {
                 const updateData = {};
                 if (isDeletedByUser1) {
@@ -108,7 +100,7 @@ let ChatService = class ChatService {
                 }
                 await this.conversationRepository.update(conversation.id, updateData);
                 const updatedConversation = await this.conversationRepository.findOne({
-                    where: { id: conversation.id },
+                    where: { id: conversation.id }
                 });
                 if (updatedConversation) {
                     conversation = updatedConversation;
@@ -144,7 +136,7 @@ let ChatService = class ChatService {
             .skip(offset)
             .take(limit)
             .getMany();
-        return messages.map((message) => ({
+        return messages.map(message => ({
             id: message.id,
             content: message.content,
             senderId: message.senderId,
@@ -168,17 +160,17 @@ let ChatService = class ChatService {
             where: [
                 {
                     participant1Id: userId,
-                    deletedByParticipant1: false,
+                    deletedByParticipant1: false
                 },
                 {
                     participant2Id: userId,
-                    deletedByParticipant2: false,
+                    deletedByParticipant2: false
                 },
             ],
             relations: ['participant1', 'participant2'],
             order: { lastMessageAt: 'DESC' },
         });
-        return conversations.map((conv) => {
+        return conversations.map(conv => {
             const otherParticipant = conv.participant1Id === userId ? conv.participant2 : conv.participant1;
             return {
                 id: conv.id,
@@ -211,7 +203,7 @@ let ChatService = class ChatService {
             if (user) {
                 this.onlineUsers.set(userId, {
                     username: user.username,
-                    lastSeen: new Date(),
+                    lastSeen: new Date()
                 });
             }
         }
@@ -229,7 +221,7 @@ let ChatService = class ChatService {
             onlineUsers.push({
                 id: userId,
                 username: userInfo.username,
-                photoUrl: user?.photoUrl || undefined,
+                photoUrl: user?.photoUrl || undefined
             });
         }
         return onlineUsers;
@@ -246,10 +238,10 @@ let ChatService = class ChatService {
         }
         await this.messageRepository.update(messageId, {
             deletedBySender: true,
-            deletedAtSender: new Date(),
+            deletedAtSender: new Date()
         });
         const updatedMessage = await this.messageRepository.findOne({
-            where: { id: messageId },
+            where: { id: messageId }
         });
         if (updatedMessage?.deletedBySender && updatedMessage?.deletedByReceiver) {
             await this.messageRepository.delete(messageId);
@@ -264,7 +256,7 @@ let ChatService = class ChatService {
             .andWhere('message.isDeleted = :isDeleted', { isDeleted: false })
             .orderBy('message.createdAt', 'DESC')
             .getMany();
-        return messages.map((message) => ({
+        return messages.map(message => ({
             id: message.id,
             content: message.content,
             senderId: message.senderId,
@@ -286,7 +278,7 @@ let ChatService = class ChatService {
     async deleteConversation(conversationId, userId) {
         const user = await this.userRepository.findOne({
             where: { id: userId },
-            select: ['id', 'username'],
+            select: ['id', 'username']
         });
         if (!user) {
             throw new common_1.NotFoundException('User not found');
@@ -304,32 +296,22 @@ let ChatService = class ChatService {
         const updateData = isParticipant1
             ? {
                 deletedByParticipant1: true,
-                deletedAtParticipant1: new Date(),
+                deletedAtParticipant1: new Date()
             }
             : {
                 deletedByParticipant2: true,
-                deletedAtParticipant2: new Date(),
+                deletedAtParticipant2: new Date()
             };
         await this.conversationRepository.update(conversationId, updateData);
         const updatedConversation = await this.conversationRepository.findOne({
-            where: { id: conversationId },
+            where: { id: conversationId }
         });
-        if (updatedConversation?.deletedByParticipant1 &&
-            updatedConversation?.deletedByParticipant2) {
+        if (updatedConversation?.deletedByParticipant1 && updatedConversation?.deletedByParticipant2) {
             await this.messageRepository.delete({ conversationId: conversationId });
             await this.conversationRepository.delete(conversationId);
-            return {
-                wasHardDeleted: true,
-                deletedBy: userId,
-                deletedByUsername: user.username,
-            };
+            return { wasHardDeleted: true, deletedBy: userId, deletedByUsername: user.username };
         }
-        return {
-            wasHardDeleted: false,
-            deletedBy: userId,
-            deletedByUsername: user.username,
-            conversation: updatedConversation || undefined,
-        };
+        return { wasHardDeleted: false, deletedBy: userId, deletedByUsername: user.username, conversation: updatedConversation || undefined };
     }
     async getConversationById(conversationId) {
         return this.conversationRepository.findOne({

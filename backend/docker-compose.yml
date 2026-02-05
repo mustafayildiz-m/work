@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: islamic_windows_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    networks:
+      - islamic_windows_network
+
+  mysql:
+    image: mysql:8.0
+    container_name: islamic_windows_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: islamic_windows
+      MYSQL_USER: islamic_user
+      MYSQL_PASSWORD: islamic_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    networks:
+      - islamic_windows_network
+
+volumes:
+  redis_data:
+  mysql_data:
+
+networks:
+  islamic_windows_network:
+    driver: bridge

@@ -33,11 +33,11 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Language.prototype, "isActive", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => book_translation_entity_1.BookTranslation, (bookTranslation) => bookTranslation.language),
+    (0, typeorm_1.OneToMany)(() => book_translation_entity_1.BookTranslation, bookTranslation => bookTranslation.language),
     __metadata("design:type", Array)
 ], Language.prototype, "bookTranslations", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => article_translation_entity_1.ArticleTranslation, (articleTranslation) => articleTranslation.language),
+    (0, typeorm_1.OneToMany)(() => article_translation_entity_1.ArticleTranslation, articleTranslation => articleTranslation.language),
     __metadata("design:type", Array)
 ], Language.prototype, "articleTranslations", void 0);
 __decorate([

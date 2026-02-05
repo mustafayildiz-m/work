@@ -34,8 +34,7 @@ let ArticlesController = class ArticlesController {
             const coverImageUrl = await this.uploadService.uploadFile(coverImageFile);
             createArticleDto.coverImage = coverImageUrl;
         }
-        if (createArticleDto.translations &&
-            Array.isArray(createArticleDto.translations)) {
+        if (createArticleDto.translations && Array.isArray(createArticleDto.translations)) {
             createArticleDto.translations = await Promise.all(createArticleDto.translations.map(async (trans, idx) => {
                 const pdfFile = files.find((f) => f.fieldname === `translations[${idx}][pdfFile]`);
                 if (pdfFile) {
@@ -70,8 +69,7 @@ let ArticlesController = class ArticlesController {
             const coverImageUrl = await this.uploadService.uploadFile(coverImageFile);
             updateArticleDto.coverImage = coverImageUrl;
         }
-        if (updateArticleDto.translations &&
-            Array.isArray(updateArticleDto.translations)) {
+        if (updateArticleDto.translations && Array.isArray(updateArticleDto.translations)) {
             updateArticleDto.translations = await Promise.all(updateArticleDto.translations.map(async (trans, idx) => {
                 const pdfFile = files.find((f) => f.fieldname === `translations[${idx}][pdfFile]`);
                 if (pdfFile) {
@@ -81,10 +79,7 @@ let ArticlesController = class ArticlesController {
                         pdfUrl: await this.uploadService.uploadPdf(pdfFile),
                     };
                 }
-                console.log(`📄 Translation [${idx}]: PDF yok, mevcut data:`, {
-                    id: trans.id,
-                    pdfUrl: trans.pdfUrl,
-                });
+                console.log(`📄 Translation [${idx}]: PDF yok, mevcut data:`, { id: trans.id, pdfUrl: trans.pdfUrl });
                 return trans;
             }));
         }

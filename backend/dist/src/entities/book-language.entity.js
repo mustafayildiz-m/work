@@ -21,7 +21,7 @@ __decorate([
     __metadata("design:type", Number)
 ], BookLanguage.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => language_entity_1.Language, (language) => language.bookLanguages),
+    (0, typeorm_1.ManyToOne)(() => language_entity_1.Language, language => language.bookLanguages),
     (0, typeorm_1.JoinColumn)({ name: 'languageId' }),
     __metadata("design:type", language_entity_1.Language)
 ], BookLanguage.prototype, "language", void 0);

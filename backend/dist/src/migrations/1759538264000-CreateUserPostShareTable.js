@@ -7,47 +7,47 @@ class CreateUserPostShareTable1759538264000 {
         this.name = 'CreateUserPostShareTable1759538264000';
     }
     async up(queryRunner) {
-        const tableExists = await queryRunner.hasTable('user_post_shares');
+        const tableExists = await queryRunner.hasTable("user_post_shares");
         if (!tableExists) {
             await queryRunner.createTable(new typeorm_1.Table({
-                name: 'user_post_shares',
+                name: "user_post_shares",
                 columns: [
                     {
-                        name: 'id',
-                        type: 'int',
+                        name: "id",
+                        type: "int",
                         isPrimary: true,
                         isGenerated: true,
-                        generationStrategy: 'increment',
+                        generationStrategy: "increment",
                     },
                     {
-                        name: 'user_id',
-                        type: 'int',
+                        name: "user_id",
+                        type: "int",
                         isNullable: false,
                     },
                     {
-                        name: 'post_id',
-                        type: 'varchar',
-                        length: '255',
+                        name: "post_id",
+                        type: "varchar",
+                        length: "255",
                         isNullable: false,
                     },
                     {
-                        name: 'post_type',
-                        type: 'varchar',
-                        length: '50',
+                        name: "post_type",
+                        type: "varchar",
+                        length: "50",
                         isNullable: false,
                     },
                     {
-                        name: 'created_at',
-                        type: 'timestamp',
-                        default: 'CURRENT_TIMESTAMP',
+                        name: "created_at",
+                        type: "timestamp",
+                        default: "CURRENT_TIMESTAMP",
                         isNullable: false,
                     },
                 ],
             }), true);
         }
         else {
-            const table = await queryRunner.getTable('user_post_shares');
-            if (!table?.findColumnByName('post_type')) {
+            const table = await queryRunner.getTable("user_post_shares");
+            if (!table?.findColumnByName("post_type")) {
                 await queryRunner.query(`
                     ALTER TABLE \`user_post_shares\` 
                     ADD COLUMN \`post_type\` varchar(50) NOT NULL DEFAULT 'user_post'
@@ -60,8 +60,8 @@ class CreateUserPostShareTable1759538264000 {
             `);
         }
         catch (error) {
-            const table = await queryRunner.getTable('user_post_shares');
-            const hasPostType = table?.findColumnByName('post_type');
+            const table = await queryRunner.getTable("user_post_shares");
+            const hasPostType = table?.findColumnByName("post_type");
             if (hasPostType) {
                 try {
                     await queryRunner.query(`DROP INDEX \`IDX_user_post_share_unique\` ON \`user_post_shares\``);
@@ -91,7 +91,7 @@ class CreateUserPostShareTable1759538264000 {
         `);
     }
     async down(queryRunner) {
-        await queryRunner.dropTable('user_post_shares');
+        await queryRunner.dropTable("user_post_shares");
     }
 }
 exports.CreateUserPostShareTable1759538264000 = CreateUserPostShareTable1759538264000;

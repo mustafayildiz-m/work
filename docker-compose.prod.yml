@@ -1,0 +1,40 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+    volumes:
+      - ./backend/uploads:/app/uploads
+
+  admin-front:
+    build:
+      context: ./admin-front
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: https://islamicwindows.com/api
+    environment:
+      NODE_ENV: production
+      VITE_API_URL: https://islamicwindows.com/api
+    command: []
+
+  user-front:
+    build:
+      context: ./user-front
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: https://islamicwindows.com/api
+        NEXT_PUBLIC_ADMIN_URL: https://islamicwindows.com/admin
+        NEXTAUTH_URL: https://islamicwindows.com
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: https://islamicwindows.com/api
+      NEXT_PUBLIC_ADMIN_URL: https://islamicwindows.com/admin
+      BACKEND_API_URL: http://backend:3000
+      NEXTAUTH_URL: https://islamicwindows.com
+      NEXTAUTH_SECRET: ${JWT_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+    command: ["npm", "start"]

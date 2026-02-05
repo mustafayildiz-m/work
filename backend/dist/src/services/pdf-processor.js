@@ -29,12 +29,11 @@ let PDFProcessor = PDFProcessor_1 = class PDFProcessor {
             job.progress(90);
             const scholars = result.scholars;
             const avgConfidence = scholars.length > 0
-                ? scholars.reduce((sum, s) => sum + (s.confidence || 0), 0) /
-                    scholars.length
+                ? scholars.reduce((sum, s) => sum + (s.confidence || 0), 0) / scholars.length
                 : 0;
-            const scholarsWithAlternativeNames = scholars.filter((s) => s.alternativeName).length;
-            const scholarsWithDates = scholars.filter((s) => s.birthDate || s.deathDate || s.birthDateHijri || s.deathDateHijri).length;
-            const scholarsWithLineage = scholars.filter((s) => s.lineage).length;
+            const scholarsWithAlternativeNames = scholars.filter(s => s.alternativeName).length;
+            const scholarsWithDates = scholars.filter(s => s.birthDate || s.deathDate || s.birthDateHijri || s.deathDateHijri).length;
+            const scholarsWithLineage = scholars.filter(s => s.lineage).length;
             const processingTimeMs = Date.now() - startTime;
             const processResult = {
                 success: true,
@@ -53,7 +52,7 @@ let PDFProcessor = PDFProcessor_1 = class PDFProcessor {
                     scholarsWithLineage,
                     originalFileName: metadata?.originalFileName,
                     fileSize: metadata?.fileSize,
-                },
+                }
             };
             this.logger.log(`Successfully completed PDF parsing job ${job.id}: ${result.metadata.totalCount} scholars found in ${processingTimeMs}ms`);
             job.progress(100);
@@ -79,7 +78,7 @@ let PDFProcessor = PDFProcessor_1 = class PDFProcessor {
                     scholarsWithLineage: 0,
                     originalFileName: metadata?.originalFileName,
                     fileSize: metadata?.fileSize,
-                },
+                }
             };
             return errorResult;
         }

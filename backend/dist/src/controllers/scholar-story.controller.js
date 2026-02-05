@@ -34,7 +34,7 @@ let ScholarStoryController = class ScholarStoryController {
                 is_featured: body.is_featured === 'true' || body.is_featured === true,
                 video_url: body.video_url || undefined,
                 duration: body.duration ? parseInt(body.duration, 10) : undefined,
-                thumbnail_url: body.thumbnail_url || undefined,
+                thumbnail_url: undefined,
             };
             if (file) {
                 const thumbnailUrl = await this.uploadService.uploadFile(file);
@@ -84,7 +84,6 @@ let ScholarStoryController = class ScholarStoryController {
     }
     async update(id, body, file) {
         try {
-            console.log('Update Body:', body);
             const updateScholarStoryDto = {
                 title: body.title,
                 description: body.description,
@@ -94,13 +93,11 @@ let ScholarStoryController = class ScholarStoryController {
                 is_featured: body.is_featured === 'true' || body.is_featured === true,
                 video_url: body.video_url || undefined,
                 duration: body.duration ? parseInt(body.duration, 10) : undefined,
-                thumbnail_url: body.thumbnail_url || undefined,
             };
             if (file) {
                 const thumbnailUrl = await this.uploadService.uploadFile(file);
                 updateScholarStoryDto.thumbnail_url = thumbnailUrl;
             }
-            console.log('Update DTO:', updateScholarStoryDto);
             return this.scholarStoryService.update(id, updateScholarStoryDto);
         }
         catch (error) {

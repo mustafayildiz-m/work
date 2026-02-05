@@ -132,12 +132,12 @@ let UsersController = class UsersController {
         const offsetNumber = offset ? parseInt(offset, 10) : 0;
         const [users, totalCount] = await Promise.all([
             this.userFollowService.getFollowingUsers(id, limitNumber, offsetNumber),
-            this.userFollowService.getFollowingCount(id),
+            this.userFollowService.getFollowingCount(id)
         ]);
         return {
             users,
             totalCount,
-            hasMore: offsetNumber + limitNumber < totalCount,
+            hasMore: (offsetNumber + limitNumber) < totalCount
         };
     }
     async getFollowersOfUser(id, limit, offset) {
@@ -145,22 +145,22 @@ let UsersController = class UsersController {
         const offsetNumber = offset ? parseInt(offset, 10) : 0;
         const [users, totalCount] = await Promise.all([
             this.userFollowService.getFollowers(id, limitNumber, offsetNumber),
-            this.userFollowService.getFollowersCount(id),
+            this.userFollowService.getFollowersCount(id)
         ]);
         return {
             users,
             totalCount,
-            hasMore: offsetNumber + limitNumber < totalCount,
+            hasMore: (offsetNumber + limitNumber) < totalCount
         };
     }
     async getFollowStatsOfUser(id) {
         const [followingCount, followersCount] = await Promise.all([
             this.userFollowService.getFollowingCount(id),
-            this.userFollowService.getFollowersCount(id),
+            this.userFollowService.getFollowersCount(id)
         ]);
         return {
             followingUsersCount: followingCount,
-            followersCount,
+            followersCount
         };
     }
     async getFollowingScholarsOfUser(id, limit, offset) {
@@ -168,12 +168,12 @@ let UsersController = class UsersController {
         const offsetNumber = offset ? parseInt(offset, 10) : 0;
         const [scholars, totalCount] = await Promise.all([
             this.userScholarFollowService.getFollowingScholars(id, limitNumber, offsetNumber),
-            this.userScholarFollowService.getFollowingScholarsCount(id),
+            this.userScholarFollowService.getFollowingScholarsCount(id)
         ]);
         return {
             scholars,
             totalCount,
-            hasMore: offsetNumber + limitNumber < totalCount,
+            hasMore: (offsetNumber + limitNumber) < totalCount
         };
     }
 };

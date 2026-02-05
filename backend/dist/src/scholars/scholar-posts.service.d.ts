@@ -4,15 +4,12 @@ import { ScholarPostTranslation } from './entities/scholar-post-translation.enti
 import { CreateScholarPostDto } from './dto/create-scholar-post.dto';
 import { UpdateTranslationDto } from './dto/update-scholar-post.dto';
 import { Scholar } from './entities/scholar.entity';
-import { CacheService } from '../services/cache.service';
 export declare class ScholarPostsService {
     private scholarPostRepository;
     private translationRepository;
     private scholarRepository;
-    private readonly cacheService;
-    constructor(scholarPostRepository: Repository<ScholarPost>, translationRepository: Repository<ScholarPostTranslation>, scholarRepository: Repository<Scholar>, cacheService: CacheService);
+    constructor(scholarPostRepository: Repository<ScholarPost>, translationRepository: Repository<ScholarPostTranslation>, scholarRepository: Repository<Scholar>);
     create(createScholarPostDto: CreateScholarPostDto): Promise<ScholarPost>;
-    private clearTimelineCacheForScholar;
     findAll(scholarId: number, language?: string): Promise<ScholarPost[]>;
     findOne(id: string, language?: string): Promise<ScholarPost>;
     remove(id: string): Promise<void>;

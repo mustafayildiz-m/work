@@ -23,7 +23,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Stock.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => book_entity_1.Book, (book) => book.stocks),
+    (0, typeorm_1.ManyToOne)(() => book_entity_1.Book, book => book.stocks),
     (0, typeorm_1.JoinColumn)({ name: 'book_id' }),
     __metadata("design:type", book_entity_1.Book)
 ], Stock.prototype, "book", void 0);
@@ -41,7 +41,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Stock.prototype, "unitPrice", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => warehouse_entity_1.Warehouse, (warehouse) => warehouse.stocks),
+    (0, typeorm_1.ManyToOne)(() => warehouse_entity_1.Warehouse, warehouse => warehouse.stocks),
     (0, typeorm_1.JoinColumn)({ name: 'warehouse_id' }),
     __metadata("design:type", warehouse_entity_1.Warehouse)
 ], Stock.prototype, "warehouse", void 0);

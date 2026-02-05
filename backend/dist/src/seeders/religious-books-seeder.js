@@ -29,15 +29,9 @@ let ReligiousBooksSeeder = class ReligiousBooksSeeder {
     }
     async seed() {
         console.log('🌱 Dini kitaplar ekleniyor...');
-        const turkish = await this.languageRepository.findOne({
-            where: { code: 'tr' },
-        });
-        const english = await this.languageRepository.findOne({
-            where: { code: 'en' },
-        });
-        const arabic = await this.languageRepository.findOne({
-            where: { code: 'ar' },
-        });
+        const turkish = await this.languageRepository.findOne({ where: { code: 'tr' } });
+        const english = await this.languageRepository.findOne({ where: { code: 'en' } });
+        const arabic = await this.languageRepository.findOne({ where: { code: 'ar' } });
         if (!turkish || !english || !arabic) {
             console.error('❌ Gerekli diller bulunamadı! Önce dilleri ekleyin.');
             return;
@@ -52,13 +46,13 @@ let ReligiousBooksSeeder = class ReligiousBooksSeeder {
                     {
                         languageId: turkish.id,
                         title: 'Kimya-yı Saadet',
-                        description: "İmam Gazali'nin en önemli eserlerinden biri. İnsanı mutluluğa götüren yolları anlatan tasavvufi bir eserdir.",
+                        description: 'İmam Gazali\'nin en önemli eserlerinden biri. İnsanı mutluluğa götüren yolları anlatan tasavvufi bir eserdir.',
                         summary: 'Mutluluk kimyası, ibadet, ahlak ve tasavvuf konularında rehber bir eser.',
                     },
                     {
                         languageId: english.id,
                         title: 'The Alchemy of Happiness',
-                        description: "One of Imam Ghazali's most important works. A Sufi work that describes the ways that lead man to happiness.",
+                        description: 'One of Imam Ghazali\'s most important works. A Sufi work that describes the ways that lead man to happiness.',
                         summary: 'The chemistry of happiness, a guide on worship, morals and Sufism.',
                     },
                     {
@@ -77,14 +71,14 @@ let ReligiousBooksSeeder = class ReligiousBooksSeeder {
                 translations: [
                     {
                         languageId: turkish.id,
-                        title: "Fusus'ul Hikem",
-                        description: "İbn Arabi'nin en önemli eserlerinden biri. Vahdet-i vücut düşüncesinin temel metinlerinden.",
+                        title: 'Fusus\'ul Hikem',
+                        description: 'İbn Arabi\'nin en önemli eserlerinden biri. Vahdet-i vücut düşüncesinin temel metinlerinden.',
                         summary: 'Peygamberlerin hikmetlerini anlatan derin bir tasavvuf eseri.',
                     },
                     {
                         languageId: english.id,
                         title: 'The Bezels of Wisdom',
-                        description: "One of Ibn Arabi's most important works. One of the basic texts of the idea of ​​unity of being.",
+                        description: 'One of Ibn Arabi\'s most important works. One of the basic texts of the idea of ​​unity of being.',
                         summary: 'A profound Sufi work describing the wisdom of the prophets.',
                     },
                     {
@@ -104,8 +98,8 @@ let ReligiousBooksSeeder = class ReligiousBooksSeeder {
                     {
                         languageId: turkish.id,
                         title: 'Risale-i Nur Külliyatı',
-                        description: "Said Nursi'nin Kur'an'ın manevi tefsiri olarak kaleme aldığı eserler topluluğu.",
-                        summary: "İman, ibadet ve Kur'an tefsiri konularında kapsamlı bir eser.",
+                        description: 'Said Nursi\'nin Kur\'an\'ın manevi tefsiri olarak kaleme aldığı eserler topluluğu.',
+                        summary: 'İman, ibadet ve Kur\'an tefsiri konularında kapsamlı bir eser.',
                     },
                     {
                         languageId: english.id,
@@ -129,7 +123,7 @@ let ReligiousBooksSeeder = class ReligiousBooksSeeder {
                 translations: [
                     {
                         languageId: turkish.id,
-                        title: "İğasetü'l Lehfan",
+                        title: 'İğasetü\'l Lehfan',
                         description: 'Şeytanın tuzaklarından korunma yollarını anlatan önemli bir eser.',
                         summary: 'İslam ahlakı ve şeytanın hilelerinden korunma rehberi.',
                     },
@@ -155,8 +149,8 @@ let ReligiousBooksSeeder = class ReligiousBooksSeeder {
                 translations: [
                     {
                         languageId: turkish.id,
-                        title: "Mefatihü'l Gayb (Tefsir-i Kebir)",
-                        description: "Kur'an-ı Kerim'in en kapsamlı ve detaylı tefsirlerinden biri.",
+                        title: 'Mefatihü\'l Gayb (Tefsir-i Kebir)',
+                        description: 'Kur\'an-ı Kerim\'in en kapsamlı ve detaylı tefsirlerinden biri.',
                         summary: 'Kelam, felsefe ve dil bilgisi açısından zengin bir tefsir eseri.',
                     },
                     {
@@ -182,7 +176,7 @@ let ReligiousBooksSeeder = class ReligiousBooksSeeder {
                     {
                         languageId: turkish.id,
                         title: 'Mektubat-ı Rabbani',
-                        description: "İmam Rabbani'nin müridlerine ve çeşitli kimselere yazdığı mektuplardan oluşan eser.",
+                        description: 'İmam Rabbani\'nin müridlerine ve çeşitli kimselere yazdığı mektuplardan oluşan eser.',
                         summary: 'Tasavvuf, şeriat-tarikat dengesi ve maneviyat üzerine öğütler.',
                     },
                     {
@@ -207,14 +201,14 @@ let ReligiousBooksSeeder = class ReligiousBooksSeeder {
                 translations: [
                     {
                         languageId: turkish.id,
-                        title: "Gunyetü't Talibin",
-                        description: "Abdulkadir Geylani'nin fıkıh ve tasavvuf konularındaki temel eseri.",
+                        title: 'Gunyetü\'t Talibin',
+                        description: 'Abdulkadir Geylani\'nin fıkıh ve tasavvuf konularındaki temel eseri.',
                         summary: 'Müridlerin rehberi, fıkıh ve tasavvuf bilgileri içeren kapsamlı eser.',
                     },
                     {
                         languageId: english.id,
                         title: 'Sufficient Provision for Seekers',
-                        description: "Abdulkadir Geylani's basic work on jurisprudence and Sufism.",
+                        description: 'Abdulkadir Geylani\'s basic work on jurisprudence and Sufism.',
                         summary: 'A comprehensive work containing the guide of disciples, jurisprudence and Sufism knowledge.',
                     },
                     {
@@ -234,13 +228,13 @@ let ReligiousBooksSeeder = class ReligiousBooksSeeder {
                     {
                         languageId: turkish.id,
                         title: 'el-Ümm',
-                        description: "İmam Şafii'nin fıkıh usulü ve fıkhi meseleleri ele aldığı ana eseri.",
+                        description: 'İmam Şafii\'nin fıkıh usulü ve fıkhi meseleleri ele aldığı ana eseri.',
                         summary: 'Şafii mezhebinin temel kaynağı, fıkıh ve usul konularında referans eser.',
                     },
                     {
                         languageId: english.id,
                         title: 'The Mother Book',
-                        description: "Imam Shafi's main work dealing with the principles of jurisprudence and jurisprudence issues.",
+                        description: 'Imam Shafi\'s main work dealing with the principles of jurisprudence and jurisprudence issues.',
                         summary: 'The main source of the Shafi school, reference work on jurisprudence and methodology.',
                     },
                     {
@@ -260,13 +254,13 @@ let ReligiousBooksSeeder = class ReligiousBooksSeeder {
                     {
                         languageId: turkish.id,
                         title: 'Mukaddime',
-                        description: "İbn Haldun'un toplum ve medeniyet tarihi üzerine çığır açan eseri.",
+                        description: 'İbn Haldun\'un toplum ve medeniyet tarihi üzerine çığır açan eseri.',
                         summary: 'Sosyolojinin temellerini atan, medeniyet ve devlet teorileri içeren klasik eser.',
                     },
                     {
                         languageId: english.id,
                         title: 'The Muqaddimah',
-                        description: "Ibn Khaldun's groundbreaking work on the history of society and civilization.",
+                        description: 'Ibn Khaldun\'s groundbreaking work on the history of society and civilization.',
                         summary: 'A classic work that lays the foundations of sociology and contains theories of civilization and state.',
                     },
                     {
@@ -285,14 +279,14 @@ let ReligiousBooksSeeder = class ReligiousBooksSeeder {
                 translations: [
                     {
                         languageId: turkish.id,
-                        title: "el-Munkizu mine'd Dalal",
-                        description: "İmam Gazali'nin entelektüel ve ruhani yolculuğunu anlattığı otobiyografik eseri.",
+                        title: 'el-Munkizu mine\'d Dalal',
+                        description: 'İmam Gazali\'nin entelektüel ve ruhani yolculuğunu anlattığı otobiyografik eseri.',
                         summary: 'Dalalet ve şüpheden kurtuluş, hakikate ulaşma serüveni.',
                     },
                     {
                         languageId: english.id,
                         title: 'The Deliverance from Error',
-                        description: "Imam Ghazali's autobiographical work describing his intellectual and spiritual journey.",
+                        description: 'Imam Ghazali\'s autobiographical work describing his intellectual and spiritual journey.',
                         summary: 'Deliverance from error and doubt, the adventure of reaching the truth.',
                     },
                     {

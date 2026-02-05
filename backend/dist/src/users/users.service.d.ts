@@ -10,7 +10,6 @@ export declare class UsersService {
     findAll(): Promise<User[]>;
     findOne(id: number): Promise<User | null>;
     findByEmail(email: string): Promise<User | null>;
-    findByUsername(username: string): Promise<User | null>;
     update(id: number, updateUserDto: Partial<CreateUserDto>): Promise<User | null>;
     updateProfile(id: number, updateUserDto: UpdateUserDto): Promise<User | null>;
     changePassword(id: number, changePasswordDto: ChangePasswordDto): Promise<void>;

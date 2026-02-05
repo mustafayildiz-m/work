@@ -28,159 +28,159 @@ let ScholarPostsSeeder = class ScholarPostsSeeder {
         const scholarPosts = {
             1: [
                 {
-                    content: 'İlim öğrenmek, namaz kılmaktan daha faziletlidir. Çünkü ilim, hem kendine hem de başkalarına faydalıdır.',
+                    content: "İlim öğrenmek, namaz kılmaktan daha faziletlidir. Çünkü ilim, hem kendine hem de başkalarına faydalıdır.",
                     mediaUrls: [],
-                    fileUrls: [],
+                    fileUrls: []
                 },
                 {
                     content: "Allah'ın rızasını kazanmak için çalışan kimse, dünyada da ahirette de mutlu olur.",
                     mediaUrls: [],
-                    fileUrls: [],
+                    fileUrls: []
                 },
                 {
                     content: "Fıkıh, Allah'ın emirlerini ve yasaklarını bilmektir. Bu ilim olmadan ibadetlerin kabul olması mümkün değildir.",
                     mediaUrls: [],
-                    fileUrls: [],
-                },
+                    fileUrls: []
+                }
             ],
             2: [
                 {
-                    content: 'Medine halkının ameli, bizim için delildir. Onların yaptığını yapmak, terk ettiğini terk etmek gerekir.',
+                    content: "Medine halkının ameli, bizim için delildir. Onların yaptığını yapmak, terk ettiğini terk etmek gerekir.",
                     mediaUrls: [],
-                    fileUrls: [],
+                    fileUrls: []
                 },
                 {
                     content: "İlim, Allah'tan korkmakla başlar. Allah'tan korkmayanın ilmi, kendisine fayda vermez.",
                     mediaUrls: [],
-                    fileUrls: [],
-                },
+                    fileUrls: []
+                }
             ],
             3: [
                 {
                     content: "Kur'an'ı anlamak için Arap dilini bilmek şarttır. Arapça bilmeyen, Kur'an'ı tam anlayamaz.",
                     mediaUrls: [],
-                    fileUrls: [],
+                    fileUrls: []
                 },
                 {
                     content: "İlim öğrenmek isteyen, önce kendini tanımalıdır. Kendini tanıyan, Allah'ı tanır.",
                     mediaUrls: [],
-                    fileUrls: [],
+                    fileUrls: []
                 },
                 {
                     content: "Fıkıh usulü, şer'i hükümleri çıkarmanın yollarını öğretir. Bu olmadan doğru hüküm verilemez.",
                     mediaUrls: [],
-                    fileUrls: [],
-                },
+                    fileUrls: []
+                }
             ],
             4: [
                 {
-                    content: 'Hadis, dinin temelidir. Hadis olmadan din olmaz. Bu yüzden hadis öğrenmek farzdır.',
+                    content: "Hadis, dinin temelidir. Hadis olmadan din olmaz. Bu yüzden hadis öğrenmek farzdır.",
                     mediaUrls: [],
-                    fileUrls: [],
+                    fileUrls: []
                 },
                 {
                     content: "Allah'ın dininde bid'at çıkarmak, dini bozmaktır. Bid'atçılar, dini tahrif ederler.",
                     mediaUrls: [],
-                    fileUrls: [],
-                },
+                    fileUrls: []
+                }
             ],
             5: [
                 {
                     content: "İlim, kalbi aydınlatır. Kalbi aydınlanan, Allah'ı görür gibi bilir.",
                     mediaUrls: [],
-                    fileUrls: [],
+                    fileUrls: []
                 },
                 {
-                    content: 'Dünya, ahiret tarlasıdır. Burada ne ekersen, orada onu biçersin.',
+                    content: "Dünya, ahiret tarlasıdır. Burada ne ekersen, orada onu biçersin.",
                     mediaUrls: [],
-                    fileUrls: [],
+                    fileUrls: []
                 },
                 {
                     content: "Tasavvuf, kalbi temizlemek ve Allah'a yaklaşmaktır. Bu olmadan gerçek iman olmaz.",
                     mediaUrls: [],
-                    fileUrls: [],
-                },
+                    fileUrls: []
+                }
             ],
             6: [
                 {
-                    content: 'Tıp, insan sağlığını koruma sanatıdır. Sağlık, en büyük nimettir.',
+                    content: "Tıp, insan sağlığını koruma sanatıdır. Sağlık, en büyük nimettir.",
                     mediaUrls: [],
-                    fileUrls: [],
+                    fileUrls: []
                 },
                 {
                     content: "Felsefe, varlığın hakikatini araştırmaktır. Bu araştırma, Allah'ı tanımaya götürür.",
                     mediaUrls: [],
-                    fileUrls: [],
+                    fileUrls: []
                 },
                 {
                     content: "İlim, insanı kemale erdirir. Kemal, Allah'a yakınlıktır.",
                     mediaUrls: [],
-                    fileUrls: [],
-                },
+                    fileUrls: []
+                }
             ],
             7: [
                 {
                     content: "Felsefe ve din, aynı hakikati farklı yollardan arar. İkisi de Allah'ı tanımaya götürür.",
                     mediaUrls: [],
-                    fileUrls: [],
+                    fileUrls: []
                 },
                 {
                     content: "Akıl, Allah'ın insana verdiği en büyük nimettir. Aklı kullanmak, ibadettir.",
                     mediaUrls: [],
-                    fileUrls: [],
-                },
+                    fileUrls: []
+                }
             ],
             8: [
                 {
                     content: "Hadis, Peygamber'in sözü, fiili ve takriridir. Bu üçü de dinin kaynağıdır.",
                     mediaUrls: [],
-                    fileUrls: [],
+                    fileUrls: []
                 },
                 {
-                    content: 'Hadis ricali, dinin koruyucularıdır. Onlar olmasa, din bozulurdu.',
+                    content: "Hadis ricali, dinin koruyucularıdır. Onlar olmasa, din bozulurdu.",
                     mediaUrls: [],
-                    fileUrls: [],
+                    fileUrls: []
                 },
                 {
-                    content: 'Sahih hadis, kesin bilgi verir. Bu bilgi olmadan din olmaz.',
+                    content: "Sahih hadis, kesin bilgi verir. Bu bilgi olmadan din olmaz.",
                     mediaUrls: [],
-                    fileUrls: [],
-                },
+                    fileUrls: []
+                }
             ],
             9: [
                 {
-                    content: 'Hadis ilmi, dinin en önemli ilmidir. Bu ilim olmadan fıkıh olmaz.',
+                    content: "Hadis ilmi, dinin en önemli ilmidir. Bu ilim olmadan fıkıh olmaz.",
                     mediaUrls: [],
-                    fileUrls: [],
+                    fileUrls: []
                 },
                 {
                     content: "Hadis öğrenmek, Peygamber'i tanımaktır. Peygamber'i tanımak, Allah'ı tanımaktır.",
                     mediaUrls: [],
-                    fileUrls: [],
-                },
+                    fileUrls: []
+                }
             ],
             10: [
                 {
-                    content: 'Aşk, her şeyin anahtarıdır. Aşk olmadan hiçbir şey anlaşılmaz.',
+                    content: "Aşk, her şeyin anahtarıdır. Aşk olmadan hiçbir şey anlaşılmaz.",
                     mediaUrls: [],
-                    fileUrls: [],
+                    fileUrls: []
                 },
                 {
-                    content: 'Gel, ne olursan ol, gel! Kafir, putperest, ateist olsan da gel! Bizim dergahımız umutsuzluk dergahı değil.',
+                    content: "Gel, ne olursan ol, gel! Kafir, putperest, ateist olsan da gel! Bizim dergahımız umutsuzluk dergahı değil.",
                     mediaUrls: [],
-                    fileUrls: [],
+                    fileUrls: []
                 },
                 {
                     content: "İnsan, aynada kendini görür. Allah'ı görmek isteyen, kendi kalbine baksın.",
                     mediaUrls: [],
-                    fileUrls: [],
-                },
-            ],
+                    fileUrls: []
+                }
+            ]
         };
         for (const [scholarId, posts] of Object.entries(scholarPosts)) {
             try {
                 const scholar = await this.scholarRepository.findOne({
-                    where: { id: parseInt(scholarId) },
+                    where: { id: parseInt(scholarId) }
                 });
                 if (!scholar) {
                     console.log(`⚠️  Scholar not found: ID ${scholarId}`);
@@ -190,7 +190,7 @@ let ScholarPostsSeeder = class ScholarPostsSeeder {
                     const post = this.scholarPostRepository.create({
                         ...postData,
                         scholar: scholar,
-                        scholarId: parseInt(scholarId),
+                        scholarId: parseInt(scholarId)
                     });
                     await this.scholarPostRepository.save(post);
                     console.log(`✅ Added post for ${scholar.fullName}: "${postData.content.substring(0, 50)}..."`);

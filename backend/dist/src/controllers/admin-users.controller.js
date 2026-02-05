@@ -34,9 +34,7 @@ let AdminUsersController = class AdminUsersController {
         }
         if (isActive !== undefined) {
             const activeStatus = isActive === 'true';
-            queryBuilder.andWhere('user.isActive = :isActive', {
-                isActive: activeStatus,
-            });
+            queryBuilder.andWhere('user.isActive = :isActive', { isActive: activeStatus });
         }
         if (search) {
             queryBuilder.andWhere('(user.firstName LIKE :search OR user.lastName LIKE :search OR user.email LIKE :search OR user.username LIKE :search)', { search: `%${search}%` });
@@ -46,7 +44,7 @@ let AdminUsersController = class AdminUsersController {
             .skip(offsetNumber)
             .take(limitNumber);
         const [users, total] = await queryBuilder.getManyAndCount();
-        const sanitizedUsers = users.map((user) => {
+        const sanitizedUsers = users.map(user => {
             const { password, ...userWithoutPassword } = user;
             return userWithoutPassword;
         });
@@ -142,7 +140,7 @@ let AdminUsersController = class AdminUsersController {
         return { message: 'Kullanıcı başarıyla silindi' };
     }
     async getUserStatistics() {
-        const [totalUsers, adminCount, editorCount, userCount, activeUsers, inactiveUsers,] = await Promise.all([
+        const [totalUsers, adminCount, editorCount, userCount, activeUsers, inactiveUsers] = await Promise.all([
             this.userRepository.count(),
             this.userRepository.count({ where: { role: 'admin' } }),
             this.userRepository.count({ where: { role: 'editor' } }),

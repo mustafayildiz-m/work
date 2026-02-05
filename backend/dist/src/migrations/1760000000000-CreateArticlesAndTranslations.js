@@ -121,8 +121,7 @@ class CreateArticlesAndTranslations1760000000000 {
     }
     async down(queryRunner) {
         const articleTranslationsTable = await queryRunner.getTable('article_translations');
-        const articlesForeignKeys = articleTranslationsTable?.foreignKeys.filter((fk) => fk.columnNames.indexOf('articleId') !== -1 ||
-            fk.columnNames.indexOf('languageId') !== -1);
+        const articlesForeignKeys = articleTranslationsTable?.foreignKeys.filter((fk) => fk.columnNames.indexOf('articleId') !== -1 || fk.columnNames.indexOf('languageId') !== -1);
         if (articlesForeignKeys) {
             for (const fk of articlesForeignKeys) {
                 await queryRunner.dropForeignKey('article_translations', fk);

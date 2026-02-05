@@ -49,16 +49,16 @@ let LanguageService = class LanguageService {
             'language.id as languageId',
             'language.name as languageName',
             'language.code as languageCode',
-            'COUNT(DISTINCT bookTranslation.bookId) as bookCount',
+            'COUNT(DISTINCT bookTranslation.bookId) as bookCount'
         ])
             .groupBy('language.id')
             .orderBy('language.name', 'ASC')
             .getRawMany();
-        return result.map((item) => ({
+        return result.map(item => ({
             languageId: parseInt(item.languageId),
             languageName: item.languageName,
             languageCode: item.languageCode,
-            bookCount: parseInt(item.bookCount),
+            bookCount: parseInt(item.bookCount)
         }));
     }
     async getArticleCounts() {
@@ -69,16 +69,16 @@ let LanguageService = class LanguageService {
             'language.id as languageId',
             'language.name as languageName',
             'language.code as languageCode',
-            'COUNT(DISTINCT articleTranslation.articleId) as articleCount',
+            'COUNT(DISTINCT articleTranslation.articleId) as articleCount'
         ])
             .groupBy('language.id')
             .orderBy('language.name', 'ASC')
             .getRawMany();
-        return result.map((item) => ({
+        return result.map(item => ({
             languageId: parseInt(item.languageId),
             languageName: item.languageName,
             languageCode: item.languageCode,
-            articleCount: parseInt(item.articleCount),
+            articleCount: parseInt(item.articleCount)
         }));
     }
     async findOne(id) {
@@ -93,7 +93,7 @@ let LanguageService = class LanguageService {
             const existingLanguage = await this.findOne(id);
             if (updateLanguageDto.name) {
                 const duplicateName = await this.languageRepository.findOne({
-                    where: { name: updateLanguageDto.name, id: (0, typeorm_3.Not)(id) },
+                    where: { name: updateLanguageDto.name, id: (0, typeorm_3.Not)(id) }
                 });
                 if (duplicateName) {
                     throw new common_1.ConflictException('Bu dil adı başka bir dilde kullanılıyor.');
@@ -101,7 +101,7 @@ let LanguageService = class LanguageService {
             }
             if (updateLanguageDto.code) {
                 const duplicateCode = await this.languageRepository.findOne({
-                    where: { code: updateLanguageDto.code, id: (0, typeorm_3.Not)(id) },
+                    where: { code: updateLanguageDto.code, id: (0, typeorm_3.Not)(id) }
                 });
                 if (duplicateCode) {
                     throw new common_1.ConflictException('Bu dil kodu başka bir dilde kullanılıyor.');

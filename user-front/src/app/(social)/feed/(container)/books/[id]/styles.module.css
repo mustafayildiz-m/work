@@ -1,0 +1,64 @@
+.bookActionButtons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.readButton {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.readButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(25, 135, 84, 0.4);
+}
+
+.readButton:active {
+  transform: translateY(0);
+}
+
+.downloadButton {
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.downloadButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.4);
+}
+
+.downloadButton:active {
+  transform: translateY(0);
+}
+
+.bookCard {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bookCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+.languageBadge {
+  transition: all 0.3s ease;
+}
+
+.languageBadge:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 576px) {
+  .bookActionButtons {
+    width: 100%;
+  }
+  
+  .bookActionButtons button {
+    flex: 1;
+    min-width: 100px;
+  }
+}
+

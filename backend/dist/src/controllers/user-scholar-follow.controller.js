@@ -32,19 +32,19 @@ let UserScholarFollowController = class UserScholarFollowController {
         const offsetNumber = offset ? parseInt(offset, 10) : 0;
         const [scholars, totalCount] = await Promise.all([
             this.userScholarFollowService.getFollowingScholars(userId, limitNumber, offsetNumber),
-            this.userScholarFollowService.getFollowingScholarsCount(userId),
+            this.userScholarFollowService.getFollowingScholarsCount(userId)
         ]);
         return {
             scholars,
             totalCount,
-            hasMore: offsetNumber + limitNumber < totalCount,
+            hasMore: (offsetNumber + limitNumber) < totalCount
         };
     }
     async getScholarFollowStats(req) {
         const userId = req?.user?.id;
         const followingCount = await this.userScholarFollowService.getFollowingScholarsCount(userId);
         return {
-            followingScholarsCount: followingCount,
+            followingScholarsCount: followingCount
         };
     }
 };

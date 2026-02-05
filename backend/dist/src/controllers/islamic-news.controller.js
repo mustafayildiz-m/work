@@ -29,7 +29,7 @@ let IslamicNewsController = class IslamicNewsController {
         if (!fromDate || !toDate) {
             return {
                 status: 'error',
-                message: 'from_date and to_date parameters are required',
+                message: 'from_date and to_date parameters are required'
             };
         }
         return this.islamicNewsService.fetchArchiveNews(fromDate, toDate);
@@ -42,19 +42,19 @@ let IslamicNewsController = class IslamicNewsController {
         if (res) {
             res.set({
                 'Cache-Control': 'public, max-age=300',
-                ETag: `news-${totalCount}-${offsetNumber}`,
-                'Last-Modified': new Date().toUTCString(),
+                'ETag': `news-${totalCount}-${offsetNumber}`,
+                'Last-Modified': new Date().toUTCString()
             });
         }
         return {
             news,
             totalCount,
-            hasMore: offsetNumber + limitNumber < totalCount,
+            hasMore: (offsetNumber + limitNumber) < totalCount,
             pagination: {
                 limit: limitNumber,
                 offset: offsetNumber,
-                total: totalCount,
-            },
+                total: totalCount
+            }
         };
     }
     async findOne(id) {
@@ -71,13 +71,13 @@ let IslamicNewsController = class IslamicNewsController {
         return {
             news,
             totalCount,
-            hasMore: offsetNumber + limitNumber < totalCount,
+            hasMore: (offsetNumber + limitNumber) < totalCount,
             searchQuery: query,
             pagination: {
                 limit: limitNumber,
                 offset: offsetNumber,
-                total: totalCount,
-            },
+                total: totalCount
+            }
         };
     }
     async create(createIslamicNewsDto) {
@@ -98,7 +98,7 @@ let IslamicNewsController = class IslamicNewsController {
         const deletedCount = await this.islamicNewsService.cleanOldNews();
         return {
             message: 'Old news cleaned successfully',
-            deletedCount,
+            deletedCount
         };
     }
     async getNewsStats() {
@@ -106,19 +106,19 @@ let IslamicNewsController = class IslamicNewsController {
         const [archivedNews, archivedCount] = await this.islamicNewsService.getNewsFromDatabase(1000, 0, undefined, undefined, undefined, true);
         const [latestNews, latestCount] = await this.islamicNewsService.getNewsFromDatabase(1000, 0, undefined, undefined, undefined, false);
         const languageStats = {};
-        allNews.forEach((news) => {
+        allNews.forEach(news => {
             if (news.language) {
                 languageStats[news.language] = (languageStats[news.language] || 0) + 1;
             }
         });
         const countryStats = {};
-        allNews.forEach((news) => {
+        allNews.forEach(news => {
             if (news.country) {
                 countryStats[news.country] = (countryStats[news.country] || 0) + 1;
             }
         });
         const categoryStats = {};
-        allNews.forEach((news) => {
+        allNews.forEach(news => {
             if (news.category) {
                 categoryStats[news.category] = (categoryStats[news.category] || 0) + 1;
             }
@@ -129,7 +129,7 @@ let IslamicNewsController = class IslamicNewsController {
             latestNews: latestCount,
             languageDistribution: languageStats,
             countryDistribution: countryStats,
-            categoryDistribution: categoryStats,
+            categoryDistribution: categoryStats
         };
     }
 };

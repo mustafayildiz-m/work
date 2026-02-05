@@ -81,8 +81,8 @@ let IslamicNewsService = IslamicNewsService_1 = class IslamicNewsService {
                     language: 'tr',
                     category: 'world,politics',
                     country: 'tr',
-                    size: 10,
-                },
+                    size: 10
+                }
             });
             const newsData = response.data;
             if (newsData.status === 'success' && newsData.results) {
@@ -93,7 +93,7 @@ let IslamicNewsService = IslamicNewsService_1 = class IslamicNewsService {
                     message: `Fetched and saved ${savedNews.length} news articles`,
                     totalResults: newsData.totalResults,
                     savedCount: savedNews.length,
-                    results: savedNews,
+                    results: savedNews
                 };
             }
             else {
@@ -101,7 +101,7 @@ let IslamicNewsService = IslamicNewsService_1 = class IslamicNewsService {
                 return {
                     status: 'error',
                     message: 'Failed to fetch news from external API',
-                    error: newsData.message || 'Unknown error',
+                    error: newsData.message || 'Unknown error'
                 };
             }
         }
@@ -119,8 +119,8 @@ let IslamicNewsService = IslamicNewsService_1 = class IslamicNewsService {
                     q: 'Islam OR Muslim OR İslam OR Müslüman',
                     from_date: fromDate,
                     to_date: toDate,
-                    language: 'tr',
-                },
+                    language: 'tr'
+                }
             });
             const newsData = response.data;
             if (newsData.status === 'success' && newsData.results) {
@@ -131,7 +131,7 @@ let IslamicNewsService = IslamicNewsService_1 = class IslamicNewsService {
                     message: `Fetched and saved ${savedNews.length} archive news articles`,
                     totalResults: newsData.totalResults,
                     savedCount: savedNews.length,
-                    results: savedNews,
+                    results: savedNews
                 };
             }
             else {
@@ -139,7 +139,7 @@ let IslamicNewsService = IslamicNewsService_1 = class IslamicNewsService {
                 return {
                     status: 'error',
                     message: 'Failed to fetch archive news from external API',
-                    error: newsData.message || 'Unknown error',
+                    error: newsData.message || 'Unknown error'
                 };
             }
         }
@@ -153,7 +153,7 @@ let IslamicNewsService = IslamicNewsService_1 = class IslamicNewsService {
         for (const news of newsArray) {
             try {
                 const existingNews = await this.islamicNewsRepository.findOne({
-                    where: { link: news.link },
+                    where: { link: news.link }
                 });
                 if (!existingNews) {
                     const newsDto = {
@@ -166,18 +166,12 @@ let IslamicNewsService = IslamicNewsService_1 = class IslamicNewsService {
                         source_name: news.source_name,
                         source_url: news.source_url,
                         language: news.language,
-                        country: Array.isArray(news.country)
-                            ? news.country.join(', ')
-                            : news.country,
-                        category: Array.isArray(news.category)
-                            ? news.category.join(', ')
-                            : news.category,
-                        keywords: Array.isArray(news.keywords)
-                            ? news.keywords.join(', ')
-                            : news.keywords,
+                        country: Array.isArray(news.country) ? news.country.join(', ') : news.country,
+                        category: Array.isArray(news.category) ? news.category.join(', ') : news.category,
+                        keywords: Array.isArray(news.keywords) ? news.keywords.join(', ') : news.keywords,
                         pub_date: news.pubDate ? new Date(news.pubDate) : new Date(),
                         video_url: news.video_url,
-                        is_archived: false,
+                        is_archived: false
                     };
                     const savedNewsItem = await this.create(newsDto);
                     savedNews.push(savedNewsItem);
@@ -194,7 +188,7 @@ let IslamicNewsService = IslamicNewsService_1 = class IslamicNewsService {
         for (const news of newsArray) {
             try {
                 const existingNews = await this.islamicNewsRepository.findOne({
-                    where: { link: news.link },
+                    where: { link: news.link }
                 });
                 if (!existingNews) {
                     const newsDto = {
@@ -207,19 +201,13 @@ let IslamicNewsService = IslamicNewsService_1 = class IslamicNewsService {
                         source_name: news.source_name,
                         source_url: news.source_url,
                         language: news.language,
-                        country: Array.isArray(news.country)
-                            ? news.country.join(', ')
-                            : news.country,
-                        category: Array.isArray(news.category)
-                            ? news.category.join(', ')
-                            : news.category,
-                        keywords: Array.isArray(news.keywords)
-                            ? news.keywords.join(', ')
-                            : news.keywords,
+                        country: Array.isArray(news.country) ? news.country.join(', ') : news.country,
+                        category: Array.isArray(news.category) ? news.category.join(', ') : news.category,
+                        keywords: Array.isArray(news.keywords) ? news.keywords.join(', ') : news.keywords,
                         pub_date: news.pubDate ? new Date(news.pubDate) : new Date(),
                         video_url: news.video_url,
                         is_archived: true,
-                        archive_date: new Date(),
+                        archive_date: new Date()
                     };
                     const savedNewsItem = await this.create(newsDto);
                     savedNews.push(savedNewsItem);

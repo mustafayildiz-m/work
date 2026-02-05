@@ -29,178 +29,178 @@ let ScholarBooksSeeder = class ScholarBooksSeeder {
             1: [
                 {
                     title: "el-Fıkhü'l-Ekber",
-                    description: 'İslam inanç esaslarının detaylı açıklaması',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/el-fikhul-ekber.pdf',
+                    description: "İslam inanç esaslarının detaylı açıklaması",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/el-fikhul-ekber.pdf"
                 },
                 {
-                    title: 'Risale-i Ebu Hanife',
-                    description: 'Fıkıh usulü ve metodolojisi hakkında risale',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/risale-ebu-hanife.pdf',
-                },
+                    title: "Risale-i Ebu Hanife",
+                    description: "Fıkıh usulü ve metodolojisi hakkında risale",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/risale-ebu-hanife.pdf"
+                }
             ],
             2: [
                 {
-                    title: 'el-Mudewwene',
-                    description: 'Maliki fıkhının temel kaynağı',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/el-mudewwene.pdf',
+                    title: "el-Mudewwene",
+                    description: "Maliki fıkhının temel kaynağı",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/el-mudewwene.pdf"
                 },
                 {
                     title: "Risale fi'l-Kader",
-                    description: 'Kader konusunda yazılmış risale',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/risale-fil-kader.pdf',
-                },
+                    description: "Kader konusunda yazılmış risale",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/risale-fil-kader.pdf"
+                }
             ],
             3: [
                 {
-                    title: 'el-Ümm',
-                    description: 'Şafii fıkhının en kapsamlı eseri',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/el-umm.pdf',
+                    title: "el-Ümm",
+                    description: "Şafii fıkhının en kapsamlı eseri",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/el-umm.pdf"
                 },
                 {
                     title: "Ahkamü'l-Kur'an",
                     description: "Kur'an'daki hükümlerin tefsiri",
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/ahkamul-kuran.pdf',
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/ahkamul-kuran.pdf"
                 },
                 {
                     title: "İhtilafü'l-Hadis",
-                    description: 'Hadis ihtilaflarının çözümü',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/ihtilaf-ul-hadis.pdf',
-                },
+                    description: "Hadis ihtilaflarının çözümü",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/ihtilaf-ul-hadis.pdf"
+                }
             ],
             4: [
                 {
                     title: "Kitabü'z-Zühd",
-                    description: 'Zühd ve takva konularında eser',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/kitabuz-zuhd.pdf',
+                    description: "Zühd ve takva konularında eser",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/kitabuz-zuhd.pdf"
                 },
                 {
                     title: "er-Red ale'l-Cehmiyye",
-                    description: 'Cehmiyye mezhebine reddiye',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/red-alel-cehmiyye.pdf',
-                },
+                    description: "Cehmiyye mezhebine reddiye",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/red-alel-cehmiyye.pdf"
+                }
             ],
             5: [
                 {
                     title: "Mizanü'l-Amel",
-                    description: 'Ahlak ve davranış ölçüleri',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/mizanul-amel.pdf',
+                    description: "Ahlak ve davranış ölçüleri",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/mizanul-amel.pdf"
                 },
                 {
                     title: "el-Munkız mine'd-Dalal",
                     description: "Gazali'nin otobiyografik eseri",
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/el-munkiz.pdf',
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/el-munkiz.pdf"
                 },
                 {
-                    title: 'Kimya-yı Saadet',
-                    description: 'Mutluluk ve kemal yolları',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/kimya-yi-saadet.pdf',
-                },
+                    title: "Kimya-yı Saadet",
+                    description: "Mutluluk ve kemal yolları",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/kimya-yi-saadet.pdf"
+                }
             ],
             6: [
                 {
                     title: "el-İşarat ve't-Tenbihat",
-                    description: 'Felsefe ve mantık konularında eser',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/el-isarat.pdf',
+                    description: "Felsefe ve mantık konularında eser",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/el-isarat.pdf"
                 },
                 {
-                    title: 'en-Necat',
-                    description: 'Felsefe ve mantık konularında özet eser',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/en-necat.pdf',
+                    title: "en-Necat",
+                    description: "Felsefe ve mantık konularında özet eser",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/en-necat.pdf"
                 },
                 {
                     title: "Uyunü'l-Hikme",
-                    description: 'Hikmet ve felsefe konularında eser',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/uyunul-hikme.pdf',
-                },
+                    description: "Hikmet ve felsefe konularında eser",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/uyunul-hikme.pdf"
+                }
             ],
             7: [
                 {
                     title: "Faslü'l-Makal",
-                    description: 'Felsefe ve din ilişkisi hakkında eser',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/faslul-makal.pdf',
+                    description: "Felsefe ve din ilişkisi hakkında eser",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/faslul-makal.pdf"
                 },
                 {
                     title: "Tefsirü Ma Ba'de't-Tabia",
                     description: "Aristoteles'in Metafizik eserinin tefsiri",
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/tefsir-ma-bade.pdf',
-                },
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/tefsir-ma-bade.pdf"
+                }
             ],
             8: [
                 {
                     title: "et-Tarihu'l-Kebir",
-                    description: 'Hadis ricali hakkında büyük eser',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/et-tarihul-kebir.pdf',
+                    description: "Hadis ricali hakkında büyük eser",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/et-tarihul-kebir.pdf"
                 },
                 {
                     title: "et-Tarihu's-Sağir",
-                    description: 'Hadis ricali hakkında küçük eser',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/et-tarihus-sagir.pdf',
+                    description: "Hadis ricali hakkında küçük eser",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/et-tarihus-sagir.pdf"
                 },
                 {
                     title: "el-Edebü'l-Müfred",
-                    description: 'Ahlak ve edep konularında hadisler',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/el-edebul-mufred.pdf',
-                },
+                    description: "Ahlak ve edep konularında hadisler",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/el-edebul-mufred.pdf"
+                }
             ],
             9: [
                 {
-                    title: 'et-Temyiz',
-                    description: 'Hadis ricali hakkında eser',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/et-temyiz.pdf',
+                    title: "et-Temyiz",
+                    description: "Hadis ricali hakkında eser",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/et-temyiz.pdf"
                 },
                 {
-                    title: 'el-Müfrid',
-                    description: 'Hadis konularında özel eser',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/el-mufrid.pdf',
-                },
+                    title: "el-Müfrid",
+                    description: "Hadis konularında özel eser",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/el-mufrid.pdf"
+                }
             ],
             10: [
                 {
-                    title: 'Fihi Ma Fih',
+                    title: "Fihi Ma Fih",
                     description: "Mevlana'nın sohbetlerinin derlemesi",
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/fihi-ma-fih.pdf',
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/fihi-ma-fih.pdf"
                 },
                 {
                     title: "Mecalis-i Seb'a",
-                    description: 'Yedi vaaz derlemesi',
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/mecalis-i-seba.pdf',
+                    description: "Yedi vaaz derlemesi",
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/mecalis-i-seba.pdf"
                 },
                 {
-                    title: 'Rubailer',
+                    title: "Rubailer",
                     description: "Mevlana'nın rubai tarzındaki şiirleri",
-                    coverUrl: 'uploads/coverImage/coverImage.jpg',
-                    pdfUrl: 'uploads/books/rubailer.pdf',
-                },
-            ],
+                    coverUrl: "uploads/coverImage/coverImage.jpg",
+                    pdfUrl: "uploads/books/rubailer.pdf"
+                }
+            ]
         };
         for (const [scholarId, books] of Object.entries(additionalBooks)) {
             try {
                 const scholar = await this.scholarRepository.findOne({
-                    where: { id: parseInt(scholarId) },
+                    where: { id: parseInt(scholarId) }
                 });
                 if (!scholar) {
                     console.log(`⚠️  Scholar not found: ID ${scholarId}`);
@@ -210,8 +210,8 @@ let ScholarBooksSeeder = class ScholarBooksSeeder {
                     const existingBook = await this.scholarBookRepository.findOne({
                         where: {
                             title: bookData.title,
-                            scholar: { id: parseInt(scholarId) },
-                        },
+                            scholar: { id: parseInt(scholarId) }
+                        }
                     });
                     if (existingBook) {
                         console.log(`⚠️  Book already exists: ${bookData.title} for ${scholar.fullName}`);
@@ -219,7 +219,7 @@ let ScholarBooksSeeder = class ScholarBooksSeeder {
                     }
                     const book = this.scholarBookRepository.create({
                         ...bookData,
-                        scholar: scholar,
+                        scholar: scholar
                     });
                     await this.scholarBookRepository.save(book);
                     console.log(`✅ Added book: ${bookData.title} for ${scholar.fullName}`);

@@ -40,20 +40,8 @@ let AppController = class AppController {
     async getMonthlyStats() {
         const now = new Date();
         const currentYear = now.getFullYear();
-        const monthNames = [
-            'Ocak',
-            'Şubat',
-            'Mart',
-            'Nisan',
-            'Mayıs',
-            'Haziran',
-            'Temmuz',
-            'Ağustos',
-            'Eylül',
-            'Ekim',
-            'Kasım',
-            'Aralık',
-        ];
+        const monthNames = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
+            'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
         const monthlyData = [];
         for (let i = 5; i >= 0; i--) {
             const month = now.getMonth() - i;

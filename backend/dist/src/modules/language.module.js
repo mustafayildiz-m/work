@@ -19,9 +19,7 @@ let LanguageModule = class LanguageModule {
 exports.LanguageModule = LanguageModule;
 exports.LanguageModule = LanguageModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            typeorm_1.TypeOrmModule.forFeature([language_entity_1.Language, book_translation_entity_1.BookTranslation, article_translation_entity_1.ArticleTranslation]),
-        ],
+        imports: [typeorm_1.TypeOrmModule.forFeature([language_entity_1.Language, book_translation_entity_1.BookTranslation, article_translation_entity_1.ArticleTranslation])],
         controllers: [language_controller_1.LanguageController],
         providers: [language_service_1.LanguageService],
         exports: [language_service_1.LanguageService],

@@ -72,9 +72,6 @@ let UsersService = class UsersService {
     async findByEmail(email) {
         return this.usersRepository.findOneBy({ email });
     }
-    async findByUsername(username) {
-        return this.usersRepository.findOneBy({ username });
-    }
     async update(id, updateUserDto) {
         if (updateUserDto.password) {
             updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
@@ -85,14 +82,11 @@ let UsersService = class UsersService {
     async updateProfile(id, updateUserDto) {
         if (updateUserDto.username) {
             const existingUser = await this.usersRepository.findOne({
-                where: { username: updateUserDto.username },
+                where: { username: updateUserDto.username }
             });
             if (existingUser && existingUser.id !== id) {
                 throw new common_1.BadRequestException('Bu kullanıcı adı zaten kullanılıyor');
             }
-        }
-        if (updateUserDto.birthDate === '') {
-            updateUserDto.birthDate = null;
         }
         await this.usersRepository.update(id, updateUserDto);
         return this.findOne(id);
@@ -115,15 +109,7 @@ let UsersService = class UsersService {
     async findOnePublic(id) {
         return this.usersRepository.findOne({
             where: { id },
-            select: [
-                'id',
-                'firstName',
-                'lastName',
-                'username',
-                'photoUrl',
-                'biography',
-                'createdAt',
-            ],
+            select: ['id', 'firstName', 'lastName', 'username', 'photoUrl', 'biography', 'createdAt']
         });
     }
 };

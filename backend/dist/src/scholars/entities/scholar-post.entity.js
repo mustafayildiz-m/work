@@ -25,14 +25,12 @@ __decorate([
     __metadata("design:type", Number)
 ], ScholarPost.prototype, "scholarId", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => scholar_entity_1.Scholar, (scholar) => scholar.posts),
+    (0, typeorm_1.ManyToOne)(() => scholar_entity_1.Scholar, scholar => scholar.posts),
     (0, typeorm_1.JoinColumn)({ name: 'scholarId' }),
     __metadata("design:type", scholar_entity_1.Scholar)
 ], ScholarPost.prototype, "scholar", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => scholar_post_translation_entity_1.ScholarPostTranslation, (translation) => translation.post, {
-        cascade: true,
-    }),
+    (0, typeorm_1.OneToMany)(() => scholar_post_translation_entity_1.ScholarPostTranslation, translation => translation.post, { cascade: true }),
     __metadata("design:type", Array)
 ], ScholarPost.prototype, "translations", void 0);
 __decorate([

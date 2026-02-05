@@ -21,7 +21,7 @@ __decorate([
     __metadata("design:type", Number)
 ], StockTransfer.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => stock_entity_1.Stock, (stock) => stock.transfers),
+    (0, typeorm_1.ManyToOne)(() => stock_entity_1.Stock, stock => stock.transfers),
     __metadata("design:type", stock_entity_1.Stock)
 ], StockTransfer.prototype, "stock", void 0);
 __decorate([
@@ -37,11 +37,7 @@ __decorate([
     __metadata("design:type", Number)
 ], StockTransfer.prototype, "quantity", void 0);
 __decorate([
-    (0, typeorm_1.Column)({
-        type: 'enum',
-        enum: ['pending', 'completed', 'cancelled'],
-        default: 'pending',
-    }),
+    (0, typeorm_1.Column)({ type: 'enum', enum: ['pending', 'completed', 'cancelled'], default: 'pending' }),
     __metadata("design:type", String)
 ], StockTransfer.prototype, "status", void 0);
 __decorate([

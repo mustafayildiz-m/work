@@ -4,9 +4,6 @@ export declare class AuthService {
     private usersService;
     private jwtService;
     constructor(usersService: UsersService, jwtService: JwtService);
-    private getGoogleClientId;
-    private sanitizeUsernameBase;
-    private generateUniqueUsername;
     validateUser(email: string, password: string): Promise<any>;
     login(user: any): Promise<{
         access_token: string;
@@ -29,17 +26,5 @@ export declare class AuthService {
     register(registerDto: any): Promise<{
         message: string;
         user: import("../users/entities/user.entity").User;
-    }>;
-    loginWithGoogleIdToken(idToken: string): Promise<{
-        access_token: string;
-        user: {
-            id: any;
-            email: any;
-            username: any;
-            firstName: any;
-            lastName: any;
-            role: any;
-            photoUrl: any;
-        };
     }>;
 }

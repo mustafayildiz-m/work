@@ -30,7 +30,7 @@ let WsJwtGuard = class WsJwtGuard {
                 id: payload.sub,
                 username: payload.username,
                 email: payload.email,
-                role: payload.role,
+                role: payload.role
             };
             return true;
         }

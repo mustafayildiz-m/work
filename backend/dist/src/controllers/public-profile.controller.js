@@ -38,7 +38,7 @@ let PublicProfileController = class PublicProfileController {
                 biography: user.biography,
                 createdAt: user.createdAt,
                 joinDate: user.createdAt,
-                type: 'user',
+                type: 'user'
             };
         }
         catch (error) {
@@ -60,7 +60,7 @@ let PublicProfileController = class PublicProfileController {
                 deathDate: scholar.deathDate,
                 locationName: scholar.locationName,
                 createdAt: scholar.createdAt,
-                type: 'scholar',
+                type: 'scholar'
             };
         }
         catch (error) {
@@ -84,7 +84,7 @@ let PublicProfileController = class PublicProfileController {
                 categoryName: book.category?.name || null,
                 publishDate: book.createdAt,
                 createdAt: book.createdAt,
-                type: 'book',
+                type: 'book'
             };
         }
         catch (error) {

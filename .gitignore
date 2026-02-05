@@ -1,0 +1,61 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Production builds
+dist/
+build/
+.next/
+out/
+
+# Environment variables (keeping .env in git, but ignore local variants)
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Docker
+*.sql
+backup.sql
+docker-compose.override.yml
+# Localhost ayarları (her developer'ın kendisi oluşturur)
+
+# Uploads (optional - uncomment if you don't want to track uploads)
+# uploads/
+# backend/uploads/
+# user-front/public/uploads/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Database
+*.sqlite
+*.db
+
+# Uploads - tüm upload klasörünü ignore et
+backend/uploads/
+admin-front/public/uploads/
+user-front/public/uploads/
+
+backend/uploads/

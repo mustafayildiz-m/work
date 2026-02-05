@@ -70,11 +70,10 @@ let WhoToFollowService = class WhoToFollowService {
                 return {
                     id: user.id,
                     name: `${user.firstName} ${user.lastName}`,
-                    description: user.biography,
+                    description: this.getUserDescription(user.role),
                     photoUrl: user.photoUrl,
                     type: 'user',
                     username: user.username,
-                    role: user.role,
                     isFollowing,
                 };
             }));
@@ -119,23 +118,23 @@ let WhoToFollowService = class WhoToFollowService {
         if (result.length < limit) {
             const remainingLimit = limit - result.length;
             if (type === 'all') {
-                const userCount = result.filter((item) => item.type === 'user').length;
-                const scholarCount = result.filter((item) => item.type === 'scholar').length;
+                const userCount = result.filter(item => item.type === 'user').length;
+                const scholarCount = result.filter(item => item.type === 'scholar').length;
                 if (userCount < scholarCount) {
-                    const additionalUsers = await this.getAdditionalUsers(remainingLimit, userId, result.map((item) => item.id));
+                    const additionalUsers = await this.getAdditionalUsers(remainingLimit, userId, result.map(item => item.id));
                     result.push(...additionalUsers);
                 }
                 else {
-                    const additionalScholars = await this.getAdditionalScholars(remainingLimit, userId, result.map((item) => item.id));
+                    const additionalScholars = await this.getAdditionalScholars(remainingLimit, userId, result.map(item => item.id));
                     result.push(...additionalScholars);
                 }
             }
             else if (type === 'users') {
-                const additionalUsers = await this.getAdditionalUsers(remainingLimit, userId, result.map((item) => item.id));
+                const additionalUsers = await this.getAdditionalUsers(remainingLimit, userId, result.map(item => item.id));
                 result.push(...additionalUsers);
             }
             else if (type === 'scholars') {
-                const additionalScholars = await this.getAdditionalScholars(remainingLimit, userId, result.map((item) => item.id));
+                const additionalScholars = await this.getAdditionalScholars(remainingLimit, userId, result.map(item => item.id));
                 result.push(...additionalScholars);
             }
         }
@@ -177,7 +176,10 @@ let WhoToFollowService = class WhoToFollowService {
         if (excludeIds.length > 0) {
             userQuery.andWhere('user.id NOT IN (:...excludeIds)', { excludeIds });
         }
-        const users = await userQuery.orderBy('RAND()').limit(limit).getMany();
+        const users = await userQuery
+            .orderBy('RAND()')
+            .limit(limit)
+            .getMany();
         return Promise.all(users.map(async (user) => {
             let isFollowing = false;
             if (userId) {
@@ -192,11 +194,10 @@ let WhoToFollowService = class WhoToFollowService {
             return {
                 id: user.id,
                 name: `${user.firstName} ${user.lastName}`,
-                description: user.biography,
+                description: this.getUserDescription(user.role),
                 photoUrl: user.photoUrl,
                 type: 'user',
                 username: user.username,
-                role: user.role,
                 isFollowing,
             };
         }));
@@ -285,11 +286,10 @@ let WhoToFollowService = class WhoToFollowService {
                 name: `${user.firstName} ${user.lastName}`,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                description: user.biography,
+                description: user.biography || this.getUserDescription(user.role),
                 photoUrl: user.photoUrl,
                 type: 'user',
                 username: user.username,
-                role: user.role,
                 isFollowing,
             };
         }));
@@ -343,11 +343,10 @@ let WhoToFollowService = class WhoToFollowService {
                 name: `${user.firstName} ${user.lastName}`,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                description: user.biography,
+                description: user.biography || this.getUserDescription(user.role),
                 photoUrl: user.photoUrl,
                 type: 'user',
                 username: user.username,
-                role: user.role,
                 isFollowing,
             };
         }));

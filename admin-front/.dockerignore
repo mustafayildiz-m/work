@@ -1,0 +1,16 @@
+node_modules
+dist
+dist-ssr
+*.log
+.env
+.env.*
+.git
+.gitignore
+.DS_Store
+.vscode
+.idea
+*.swp
+*.swo
+*~
+coverage
+

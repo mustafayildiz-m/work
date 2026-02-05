@@ -54,27 +54,23 @@ let EventDetailsService = class EventDetailsService {
             where: { follower_id: userId },
             select: ['following_id'],
         });
-        const followingIds = following.map((f) => f.following_id);
+        const followingIds = following.map(f => f.following_id);
         const scholarFollowing = await this.userScholarFollowRepository.find({
             where: { user_id: userId },
             select: ['scholar_id'],
         });
-        const scholarIds = scholarFollowing.map((f) => f.scholar_id);
-        const userEvents = followingIds.length > 0
-            ? await this.eventDetailsRepository.find({
-                where: { user_id: (0, typeorm_2.In)(followingIds) },
-                order: { created_at: 'DESC' },
-            })
-            : [];
-        const scholarEvents = scholarIds.length > 0
-            ? await this.eventDetailsRepository.find({
-                where: { scholar_id: (0, typeorm_2.In)(scholarIds) },
-                order: { created_at: 'DESC' },
-            })
-            : [];
+        const scholarIds = scholarFollowing.map(f => f.scholar_id);
+        const userEvents = followingIds.length > 0 ? await this.eventDetailsRepository.find({
+            where: { user_id: (0, typeorm_2.In)(followingIds) },
+            order: { created_at: 'DESC' },
+        }) : [];
+        const scholarEvents = scholarIds.length > 0 ? await this.eventDetailsRepository.find({
+            where: { scholar_id: (0, typeorm_2.In)(scholarIds) },
+            order: { created_at: 'DESC' },
+        }) : [];
         const allEvents = [
-            ...userEvents.map((e) => ({ ...e, type: 'user' })),
-            ...scholarEvents.map((e) => ({ ...e, type: 'scholar' })),
+            ...userEvents.map(e => ({ ...e, type: 'user' })),
+            ...scholarEvents.map(e => ({ ...e, type: 'scholar' })),
         ];
         allEvents.sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
         return allEvents;

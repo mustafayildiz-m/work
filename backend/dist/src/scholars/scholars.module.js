@@ -23,28 +23,18 @@ const book_translation_entity_1 = require("../books/entities/book-translation.en
 const language_entity_1 = require("../languages/entities/language.entity");
 const upload_module_1 = require("../upload/upload.module");
 const user_scholar_follow_module_1 = require("../modules/user-scholar-follow.module");
-const cache_service_1 = require("../services/cache.service");
 let ScholarsModule = class ScholarsModule {
 };
 exports.ScholarsModule = ScholarsModule;
 exports.ScholarsModule = ScholarsModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            typeorm_1.TypeOrmModule.forFeature([
-                scholar_entity_1.Scholar,
-                scholar_book_entity_1.ScholarBook,
-                scholar_post_entity_1.ScholarPost,
-                scholar_post_translation_entity_1.ScholarPostTranslation,
-                source_entity_1.Source,
-                book_entity_1.Book,
-                book_translation_entity_1.BookTranslation,
-                language_entity_1.Language,
-            ]),
+            typeorm_1.TypeOrmModule.forFeature([scholar_entity_1.Scholar, scholar_book_entity_1.ScholarBook, scholar_post_entity_1.ScholarPost, scholar_post_translation_entity_1.ScholarPostTranslation, source_entity_1.Source, book_entity_1.Book, book_translation_entity_1.BookTranslation, language_entity_1.Language]),
             upload_module_1.UploadModule,
             user_scholar_follow_module_1.UserScholarFollowModule,
         ],
         controllers: [scholars_controller_1.ScholarsController, scholar_posts_controller_1.ScholarPostsController],
-        providers: [scholars_service_1.ScholarsService, scholar_posts_service_1.ScholarPostsService, cache_service_1.CacheService],
+        providers: [scholars_service_1.ScholarsService, scholar_posts_service_1.ScholarPostsService],
         exports: [scholars_service_1.ScholarsService, scholar_posts_service_1.ScholarPostsService],
     })
 ], ScholarsModule);

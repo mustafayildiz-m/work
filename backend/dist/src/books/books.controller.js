@@ -77,19 +77,18 @@ let BooksController = class BooksController {
         return this.booksService.findOne(id);
     }
     async create(createBookDto, files) {
-        const coverImageFile = files.find((f) => f.fieldname === 'coverImage');
+        const coverImageFile = files.find(f => f.fieldname === 'coverImage');
         if (coverImageFile) {
             const coverImageUrl = await this.uploadService.uploadFile(coverImageFile);
             createBookDto.coverImage = coverImageUrl;
         }
-        if (createBookDto.translations &&
-            Array.isArray(createBookDto.translations)) {
+        if (createBookDto.translations && Array.isArray(createBookDto.translations)) {
             createBookDto.translations = await Promise.all(createBookDto.translations.map(async (trans, idx) => {
                 const transData = {
                     ...trans,
                     languageId: parseInt(trans.languageId),
                 };
-                const pdfFile = files.find((f) => f.fieldname === `translations[${idx}][pdfFile]`);
+                const pdfFile = files.find(f => f.fieldname === `translations[${idx}][pdfFile]`);
                 if (pdfFile) {
                     transData.pdfUrl = await this.uploadService.uploadPdf(pdfFile);
                 }
@@ -111,7 +110,7 @@ let BooksController = class BooksController {
         if (!book) {
             throw new common_1.NotFoundException(`Book with ID ${id} not found`);
         }
-        const coverImageFile = files.find((f) => f.fieldname === 'coverImage');
+        const coverImageFile = files.find(f => f.fieldname === 'coverImage');
         if (coverImageFile) {
             if (book.coverImage) {
                 const oldPath = path.join(process.cwd(), book.coverImage);
@@ -124,18 +123,16 @@ let BooksController = class BooksController {
                     }
                 }
             }
-            updateBookDto.coverImage =
-                await this.uploadService.uploadFile(coverImageFile);
+            updateBookDto.coverImage = await this.uploadService.uploadFile(coverImageFile);
         }
-        if (updateBookDto.translations &&
-            Array.isArray(updateBookDto.translations)) {
+        if (updateBookDto.translations && Array.isArray(updateBookDto.translations)) {
             updateBookDto.translations = await Promise.all(updateBookDto.translations.map(async (trans, idx) => {
                 const transData = {
                     ...trans,
                     id: trans.id ? parseInt(trans.id) : undefined,
                     languageId: parseInt(trans.languageId),
                 };
-                const pdfFile = files.find((f) => f.fieldname === `translations[${idx}][pdfFile]`);
+                const pdfFile = files.find(f => f.fieldname === `translations[${idx}][pdfFile]`);
                 if (pdfFile) {
                     transData.pdfUrl = await this.uploadService.uploadPdf(pdfFile);
                 }
@@ -157,7 +154,7 @@ let BooksController = class BooksController {
         await this.booksService.remove(id);
         return {
             message: 'Kitap ve ilişkili dosyalar başarıyla silindi.',
-            deletedBook,
+            deletedBook
         };
     }
 };

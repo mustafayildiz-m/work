@@ -45,7 +45,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthController = exports.GoogleLoginDto = exports.RegisterDto = exports.LoginDto = void 0;
+exports.AuthController = exports.RegisterDto = exports.LoginDto = void 0;
 const common_1 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
@@ -58,9 +58,6 @@ exports.LoginDto = LoginDto;
 class RegisterDto {
 }
 exports.RegisterDto = RegisterDto;
-class GoogleLoginDto {
-}
-exports.GoogleLoginDto = GoogleLoginDto;
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
@@ -103,13 +100,13 @@ let AuthController = class AuthController {
             return {
                 message: 'JWT test successful',
                 token: result.access_token,
-                secret: process.env.JWT_SECRET ? 'Set' : 'Not set (using default)',
+                secret: process.env.JWT_SECRET ? 'Set' : 'Not set (using default)'
             };
         }
         catch (error) {
             return {
                 message: 'JWT test failed',
-                error: error.message,
+                error: error.message
             };
         }
     }
@@ -121,7 +118,7 @@ let AuthController = class AuthController {
                     error: 'CredentialsSignin',
                     message: 'Email ve şifre gereklidir',
                     ok: false,
-                    status: 401,
+                    status: 401
                 };
             }
             const user = await this.authService.validateUser(email, password);
@@ -129,7 +126,7 @@ let AuthController = class AuthController {
             return {
                 ok: true,
                 user: loginResult.user,
-                access_token: loginResult.access_token,
+                access_token: loginResult.access_token
             };
         }
         catch (error) {
@@ -138,13 +135,9 @@ let AuthController = class AuthController {
                 error: 'CredentialsSignin',
                 message: error.message || 'Giriş başarısız',
                 ok: false,
-                status: 401,
+                status: 401
             };
         }
-    }
-    async googleCallback(body) {
-        const { idToken } = body || {};
-        return this.authService.loginWithGoogleIdToken(idToken);
     }
 };
 exports.AuthController = AuthController;
@@ -204,13 +197,6 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "nextAuthCallback", null);
-__decorate([
-    (0, common_1.Post)('callback/google'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [GoogleLoginDto]),
-    __metadata("design:returntype", Promise)
-], AuthController.prototype, "googleCallback", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])

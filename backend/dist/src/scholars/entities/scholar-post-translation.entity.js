@@ -26,9 +26,7 @@ __decorate([
     __metadata("design:type", String)
 ], ScholarPostTranslation.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => scholar_post_entity_1.ScholarPost, (post) => post.translations, {
-        onDelete: 'CASCADE',
-    }),
+    (0, typeorm_1.ManyToOne)(() => scholar_post_entity_1.ScholarPost, post => post.translations, { onDelete: 'CASCADE' }),
     __metadata("design:type", scholar_post_entity_1.ScholarPost)
 ], ScholarPostTranslation.prototype, "post", void 0);
 __decorate([

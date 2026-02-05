@@ -43,26 +43,17 @@ let UserFollowService = class UserFollowService {
     async follow(follower_id, following_id) {
         if (follower_id === following_id)
             throw new common_1.NotFoundException('Kendini takip edemezsin.');
-        const existing = await this.userFollowRepository.findOneBy({
-            follower_id,
-            following_id,
-        });
+        const existing = await this.userFollowRepository.findOneBy({ follower_id, following_id });
         if (existing)
             return existing;
-        const follow = this.userFollowRepository.create({
-            follower_id,
-            following_id,
-        });
+        const follow = this.userFollowRepository.create({ follower_id, following_id });
         const savedFollow = await this.userFollowRepository.save(follow);
         await this.invalidateFollowingCache(follower_id);
         await this.invalidateFollowingCache(following_id);
         return savedFollow;
     }
     async unfollow(follower_id, following_id) {
-        const follow = await this.userFollowRepository.findOneBy({
-            follower_id,
-            following_id,
-        });
+        const follow = await this.userFollowRepository.findOneBy({ follower_id, following_id });
         if (!follow)
             throw new common_1.NotFoundException('Takip ilişkisi bulunamadı.');
         await this.userFollowRepository.remove(follow);
@@ -85,7 +76,7 @@ let UserFollowService = class UserFollowService {
             'user.username',
             'user.photoUrl',
             'user.role',
-            'user.isActive',
+            'user.isActive'
         ])
             .where('follow.follower_id = :userId', { userId })
             .andWhere('user.isActive = :isActive', { isActive: true })
@@ -93,7 +84,7 @@ let UserFollowService = class UserFollowService {
             .limit(limit)
             .offset(offset)
             .getMany();
-        return following.map((follow) => ({
+        return following.map(follow => ({
             id: follow.following.id,
             firstName: follow.following.firstName,
             lastName: follow.following.lastName,
@@ -101,7 +92,7 @@ let UserFollowService = class UserFollowService {
             photoUrl: follow.following.photoUrl,
             role: follow.following.role,
             followId: follow.id,
-            followedAt: follow.id,
+            followedAt: follow.id
         }));
     }
     async getFollowers(userId, limit = 20, offset = 0) {
@@ -121,7 +112,7 @@ let UserFollowService = class UserFollowService {
             'user.username',
             'user.photoUrl',
             'user.role',
-            'user.isActive',
+            'user.isActive'
         ])
             .where('follow.following_id = :userId', { userId })
             .andWhere('user.isActive = :isActive', { isActive: true })
@@ -129,7 +120,7 @@ let UserFollowService = class UserFollowService {
             .limit(limit)
             .offset(offset)
             .getMany();
-        const result = followers.map((follow) => ({
+        const result = followers.map(follow => ({
             id: follow.follower.id,
             firstName: follow.follower.firstName,
             lastName: follow.follower.lastName,
@@ -137,19 +128,19 @@ let UserFollowService = class UserFollowService {
             photoUrl: follow.follower.photoUrl,
             role: follow.follower.role,
             followId: follow.id,
-            followedAt: follow.id,
+            followedAt: follow.id
         }));
         await this.cacheService.set(cacheKey, result, 120);
         return result;
     }
     async getFollowingCount(userId) {
         return this.userFollowRepository.count({
-            where: { follower_id: userId },
+            where: { follower_id: userId }
         });
     }
     async getFollowersCount(userId) {
         return this.userFollowRepository.count({
-            where: { following_id: userId },
+            where: { following_id: userId }
         });
     }
     async getRecentPostsFromFollowing(userId, limit = 5, language = 'tr') {
@@ -159,7 +150,7 @@ let UserFollowService = class UserFollowService {
                 .select('follow.following_id')
                 .where('follow.follower_id = :userId', { userId })
                 .getMany();
-            const followingUserIds = followingUsers.map((f) => f.following_id);
+            const followingUserIds = followingUsers.map(f => f.following_id);
             const userPosts = await this.getUserPosts(followingUserIds, Math.ceil(limit / 2));
             const scholarPosts = await this.getScholarPosts(userId, Math.ceil(limit / 2), language);
             const allPosts = [...userPosts, ...scholarPosts];
@@ -177,19 +168,12 @@ let UserFollowService = class UserFollowService {
         const posts = await this.userPostRepository.find({
             where: { user_id: (0, typeorm_2.In)(userIds) },
             order: { created_at: 'DESC' },
-            take: limit,
+            take: limit
         });
         const postsWithUsers = await Promise.all(posts.map(async (post) => {
             const user = await this.userRepository.findOne({
                 where: { id: post.user_id, isActive: true },
-                select: [
-                    'id',
-                    'firstName',
-                    'lastName',
-                    'username',
-                    'photoUrl',
-                    'role',
-                ],
+                select: ['id', 'firstName', 'lastName', 'username', 'photoUrl', 'role']
             });
             return {
                 id: post.id,
@@ -204,9 +188,9 @@ let UserFollowService = class UserFollowService {
                     username: user?.username,
                     photoUrl: user?.photoUrl,
                     role: user?.role,
-                    type: 'user',
+                    type: 'user'
                 },
-                type: 'user_post',
+                type: 'user_post'
             };
         }));
         return postsWithUsers;
@@ -218,19 +202,19 @@ let UserFollowService = class UserFollowService {
                 .select('follow.scholar_id')
                 .where('follow.user_id = :userId', { userId })
                 .getMany();
-            const followingScholarIds = followingScholars.map((f) => f.scholar_id);
+            const followingScholarIds = followingScholars.map(f => f.scholar_id);
             if (followingScholarIds.length === 0)
                 return [];
             const posts = await this.scholarPostRepository.find({
                 where: { scholarId: (0, typeorm_2.In)(followingScholarIds) },
                 relations: ['scholar', 'translations'],
                 order: { createdAt: 'DESC' },
-                take: limit,
+                take: limit
             });
-            return posts.map((post) => {
-                const translation = post.translations?.find((t) => t.language === language) ||
-                    post.translations?.find((t) => t.language === 'tr') ||
-                    post.translations?.[0];
+            return posts.map(post => {
+                const translation = post.translations?.find(t => t.language === language)
+                    || post.translations?.find(t => t.language === 'tr')
+                    || post.translations?.[0];
                 return {
                     id: post.id,
                     content: translation?.content || '',
@@ -241,14 +225,14 @@ let UserFollowService = class UserFollowService {
                         fullName: post.scholar?.fullName,
                         photoUrl: post.scholar?.photoUrl,
                         biography: post.scholar?.biography,
-                        type: 'scholar',
+                        type: 'scholar'
                     },
-                    type: 'scholar_post',
+                    type: 'scholar_post'
                 };
             });
         }
         catch (error) {
-            console.error("Alim post'ları getirilirken hata:", error);
+            console.error('Alim post\'ları getirilirken hata:', error);
             return [];
         }
     }

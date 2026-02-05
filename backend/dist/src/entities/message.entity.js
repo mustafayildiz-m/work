@@ -34,7 +34,7 @@ __decorate([
     (0, typeorm_1.Column)({
         type: 'enum',
         enum: MessageStatus,
-        default: MessageStatus.SENT,
+        default: MessageStatus.SENT
     }),
     __metadata("design:type", String)
 ], Message.prototype, "status", void 0);

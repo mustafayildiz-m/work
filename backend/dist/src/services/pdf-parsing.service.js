@@ -114,9 +114,9 @@ let PDFParsingService = PDFParsingService_1 = class PDFParsingService {
             this.logger.log(`Starting direct PDF parsing for: ${filePath}`);
             const parser = new enhanced_pdf_parser_1.PDFSpecificScholarParser(filePath, outputPath, parserConfig);
             const scholars = await parser.process();
-            const highConfidence = scholars.filter((s) => (s.confidence || 0) >= 80).length;
-            const mediumConfidence = scholars.filter((s) => (s.confidence || 0) >= 60 && (s.confidence || 0) < 80).length;
-            const lowConfidence = scholars.filter((s) => (s.confidence || 0) >= 40 && (s.confidence || 0) < 60).length;
+            const highConfidence = scholars.filter(s => (s.confidence || 0) >= 80).length;
+            const mediumConfidence = scholars.filter(s => (s.confidence || 0) >= 60 && (s.confidence || 0) < 80).length;
+            const lowConfidence = scholars.filter(s => (s.confidence || 0) >= 40 && (s.confidence || 0) < 60).length;
             const result = {
                 scholars,
                 metadata: {
@@ -127,7 +127,7 @@ let PDFParsingService = PDFParsingService_1 = class PDFParsingService {
                     processedAt: new Date().toISOString(),
                     sourceFile: path.basename(filePath),
                     parserConfig,
-                },
+                }
             };
             this.logger.log(`Successfully parsed ${scholars.length} scholars from ${filePath}`);
             return result;
@@ -138,8 +138,7 @@ let PDFParsingService = PDFParsingService_1 = class PDFParsingService {
         }
     }
     async testParser(sampleText) {
-        const testText = sampleText ||
-            `
+        const testText = sampleText || `
       HENNÂD BİN SERÎ
       Bu âlim hakkında bilgi...
       
@@ -174,13 +173,8 @@ let PDFParsingService = PDFParsingService_1 = class PDFParsingService {
     }
     async getAllJobs() {
         try {
-            const jobs = await this.pdfQueue.getJobs([
-                'waiting',
-                'active',
-                'completed',
-                'failed',
-            ]);
-            return jobs.map((job) => ({
+            const jobs = await this.pdfQueue.getJobs(['waiting', 'active', 'completed', 'failed']);
+            return jobs.map(job => ({
                 id: job.id,
                 state: job.opts.delay ? 'delayed' : 'waiting',
                 progress: job.progress(),
@@ -233,22 +227,7 @@ let PDFParsingService = PDFParsingService_1 = class PDFParsingService {
                 /vefât\s*(\d{2,4})/gi,
                 /ölüm\s*(\d{2,4})/gi,
             ],
-            lineageKeywords: [
-                'İbn',
-                'Ebu',
-                'Ebû',
-                'bin',
-                'el-',
-                'ed-',
-                'en-',
-                'er-',
-                'es-',
-                'et-',
-                'ez-',
-                'Abd',
-                'Künyesi',
-                'Adı',
-            ],
+            lineageKeywords: ['İbn', 'Ebu', 'Ebû', 'bin', 'el-', 'ed-', 'en-', 'er-', 'es-', 'et-', 'ez-', 'Abd', 'Künyesi', 'Adı'],
             excludePatterns: [
                 /^\d+$/,
                 /^[A-ZÇĞİÖŞÜÂÎÛ\s]*SAYFA[A-ZÇĞİÖŞÜÂÎÛ\s]*$/i,

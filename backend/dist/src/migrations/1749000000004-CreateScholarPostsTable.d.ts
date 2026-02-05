@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner } from "typeorm";
 export declare class CreateScholarPostsTable1749000000004 implements MigrationInterface {
     name: string;
     up(queryRunner: QueryRunner): Promise<void>;

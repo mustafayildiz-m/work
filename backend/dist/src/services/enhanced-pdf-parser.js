@@ -57,22 +57,7 @@ class PDFSpecificScholarParser {
                 /vefât\s*(\d{2,4})/gi,
                 /ölüm\s*(\d{2,4})/gi,
             ],
-            lineageKeywords: [
-                'İbn',
-                'Ebu',
-                'Ebû',
-                'bin',
-                'el-',
-                'ed-',
-                'en-',
-                'er-',
-                'es-',
-                'et-',
-                'ez-',
-                'Abd',
-                'Künyesi',
-                'Adı',
-            ],
+            lineageKeywords: ['İbn', 'Ebu', 'Ebû', 'bin', 'el-', 'ed-', 'en-', 'er-', 'es-', 'et-', 'ez-', 'Abd', 'Künyesi', 'Adı'],
             excludePatterns: [
                 /^\d+$/,
                 /^[A-ZÇĞİÖŞÜÂÎÛ\s]*SAYFA[A-ZÇĞİÖŞÜÂÎÛ\s]*$/i,
@@ -92,7 +77,7 @@ class PDFSpecificScholarParser {
             ],
             alternativeNameSupport: true,
             confidenceThreshold: 40,
-            ...config,
+            ...config
         };
         this.compilePatterns();
     }
@@ -110,7 +95,7 @@ class PDFSpecificScholarParser {
                 /\b(SERÎ|HETTÂR|HEVÂRÎ|BİRGİVİ|HADİMİ|KOTKU|TOPBAŞ|KONUK|YAZIR)\b/i,
                 /[ÂÎÛÇĞŞİÖÜ]/,
                 /(GAZALİ|BUHARİ|MÜSLİM|TİRMİZİ|NESAİ|EBU\s*DAVUD|İBN\s*MACE|AHMED\s*BİN\s*HANBEL)$/i,
-            ],
+            ]
         };
     }
     async parsePDF() {
@@ -132,17 +117,17 @@ class PDFSpecificScholarParser {
         if (match && match.length >= 3) {
             return {
                 mainName: match[1].trim(),
-                altName: match[2].trim(),
+                altName: match[2].trim()
             };
         }
         return { mainName: fullName };
     }
     hasKnownScholarPatterns(name) {
-        return this.compiledPatterns.knownScholarPatterns.some((pattern) => pattern.test(name));
+        return this.compiledPatterns.knownScholarPatterns.some(pattern => pattern.test(name));
     }
     isValidScholarName(name) {
         const trimmed = name.trim();
-        if (this.config.excludePatterns.some((pattern) => pattern.test(trimmed))) {
+        if (this.config.excludePatterns.some(pattern => pattern.test(trimmed))) {
             return false;
         }
         if (!this.compiledPatterns.scholarName.test(trimmed)) {
@@ -150,8 +135,7 @@ class PDFSpecificScholarParser {
         }
         const mainName = trimmed.replace(/\s*\([^)]+\)/, '');
         const words = mainName.split(/\s+/).filter(Boolean);
-        if (words.length < this.config.minWordCount ||
-            words.length > this.config.maxWordCount) {
+        if (words.length < this.config.minWordCount || words.length > this.config.maxWordCount) {
             return false;
         }
         return this.hasKnownScholarPatterns(trimmed);
@@ -175,8 +159,7 @@ class PDFSpecificScholarParser {
                 if (pattern.source.includes('doğum')) {
                     result.birthDate = match[1];
                 }
-                else if (pattern.source.includes('vefât') ||
-                    pattern.source.includes('ölüm')) {
+                else if (pattern.source.includes('vefât') || pattern.source.includes('ölüm')) {
                     result.deathDate = match[1];
                 }
                 else if (match.length >= 3) {
@@ -236,10 +219,9 @@ class PDFSpecificScholarParser {
     }
     extractScholars(text) {
         const scholars = [];
-        const lines = text
-            .split('\n')
-            .map((line) => line.trim())
-            .filter((line) => line.length > 0);
+        const lines = text.split('\n')
+            .map(line => line.trim())
+            .filter(line => line.length > 0);
         let currentScholar = {};
         let biographyLines = [];
         let processingBiography = false;
@@ -253,10 +235,7 @@ class PDFSpecificScholarParser {
                     const dates = this.extractDatesFromBiography(biography);
                     const lineage = this.extractLineage(biography, currentScholar.fullName);
                     const hasAltName = !!currentScholar.alternativeName;
-                    const hasDateInfo = !!(dates.birthDate ||
-                        dates.deathDate ||
-                        dates.birthDateHijri ||
-                        dates.deathDateHijri);
+                    const hasDateInfo = !!(dates.birthDate || dates.deathDate || dates.birthDateHijri || dates.deathDateHijri);
                     const confidence = this.calculateConfidence(currentScholar.fullName, biography, hasAltName, hasDateInfo);
                     if (confidence >= this.config.confidenceThreshold) {
                         scholars.push({
@@ -268,7 +247,7 @@ class PDFSpecificScholarParser {
                             confidence,
                             photoUrl: 'uploads/coverImage/coverImage.jpg',
                             coverImage: 'uploads/coverImage/coverImage.jpg',
-                            rawLine: currentScholar.rawLine,
+                            rawLine: currentScholar.rawLine
                         });
                         console.log(`  💾 Kaydedildi (Güvenilirlik: ${confidence}%)`);
                     }
@@ -280,22 +259,18 @@ class PDFSpecificScholarParser {
                 currentScholar = {
                     fullName: mainName,
                     alternativeName: altName,
-                    rawLine: line,
+                    rawLine: line
                 };
                 biographyLines = [];
                 processingBiography = true;
                 continue;
             }
             if (processingBiography) {
-                if (line.length > 15 &&
-                    !line.match(/^[-–=_\s]+$/) &&
-                    !line.match(/^\d+$/)) {
+                if (line.length > 15 && !line.match(/^[-–=_\s]+$/) && !line.match(/^\d+$/)) {
                     biographyLines.push(line);
                 }
                 if (line.match(/^[-–=_]{5,}/) ||
-                    (line.length > 50 &&
-                        line === line.toUpperCase() &&
-                        this.hasKnownScholarPatterns(line))) {
+                    (line.length > 50 && line === line.toUpperCase() && this.hasKnownScholarPatterns(line))) {
                     processingBiography = false;
                 }
             }
@@ -305,10 +280,7 @@ class PDFSpecificScholarParser {
             const dates = this.extractDatesFromBiography(biography);
             const lineage = this.extractLineage(biography, currentScholar.fullName);
             const hasAltName = !!currentScholar.alternativeName;
-            const hasDateInfo = !!(dates.birthDate ||
-                dates.deathDate ||
-                dates.birthDateHijri ||
-                dates.deathDateHijri);
+            const hasDateInfo = !!(dates.birthDate || dates.deathDate || dates.birthDateHijri || dates.deathDateHijri);
             const confidence = this.calculateConfidence(currentScholar.fullName, biography, hasAltName, hasDateInfo);
             if (confidence >= this.config.confidenceThreshold) {
                 scholars.push({
@@ -320,7 +292,7 @@ class PDFSpecificScholarParser {
                     confidence,
                     photoUrl: 'uploads/coverImage/coverImage.jpg',
                     coverImage: 'uploads/coverImage/coverImage.jpg',
-                    rawLine: currentScholar.rawLine,
+                    rawLine: currentScholar.rawLine
                 });
             }
         }
@@ -330,15 +302,14 @@ class PDFSpecificScholarParser {
         const output = {
             metadata: {
                 totalCount: scholars.length,
-                highConfidence: scholars.filter((s) => (s.confidence || 0) >= 80)
-                    .length,
-                mediumConfidence: scholars.filter((s) => (s.confidence || 0) >= 60 && (s.confidence || 0) < 80).length,
-                lowConfidence: scholars.filter((s) => (s.confidence || 0) >= 40 && (s.confidence || 0) < 60).length,
+                highConfidence: scholars.filter(s => (s.confidence || 0) >= 80).length,
+                mediumConfidence: scholars.filter(s => (s.confidence || 0) >= 60 && (s.confidence || 0) < 80).length,
+                lowConfidence: scholars.filter(s => (s.confidence || 0) >= 40 && (s.confidence || 0) < 60).length,
                 processedAt: new Date().toISOString(),
                 sourceFile: path.basename(this.pdfPath),
-                parserConfig: this.config,
+                parserConfig: this.config
             },
-            scholars: scholars,
+            scholars: scholars
         };
         await fs.promises.writeFile(this.outputPath, JSON.stringify(output, null, 2), 'utf8');
         console.log(`\n✅ ${scholars.length} âlim verisi ${this.outputPath} dosyasına kaydedildi.`);
@@ -358,17 +329,17 @@ class PDFSpecificScholarParser {
     }
     testWithYourExamples() {
         const examples = [
-            'HENNÂD BİN SERÎ',
-            'HETTÂR (Îsâ bin İkbâl)',
-            'HEVÂRÎ (Ebû Abdullah)',
-            'İMAM EBU HANİFE',
-            'SAYFA 123',
-            'İÇİNDEKİLER',
-            "ABDULLAH BİN MAS'UD",
+            "HENNÂD BİN SERÎ",
+            "HETTÂR (Îsâ bin İkbâl)",
+            "HEVÂRÎ (Ebû Abdullah)",
+            "İMAM EBU HANİFE",
+            "SAYFA 123",
+            "İÇİNDEKİLER",
+            "ABDULLAH BİN MAS'UD"
         ];
         console.log('\n🧪 PDF Formatınızla Test:');
         console.log('========================');
-        examples.forEach((example) => {
+        examples.forEach(example => {
             const isValid = this.isValidScholarName(example);
             const { mainName, altName } = this.extractAlternativeName(example);
             const hasKnownPattern = this.hasKnownScholarPatterns(example);

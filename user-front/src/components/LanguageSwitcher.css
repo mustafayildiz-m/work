@@ -1,0 +1,246 @@
+/* Remove Bootstrap dropdown caret/arrow */
+.no-caret::after {
+  display: none !important;
+}
+
+.no-caret {
+  position: relative;
+}
+
+/* Language Switcher Toggle - Light Mode */
+.language-switcher-toggle,
+.btn.language-switcher-toggle {
+  border-radius: 50px !important;
+  padding: 0.45rem 0.9rem !important;
+  font-weight: 600 !important;
+  border: 1px solid var(--bs-border-color, #e2e8f0) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.3s ease !important;
+  background: var(--bs-body-bg, #fff) !important;
+  color: var(--bs-body-color, #000) !important;
+}
+
+/* Language Switcher Toggle - Dark Mode */
+[data-bs-theme="dark"] .language-switcher-toggle,
+[data-bs-theme="dark"] .btn.language-switcher-toggle,
+[data-bs-theme="dark"] .btn-light.language-switcher-toggle {
+  background: #2d3748 !important;
+  color: #ffffff !important;
+  border-color: #4a5568 !important;
+}
+
+[data-bs-theme="dark"] .language-switcher-toggle span,
+[data-bs-theme="dark"] .btn.language-switcher-toggle span,
+[data-bs-theme="dark"] .dropdown-toggle.language-switcher-toggle span {
+  color: #ffffff !important;
+}
+
+/* Hover and focus states for dark mode */
+[data-bs-theme="dark"] .language-switcher-toggle:hover,
+[data-bs-theme="dark"] .btn.language-switcher-toggle:hover,
+[data-bs-theme="dark"] .language-switcher-toggle:focus {
+  background: #374151 !important;
+  color: #ffffff !important;
+  border-color: #667eea !important;
+}
+
+/* Active/pressed state for dark mode */
+[data-bs-theme="dark"] .language-switcher-toggle:active,
+[data-bs-theme="dark"] .btn.language-switcher-toggle:active,
+[data-bs-theme="dark"] .language-switcher-toggle.show {
+  background: #374151 !important;
+  color: #ffffff !important;
+}
+
+/* Language Switcher Select2 Style */
+.language-switcher-select2 {
+  z-index: 1000;
+}
+
+.language-select__menu {
+  z-index: 10000 !important;
+}
+
+.language-select__menu-portal {
+  z-index: 10000 !important;
+}
+
+/* Ensure menu portal is visible */
+body>div[id*="react-select"] {
+  z-index: 10000 !important;
+  overflow: visible !important;
+}
+
+body>div[id*="react-select"]>div {
+  overflow: visible !important;
+}
+
+.language-select__menu-list {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0.25rem !important;
+}
+
+.language-select__menu-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.language-select__menu-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.language-select__menu-list::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 3px;
+}
+
+.language-select__menu-list::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
+.language-select__option {
+  margin: 0 !important;
+}
+
+/* Language Switcher Select2 - Dark Mode */
+[data-bs-theme="dark"] .language-select__control {
+  background: #2d3748 !important;
+  border-color: #4a5568 !important;
+  color: #fff !important;
+}
+
+[data-bs-theme="dark"] .language-select__single-value {
+  color: #fff !important;
+}
+
+[data-bs-theme="dark"] .language-select__menu {
+  background: #1a1d29 !important;
+  border-color: #2d3748 !important;
+}
+
+[data-bs-theme="dark"] .language-select__option {
+  background: transparent !important;
+  color: #fff !important;
+}
+
+[data-bs-theme="dark"] .language-select__option--is-focused {
+  background: #2d3748 !important;
+}
+
+[data-bs-theme="dark"] .language-select__option--is-selected {
+  background: #667eea !important;
+  color: #fff !important;
+}
+
+[data-bs-theme="dark"] .language-select__dropdown-indicator {
+  color: #fff !important;
+}
+
+[data-bs-theme="dark"] .language-select__menu-list::-webkit-scrollbar-thumb {
+  background: #4a5568;
+}
+
+[data-bs-theme="dark"] .language-select__menu-list::-webkit-scrollbar-thumb:hover {
+  background: #718096;
+}
+
+[data-bs-theme="dark"] .language-switcher-menu .language-switcher-item {
+  color: var(--bs-light, #fff) !important;
+}
+
+[data-bs-theme="dark"] .language-switcher-menu .language-switcher-item span {
+  color: var(--bs-light, #fff) !important;
+}
+
+/* Simple variant scrollbar styling */
+.language-switcher-simple-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.language-switcher-simple-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.language-switcher-simple-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.language-switcher-simple-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Language Switcher Item */
+.language-switcher-item {
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.language-switcher-item.active {
+  font-weight: 600;
+  background: var(--bs-primary) !important;
+  color: white !important;
+}
+
+.language-switcher-item.active span {
+  color: white !important;
+}
+
+/* Dark Mode - Item hover */
+[data-bs-theme="dark"] .language-switcher-item:hover {
+  background: var(--bs-secondary-bg, #2d3748) !important;
+}
+
+[data-bs-theme="dark"] .language-switcher-item.active {
+  background: var(--bs-primary) !important;
+  color: white !important;
+}
+
+/* Dropdown menu animations */
+.dropdown-menu {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile responsive grid for language menu */
+@media (max-width: 767.98px) {
+  .language-menu-list-responsive {
+    grid-template-columns: 1fr !important;
+    max-height: min(350px, 60vh) !important;
+  }
+
+  .language-select__menu {
+    min-width: 200px !important;
+    max-width: calc(100vw - 2rem) !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .language-menu-list-responsive {
+    max-height: min(300px, 50vh) !important;
+    padding: 0.35rem !important;
+  }
+
+  .language-select__option {
+    padding: 0.4rem 0.6rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  .language-select__menu {
+    min-width: 220px !important;
+  }
+}

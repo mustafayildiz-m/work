@@ -26,24 +26,22 @@ let ScholarRelatedBooksSeeder = class ScholarRelatedBooksSeeder {
     async seed() {
         console.log('🌱 Starting scholar related books seeding...');
         const scholars = await this.scholarRepository.find();
-        const books = await this.bookRepository.find({
-            relations: ['translations'],
-        });
-        const realScholars = scholars.filter((scholar) => scholar.id !== 12);
-        const realBooks = books.filter((book) => book.id !== 16);
+        const books = await this.bookRepository.find({ relations: ['translations'] });
+        const realScholars = scholars.filter(scholar => scholar.id !== 12);
+        const realBooks = books.filter(book => book.id !== 16);
         console.log(`Found ${realScholars.length} scholars and ${realBooks.length} books`);
         for (const scholar of realScholars) {
             try {
                 const scholarWithBooks = await this.scholarRepository.findOne({
                     where: { id: scholar.id },
-                    relations: ['relatedBooks'],
+                    relations: ['relatedBooks']
                 });
                 if (!scholarWithBooks) {
                     console.log(`⚠️  Scholar not found: ${scholar.fullName}`);
                     continue;
                 }
-                const currentBookIds = scholarWithBooks.relatedBooks?.map((book) => book.id) || [];
-                const availableBooks = realBooks.filter((book) => !currentBookIds.includes(book.id));
+                const currentBookIds = scholarWithBooks.relatedBooks?.map(book => book.id) || [];
+                const availableBooks = realBooks.filter(book => !currentBookIds.includes(book.id));
                 const numberOfBooks = Math.floor(Math.random() * 5) + 3;
                 const selectedBooks = this.getRandomBooks(availableBooks, numberOfBooks);
                 if (selectedBooks.length === 0) {
@@ -52,11 +50,7 @@ let ScholarRelatedBooksSeeder = class ScholarRelatedBooksSeeder {
                 }
                 scholarWithBooks.relatedBooks = selectedBooks;
                 await this.scholarRepository.save(scholarWithBooks);
-                const bookTitles = selectedBooks
-                    .map((b) => b.translations?.[0]?.title ||
-                    b.author ||
-                    `Book #${b.id}`)
-                    .join(', ');
+                const bookTitles = selectedBooks.map(b => b.translations?.[0]?.title || b.author || `Book #${b.id}`).join(', ');
                 console.log(`✅ Added ${selectedBooks.length} books to ${scholar.fullName}: ${bookTitles}`);
             }
             catch (error) {

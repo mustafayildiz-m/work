@@ -27,18 +27,7 @@ let UserPostsModule = class UserPostsModule {
 exports.UserPostsModule = UserPostsModule;
 exports.UserPostsModule = UserPostsModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            typeorm_1.TypeOrmModule.forFeature([
-                user_post_entity_1.UserPost,
-                user_follow_entity_1.UserFollow,
-                user_scholar_follow_entity_1.UserScholarFollow,
-                scholar_post_entity_1.ScholarPost,
-                user_entity_1.User,
-                scholar_entity_1.Scholar,
-                user_post_comment_entity_1.UserPostComment,
-                user_post_share_entity_1.UserPostShare,
-            ]),
-        ],
+        imports: [typeorm_1.TypeOrmModule.forFeature([user_post_entity_1.UserPost, user_follow_entity_1.UserFollow, user_scholar_follow_entity_1.UserScholarFollow, scholar_post_entity_1.ScholarPost, user_entity_1.User, scholar_entity_1.Scholar, user_post_comment_entity_1.UserPostComment, user_post_share_entity_1.UserPostShare])],
         controllers: [user_posts_controller_1.UserPostsController, user_post_share_controller_1.UserPostShareController],
         providers: [user_posts_service_1.UserPostsService, user_post_share_service_1.UserPostShareService, cache_service_1.CacheService],
         exports: [user_posts_service_1.UserPostsService, user_post_share_service_1.UserPostShareService],
