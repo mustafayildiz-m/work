@@ -3,15 +3,28 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class MailService {
-  constructor(private mailerService: MailerService) {}
+  constructor(private mailerService: MailerService) { }
 
   async sendWelcomeEmail(email: string, name: string) {
     await this.mailerService.sendMail({
       to: email,
       subject: 'İslâmî Windows - Hoş Geldiniz!',
-      template: './welcome', // .ejs extension is appended automatically
+      template: './welcome',
       context: {
         name: name,
+      },
+    });
+  }
+
+  async sendVerificationEmail(email: string, name: string, token: string) {
+    const url = `https://islamicwindows.com/auth/verify?token=${token}`;
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'E-posta Adresinizi Doğrulayın',
+      template: './verification',
+      context: {
+        name: name,
+        url: url,
       },
     });
   }

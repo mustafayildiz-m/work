@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hoş Geldiniz</title>
+    <title>Hesabınızı Doğrulayın</title>
 </head>
 
 <body
@@ -22,26 +22,30 @@
         <!-- Content -->
         <tr>
             <td style="padding: 40px 30px;">
-                <h1 style="color: #333333; font-size: 24px; margin-top: 0; text-align: center;">Selamün Aleyküm, <%=
-                        name %>!</h1>
+                <h1 style="color: #333333; font-size: 24px; margin-top: 0; text-align: center;">Hoş Geldiniz, <%= name
+                        %>!</h1>
                 <p style="color: #666666; font-size: 16px; line-height: 1.6; text-align: center;">
-                    İslâmî Windows platformuna hoş geldiniz. Kaydınız başarıyla tamamlanmıştır ve hesabınız aktiftir.
-                </p>
-                <p style="color: #666666; font-size: 16px; line-height: 1.6; text-align: center;">
-                    Platformumuzda dilediğiniz gibi vakit geçirebilir, paylaşımlarda bulunabilir ve âlimlerimizin
-                    hayatlarını inceleyebilirsiniz.
+                    İslâmî Windows platformuna katıldığınız için teşekkür ederiz. Hesabınızı aktifleştirmek ve tüm
+                    özelliklere erişebilmek için lütfen aşağıdaki butona tıklayarak e-posta adresinizi doğrulayın.
                 </p>
 
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 30px;">
                     <tr>
                         <td align="center">
-                            <a href="https://islamicwindows.com"
-                                style="display: inline-block; background-color: #1a2a6c; color: #ffffff; padding: 16px 32px; font-size: 16px; font-weight: bold; text-decoration: none; border-radius: 8px;">
-                                Keşfetmeye Başla
+                            <a href="<%= url %>"
+                                style="display: inline-block; background-color: #1a2a6c; color: #ffffff; padding: 16px 32px; font-size: 16px; font-weight: bold; text-decoration: none; border-radius: 8px; box-shadow: 0 4px 6px rgba(26, 42, 108, 0.2);">
+                                Hesabı Doğrula
                             </a>
                         </td>
                     </tr>
                 </table>
+
+                <p style="color: #999999; font-size: 14px; line-height: 1.6; margin-top: 40px; text-align: center;">
+                    Eğer butona tıklayamıyorsanız, aşağıdaki bağlantıyı kopyalayıp tarayıcınıza yapıştırabilirsiniz:<br>
+                    <a href="<%= url %>" style="color: #1a2a6c; word-break: break-all;">
+                        <%= url %>
+                    </a>
+                </p>
             </td>
         </tr>
 
