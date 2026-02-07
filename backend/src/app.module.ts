@@ -48,6 +48,7 @@ import { PublicProfileModule } from './modules/public-profile.module';
 import { PodcastModule } from './modules/podcast.module';
 import { AdminUsersModule } from './modules/admin-users.module';
 import { TranslationModule } from './modules/translation.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -105,6 +106,7 @@ import { TranslationModule } from './modules/translation.module';
     PodcastModule,
     AdminUsersModule,
     TranslationModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [

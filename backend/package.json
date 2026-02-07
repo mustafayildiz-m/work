@@ -29,6 +29,7 @@
     "seed:all": "npm run seed:languages && npm run seed:multilanguage-books && npm run seed:multilanguage-articles"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/bull": "^11.0.3",
     "@nestjs/cache-manager": "^3.0.1",
     "@nestjs/common": "^11.0.1",
@@ -52,9 +53,11 @@
     "cache-manager": "^6.4.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
+    "ejs": "^3.1.10",
     "google-auth-library": "^10.5.0",
     "multer": "^1.4.5-lts.2",
     "mysql2": "^3.9.1",
+    "nodemailer": "^6.10.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pdf-parse": "^1.1.1",
