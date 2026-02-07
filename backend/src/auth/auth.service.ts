@@ -5,12 +5,15 @@ import * as bcrypt from 'bcrypt';
 import { OAuth2Client } from 'google-auth-library';
 import { randomBytes } from 'crypto';
 
+import { MailService } from '../mail/mail.service';
+
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-  ) {}
+    private mailService: MailService,
+  ) { }
 
   private getGoogleClientId(): string {
     const clientId = process.env.GOOGLE_CLIENT_ID;
@@ -56,6 +59,13 @@ export class AuthService {
     const user = await this.usersService.findByEmail(email);
     if (!user) {
       throw new UnauthorizedException('Geçersiz email veya şifre');
+    }
+
+    // Kullanıcı doğrulanmış mı kontrol et
+    if (!user.isVerified) {
+      throw new UnauthorizedException(
+        'Lütfen önce e-posta adresinizi doğrulayın.',
+      );
     }
 
     // Kullanıcı aktif mi kontrol et
@@ -127,12 +137,52 @@ export class AuthService {
       throw new UnauthorizedException('Bu email ile zaten bir kullanıcı var.');
     }
     // Yeni kullanıcı oluştur
+    const verificationToken = randomBytes(32).toString('hex');
+    const verificationTokenExpires = new Date();
+    verificationTokenExpires.setHours(verificationTokenExpires.getHours() + 24);
+
     const user = await this.usersService.create({
       ...registerDto,
       role: 'user',
       isActive: true,
+      isVerified: false,
+      verificationToken,
+      verificationTokenExpires,
+    } as any);
+
+    // E-posta gönder
+    await this.mailService.sendVerificationEmail(
+      user.email,
+      user.firstName || user.username,
+      verificationToken,
+    );
+
+    return {
+      message:
+        'Kayıt başarılı. Lütfen e-posta adresinize gönderilen doğrulama linkine tıklayın.',
+    };
+  }
+
+  async verifyEmail(token: string) {
+    const user = await (this.usersService as any).usersRepository.findOne({
+      where: { verificationToken: token },
     });
-    return { message: 'Kayıt başarılı', user };
+
+    if (!user) {
+      throw new UnauthorizedException('Geçersiz doğrulama tokenı.');
+    }
+
+    if (user.verificationTokenExpires < new Date()) {
+      throw new UnauthorizedException('Doğrulama linkinin süresi dolmuş.');
+    }
+
+    await this.usersService.update(user.id, {
+      isVerified: true,
+      verificationToken: null,
+      verificationTokenExpires: null,
+    } as any);
+
+    return { message: 'Hesabınız başarıyla doğrulandı.' };
   }
 
   async loginWithGoogleIdToken(idToken: string) {
@@ -212,7 +262,11 @@ export class AuthService {
       photoUrl,
       role: 'user',
       isActive: true,
-    });
+      isVerified: true, // Google ile kayıt olanlar direkt doğrulanmış sayılır
+    } as any);
+
+    // Google ile yeni kayıt olana hoş geldin maili gönder
+    await this.mailService.sendWelcomeEmail(user.email, user.firstName);
 
     return this.login(user);
   }

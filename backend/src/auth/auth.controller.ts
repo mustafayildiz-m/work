@@ -33,7 +33,7 @@ export class GoogleLoginDto {
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
@@ -163,5 +163,10 @@ export class AuthController {
   async googleCallback(@Body() body: GoogleLoginDto) {
     const { idToken } = body || {};
     return this.authService.loginWithGoogleIdToken(idToken);
+  }
+
+  @Get('verify')
+  async verifyEmail(@Headers('token') tokenHeader: string) {
+    return this.authService.verifyEmail(tokenHeader);
   }
 }
