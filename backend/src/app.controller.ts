@@ -22,7 +22,7 @@ export class AppController {
     private readonly languageRepository: Repository<Language>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   @Get('statistics/counts')
   @UseGuards(JwtAuthGuard)
