@@ -8,15 +8,8 @@ import { WebSocketChatProvider } from '@/context/useWebSocketChatContext';
  * Only renders the provider when user is authenticated
  */
 const ConditionalWebSocketProvider = ({ children }) => {
-    const { data: session, status } = useSession();
-
-    // Only provide WebSocket context when user is authenticated
-    if (status === 'authenticated' && session) {
-        return <WebSocketChatProvider>{children}</WebSocketChatProvider>;
-    }
-
-    // For unauthenticated users, just render children without the provider
-    return <>{children}</>;
+    // ALWAYS provide the context. The provider handles internal connection logic.
+    return <WebSocketChatProvider>{children}</WebSocketChatProvider>;
 };
 
 export default ConditionalWebSocketProvider;

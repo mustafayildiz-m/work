@@ -3,6 +3,7 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
+import { existsSync } from 'fs';
 import { MailService } from './mail.service';
 
 @Global()
@@ -24,7 +25,9 @@ import { MailService } from './mail.service';
                     from: `"İslâmî Windows" <${config.get('MAIL_FROM')}>`,
                 },
                 template: {
-                    dir: join(__dirname, 'templates'),
+                    dir: existsSync(join(__dirname, 'templates'))
+                        ? join(__dirname, 'templates')
+                        : join(process.cwd(), 'src/mail/templates'),
                     adapter: new EjsAdapter(),
                     options: {
                         strict: true,

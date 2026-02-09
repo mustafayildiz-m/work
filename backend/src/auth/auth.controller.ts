@@ -4,6 +4,7 @@ import {
   Body,
   Get,
   Headers,
+  Query,
   UseInterceptors,
   UploadedFile,
 } from '@nestjs/common';
@@ -166,7 +167,8 @@ export class AuthController {
   }
 
   @Get('verify')
-  async verifyEmail(@Headers('token') tokenHeader: string) {
-    return this.authService.verifyEmail(tokenHeader);
+  async verifyEmail(@Query('token') queryToken: string, @Headers('token') headerToken: string) {
+    const token = queryToken || headerToken;
+    return this.authService.verifyEmail(token);
   }
 }
