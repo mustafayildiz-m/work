@@ -4,8 +4,9 @@ import { getToken } from 'next-auth/jwt';
 // Public sayfalar - authentication gerektirmeyen sayfalar
 const publicPages = [
   '/auth-advance/sign-in',
-  '/auth/sign-in', 
+  '/auth/sign-in',
   '/auth/sign-up',
+  '/auth/verify',
   '/auth/forgot-pass',
   '/api/auth',
   '/_next',
@@ -27,21 +28,21 @@ const NEXTAUTH_SECRET =
 
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
-  
+
   // Ana sayfa yönlendirmesi
   if (pathname === '/') {
     return NextResponse.redirect(new URL('/feed/home', request.url));
   }
-  
+
   // Public sayfalar için middleware çalıştırma
   if (publicPages.some(page => pathname.startsWith(page))) {
     return NextResponse.next();
   }
-  
+
   // Protected sayfalar için token kontrolü
   if (protectedPages.some(page => pathname.startsWith(page))) {
     const token = await getToken({ req: request, secret: NEXTAUTH_SECRET });
-    
+
     // Token yoksa login sayfasına yönlendir
     // Not: biz backend JWT'i `token.access_token` alanında tutuyoruz
     if (!token?.access_token) {
@@ -50,7 +51,7 @@ export async function middleware(request) {
       return NextResponse.redirect(loginUrl);
     }
   }
-  
+
   return NextResponse.next();
 }
 

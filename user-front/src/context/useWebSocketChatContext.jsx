@@ -53,10 +53,19 @@ const WebSocketChatContext = createContext(undefined);
 
 export const useWebSocketChatContext = () => {
   const context = useContext(WebSocketChatContext);
-  if (!context) {
-    throw new Error('useWebSocketChatContext can only be used within WebSocketChatProvider');
-  }
-  return context;
+  // Return a safe object with defaults if no context (for unauthenticated pages)
+  return context || {
+    conversations: [],
+    messages: [],
+    onlineUsers: [],
+    typingUsers: {},
+    isConnected: false,
+    loading: false,
+    selectConversation: () => { },
+    sendMessage: () => Promise.resolve(),
+    createNewConversation: () => Promise.resolve(),
+    deleteConversation: () => Promise.resolve(),
+  };
 };
 
 export const WebSocketChatProvider = ({ children }) => {

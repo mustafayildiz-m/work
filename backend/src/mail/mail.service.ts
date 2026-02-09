@@ -1,29 +1,36 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class MailService {
-  constructor(private mailerService: MailerService) { }
+  constructor(
+    private mailerService: MailerService,
+    private configService: ConfigService,
+  ) { }
 
-  async sendWelcomeEmail(email: string, name: string) {
+  async sendWelcomeEmail(email: string, recipientName: string) {
     await this.mailerService.sendMail({
       to: email,
       subject: 'İslâmî Windows - Hoş Geldiniz!',
       template: './welcome',
       context: {
-        name: name,
+        recipientName: recipientName || 'Sayın Kullanıcı',
+        name: recipientName || 'Sayın Kullanıcı',
       },
     });
   }
 
-  async sendVerificationEmail(email: string, name: string, token: string) {
-    const url = `https://islamicwindows.com/auth/verify?token=${token}`;
+  async sendVerificationEmail(email: string, recipientName: string, token: string) {
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL') || 'https://islamicwindows.com';
+    const url = `${frontendUrl}/auth/verify?token=${token}`;
     await this.mailerService.sendMail({
       to: email,
       subject: 'E-posta Adresinizi Doğrulayın',
       template: './verification',
       context: {
-        name: name,
+        recipientName: recipientName || 'Sayın Kullanıcı',
+        name: recipientName || 'Sayın Kullanıcı',
         url: url,
       },
     });

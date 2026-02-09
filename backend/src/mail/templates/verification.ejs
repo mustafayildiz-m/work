@@ -8,53 +8,70 @@
 </head>
 
 <body
-    style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f9f9f9; margin: 0; padding: 0;">
+    style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f4f0; margin: 0; padding: 0;">
     <table border="0" cellpadding="0" cellspacing="0" width="100%"
-        style="max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-        <!-- Header -->
+        style="max-width: 600px; margin: 30px auto; background-color: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 45px rgba(0,0,0,0.1); border: 1px solid #ddecdd;">
+        <!-- Header with PNG Logo -->
         <tr>
-            <td align="center" style="padding: 40px 0; background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);">
-                <img src="https://islamicwindows.com/_next/static/media/logo.dca38a98.svg" alt="İslâmî Windows Logo"
-                    width="180" style="display: block; filter: brightness(0) invert(1);">
+            <td align="center" style="padding: 45px 0; background-color: #ffffff;">
+                <img src="https://islamicwindows.com/logo/logo.png" alt="İslâmî Windows" width="160"
+                    style="display: block; border: 0;">
             </td>
         </tr>
 
-        <!-- Content -->
+        <!-- Decorative Islamic Pattern Border -->
         <tr>
-            <td style="padding: 40px 30px;">
-                <h1 style="color: #333333; font-size: 24px; margin-top: 0; text-align: center;">Hoş Geldiniz, <%= name
-                        %>!</h1>
-                <p style="color: #666666; font-size: 16px; line-height: 1.6; text-align: center;">
-                    İslâmî Windows platformuna katıldığınız için teşekkür ederiz. Hesabınızı aktifleştirmek ve tüm
-                    özelliklere erişebilmek için lütfen aşağıdaki butona tıklayarak e-posta adresinizi doğrulayın.
+            <td height="6" style="background: linear-gradient(90deg, #1b5e20 0%, #43a047 50%, #1b5e20 100%);"></td>
+        </tr>
+
+        <!-- Main Content -->
+        <tr>
+            <td style="padding: 50px 45px; text-align: center;">
+                <h1 style="color: #1b5e20; font-size: 26px; margin-top: 0; font-weight: 700; letter-spacing: -0.5px;">
+                    Hoş Geldiniz, <%= (locals.recipientName || locals.name || 'Değerli Kullanıcımız' ) %>!</h1>
+                <p style="color: #445544; font-size: 17px; line-height: 1.8; margin-bottom: 35px; margin-top: 20px;">
+                    İslâmî Windows ailesine katıldığınız için mutluluk duyuyoruz. Hesabınızı güvenli bir şekilde
+                    aktifleştirmek için lütfen aşağıdaki butona dokunun.
                 </p>
 
-                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 30px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
                     <tr>
                         <td align="center">
-                            <a href="<%= url %>"
-                                style="display: inline-block; background-color: #1a2a6c; color: #ffffff; padding: 16px 32px; font-size: 16px; font-weight: bold; text-decoration: none; border-radius: 8px; box-shadow: 0 4px 6px rgba(26, 42, 108, 0.2);">
-                                Hesabı Doğrula
+                            <a href="<%=locals.url%>"
+                                style="display: inline-block; background-color: #2e7d32; color: #ffffff; padding: 20px 45px; font-size: 17px; font-weight: 600; text-decoration: none; border-radius: 14px; box-shadow: 0 8px 25px rgba(46, 125, 50, 0.3); border: 1px solid #1b5e20;">
+                                Hesabımı Doğrula
                             </a>
                         </td>
                     </tr>
                 </table>
 
-                <p style="color: #999999; font-size: 14px; line-height: 1.6; margin-top: 40px; text-align: center;">
-                    Eğer butona tıklayamıyorsanız, aşağıdaki bağlantıyı kopyalayıp tarayıcınıza yapıştırabilirsiniz:<br>
-                    <a href="<%= url %>" style="color: #1a2a6c; word-break: break-all;">
-                        <%= url %>
+                <div style="margin-top: 50px; padding-top: 30px; border-top: 1px dotted #c8d8c8;">
+                    <p style="color: #7a8a7a; font-size: 14px; margin-bottom: 12px;">Eğer buton çalışmıyorsa aşağıdaki
+                        güvenli linki kullanabilirsiniz:</p>
+                    <a href="<%=locals.url%>"
+                        style="color: #2e7d32; font-size: 13px; word-break: break-all; text-decoration: none; background: #f4f9f4; padding: 12px; border-radius: 8px; display: block; border: 1px dashed #bdd4bd;">
+                        <%=locals.url%>
                     </a>
-                </p>
+                </div>
             </td>
         </tr>
 
         <!-- Footer -->
         <tr>
-            <td style="padding: 30px; background-color: #f4f4f4; text-align: center;">
-                <p style="color: #999999; font-size: 12px; margin: 0;">
-                    Bu e-posta İslâmî Windows tarafından gönderilmiştir.<br>
-                    © 2026 İslâmî Windows. Tüm hakları saklıdır.
+            <td style="padding: 40px; background-color: #f8faf8; text-align: center; border-top: 1px solid #e8eee8;">
+                <p style="color: #556655; font-size: 14px; margin: 0; font-weight: 500;">
+                    İslâmî Windows - İlim ve Hikmet Dünyası
+                </p>
+                <div
+                    style="margin: 20px 0; height: 1px; background-color: #e0e8e0; width: 60px; display: inline-block;">
+                </div>
+                <p style="color: #889988; font-size: 12px; margin: 0; line-height: 1.6;">
+                    Bu ileti sistem tarafından otomatik olarak oluşturulmuştur.<br>
+                    Herhangi bir sorunuz olursa destek ekibimizle iletişime geçebilirsiniz.
+                </p>
+                <p
+                    style="color: #abbbaa; font-size: 11px; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px;">
+                    © 2026 ISLAMIC WINDOWS
                 </p>
             </td>
         </tr>
