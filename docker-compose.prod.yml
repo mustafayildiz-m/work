@@ -5,9 +5,22 @@ services:
       dockerfile: Dockerfile
     environment:
       NODE_ENV: production
+      PORT: 3000
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: ${MYSQL_USER:-islamic_user}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-islamic_pass}
+      DB_DATABASE: ${MYSQL_DATABASE:-islamic_windows}
+      JWT_SECRET: ${JWT_SECRET}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      FRONTEND_URL: ${FRONTEND_URL:-https://islamicwindows.com}
     volumes:
       - ./backend/uploads:/app/uploads
+    networks:
+      - islamic_windows_network
+    restart: unless-stopped
 
   admin-front:
     build:
@@ -18,7 +31,9 @@ services:
     environment:
       NODE_ENV: production
       VITE_API_URL: https://islamicwindows.com/api
-    command: []
+    networks:
+      - islamic_windows_network
+    restart: unless-stopped
 
   user-front:
     build:
@@ -37,4 +52,11 @@ services:
       NEXTAUTH_SECRET: ${JWT_SECRET}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-    command: ["npm", "start"]
+    networks:
+      - islamic_windows_network
+    restart: unless-stopped
+    command: [ "npm", "start" ]
+
+networks:
+  islamic_windows_network:
+    external: true
