@@ -59,4 +59,5 @@ services:
 
 networks:
   islamic_windows_network:
+    name: iw_developments_islamic_windows_network
     external: true
