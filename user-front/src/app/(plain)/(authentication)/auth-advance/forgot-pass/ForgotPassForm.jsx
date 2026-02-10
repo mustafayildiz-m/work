@@ -14,6 +14,8 @@ import styles from '../auth-pages.module.css';
 const ForgotPassForm = () => {
   const { t } = useLanguage();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const forgotPassSchema = yup.object({
     email: yup
@@ -30,9 +32,29 @@ const ForgotPassForm = () => {
     resolver: yupResolver(forgotPassSchema)
   });
 
-  const onSubmit = (data) => {
-    // Burada e-posta gönderme işlemi yapılacak
-    setIsSubmitted(true);
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: data.email }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Bir hata oluştu');
+      }
+
+      setIsSubmitted(true);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (isSubmitted) {
@@ -85,6 +107,11 @@ const ForgotPassForm = () => {
 
   return (
     <form className="mt-2" onSubmit={handleSubmit(onSubmit)}>
+      {error && (
+        <Alert variant="danger" className="py-2 small mb-3">
+          {error}
+        </Alert>
+      )}
       <div className="mb-2">
         <TextFormInput
           name="email"
@@ -105,6 +132,7 @@ const ForgotPassForm = () => {
           size="lg"
           type="submit"
           className={styles.submitButton}
+          disabled={isLoading}
           style={{
             fontWeight: '600',
             padding: '1rem 1.5rem',
@@ -112,10 +140,11 @@ const ForgotPassForm = () => {
             minHeight: '54px',
             background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
             border: 'none',
-            color: 'white'
+            color: 'white',
+            opacity: isLoading ? 0.7 : 1
           }}
         >
-          {t('auth.sendResetLink')}
+          {isLoading ? 'Gönderiliyor...' : t('auth.sendResetLink')}
         </Button>
       </div>
 
