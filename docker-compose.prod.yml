@@ -16,6 +16,11 @@ services:
       REDIS_PORT: 6379
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       FRONTEND_URL: ${FRONTEND_URL:-https://islamicwindows.com}
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_USER: ${MAIL_USER}
+      MAIL_PASS: ${MAIL_PASS}
+      MAIL_FROM: ${MAIL_FROM}
     volumes:
       - ./backend/uploads:/app/uploads
     networks:
