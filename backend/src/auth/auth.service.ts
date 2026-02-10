@@ -182,6 +182,9 @@ export class AuthService {
       verificationTokenExpires: null,
     } as any);
 
+    // Doğrulama tamamlandıktan sonra hoş geldin maili gönder
+    await this.mailService.sendWelcomeEmail(user.email, user.firstName);
+
     return { message: 'Hesabınız başarıyla doğrulandı.' };
   }
 
