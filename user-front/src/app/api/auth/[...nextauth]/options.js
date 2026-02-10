@@ -63,6 +63,7 @@ export const options = {
               lastName: data.user.lastName,
               role: data.user.role,
               photoUrl: data.user.photoUrl,
+              language: data.user.language,
               access_token: data.access_token
             };
           }
@@ -170,7 +171,8 @@ export const options = {
           bio: token.user.bio,
           booksCount: token.user.booksCount,
           articlesCount: token.user.articlesCount,
-          visitsCount: token.user.visitsCount
+          visitsCount: token.user.visitsCount,
+          language: token.user.language
         };
 
         // Access token'ı session'a da ekle (client-side'da kullanmak için)

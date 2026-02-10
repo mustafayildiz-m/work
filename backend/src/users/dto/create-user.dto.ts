@@ -36,4 +36,8 @@ export class CreateUserDto {
 
   @IsOptional()
   isActive?: boolean;
+
+  @IsString()
+  @IsOptional()
+  language?: string;
 }

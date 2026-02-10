@@ -101,6 +101,7 @@ export class AuthService {
         lastName: user.lastName,
         role: user.role,
         photoUrl: user.photoUrl,
+        language: user.language,
       },
     };
   }
@@ -123,6 +124,7 @@ export class AuthService {
         email: user.email,
         role: user.role,
         photoUrl: user.photoUrl,
+        language: user.language,
       };
     } catch (err) {
       console.error('Token verification error:', err.message);
@@ -261,9 +263,9 @@ export class AuthService {
       email,
       password: randomPassword,
       firstName,
-      lastName,
       photoUrl,
       role: 'user',
+      language: (payload as any)?.locale || 'tr',
       isActive: true,
       isVerified: true, // Google ile kayıt olanlar direkt doğrulanmış sayılır
     } as any);
