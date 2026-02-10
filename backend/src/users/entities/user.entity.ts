@@ -44,6 +44,9 @@ export class User {
   @Column({ default: 'user' })
   role: string;
 
+  @Column({ nullable: true, default: 'tr' })
+  language: string;
+
   @Column({ default: true })
   isActive: boolean;
 

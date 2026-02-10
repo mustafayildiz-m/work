@@ -16,7 +16,7 @@ import { useLanguage } from '@/context/useLanguageContext';
 import styles from '../../auth-pages.module.css';
 
 const SignUpForm = () => {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const [firstPassword, setFirstPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -83,6 +83,7 @@ const SignUpForm = () => {
       formData.append('username', data.email.split('@')[0]);
       formData.append('firstName', data.firstName);
       formData.append('lastName', data.lastName);
+      formData.append('language', locale);
 
       // Eğer fotoğraf seçildiyse ekle
       if (selectedFile) {
