@@ -24,9 +24,9 @@ const SignIn = () => {
     }
   }, [status, router]);
 
-  // Loading durumunda bir şey gösterme veya boş bir loader göster
-  if (status === 'loading') return null;
-  if (status === 'authenticated') return null;
+  // Loading durumunda boş ekran göstermek yerine formu gösterelim (NextAuth bazen takılabiliyor)
+  // if (status === 'loading') return null;
+  // if (status === 'authenticated') return null;
 
   return (
     <div className={styles.authWrapper}>
