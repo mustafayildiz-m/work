@@ -263,6 +263,7 @@ export class AuthService {
       email,
       password: randomPassword,
       firstName,
+      lastName,
       photoUrl,
       role: 'user',
       language: (payload as any)?.locale || 'tr',
