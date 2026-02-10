@@ -57,6 +57,8 @@ services:
       REDIS_PORT: 6379
       DEEPL_API_KEY: ${DEEPL_API_KEY}
       DEEPL_API_URL: ${DEEPL_API_URL:-https://api-free.deepl.com/v2/translate}
+    ports:
+      - "${BACKEND_PORT:-3000}:3000"
     volumes:
       - ./backend:/app
       - /app/node_modules

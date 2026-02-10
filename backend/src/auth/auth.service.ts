@@ -312,11 +312,12 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    await this.usersService.update(user.id, {
+    // UsersService.update metodu şifreyi tekrar hashliyor olabilir, bu yüzden direkt repository kullanıyoruz
+    await (this.usersService as any).usersRepository.update(user.id, {
       password: hashedPassword,
       resetPasswordToken: null,
       resetPasswordExpires: null,
-    } as any);
+    });
 
     return { message: 'Şifreniz başarıyla güncellendi. Yeni şifrenizle giriş yapabilirsiniz.' };
   }

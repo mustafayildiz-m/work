@@ -36,7 +36,8 @@ const ForgotPassForm = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/auth/forgot-password', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+      const response = await fetch(`${apiUrl}/auth/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
