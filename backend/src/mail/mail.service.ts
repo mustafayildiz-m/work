@@ -36,6 +36,21 @@ export class MailService {
     });
   }
 
+  async sendPasswordResetEmail(email: string, recipientName: string, token: string) {
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL') || 'https://islamicwindows.com';
+    const url = `${frontendUrl}/auth/reset-password?token=${token}`;
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Şifrenizi Sıfırlayın',
+      template: './reset-password',
+      context: {
+        recipientName: recipientName || 'Sayın Kullanıcı',
+        name: recipientName || 'Sayın Kullanıcı',
+        url: url,
+      },
+    });
+  }
+
   async sendTestMail(to: string) {
     try {
       await this.mailerService.sendMail({

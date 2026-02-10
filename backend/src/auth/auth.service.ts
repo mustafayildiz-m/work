@@ -270,4 +270,54 @@ export class AuthService {
 
     return this.login(user);
   }
+
+  async forgotPassword(email: string) {
+    const user = await this.usersService.findByEmail(email);
+    if (!user) {
+      // Güvenlik için kullanıcı bulunamasa bile aynı mesajı dönebiliriz 
+      // ama şu an geliştirme aşamasında olduğumuz için basit tutalım
+      throw new UnauthorizedException('Kullanıcı bulunamadı.');
+    }
+
+    const resetToken = randomBytes(32).toString('hex');
+    const resetExpires = new Date();
+    resetExpires.setHours(resetExpires.getHours() + 1); // 1 saat geçerli
+
+    await this.usersService.update(user.id, {
+      resetPasswordToken: resetToken,
+      resetPasswordExpires: resetExpires,
+    } as any);
+
+    await this.mailService.sendPasswordResetEmail(
+      user.email,
+      user.firstName || user.username,
+      resetToken,
+    );
+
+    return { message: 'Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.' };
+  }
+
+  async resetPassword(token: string, newPassword: string) {
+    const user = await (this.usersService as any).usersRepository.findOne({
+      where: { resetPasswordToken: token },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Geçersiz veya süresi dolmuş şifre sıfırlama tokenı.');
+    }
+
+    if (user.resetPasswordExpires < new Date()) {
+      throw new UnauthorizedException('Şifre sıfırlama linkinin süresi dolmuş.');
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await this.usersService.update(user.id, {
+      password: hashedPassword,
+      resetPasswordToken: null,
+      resetPasswordExpires: null,
+    } as any);
+
+    return { message: 'Şifreniz başarıyla güncellendi. Yeni şifrenizle giriş yapabilirsiniz.' };
+  }
 }

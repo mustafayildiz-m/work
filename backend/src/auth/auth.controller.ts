@@ -171,4 +171,15 @@ export class AuthController {
     const token = queryToken || headerToken;
     return this.authService.verifyEmail(token);
   }
+
+  @Post('forgot-password')
+  async forgotPassword(@Body('email') email: string) {
+    return this.authService.forgotPassword(email);
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body() body: any) {
+    const { token, password } = body;
+    return this.authService.resetPassword(token, password);
+  }
 }
