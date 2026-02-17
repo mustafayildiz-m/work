@@ -24,7 +24,7 @@ export class ArticlesController {
   constructor(
     private readonly articlesService: ArticlesService,
     private readonly uploadService: UploadService,
-  ) {}
+  ) { }
 
   // Public endpoint - must be before the guarded routes
   @Get('public/:id')
@@ -177,6 +177,26 @@ export class ArticlesController {
     return {
       message: 'Makale ve ilişkili dosyalar başarıyla silindi.',
     };
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post(':id/page-translate')
+  async translatePage(
+    @Param('id', ParseIntPipe) id: number,
+    @Body()
+    body: {
+      pageNumber: number;
+      originalText: string;
+      targetLangCode: string;
+    },
+  ) {
+    const translatedText = await this.articlesService.getOrTranslatePage(
+      id,
+      body.pageNumber,
+      body.originalText,
+      body.targetLangCode,
+    );
+    return { translatedText };
   }
 
   @UseGuards(AuthGuard('jwt'))

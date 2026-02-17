@@ -10,6 +10,10 @@ import { createSlug, createUniqueSlug } from '../utils/slug.utils';
 import * as fs from 'fs';
 import * as path from 'path';
 
+import { ArticlePage } from './entities/article-page.entity';
+import { ArticlePageTranslation } from './entities/article-page-translation.entity';
+import { TranslationService } from '../services/translation.service';
+
 @Injectable()
 export class ArticlesService {
   constructor(
@@ -17,8 +21,66 @@ export class ArticlesService {
     private articleRepository: Repository<Article>,
     @InjectRepository(ArticleTranslation)
     private articleTranslationRepository: Repository<ArticleTranslation>,
+    @InjectRepository(ArticlePage)
+    private articlePageRepository: Repository<ArticlePage>,
+    @InjectRepository(ArticlePageTranslation)
+    private articlePageTranslationRepository: Repository<ArticlePageTranslation>,
     private uploadService: UploadService,
-  ) {}
+    private translationService: TranslationService,
+  ) { }
+
+  /**
+   * Makale sayfası bazlı çeviri ve önbellekleme
+   */
+  async getOrTranslatePage(
+    articleId: number,
+    pageNumber: number,
+    originalText: string,
+    targetLangCode: string,
+  ): Promise<string> {
+    // 1. Önce bu sayfayı bul veya oluştur
+    let page = await this.articlePageRepository.findOne({
+      where: { articleId, pageNumber },
+    });
+
+    if (!page) {
+      page = this.articlePageRepository.create({
+        articleId,
+        pageNumber,
+        content: originalText,
+      });
+      page = await this.articlePageRepository.save(page);
+    }
+
+    // 2. Bu dilde çeviri var mı bak
+    // Dil ID'sini bul (Basit bir mapleme veya DB sorgusu)
+    const langMap = { tr: 1, en: 2, ar: 3, de: 4, fr: 5, ja: 6 };
+    const languageId = langMap[targetLangCode] || 1;
+
+    const cachedTranslation = await this.articlePageTranslationRepository.findOne({
+      where: { pageId: page.id, languageId },
+    });
+
+    if (cachedTranslation) {
+      return cachedTranslation.content;
+    }
+
+    // 3. Yoksa DeepL'e git
+    const translatedText = await this.translationService.translateLongText(
+      originalText,
+      targetLangCode,
+    );
+
+    // 4. Sonucu kaydet
+    const newTranslation = this.articlePageTranslationRepository.create({
+      pageId: page.id,
+      languageId,
+      content: translatedText,
+    });
+    await this.articlePageTranslationRepository.save(newTranslation);
+
+    return translatedText;
+  }
 
   /**
    * Mevcut slug'ları getirir
