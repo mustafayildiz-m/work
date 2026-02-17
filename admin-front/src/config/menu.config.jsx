@@ -62,6 +62,7 @@ import {
   BarChart3,
   UserCog,
   FileText as NoteIcon,
+  Package,
 } from 'lucide-react';
 
 export const MENU_SIDEBAR = [
@@ -141,9 +142,15 @@ export const MENU_SIDEBAR = [
         ],
       },
 
+    ],
+  },
+  {
+    title: 'Envanter Yönetimi',
+    icon: Package,
+    status: 'done',
+    children: [
       {
         title: 'Depolar',
-        status: 'done',
         children: [
           { title: 'Depo Ekle', path: '/depolar/ekle', status: 'done' },
           { title: 'Tüm Depolar', path: '/depolar/liste', status: 'done' },
@@ -151,7 +158,6 @@ export const MENU_SIDEBAR = [
       },
       {
         title: 'Stoklar',
-        status: 'done',
         children: [
           { title: 'Stok Ekle', path: '/stoklar/ekle', status: 'done' },
           { title: 'Tüm Stoklar', path: '/stoklar/liste', status: 'done' },
@@ -159,7 +165,6 @@ export const MENU_SIDEBAR = [
       },
       {
         title: 'Stok Transferleri',
-        status: 'done',
         children: [
           { title: 'Stok Transferi Ekle', path: '/stok-transfer/ekle', status: 'done' },
           { title: 'Tüm Transferler', path: '/stok-transfer/liste', status: 'done' },
