@@ -25,7 +25,7 @@ export class PodcastController {
   constructor(
     private readonly podcastService: PodcastService,
     private readonly uploadService: UploadService,
-  ) {}
+  ) { }
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -44,7 +44,7 @@ export class PodcastController {
     let coverUrl: string | undefined;
 
     if (files?.audio?.[0]) {
-      audioUrl = await this.uploadService.uploadFile(files.audio[0]);
+      audioUrl = await this.uploadService.uploadAudio(files.audio[0]);
     }
 
     if (files?.cover?.[0]) {
@@ -142,7 +142,7 @@ export class PodcastController {
     let coverUrl: string | undefined;
 
     if (files?.audio?.[0]) {
-      audioUrl = await this.uploadService.uploadFile(files.audio[0]);
+      audioUrl = await this.uploadService.uploadAudio(files.audio[0]);
     }
 
     if (files?.cover?.[0]) {

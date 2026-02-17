@@ -7,7 +7,7 @@ import sharp from 'sharp';
 
 @Injectable()
 export class UploadService {
-  constructor(private configService: ConfigService) {}
+  constructor(private configService: ConfigService) { }
 
   async uploadFile(file: Express.Multer.File): Promise<string> {
     const uploadDir = path.join(process.cwd(), 'uploads');
@@ -64,5 +64,24 @@ export class UploadService {
 
     // URL'i döndür
     return `/uploads/pdfs/${uniqName}`;
+  }
+
+  async uploadAudio(file: Express.Multer.File): Promise<string> {
+    const uploadDir = path.join(process.cwd(), 'uploads', 'audios');
+
+    // Uploads/audios dizini yoksa oluştur
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    const ext = path.extname(file.originalname);
+    const uniqName = `${Date.now()}-${uuidv4()}${ext}`;
+    const filePath = path.join(uploadDir, uniqName);
+
+    // Dosyayı kaydet
+    fs.writeFileSync(filePath, file.buffer);
+
+    // URL'i döndür
+    return `/uploads/audios/${uniqName}`;
   }
 }
