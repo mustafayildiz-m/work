@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardBody, CardHeader, CardTitle, Row, Col, Button, Badge, Spinner, Alert, Modal, ProgressBar } from 'react-bootstrap';
 import { BsDownload, BsCalendar, BsPerson, BsBook, BsArrowLeft, BsEyeFill, BsShare, BsWhatsapp, BsNewspaper, BsThreeDotsVertical, BsGrid3X3, BsX, BsVolumeUp, BsTranslate, BsPause, BsPlay, BsSkipBackward, BsSkipForward } from 'react-icons/bs';
@@ -48,6 +48,11 @@ const BookDetailPage = () => {
   const [selectedTranslationIndexForTranslate, setSelectedTranslationIndexForTranslate] = useState(null);
   const [selectedPdfUrlForTranslate, setSelectedPdfUrlForTranslate] = useState(null);
   const [translating, setTranslating] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [pdfDoc, setPdfDoc] = useState(null);
+  const [targetLang, setTargetLang] = useState(null);
+  const isReadingRef = useRef(false);
 
   // URL'den dil bilgilerini al
   const languageId = searchParams.get('languageId');
@@ -690,14 +695,38 @@ const BookDetailPage = () => {
     };
   }, [isReading, isPaused]);
 
-  // Backend'den metni çevir
-  const translateText = async (text, targetLangCode, sourceLangCode = null) => {
+  // Backend'den metni çevir (Caching desteği ile)
+  const translateText = async (text, targetLangCode, sourceLangCode = null, pageNumber = null, bookId = null) => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
         throw new Error('Token bulunamadı');
       }
 
+      // Eğer sayfa bazlı çeviri ise yeni endpoint'i kullan
+      if (pageNumber !== null && bookId !== null) {
+        const response = await fetch(`${API_BASE_URL}/books/${bookId}/page-translate`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            pageNumber,
+            originalText: text,
+            targetLangCode
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Sayfa çevirisi başarısız');
+        }
+
+        const data = await response.json();
+        return data.translatedText;
+      }
+
+      // Genel çeviri için eski endpoint (description/summary için)
       const response = await fetch(`${API_BASE_URL}/translation/translate`, {
         method: 'POST',
         headers: {
@@ -725,10 +754,8 @@ const BookDetailPage = () => {
   };
 
   // Seçilen dilde çeviri yap ve sesli oku
-  const handleTranslateAndRead = async (targetLanguage) => {
-    if (!selectedTranslationForTranslate) {
-      return;
-    }
+  const handleTranslateAndRead = async (targetLanguage, startPage = 1) => {
+    if (!selectedTranslationForTranslate) return;
 
     if (!('speechSynthesis' in window)) {
       showNotification({
@@ -743,264 +770,123 @@ const BookDetailPage = () => {
     setShowLanguageModal(false);
 
     try {
-      // Önceki okumayı durdur
-      if (speechSynthesis) {
-        window.speechSynthesis.cancel();
-      }
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
 
-      let fullText = '';
+      let activePdfDoc = pdfDoc;
+      let activeTotalPages = totalPages;
 
-      // PDF'den text çıkar veya translation içeriğini kullan
-      if (selectedPdfUrlForTranslate) {
+      if (selectedPdfUrlForTranslate && !activePdfDoc) {
         showNotification({
           title: 'Bilgi',
-          message: 'PDF içeriği çıkarılıyor...',
+          message: 'Kitap hazırlanıyor, okuma hemen başlayacak...',
           variant: 'info'
         });
-        const pdfText = await extractTextFromPdf(selectedPdfUrlForTranslate);
-        if (pdfText) {
-          fullText = pdfText;
-        } else {
-          // PDF'den text çıkarılamazsa translation içeriğini kullan
-          const textToRead = [];
-          if (selectedTranslationForTranslate?.description) {
-            textToRead.push(selectedTranslationForTranslate.description);
-          }
-          if (selectedTranslationForTranslate?.summary) {
-            textToRead.push(selectedTranslationForTranslate.summary);
-          }
-          fullText = textToRead.join('. ');
-        }
-      } else {
-        // PDF yoksa translation içeriğini kullan
-        const textToRead = [];
-        if (selectedTranslationForTranslate?.description) {
-          textToRead.push(selectedTranslationForTranslate.description);
-        }
-        if (selectedTranslationForTranslate?.summary) {
-          textToRead.push(selectedTranslationForTranslate.summary);
-        }
-        fullText = textToRead.join('. ');
-      }
 
-      if (!fullText || fullText.trim().length === 0) {
-        showNotification({
-          title: 'Uyarı',
-          message: 'Okunacak içerik bulunamadı',
-          variant: 'warning'
+        const loadingTask = pdfjs.getDocument({
+          url: selectedPdfUrlForTranslate,
+          withCredentials: false,
         });
-        setTranslating(false);
-        return;
+        activePdfDoc = await loadingTask.promise;
+        setPdfDoc(activePdfDoc);
+        setTotalPages(activePdfDoc.numPages);
+        activeTotalPages = activePdfDoc.numPages;
       }
 
-      // Seslerin yüklenmesini bekle
       await waitForVoices();
+      setTargetLang(targetLanguage);
 
-      // Kaynak dil kodunu belirle
-      const sourceLangCode = selectedTranslationForTranslate.language?.code || null;
-
-      showNotification({
-        title: 'Bilgi',
-        message: `Metin ${targetLanguage.name} diline çevriliyor...`,
-        variant: 'info'
-      });
-
-      // Metni çevir
-      const translatedText = await translateText(fullText, targetLanguage.code, sourceLangCode);
-
-      if (!translatedText || translatedText.trim().length === 0) {
-        showNotification({
-          title: 'Hata',
-          message: 'Çeviri başarısız oldu',
-          variant: 'danger'
-        });
-        setTranslating(false);
-        return;
-      }
-
-      // En iyi sesi seç (kaliteli sesler için)
-      const getBestVoice = (langCode) => {
-        const voices = window.speechSynthesis.getVoices();
-
-        // Dil kodunu normalize et
-        const normalizedLang = langCode.toLowerCase();
-
-        // Öncelik sırası:
-        // 1. Google ile başlayan sesler (genellikle en iyi kalite)
-        // 2. Premium/Enhanced sesler
-        // 3. Yerel (local) sesler
-        // 4. Remote sesler
-
-        // Dille eşleşen tüm sesleri bul
-        const matchingVoices = voices.filter(voice =>
-          voice.lang.toLowerCase().includes(normalizedLang.split('-')[0])
-        );
-
-        if (matchingVoices.length === 0) {
-          return null;
+      const playPage = async (pageNum) => {
+        if (activePdfDoc && pageNum > activeTotalPages) {
+          setIsReading(false);
+          isReadingRef.current = false;
+          setTranslating(false);
+          showNotification({ title: 'Tamamlandı', message: 'Kitabın tamamı okundu.', variant: 'success' });
+          return;
         }
 
-        // Google sesleri (en iyi kalite)
-        const googleVoice = matchingVoices.find(voice =>
-          voice.name.toLowerCase().includes('google')
-        );
-        if (googleVoice) {
-          console.log('Selected Google voice:', googleVoice.name);
-          return googleVoice;
-        }
+        setCurrentPage(pageNum);
 
-        // Premium/Enhanced sesler
-        const premiumVoice = matchingVoices.find(voice =>
-          voice.name.toLowerCase().includes('premium') ||
-          voice.name.toLowerCase().includes('enhanced') ||
-          voice.name.toLowerCase().includes('natural')
-        );
-        if (premiumVoice) {
-          console.log('Selected premium voice:', premiumVoice.name);
-          return premiumVoice;
-        }
+        try {
+          let textToTranslate = '';
+          if (activePdfDoc) {
+            const page = await activePdfDoc.getPage(pageNum);
+            const textContent = await page.getTextContent();
+            textToTranslate = textContent.items.map(item => item.str).join(' ').trim();
+          } else {
+            const parts = [];
+            if (selectedTranslationForTranslate?.description) parts.push(selectedTranslationForTranslate.description);
+            if (selectedTranslationForTranslate?.summary) parts.push(selectedTranslationForTranslate.summary);
+            textToTranslate = parts.join('. ');
+          }
 
-        // Yerel sesler (localService = true)
-        const localVoice = matchingVoices.find(voice => voice.localService);
-        if (localVoice) {
-          console.log('Selected local voice:', localVoice.name);
-          return localVoice;
-        }
+          if (textToTranslate.length === 0) {
+            if (activePdfDoc && pageNum < activeTotalPages) return playPage(pageNum + 1);
+            setTranslating(false);
+            return;
+          }
 
-        // En son çare: ilk eşleşen ses
-        console.log('Selected default voice:', matchingVoices[0].name);
-        return matchingVoices[0];
-      };
+          const translatedText = await translateText(
+            textToTranslate,
+            targetLanguage.code,
+            null,
+            activePdfDoc ? pageNum : 1,
+            params.id
+          );
 
-      // Çevrilen metni sesli oku
-      const utterance = new SpeechSynthesisUtterance(translatedText);
+          setTranslating(false);
 
-      // Dil ayarı - daha spesifik dil kodları
-      const lang = targetLanguage.code;
-      let langCode = 'tr-TR';
-      if (lang === 'tr') {
-        langCode = 'tr-TR';
-      } else if (lang === 'en') {
-        langCode = 'en-US'; // veya 'en-GB' İngiliz aksanı için
-      } else if (lang === 'ar' || lang?.toLowerCase().includes('arabic')) {
-        langCode = 'ar-SA';
-      } else if (lang === 'de') {
-        langCode = 'de-DE';
-      } else if (lang === 'fr') {
-        langCode = 'fr-FR';
-      } else if (lang === 'es') {
-        langCode = 'es-ES';
-      } else if (lang === 'it') {
-        langCode = 'it-IT';
-      } else if (lang === 'ru') {
-        langCode = 'ru-RU';
-      } else if (lang === 'zh') {
-        langCode = 'zh-CN';
-      } else if (lang === 'ja') {
-        langCode = 'ja-JP';
-      } else if (lang === 'ko') {
-        langCode = 'ko-KR';
-      } else if (lang === 'pt') {
-        langCode = 'pt-BR';
-      } else if (lang === 'nl') {
-        langCode = 'nl-NL';
-      } else if (lang === 'pl') {
-        langCode = 'pl-PL';
-      } else if (lang === 'sv') {
-        langCode = 'sv-SE';
-      } else if (lang === 'hi') {
-        langCode = 'hi-IN';
-      } else {
-        langCode = `${lang}-${lang.toUpperCase()}`;
-      }
+          const utterance = new SpeechSynthesisUtterance(translatedText);
+          const langCode = getLanguageCode(targetLanguage.code);
+          utterance.lang = langCode;
+          utterance.rate = playbackRate || 1.0;
 
-      utterance.lang = langCode;
-      utterance.rate = playbackRate;
-      utterance.pitch = 1.0; // Doğal ton
-      utterance.volume = 1.0;
+          const bestVoice = getBestVoice(langCode);
+          if (bestVoice) utterance.voice = bestVoice;
 
-      // Ses seçimi - optimize edilmiş
-      const speakWithVoice = () => {
-        const bestVoice = getBestVoice(langCode);
-        if (bestVoice) {
-          utterance.voice = bestVoice;
-        }
+          utterance.onstart = () => {
+            setIsReading(true);
+            isReadingRef.current = true;
+            setIsPaused(false);
+            setSpeechSynthesis(window.speechSynthesis);
+            setCurrentUtterance(utterance);
+            setCurrentText(translatedText);
+            setCurrentCharIndex(0);
+          };
 
-        window.speechSynthesis.speak(utterance);
-      };
+          utterance.onboundary = (event) => {
+            if (event.name === 'word' || event.name === 'sentence') {
+              setCurrentCharIndex(event.charIndex);
+            }
+          };
 
-      if (window.speechSynthesis.getVoices().length > 0) {
-        speakWithVoice();
-      } else {
-        window.speechSynthesis.onvoiceschanged = () => {
-          speakWithVoice();
-          window.speechSynthesis.onvoiceschanged = null;
-        };
-      }
+          utterance.onend = () => {
+            if (isReadingRef.current && activePdfDoc && pageNum < activeTotalPages) {
+              playPage(pageNum + 1);
+            } else {
+              setIsReading(false);
+              isReadingRef.current = false;
+            }
+          };
 
-      utterance.onstart = () => {
-        setIsReading(true);
-        setIsPaused(false);
-        setTranslating(false);
-        setReadingTranslationId(selectedTranslationIndexForTranslate);
-        setSpeechSynthesis(window.speechSynthesis);
-        setCurrentUtterance(utterance);
-        setCurrentText(translatedText);
-        setCurrentCharIndex(0);
-        setElapsedTime(0);
-        showNotification({
-          title: 'Sesli Okuma Başladı',
-          message: `Kitap ${targetLanguage.name} dilinde okunuyor...`,
-          variant: 'success'
-        });
-      };
+          utterance.onerror = (err) => {
+            console.error('TTS Error:', err);
+            setIsReading(false);
+          };
 
-      utterance.onboundary = (event) => {
-        if (event.name === 'word' || event.name === 'sentence') {
-          setCurrentCharIndex(event.charIndex);
+          window.speechSynthesis.speak(utterance);
+        } catch (err) {
+          console.error(`Page ${pageNum} error:`, err);
+          setTranslating(false);
+          setIsReading(false);
         }
       };
 
-      utterance.onend = () => {
-        setIsReading(false);
-        setIsPaused(false);
-        setSpeechSynthesis(null);
-        setCurrentUtterance(null);
-        setCurrentText('');
-        setCurrentCharIndex(0);
-        setElapsedTime(0);
-        showNotification({
-          title: 'Sesli Okuma Tamamlandı',
-          message: 'Kitap okunması tamamlandı',
-          variant: 'success'
-        });
-      };
-
-      utterance.onerror = (error) => {
-        console.error('Speech synthesis error:', error);
-        setIsReading(false);
-        setIsPaused(false);
-        setTranslating(false);
-        setSpeechSynthesis(null);
-        setCurrentUtterance(null);
-        setCurrentText('');
-        setCurrentCharIndex(0);
-        setElapsedTime(0);
-        showNotification({
-          title: 'Hata',
-          message: 'Sesli okuma sırasında bir hata oluştu',
-          variant: 'danger'
-        });
-      };
+      playPage(startPage);
 
     } catch (error) {
-      console.error('Translate and read error:', error);
+      console.error('General read error:', error);
       setTranslating(false);
-      showNotification({
-        title: 'Hata',
-        message: error.message || 'Çeviri veya sesli okuma sırasında bir hata oluştu',
-        variant: 'danger'
-      });
+      showNotification({ title: 'Hata', message: 'Okuma başlatılamadı.', variant: 'danger' });
     }
   };
 
@@ -1015,6 +901,7 @@ const BookDetailPage = () => {
   // Sesli okumayı durdur
   const stopTextToSpeech = () => {
     if (window.speechSynthesis) {
+      isReadingRef.current = false;
       window.speechSynthesis.cancel();
       setIsReading(false);
       setIsPaused(false);
@@ -1039,10 +926,48 @@ const BookDetailPage = () => {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // İlerleme yüzdesi hesapla
   const getProgress = () => {
     if (!currentText || currentText.length === 0) return 0;
     return Math.min(100, (currentCharIndex / currentText.length) * 100);
+  };
+
+  // İlerleme çubuğuna tıklayarak ileri/geri al
+  const seekTo = (percent) => {
+    if (!currentUtterance || !currentText) return;
+
+    const newIndex = Math.floor((percent / 100) * currentText.length);
+    const remainingText = currentText.substring(newIndex);
+
+    // Yeni utterance oluştur
+    const newUtterance = new SpeechSynthesisUtterance(remainingText);
+    newUtterance.lang = currentUtterance.lang;
+    newUtterance.rate = currentUtterance.rate;
+    newUtterance.voice = currentUtterance.voice;
+
+    window.speechSynthesis.cancel();
+
+    newUtterance.onstart = () => {
+      setIsReading(true);
+      setIsPaused(false);
+      setCurrentUtterance(newUtterance);
+    };
+
+    newUtterance.onboundary = (event) => {
+      if (event.name === 'word' || event.name === 'sentence') {
+        setCurrentCharIndex(newIndex + event.charIndex);
+      }
+    };
+
+    newUtterance.onend = () => {
+      if (pdfDoc && currentPage < totalPages) {
+        handleTranslateAndRead(targetLang, currentPage + 1);
+      } else {
+        setIsReading(false);
+      }
+    };
+
+    window.speechSynthesis.speak(newUtterance);
+    setCurrentCharIndex(newIndex);
   };
 
   // Component unmount olduğunda sesli okumayı durdur
@@ -1574,32 +1499,19 @@ const BookDetailPage = () => {
                                 </Button>
                               </>
                             )}
-                            {/* Sesli Okuma Butonları - Her zaman göster */}
+                            {/* Dil Seç ve Oku Butonu */}
                             <>
                               {!isReading || readingTranslationId !== index ? (
-                                <>
-                                  {(translation.description || translation.summary) && (
-                                    <Button
-                                      variant="info"
-                                      size="sm"
-                                      onClick={() => handleTextToSpeech(translation, index)}
-                                      className="d-flex align-items-center me-2"
-                                    >
-                                      <BsVolumeUp className="me-1" />
-                                      Sesli Oku
-                                    </Button>
-                                  )}
-                                  <Button
-                                    variant="success"
-                                    size="sm"
-                                    onClick={() => openLanguageModal(translation, index)}
-                                    className="d-flex align-items-center"
-                                    disabled={translating}
-                                  >
-                                    <BsTranslate className="me-1" />
-                                    {translating ? 'Çevriliyor...' : 'Dil Seç ve Oku'}
-                                  </Button>
-                                </>
+                                <Button
+                                  variant="success"
+                                  size="sm"
+                                  onClick={() => openLanguageModal(translation, index)}
+                                  className="d-flex align-items-center"
+                                  disabled={translating}
+                                >
+                                  <BsTranslate className="me-1" />
+                                  {translating ? 'Çevriliyor...' : 'Dil Seç ve Oku'}
+                                </Button>
                               ) : (
                                 <Button
                                   variant="warning"
@@ -1840,6 +1752,229 @@ const BookDetailPage = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      {/* Modern Floating Audio Player */}
+      {(isReading || translating) && (
+        <div className="fixed-bottom p-3 d-flex justify-content-center" style={{ zIndex: 1050 }}>
+          <Card
+            className="border-0 shadow-lg"
+            style={{
+              width: '100%',
+              maxWidth: '800px',
+              backgroundColor: '#1c1f2e !important',
+              color: '#ffffff !important',
+              backdropFilter: 'blur(10px)',
+              borderRadius: '20px',
+              border: '1px solid rgba(255,255,255,0.1)',
+              overflow: 'visible' // Kutunun kesilmesini engeller
+            }}
+          >
+            <CardBody className="p-3" style={{ overflow: 'visible' }}>
+              <Row className="align-items-center g-3">
+                {/* Book Info & Status */}
+                <Col xs={12} md={4}>
+                  <div className="d-flex align-items-center gap-3">
+                    <div
+                      className="bg-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm"
+                      style={{ width: '45px', height: '45px', animation: isReading && !isPaused ? 'pulse 2s infinite' : 'none', color: '#ffffff !important' }}
+                    >
+                      <BsVolumeUp size={22} style={{ color: '#ffffff' }} />
+                    </div>
+                    <div className="overflow-hidden">
+                      <h6 className="mb-0 text-truncate" style={{ fontSize: '0.95rem', color: '#ffffff !important' }}>{book?.translations?.[0]?.title}</h6>
+                      <div className="d-flex align-items-center gap-2">
+                        <Badge bg="primary" style={{ fontSize: '0.7rem', color: '#ffffff !important' }}>{targetLang?.name || 'Çeviri'}</Badge>
+                        <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6) !important' }}>
+                          {translating ? 'Hazırlanıyor...' : isPaused ? 'Duraklatıldı' : 'Okunuyor'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </Col>
+
+                {/* Main Controls */}
+                <Col xs={12} md={4} className="d-flex flex-column align-items-center">
+                  <div className="d-flex align-items-center gap-3 mb-2">
+                    <Button
+                      variant="link"
+                      className="p-0 opacity-75"
+                      style={{ color: '#ffffff !important', border: 'none', boxShadow: 'none' }}
+                      disabled={currentPage <= 1 || translating}
+                      onClick={() => handleTranslateAndRead(targetLang, currentPage - 1)}
+                    >
+                      <BsSkipBackward size={20} />
+                    </Button>
+
+                    <Button
+                      variant="light"
+                      className="rounded-circle d-flex align-items-center justify-content-center shadow"
+                      style={{ width: '50px', height: '50px', backgroundColor: '#ffffff !important', color: '#1c1f2e !important', border: 'none' }}
+                      onClick={pauseResumeTextToSpeech}
+                      disabled={translating}
+                    >
+                      {isPaused ? <BsPlay size={28} /> : <BsPause size={28} />}
+                    </Button>
+
+                    <Button
+                      variant="link"
+                      className="p-0 opacity-75"
+                      style={{ color: '#ffffff !important', border: 'none', boxShadow: 'none' }}
+                      disabled={currentPage >= totalPages || translating}
+                      onClick={() => handleTranslateAndRead(targetLang, currentPage + 1)}
+                    >
+                      <BsSkipForward size={20} />
+                    </Button>
+                  </div>
+
+                  <div className="w-100 px-3 mt-1">
+                    <input
+                      type="range"
+                      className="w-100 player-slider"
+                      min="0"
+                      max="100"
+                      step="0.1"
+                      value={getProgress()}
+                      onChange={(e) => seekTo(parseFloat(e.target.value))}
+                      style={{
+                        cursor: 'pointer',
+                        accentColor: '#007bff'
+                      }}
+                    />
+                  </div>
+                </Col>
+
+                {/* Page Info & Speed */}
+                <Col xs={12} md={4}>
+                  <div className="d-flex align-items-center justify-content-end gap-3 px-2">
+                    <div className="text-end me-2">
+                      <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'rgba(255,255,255,0.5) !important' }}>SAYFA</div>
+                      <div className="d-flex align-items-center gap-1 justify-content-end">
+                        <div className="position-relative d-flex align-items-center">
+                          <select
+                            className="bg-transparent border-0 fw-bold p-0 pe-1 player-select"
+                            style={{
+                              outline: 'none',
+                              cursor: 'pointer',
+                              fontSize: '1.25rem',
+                              minWidth: '30px',
+                              textAlign: 'right',
+                              appearance: 'none',
+                              WebkitAppearance: 'none',
+                              color: '#007bff !important'
+                            }}
+                            value={currentPage}
+                            onChange={(e) => {
+                              const newPage = parseInt(e.target.value);
+                              handleTranslateAndRead(targetLang, newPage);
+                            }}
+                          >
+                            {[...Array(totalPages || 1)].map((_, i) => (
+                              <option key={i + 1} value={i + 1} style={{ backgroundColor: '#1c1f2e', color: '#ffffff' }}>{i + 1}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <span style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.6) !important' }}>/ {totalPages || 1}</span>
+                      </div>
+                    </div>
+
+                    <Dropdown drop="up" style={{ overflow: 'visible' }}>
+                      <DropdownToggle
+                        variant="outline-light"
+                        size="sm"
+                        className="rounded-pill px-3 d-flex align-items-center gap-1"
+                        style={{ fontSize: '0.8rem', color: '#ffffff !important', borderColor: 'rgba(255,255,255,0.3) !important' }}
+                      >
+                        {playbackRate}x
+                      </DropdownToggle>
+                      <DropdownMenu
+                        style={{
+                          minWidth: '120px',
+                          backgroundColor: '#1c1f2e !important',
+                          border: '1px solid rgba(255,255,255,0.2) !important',
+                          boxShadow: '0 10px 25px rgba(0,0,0,0.5) !important',
+                          borderRadius: '12px',
+                          padding: '8px 0',
+                          marginBottom: '10px',
+                          zIndex: 2000,
+                          position: 'absolute'
+                        }}
+                      >
+                        {[0.5, 0.75, 1.0, 1.25, 1.5, 2.0].map(rate => (
+                          <button
+                            key={rate}
+                            onClick={() => changePlaybackRate(rate)}
+                            className="dropdown-item w-100 border-0 text-start"
+                            style={{
+                              backgroundColor: playbackRate === rate ? '#007bff !important' : 'transparent',
+                              color: '#ffffff !important',
+                              padding: '8px 16px',
+                              fontSize: '0.85rem',
+                              transition: 'background 0.2s',
+                              cursor: 'pointer'
+                            }}
+                          >
+                            {rate === 1.0 ? 'Normal (1x)' : `${rate}x`}
+                          </button>
+                        ))}
+                      </DropdownMenu>
+                    </Dropdown>
+
+                    <Button
+                      variant="outline-danger"
+                      size="sm"
+                      className="rounded-circle p-1"
+                      style={{ color: '#ff4d4d', borderColor: '#ff4d4d' }}
+                      onClick={stopTextToSpeech}
+                      title="Kapat"
+                    >
+                      <BsX size={18} />
+                    </Button>
+                  </div>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+        </div>
+      )}
+
+      <style jsx global>{`
+        @keyframes pulse {
+          0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7); }
+          70% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+        }
+        .player-select option {
+          background-color: #1c1f2e !important;
+          color: white !important;
+        }
+        .player-slider {
+          -webkit-appearance: none;
+          height: 4px;
+          border-radius: 5px;
+          background: rgba(255,255,255,0.1);
+          outline: none;
+        }
+        .player-slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background: #007bff;
+          cursor: pointer;
+          border: 2px solid #ffffff;
+          box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+        .player-slider::-moz-range-thumb {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background: #007bff;
+          cursor: pointer;
+          border: 2px solid #ffffff;
+          box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+      `}</style>
     </Col>
   );
 };

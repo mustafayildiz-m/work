@@ -26,7 +26,7 @@ export class BooksController {
   constructor(
     private readonly booksService: BooksService,
     private readonly uploadService: UploadService,
-  ) {}
+  ) { }
 
   // Public endpoint - must be before the guarded routes
   @Get('public/:id')
@@ -197,5 +197,25 @@ export class BooksController {
       message: 'Kitap ve ilişkili dosyalar başarıyla silindi.',
       deletedBook,
     };
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post(':id/page-translate')
+  async translatePage(
+    @Param('id', ParseIntPipe) id: number,
+    @Body()
+    body: {
+      pageNumber: number;
+      originalText: string;
+      targetLangCode: string;
+    },
+  ) {
+    const translatedText = await this.booksService.getOrTranslatePage(
+      id,
+      body.pageNumber,
+      body.originalText,
+      body.targetLangCode,
+    );
+    return { success: true, translatedText };
   }
 }
