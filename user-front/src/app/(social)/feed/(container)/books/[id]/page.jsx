@@ -11,8 +11,14 @@ import PdfViewer from '@/components/PdfViewer';
 import { generateBookUrl } from '@/utils/bookEncoder';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import { useLanguages } from '@/hooks/useLanguages';
+import { pdfjs } from 'react-pdf';
 import styles from './styles.module.css';
 import { getBestVoice, getLanguageCode, waitForVoices } from '@/utils/textToSpeech';
+
+// PDF.js worker'ı yapılandır
+if (typeof window !== 'undefined') {
+  pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
+}
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -40,6 +46,7 @@ const BookDetailPage = () => {
   const [showLanguageModal, setShowLanguageModal] = useState(false);
   const [selectedTranslationForTranslate, setSelectedTranslationForTranslate] = useState(null);
   const [selectedTranslationIndexForTranslate, setSelectedTranslationIndexForTranslate] = useState(null);
+  const [selectedPdfUrlForTranslate, setSelectedPdfUrlForTranslate] = useState(null);
   const [translating, setTranslating] = useState(false);
 
   // URL'den dil bilgilerini al
@@ -117,12 +124,75 @@ const BookDetailPage = () => {
     setShowPdfViewer(true);
   };
 
-  // PDF'den text çıkarma fonksiyonu - Not: iframe kullandığımız için client-side extraction mümkün değil
-  // Bu yüzden sadece translation içeriğini kullanıyoruz
+  // PDF'den text çıkarma fonksiyonu
   const extractTextFromPdf = async (pdfUrl) => {
-    // PDF'den text extraction yapılamıyor (iframe kullanımı nedeniyle)
-    // Translation içeriği kullanılacak
-    return null;
+    try {
+      if (typeof window === 'undefined' || !pdfjs) {
+        return null;
+      }
+
+      showNotification({
+        title: 'Bilgi',
+        message: 'PDF içeriği çıkarılıyor, lütfen bekleyin...',
+        variant: 'info'
+      });
+
+      // PDF'i yükle
+      const loadingTask = pdfjs.getDocument({
+        url: pdfUrl,
+        withCredentials: false,
+        httpHeaders: {}
+      });
+
+      const pdfDocument = await loadingTask.promise;
+      const numPages = pdfDocument.numPages;
+
+      let fullText = '';
+
+      // Tüm sayfalardan text çıkar (maksimum 50 sayfa)
+      const maxPages = Math.min(numPages, 50);
+      for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
+        try {
+          const page = await pdfDocument.getPage(pageNum);
+          const textContent = await page.getTextContent();
+
+          // Text items'ları birleştir
+          const pageText = textContent.items
+            .map(item => item.str)
+            .filter(str => str && str.trim().length > 0)
+            .join(' ');
+
+          if (pageText.trim().length > 0) {
+            fullText += pageText + ' ';
+          }
+        } catch (pageError) {
+          console.warn(`Page ${pageNum} extraction error:`, pageError);
+          // Bir sayfada hata olsa bile devam et
+          continue;
+        }
+      }
+
+      const extractedText = fullText.trim();
+
+      if (extractedText.length === 0) {
+        showNotification({
+          title: 'Uyarı',
+          message: 'PDF\'den metin çıkarılamadı. Translation içeriği kullanılacak.',
+          variant: 'warning'
+        });
+        return null;
+      }
+
+      return extractedText;
+    } catch (error) {
+      console.error('PDF text extraction error:', error);
+      showNotification({
+        title: 'Uyarı',
+        message: 'PDF\'den metin çıkarılamadı. Translation içeriği kullanılacak.',
+        variant: 'warning'
+      });
+      return null;
+    }
   };
 
   // Sesli okuma fonksiyonu - Translation içeriğinden
@@ -678,15 +748,40 @@ const BookDetailPage = () => {
         window.speechSynthesis.cancel();
       }
 
-      // Translation içeriğini kullan
-      const textToRead = [];
-      if (selectedTranslationForTranslate?.description) {
-        textToRead.push(selectedTranslationForTranslate.description);
+      let fullText = '';
+
+      // PDF'den text çıkar veya translation içeriğini kullan
+      if (selectedPdfUrlForTranslate) {
+        showNotification({
+          title: 'Bilgi',
+          message: 'PDF içeriği çıkarılıyor...',
+          variant: 'info'
+        });
+        const pdfText = await extractTextFromPdf(selectedPdfUrlForTranslate);
+        if (pdfText) {
+          fullText = pdfText;
+        } else {
+          // PDF'den text çıkarılamazsa translation içeriğini kullan
+          const textToRead = [];
+          if (selectedTranslationForTranslate?.description) {
+            textToRead.push(selectedTranslationForTranslate.description);
+          }
+          if (selectedTranslationForTranslate?.summary) {
+            textToRead.push(selectedTranslationForTranslate.summary);
+          }
+          fullText = textToRead.join('. ');
+        }
+      } else {
+        // PDF yoksa translation içeriğini kullan
+        const textToRead = [];
+        if (selectedTranslationForTranslate?.description) {
+          textToRead.push(selectedTranslationForTranslate.description);
+        }
+        if (selectedTranslationForTranslate?.summary) {
+          textToRead.push(selectedTranslationForTranslate.summary);
+        }
+        fullText = textToRead.join('. ');
       }
-      if (selectedTranslationForTranslate?.summary) {
-        textToRead.push(selectedTranslationForTranslate.summary);
-      }
-      const fullText = textToRead.join('. ');
 
       if (!fullText || fullText.trim().length === 0) {
         showNotification({
@@ -697,6 +792,9 @@ const BookDetailPage = () => {
         setTranslating(false);
         return;
       }
+
+      // Seslerin yüklenmesini bekle
+      await waitForVoices();
 
       // Kaynak dil kodunu belirle
       const sourceLangCode = selectedTranslationForTranslate.language?.code || null;
@@ -910,6 +1008,7 @@ const BookDetailPage = () => {
   const openLanguageModal = (translation, translationIndex) => {
     setSelectedTranslationForTranslate(translation);
     setSelectedTranslationIndexForTranslate(translationIndex);
+    setSelectedPdfUrlForTranslate(translation.pdfUrl ? getPdfUrl(translation.pdfUrl) : null);
     setShowLanguageModal(true);
   };
 
