@@ -9,6 +9,10 @@ import { UploadService } from '../upload/upload.service';
 import * as fs from 'fs';
 import * as path from 'path';
 
+import { TranslationService } from '../services/translation.service';
+import { BookPage } from './entities/book-page.entity';
+import { BookPageTranslation } from './entities/book-page-translation.entity';
+
 @Injectable()
 export class BooksService {
   constructor(
@@ -18,8 +22,13 @@ export class BooksService {
     private bookTranslationRepository: Repository<BookTranslation>,
     @InjectRepository(BookCategory)
     private bookCategoryRepository: Repository<BookCategory>,
+    @InjectRepository(BookPage)
+    private bookPageRepository: Repository<BookPage>,
+    @InjectRepository(BookPageTranslation)
+    private bookPageTranslationRepository: Repository<BookPageTranslation>,
     private uploadService: UploadService,
-  ) {}
+    private translationService: TranslationService,
+  ) { }
 
   async create(createBookDto: CreateBookDto): Promise<Book> {
     const { translations, category, ...bookData } = createBookDto;
@@ -415,5 +424,58 @@ export class BooksService {
       title: result.title,
       articleCount: parseInt(result.articleCount) || 0,
     }));
+  }
+
+  /**
+   * Sayfa bazlı çeviri ve önbellekleme
+   */
+  async getOrTranslatePage(
+    bookId: number,
+    pageNumber: number,
+    originalText: string,
+    targetLangCode: string,
+  ): Promise<string> {
+    // 1. Önce bu sayfayı bul veya oluştur
+    let page = await this.bookPageRepository.findOne({
+      where: { bookId, pageNumber },
+    });
+
+    if (!page) {
+      page = this.bookPageRepository.create({
+        bookId,
+        pageNumber,
+        content: originalText,
+      });
+      page = await this.bookPageRepository.save(page);
+    }
+
+    // 2. Bu dilde çeviri var mı bak
+    // Dil ID'sini bul (Basit bir mapleme veya DB sorgusu)
+    const langMap = { tr: 1, en: 2, ar: 3, de: 4, fr: 5, ja: 6 };
+    const languageId = langMap[targetLangCode] || 1;
+
+    const cachedTranslation = await this.bookPageTranslationRepository.findOne({
+      where: { pageId: page.id, languageId },
+    });
+
+    if (cachedTranslation) {
+      return cachedTranslation.content;
+    }
+
+    // 3. Yoksa DeepL'e git
+    const translatedText = await this.translationService.translateLongText(
+      originalText,
+      targetLangCode,
+    );
+
+    // 4. Sonucu kaydet
+    const newTranslation = this.bookPageTranslationRepository.create({
+      pageId: page.id,
+      languageId,
+      content: translatedText,
+    });
+    await this.bookPageTranslationRepository.save(newTranslation);
+
+    return translatedText;
   }
 }
