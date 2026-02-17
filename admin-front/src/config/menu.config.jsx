@@ -134,10 +134,10 @@ export const MENU_SIDEBAR = [
         ],
       },
       {
-        title: 'Alim Hikayeleri',
+        title: 'İslamla Şereflenenler',
         children: [
-          { title: 'Hikaye Ekle', path: '/alim-hikayeleri/ekle', status: 'done' },
-          { title: 'Tüm Hikayeler', path: '/alim-hikayeleri/liste', status: 'done' },
+          { title: 'Video Ekle', path: '/alim-hikayeleri/ekle', status: 'done' },
+          { title: 'Tüm Videolar', path: '/alim-hikayeleri/liste', status: 'done' },
         ],
       },
 

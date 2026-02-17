@@ -227,10 +227,10 @@ export default function AlimHikayesiEkle() {
         }
       });
 
-      toast.success('Alim hikayesi başarıyla eklendi!');
+      toast.success('Video başarıyla eklendi!');
       navigate('/alim-hikayeleri/liste');
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Hikaye eklenirken bir hata oluştu');
+      toast.error(error.response?.data?.message || 'Video eklenirken bir hata oluştu');
     } finally {
       setLoading(false);
     }
@@ -251,7 +251,7 @@ export default function AlimHikayesiEkle() {
   return (
     <>
       <Helmet>
-        <title>Yeni Hikaye Ekle - Islamic Windows Admin</title>
+        <title>Yeni Video Ekle - Islamic Windows Admin</title>
       </Helmet>
 
       <div className="p-6 max-w-5xl mx-auto">
@@ -270,10 +270,10 @@ export default function AlimHikayesiEkle() {
                   <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-lg">
                     <FaVideo className="text-2xl" />
                   </div>
-                  Yeni Âlim Hikayesi Ekle
+                  Yeni Video Ekle
                 </h1>
                 <p className="text-gray-500 dark:text-gray-400 mt-2 ml-1">
-                  İslam âlimlerinin videolu hayat hikayelerini sisteme ekleyin
+                  İslam'la şereflenen kişilerin videolarını sisteme ekleyin
                 </p>
               </div>
             </div>
@@ -296,7 +296,7 @@ export default function AlimHikayesiEkle() {
                 Temel Bilgiler
               </CardTitle>
               <CardDescription className="text-base">
-                Hikayenin temel bilgilerini girin
+                Videonun temel bilgilerini girin
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5 pt-6">
@@ -409,7 +409,7 @@ export default function AlimHikayesiEkle() {
                 <Textarea
                   id="description"
                   {...register('description')}
-                  placeholder="Hikayenin detaylı açıklamasını yazın..."
+                  placeholder="Videonun detaylı açıklamasını yazın..."
                   rows={5}
                   className={`resize-none ${errors.description ? 'border-red-500 focus-visible:ring-red-500' : 'focus-visible:ring-purple-500'}`}
                 />
@@ -419,7 +419,7 @@ export default function AlimHikayesiEkle() {
                   </p>
                 )}
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  💡 Hikayenin içeriğini detaylı bir şekilde anlatın
+                  💡 Videonun içeriğini detaylı bir şekilde anlatın
                 </p>
               </div>
 
@@ -568,7 +568,7 @@ export default function AlimHikayesiEkle() {
                     <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                       <p className="text-sm text-blue-700 dark:text-blue-300 flex items-center gap-2">
                         <FaUpload className="text-blue-500" />
-                        Hikaye kapak resmi yükleyin
+                        Video kapak resmi yükleyin
                       </p>
                       <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
                         📷 Desteklenen formatlar: JPG, PNG, WEBP (Max 5MB)
@@ -590,7 +590,7 @@ export default function AlimHikayesiEkle() {
                 Görünürlük Ayarları
               </CardTitle>
               <CardDescription className="text-base">
-                Hikayenin görünürlük ve öne çıkarma ayarlarını belirleyin
+                Videonun görünürlük ve öne çıkarma ayarlarını belirleyin
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5 pt-6">
@@ -601,7 +601,7 @@ export default function AlimHikayesiEkle() {
                     Aktif
                   </Label>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Hikayenin kullanıcılara görünür olup olmayacağını belirler
+                    Videonun kullanıcılara görünür olup olmayacağını belirler
                   </p>
                 </div>
                 <Switch
@@ -621,7 +621,7 @@ export default function AlimHikayesiEkle() {
                     Öne Çıkan
                   </Label>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Hikayeyi öne çıkan hikayeler arasında gösterir
+                    Videoyu öne çıkan videolar arasında gösterir
                   </p>
                 </div>
                 <Switch
@@ -634,7 +634,7 @@ export default function AlimHikayesiEkle() {
 
               <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                 <p className="text-sm text-blue-700 dark:text-blue-300">
-                  💡 <strong>İpucu:</strong> Öne çıkan hikayeler ana sayfada ve liste başında gösterilir
+                  💡 <strong>İpucu:</strong> Öne çıkan videolar ana sayfada ve liste başında gösterilir
                 </p>
               </div>
             </CardContent>
