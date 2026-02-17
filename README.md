@@ -27,7 +27,16 @@ cd iw_project
 ```bash
 docker-compose up -d --build
 
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.prod.yml up -d --build
+
+# Sadece backend
+docker compose -f docker-compose.prod.yml up -d --build backend
+
+# Sadece user-front
+docker compose -f docker-compose.prod.yml up -d --build user-front
+
+# Sadece admin-front
+docker compose -f docker-compose.prod.yml up -d --build admin-front
 
 docker exec islamic_windows_nginx nginx -s reload
 
