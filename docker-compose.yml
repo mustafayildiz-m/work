@@ -57,7 +57,9 @@ services:
       REDIS_PORT: 6379
       DEEPL_API_KEY: ${DEEPL_API_KEY}
       DEEPL_API_URL: ${DEEPL_API_URL:-https://api-free.deepl.com/v2/translate}
-      FRONTEND_URL: https://islamicwindows.com
+      FRONTEND_URL: http://localhost:3001
+    env_file:
+      - ./backend/.env
     ports:
       - "${BACKEND_PORT:-3000}:3000"
     volumes:
@@ -120,10 +122,10 @@ services:
     container_name: islamic_windows_user_front
     environment:
       NODE_ENV: development
-      NEXT_PUBLIC_API_URL: https://islamicwindows.com/api
-      NEXT_PUBLIC_ADMIN_URL: https://islamicwindows.com/admin
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+      NEXT_PUBLIC_ADMIN_URL: http://localhost:5173
       BACKEND_API_URL: http://backend:3000
-      NEXTAUTH_URL: https://islamicwindows.com
+      NEXTAUTH_URL: http://localhost:3001
       NEXTAUTH_SECRET: ${JWT_SECRET:-your-secret-key}
       WATCHPACK_POLLING: "true"
       CHOKIDAR_USEPOLLING: "true"

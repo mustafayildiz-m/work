@@ -1,14 +1,23 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 
 @Injectable()
 export class TranslationService {
+  constructor(private configService: ConfigService) { }
+
   // DeepL API endpoint - ücretsiz plan
-  private readonly DEEPL_API_URL =
-    process.env.DEEPL_API_URL || 'https://api-free.deepl.com/v2/translate';
+  private get DEEPL_API_URL(): string {
+    return (
+      this.configService.get<string>('DEEPL_API_URL') ||
+      'https://api-free.deepl.com/v2/translate'
+    );
+  }
 
   // DeepL API key - environment variable'dan alınır
-  private readonly DEEPL_API_KEY = process.env.DEEPL_API_KEY;
+  private get DEEPL_API_KEY(): string | undefined {
+    return this.configService.get<string>('DEEPL_API_KEY');
+  }
 
   /**
    * Dil kodunu DeepL formatına çevirir (büyük harf, özel kodlar)
