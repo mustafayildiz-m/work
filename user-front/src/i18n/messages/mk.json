@@ -61,7 +61,12 @@
     "forgotPasswordDesc": "Въведете имейл адреса си и ние ще ви изпратим връзка за възстановяване на паролата.",
     "sendResetLink": "Изпрати",
     "backToLogin": "← Обратно към вход",
-    "changePhoto": "✏️ Промяна"
+    "changePhoto": "✏️ Промяна",
+    "birthDate": "Birth Date",
+    "birthDatePlaceholder": "Birth Date (DD.MM.YYYY) *",
+    "birthDateRequired": "Please enter your birth date",
+    "ageLimitError": "You must be at least 16 years old to register",
+    "ageConfirm": "I declare and accept that I am over 16 years old."
   },
   "navigation": {
     "home": "Начало",

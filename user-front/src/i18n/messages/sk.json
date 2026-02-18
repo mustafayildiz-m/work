@@ -61,7 +61,12 @@
     "forgotPasswordDesc": "Zadajte svoju e-mailovú adresu a my vám pošleme odkaz na obnovenie hesla.",
     "sendResetLink": "Odoslať",
     "backToLogin": "← Späť na prihlásenie",
-    "changePhoto": "✏️ Zmena"
+    "changePhoto": "✏️ Zmena",
+    "birthDate": "Birth Date",
+    "birthDatePlaceholder": "Birth Date (DD.MM.YYYY) *",
+    "birthDateRequired": "Please enter your birth date",
+    "ageLimitError": "You must be at least 16 years old to register",
+    "ageConfirm": "I declare and accept that I am over 16 years old."
   },
   "navigation": {
     "home": "Domov",

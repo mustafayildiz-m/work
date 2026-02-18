@@ -61,7 +61,12 @@
     "forgotPasswordDesc": "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen des Passworts.",
     "sendResetLink": "Senden",
     "backToLogin": "← Zurück zur Anmeldung",
-    "changePhoto": "✏️ Ändern"
+    "changePhoto": "✏️ Ändern",
+    "birthDate": "Geburtsdatum",
+    "birthDatePlaceholder": "Geburtsdatum (TT.MM.JJJJ) *",
+    "birthDateRequired": "Bitte geben Sie Ihr Geburtsdatum ein",
+    "ageLimitError": "Sie müssen mindestens 16 Jahre alt sein, um sich zu registrieren",
+    "ageConfirm": "Ich erkläre und akzeptiere, dass ich über 16 Jahre alt bin."
   },
   "navigation": {
     "home": "Startseite",

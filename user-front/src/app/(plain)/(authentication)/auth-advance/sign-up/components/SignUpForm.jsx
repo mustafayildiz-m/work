@@ -3,6 +3,7 @@
 import PasswordFormInput from '@/components/form/PasswordFormInput';
 import TextFormInput from '@/components/form/TextFormInput';
 import DropzoneFormInput from '@/components/form/DropzoneFormInput';
+import DateFormInput from '@/components/form/DateFormInput';
 import PasswordStrengthMeter from '@/components/PasswordStrengthMeter';
 import { currentYear, developedBy, developedByLink } from '@/context/constants';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -25,16 +26,30 @@ const SignUpForm = () => {
   const router = useRouter();
 
   const signUpSchema = yup.object({
-    firstName: yup.string().required('Lütfen adınızı girin'),
-    lastName: yup.string().required('Lütfen soyadınızı girin'),
-    email: yup.string().email('Lütfen geçerli bir e-posta girin').required('Lütfen e-postanızı girin'),
-    password: yup.string().min(6, 'Şifre en az 6 karakter olmalıdır').required('Lütfen şifrenizi girin'),
+    firstName: yup.string().required(t('auth.firstNameRequired') || 'Lütfen adınızı girin'),
+    lastName: yup.string().required(t('auth.lastNameRequired') || 'Lütfen soyadınızı girin'),
+    email: yup.string().email(t('auth.emailInvalid') || 'Lütfen geçerli bir e-posta girin').required(t('auth.emailRequired') || 'Lütfen e-postanızı girin'),
+    birthDate: yup.date()
+      .nullable()
+      .required(t('auth.birthDateRequired'))
+      .test('age', t('auth.ageLimitError'), (value) => {
+        if (!value) return false;
+        const today = new Date();
+        const birthDate = new Date(value);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        return age >= 16;
+      }),
+    password: yup.string().min(6, t('auth.passwordMinLength') || 'Şifre en az 6 karakter olmalıdır').required(t('auth.passwordRequired') || 'Lütfen şifrenizi girin'),
     confirmPassword: yup.string()
-      .oneOf([yup.ref('password')], 'Parolalar eşleşmelidir')
-      .required('Lütfen şifrenizi doğrulayın'),
+      .oneOf([yup.ref('password')], t('auth.passwordsNotMatch') || 'Parolalar eşleşmelidir')
+      .required(t('auth.confirmPasswordRequired') || 'Lütfen şifrenizi doğrulayın'),
     acceptTerms: yup.boolean()
-      .oneOf([true], 'Kullanım şartlarını kabul etmelisiniz')
-      .required('Kullanım şartlarını kabul etmelisiniz')
+      .oneOf([true], t('auth.acceptTermsRequired') || 'Kullanım şartlarını kabul etmelisiniz')
+      .required(t('auth.acceptTermsRequired') || 'Kullanım şartlarını kabul etmelisiniz')
   });
 
   const {
@@ -50,6 +65,7 @@ const SignUpForm = () => {
       firstName: '',
       lastName: '',
       email: '',
+      birthDate: null,
       password: '',
       confirmPassword: '',
       acceptTerms: false
@@ -85,6 +101,13 @@ const SignUpForm = () => {
       formData.append('lastName', data.lastName);
       formData.append('language', locale);
 
+      if (data.birthDate) {
+        // Format as YYYY-MM-DD for backend
+        const date = new Date(data.birthDate);
+        const formattedDate = date.toISOString().split('T')[0];
+        formData.append('birthDate', formattedDate);
+      }
+
       // Eğer fotoğraf seçildiyse ekle
       if (selectedFile) {
         formData.append('profilePhoto', selectedFile);
@@ -99,16 +122,16 @@ const SignUpForm = () => {
       });
 
       if (res.ok) {
-        setSuccess('Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...');
+        setSuccess(t('auth.registerSuccess') || 'Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...');
         // Loading state true kalsın, yönlendirme olsun
         setTimeout(() => router.push('/auth-advance/sign-in'), 1500);
       } else {
         const err = await res.json();
-        setError(err.message || 'Kayıt başarısız!');
+        setError(err.message || t('auth.registerError') || 'Kayıt başarısız!');
         setLoading(false);
       }
     } catch (e) {
-      setError('Sunucuya bağlanılamadı!');
+      setError(t('auth.serverError') || 'Sunucuya bağlanılamadı!');
       setLoading(false);
     }
   };
@@ -133,6 +156,17 @@ const SignUpForm = () => {
         name="email"
         control={control}
         placeholder={t('auth.emailPlaceholderRequired')}
+      />
+    </div>
+
+    <div className="mb-1 text-start">
+      <DateFormInput
+        name="birthDate"
+        control={control}
+        placeholder={t('auth.birthDatePlaceholder')}
+        options={{
+          maxDate: new Date()
+        }}
       />
     </div>
 

@@ -40,4 +40,8 @@ export class CreateUserDto {
   @IsString()
   @IsOptional()
   language?: string;
+
+  @IsString()
+  @IsOptional()
+  birthDate?: string;
 }

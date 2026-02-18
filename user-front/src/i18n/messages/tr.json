@@ -61,7 +61,12 @@
     "forgotPasswordDesc": "E-posta adresinizi girin, size şifre sıfırlama bağlantısı gönderelim.",
     "sendResetLink": "Gönder",
     "backToLogin": "← Giriş sayfasına dön",
-    "changePhoto": "✏️ Değiştir"
+    "changePhoto": "✏️ Değiştir",
+    "birthDate": "Doğum Tarihi",
+    "birthDatePlaceholder": "Doğum Tarihi (GG.AA.YYYY) *",
+    "birthDateRequired": "Lütfen doğum tarihinizi girin",
+    "ageLimitError": "Üye olabilmek için en az 16 yaşında olmalısınız",
+    "ageConfirm": "16 yaşından büyük olduğumu beyan ve kabul ediyorum."
   },
   "navigation": {
     "home": "Ana Sayfa",

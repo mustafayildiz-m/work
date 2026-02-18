@@ -61,7 +61,12 @@
     "forgotPasswordDesc": "メールアドレスを入力してください。パスワードリセットリンクをお送りします。",
     "sendResetLink": "送信",
     "backToLogin": "← ログインに戻る",
-    "changePhoto": "✏️ 変更"
+    "changePhoto": "✏️ 変更",
+    "birthDate": "生年月日",
+    "birthDatePlaceholder": "生年月日 (日.月.年) *",
+    "birthDateRequired": "生年月日を入力してください",
+    "ageLimitError": "登録するには16歳以上である必要があります",
+    "ageConfirm": "私は16歳以上であることを宣言し、同意します。"
   },
   "navigation": {
     "home": "ホーム",

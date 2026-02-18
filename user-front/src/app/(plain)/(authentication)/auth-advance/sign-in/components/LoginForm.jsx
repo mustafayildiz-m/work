@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { Button, FormCheck } from 'react-bootstrap';
 import useSignIn from './useSignIn';
@@ -14,6 +15,7 @@ import { FcGoogle } from 'react-icons/fc';
 const LoginForm = () => {
   const { t } = useLanguage();
   const queryParams = useQueryParams();
+  const [ageConfirmed, setAgeConfirmed] = useState(false);
   const {
     loading,
     showSuccess,
@@ -141,18 +143,33 @@ const LoginForm = () => {
           <div className={styles.dividerLine} />
         </div>
 
+        <div className="mb-3">
+          <FormCheck
+            type="checkbox"
+            id="ageConfirmCheck"
+            label={<span style={{ fontSize: '0.85rem', color: '#64748b' }}>{t('auth.ageConfirm')}</span>}
+            checked={ageConfirmed}
+            onChange={(e) => setAgeConfirmed(e.target.checked)}
+            className="custom-green-check"
+          />
+        </div>
+
         <div className="d-grid">
           <Button
             size="lg"
             type="button"
             variant="light"
-            disabled={loading || showSuccess}
+            disabled={loading || showSuccess || !ageConfirmed}
             onClick={() =>
               signIn('google', {
                 callbackUrl: queryParams['redirectTo'] ?? '/feed/home',
               })
             }
             className={styles.providerButton}
+            style={{
+              opacity: ageConfirmed ? 1 : 0.6,
+              transition: 'all 0.3s ease'
+            }}
             aria-label={t('auth.signInWithGoogle')}
           >
             <span className={styles.providerIcon} aria-hidden="true">

@@ -61,7 +61,12 @@
     "forgotPasswordDesc": "Inserisci il tuo indirizzo e-mail e ti invieremo un link per reimpostare la password.",
     "sendResetLink": "Inviare",
     "backToLogin": "← Torna al login",
-    "changePhoto": "✏️ Cambiamento"
+    "changePhoto": "✏️ Cambiamento",
+    "birthDate": "Data di nascita",
+    "birthDatePlaceholder": "Data di nascita (GG.MM.AAAA) *",
+    "birthDateRequired": "Inserisci la tua data di nascita",
+    "ageLimitError": "Devi avere almeno 16 anni per registrarti",
+    "ageConfirm": "Dichiaro e accetto di avere più di 16 anni."
   },
   "navigation": {
     "home": "Casa",
