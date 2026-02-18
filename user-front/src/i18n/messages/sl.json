@@ -61,7 +61,12 @@
     "forgotPasswordDesc": "Vnesite svoj e-poštni naslov in poslali vam bomo povezavo za ponastavitev gesla.",
     "sendResetLink": "Pošlji",
     "backToLogin": "← Nazaj na prijavo",
-    "changePhoto": "✏️ Sprememba"
+    "changePhoto": "✏️ Sprememba",
+    "birthDate": "Birth Date",
+    "birthDatePlaceholder": "Birth Date (DD.MM.YYYY) *",
+    "birthDateRequired": "Please enter your birth date",
+    "ageLimitError": "You must be at least 16 years old to register",
+    "ageConfirm": "I declare and accept that I am over 16 years old."
   },
   "navigation": {
     "home": "Domov",

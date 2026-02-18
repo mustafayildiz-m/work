@@ -61,7 +61,12 @@
     "forgotPasswordDesc": "أدخل عنوان بريدك الإلكتروني وسنرسل لك رابط إعادة تعيين كلمة المرور.",
     "sendResetLink": "إرسال",
     "backToLogin": "← العودة لتسجيل الدخول",
-    "changePhoto": "✏️ تغيير"
+    "changePhoto": "✏️ تغيير",
+    "birthDate": "تاريخ الميلاد",
+    "birthDatePlaceholder": "تاريخ الميلاد (يوم.شهر.سنة) *",
+    "birthDateRequired": "يرجى إدخال تاريخ ميلادك",
+    "ageLimitError": "يجب أن يكون عمرك 16 عامًا على الأقل للتسجيل",
+    "ageConfirm": "أقر وأقبل بأن عمري يتجاوز 16 عامًا."
   },
   "navigation": {
     "home": "الصفحة الرئيسية",

@@ -61,7 +61,12 @@
     "forgotPasswordDesc": "Adja meg e-mail címét, és elküldjük Önnek a jelszó-visszaállítási linket.",
     "sendResetLink": "Küldje el a",
     "backToLogin": "← Vissza a bejelentkezéshez",
-    "changePhoto": "✏️ Változás"
+    "changePhoto": "✏️ Változás",
+    "birthDate": "Birth Date",
+    "birthDatePlaceholder": "Birth Date (DD.MM.YYYY) *",
+    "birthDateRequired": "Please enter your birth date",
+    "ageLimitError": "You must be at least 16 years old to register",
+    "ageConfirm": "I declare and accept that I am over 16 years old."
   },
   "navigation": {
     "home": "Home",

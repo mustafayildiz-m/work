@@ -61,7 +61,12 @@
     "forgotPasswordDesc": "输入您的电子邮件地址，我们将向您发送密码重置链接。",
     "sendResetLink": "发送",
     "backToLogin": "← 返回登录",
-    "changePhoto": "✏️ 更改"
+    "changePhoto": "✏️ 更改",
+    "birthDate": "出生日期",
+    "birthDatePlaceholder": "出生日期 (日.月.年) *",
+    "birthDateRequired": "请输入您的出生日期",
+    "ageLimitError": "注册账号必须年满16岁",
+    "ageConfirm": "我声明并接受我已满16岁。"
   },
   "navigation": {
     "home": "首页",

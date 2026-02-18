@@ -61,7 +61,12 @@
     "forgotPasswordDesc": "Introduza o seu endereço de correio eletrónico e enviar-lhe-emos uma ligação para redefinir a palavra-passe.",
     "sendResetLink": "Enviar",
     "backToLogin": "← Voltar ao início de sessão",
-    "changePhoto": "✏️ Alterar"
+    "changePhoto": "✏️ Alterar",
+    "birthDate": "Data de nascimento",
+    "birthDatePlaceholder": "Data de nascimento (DD.MM.AAAA) *",
+    "birthDateRequired": "Por favor, insira a sua data de nascimento",
+    "ageLimitError": "Deve ter pelo menos 16 anos para se registar",
+    "ageConfirm": "Declaro e aceito que tenho mais de 16 anos."
   },
   "navigation": {
     "home": "Início",
