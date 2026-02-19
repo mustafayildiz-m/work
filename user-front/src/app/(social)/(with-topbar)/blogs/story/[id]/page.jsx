@@ -24,13 +24,17 @@ const StoryDetail = ({ params }) => {
     const fetchLanguages = async () => {
       try {
         const token = localStorage.getItem('token');
+        const headers = {
+          'Content-Type': 'application/json'
+        };
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/languages`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+          headers: headers
         });
-        
+
+
         if (response.ok) {
           const data = await response.json();
           setLanguages(data || []);
@@ -39,7 +43,7 @@ const StoryDetail = ({ params }) => {
         console.error('Diller yüklenirken hata:', error);
       }
     };
-    
+
     fetchLanguages();
   }, []);
 
@@ -48,11 +52,11 @@ const StoryDetail = ({ params }) => {
     const userId = userInfo?.id;
     const likedStoriesKey = userId ? `likedStories_${userId}` : 'likedStories';
     const viewedStoriesKey = userId ? `viewedStories_${userId}` : 'viewedStories';
-    
+
     // LocalStorage'dan beğeni ve görüntülenme durumlarını kontrol et
     const likedStories = JSON.parse(localStorage.getItem(likedStoriesKey) || '[]');
     const viewedStories = JSON.parse(localStorage.getItem(viewedStoriesKey) || '[]');
-    
+
     setHasLiked(likedStories.includes(parseInt(id)));
     setHasViewed(viewedStories.includes(parseInt(id)));
 
@@ -70,18 +74,18 @@ const StoryDetail = ({ params }) => {
 
         const data = await response.json();
         setStory(data);
-        
+
         // Kullanıcı bazlı localStorage key'leri oluştur
         const userId = userInfo?.id;
         const viewedStoriesKey = userId ? `viewedStories_${userId}` : 'viewedStories';
         const viewedStories = JSON.parse(localStorage.getItem(viewedStoriesKey) || '[]');
-        
+
         // Sadece authenticated kullanıcılar ve daha önce görüntülenmemişse view count'u artır
         if (isAuthenticated && !viewedStories.includes(parseInt(id))) {
           try {
             // View count'u artır (authentication token ile)
             const token = localStorage.getItem('token');
-            
+
             if (token) {
               const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/scholar-stories/${id}/view`, {
                 method: 'POST',
@@ -90,7 +94,7 @@ const StoryDetail = ({ params }) => {
                   'Authorization': `Bearer ${token}`
                 }
               });
-              
+
               if (response.ok) {
                 // LocalStorage'a ekle (kullanıcı bazlı key ile)
                 const updatedViewedStories = [...viewedStories, parseInt(id)];
@@ -105,7 +109,7 @@ const StoryDetail = ({ params }) => {
       } catch (err) {
         setError(err.message);
         console.error('Error fetching story detail:', err);
-        
+
         // Fallback for API errors
         if (err.message.includes('fetch')) {
           setError('API bağlantısı kurulamadı. Lütfen daha sonra tekrar deneyin.');
@@ -115,10 +119,10 @@ const StoryDetail = ({ params }) => {
       }
     };
 
-        if (id) {
-          fetchStoryDetail();
-        }
-      }, [id, isAuthenticated]);
+    if (id) {
+      fetchStoryDetail();
+    }
+  }, [id, isAuthenticated]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -168,7 +172,7 @@ const StoryDetail = ({ params }) => {
           ...prev,
           like_count: (prev.like_count || 0) + 1
         }));
-        
+
         // LocalStorage'a ekle (kullanıcı bazlı key ile)
         const userId = userInfo?.id;
         const likedStoriesKey = userId ? `likedStories_${userId}` : 'likedStories';
@@ -220,16 +224,16 @@ const StoryDetail = ({ params }) => {
   }
 
   return (
-        <div className="bg-mode p-4" style={{ marginTop: '80px' }}>
-          {/* Back Button */}
-          <div className="mb-4">
-            <Link href="/blogs">
-              <Button variant="outline-secondary">
-                <BsArrowLeft className="me-2" />
-                Geri Dön
-              </Button>
-            </Link>
-          </div>
+    <div className="bg-mode p-4" style={{ marginTop: '80px' }}>
+      {/* Back Button */}
+      <div className="mb-4">
+        <Link href="/blogs">
+          <Button variant="outline-secondary">
+            <BsArrowLeft className="me-2" />
+            Geri Dön
+          </Button>
+        </Link>
+      </div>
 
       <Row className="g-4">
         {/* Main Content */}
@@ -240,7 +244,7 @@ const StoryDetail = ({ params }) => {
               <div className="position-relative">
                 <div className="ratio ratio-16x9">
                   <iframe
-                    src={story.video_url.includes('youtube.com') 
+                    src={story.video_url.includes('youtube.com')
                       ? story.video_url.replace('watch?v=', 'embed/')
                       : story.video_url
                     }
@@ -275,7 +279,7 @@ const StoryDetail = ({ params }) => {
                       width={24}
                       height={24}
                       className="rounded-circle"
-                      style={{ 
+                      style={{
                         objectFit: 'cover',
                         width: '24px',
                         height: '24px'
@@ -312,9 +316,9 @@ const StoryDetail = ({ params }) => {
               {story.description && (
                 <div className="mb-4">
                   <h5 className="mb-3">Hikaye Hakkında</h5>
-                  <div 
+                  <div
                     className="text-muted"
-                    style={{ 
+                    style={{
                       whiteSpace: 'pre-line',
                       lineHeight: '1.6'
                     }}
@@ -327,8 +331,8 @@ const StoryDetail = ({ params }) => {
               {/* Action Buttons */}
               <div className="d-flex gap-2">
                 {story.video_url && (
-                  <Button 
-                    variant="primary" 
+                  <Button
+                    variant="primary"
                     size="lg"
                     onClick={() => window.open(story.video_url, '_blank')}
                   >
@@ -336,15 +340,15 @@ const StoryDetail = ({ params }) => {
                     Videoyu İzle
                   </Button>
                 )}
-                    <Button 
-                      variant={hasLiked ? "success" : "outline-primary"}
-                      size="lg"
-                      onClick={handleLike}
-                      disabled={hasLiked || !isAuthenticated}
-                    >
-                      <BsHeart className="me-2" />
-                      {!isAuthenticated ? 'Giriş Yapın' : hasLiked ? 'Beğenildi' : 'Beğen'} ({story.like_count || 0})
-                    </Button>
+                <Button
+                  variant={hasLiked ? "success" : "outline-primary"}
+                  size="lg"
+                  onClick={handleLike}
+                  disabled={hasLiked || !isAuthenticated}
+                >
+                  <BsHeart className="me-2" />
+                  {!isAuthenticated ? 'Giriş Yapın' : hasLiked ? 'Beğenildi' : 'Beğen'} ({story.like_count || 0})
+                </Button>
               </div>
             </Card.Body>
           </Card>
@@ -400,7 +404,7 @@ const StoryDetail = ({ params }) => {
                     width={40}
                     height={40}
                     className="rounded-circle mb-3"
-                    style={{ 
+                    style={{
                       objectFit: 'cover',
                       width: '40px',
                       height: '40px'

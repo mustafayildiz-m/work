@@ -50,8 +50,8 @@ const StoryCard = ({ story, languages = [] }) => {
   // Thumbnail URL'i oluştur
   const getThumbnailUrl = () => {
     if (!thumbnail_url) return null;
-    return thumbnail_url.startsWith('http') 
-      ? thumbnail_url 
+    return thumbnail_url.startsWith('http')
+      ? thumbnail_url
       : `${API_BASE_URL}${thumbnail_url}`;
   };
 
@@ -61,18 +61,18 @@ const StoryCard = ({ story, languages = [] }) => {
         <div className="position-relative">
           {/* Story Thumbnail */}
           <div className="position-relative overflow-hidden" style={{ height: '180px' }}>
-                <NewsImage 
-                  className="w-100 h-100" 
-                  src={getThumbnailUrl() || '/images/book-placeholder.jpg'} 
-                  alt={title}
-                  width={400}
-                  height={180}
-                  style={{ 
-                    objectFit: 'cover',
-                    width: '100%',
-                    height: '100%'
-                  }}
-                />
+            <NewsImage
+              className="w-100 h-100"
+              src={getThumbnailUrl() || '/images/book-placeholder.jpg'}
+              alt={title}
+              width={400}
+              height={180}
+              style={{
+                objectFit: 'cover',
+                width: '100%',
+                height: '100%'
+              }}
+            />
             {/* Play Button */}
             {video_url && (
               <div className="position-absolute top-50 start-50 translate-middle">
@@ -102,11 +102,11 @@ const StoryCard = ({ story, languages = [] }) => {
               </div>
             )}
           </div>
-          
+
           {/* Card Body */}
           <Card.Body className="p-3">
             {/* Title */}
-            <h6 className="mb-2 fw-bold line-clamp-2 text-reset" style={{ 
+            <h6 className="mb-2 fw-bold line-clamp-2 text-reset" style={{
               minHeight: '2.5rem',
               display: '-webkit-box',
               WebkitLineClamp: 2,
@@ -116,14 +116,14 @@ const StoryCard = ({ story, languages = [] }) => {
             }}>
               {title}
             </h6>
-            
+
             {/* Scholar Name */}
             {scholar && (
               <p className="text-primary small mb-2 fw-semibold">
                 {scholar.fullName}
               </p>
             )}
-            
+
             {/* Description */}
             <p className="text-muted small mb-3 line-clamp-3" style={{
               display: '-webkit-box',
@@ -134,7 +134,7 @@ const StoryCard = ({ story, languages = [] }) => {
             }}>
               {description}
             </p>
-            
+
             {/* Meta Information */}
             <div className="d-flex justify-content-between align-items-center">
               <div className="d-flex align-items-center gap-2">
@@ -200,13 +200,17 @@ const ScholarStories = () => {
       try {
         setLanguagesLoading(true);
         const token = localStorage.getItem('token');
+        const headers = {
+          'Content-Type': 'application/json'
+        };
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
         const response = await fetch(`${API_BASE_URL}/languages`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+          headers: headers
         });
-        
+
+
         if (response.ok) {
           const data = await response.json();
           setLanguages(data || []);
@@ -217,7 +221,7 @@ const ScholarStories = () => {
         setLanguagesLoading(false);
       }
     };
-    
+
     fetchLanguages();
   }, []);
 
@@ -270,11 +274,11 @@ const ScholarStories = () => {
     const items = [];
     const { page, totalPages } = pagination;
     const maxVisiblePages = 5;
-    
+
     // Calculate start and end page numbers
     let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2));
     let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-    
+
     // Adjust start page if we're near the end
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
@@ -283,8 +287,8 @@ const ScholarStories = () => {
     // Previous button
     items.push(
       <li key="prev" className={`page-item ${page === 1 ? 'disabled' : ''}`}>
-        <button 
-          className="page-link" 
+        <button
+          className="page-link"
           onClick={() => handlePageChange(page - 1)}
           disabled={page === 1}
         >
@@ -341,8 +345,8 @@ const ScholarStories = () => {
     // Next button
     items.push(
       <li key="next" className={`page-item ${page === totalPages ? 'disabled' : ''}`}>
-        <button 
-          className="page-link" 
+        <button
+          className="page-link"
           onClick={() => handlePageChange(page + 1)}
           disabled={page === totalPages}
         >
@@ -403,8 +407,8 @@ const ScholarStories = () => {
                 {t('blogs.filterByLanguage')}
               </Form.Label>
               <Dropdown className="w-100">
-                <Dropdown.Toggle 
-                  variant="outline-primary" 
+                <Dropdown.Toggle
+                  variant="outline-primary"
                   id="language-dropdown"
                   className="w-100 d-flex align-items-center justify-content-between"
                   disabled={languagesLoading}
@@ -474,8 +478,8 @@ const ScholarStories = () => {
             <Form.Group>
               <Form.Label className="small text-muted mb-1 d-none d-md-block">&nbsp;</Form.Label>
               {searchQuery && (
-                <Button 
-                  variant="outline-secondary" 
+                <Button
+                  variant="outline-secondary"
                   onClick={handleClearSearch}
                   className="w-100"
                 >
@@ -554,8 +558,8 @@ const ScholarStories = () => {
 
               const getThumbnailUrl = () => {
                 if (!thumbnail_url) return null;
-                return thumbnail_url.startsWith('http') 
-                  ? thumbnail_url 
+                return thumbnail_url.startsWith('http')
+                  ? thumbnail_url
                   : `${API_BASE_URL}${thumbnail_url}`;
               };
 
@@ -565,13 +569,13 @@ const ScholarStories = () => {
                     <Row className="g-0">
                       <Col xs={12} md={4} lg={3}>
                         <div className="position-relative" style={{ height: '100%', minHeight: '200px' }}>
-                          <NewsImage 
-                            className="w-100 h-100 rounded-start" 
-                            src={getThumbnailUrl() || '/images/book-placeholder.jpg'} 
+                          <NewsImage
+                            className="w-100 h-100 rounded-start"
+                            src={getThumbnailUrl() || '/images/book-placeholder.jpg'}
                             alt={title}
                             width={300}
                             height={200}
-                            style={{ 
+                            style={{
                               objectFit: 'cover',
                               width: '100%',
                               height: '100%'
@@ -606,7 +610,7 @@ const ScholarStories = () => {
                               {getLanguageLabel(language)}
                             </span>
                           </div>
-                          
+
                           <p className="text-muted mb-3" style={{
                             display: '-webkit-box',
                             WebkitLineClamp: 2,
@@ -616,7 +620,7 @@ const ScholarStories = () => {
                           }}>
                             {description}
                           </p>
-                          
+
                           <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
                             <div className="d-flex align-items-center gap-2">
                               <BsCalendarDate size={14} className="text-muted" />
@@ -678,7 +682,7 @@ const ScholarStories = () => {
       {filteredStories.length > 0 && (
         <div className="mt-4 text-center">
           <small className="text-muted">
-            {searchQuery ? 
+            {searchQuery ?
               `"${searchQuery}" ${t('blogs.searchResults')} ${filteredStories.length} ${t('blogs.storiesFound')}` :
               `${(pagination.page - 1) * pagination.limit + 1} - ${Math.min(pagination.page * pagination.limit, pagination.total)} ${t('blogs.paginationInfo')} ${pagination.total} ${t('blogs.storiesCount')}`
             }

@@ -73,7 +73,6 @@ export class ArticlesController {
     return this.articlesService.create(createArticleDto);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('book/:bookId')
   findAllByBook(
     @Param('bookId', ParseIntPipe) bookId: number,
@@ -93,7 +92,6 @@ export class ArticlesController {
     );
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get()
   findAll(
     @Query('languageId') languageId?: string,
@@ -113,11 +111,11 @@ export class ArticlesController {
     );
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.articlesService.findOne(id);
   }
+
 
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
@@ -179,8 +177,8 @@ export class ArticlesController {
     };
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Post(':id/page-translate')
+
   async translatePage(
     @Param('id', ParseIntPipe) id: number,
     @Body()

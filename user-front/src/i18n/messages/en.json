@@ -21,6 +21,12 @@
     "required": "Required",
     "or": "or"
   },
+  "guest": {
+    "messagingTitle": "Join the Conversation",
+    "messagingDesc": "You need to log in to meet people and chat.",
+    "login": "Log In",
+    "continue": "Continue Browsing"
+  },
   "auth": {
     "signIn": "Sign In",
     "signUp": "Sign Up",
@@ -66,7 +72,8 @@
     "birthDatePlaceholder": "Birth Date (DD.MM.YYYY) *",
     "birthDateRequired": "Please enter your birth date",
     "ageLimitError": "You must be at least 16 years old to register",
-    "ageConfirm": "I declare and accept that I am over 16 years old."
+    "ageConfirm": "I declare and accept that I am over 16 years old.",
+    "visitAsGuest": "Visit as guest"
   },
   "navigation": {
     "home": "Home",
@@ -201,7 +208,10 @@
     "about": "About",
     "viewProfile": "View Profile",
     "noBio": "User hasn't added a bio yet.",
-    "user": "User"
+    "user": "User",
+    "loginRequired": "Login Required",
+    "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
+    "loginAction": "Sign In / Sign Up"
   },
   "feed": {
     "sortBy": "Sort by",
@@ -272,7 +282,8 @@
     "lightTheme": "Light Theme",
     "darkTheme": "Dark Theme",
     "systemTheme": "System Theme",
-    "activeTheme": "Active theme:"
+    "activeTheme": "Active theme:",
+    "title": "Theme"
   },
   "settings": {
     "account": {

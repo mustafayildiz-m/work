@@ -10,8 +10,10 @@ import { useSession } from 'next-auth/react';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
-import { BsCamera, BsCheckCircleFill, BsEye, BsImage } from 'react-icons/bs';
+import { BsCamera, BsCheckCircleFill, BsEye, BsImage, BsShieldLock } from 'react-icons/bs';
+
 import clsx from 'clsx';
+
 
 const ProfilePanel = ({ links, onLinkClick }) => {
   const { t } = useLanguage();
@@ -33,7 +35,12 @@ const ProfilePanel = ({ links, onLinkClick }) => {
   const [showAvatarMenu, setShowAvatarMenu] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
   const [imageKey, setImageKey] = useState(0);
+
   const [bioExpanded, setBioExpanded] = useState(false);
+
+  const handleLinkClick = (e, link) => {
+    if (onLinkClick) onLinkClick();
+  };
 
   useEffect(() => {
     if (session?.user) {
@@ -346,262 +353,257 @@ const ProfilePanel = ({ links, onLinkClick }) => {
         {/* Profile Content */}
         <div style={{ padding: '0 1.5rem 1.5rem' }}>
           <div className="text-center">
-            {/* Avatar */}
-            <div className="position-relative d-inline-block" style={{ marginTop: '-50px' }}>
-              <div
-                className="position-relative"
-                onClick={() => setShowAvatarMenu(!showAvatarMenu)}
-                style={{ cursor: 'pointer' }}
-              >
-                {imageLoading && (
+            {status === 'unauthenticated' ? (
+              <div className="py-2">
+                <div className="mb-3">
+                  <div className="rounded-circle d-flex align-items-center justify-content-center mx-auto" style={{
+                    width: '60px',
+                    height: '60px',
+                    background: isDarkMode ? 'rgba(102,187,106,0.1)' : 'rgba(102,187,106,0.05)',
+                    border: `2px dashed ${isDarkMode ? 'rgba(102,187,106,0.3)' : 'rgba(102,187,106,0.2)'}`,
+                    marginTop: '20px'
+                  }}>
+                    <BsShieldLock className="text-success" size={24} />
+                  </div>
+
+                </div>
+                <h6 className="fw-bold mb-2" style={{ color: headingColor }}>
+                  {t('profile.loginRequired')}
+                </h6>
+                <p className="text-muted mb-3" style={{ fontSize: '0.8rem' }}>
+                  {t('profile.loginDescription')}
+                </p>
+                <Link
+                  href="/auth-advance/sign-in"
+                  className="btn btn-success btn-sm w-100 py-2 fw-semibold mb-3"
+                  style={{
+                    background: '#66BB6A',
+                    border: 'none',
+                    borderRadius: '8px',
+                    transition: 'all 0.3s'
+                  }}
+                >
+                  {t('profile.loginAction')}
+                </Link>
+              </div>
+            ) : (
+              <>
+                {/* Avatar */}
+                <div className="position-relative d-inline-block" style={{ marginTop: '-50px' }}>
                   <div
-                    className="position-absolute top-0 start-0 rounded-circle d-flex align-items-center justify-content-center"
-                    style={{
-                      width: '100px',
-                      height: '100px',
-                      backgroundColor: isDarkMode ? '#464950' : '#f5f5f5',
-                      zIndex: 2,
-                      border: `5px solid ${cardBg}`
-                    }}
+                    className="position-relative"
+                    onClick={() => setShowAvatarMenu(!showAvatarMenu)}
+                    style={{ cursor: 'pointer' }}
                   >
-                    <div className="spinner-border spinner-border-sm text-success" role="status">
-                      <span className="visually-hidden">Yükleniyor...</span>
+                    {imageLoading && (
+                      <div
+                        className="position-absolute top-0 start-0 rounded-circle d-flex align-items-center justify-content-center"
+                        style={{
+                          width: '100px',
+                          height: '100px',
+                          backgroundColor: isDarkMode ? '#464950' : '#f5f5f5',
+                          zIndex: 2,
+                          border: `5px solid ${cardBg}`
+                        }}
+                      >
+                        <div className="spinner-border spinner-border-sm text-success" role="status">
+                          <span className="visually-hidden">Yükleniyor...</span>
+                        </div>
+                      </div>
+                    )}
+                    <img
+                      src={getImageUrl(user?.photoUrl, false)}
+                      alt="avatar"
+                      className="rounded-circle"
+                      key={imageKey}
+                      style={{
+                        width: '100px',
+                        height: '100px',
+                        transition: 'transform 0.3s ease',
+                        opacity: imageLoading ? 0 : 1,
+                        border: `5px solid ${cardBg}`,
+                        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)',
+                        objectFit: 'cover'
+                      }}
+                      onLoad={() => setImageLoading(false)}
+                      onError={(e) => {
+                        e.target.src = typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg');
+                        setImageLoading(false);
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                      onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                    />
+                    <div
+                      className="position-absolute rounded-circle d-flex align-items-center justify-content-center"
+                      style={{
+                        width: '36px',
+                        height: '36px',
+                        bottom: '5px',
+                        right: '5px',
+                        background: '#66BB6A',
+                        boxShadow: '0 4px 16px rgba(102, 187, 106, 0.5)',
+                        border: `3px solid ${cardBg}`,
+                        transition: 'all 0.3s'
+                      }}
+                    >
+                      <BsCamera className="text-white" size={18} />
                     </div>
                   </div>
-                )}
-                <img
-                  src={getImageUrl(user?.photoUrl, false)}
-                  alt="avatar"
-                  className="rounded-circle"
-                  key={imageKey}
-                  style={{
-                    width: '100px',
-                    height: '100px',
-                    transition: 'transform 0.3s ease',
-                    opacity: imageLoading ? 0 : 1,
-                    border: `5px solid ${cardBg}`,
-                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)',
-                    objectFit: 'cover'
-                  }}
-                  onLoad={() => setImageLoading(false)}
-                  onError={(e) => {
-                    e.target.src = typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg');
-                    setImageLoading(false);
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                  onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                />
-                <div
-                  className="position-absolute rounded-circle d-flex align-items-center justify-content-center"
-                  style={{
-                    width: '36px',
-                    height: '36px',
-                    bottom: '5px',
-                    right: '5px',
-                    background: '#66BB6A',
-                    boxShadow: '0 4px 16px rgba(102, 187, 106, 0.5)',
-                    border: `3px solid ${cardBg}`,
-                    transition: 'all 0.3s ease',
-                    cursor: 'pointer'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.15)';
-                    e.currentTarget.style.background = '#4CAF50';
-                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(76, 175, 80, 0.6)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.background = '#66BB6A';
-                    e.currentTarget.style.boxShadow = '0 4px 16px rgba(102, 187, 106, 0.5)';
-                  }}
-                >
-                  <BsCamera className="text-white" size={18} />
-                </div>
-              </div>
 
-              {/* Dropdown Menu */}
-              {showAvatarMenu && (
-                <>
-                  <div
-                    className="position-fixed top-0 start-0 w-100 h-100"
-                    style={{ zIndex: 1040 }}
-                    onClick={() => setShowAvatarMenu(false)}
-                  />
-                  <div
-                    className="rounded-3 shadow-lg border"
-                    style={{
-                      position: 'absolute',
-                      zIndex: 1050,
-                      top: 'calc(100% + 10px)',
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      width: '200px',
-                      padding: '0.5rem 0',
-                      overflow: 'hidden',
-                      background: cardBg,
-                      borderColor: borderColor
-                    }}
-                  >
-                    <button
-                      className="w-100 d-flex align-items-center py-2 px-3 bg-transparent border-0 text-start"
-                      onClick={() => {
-                        setShowAvatarMenu(false);
-                        setShowPhotoViewModal(true);
-                      }}
+                  {/* Dropdown Menu */}
+                  {showAvatarMenu && (
+                    <>
+                      <div
+                        className="position-fixed top-0 start-0 w-100 h-100"
+                        style={{ zIndex: 1040 }}
+                        onClick={() => setShowAvatarMenu(false)}
+                      />
+                      <div
+                        className="rounded-3 shadow-lg border"
+                        style={{
+                          position: 'absolute',
+                          zIndex: 1050,
+                          top: 'calc(100% + 10px)',
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          width: '200px',
+                          padding: '0.5rem 0',
+                          overflow: 'hidden',
+                          background: cardBg,
+                          borderColor: borderColor
+                        }}
+                      >
+                        <button
+                          className="w-100 d-flex align-items-center py-2 px-3 bg-transparent border-0 text-start"
+                          onClick={() => {
+                            setShowAvatarMenu(false);
+                            setShowPhotoViewModal(true);
+                          }}
+                          style={{
+                            transition: 'background-color 0.2s',
+                            cursor: 'pointer',
+                            color: 'var(--bs-body-color, #000)'
+                          }}
+                        >
+                          <BsEye size={18} className="me-2 text-primary flex-shrink-0" />
+                          <span>Profil resmini gör</span>
+                        </button>
+                        <button
+                          className="w-100 d-flex align-items-center py-2 px-3 bg-transparent border-0 text-start"
+                          onClick={() => {
+                            setShowAvatarMenu(false);
+                            setShowPhotoModal(true);
+                          }}
+                          style={{
+                            transition: 'background-color 0.2s',
+                            cursor: 'pointer',
+                            color: textColor
+                          }}
+                        >
+                          <BsImage size={18} className="me-2 text-success flex-shrink-0" />
+                          <span>Profil resmi seç</span>
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* User Info */}
+                <h5 className="mb-1 mt-3 fw-bold">
+                  {user?.id && user?.id !== 'undefined' ? (
+                    <Link
+                      href={`/profile/user/${user.id}`}
+                      className="text-decoration-none"
                       style={{
-                        transition: 'background-color 0.2s',
-                        cursor: 'pointer',
-                        color: 'var(--bs-body-color, #000)'
+                        color: headingColor,
+                        transition: 'color 0.3s ease'
                       }}
-                      onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--bs-gray-100, #f8f9fa)'}
-                      onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                      onClick={() => onLinkClick && onLinkClick()}
                     >
-                      <BsEye size={18} className="me-2 text-primary flex-shrink-0" />
-                      <span>Profil resmini gör</span>
-                    </button>
-                    <button
-                      className="w-100 d-flex align-items-center py-2 px-3 bg-transparent border-0 text-start"
-                      onClick={() => {
-                        setShowAvatarMenu(false);
-                        setShowPhotoModal(true);
-                      }}
-                      style={{
-                        transition: 'background-color 0.2s',
-                        cursor: 'pointer',
-                        color: textColor
-                      }}
-                      onMouseEnter={(e) => {
-                        e.target.style.backgroundColor = hoverBg;
-                        e.currentTarget.style.backgroundColor = hoverBg;
-                      }}
-                      onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
-                    >
-                      <BsImage size={18} className="me-2 text-success flex-shrink-0" />
-                      <span>Profil resmi seç</span>
-                    </button>
+                      {user.firstName || user.lastName
+                        ? `${user.firstName || ''} ${user.lastName || ''}`.trim()
+                        : (user.name || t('profile.user'))
+                      }
+                    </Link>
+                  ) : (
+                    <span style={{ color: headingColor }}>
+                      {user ? (
+                        (user.firstName || user.lastName)
+                          ? `${user.firstName || ''} ${user.lastName || ''}`.trim()
+                          : (user.name || t('profile.user'))
+                      ) : t('profile.user')}
+                    </span>
+                  )}
+                </h5>
+                <small className="text-muted">@{user?.username || user?.email || t('profile.user')}</small>
+
+                {user?.bio && (
+                  <div className="mt-2 mb-2">
+                    <p className="mb-1 text-muted" style={{ fontSize: '0.85rem', lineHeight: '1.4', whiteSpace: 'pre-wrap' }}>
+                      {bioExpanded || user.bio.length <= 100
+                        ? user.bio
+                        : `${user.bio.slice(0, 100)}...`}
+                    </p>
+                    {user.bio.length > 100 && (
+                      <button
+                        onClick={() => setBioExpanded(!bioExpanded)}
+                        className="btn btn-link p-0 text-decoration-none"
+                        style={{
+                          fontSize: '0.8rem',
+                          color: '#66BB6A',
+                          fontWeight: 500
+                        }}
+                      >
+                        {bioExpanded ? 'Daha Az Göster' : 'Daha Fazla Göster'}
+                      </button>
+                    )}
                   </div>
-                </>
-              )}
-            </div>
-
-            {/* User Info */}
-            <h5 className="mb-1 mt-3 fw-bold">
-              {user?.id && user?.id !== 'undefined' ? (
-                <Link
-                  href={`/profile/user/${user.id}`}
-                  className="text-decoration-none"
-                  style={{
-                    color: headingColor,
-                    transition: 'color 0.3s ease'
-                  }}
-                  onClick={() => onLinkClick && onLinkClick()}
-                  onMouseEnter={(e) => e.currentTarget.style.color = '#66BB6A'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = headingColor}
-                >
-                  {user.firstName || user.lastName
-                    ? `${user.firstName || ''} ${user.lastName || ''}`.trim()
-                    : (user.name || t('profile.user'))
-                  }
-                </Link>
-              ) : (
-                <span style={{ color: headingColor }}>
-                  {user ? (
-                    (user.firstName || user.lastName)
-                      ? `${user.firstName || ''} ${user.lastName || ''}`.trim()
-                      : (user.name || t('profile.user'))
-                  ) : t('profile.user')}
-                </span>
-              )}
-            </h5>
-            <small className="text-muted">@{user?.username || user?.email || t('profile.user')}</small>
-
-            {user?.bio && (
-              <div className="mt-2 mb-2">
-                <p className="mb-1 text-muted" style={{ fontSize: '0.85rem', lineHeight: '1.4', whiteSpace: 'pre-wrap' }}>
-                  {bioExpanded || user.bio.length <= 100
-                    ? user.bio
-                    : `${user.bio.slice(0, 100)}...`}
-                </p>
-                {user.bio.length > 100 && (
-                  <button
-                    onClick={() => setBioExpanded(!bioExpanded)}
-                    className="btn btn-link p-0 text-decoration-none"
-                    style={{
-                      fontSize: '0.8rem',
-                      color: '#66BB6A',
-                      fontWeight: 500,
-                      transition: 'all 0.3s ease'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = '#4CAF50'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = '#66BB6A'}
-                  >
-                    {bioExpanded ? 'Daha Az Göster' : 'Daha Fazla Göster'}
-                  </button>
                 )}
-              </div>
+
+                {/* Stats - Pill Design */}
+                <div className="d-flex gap-1 justify-content-center mt-3 flex-nowrap">
+                  <Link
+                    href="/feed/followers"
+                    className="text-decoration-none"
+                    onClick={() => onLinkClick && onLinkClick()}
+                  >
+                    <div style={{
+                      padding: '0.4rem 0.5rem',
+                      borderRadius: '50px',
+                      background: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)',
+                      border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)'}`,
+                      transition: 'all 0.3s',
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap'
+                    }}>
+                      <span style={{ fontWeight: 700, color: headingColor, marginRight: '4px' }}>{followStats.followersCount}</span>
+                      <span style={{ fontSize: '0.8rem', color: isDarkMode ? '#999' : '#666' }}>{t('profile.followers')}</span>
+                    </div>
+                  </Link>
+
+                  <Link
+                    href="/feed/following"
+                    className="text-decoration-none"
+                    onClick={() => onLinkClick && onLinkClick()}
+                  >
+                    <div style={{
+                      padding: '0.4rem 0.5rem',
+                      borderRadius: '50px',
+                      background: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)',
+                      border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)'}`,
+                      transition: 'all 0.3s',
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap'
+                    }}>
+                      <span style={{ fontWeight: 700, color: headingColor, marginRight: '4px' }}>{followStats.followingCount}</span>
+                      <span style={{ fontSize: '0.8rem', color: isDarkMode ? '#999' : '#666' }}>{t('profile.following')}</span>
+                    </div>
+                  </Link>
+                </div>
+              </>
             )}
-
-            {/* Stats - Pill Design */}
-            <div className="d-flex gap-1 justify-content-center mt-3 flex-nowrap">
-              <Link
-                href="/feed/followers"
-                className="text-decoration-none"
-                onClick={() => onLinkClick && onLinkClick()}
-              >
-                <div style={{
-                  padding: '0.4rem 0.5rem',
-                  borderRadius: '50px',
-                  background: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)',
-                  border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)'}`,
-                  transition: 'all 0.3s',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap'
-                }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = isDarkMode ? 'rgba(102,187,106,0.15)' : 'rgba(102,187,106,0.1)';
-                    e.currentTarget.style.borderColor = '#66BB6A';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)';
-                    e.currentTarget.style.borderColor = isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}>
-                  <span style={{ fontWeight: 700, color: headingColor, marginRight: '4px' }}>{followStats.followersCount}</span>
-                  <span style={{ fontSize: '0.8rem', color: isDarkMode ? '#999' : '#666' }}>{t('profile.followers')}</span>
-                </div>
-              </Link>
-
-              <Link
-                href="/feed/following"
-                className="text-decoration-none"
-                onClick={() => onLinkClick && onLinkClick()}
-              >
-                <div style={{
-                  padding: '0.4rem 0.5rem',
-                  borderRadius: '50px',
-                  background: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)',
-                  border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)'}`,
-                  transition: 'all 0.3s',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap'
-                }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = isDarkMode ? 'rgba(102,187,106,0.15)' : 'rgba(102,187,106,0.1)';
-                    e.currentTarget.style.borderColor = '#66BB6A';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)';
-                    e.currentTarget.style.borderColor = isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}>
-                  <span style={{ fontWeight: 700, color: headingColor, marginRight: '4px' }}>{followStats.followingCount}</span>
-                  <span style={{ fontSize: '0.8rem', color: isDarkMode ? '#999' : '#666' }}>{t('profile.following')}</span>
-                </div>
-              </Link>
-            </div>
           </div>
+
 
           <hr style={{ margin: '0.75rem 0', opacity: 0.1 }} />
 
@@ -612,7 +614,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                 <Link
                   className="d-flex align-items-center text-decoration-none"
                   href={item.link}
-                  onClick={() => onLinkClick && onLinkClick()}
+                  onClick={(e) => handleLinkClick(e, item.link)}
                   style={{
                     padding: '0.65rem 0.75rem',
                     borderRadius: '10px',
@@ -662,7 +664,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
           <Link
             href={user?.id && user?.id !== 'undefined' ? `/profile/user/${user.id}/feed` : '/profile/feed'}
             className="d-block text-center text-decoration-none"
-            onClick={() => onLinkClick && onLinkClick()}
+            onClick={(e) => handleLinkClick(e, '/profile/feed')}
             style={{
               padding: '0.75rem',
               background: isDarkMode ? 'rgba(102,187,106,0.1)' : 'rgba(102,187,106,0.08)',
@@ -685,10 +687,10 @@ const ProfilePanel = ({ links, onLinkClick }) => {
             {t('profile.viewProfile')}
           </Link>
         </div>
-      </div>
+      </div >
 
       {/* Profil Resmini Görüntüleme Modalı */}
-      <Modal
+      < Modal
         show={showPhotoViewModal}
         onHide={() => setShowPhotoViewModal(false)}
         centered
@@ -722,10 +724,10 @@ const ProfilePanel = ({ links, onLinkClick }) => {
             </button>
           </ModalFooter>
         </div>
-      </Modal>
+      </Modal >
 
       {/* Profil Resmi Güncelleme Modalı */}
-      <Modal
+      < Modal
         show={showPhotoModal}
         onHide={() => {
           setShowPhotoModal(false);
@@ -861,7 +863,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
             </div>
           </ModalFooter>
         </div>
-      </Modal>
+      </Modal >
     </>
   );
 };

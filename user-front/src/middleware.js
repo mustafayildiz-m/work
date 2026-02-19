@@ -10,15 +10,22 @@ const publicPages = [
   '/auth/forgot-pass',
   '/api/auth',
   '/_next',
-  '/favicon.ico'
+  '/favicon.ico',
+  '/blogs',
+  '/feed/scholars',
+  '/feed/books',
+  '/feed/articles',
+  '/feed/podcasts',
+  '/profile/scholar'
 ];
 
 // Protected sayfalar - authentication gerektiren sayfalar
 const protectedPages = [
-  '/feed',
+  '/feed/home',
+  '/feed/who-to-follow',
+  '/messaging',
   '/profile',
   '/settings',
-  '/messaging',
   '/chat',
   '/social'
 ];
@@ -28,26 +35,34 @@ const NEXTAUTH_SECRET =
 
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
+  const token = await getToken({ req: request, secret: NEXTAUTH_SECRET });
 
   // Ana sayfa yönlendirmesi
   if (pathname === '/') {
-    return NextResponse.redirect(new URL('/feed/home', request.url));
+    if (token?.access_token) {
+      return NextResponse.redirect(new URL('/feed/home', request.url));
+    } else {
+      return NextResponse.redirect(new URL('/feed/books', request.url));
+    }
   }
 
   // Public sayfalar için middleware çalıştırma
-  if (publicPages.some(page => pathname.startsWith(page))) {
+  if (publicPages.some(page => pathname === page || pathname.startsWith(page + '/'))) {
     return NextResponse.next();
   }
 
+  // Allow scholar profiles explicitly (bypass protected check for this specific sub-route)
   // Protected sayfalar için token kontrolü
-  if (protectedPages.some(page => pathname.startsWith(page))) {
-    const token = await getToken({ req: request, secret: NEXTAUTH_SECRET });
-
+  if (protectedPages.some(page => pathname.startsWith(page)) && !pathname.startsWith('/profile/scholar')) {
     // Token yoksa login sayfasına yönlendir
-    // Not: biz backend JWT'i `token.access_token` alanında tutuyoruz
     if (!token?.access_token) {
       const loginUrl = new URL('/auth-advance/sign-in', request.url);
       loginUrl.searchParams.set('redirectTo', pathname);
+      // Eğer kullanıcı özel olarak belirtilen korumalı sayfalara girmeye çalışıyorsa mesaj ekle
+      const specialProtected = ['/feed/home', '/feed/who-to-follow', '/messaging'];
+      if (specialProtected.some(page => pathname.startsWith(page))) {
+        loginUrl.searchParams.set('message', 'login_required');
+      }
       return NextResponse.redirect(loginUrl);
     }
   }

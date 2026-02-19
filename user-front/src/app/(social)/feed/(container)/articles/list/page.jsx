@@ -57,25 +57,29 @@ const ArticlesListPage = () => {
     try {
       setLoadingBooks(true);
       const token = localStorage.getItem('token');
-      
-      if (!token) return;
 
       const params = new URLSearchParams();
       if (languageId) params.append('languageId', languageId);
 
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await fetch(`${API_BASE_URL}/books/with-articles?${params.toString()}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+        headers: headers
       });
+
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      
+
       // react-select formatına dönüştür
       const bookOptions = data.map(book => ({
         value: book.id,
@@ -273,8 +277,8 @@ const ArticlesListPage = () => {
                   )}
                 </h6>
                 <small className="text-muted">
-                  {selectedBooks.length > 0 
-                    ? `${selectedBooks.length} ${t('articles.list.booksSelected')}` 
+                  {selectedBooks.length > 0
+                    ? `${selectedBooks.length} ${t('articles.list.booksSelected')}`
                     : t('articles.list.allBooksShowing')}
                 </small>
               </div>
@@ -282,7 +286,7 @@ const ArticlesListPage = () => {
                 {showBookFilter ? <BsChevronUp size={20} /> : <BsChevronDown size={20} />}
               </div>
             </div>
-            
+
             <Collapse in={showBookFilter}>
               <div>
                 <Select

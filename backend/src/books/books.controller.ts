@@ -37,19 +37,16 @@ export class BooksController {
     return this.booksService.findOne(id);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('with-articles')
   getBooksWithArticles(@Query('languageId') languageId?: string) {
     return this.booksService.getBooksWithArticles(languageId);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('categories')
   getCategories(@Query('languageId') languageId?: string) {
     return this.booksService.getCategories(languageId);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get()
   findAll(
     @Query('languageId') languageId?: string,
@@ -58,6 +55,7 @@ export class BooksController {
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
+
     const pageNumber = page ? parseInt(page, 10) : 1;
     const limitNumber = limit ? parseInt(limit, 10) : 12;
     return this.booksService.findAll(
@@ -69,9 +67,9 @@ export class BooksController {
     );
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
+
     return this.booksService.findOne(id);
   }
 
@@ -199,8 +197,8 @@ export class BooksController {
     };
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Post(':id/page-translate')
+
   async translatePage(
     @Param('id', ParseIntPipe) id: number,
     @Body()

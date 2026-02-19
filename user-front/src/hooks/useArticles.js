@@ -20,16 +20,16 @@ export const useArticles = (languageId, bookIds = null, search = '', page = 1, l
 
       const token = localStorage.getItem('token');
       const params = new URLSearchParams();
-      
+
       if (languageId) params.append('languageId', languageId);
       if (page) params.append('page', page);
       if (limit) params.append('limit', limit);
       if (search && search.trim()) params.append('search', search.trim());
-      
+
       // bookIds string veya array olabilir
       if (bookIds) {
-        const bookIdsString = Array.isArray(bookIds) 
-          ? bookIds.join(',') 
+        const bookIdsString = Array.isArray(bookIds)
+          ? bookIds.join(',')
           : bookIds;
         if (bookIdsString && bookIdsString.trim()) {
           params.append('bookIds', bookIdsString);
@@ -38,19 +38,25 @@ export const useArticles = (languageId, bookIds = null, search = '', page = 1, l
 
       const url = `${API_BASE_URL}/articles?${params.toString()}`;
 
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+        headers: headers
       });
+
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      
+
       setArticles(data.data || []);
       setPagination({
         currentPage: data.pagination?.currentPage || 1,

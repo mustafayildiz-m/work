@@ -55,22 +55,28 @@ const BookDetailPage = () => {
   const isReadingRef = useRef(false);
 
   // URL'den dil bilgilerini al
-  const languageId = searchParams.get('languageId');
-  const languageName = searchParams.get('languageName');
-  const languageCode = searchParams.get('languageCode');
+  const languageId = searchParams ? searchParams.get('languageId') : null;
+  const languageNameRaw = searchParams ? searchParams.get('languageName') : null;
+  const languageCode = searchParams ? searchParams.get('languageCode') : null;
+
+  // URL-encoded olabilecek dil ismini decode et
+  const languageName = languageNameRaw ? decodeURIComponent(languageNameRaw) : null;
 
   // Dilleri yükle
   const { languages: availableLanguages, loading: languagesLoading } = useLanguages();
 
   // Safe translation function
   const translate = (key, fallback = '') => {
-    if (langLoading) return fallback;
+    if (langLoading || typeof t !== 'function') return fallback;
     try {
-      return t(key) || fallback;
-    } catch {
+      const result = t(key);
+      return result !== key ? result : fallback;
+    } catch (err) {
+      console.warn(`Translation error for key ${key}:`, err);
       return fallback;
     }
   };
+
 
 
   useEffect(() => {
@@ -79,12 +85,18 @@ const BookDetailPage = () => {
         setLoading(true);
         const token = localStorage.getItem('token');
 
+        const headers = {
+          'Content-Type': 'application/json'
+        };
+
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
         const response = await fetch(`${API_BASE_URL}/books/${params.id}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+          headers: headers
         });
+
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -699,18 +711,19 @@ const BookDetailPage = () => {
   const translateText = async (text, targetLangCode, sourceLangCode = null, pageNumber = null, bookId = null) => {
     try {
       const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('Token bulunamadı');
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
       }
 
       // Eğer sayfa bazlı çeviri ise yeni endpoint'i kullan
       if (pageNumber !== null && bookId !== null) {
         const response = await fetch(`${API_BASE_URL}/books/${bookId}/page-translate`, {
           method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
+          headers: headers,
           body: JSON.stringify({
             pageNumber,
             originalText: text,
@@ -729,16 +742,14 @@ const BookDetailPage = () => {
       // Genel çeviri için eski endpoint (description/summary için)
       const response = await fetch(`${API_BASE_URL}/translation/translate`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
+        headers: headers,
         body: JSON.stringify({
           text,
           targetLangCode,
           sourceLangCode
         })
       });
+
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -1213,11 +1224,12 @@ const BookDetailPage = () => {
       <Col lg={9}>
         <div className="text-center py-5">
           <Spinner animation="border" variant="primary" />
-          <p className="mt-3">{t('books.detail.loadingBook')}</p>
+          <p className="mt-3">{translate('books.detail.loadingBook', 'Kitap yükleniyor...')}</p>
         </div>
       </Col>
     );
   }
+
 
   if (error) {
     return (
@@ -1268,13 +1280,14 @@ const BookDetailPage = () => {
                     className="me-3"
                   >
                     <BsArrowLeft className="me-1" />
-                    {languageName ? `${t(`books.languages.${languageName}`)} ${t('books.detail.backToLanguageBooks')}` : t('books.detail.backToList')}
+                    {languageName ? `${translate(`books.languages.${languageName}`, languageName)} ${translate('books.detail.backToLanguageBooks', 'Kitaplarına Dön')}` : translate('books.detail.backToList', 'Listeye Dön')}
                   </Button>
                 </Link>
                 <CardTitle className="mb-0 h4">
                   <BsBook className="me-2" />
                   {bookTitle}
                 </CardTitle>
+
               </div>
             </Col>
           </Row>

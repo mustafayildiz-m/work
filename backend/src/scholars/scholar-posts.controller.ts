@@ -22,7 +22,7 @@ import { UpdateTranslationDto } from './dto/update-scholar-post.dto';
 
 @Controller('scholar-posts')
 export class ScholarPostsController {
-  constructor(private readonly scholarPostsService: ScholarPostsService) {}
+  constructor(private readonly scholarPostsService: ScholarPostsService) { }
 
   // Public endpoint - must be before the guarded routes
   @Get('public/:id')
@@ -74,7 +74,6 @@ export class ScholarPostsController {
   }
 
   @Get('scholar/:scholarId')
-  @UseGuards(JwtAuthGuard)
   findAll(
     @Param('scholarId') scholarId: string,
     @Query('language') language?: string,

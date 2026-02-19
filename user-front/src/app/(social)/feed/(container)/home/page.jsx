@@ -17,74 +17,44 @@ const Home = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [isChecking, setIsChecking] = useState(true);
-  
+
   // Get the authenticated user's ID from session
   const currentUserId = session?.user?.id || null;
 
-  // Immediate token check - run on mount and when dependencies change
+  // Check auth but don't redirect
   useEffect(() => {
-    const checkAuth = () => {
-      const token = localStorage.getItem('token');
-      
-      // If no token found, redirect immediately
-      if (!token) {
-        router.replace('/auth-advance/sign-in');
-        return;
-      }
-      
-      // If session loaded and no user, redirect
-      if (status === 'unauthenticated' || (status !== 'loading' && !currentUserId)) {
-        router.replace('/auth-advance/sign-in');
-        return;
-      }
-      
-      setIsChecking(false);
-    };
-
-    checkAuth();
-  }, [status, currentUserId, router]);
+    setIsChecking(false);
+  }, []);
 
   // Show loading while checking authentication
-  if (isChecking || status === 'loading') {
+  if (status === 'loading') {
     return (
       <div className="text-center py-5">
         <div className="spinner-border text-primary" role="status">
           <span className="visually-hidden">Yükleniyor...</span>
         </div>
-        <p className="mt-3">Kimlik doğrulanıyor...</p>
-      </div>
-    );
-  }
-
-  // If no user is authenticated, show redirecting message
-  if (!currentUserId) {
-    return (
-      <div className="text-center py-5">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Yönlendiriliyor...</span>
-        </div>
-        <p className="mt-3">Giriş sayfasına yönlendiriliyorsunuz...</p>
+        <p className="mt-3">Yükleniyor...</p>
       </div>
     );
   }
 
   return <>
-      <Col md={8} lg={6} className="vstack gap-4">
-        {/* <Stories /> */}
-        <CreatePostCard />
-        <Feeds userId={currentUserId} />
-      </Col>
+    <Col md={8} lg={6} className="vstack gap-4">
+      {/* <Stories /> */}
+      <CreatePostCard />
+      <Feeds userId={currentUserId} />
+    </Col>
 
-      <Col lg={3} className="d-none d-lg-block">
-        <Row className="g-4">
-          <Col sm={6} lg={12}>
-            <Followers />
-          </Col>
+    <Col lg={3} className="d-none d-lg-block">
+      <Row className="g-4">
+        <Col sm={6} lg={12}>
+          <Followers />
+        </Col>
 
-      
-        </Row>
-      </Col>
-    </>;
+
+      </Row>
+    </Col>
+  </>;
 };
 
 export default Home;

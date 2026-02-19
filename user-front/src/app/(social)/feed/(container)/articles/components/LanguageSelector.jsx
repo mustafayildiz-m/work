@@ -27,13 +27,17 @@ const LanguageSelector = () => {
       try {
         setCountsLoading(true);
         const token = localStorage.getItem('token');
+        const headers = {
+          'Content-Type': 'application/json'
+        };
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
 
         const response = await fetch(`${API_BASE_URL}/languages/article-counts`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+          headers: headers
         });
+
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

@@ -10,12 +10,15 @@ import { useLanguage } from '@/context/useLanguageContext';
 
 import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Alert } from 'react-bootstrap';
 
 const SignIn = () => {
   const { t } = useLanguage();
   const { status } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const message = searchParams.get('message');
 
   // Eğer zaten giriş yapılmışsa ana sayfaya yönlendir
   useEffect(() => {
@@ -64,7 +67,19 @@ const SignIn = () => {
                   <div className="mb-3">
                     <h2 className={`h2 ${styles.cardTitle}`}>{t('auth.signIn')}</h2>
                   </div>
+                  {message === 'login_required' && (
+                    <Alert variant="warning" className="mb-4 border-0 shadow-sm" style={{ borderRadius: '12px' }}>
+                      <div className="d-flex align-items-center">
+                        <i className="bi bi-exclamation-triangle-fill me-2" style={{ fontSize: '1.2rem' }}></i>
+                        <div>
+                          <h6 className="mb-1 fw-bold">{t('feed.authRequired')}</h6>
+                          <p className="mb-0" style={{ fontSize: '0.85rem' }}>{t('feed.pleaseLogin')}</p>
+                        </div>
+                      </div>
+                    </Alert>
+                  )}
                   <LoginForm />
+
                   <div className="text-center mt-3">
                     <p className={styles.cardSubtitle}>
                       {t('auth.dontHaveAccount')}{' '}

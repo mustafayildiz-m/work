@@ -66,7 +66,8 @@
     "birthDatePlaceholder": "تاريخ الميلاد (يوم.شهر.سنة) *",
     "birthDateRequired": "يرجى إدخال تاريخ ميلادك",
     "ageLimitError": "يجب أن يكون عمرك 16 عامًا على الأقل للتسجيل",
-    "ageConfirm": "أقر وأقبل بأن عمري يتجاوز 16 عامًا."
+    "ageConfirm": "أقر وأقبل بأن عمري يتجاوز 16 عامًا.",
+    "visitAsGuest": "Visit as guest"
   },
   "navigation": {
     "home": "الصفحة الرئيسية",
@@ -202,7 +203,10 @@
     "about": "حول",
     "viewProfile": "عرض الملف الشخصي",
     "noBio": "لم يضف المستخدم السيرة الذاتية بعد.",
-    "user": "مستخدم"
+    "user": "مستخدم",
+    "loginRequired": "Login Required",
+    "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
+    "loginAction": "Sign In / Sign Up"
   },
   "feed": {
     "sortBy": "ترتيب حسب",
@@ -273,7 +277,8 @@
     "lightTheme": "السمة الفاتحة",
     "darkTheme": "السمة الداكنة",
     "systemTheme": "سمة النظام",
-    "activeTheme": "السمة النشطة:"
+    "activeTheme": "السمة النشطة:",
+    "title": "موضوع"
   },
   "settings": {
     "account": {
@@ -828,5 +833,11 @@
     "languagesLoading": "جارٍ تحميل اللغات...",
     "languagesError": "تعذر تحميل قائمة اللغات. يرجى تحديث الصفحة.",
     "cancel": "إلغاء"
+  },
+  "guest": {
+    "messagingTitle": "Join the Conversation",
+    "messagingDesc": "You need to log in to meet people and chat.",
+    "login": "Log In",
+    "continue": "Continue Browsing"
   }
 }

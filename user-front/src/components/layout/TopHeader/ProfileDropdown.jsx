@@ -334,7 +334,7 @@ const ProfileDropdown = () => {
   // Loading state
   if (status === 'loading') {
     return (
-      <li className="nav-item ms-2 d-flex align-items-center">
+      <div className="ms-2 d-flex align-items-center">
         <div className="nav-link">
           <div
             className="rounded-circle bg-light d-flex align-items-center justify-content-center"
@@ -349,12 +349,43 @@ const ProfileDropdown = () => {
             </div>
           </div>
         </div>
-      </li>
+      </div>
     );
   }
 
+  if (status === 'unauthenticated') {
+    return (
+      <div className="ms-2 ms-lg-2 d-flex align-items-center">
+        <Link
+          href="/auth-advance/sign-in"
+          className="btn btn-sm px-3 fw-bold"
+          style={{
+            background: isDark ? 'rgba(102, 187, 106, 0.15)' : 'rgba(102, 187, 106, 0.1)',
+            color: '#66BB6A',
+            borderRadius: '10px',
+            border: '1px solid rgba(102, 187, 106, 0.2)',
+            fontSize: '0.85rem',
+            padding: '0.4rem 0.75rem',
+            transition: 'all 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#66BB6A';
+            e.currentTarget.style.color = 'white';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = isDark ? 'rgba(102, 187, 106, 0.15)' : 'rgba(102, 187, 106, 0.1)';
+            e.currentTarget.style.color = '#66BB6A';
+          }}
+        >
+          {t('auth.signIn')}
+        </Link>
+      </div>
+    );
+  }
+
+
   return (
-    <li className="nav-item ms-2 ms-lg-2 d-flex align-items-center position-relative" ref={dropdownRef}>
+    <div className="ms-2 ms-lg-2 d-flex align-items-center position-relative" ref={dropdownRef}>
       {/* Profile Button */}
       <button
         ref={buttonRef}
@@ -695,7 +726,7 @@ const ProfileDropdown = () => {
           }
         }
       `}</style>
-    </li>
+    </div>
   );
 };
 

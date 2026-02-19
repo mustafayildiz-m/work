@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button, FormCheck } from 'react-bootstrap';
 import useSignIn from './useSignIn';
 import TextFormInput from '@/components/form/TextFormInput';
@@ -11,9 +12,11 @@ import styles from '../../auth-pages.module.css';
 import { signIn } from 'next-auth/react';
 import useQueryParams from '@/hooks/useQueryParams';
 import { FcGoogle } from 'react-icons/fc';
+import { BsPerson } from 'react-icons/bs';
 
 const LoginForm = () => {
   const { t } = useLanguage();
+  const router = useRouter();
   const queryParams = useQueryParams();
   const [ageConfirmed, setAgeConfirmed] = useState(false);
   const {
@@ -154,7 +157,7 @@ const LoginForm = () => {
           />
         </div>
 
-        <div className="d-grid">
+        <div className="d-grid mt-2">
           <Button
             size="lg"
             type="button"
@@ -176,6 +179,45 @@ const LoginForm = () => {
               <FcGoogle size={20} />
             </span>
             <span>{t('auth.signInWithGoogle')}</span>
+          </Button>
+        </div>
+
+        <div className="d-grid mt-3">
+          <Button
+            size="lg"
+            type="button"
+            variant="outline-primary"
+            disabled={loading || showSuccess}
+            onClick={() => window.location.href = '/'}
+            style={{
+              borderRadius: '24px',
+              minHeight: '52px',
+              fontWeight: '700',
+              border: '2px solid #764ba2',
+              color: '#764ba2',
+              backgroundColor: 'rgba(118, 75, 162, 0.05)',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#764ba2';
+              e.currentTarget.style.color = 'white';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(118, 75, 162, 0.3)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(118, 75, 162, 0.05)';
+              e.currentTarget.style.color = '#764ba2';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+            }}
+          >
+            <BsPerson size={22} />
+            <span>{t('auth.visitAsGuest')}</span>
           </Button>
         </div>
       </form>

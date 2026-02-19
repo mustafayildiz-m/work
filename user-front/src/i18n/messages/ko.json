@@ -66,7 +66,8 @@
     "birthDatePlaceholder": "생년월일 (일.월.년) *",
     "birthDateRequired": "생년월일을 입력해 주세요",
     "ageLimitError": "가입하려면 최소 16세 이상이어야 합니다",
-    "ageConfirm": "본인은 16세 이상임을 선언하고 수락합니다."
+    "ageConfirm": "본인은 16세 이상임을 선언하고 수락합니다.",
+    "visitAsGuest": "Visit as guest"
   },
   "navigation": {
     "home": "홈",
@@ -201,7 +202,10 @@
     "about": "정보",
     "viewProfile": "프로필 보기",
     "noBio": "사용자가 아직 자기소개를 추가하지 않았습니다.",
-    "user": "사용자"
+    "user": "사용자",
+    "loginRequired": "Login Required",
+    "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
+    "loginAction": "Sign In / Sign Up"
   },
   "feed": {
     "sortBy": "정렬 기준",
@@ -272,7 +276,8 @@
     "lightTheme": "조명 테마",
     "darkTheme": "어두운 테마",
     "systemTheme": "시스템 테마",
-    "activeTheme": "활성 테마:"
+    "activeTheme": "활성 테마:",
+    "title": "테마"
   },
   "settings": {
     "account": {
@@ -827,5 +832,11 @@
     "languagesLoading": "Loading languages...",
     "languagesError": "Language list could not be loaded. Please refresh the page.",
     "cancel": "Cancel"
+  },
+  "guest": {
+    "messagingTitle": "Join the Conversation",
+    "messagingDesc": "You need to log in to meet people and chat.",
+    "login": "Log In",
+    "continue": "Continue Browsing"
   }
 }

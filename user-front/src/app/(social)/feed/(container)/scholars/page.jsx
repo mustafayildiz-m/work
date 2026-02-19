@@ -31,14 +31,18 @@ const ScholarsPage = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem('token');
+        const headers = {
+          'Content-Type': 'application/json'
+        };
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scholars?page=${currentPage}&limit=${itemsPerPage}`, {
           method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+          headers: headers
         });
+
 
         if (response.ok) {
           const data = await response.json();
@@ -72,16 +76,21 @@ const ScholarsPage = () => {
 
         try {
           const token = localStorage.getItem('token');
+          const headers = {
+            'Content-Type': 'application/json'
+          };
+          if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+          }
+
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/scholars?search=${encodeURIComponent(searchQuery)}&page=${currentPage}&limit=${itemsPerPage}`,
             {
               method: 'GET',
-              headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-              }
+              headers: headers
             }
           );
+
 
           if (response.ok) {
             const data = await response.json();

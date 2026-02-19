@@ -14,12 +14,12 @@ import { CreateLanguageDto } from '../dto/create-language.dto';
 import { UpdateLanguageDto } from '../dto/update-language.dto';
 import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(AuthGuard('jwt'))
 @Controller('languages')
 export class LanguageController {
-  constructor(private readonly languageService: LanguageService) {}
+  constructor(private readonly languageService: LanguageService) { }
 
   @Post()
+  @UseGuards(AuthGuard('jwt'))
   create(@Body() createLanguageDto: CreateLanguageDto) {
     return this.languageService.create(createLanguageDto);
   }
@@ -45,6 +45,7 @@ export class LanguageController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard('jwt'))
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateLanguageDto: UpdateLanguageDto,
@@ -53,7 +54,9 @@ export class LanguageController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.languageService.remove(id);
   }
 }
+

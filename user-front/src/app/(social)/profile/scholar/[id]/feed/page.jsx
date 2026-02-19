@@ -30,13 +30,18 @@ const ScholarFeedPage = () => {
         if (scholarId) {
           const token = localStorage.getItem('token');
 
+          const headers = {
+            'Content-Type': 'application/json'
+          };
+
+          if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+          }
+
           // Alim bilgilerini çek
           const scholarResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scholars/${scholarId}`, {
             method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
+            headers: headers
           });
 
           let scholarData = null;
@@ -48,10 +53,7 @@ const ScholarFeedPage = () => {
           // Alim'in gönderilerini çek (translations ile birlikte)
           const postsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scholar-posts/scholar/${scholarId}`, {
             method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
+            headers: headers
           });
 
           if (postsResponse.ok) {
@@ -70,7 +72,9 @@ const ScholarFeedPage = () => {
 
             setPosts(normalizedPosts);
           } else {
-            console.error('❌ Posts not found, status:', postsResponse.status);
+            if (postsResponse.status !== 401) {
+              console.error('❌ Posts not found, status:', postsResponse.status);
+            }
           }
         }
       } catch (error) {

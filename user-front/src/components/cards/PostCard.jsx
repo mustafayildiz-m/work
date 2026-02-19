@@ -19,6 +19,7 @@ import { useLanguage } from '@/context/useLanguageContext';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import { useAuthContext } from '@/context/useAuthContext';
 import { encodePostId } from '@/utils/encoding';
+import GuestMessagingModal from '@/components/layout/GuestMessagingModal';
 
 const ActionMenu = ({
   name,
@@ -208,7 +209,19 @@ const PostCard = ({
   const [isSharing, setIsSharing] = useState(false);
   const [shareCount, setShareCount] = useState(0);
   const [isShared, setIsShared] = useState(false);
+
   const [showAllComments, setShowAllComments] = useState(false);
+  const [showGuestModal, setShowGuestModal] = useState(false);
+
+  const handleGuestInteraction = (e) => {
+    if (!userInfo?.id) {
+      e.preventDefault();
+      e.stopPropagation();
+      setShowGuestModal(true);
+      return true;
+    }
+    return false;
+  };
 
   // Get current user's profile picture
   useEffect(() => {
@@ -635,6 +648,7 @@ const PostCard = ({
                     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                     cursor: 'pointer'
                   }}
+                  onClick={(e) => handleGuestInteraction(e)}
                   onError={(e) => {
                     if (process.env.NODE_ENV === 'development') {
                       // console.error('Avatar failed to load:', e.target.src);
@@ -661,6 +675,7 @@ const PostCard = ({
                     <Link
                       href={isUserPost ? `/profile/user/${socialUser?.id}` : `/profile/scholar/${socialUser?.id}`}
                       className="text-decoration-none"
+                      onClick={(e) => handleGuestInteraction(e)}
                     >
                       {isUserPost ? (socialUser?.name || t('post.userRole')) : (socialUser?.fullName || t('post.scholarRole'))}
                     </Link>
@@ -1219,10 +1234,10 @@ const PostCard = ({
       </CardBody>
 
       {/* <CardFooter className="border-0 pt-0">{comments && <LoadContentButton name="Daha fazla yorum yükle" />}</CardFooter> */}
-    </Card>
+    </Card >
 
     {/* Comment Delete Confirmation Dialog */}
-    <CustomConfirmDialog
+    < CustomConfirmDialog
       show={showCommentDeleteConfirm}
       onConfirm={() => {
         if (commentToDelete && onDeleteComment) {
@@ -1243,35 +1258,37 @@ const PostCard = ({
     />
 
     {/* Image Preview Modal */}
-    {selectedImage && (
-      <div
-        className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-        style={{
-          backgroundColor: 'rgba(0, 0, 0, 0.9)',
-          zIndex: 9999
-        }}
-        onClick={() => setSelectedImage(null)}
-      >
-        <div className="position-relative">
-          <button
-            className="btn btn-light position-absolute top-0 end-0 m-2"
-            style={{ zIndex: 10000 }}
-            onClick={() => setSelectedImage(null)}
-          >
-            <BsX size={24} />
-          </button>
-          <Image
-            src={selectedImage}
-            alt="Önizleme"
-            width={800}
-            height={600}
-            className="img-fluid"
-            style={{ maxHeight: '90vh', maxWidth: '90vw' }}
-            onClick={(e) => e.stopPropagation()}
-          />
+    {
+      selectedImage && (
+        <div
+          className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            zIndex: 9999
+          }}
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="position-relative">
+            <button
+              className="btn btn-light position-absolute top-0 end-0 m-2"
+              style={{ zIndex: 10000 }}
+              onClick={() => setSelectedImage(null)}
+            >
+              <BsX size={24} />
+            </button>
+            <Image
+              src={selectedImage}
+              alt="Önizleme"
+              width={800}
+              height={600}
+              className="img-fluid"
+              style={{ maxHeight: '90vh', maxWidth: '90vw' }}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
         </div>
-      </div>
-    )}
+      )
+    }
   </>;
 };
 

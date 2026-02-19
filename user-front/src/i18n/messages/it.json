@@ -66,7 +66,8 @@
     "birthDatePlaceholder": "Data di nascita (GG.MM.AAAA) *",
     "birthDateRequired": "Inserisci la tua data di nascita",
     "ageLimitError": "Devi avere almeno 16 anni per registrarti",
-    "ageConfirm": "Dichiaro e accetto di avere più di 16 anni."
+    "ageConfirm": "Dichiaro e accetto di avere più di 16 anni.",
+    "visitAsGuest": "Visit as guest"
   },
   "navigation": {
     "home": "Casa",
@@ -201,7 +202,10 @@
     "about": "Circa",
     "viewProfile": "Visualizza il profilo",
     "noBio": "L'utente non ha ancora aggiunto una biografia.",
-    "user": "Utente"
+    "user": "Utente",
+    "loginRequired": "Login Required",
+    "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
+    "loginAction": "Sign In / Sign Up"
   },
   "feed": {
     "sortBy": "Ordina per",
@@ -272,7 +276,8 @@
     "lightTheme": "Tema luce",
     "darkTheme": "Tema scuro",
     "systemTheme": "Tema del sistema",
-    "activeTheme": "Tema attivo:"
+    "activeTheme": "Tema attivo:",
+    "title": "Tema"
   },
   "settings": {
     "account": {
@@ -827,5 +832,11 @@
     "languagesLoading": "Loading languages...",
     "languagesError": "Language list could not be loaded. Please refresh the page.",
     "cancel": "Cancel"
+  },
+  "guest": {
+    "messagingTitle": "Join the Conversation",
+    "messagingDesc": "You need to log in to meet people and chat.",
+    "login": "Log In",
+    "continue": "Continue Browsing"
   }
 }

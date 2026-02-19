@@ -86,9 +86,6 @@ const BooksListPage = () => {
       setError(null);
 
       const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error(t('books.list.pleaseLogin'));
-      }
 
       const params = new URLSearchParams();
       if (languageId) {
@@ -105,12 +102,18 @@ const BooksListPage = () => {
         params.append('category', category.trim());
       }
 
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await fetch(`${API_BASE_URL}/books?${params.toString()}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+        headers: headers
       });
+
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
