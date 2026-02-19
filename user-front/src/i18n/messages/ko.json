@@ -67,7 +67,7 @@
     "birthDateRequired": "생년월일을 입력해 주세요",
     "ageLimitError": "가입하려면 최소 16세 이상이어야 합니다",
     "ageConfirm": "본인은 16세 이상임을 선언하고 수락합니다.",
-    "visitAsGuest": "Visit as guest"
+    "visitAsGuest": "게스트로 방문"
   },
   "navigation": {
     "home": "홈",
@@ -760,7 +760,8 @@
       "Somalice": "Somali",
       "Fon": "Fon",
       "Esperanto": "Esperanto",
-      "Baskça": "Basque"
+      "Baskça": "Basque",
+      "divehice": "디베히어"
     },
     "detail": {
       "loadingBook": "책 로드 중...",

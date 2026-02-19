@@ -67,7 +67,7 @@
     "birthDateRequired": "يرجى إدخال تاريخ ميلادك",
     "ageLimitError": "يجب أن يكون عمرك 16 عامًا على الأقل للتسجيل",
     "ageConfirm": "أقر وأقبل بأن عمري يتجاوز 16 عامًا.",
-    "visitAsGuest": "Visit as guest"
+    "visitAsGuest": "زيارة كضيف"
   },
   "navigation": {
     "home": "الصفحة الرئيسية",
@@ -761,7 +761,8 @@
       "Somalice": "الصومالية",
       "Fon": "الفون",
       "Esperanto": "الإسبرانتو",
-      "Baskça": "الباسكية"
+      "Baskça": "الباسكية",
+      "divehice": "ديفيهي"
     },
     "detail": {
       "loadingBook": "جاري تحميل الكتاب...",

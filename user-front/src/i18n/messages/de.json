@@ -67,7 +67,7 @@
     "birthDateRequired": "Bitte geben Sie Ihr Geburtsdatum ein",
     "ageLimitError": "Sie müssen mindestens 16 Jahre alt sein, um sich zu registrieren",
     "ageConfirm": "Ich erkläre und akzeptiere, dass ich über 16 Jahre alt bin.",
-    "visitAsGuest": "Visit as guest"
+    "visitAsGuest": "Als Gast besuchen"
   },
   "navigation": {
     "home": "Startseite",
@@ -759,7 +759,8 @@
       "Somalice": "Somali",
       "Fon": "Fon",
       "Esperanto": "Esperanto",
-      "Baskça": "Basque"
+      "Baskça": "Basque",
+      "divehice": "Dhivehi"
     },
     "detail": {
       "loadingBook": "Buch wird geladen...",

@@ -34,12 +34,12 @@ function AddArticle() {
     const observer = new MutationObserver(() => {
       setCurrentTheme(getTheme());
     });
-    
+
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['class']
     });
-    
+
     return () => observer.disconnect();
   }, []);
 
@@ -48,7 +48,7 @@ function AddArticle() {
       setLoadingData(true);
       try {
         const token = localStorage.getItem('access_token');
-        
+
         // Dilleri çek
         const langResponse = await fetch(`${BASE_URL}/languages`, {
           headers: {
@@ -100,12 +100,12 @@ function AddArticle() {
     const newTranslations = form.translations.map((trans, i) => {
       if (i === idx) {
         const updatedTrans = { ...trans, [field]: value };
-        
+
         // Eğer başlık değişiyorsa, slug'ı otomatik oluştur
         if (field === 'title' && value) {
           updatedTrans.slug = createSlug(value);
         }
-        
+
         return updatedTrans;
       }
       return trans;
@@ -219,7 +219,7 @@ function AddArticle() {
       <Helmet>
         <title>Yeni Makale Ekle - Islamic Windows Admin</title>
       </Helmet>
-      
+
       <div className="p-6 max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
@@ -389,7 +389,7 @@ function AddArticle() {
                         {idx + 1}
                       </div>
                       <h4 className="font-bold text-gray-900 dark:text-white">
-                        {trans.languageId 
+                        {trans.languageId
                           ? availableLanguages.find(l => l.id === trans.languageId)?.name || `Çeviri ${idx + 1}`
                           : `Çeviri ${idx + 1}`}
                       </h4>
@@ -483,28 +483,6 @@ function AddArticle() {
                       />
                     </div>
 
-                    {/* Slug */}
-                    <div>
-                      <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
-                        <FaInfoCircle className="text-indigo-600" />
-                        URL Slug
-                        <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={trans.slug}
-                        onChange={(e) =>
-                          handleTranslationChange(idx, 'slug', e.target.value)
-                        }
-                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition font-mono text-sm"
-                        placeholder="makale-basligi"
-                        required
-                      />
-                      <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                        <FaInfoCircle className="inline mr-1" />
-                        Başlık yazdığınızda otomatik oluşturulur
-                      </p>
-                    </div>
 
                     {/* PDF Dosyası */}
                     <div>
