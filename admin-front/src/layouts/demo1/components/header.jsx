@@ -1,21 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/auth/context/auth-context';
 import { StoreClientTopbar } from '@/pages/store-client/components/common/topbar';
-import { SearchDialog } from '@/partials/dialogs/search/search-dialog';
-import { AppsDropdownMenu } from '@/partials/topbar/apps-dropdown-menu';
-import { ChatSheet } from '@/partials/topbar/chat-sheet';
-import { NotificationsSheet } from '@/partials/topbar/notifications-sheet';
 import { UserDropdownMenu } from '@/partials/topbar/user-dropdown-menu';
-import {
-  Bell,
-  LayoutGrid,
-  Menu,
-  MessageCircleMore,
-  Search,
-  SquareChevronRight,
-} from 'lucide-react';
+import { Menu, SquareChevronRight } from 'lucide-react';
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
-import { toAbsoluteUrl } from '@/lib/helpers';
+import { getAvatarUrl, toAbsoluteUrl } from '@/lib/helpers';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useScrollPosition } from '@/hooks/use-scroll-position';
@@ -36,6 +26,7 @@ import { SidebarMenu } from './sidebar-menu';
 export function Header() {
   const [isSidebarSheetOpen, setIsSidebarSheetOpen] = useState(false);
   const [isMegaMenuSheetOpen, setIsMegaMenuSheetOpen] = useState(false);
+  const { user } = useAuth();
 
   const { pathname } = useLocation();
   const mobileMode = useIsMobile();
@@ -127,64 +118,13 @@ export function Header() {
             <StoreClientTopbar />
           ) : (
             <>
-              {!mobileMode && (
-                <SearchDialog
-                  trigger={
-                    <Button
-                      variant="ghost"
-                      mode="icon"
-                      shape="circle"
-                      className="size-9 hover:bg-primary/10 hover:[&_svg]:text-primary"
-                    >
-                      <Search className="size-4.5!" />
-                    </Button>
-                  }
-                />
-              )}
-              <NotificationsSheet
-                trigger={
-                  <Button
-                    variant="ghost"
-                    mode="icon"
-                    shape="circle"
-                    className="size-9 hover:bg-primary/10 hover:[&_svg]:text-primary"
-                  >
-                    <Bell className="size-4.5!" />
-                  </Button>
-                }
-              />
 
-              <ChatSheet
-                trigger={
-                  <Button
-                    variant="ghost"
-                    mode="icon"
-                    shape="circle"
-                    className="size-9 hover:bg-primary/10 hover:[&_svg]:text-primary"
-                  >
-                    <MessageCircleMore className="size-4.5!" />
-                  </Button>
-                }
-              />
-
-              <AppsDropdownMenu
-                trigger={
-                  <Button
-                    variant="ghost"
-                    mode="icon"
-                    shape="circle"
-                    className="size-9 hover:bg-primary/10 hover:[&_svg]:text-primary"
-                  >
-                    <LayoutGrid className="size-4.5!" />
-                  </Button>
-                }
-              />
 
               <UserDropdownMenu
                 trigger={
                   <img
                     className="size-9 rounded-full border-2 border-success shrink-0 cursor-pointer"
-                    src={toAbsoluteUrl('/media/avatars/300-2.png')}
+                    src={getAvatarUrl(user)}
                     alt="User Avatar"
                   />
                 }

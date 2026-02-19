@@ -106,3 +106,25 @@ export function formatDateTime(input) {
     hour12: true,
   });
 }
+
+export function getAvatarUrl(user) {
+  if (!user) return toAbsoluteUrl('/media/avatars/300-2.png');
+
+  const avatarPath = user.photoUrl || user.pic || user.avatar;
+  if (!avatarPath) return toAbsoluteUrl('/media/avatars/300-2.png');
+
+  if (avatarPath.startsWith('http') || avatarPath.startsWith('data:')) {
+    return avatarPath;
+  }
+
+  const envUrl = import.meta.env.VITE_API_URL;
+  let apiUrl = '';
+  if (envUrl && envUrl.trim() !== '') apiUrl = envUrl.trim();
+  else if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') apiUrl = 'http://localhost:3000';
+
+  if (avatarPath.startsWith('/')) {
+    return `${apiUrl}${avatarPath}`;
+  }
+
+  return `${apiUrl}/${avatarPath}`;
+}
