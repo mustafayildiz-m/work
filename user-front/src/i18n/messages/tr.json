@@ -789,7 +789,8 @@
       "readPdf": "Oku",
       "downloadPdf": "PDF İndir",
       "description": "Açıklama:",
-      "summary": "Özet:"
+      "summary": "Özet:",
+      "pdfContentInvalid": "Bu PDF çeviri için uygun değil."
     },
     "pdfViewer": {
       "title": "PDF Görüntüleyici",

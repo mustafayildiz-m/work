@@ -13,6 +13,7 @@ import * as path from 'path';
 import { ArticlePage } from './entities/article-page.entity';
 import { ArticlePageTranslation } from './entities/article-page-translation.entity';
 import { TranslationService } from '../services/translation.service';
+import { PdfOcrService } from '../services/pdf-ocr.service';
 
 @Injectable()
 export class ArticlesService {
@@ -27,6 +28,7 @@ export class ArticlesService {
     private articlePageTranslationRepository: Repository<ArticlePageTranslation>,
     private uploadService: UploadService,
     private translationService: TranslationService,
+    private pdfOcrService: PdfOcrService,
   ) { }
 
   /**
@@ -463,5 +465,9 @@ export class ArticlesService {
         { orderIndex: order.orderIndex },
       );
     }
+  }
+
+  async validatePdf(pdfPath: string): Promise<void> {
+    return this.pdfOcrService.validatePdfTextQuality(pdfPath);
   }
 }

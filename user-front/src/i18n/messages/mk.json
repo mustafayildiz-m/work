@@ -766,7 +766,8 @@
       "readPdf": "Прочетете",
       "downloadPdf": "Изтегляне на PDF",
       "description": "Описание:",
-      "summary": "Резюме:"
+      "summary": "Резюме:",
+      "pdfContentInvalid": "This PDF is not suitable for translation."
     },
     "pdfViewer": {
       "title": "Програма за преглед на PDF",

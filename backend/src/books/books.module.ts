@@ -10,6 +10,7 @@ import { BookCategory } from './entities/book-category.entity';
 import { BookPage } from './entities/book-page.entity';
 import { BookPageTranslation } from './entities/book-page-translation.entity';
 import { TranslationModule } from '../modules/translation.module';
+import { PdfOcrService } from '../services/pdf-ocr.service';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { TranslationModule } from '../modules/translation.module';
     TranslationModule,
   ],
   controllers: [BooksController, BookCategoriesController],
-  providers: [BooksService],
+  providers: [BooksService, PdfOcrService],
   exports: [BooksService],
 })
 export class BooksModule { }

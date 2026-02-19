@@ -778,7 +778,8 @@
       "readPdf": "阅读",
       "downloadPdf": "下载 PDF",
       "description": "说明",
-      "summary": "摘要"
+      "summary": "摘要",
+      "pdfContentInvalid": "此 PDF 不适合翻译。"
     },
     "pdfViewer": {
       "title": "PDF 阅读器",

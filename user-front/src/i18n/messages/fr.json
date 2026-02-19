@@ -777,7 +777,8 @@
       "readPdf": "Lire",
       "downloadPdf": "Télécharger le PDF",
       "description": "Description :",
-      "summary": "Résumé :"
+      "summary": "Résumé :",
+      "pdfContentInvalid": "Ce PDF ne convient pas à la traduction."
     },
     "pdfViewer": {
       "title": "Visionneuse PDF",

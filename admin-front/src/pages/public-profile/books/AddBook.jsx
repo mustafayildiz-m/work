@@ -32,12 +32,12 @@ function AddBook() {
     const observer = new MutationObserver(() => {
       setCurrentTheme(getTheme());
     });
-    
+
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['class']
     });
-    
+
     return () => observer.disconnect();
   }, []);
 
@@ -155,12 +155,12 @@ function AddBook() {
         if (!translation.title) {
           throw new Error('Lütfen tüm diller için başlık girin');
         }
-        
+
         formData.append(`translations[${index}][languageId]`, translation.language);
         formData.append(`translations[${index}][title]`, translation.title);
         formData.append(`translations[${index}][description]`, translation.description || '');
         formData.append(`translations[${index}][summary]`, translation.summary || '');
-        
+
         if (translation.file) {
           formData.append(`translations[${index}][pdfFile]`, translation.file);
         } else {
@@ -168,22 +168,39 @@ function AddBook() {
         }
       });
 
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        body: formData,
-      });
+      const submitData = async (ignoreErrors = false) => {
+        let url = API_URL;
+        if (ignoreErrors) url += '?ignorePdfErrors=true';
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Kitap eklenirken bir hata oluştu');
-      }
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+          body: formData,
+        });
 
-      const data = await response.json();
-      toast.success('Kitap başarıyla eklendi');
-      navigate('/kitaplar/liste');
+        if (!response.ok) {
+          const errorData = await response.json();
+
+          if (errorData.message === 'PDF_INVALID_CONFIRM_NEEDED') {
+            if (window.confirm('⚠️ UYARI: PDF Metin İçeriği Bozuk!\n\nBu PDF dosyasının metni okunamıyor. Otomatik çeviri yapılamayacak ve kullanıcılar metni seçemeyecek (sadece resim olarak görüntüleyebilecek).\n\nYine de yüklemek istiyor musunuz?')) {
+              return submitData(true);
+            }
+            // İptal edilirse
+            setLoading(false);
+            return;
+          }
+
+          throw new Error(errorData.message || 'Kitap eklenirken bir hata oluştu');
+        }
+
+        const data = await response.json();
+        toast.success('Kitap başarıyla eklendi');
+        navigate('/kitaplar/liste');
+      };
+
+      await submitData();
     } catch (err) {
       setError(err.message);
       toast.error(err.message || 'Kitap eklenirken bir hata oluştu');
@@ -197,7 +214,7 @@ function AddBook() {
       <Helmet>
         <title>Yeni Kitap Ekle - Islamic Windows Admin</title>
       </Helmet>
-      
+
       <div className="p-6 max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
@@ -359,7 +376,7 @@ function AddBook() {
                       {idx + 1}
                     </div>
                     <h4 className="font-bold text-gray-900 dark:text-white">
-                      {translation.language 
+                      {translation.language
                         ? availableLanguages.find(l => l.id === translation.language)?.name || `Çeviri ${idx + 1}`
                         : `Çeviri ${idx + 1}`}
                     </h4>
@@ -375,7 +392,7 @@ function AddBook() {
                     </button>
                   )}
                 </div>
-                
+
                 <div className="space-y-4">
                   {/* Dil Seçimi */}
                   <div>
@@ -469,7 +486,7 @@ function AddBook() {
                 </div>
               </div>
             ))}
-            
+
             {form.translations.length < 10 && (
               <button
                 type="button"

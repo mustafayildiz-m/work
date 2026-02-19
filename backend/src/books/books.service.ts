@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Book } from './entities/book.entity';
@@ -10,11 +10,14 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import { TranslationService } from '../services/translation.service';
+import { PdfOcrService } from '../services/pdf-ocr.service';
 import { BookPage } from './entities/book-page.entity';
 import { BookPageTranslation } from './entities/book-page-translation.entity';
 
 @Injectable()
 export class BooksService {
+  private readonly logger = new Logger(BooksService.name);
+
   constructor(
     @InjectRepository(Book)
     private bookRepository: Repository<Book>,
@@ -28,6 +31,7 @@ export class BooksService {
     private bookPageTranslationRepository: Repository<BookPageTranslation>,
     private uploadService: UploadService,
     private translationService: TranslationService,
+    private pdfOcrService: PdfOcrService,
   ) { }
 
   async create(createBookDto: CreateBookDto): Promise<Book> {
@@ -427,7 +431,15 @@ export class BooksService {
   }
 
   /**
-   * Sayfa bazlı çeviri ve önbellekleme
+   * Sayfa bazlı çeviri ve önbellekleme.
+   *
+   * Akış:
+   *  1. Önbellekte çeviri var mı? → Varsa direkt dön
+   *  2. originalText kontrol karakteri içeriyor mu? (özel fontlu PDF)
+   *     → Evet: Sunucudaki PDF'i bul, OCR ile gerçek metni çıkar
+   *     → Hayır: Gelen originalText'i kullan
+   *  3. Gerçek metni DeepL'e gönder
+   *  4. Çeviriyi önbelleğe (book_page_translations) kaydet
    */
   async getOrTranslatePage(
     bookId: number,
@@ -435,40 +447,156 @@ export class BooksService {
     originalText: string,
     targetLangCode: string,
   ): Promise<string> {
-    // 1. Önce bu sayfayı bul veya oluştur
-    let page = await this.bookPageRepository.findOne({
+    const langMap: Record<string, number> = {
+      tr: 1,
+      en: 2,
+      ar: 3,
+      de: 4,
+      fr: 5,
+      ja: 6,
+    };
+    const languageId = langMap[targetLangCode] ?? 1;
+
+    // ── 1. Önbellekte çeviri var mı? ──────────────────────────────────────
+    // Sayfa kaydı (book_pages) varsa ve bu dild çeviri varsa direkt dön
+    const existingPage = await this.bookPageRepository.findOne({
       where: { bookId, pageNumber },
     });
+
+    if (existingPage) {
+      const cachedTranslation =
+        await this.bookPageTranslationRepository.findOne({
+          where: { pageId: existingPage.id, languageId },
+        });
+
+      if (cachedTranslation) {
+        this.logger.log(
+          `Önbellekten çeviri döndürülüyor: kitap=${bookId}, sayfa=${pageNumber}, dil=${targetLangCode}`,
+        );
+        return cachedTranslation.content;
+      }
+    }
+
+    // ── 2. Metin kalitesi kontrolü → Gerekirse OCR ──────────────────────
+    let textToTranslate = originalText;
+
+    if (this.pdfOcrService.isGarbageText(originalText)) {
+      this.logger.warn(
+        `Kitap ${bookId} sayfa ${pageNumber}: Metin bozuk. Çeviri reddedildi.`,
+      );
+      throw new BadRequestException('PDF_CONTENT_INVALID');
+    }
+    /* Eski OCR Kodları (Devre Dışı)
+    if (this.pdfOcrService.isGarbageText(originalText)) {
+      this.logger.warn(
+        `Kitap ${bookId} sayfa ${pageNumber}: originalText kontrol karakterleri içeriyor. OCR başlatılıyor...`,
+      );
+
+      // Kitabın orijinal dil translation'ını bul (pdfUrl için)
+      // Arapça kitaplar için languageId=3 (ar), yoksa ilk translation
+      const bookWithTranslations = await this.bookRepository.findOne({
+        where: { id: bookId },
+        relations: ['translations'],
+      });
+
+      if (!bookWithTranslations) {
+        throw new Error(`Kitap bulunamadı: ${bookId}`);
+      }
+
+      // Arapça translation öncelikli, yoksa ilk translation
+      const arabicTrans = bookWithTranslations.translations?.find(
+        (t) => t.languageId === 3,
+      );
+      const sourceTrans =
+        arabicTrans || bookWithTranslations.translations?.[0];
+
+      if (!sourceTrans?.pdfUrl) {
+        throw new Error(
+          `Kitap ${bookId} için PDF bulunamadı, OCR yapılamıyor.`,
+        );
+      }
+
+      // pdfUrl genellikle "/uploads/pdfs/dosya.pdf" formatında geliyor
+      const pdfAbsPath = path.join(process.cwd(), sourceTrans.pdfUrl);
+      this.logger.log(`OCR için PDF yolu: ${pdfAbsPath}`);
+
+      // Orijinal kitabın kaynak dil kodu (varsayılan: Arapça → 'ar')
+      const sourceBookLangCode = arabicTrans ? 'ar' : 'ar';
+      const tesseractLang =
+        this.pdfOcrService.getTesseractLang(sourceBookLangCode);
+
+      textToTranslate = await this.pdfOcrService.extractTextViaOcr(
+        pdfAbsPath,
+        pageNumber,
+        tesseractLang,
+      );
+
+      // ── OCR çıktısını temizle ──────────────────────────────────────────
+      // Tesseract Arapça için bazen Latin gürültüsü (ssss..., 1111...) üretir.
+      // Ancak "Baskı: ..." gibi geçerli Türkçe/Latin satırları da olabilir.
+      // Sadece bariz gürültüyü (tekrarlayan karakterler) filtreleyelim.
+      textToTranslate = textToTranslate
+        .split('\n')
+        .filter((line) => {
+          const trimmed = line.trim();
+          if (!trimmed) return false;
+
+          // 1. Arapça içeriyorsa Koru
+          if (/[\u0600-\u06FF]/.test(trimmed)) return true;
+
+          // 2. Arapça yoksa Gürültü Kontrolü yap
+          // Tekrarlayan karakter analizi (örn: "sssss", ".....", "1111")
+          const maxRepeat = (trimmed.match(/(.)\1{3,}/g) || []).length;
+          if (maxRepeat > 0) return false; // 4+ kez tekrarlayan karakter varsa at
+
+          // Çok uzun kelime kontrolü (boşluksuz 30+ karakter gürültü işaretidir)
+          const hasLongWord = trimmed.split(/\s+/).some(w => w.length > 30);
+          if (hasLongWord) return false;
+
+          // Kabul et
+          return true;
+        })
+        .join('\n')
+        .trim();
+
+      // Eğer filtreleme sonucu her şey silindiyse (ama OCR boş değilse),
+      // en azından gürültülü de olsa orijinali döndür ki sayfa atlanmasın
+      if (!textToTranslate && originalText) {
+        // Orijinal text'e (OCR çıktısının ham haline) dönmek gerekir ama burada scope'ta yok.
+        // Bu durumda "Metin okunamadı" döndürmek yerine boş dönüp atlamasına izin vermek
+        // yerine kullanıcıya bilgi verelim.
+        textToTranslate = " [Bu sayfanın metni otomatik olarak çıkarılamadı] ";
+      }
+
+      this.logger.log(
+        `OCR tamamlandı. Temizlenmiş metin uzunluğu: ${textToTranslate.length}`,
+      );
+    }
+    */
+
+    // ── 3. Sayfa kaydını oluştur / güncelle ────────────────────────────
+    let page = existingPage;
 
     if (!page) {
       page = this.bookPageRepository.create({
         bookId,
         pageNumber,
-        content: originalText,
+        content: textToTranslate,
       });
+      page = await this.bookPageRepository.save(page);
+    } else if (page.content !== textToTranslate) {
+      // OCR ile daha iyi metin geldiyse güncelle
+      page.content = textToTranslate;
       page = await this.bookPageRepository.save(page);
     }
 
-    // 2. Bu dilde çeviri var mı bak
-    // Dil ID'sini bul (Basit bir mapleme veya DB sorgusu)
-    const langMap = { tr: 1, en: 2, ar: 3, de: 4, fr: 5, ja: 6 };
-    const languageId = langMap[targetLangCode] || 1;
-
-    const cachedTranslation = await this.bookPageTranslationRepository.findOne({
-      where: { pageId: page.id, languageId },
-    });
-
-    if (cachedTranslation) {
-      return cachedTranslation.content;
-    }
-
-    // 3. Yoksa DeepL'e git
+    // ── 4. DeepL ile çevir ────────────────────────────────────────────
     const translatedText = await this.translationService.translateLongText(
-      originalText,
+      textToTranslate,
       targetLangCode,
     );
 
-    // 4. Sonucu kaydet
+    // ── 5. Çeviriyi önbelleğe kaydet ──────────────────────────────────
     const newTranslation = this.bookPageTranslationRepository.create({
       pageId: page.id,
       languageId,
@@ -477,5 +605,13 @@ export class BooksService {
     await this.bookPageTranslationRepository.save(newTranslation);
 
     return translatedText;
+  }
+
+  /**
+   * Yüklenen PDF'in metin kalitesini kontrol eder.
+   * Controller tarafından çağrılır.
+   */
+  async validatePdf(pdfPath: string): Promise<void> {
+    return this.pdfOcrService.validatePdfTextQuality(pdfPath);
   }
 }

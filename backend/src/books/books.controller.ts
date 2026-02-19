@@ -11,6 +11,7 @@ import {
   UseGuards,
   ParseIntPipe,
   NotFoundException,
+  BadRequestException,
   Query,
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
@@ -77,6 +78,7 @@ export class BooksController {
   @Post()
   @UseInterceptors(AnyFilesInterceptor())
   async create(
+    @Query('ignorePdfErrors') ignorePdfErrors: string | undefined, // Opsiyonel query
     @Body() createBookDto: CreateBookDto,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
@@ -103,6 +105,26 @@ export class BooksController {
           );
           if (pdfFile) {
             transData.pdfUrl = await this.uploadService.uploadPdf(pdfFile);
+
+            // 🛡️ PDF Metin Kalitesi Kontrolü
+            const pdfAbsPath = path.join(process.cwd(), transData.pdfUrl);
+            try {
+              await this.booksService.validatePdf(pdfAbsPath);
+            } catch (error) {
+              if (ignorePdfErrors === 'true') {
+                console.warn(
+                  `Kullanıcı onayı ile bozuk PDF kabul edildi: ${transData.pdfUrl}`,
+                );
+              } else {
+                // Validasyon başarısızsa yüklenen dosyayı sil
+                try {
+                  if (fs.existsSync(pdfAbsPath)) fs.unlinkSync(pdfAbsPath);
+                } catch (e) {
+                  console.error('Yüklenen bozuk PDF silinemedi:', e);
+                }
+                throw new BadRequestException('PDF_INVALID_CONFIRM_NEEDED');
+              }
+            }
           }
           return transData;
         }),
@@ -124,6 +146,7 @@ export class BooksController {
   @UseInterceptors(AnyFilesInterceptor())
   async update(
     @Param('id', ParseIntPipe) id: number,
+    @Query('ignorePdfErrors') ignorePdfErrors: string | undefined, // Opsiyonel query
     @Body() updateBookDto: any,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
@@ -168,6 +191,26 @@ export class BooksController {
           );
           if (pdfFile) {
             transData.pdfUrl = await this.uploadService.uploadPdf(pdfFile);
+
+            // 🛡️ PDF Metin Kalitesi Kontrolü
+            const pdfAbsPath = path.join(process.cwd(), transData.pdfUrl);
+            try {
+              await this.booksService.validatePdf(pdfAbsPath);
+            } catch (error) {
+              if (ignorePdfErrors === 'true') {
+                console.warn(
+                  `Kullanıcı onayı ile bozuk PDF kabul edildi: ${transData.pdfUrl}`,
+                );
+              } else {
+                // Validasyon başarısızsa yüklenen dosyayı sil
+                try {
+                  if (fs.existsSync(pdfAbsPath)) fs.unlinkSync(pdfAbsPath);
+                } catch (e) {
+                  console.error('Yüklenen bozuk PDF silinemedi:', e);
+                }
+                throw new BadRequestException('PDF_INVALID_CONFIRM_NEEDED');
+              }
+            }
           }
           return transData;
         }),

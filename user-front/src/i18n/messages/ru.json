@@ -778,7 +778,8 @@
       "readPdf": "Читать",
       "downloadPdf": "Скачать PDF",
       "description": "Описание:",
-      "summary": "Резюме:"
+      "summary": "Резюме:",
+      "pdfContentInvalid": "Этот PDF не подходит для перевода."
     },
     "pdfViewer": {
       "title": "Программа просмотра PDF",

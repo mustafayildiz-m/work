@@ -778,7 +778,8 @@
       "readPdf": "읽기",
       "downloadPdf": "PDF 다운로드",
       "description": "설명:",
-      "summary": "요약:"
+      "summary": "요약:",
+      "pdfContentInvalid": "This PDF is not suitable for translation."
     },
     "pdfViewer": {
       "title": "PDF 뷰어",

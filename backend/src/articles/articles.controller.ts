@@ -11,6 +11,7 @@ import {
   UseGuards,
   ParseIntPipe,
   Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { ArticlesService } from './articles.service';
@@ -18,6 +19,8 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { UploadService } from '../upload/upload.service';
 import { AuthGuard } from '@nestjs/passport';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Controller('articles')
 export class ArticlesController {
@@ -39,6 +42,7 @@ export class ArticlesController {
   @Post()
   @UseInterceptors(AnyFilesInterceptor())
   async create(
+    @Query('ignorePdfErrors') ignorePdfErrors: string | undefined,
     @Body() createArticleDto: CreateArticleDto,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
@@ -56,16 +60,33 @@ export class ArticlesController {
     ) {
       createArticleDto.translations = await Promise.all(
         createArticleDto.translations.map(async (trans: any, idx: number) => {
+          const transData = { ...trans };
           const pdfFile = files.find(
             (f) => f.fieldname === `translations[${idx}][pdfFile]`,
           );
+
           if (pdfFile) {
-            return {
-              ...trans,
-              pdfUrl: await this.uploadService.uploadPdf(pdfFile),
-            };
+            transData.pdfUrl = await this.uploadService.uploadPdf(pdfFile);
+
+            // 🛡️ PDF Metin Kalitesi Kontrolü
+            const pdfAbsPath = path.join(process.cwd(), transData.pdfUrl);
+            try {
+              await this.articlesService.validatePdf(pdfAbsPath);
+            } catch (error) {
+              if (ignorePdfErrors === 'true') {
+                console.warn(`Kullanıcı onayı ile bozuk PDF kabul edildi: ${transData.pdfUrl}`);
+              } else {
+                // Clean up
+                try {
+                  if (fs.existsSync(pdfAbsPath)) fs.unlinkSync(pdfAbsPath);
+                } catch (e) {
+                  console.error('Yüklenen bozuk PDF silinemedi:', e);
+                }
+                throw new BadRequestException('PDF_INVALID_CONFIRM_NEEDED');
+              }
+            }
           }
-          return trans;
+          return transData;
         }),
       );
     }
@@ -122,6 +143,7 @@ export class ArticlesController {
   @UseInterceptors(AnyFilesInterceptor())
   async update(
     @Param('id', ParseIntPipe) id: number,
+    @Query('ignorePdfErrors') ignorePdfErrors: string | undefined,
     @Body() updateArticleDto: UpdateArticleDto,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
@@ -146,21 +168,39 @@ export class ArticlesController {
     ) {
       updateArticleDto.translations = await Promise.all(
         updateArticleDto.translations.map(async (trans: any, idx: number) => {
+          const transData = { ...trans };
           const pdfFile = files.find(
             (f) => f.fieldname === `translations[${idx}][pdfFile]`,
           );
+
           if (pdfFile) {
             console.log(`✅ Translation [${idx}]: Yeni PDF yüklendi`);
-            return {
-              ...trans,
-              pdfUrl: await this.uploadService.uploadPdf(pdfFile),
-            };
+            transData.pdfUrl = await this.uploadService.uploadPdf(pdfFile);
+
+            // 🛡️ PDF Metin Kalitesi Kontrolü
+            const pdfAbsPath = path.join(process.cwd(), transData.pdfUrl);
+            try {
+              await this.articlesService.validatePdf(pdfAbsPath);
+            } catch (error) {
+              if (ignorePdfErrors === 'true') {
+                console.warn(`Kullanıcı onayı ile bozuk PDF kabul edildi: ${transData.pdfUrl}`);
+              } else {
+                // Clean up
+                try {
+                  if (fs.existsSync(pdfAbsPath)) fs.unlinkSync(pdfAbsPath);
+                } catch (e) {
+                  console.error('Yüklenen bozuk PDF silinemedi:', e);
+                }
+                throw new BadRequestException('PDF_INVALID_CONFIRM_NEEDED');
+              }
+            }
+          } else {
+            console.log(`📄 Translation [${idx}]: PDF yok, mevcut data:`, {
+              id: trans.id,
+              pdfUrl: trans.pdfUrl,
+            });
           }
-          console.log(`📄 Translation [${idx}]: PDF yok, mevcut data:`, {
-            id: trans.id,
-            pdfUrl: trans.pdfUrl,
-          });
-          return trans;
+          return transData;
         }),
       );
     }

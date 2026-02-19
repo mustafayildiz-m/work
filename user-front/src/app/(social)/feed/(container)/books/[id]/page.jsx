@@ -732,7 +732,8 @@ const BookDetailPage = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Sayfa çevirisi başarısız');
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || 'Sayfa çevirisi başarısız');
         }
 
         const data = await response.json();
@@ -887,8 +888,19 @@ const BookDetailPage = () => {
           window.speechSynthesis.speak(utterance);
         } catch (err) {
           console.error(`Page ${pageNum} error:`, err);
+
+          let message = err.message || 'Bir hata oluştu';
+          if (message === 'PDF_CONTENT_INVALID' || message.includes('PDF_CONTENT_INVALID')) {
+            message = translate('books.detail.pdfContentInvalid', 'Bu PDF çeviri için uygun değil.');
+          }
+
           setTranslating(false);
           setIsReading(false);
+          showNotification({
+            title: 'Hata',
+            message: message,
+            variant: 'danger'
+          });
         }
       };
 
