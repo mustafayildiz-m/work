@@ -22,12 +22,17 @@ export class PdfOcrService {
     isGarbageText(text: string): boolean {
         if (!text || text.trim().length === 0) return true;
 
-        const controlChars = (text.match(/[\x00-\x1F]/g) || []).length;
+        // Replacement Character (%99 bozuk PDF belirtisi) - Varsa direkt reddet
+        if (text.includes('\uFFFD')) return true;
+
+        // Encoding Hataları (‹, ›) ve Kontrol Karakterleri
+        const controlChars = (text.match(/[\x00-\x1F\uE000-\uF8FF\u2039\u203A]/g) || []).length;
         const totalChars = text.replace(/\s/g, '').length;
+
         if (totalChars === 0) return true;
 
-        // Kontrol karakterleri, anlamlı karakterlerin %30'undan fazlaysa bozuk
-        return controlChars / totalChars > 0.3;
+        // Çok düşük eşik (%1) - Metnin %1'i bile bozuksa reddet
+        return controlChars / totalChars > 0.01;
     }
 
     /**
