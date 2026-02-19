@@ -318,7 +318,7 @@ const CreatePostCard = () => {
       // Show success notification
       showNotification({
         title: t('common.success'),
-        message: t('feed.postSuccess'),
+        message: result.status === 'approved' ? t('feed.postSuccess') : t('feed.postPendingApproval'),
         variant: 'success',
         delay: 3000
       });

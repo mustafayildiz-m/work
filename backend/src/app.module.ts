@@ -49,6 +49,8 @@ import { PodcastModule } from './modules/podcast.module';
 import { AdminUsersModule } from './modules/admin-users.module';
 import { TranslationModule } from './modules/translation.module';
 import { MailModule } from './mail/mail.module';
+import { SystemSettingsModule } from './modules/system-settings.module';
+import { SystemSetting } from './entities/system-setting.entity';
 
 @Module({
   imports: [
@@ -81,6 +83,7 @@ import { MailModule } from './mail/mail.module';
       Article,
       ArticleTranslation,
       User,
+      SystemSetting,
     ]),
     BooksModule,
     ArticlesModule,
@@ -107,6 +110,7 @@ import { MailModule } from './mail/mail.module';
     AdminUsersModule,
     TranslationModule,
     MailModule,
+    SystemSettingsModule,
   ],
   controllers: [AppController],
   providers: [

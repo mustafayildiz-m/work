@@ -821,11 +821,10 @@ const Feeds = ({ userId }) => {
       if (response.ok) {
         const updatedPost = await response.json();
 
-        // Post güncellendiğinde status pending olduğu için timeline'dan kaldır
-        removePost(editingPost.id);
-
-        // Güncellenmiş post'u pending posts listesine ekle
+        // Eğer post onay bekliyorsa timeline'dan kaldır ve pending listesine ekle
         if (updatedPost.status === 'pending') {
+          removePost(editingPost.id);
+
           // Post verisini pending posts formatına çevir
           const pendingPost = {
             id: updatedPost.id,
@@ -846,27 +845,36 @@ const Feeds = ({ userId }) => {
           setPendingPosts(prev => {
             const exists = prev.some(p => p.id === pendingPost.id);
             if (exists) {
-              // Eğer zaten varsa, güncelle
               return prev.map(p => p.id === pendingPost.id ? pendingPost : p);
             }
             return [pendingPost, ...prev];
+          });
+
+          showNotification({
+            title: t('common.success'),
+            message: t('feed.postPendingApproval'),
+            variant: 'success',
+            delay: 3000
+          });
+        } else {
+          // Eğer onay gerektirmiyorsa (approved ise) timeline'ı yenile
+          refetch();
+          showNotification({
+            title: t('common.success'),
+            message: t('feed.postSuccess'),
+            variant: 'success',
+            delay: 3000
           });
         }
 
         // Close modal
         setShowEditModal(false);
         setEditingPost(null);
-
-        // Timeline'ı da güncelle (pending post'lar timeline'da görünmeyecek)
-        refetch();
       } else {
-        // console.error('Failed to update post:', response.status, response.statusText);
         const errorData = await response.text();
-        // console.error('Error details:', errorData);
         alert('Gönderi güncellenirken bir hata oluştu. Lütfen tekrar deneyin.');
       }
     } catch (error) {
-      // console.error('Error updating post:', error);
       alert('Gönderi güncellenirken bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setIsEditing(false);
