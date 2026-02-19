@@ -7,7 +7,7 @@ import { useLanguage } from '@/context/useLanguageContext';
 
 const PdfViewer = ({ show, onHide, pdfUrl, title }) => {
   const { t, loading: langLoading } = useLanguage();
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(true);
 
   // Safe translation function with fallback
   const translate = (key, fallback) => {
@@ -20,9 +20,9 @@ const PdfViewer = ({ show, onHide, pdfUrl, title }) => {
   };
 
   useEffect(() => {
-    // Modal açıldığında fullscreen'i sıfırla
+    // Modal açıldığında fullscreen yap
     if (show) {
-      setIsFullscreen(false);
+      setIsFullscreen(true);
     }
   }, [show]);
 
