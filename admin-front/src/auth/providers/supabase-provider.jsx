@@ -22,6 +22,9 @@ export function AuthProvider({ children }) {
     if (auth?.access_token) {
       try {
         const user = await getUser();
+        if (user?.role === 'user') {
+          throw new Error('Yetkisiz giriş: Bu alana sadece yöneticiler erişebilir.');
+        }
         setCurrentUser(user || undefined);
       } catch {
         saveAuth(undefined);
@@ -42,8 +45,16 @@ export function AuthProvider({ children }) {
   const login = async (email, password) => {
     try {
       const auth = await SupabaseAdapter.login(email, password);
+      if (auth.user?.role === 'user') {
+        throw new Error('Yetkisiz giriş: Bu alana sadece yöneticiler erişebilir.');
+      }
       saveAuth(auth);
       const user = await getUser();
+      if (user?.role === 'user') {
+        saveAuth(undefined);
+        setCurrentUser(undefined);
+        throw new Error('Yetkisiz giriş: Bu alana sadece yöneticiler erişebilir.');
+      }
       setCurrentUser(user || undefined);
     } catch (error) {
       console.error('Login error in provider:', error);

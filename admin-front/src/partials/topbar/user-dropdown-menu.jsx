@@ -1,22 +1,9 @@
 import { useAuth } from '@/auth/context/auth-context';
 import { I18N_LANGUAGES } from '@/i18n/config';
-import {
-  BetweenHorizontalStart,
-  Coffee,
-  CreditCard,
-  FileText,
-  Globe,
-  IdCard,
-  Moon,
-  Settings,
-  Shield,
-  SquareCode,
-  UserCircle,
-  Users,
-} from 'lucide-react';
+import { Globe, Moon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Link } from 'react-router';
-import { toAbsoluteUrl } from '@/lib/helpers';
+import { getAvatarUrl, toAbsoluteUrl } from '@/lib/helpers';
 import { useLanguage } from '@/providers/i18n-provider';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -44,11 +31,10 @@ export function UserDropdownMenu({ trigger }) {
     user?.fullname ||
     (user?.first_name && user?.last_name
       ? `${user.first_name} ${user.last_name}`
-      : user?.username || 'User');
+      : user?.username || 'Admin');
 
   const displayEmail = user?.email || '';
-  // const displayAvatar = user?.pic || toAbsoluteUrl('/media/avatars/300-2.png');
-  const displayAvatar = toAbsoluteUrl('/media/avatars/300-2.png');
+  const displayAvatar = getAvatarUrl(user);
 
   const handleLanguage = (lang) => {
     changeLanguage(lang);
@@ -86,106 +72,11 @@ export function UserDropdownMenu({ trigger }) {
               </a>
             </div>
           </div>
-          <Badge variant="primary" appearance="outline" size="sm">
-            Pro
-          </Badge>
         </div>
 
         <DropdownMenuSeparator />
 
-        {/* Menu Items */}
-        <DropdownMenuItem asChild>
-          <Link
-            to="/public-profile/profiles/default"
-            className="flex items-center gap-2"
-          >
-            <IdCard />
-            Public Profile
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link
-            to="/account/home/user-profile"
-            className="flex items-center gap-2"
-          >
-            <UserCircle />
-            My Profile
-          </Link>
-        </DropdownMenuItem>
 
-        {/* My Account Submenu */}
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger className="flex items-center gap-2">
-            <Settings />
-            My Account
-          </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent className="w-48">
-            <DropdownMenuItem asChild>
-              <Link
-                to="/account/home/get-started"
-                className="flex items-center gap-2"
-              >
-                <Coffee />
-                Get Started
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link
-                to="/account/home/user-profile"
-                className="flex items-center gap-2"
-              >
-                <FileText />
-                My Profile
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link
-                to="/account/billing/basic"
-                className="flex items-center gap-2"
-              >
-                <CreditCard />
-                Billing
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link
-                to="/account/security/overview"
-                className="flex items-center gap-2"
-              >
-                <Shield />
-                Security
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link
-                to="/account/members/teams"
-                className="flex items-center gap-2"
-              >
-                <Users />
-                Members & Roles
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link
-                to="/account/integrations"
-                className="flex items-center gap-2"
-              >
-                <BetweenHorizontalStart />
-                Integrations
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
-
-        <DropdownMenuItem asChild>
-          <Link
-            to="https://devs.keenthemes.com"
-            className="flex items-center gap-2"
-          >
-            <SquareCode />
-            Dev Forum
-          </Link>
-        </DropdownMenuItem>
 
         {/* Language Submenu with Radio Group */}
         <DropdownMenuSub>
