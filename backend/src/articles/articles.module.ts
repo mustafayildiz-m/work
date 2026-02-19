@@ -8,6 +8,7 @@ import { ArticlePage } from './entities/article-page.entity';
 import { ArticlePageTranslation } from './entities/article-page-translation.entity';
 import { UploadModule } from '../upload/upload.module';
 import { TranslationModule } from '../modules/translation.module';
+import { PdfOcrService } from '../services/pdf-ocr.service';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { TranslationModule } from '../modules/translation.module';
     TranslationModule,
   ],
   controllers: [ArticlesController],
-  providers: [ArticlesService],
+  providers: [ArticlesService, PdfOcrService],
   exports: [ArticlesService],
 })
 export class ArticlesModule { }

@@ -766,7 +766,8 @@
       "readPdf": "Prečítajte si",
       "downloadPdf": "Stiahnuť PDF",
       "description": "Popis: V súčasnosti sa nachádza na území Slovenskej republiky:",
-      "summary": "Zhrnutie:"
+      "summary": "Zhrnutie:",
+      "pdfContentInvalid": "This PDF is not suitable for translation."
     },
     "pdfViewer": {
       "title": "Prehliadač PDF",

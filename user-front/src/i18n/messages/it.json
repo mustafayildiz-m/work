@@ -778,7 +778,8 @@
       "readPdf": "Leggi",
       "downloadPdf": "Scaricare PDF",
       "description": "Descrizione:",
-      "summary": "Sintesi:"
+      "summary": "Sintesi:",
+      "pdfContentInvalid": "Questo PDF non è adatto alla traduzione."
     },
     "pdfViewer": {
       "title": "Visualizzatore PDF",

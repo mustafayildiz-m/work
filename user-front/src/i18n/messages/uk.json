@@ -766,7 +766,8 @@
       "readPdf": "Прочитайте",
       "downloadPdf": "Завантажити PDF",
       "description": "Опис:",
-      "summary": "Підсумок:"
+      "summary": "Підсумок:",
+      "pdfContentInvalid": "This PDF is not suitable for translation."
     },
     "pdfViewer": {
       "title": "Переглядач PDF-файлів",

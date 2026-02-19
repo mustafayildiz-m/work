@@ -766,7 +766,8 @@
       "readPdf": "Olvassa el",
       "downloadPdf": "PDF letöltése",
       "description": "Leírás:",
-      "summary": "Összefoglaló:"
+      "summary": "Összefoglaló:",
+      "pdfContentInvalid": "This PDF is not suitable for translation."
     },
     "pdfViewer": {
       "title": "PDF Viewer",

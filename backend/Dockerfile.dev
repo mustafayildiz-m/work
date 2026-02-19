@@ -1,8 +1,16 @@
 # Backend Development Dockerfile
 FROM node:20-alpine
 
-# Install dependencies
-RUN apk add --no-cache libc6-compat wget curl netcat-openbsd
+# Install system dependencies
+# - libc6-compat, wget, curl, netcat-openbsd: temel araçlar
+# - python3, make, g++, build-base: canvas npm paketi için native build araçları
+# - cairo-dev, pango-dev, jpeg-dev, giflib-dev, librsvg-dev: canvas (node-canvas) bağımlılıkları
+# - tesseract-ocr, tesseract-ocr-data-ara, tesseract-ocr-data-tur: OCR motoru ve dil paketleri
+RUN apk add --no-cache \
+    libc6-compat wget curl netcat-openbsd \
+    python3 make g++ build-base \
+    cairo-dev pango-dev jpeg-dev giflib-dev librsvg-dev pixman-dev \
+    tesseract-ocr tesseract-ocr-data-ara tesseract-ocr-data-tur tesseract-ocr-data-eng
 
 WORKDIR /app
 

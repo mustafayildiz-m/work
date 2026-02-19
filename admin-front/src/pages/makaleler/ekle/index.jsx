@@ -181,22 +181,36 @@ function AddArticle() {
         }
       });
 
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        body: formData,
-      });
+      const submitData = async (ignoreErrors = false) => {
+        let url = API_URL;
+        if (ignoreErrors) url += '?ignorePdfErrors=true';
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Makale eklenemedi');
-      }
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+          body: formData,
+        });
 
-      const data = await response.json();
-      toast.success('Makale başarıyla eklendi!');
-      navigate('/makaleler/liste');
+        if (!response.ok) {
+          const errorData = await response.json();
+          if (errorData.message === 'PDF_INVALID_CONFIRM_NEEDED') {
+            if (window.confirm('⚠️ UYARI: PDF Metin İçeriği Bozuk!\n\nBu PDF dosyasının metni okunamıyor. Otomatik çeviri yapılamayacak.\n\nYine de yüklemek istiyor musunuz?')) {
+              return submitData(true);
+            }
+            setLoading(false);
+            return;
+          }
+          throw new Error(errorData.message || 'Makale eklenemedi');
+        }
+
+        const data = await response.json();
+        toast.success('Makale başarıyla eklendi!');
+        navigate('/makaleler/liste');
+      };
+
+      await submitData();
     } catch (error) {
       toast.error(error.message || 'Makale eklenirken bir hata oluştu');
     } finally {

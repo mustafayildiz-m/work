@@ -34,12 +34,12 @@ function EditBook() {
     const observer = new MutationObserver(() => {
       setCurrentTheme(getTheme());
     });
-    
+
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['class']
     });
-    
+
     return () => observer.disconnect();
   }, []);
 
@@ -54,33 +54,33 @@ function EditBook() {
             'Content-Type': 'application/json',
           },
         });
-        
+
         if (!response.ok) throw new Error('Kitap yüklenirken bir hata oluştu');
-        
+
         const book = await response.json();
-        
+
         // Form'u doldur
         setForm({
           author: book.author || '',
           categories: book.categories || [],
           publishDate: book.publishDate ? book.publishDate.split('T')[0] : '',
-          translations: book.translations && book.translations.length > 0 
+          translations: book.translations && book.translations.length > 0
             ? book.translations.map(t => ({
-                id: t.id,
-                language: t.languageId || t.language?.id || '',
-                title: t.title || '',
-                description: t.description || '',
-                summary: t.summary || '',
-                file: null,
-                pdfUrl: t.pdfUrl || null
-              }))
+              id: t.id,
+              language: t.languageId || t.language?.id || '',
+              title: t.title || '',
+              description: t.description || '',
+              summary: t.summary || '',
+              file: null,
+              pdfUrl: t.pdfUrl || null
+            }))
             : [{ language: '', title: '', description: '', summary: '', file: null, pdfUrl: null }],
           coverImage: book.coverImage || book.coverUrl || '',
         });
-        
+
         // Mevcut kapak resmini göster
         if (book.coverImage || book.coverUrl) {
-          const coverImageUrl = (book.coverImage || book.coverUrl).startsWith('http') 
+          const coverImageUrl = (book.coverImage || book.coverUrl).startsWith('http')
             ? (book.coverImage || book.coverUrl)
             : `${BASE_URL}${book.coverImage || book.coverUrl}`;
           setPreview(coverImageUrl);
@@ -91,7 +91,7 @@ function EditBook() {
         setFetchingBook(false);
       }
     };
-    
+
     fetchBook();
   }, [id]);
 
@@ -210,17 +210,17 @@ function EditBook() {
         if (!translation.title) {
           throw new Error('Lütfen tüm diller için başlık girin');
         }
-        
+
         // Eğer mevcut bir çeviri ise, id'sini gönder
         if (translation.id) {
           formData.append(`translations[${index}][id]`, translation.id);
         }
-        
+
         formData.append(`translations[${index}][languageId]`, translation.language);
         formData.append(`translations[${index}][title]`, translation.title);
         formData.append(`translations[${index}][description]`, translation.description || '');
         formData.append(`translations[${index}][summary]`, translation.summary || '');
-        
+
         // PDF yönetimi: Yeni PDF yüklendiyse yeni dosyayı, yoksa mevcut pdfUrl'i gönder
         if (translation.file) {
           // Yeni PDF dosyası yüklendi
@@ -231,22 +231,39 @@ function EditBook() {
         }
       });
 
-      const response = await fetch(`${API_URL}/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        body: formData,
-      });
+      const submitData = async (ignoreErrors = false) => {
+        let url = `${API_URL}/${id}`;
+        if (ignoreErrors) url += '?ignorePdfErrors=true';
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Kitap güncellenirken bir hata oluştu');
-      }
+        const response = await fetch(url, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+          body: formData,
+        });
 
-      const data = await response.json();
-      toast.success('Kitap başarıyla güncellendi');
-      navigate('/kitaplar/liste');
+        if (!response.ok) {
+          const errorData = await response.json();
+
+          if (errorData.message === 'PDF_INVALID_CONFIRM_NEEDED') {
+            if (window.confirm('⚠️ UYARI: PDF Metin İçeriği Bozuk!\n\nBu PDF dosyasının metni okunamıyor. Otomatik çeviri yapılamayacak ve kullanıcılar metni seçemeyecek (sadece resim olarak görüntüleyebilecek).\n\nYine de yüklemek istiyor musunuz?')) {
+              return submitData(true);
+            }
+            // İptal edilirse
+            setLoading(false);
+            return;
+          }
+
+          throw new Error(errorData.message || 'Kitap güncellenirken bir hata oluştu');
+        }
+
+        const data = await response.json();
+        toast.success('Kitap başarıyla güncellendi');
+        navigate('/kitaplar/liste');
+      };
+
+      await submitData();
     } catch (err) {
       setError(err.message);
       toast.error(err.message || 'Kitap güncellenirken bir hata oluştu');
@@ -261,7 +278,7 @@ function EditBook() {
         <Helmet>
           <title>Kitap Düzenle - Islamic Windows Admin</title>
         </Helmet>
-        
+
         <div className="p-6 max-w-6xl mx-auto text-center">
           <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mb-4"></div>
@@ -277,7 +294,7 @@ function EditBook() {
       <Helmet>
         <title>Kitap Düzenle #{id} - Islamic Windows Admin</title>
       </Helmet>
-      
+
       <div className="p-6 max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
@@ -439,7 +456,7 @@ function EditBook() {
                       {idx + 1}
                     </div>
                     <h4 className="font-bold text-gray-900 dark:text-white">
-                      {translation.language 
+                      {translation.language
                         ? availableLanguages.find(l => l.id === translation.language)?.name || `Çeviri ${idx + 1}`
                         : `Çeviri ${idx + 1}`}
                     </h4>
@@ -455,7 +472,7 @@ function EditBook() {
                     </button>
                   )}
                 </div>
-                
+
                 <div className="space-y-4">
                   {/* Dil Seçimi */}
                   <div>
@@ -557,7 +574,7 @@ function EditBook() {
                 </div>
               </div>
             ))}
-            
+
             {form.translations.length < 10 && (
               <button
                 type="button"

@@ -779,7 +779,8 @@
       "readPdf": "اقرأ",
       "downloadPdf": "تحميل PDF",
       "description": "الوصف:",
-      "summary": "الملخص:"
+      "summary": "الملخص:",
+      "pdfContentInvalid": "هذا الملف PDF غير مناسب للترجمة."
     },
     "pdfViewer": {
       "title": "عارض PDF",
