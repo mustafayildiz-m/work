@@ -3,7 +3,7 @@ FROM node:20-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat python3 make g++ cairo-dev pango-dev jpeg-dev giflib-dev librsvg-dev
 WORKDIR /app
 
 # Copy package files
@@ -26,7 +26,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # Install wget and curl for health checks
-RUN apk add --no-cache wget curl
+RUN apk add --no-cache wget curl cairo pango jpeg giflib librsvg font-noto
 
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs
