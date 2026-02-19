@@ -3,9 +3,12 @@
 import Link from 'next/link';
 import { BsChatLeftTextFill } from 'react-icons/bs';
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
+import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
 
+
 const MessageIconWithBadge = () => {
+  const { status } = useSession();
   const { conversations } = useWebSocketChatContext();
 
   // Okunmamış mesaj sayısını hesapla
@@ -15,14 +18,17 @@ const MessageIconWithBadge = () => {
     }, 0);
   }, [conversations]);
 
+  if (status === 'unauthenticated') return null;
+
+
   return (
     <>
       <Link className="nav-link bg-light icon-md btn btn-light p-0 position-relative message-icon-link" href="/messaging">
         <BsChatLeftTextFill size={15} className="message-icon" />
-        
+
         {/* Badge - sadece okunmamış mesaj varsa göster */}
         {unreadCount > 0 && (
-          <span 
+          <span
             className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger message-badge"
             style={{
               fontSize: '0.6rem',

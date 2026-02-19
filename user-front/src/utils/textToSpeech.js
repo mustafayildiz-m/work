@@ -9,14 +9,14 @@
  * @returns {SpeechSynthesisVoice|null}
  */
 export const getBestEnglishVoice = (voices) => {
-  const englishVoices = voices.filter(voice => 
+  const englishVoices = voices.filter(voice =>
     voice.lang.toLowerCase().startsWith('en')
   );
-  
+
   if (englishVoices.length === 0) {
     return null;
   }
-  
+
   // Priority list for English voices (from best to worst)
   const preferredNames = [
     'google uk english female',
@@ -33,45 +33,45 @@ export const getBestEnglishVoice = (voices) => {
     'fiona',
     'moira'
   ];
-  
+
   // Try to find preferred voices in order
   for (const preferredName of preferredNames) {
-    const voice = englishVoices.find(v => 
+    const voice = englishVoices.find(v =>
       v.name.toLowerCase().includes(preferredName)
     );
     if (voice) {
       return voice;
     }
   }
-  
+
   // Look for any Google voice
-  const googleVoice = englishVoices.find(v => 
+  const googleVoice = englishVoices.find(v =>
     v.name.toLowerCase().includes('google')
   );
   if (googleVoice) {
     return googleVoice;
   }
-  
+
   // Look for Premium/Natural voices
   const premiumVoice = englishVoices.find(v => {
     const name = v.name.toLowerCase();
-    return name.includes('premium') || 
-           name.includes('natural') || 
-           name.includes('enhanced') ||
-           name.includes('neural');
+    return name.includes('premium') ||
+      name.includes('natural') ||
+      name.includes('enhanced') ||
+      name.includes('neural');
   });
   if (premiumVoice) {
     return premiumVoice;
   }
-  
+
   // Prefer female voices (usually clearer)
-  const femaleVoice = englishVoices.find(v => 
+  const femaleVoice = englishVoices.find(v =>
     v.name.toLowerCase().includes('female')
   );
   if (femaleVoice) {
     return femaleVoice;
   }
-  
+
   // Last resort: first English voice
   return englishVoices[0];
 };
@@ -82,17 +82,17 @@ export const getBestEnglishVoice = (voices) => {
  * @returns {SpeechSynthesisVoice|null}
  */
 export const getBestChineseVoice = (voices) => {
-  const chineseVoices = voices.filter(voice => 
+  const chineseVoices = voices.filter(voice =>
     voice.lang.toLowerCase().startsWith('zh')
   );
-  
+
   if (chineseVoices.length === 0) {
     return null;
   }
-  
+
   // Avoid low-quality Eloquence voices (Eddy, Flo, Grandma, etc.)
   const eloquenceKeywords = ['eddy', 'flo', 'grandma', 'grandpa', 'reed', 'rocko', 'sandy', 'shelley'];
-  
+
   // Priority list for Chinese voices (from best to worst)
   const preferredNames = [
     'google 普通话',
@@ -104,7 +104,7 @@ export const getBestChineseVoice = (voices) => {
     'microsoft huihui',
     'microsoft yaoyao'
   ];
-  
+
   // Try to find preferred voices in order (excluding eloquence)
   for (const preferredName of preferredNames) {
     const voice = chineseVoices.find(v => {
@@ -116,22 +116,22 @@ export const getBestChineseVoice = (voices) => {
       return voice;
     }
   }
-  
+
   // Look for any Google voice
-  const googleVoice = chineseVoices.find(v => 
+  const googleVoice = chineseVoices.find(v =>
     v.name.toLowerCase().includes('google')
   );
   if (googleVoice) {
     return googleVoice;
   }
-  
+
   // Look for Premium/Natural voices (excluding eloquence)
   const premiumVoice = chineseVoices.find(v => {
     const name = v.name.toLowerCase();
     const hasEloquence = eloquenceKeywords.some(kw => name.includes(kw));
     return !hasEloquence && (
-      name.includes('premium') || 
-      name.includes('natural') || 
+      name.includes('premium') ||
+      name.includes('natural') ||
       name.includes('enhanced') ||
       name.includes('neural')
     );
@@ -139,7 +139,7 @@ export const getBestChineseVoice = (voices) => {
   if (premiumVoice) {
     return premiumVoice;
   }
-  
+
   // Find first non-eloquence voice
   const nonEloquenceVoice = chineseVoices.find(v => {
     const name = v.name.toLowerCase();
@@ -148,7 +148,7 @@ export const getBestChineseVoice = (voices) => {
   if (nonEloquenceVoice) {
     return nonEloquenceVoice;
   }
-  
+
   // Last resort: first Chinese voice
   return chineseVoices[0];
 };
@@ -161,67 +161,70 @@ export const getBestChineseVoice = (voices) => {
  * @returns {SpeechSynthesisVoice|null} - Best available voice or null
  */
 export const getBestVoice = (langCode) => {
+  if (typeof window === 'undefined' || !window.speechSynthesis) {
+    return null;
+  }
   const voices = window.speechSynthesis.getVoices();
-  
+
   if (!langCode || voices.length === 0) {
     return null;
   }
-  
+
   // Normalize language code
   const normalizedLang = langCode.toLowerCase();
   const baseLanguage = normalizedLang.split('-')[0];
-  
+
   // Special handling for English
   if (baseLanguage === 'en') {
     return getBestEnglishVoice(voices);
   }
-  
+
   // Special handling for Chinese
   if (baseLanguage === 'zh') {
     return getBestChineseVoice(voices);
   }
-  
+
   // Special handling for Japanese
   if (baseLanguage === 'ja') {
     return getBestJapaneseVoice(voices);
   }
-  
+
   // Find all voices matching the language
   const matchingVoices = voices.filter(voice => {
     const voiceLang = voice.lang.toLowerCase();
     return voiceLang.includes(baseLanguage);
   });
-  
+
   if (matchingVoices.length === 0) {
     return null;
   }
-  
+
   // Priority 1: Google voices (highest quality)
-  const googleVoice = matchingVoices.find(voice => 
+  const googleVoice = matchingVoices.find(voice =>
     voice.name.toLowerCase().includes('google')
   );
   if (googleVoice) {
     return googleVoice;
   }
-  
+
   // Priority 2: Premium/Enhanced/Natural voices
   const premiumVoice = matchingVoices.find(voice => {
     const name = voice.name.toLowerCase();
     return name.includes('premium') ||
-           name.includes('enhanced') ||
-           name.includes('natural') ||
-           name.includes('neural');
+      name.includes('enhanced') ||
+      name.includes('natural') ||
+      name.includes('neural');
   });
   if (premiumVoice) {
     return premiumVoice;
   }
-  
+
   // Priority 3: Local voices (faster, offline capable)
   const localVoice = matchingVoices.find(voice => voice.localService);
   if (localVoice) {
     return localVoice;
   }
-  
+
   // Priority 4: First matching voice (fallback)
   return matchingVoices[0];
 };
@@ -234,7 +237,7 @@ export const getBestVoice = (langCode) => {
  */
 export const getLanguageCode = (lang) => {
   if (!lang) return 'en-US';
-  
+
   const languageMap = {
     'tr': 'tr-TR',
     'en': 'en-US',
@@ -271,7 +274,7 @@ export const getLanguageCode = (lang) => {
     'ms': 'ms-MY',
     'tl': 'tl-PH',
   };
-  
+
   return languageMap[lang.toLowerCase()] || `${lang}-${lang.toUpperCase()}`;
 };
 
@@ -284,16 +287,21 @@ export const getLanguageCode = (lang) => {
  */
 export const waitForVoices = (timeout = 2000) => {
   return new Promise((resolve) => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) {
+      resolve();
+      return;
+    }
+
     if (window.speechSynthesis.getVoices().length > 0) {
       resolve();
       return;
     }
-    
+
     const timeoutId = setTimeout(() => {
       console.warn('Voice loading timeout - proceeding with available voices');
       resolve();
     }, timeout);
-    
+
     window.speechSynthesis.onvoiceschanged = () => {
       clearTimeout(timeoutId);
       console.log('✅ Voices loaded:', window.speechSynthesis.getVoices().length);
@@ -314,18 +322,18 @@ export const waitForVoices = (timeout = 2000) => {
  */
 export const createOptimizedUtterance = (text, langCode, rate = 1.0, pitch = 1.0, volume = 1.0) => {
   const utterance = new SpeechSynthesisUtterance(text);
-  
+
   utterance.lang = langCode;
   utterance.rate = rate;
   utterance.pitch = pitch;
   utterance.volume = volume;
-  
+
   // Set best available voice
   const bestVoice = getBestVoice(langCode);
   if (bestVoice) {
     utterance.voice = bestVoice;
   }
-  
+
   return utterance;
 };
 
@@ -336,10 +344,13 @@ export const createOptimizedUtterance = (text, langCode, rate = 1.0, pitch = 1.0
  * @returns {Array<SpeechSynthesisVoice>} - Array of available voices
  */
 export const getAvailableVoices = (langCode) => {
+  if (typeof window === 'undefined' || !window.speechSynthesis) {
+    return [];
+  }
   const voices = window.speechSynthesis.getVoices();
   const baseLanguage = langCode.toLowerCase().split('-')[0];
-  
-  return voices.filter(voice => 
+
+  return voices.filter(voice =>
     voice.lang.toLowerCase().includes(baseLanguage)
   );
 };
@@ -348,6 +359,9 @@ export const getAvailableVoices = (langCode) => {
  * Log all available voices (for debugging)
  */
 export const logAvailableVoices = () => {
+  if (typeof window === 'undefined' || !window.speechSynthesis) {
+    return;
+  }
   const voices = window.speechSynthesis.getVoices();
   console.group('🎤 Available Speech Synthesis Voices');
   voices.forEach(voice => {
@@ -360,19 +374,22 @@ export const logAvailableVoices = () => {
  * Log only English voices (for debugging English issues)
  */
 export const logEnglishVoices = () => {
+  if (typeof window === 'undefined' || !window.speechSynthesis) {
+    return;
+  }
   const voices = window.speechSynthesis.getVoices();
   const englishVoices = voices.filter(v => v.lang.toLowerCase().startsWith('en'));
-  
+
   console.group('🇬🇧 Available English Voices (' + englishVoices.length + ')');
   englishVoices.forEach((voice, index) => {
     const quality = voice.name.toLowerCase().includes('google') ? '⭐⭐⭐⭐⭐' :
-                   voice.name.toLowerCase().includes('samantha') || voice.name.toLowerCase().includes('karen') ? '⭐⭐⭐⭐⭐' :
-                   voice.name.toLowerCase().includes('premium') || voice.name.toLowerCase().includes('natural') ? '⭐⭐⭐⭐' :
-                   voice.localService ? '⭐⭐⭐' : '⭐⭐';
+      voice.name.toLowerCase().includes('samantha') || voice.name.toLowerCase().includes('karen') ? '⭐⭐⭐⭐⭐' :
+        voice.name.toLowerCase().includes('premium') || voice.name.toLowerCase().includes('natural') ? '⭐⭐⭐⭐' :
+          voice.localService ? '⭐⭐⭐' : '⭐⭐';
     console.log(`${index + 1}. ${voice.name} (${voice.lang}) ${quality} ${voice.localService ? '📍' : '☁️'}`);
   });
   console.groupEnd();
-  
+
   // Show which one would be selected
   const selected = getBestEnglishVoice(voices);
   if (selected) {
@@ -384,24 +401,27 @@ export const logEnglishVoices = () => {
  * Log only Chinese voices (for debugging Chinese issues)
  */
 export const logChineseVoices = () => {
+  if (typeof window === 'undefined' || !window.speechSynthesis) {
+    return;
+  }
   const voices = window.speechSynthesis.getVoices();
   const chineseVoices = voices.filter(v => v.lang.toLowerCase().startsWith('zh'));
-  
+
   const eloquenceKeywords = ['eddy', 'flo', 'grandma', 'grandpa', 'reed', 'rocko', 'sandy', 'shelley'];
-  
+
   console.group('🇨🇳 Available Chinese Voices (' + chineseVoices.length + ')');
   chineseVoices.forEach((voice, index) => {
     const isEloquence = eloquenceKeywords.some(kw => voice.name.toLowerCase().includes(kw));
     const quality = voice.name.toLowerCase().includes('google') ? '⭐⭐⭐⭐⭐' :
-                   voice.name.toLowerCase().includes('tingting') || voice.name.toLowerCase().includes('meijia') ? '⭐⭐⭐⭐' :
-                   voice.name.toLowerCase().includes('premium') || voice.name.toLowerCase().includes('natural') ? '⭐⭐⭐⭐' :
-                   isEloquence ? '⭐' :
-                   voice.localService ? '⭐⭐⭐' : '⭐⭐';
+      voice.name.toLowerCase().includes('tingting') || voice.name.toLowerCase().includes('meijia') ? '⭐⭐⭐⭐' :
+        voice.name.toLowerCase().includes('premium') || voice.name.toLowerCase().includes('natural') ? '⭐⭐⭐⭐' :
+          isEloquence ? '⭐' :
+            voice.localService ? '⭐⭐⭐' : '⭐⭐';
     const warning = isEloquence ? '❌ Low-quality Eloquence' : '';
     console.log(`${index + 1}. ${voice.name} (${voice.lang}) ${quality} ${voice.localService ? '📍' : '☁️'} ${warning}`);
   });
   console.groupEnd();
-  
+
   // Show which one would be selected
   const selected = getBestChineseVoice(voices);
   if (selected) {
@@ -415,17 +435,17 @@ export const logChineseVoices = () => {
  * @returns {SpeechSynthesisVoice|null}
  */
 export const getBestJapaneseVoice = (voices) => {
-  const japaneseVoices = voices.filter(voice => 
+  const japaneseVoices = voices.filter(voice =>
     voice.lang.toLowerCase().startsWith('ja')
   );
-  
+
   if (japaneseVoices.length === 0) {
     return null;
   }
-  
+
   // Avoid low-quality Eloquence voices
   const eloquenceKeywords = ['eddy', 'flo', 'grandma', 'grandpa', 'reed', 'rocko', 'sandy', 'shelley', 'junior'];
-  
+
   // Priority list for Japanese voices (from best to worst)
   const preferredNames = [
     'google 日本語',
@@ -435,7 +455,7 @@ export const getBestJapaneseVoice = (voices) => {
     'microsoft haruka',
     'microsoft ayumi'
   ];
-  
+
   // Try to find preferred voices in order (excluding eloquence)
   for (const preferredName of preferredNames) {
     const voice = japaneseVoices.find(v => {
@@ -447,22 +467,22 @@ export const getBestJapaneseVoice = (voices) => {
       return voice;
     }
   }
-  
+
   // Look for any Google voice
-  const googleVoice = japaneseVoices.find(v => 
+  const googleVoice = japaneseVoices.find(v =>
     v.name.toLowerCase().includes('google')
   );
   if (googleVoice) {
     return googleVoice;
   }
-  
+
   // Look for Premium/Natural voices (excluding eloquence)
   const premiumVoice = japaneseVoices.find(v => {
     const name = v.name.toLowerCase();
     const hasEloquence = eloquenceKeywords.some(kw => name.includes(kw));
     return !hasEloquence && (
-      name.includes('premium') || 
-      name.includes('natural') || 
+      name.includes('premium') ||
+      name.includes('natural') ||
       name.includes('enhanced') ||
       name.includes('neural')
     );
@@ -470,7 +490,7 @@ export const getBestJapaneseVoice = (voices) => {
   if (premiumVoice) {
     return premiumVoice;
   }
-  
+
   // Find first non-eloquence voice
   const nonEloquenceVoice = japaneseVoices.find(v => {
     const name = v.name.toLowerCase();
@@ -479,7 +499,7 @@ export const getBestJapaneseVoice = (voices) => {
   if (nonEloquenceVoice) {
     return nonEloquenceVoice;
   }
-  
+
   // Last resort: first Japanese voice
   return japaneseVoices[0];
 };
@@ -488,24 +508,27 @@ export const getBestJapaneseVoice = (voices) => {
  * Log only Japanese voices (for debugging Japanese issues)
  */
 export const logJapaneseVoices = () => {
+  if (typeof window === 'undefined' || !window.speechSynthesis) {
+    return;
+  }
   const voices = window.speechSynthesis.getVoices();
   const japaneseVoices = voices.filter(v => v.lang.toLowerCase().startsWith('ja'));
-  
+
   const eloquenceKeywords = ['eddy', 'flo', 'grandma', 'grandpa', 'reed', 'rocko', 'sandy', 'shelley', 'junior'];
-  
+
   console.group('🇯🇵 Available Japanese Voices (' + japaneseVoices.length + ')');
   japaneseVoices.forEach((voice, index) => {
     const isEloquence = eloquenceKeywords.some(kw => voice.name.toLowerCase().includes(kw));
     const quality = voice.name.toLowerCase().includes('google') ? '⭐⭐⭐⭐⭐' :
-                   voice.name.toLowerCase().includes('kyoko') || voice.name.toLowerCase().includes('otoya') ? '⭐⭐⭐⭐⭐' :
-                   voice.name.toLowerCase().includes('premium') || voice.name.toLowerCase().includes('natural') ? '⭐⭐⭐⭐' :
-                   isEloquence ? '⭐' :
-                   voice.localService ? '⭐⭐⭐' : '⭐⭐';
+      voice.name.toLowerCase().includes('kyoko') || voice.name.toLowerCase().includes('otoya') ? '⭐⭐⭐⭐⭐' :
+        voice.name.toLowerCase().includes('premium') || voice.name.toLowerCase().includes('natural') ? '⭐⭐⭐⭐' :
+          isEloquence ? '⭐' :
+            voice.localService ? '⭐⭐⭐' : '⭐⭐';
     const warning = isEloquence ? '❌ Low-quality Eloquence' : '';
     console.log(`${index + 1}. ${voice.name} (${voice.lang}) ${quality} ${voice.localService ? '📍' : '☁️'} ${warning}`);
   });
   console.groupEnd();
-  
+
   // Show which one would be selected
   const selected = getBestJapaneseVoice(voices);
   if (selected) {

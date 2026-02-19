@@ -15,6 +15,7 @@ import * as yup from 'yup';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/context/useLanguageContext';
 import styles from '../../auth-pages.module.css';
+import { BsPerson } from 'react-icons/bs';
 
 const SignUpForm = () => {
   const { t, locale } = useLanguage();
@@ -247,7 +248,7 @@ const SignUpForm = () => {
         )}
       </Button>
     </div>
-    <div className="text-center mt-2">
+    <div className="text-center mt-2 d-flex flex-column gap-2">
       <Link
         href="/auth-advance/sign-in"
         style={{
@@ -259,6 +260,44 @@ const SignUpForm = () => {
       >
         {t('auth.alreadyHaveAccount')} {t('auth.signIn')}
       </Link>
+      <div className="d-grid mt-2">
+        <Button
+          size="lg"
+          type="button"
+          variant="outline-primary"
+          onClick={() => window.location.href = '/'}
+          style={{
+            borderRadius: '12px',
+            minHeight: '52px',
+            fontWeight: '700',
+            border: '2px solid #764ba2',
+            color: '#764ba2',
+            backgroundColor: 'rgba(118, 75, 162, 0.05)',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '10px',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            fontSize: '1rem'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = '#764ba2';
+            e.currentTarget.style.color = 'white';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(118, 75, 162, 0.3)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(118, 75, 162, 0.05)';
+            e.currentTarget.style.color = '#764ba2';
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+          }}
+        >
+          <BsPerson size={22} />
+          <span>{t('auth.visitAsGuest')}</span>
+        </Button>
+      </div>
     </div>
   </form>;
 };

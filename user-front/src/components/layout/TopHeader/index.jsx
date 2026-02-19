@@ -9,6 +9,7 @@ import ProfileDropdown from './ProfileDropdown';
 import StyledHeader from './StyledHeader';
 import MessageIconWithBadge from './MessageIconWithBadge';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import ThemeSwitcher from './ThemeSwitcher';
 
 const TopHeader = () => {
   return <StyledHeader>
@@ -39,7 +40,13 @@ const TopHeader = () => {
           <LanguageSwitcher />
         </li>
 
-        <ProfileDropdown />
+        <li className="nav-item">
+          <ThemeSwitcher />
+        </li>
+
+        <li className="nav-item">
+          <ProfileDropdown />
+        </li>
       </ul>
 
       {/* Mobile navigation - compact layout for small screens */}
@@ -53,6 +60,7 @@ const TopHeader = () => {
         <div className="mobile-language-switcher">
           <LanguageSwitcher />
         </div>
+        <ThemeSwitcher />
         <ProfileDropdown />
       </div>
     </div>

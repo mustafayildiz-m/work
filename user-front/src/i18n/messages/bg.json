@@ -66,7 +66,8 @@
     "birthDatePlaceholder": "Birth Date (DD.MM.YYYY) *",
     "birthDateRequired": "Please enter your birth date",
     "ageLimitError": "You must be at least 16 years old to register",
-    "ageConfirm": "I declare and accept that I am over 16 years old."
+    "ageConfirm": "I declare and accept that I am over 16 years old.",
+    "visitAsGuest": "Visit as guest"
   },
   "navigation": {
     "home": "Начало",
@@ -201,7 +202,10 @@
     "about": "За",
     "viewProfile": "Преглед на профила",
     "noBio": "Потребителят все още не е добавил биография.",
-    "user": "Потребител"
+    "user": "Потребител",
+    "loginRequired": "Login Required",
+    "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
+    "loginAction": "Sign In / Sign Up"
   },
   "feed": {
     "sortBy": "Сортирай по",
@@ -272,7 +276,8 @@
     "lightTheme": "Светлинна тема",
     "darkTheme": "Тъмна тема",
     "systemTheme": "Тема на системата",
-    "activeTheme": "Активна тема:"
+    "activeTheme": "Активна тема:",
+    "title": "Theme"
   },
   "settings": {
     "account": {
@@ -815,5 +820,11 @@
     "languagesLoading": "Loading languages...",
     "languagesError": "Language list could not be loaded. Please refresh the page.",
     "cancel": "Cancel"
+  },
+  "guest": {
+    "messagingTitle": "Join the Conversation",
+    "messagingDesc": "You need to log in to meet people and chat.",
+    "login": "Log In",
+    "continue": "Continue Browsing"
   }
 }

@@ -10,6 +10,9 @@ import OnlineUsersPanel from '@/components/layout/OnlineUsersPanel';
 import ConversationPanel from '@/components/layout/ConversationPanel';
 
 import { useLanguage } from '@/context/useLanguageContext';
+import { useSession } from 'next-auth/react';
+import { useState } from 'react';
+import GuestMessagingModal from '@/components/layout/GuestMessagingModal';
 
 const FeedLayout = ({
   children
@@ -19,6 +22,16 @@ const FeedLayout = ({
     messagingOffcanvas,
     startOffcanvas
   } = useLayoutContext();
+  const { status } = useSession();
+  const [showGuestModal, setShowGuestModal] = useState(false);
+
+  const handleMessagingClick = () => {
+    if (status === 'unauthenticated') {
+      setShowGuestModal(true);
+    } else {
+      messagingOffcanvas.toggle();
+    }
+  };
 
   return <>
     <main>
@@ -72,7 +85,7 @@ const FeedLayout = ({
     </main>
     <div className="d-none d-lg-block">
       <a
-        onClick={messagingOffcanvas.toggle}
+        onClick={handleMessagingClick}
         className="position-fixed end-0 bottom-0 me-5 mb-5 d-flex align-items-center justify-content-center"
         role="button"
         aria-controls="offcanvasChat"
@@ -127,6 +140,9 @@ const FeedLayout = ({
 
     {/* Conversation Panel */}
     <ConversationPanel />
+
+    {/* Guest Messaging Modal */}
+    <GuestMessagingModal show={showGuestModal} onHide={() => setShowGuestModal(false)} />
 
     <style jsx global>{`
         @media (max-width: 991.98px) {

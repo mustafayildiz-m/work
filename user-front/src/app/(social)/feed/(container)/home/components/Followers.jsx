@@ -10,9 +10,11 @@ import { FaPlus } from 'react-icons/fa';
 import React, { useState, useEffect } from 'react';
 import { getUserIdFromToken } from '../../../../../../utils/auth';
 import { useLanguage } from '@/context/useLanguageContext';
+import { useSession } from 'next-auth/react';
 
 const Followers = () => {
   const { t } = useLanguage();
+  const { status } = useSession();
   const [whoToFollowData, setWhoToFollowData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [followLoading, setFollowLoading] = useState({});
@@ -36,6 +38,10 @@ const Followers = () => {
 
     fetchData();
   }, []);
+
+  if (status !== 'authenticated') {
+    return null;
+  }
 
   // Helper function to get proper image URL
   const getImageUrl = (photoUrl) => {

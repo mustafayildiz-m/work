@@ -66,7 +66,8 @@
     "birthDatePlaceholder": "出生日期 (日.月.年) *",
     "birthDateRequired": "请输入您的出生日期",
     "ageLimitError": "注册账号必须年满16岁",
-    "ageConfirm": "我声明并接受我已满16岁。"
+    "ageConfirm": "我声明并接受我已满16岁。",
+    "visitAsGuest": "Visit as guest"
   },
   "navigation": {
     "home": "首页",
@@ -201,7 +202,10 @@
     "about": "关于",
     "viewProfile": "查看简介",
     "noBio": "用户尚未添加简介。",
-    "user": "用户"
+    "user": "用户",
+    "loginRequired": "Login Required",
+    "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
+    "loginAction": "Sign In / Sign Up"
   },
   "feed": {
     "sortBy": "排序方式",
@@ -272,7 +276,8 @@
     "lightTheme": "灯光主题",
     "darkTheme": "深色主题",
     "systemTheme": "系统主题",
-    "activeTheme": "活跃的主题："
+    "activeTheme": "活跃的主题：",
+    "title": "主题"
   },
   "settings": {
     "account": {
@@ -827,5 +832,11 @@
     "languagesLoading": "Loading languages...",
     "languagesError": "Language list could not be loaded. Please refresh the page.",
     "cancel": "Cancel"
+  },
+  "guest": {
+    "messagingTitle": "Join the Conversation",
+    "messagingDesc": "You need to log in to meet people and chat.",
+    "login": "Log In",
+    "continue": "Continue Browsing"
   }
 }

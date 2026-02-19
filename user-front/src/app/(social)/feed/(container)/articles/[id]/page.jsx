@@ -54,22 +54,28 @@ const ArticleDetailPage = () => {
   const [pdfDoc, setPdfDoc] = useState(null);
 
   // URL'den dil bilgilerini al
-  const languageId = searchParams.get('languageId');
-  const languageName = searchParams.get('languageName');
-  const languageCode = searchParams.get('languageCode');
+  const languageId = searchParams ? searchParams.get('languageId') : null;
+  const languageNameRaw = searchParams ? searchParams.get('languageName') : null;
+  const languageCode = searchParams ? searchParams.get('languageCode') : null;
+
+  // URL-encoded olabilecek dil ismini decode et
+  const languageName = languageNameRaw ? decodeURIComponent(languageNameRaw) : null;
 
   // Dilleri yükle
   const { languages: availableLanguages, loading: languagesLoading } = useLanguages();
 
   // Safe translation function
   const translate = (key, fallback = '') => {
-    if (langLoading) return fallback;
+    if (langLoading || typeof t !== 'function') return fallback;
     try {
-      return t(key) || fallback;
-    } catch {
+      const result = t(key);
+      return result !== key ? result : fallback;
+    } catch (err) {
+      console.warn(`Translation error for key ${key}:`, err);
       return fallback;
     }
   };
+
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -77,11 +83,16 @@ const ArticleDetailPage = () => {
         setLoading(true);
         const token = localStorage.getItem('token');
 
+        const headers = {
+          'Content-Type': 'application/json'
+        };
+
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
         const response = await fetch(`${API_BASE_URL}/articles/${params.id}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+          headers: headers
         });
 
         if (!response.ok) {
@@ -666,18 +677,19 @@ const ArticleDetailPage = () => {
   const translateText = async (text, targetLangCode, sourceLangCode = null, pageNumber = null, articleId = null) => {
     try {
       const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('Token bulunamadı');
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
       }
 
       // Eğer sayfa bazlı çeviri ise yeni endpoint'i kullan
       if (pageNumber !== null && articleId !== null) {
         const response = await fetch(`${API_BASE_URL}/articles/${articleId}/page-translate`, {
           method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
+          headers: headers,
           body: JSON.stringify({
             pageNumber,
             originalText: text,
@@ -696,16 +708,14 @@ const ArticleDetailPage = () => {
       // Genel çeviri için eski endpoint
       const response = await fetch(`${API_BASE_URL}/translation/translate`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
+        headers: headers,
         body: JSON.stringify({
           text,
           targetLangCode,
           sourceLangCode
         })
       });
+
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -1164,7 +1174,7 @@ const ArticleDetailPage = () => {
                     className="me-3"
                   >
                     <BsArrowLeft className="me-1" />
-                    {languageName ? `${t(`books.languages.${languageName}`) || languageName} ${translate('articles.detail.backToLanguageArticles')}` : translate('articles.detail.backToList')}
+                    {languageName ? `${translate(`books.languages.${languageName}`, languageName)} ${translate('articles.detail.backToLanguageArticles', 'Makalelerine Dön')}` : translate('articles.detail.backToList', 'Listeye Dön')}
                   </Button>
                 </Link>
                 <CardTitle className="mb-0 h4">

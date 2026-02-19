@@ -66,7 +66,8 @@
     "birthDatePlaceholder": "生年月日 (日.月.年) *",
     "birthDateRequired": "生年月日を入力してください",
     "ageLimitError": "登録するには16歳以上である必要があります",
-    "ageConfirm": "私は16歳以上であることを宣言し、同意します。"
+    "ageConfirm": "私は16歳以上であることを宣言し、同意します。",
+    "visitAsGuest": "Visit as guest"
   },
   "navigation": {
     "home": "ホーム",
@@ -199,7 +200,10 @@
     "about": "プロフィール",
     "viewProfile": "プロフィールを見る",
     "noBio": "ユーザーはまだ自己紹介を追加していません。",
-    "user": "ユーザー"
+    "user": "ユーザー",
+    "loginRequired": "Login Required",
+    "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
+    "loginAction": "Sign In / Sign Up"
   },
   "feed": {
     "sortBy": "並び替え",
@@ -271,7 +275,8 @@
     "lightTheme": "ライトテーマ",
     "darkTheme": "ダークテーマ",
     "systemTheme": "システムテーマ",
-    "activeTheme": "アクティブなテーマ："
+    "activeTheme": "アクティブなテーマ：",
+    "title": "テーマ"
   },
   "settings": {
     "account": {
@@ -826,5 +831,11 @@
     "languagesLoading": "Loading languages...",
     "languagesError": "Language list could not be loaded. Please refresh the page.",
     "cancel": "Cancel"
+  },
+  "guest": {
+    "messagingTitle": "Join the Conversation",
+    "messagingDesc": "You need to log in to meet people and chat.",
+    "login": "Log In",
+    "continue": "Continue Browsing"
   }
 }

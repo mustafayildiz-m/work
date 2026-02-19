@@ -23,9 +23,15 @@ export const useBooks = (selectedLanguageId = null) => {
       setError(null);
 
       const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('Authentication token not found');
+
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
       }
+
 
       const params = new URLSearchParams({
         page: page.toString(),
@@ -41,25 +47,23 @@ export const useBooks = (selectedLanguageId = null) => {
       }
 
       const response = await fetch(`${API_BASE_URL}/books?${params}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+        headers: headers
       });
+
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      
+
       // Backend'den gelen translations'ı kullanıcının diline göre transform et
       const transformedBooks = (data || []).map(book => {
         // Kullanıcının seçtiği dildeki çeviriyi bul, yoksa ilk çeviriyi al
-        const selectedTranslation = selectedLanguageId 
+        const selectedTranslation = selectedLanguageId
           ? book.translations?.find(t => t.languageId === selectedLanguageId)
           : book.translations?.[0];
-        
+
         const fallbackTranslation = book.translations?.[0];
         const translation = selectedTranslation || fallbackTranslation;
 
@@ -71,7 +75,7 @@ export const useBooks = (selectedLanguageId = null) => {
           // Translations'ı da koru (detay sayfası için)
         };
       });
-      
+
       setBooks(transformedBooks);
       setPagination(prev => ({
         ...prev,

@@ -21,6 +21,12 @@
     "required": "Zorunlu",
     "or": "veya"
   },
+  "guest": {
+    "messagingTitle": "Sohbete Katıl",
+    "messagingDesc": "Diğer kullanıcılarla mesajlaşmak için giriş yapmalısınız.",
+    "login": "Giriş Yap",
+    "continue": "Gezinmeye Devam Et"
+  },
   "auth": {
     "signIn": "Giriş Yap",
     "signUp": "Hesap Oluştur",
@@ -66,7 +72,8 @@
     "birthDatePlaceholder": "Doğum Tarihi (GG.AA.YYYY) *",
     "birthDateRequired": "Lütfen doğum tarihinizi girin",
     "ageLimitError": "Üye olabilmek için en az 16 yaşında olmalısınız",
-    "ageConfirm": "16 yaşından büyük olduğumu beyan ve kabul ediyorum."
+    "ageConfirm": "16 yaşından büyük olduğumu beyan ve kabul ediyorum.",
+    "visitAsGuest": "Misafir olarak ziyaret et"
   },
   "navigation": {
     "home": "Ana Sayfa",
@@ -204,7 +211,10 @@
     "about": "Hakkında",
     "viewProfile": "Profili Görüntüle",
     "noBio": "Kullanıcı henüz bir biyografi eklememiş.",
-    "user": "Kullanıcı"
+    "user": "Kullanıcı",
+    "loginRequired": "Giriş Yapmanız Gerekiyor",
+    "loginDescription": "Profil özelliklerini kullanmak ve diğer kullanıcılarla etkileşime geçmek için lütfen giriş yapın veya üye olun.",
+    "loginAction": "Giriş Yap / Üye Ol"
   },
   "feed": {
     "sortBy": "Sırala",
@@ -276,7 +286,8 @@
     "lightTheme": "Açık Tema",
     "darkTheme": "Koyu Tema",
     "systemTheme": "Sistem Teması",
-    "activeTheme": "Aktif tema:"
+    "activeTheme": "Aktif tema:",
+    "title": "Tema"
   },
   "settings": {
     "account": {

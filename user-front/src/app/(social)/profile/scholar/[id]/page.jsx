@@ -56,14 +56,17 @@ const ScholarProfilePage = () => {
         if (scholarId) {
           // JWT token'ı localStorage'dan al
           const token = localStorage.getItem('token');
+          const headers = {
+            'Content-Type': 'application/json'
+          };
+          if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+          }
 
           // API'den alim verilerini çek
           const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scholars/${scholarId}`, {
             method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
+            headers: headers
           });
 
           if (response.ok) {
@@ -125,22 +128,24 @@ const ScholarProfilePage = () => {
   const translateText = async (text, targetLangCode, sourceLangCode = null) => {
     try {
       const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('Token bulunamadı');
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
       }
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/translation/translate`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
+        headers: headers,
         body: JSON.stringify({
           text,
           targetLangCode,
           sourceLangCode
         })
       });
+
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));

@@ -15,16 +15,19 @@ export const useLanguages = () => {
       setError(null);
 
       const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('Authentication token not found');
+
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
       }
 
       const response = await fetch(`${API_BASE_URL}/languages`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+        headers: headers
       });
+
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

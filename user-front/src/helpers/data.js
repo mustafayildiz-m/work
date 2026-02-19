@@ -12,14 +12,23 @@ export const getWhoToFollow = async (type = 'all', limit = 200) => {
   try {
     const token = localStorage.getItem('token');
 
+    // If no token, don't attempt to fetch from protected endpoint
+    if (!token) {
+      return users.slice(0, limit);
+    }
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/who-to-follow?type=${type}&limit=${limit}`, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': token ? `Bearer ${token}` : '',
+        'Authorization': `Bearer ${token}`,
       },
     });
 
     if (!response.ok) {
+      // Silently handle 401 for invalid tokens
+      if (response.status === 401) {
+        return users.slice(0, limit);
+      }
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
@@ -167,9 +176,6 @@ export const getTimelinePosts = async (userId, language = 'tr') => {
   try {
     const token = localStorage.getItem('token');
 
-    if (!token) {
-      throw new Error('Authentication token not found. Please login first.');
-    }
 
     if (!process.env.NEXT_PUBLIC_API_URL) {
       throw new Error('API URL not configured. Please check environment variables.');
@@ -186,12 +192,18 @@ export const getTimelinePosts = async (userId, language = 'tr') => {
       url.searchParams.append('language', language);
     }
 
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const response = await fetch(url.toString(), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
+      headers: headers,
     });
+
 
     if (!response.ok) {
       if (response.status === 401) {
