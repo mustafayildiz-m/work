@@ -67,7 +67,7 @@
     "birthDateRequired": "Пожалуйста, введите вашу дату рождения",
     "ageLimitError": "Вам должно быть не менее 16 лет для регистрации",
     "ageConfirm": "Я заявляю и принимаю, что мне больше 16 лет.",
-    "visitAsGuest": "Visit as guest"
+    "visitAsGuest": "Войти как гость"
   },
   "navigation": {
     "home": "Главная",
@@ -760,7 +760,8 @@
       "Somalice": "Somali",
       "Fon": "Fon",
       "Esperanto": "Esperanto",
-      "Baskça": "Basque"
+      "Baskça": "Basque",
+      "divehice": "Дивехи"
     },
     "detail": {
       "loadingBook": "Загрузка книги...",

@@ -42,12 +42,12 @@ function EditArticle() {
     const observer = new MutationObserver(() => {
       setCurrentTheme(getTheme());
     });
-    
+
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['class']
     });
-    
+
     return () => observer.disconnect();
   }, []);
 
@@ -145,12 +145,12 @@ function EditArticle() {
     const newTranslations = form.translations.map((trans, i) => {
       if (i === idx) {
         const updatedTrans = { ...trans, [field]: value };
-        
+
         // Eğer başlık değişiyorsa, slug'ı otomatik oluştur
         if (field === 'title' && value) {
           updatedTrans.slug = createSlug(value);
         }
-        
+
         return updatedTrans;
       }
       return trans;
@@ -221,7 +221,7 @@ function EditArticle() {
           formData.append(`translations[${idx}][content]`, trans.content);
           if (trans.summary) formData.append(`translations[${idx}][summary]`, trans.summary);
           if (trans.slug) formData.append(`translations[${idx}][slug]`, trans.slug);
-          
+
           // PDF handling: Yeni dosya yüklendiyse onu, yoksa mevcut URL'i gönder
           if (trans.pdfFile) {
             // Yeni PDF dosyası yüklendi
@@ -474,26 +474,6 @@ function EditArticle() {
                     />
                   </div>
 
-                  {/* Slug */}
-                  <div>
-                    <label className="block text-xs font-medium mb-1 text-gray-700 dark:text-gray-300">
-                      Slug (URL) <span className="text-red-500">*</span>
-                      <span className="text-xs text-gray-500 ml-1">(Otomatik oluşturulur)</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={trans.slug}
-                      onChange={(e) =>
-                        handleTranslationChange(idx, 'slug', e.target.value)
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-xs"
-                      placeholder="makale-basligi"
-                      required
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                      Başlık yazdığınızda otomatik oluşturulur. İsterseniz düzenleyebilirsiniz.
-                    </p>
-                  </div>
 
                   {/* PDF Dosyası */}
                   <div>
