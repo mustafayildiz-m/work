@@ -12,6 +12,7 @@ import { Scholar } from '../scholars/entities/scholar.entity';
 import { UserPostComment } from '../entities/user-post-comment.entity';
 import { UserPostShare } from '../entities/user-post-share.entity';
 import { CacheService } from './cache.service';
+import { SystemSettingsService } from './system-settings.service';
 
 @Injectable()
 export class UserPostsService {
@@ -33,12 +34,15 @@ export class UserPostsService {
     @InjectRepository(UserPostShare)
     private userPostShareRepository: Repository<UserPostShare>,
     private readonly cacheService: CacheService,
+    private readonly settingsService: SystemSettingsService,
   ) { }
 
   async create(createUserPostDto: CreateUserPostDto) {
+    const isApprovalEnabled = await this.settingsService.getSettingBool('post_approval_enabled', true);
+
     const post = this.userPostRepository.create({
       ...createUserPostDto,
-      status: PostStatus.PENDING, // Default olarak pending
+      status: isApprovalEnabled ? PostStatus.PENDING : PostStatus.APPROVED,
     });
     const savedPost = await this.userPostRepository.save(post);
 
@@ -63,12 +67,14 @@ export class UserPostsService {
     // DTO'dan status ve approved_by alanlarını çıkar (güvenlik için)
     const { status, approved_by, ...updateData } = updateUserPostDto as any;
 
-    // Post güncellendiğinde tekrar onaya gitmesi için status'u pending yap
+    const isApprovalEnabled = await this.settingsService.getSettingBool('post_approval_enabled', true);
+
+    // Post güncellendiğinde ayara göre status'u belirle
     // repository.update kullanarak doğrudan veritabanında güncelle
     await this.userPostRepository.update(id, {
       ...updateData,
-      status: PostStatus.PENDING, // Her zaman pending yap
-      approved_by: null, // Onaylayan admin bilgisini temizle
+      status: isApprovalEnabled ? PostStatus.PENDING : PostStatus.APPROVED,
+      approved_by: isApprovalEnabled ? null : post.approved_by, // Onay gerekliyse temizle, değilse eski durumu koru
     });
 
     // Güncellenmiş post'u tekrar çek

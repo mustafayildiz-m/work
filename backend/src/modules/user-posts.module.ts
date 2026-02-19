@@ -13,6 +13,7 @@ import { UserPostShare } from '../entities/user-post-share.entity';
 import { UserPostShareController } from '../controllers/user-post-share.controller';
 import { UserPostShareService } from '../services/user-post-share.service';
 import { CacheService } from '../services/cache.service';
+import { SystemSettingsModule } from './system-settings.module';
 
 @Module({
   imports: [
@@ -26,9 +27,10 @@ import { CacheService } from '../services/cache.service';
       UserPostComment,
       UserPostShare,
     ]),
+    SystemSettingsModule,
   ],
   controllers: [UserPostsController, UserPostShareController],
   providers: [UserPostsService, UserPostShareService, CacheService],
   exports: [UserPostsService, UserPostShareService],
 })
-export class UserPostsModule {}
+export class UserPostsModule { }

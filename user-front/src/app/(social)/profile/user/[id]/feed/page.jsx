@@ -394,15 +394,41 @@ const UserFeedPage = () => {
     }
   };
 
-  const handleUpdatePost = async (updatedPost) => {
+  const handleUpdatePost = async (postData) => {
+    if (!editingPost) return;
+
+    setIsEditing(true);
+
     try {
-      // TODO: Implement update post API call
-      setShowEditModal(false);
-      setEditingPost(null);
-      // Refresh posts
-      fetchPosts();
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/user-posts/${editingPost.id}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          title: postData.title,
+          content: postData.content
+        })
+      });
+
+      if (response.ok) {
+        setShowEditModal(false);
+        setEditingPost(null);
+        // Refresh posts
+        fetchPosts();
+
+        alert('Gönderi başarıyla güncellendi.');
+      } else {
+        alert('Gönderi güncellenirken bir hata oluştu.');
+      }
     } catch (error) {
-      // console.error('Error updating post:', error);
+      alert('Gönderi güncellenirken hata oluştu.');
+    } finally {
+      setIsEditing(false);
     }
   };
 

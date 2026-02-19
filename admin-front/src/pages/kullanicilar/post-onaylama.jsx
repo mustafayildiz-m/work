@@ -13,6 +13,65 @@ const PostOnaylama = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [processingId, setProcessingId] = useState(null);
+  const [isApprovalEnabled, setIsApprovalEnabled] = useState(true);
+  const [isSettingLoading, setIsSettingLoading] = useState(false);
+
+  const fetchSettings = async () => {
+    try {
+      const token = localStorage.getItem('access_token');
+      if (!token) return;
+
+      const response = await fetch(`${API_URL}/system-settings/post_approval_enabled`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setIsApprovalEnabled(data.value === 'true');
+      }
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+    }
+  };
+
+  const toggleApprovalSetting = async () => {
+    try {
+      setIsSettingLoading(true);
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        toast.error('Giriş yapmanız gerekiyor');
+        return;
+      }
+
+      const newValue = !isApprovalEnabled;
+      const response = await fetch(`${API_URL}/system-settings/post_approval_enabled`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          value: newValue.toString(),
+          description: 'Kullanıcı postlarının admin onayına düşüp düşmeyeceğini belirler.'
+        }),
+      });
+
+      if (response.ok) {
+        setIsApprovalEnabled(newValue);
+        toast.success(`Post onayı ${newValue ? 'etkinleştirildi' : 'devre dışı bırakıldı'}`);
+      } else {
+        throw new Error('Ayar güncellenemedi');
+      }
+    } catch (error) {
+      console.error('Error toggling setting:', error);
+      toast.error('Ayar güncellenirken bir hata oluştu');
+    } finally {
+      setIsSettingLoading(false);
+    }
+  };
 
   const fetchPendingPosts = async () => {
     try {
@@ -33,7 +92,6 @@ const PostOnaylama = () => {
       if (!response.ok) {
         if (response.status === 401) {
           toast.error('Oturum süreniz dolmuş. Lütfen tekrar giriş yapın.');
-          // Redirect to login
           window.location.href = '/auth/signin';
           return;
         }
@@ -53,6 +111,7 @@ const PostOnaylama = () => {
 
   useEffect(() => {
     fetchPendingPosts();
+    fetchSettings();
   }, []);
 
   const handleApprove = async (postId) => {
@@ -179,14 +238,35 @@ const PostOnaylama = () => {
                 Kullanıcılar tarafından paylaşılan postları inceleyin ve onaylayın
               </p>
             </div>
-            <button
-              onClick={fetchPendingPosts}
-              disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
-            >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-              Yenile
-            </button>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 p-2 rounded-lg border border-gray-200 dark:border-gray-700">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 ml-2">
+                  Post Onay Sistemi:
+                </span>
+                <button
+                  onClick={toggleApprovalSetting}
+                  disabled={isSettingLoading}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${isApprovalEnabled ? 'bg-green-600' : 'bg-gray-400'
+                    }`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isApprovalEnabled ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                  />
+                </button>
+                <span className={`text-xs font-bold px-2 py-0.5 rounded ${isApprovalEnabled ? 'text-green-600 bg-green-100' : 'text-gray-600 bg-gray-200'}`}>
+                  {isApprovalEnabled ? 'AÇIK' : 'KAPALI'}
+                </span>
+              </div>
+              <button
+                onClick={fetchPendingPosts}
+                disabled={loading}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              >
+                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                Yenile
+              </button>
+            </div>
           </div>
 
           {loading ? (

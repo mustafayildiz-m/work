@@ -38,34 +38,34 @@ const Posts = ({ userId, showOwnPosts = false }) => {
   const [ownPosts, setOwnPosts] = useState([]);
   const [ownPostsLoading, setOwnPostsLoading] = useState(false);
   const [ownPostsError, setOwnPostsError] = useState(null);
-  
+
   const { posts: timelinePosts, loading, error, refetch } = useTimelinePosts(userId);
-  
+
   // State for delete operation
   const [deletingPostId, setDeletingPostId] = useState(null);
-  
+
   // State for custom confirmation dialogs
   const [showUnfollowConfirm, setShowUnfollowConfirm] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
-  
+
   // State for edit post modal
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingPost, setEditingPost] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  
+
   // State for comments
   const [postComments, setPostComments] = useState({});
   const [loadingComments, setLoadingComments] = useState({});
-  
+
   // State for language selection per post
   const [selectedLanguages, setSelectedLanguages] = useState({});
-  
+
   // Global dil değiştiğinde tüm post dillerini sıfırla
   useEffect(() => {
     setSelectedLanguages({});
   }, [locale]);
-  
+
   // Handler functions for post actions
   const handleUnfollow = async (userIdToUnfollow, userType = 'user') => {
     // Store the action details and show confirmation dialog
@@ -79,22 +79,22 @@ const Posts = ({ userId, showOwnPosts = false }) => {
 
   const executeUnfollow = async () => {
     const { userId: userIdToUnfollow, userType } = pendingAction;
-    
+
     try {
-      
+
       // Get the token from localStorage
       const token = localStorage.getItem('token');
       if (!token) {
         // console.error('No authentication token found');
         return;
       }
-      
+
 
       // Make the DELETE request to unfollow the user
       // Determine the correct endpoint based on user type
       let endpoint;
       let requestBody;
-      
+
       if (userType === 'scholar') {
         endpoint = '/user-scholar-follow/unfollow';
         requestBody = {
@@ -108,15 +108,15 @@ const Posts = ({ userId, showOwnPosts = false }) => {
           following_id: userIdToUnfollow
         };
       }
-      
+
       const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}${endpoint}`;
       //   'Authorization': `Bearer ${token.substring(0, 20)}...`,
       //   'Content-Type': 'application/json'
       // });
-      
-      
+
+
       // Log the exact curl command that would be equivalent
-      
+
       const response = await fetch(apiUrl, {
         method: 'DELETE',
         headers: {
@@ -159,10 +159,10 @@ const Posts = ({ userId, showOwnPosts = false }) => {
 
   const executeDeletePost = async () => {
     const { postId } = pendingAction;
-    
+
     try {
       setDeletingPostId(postId);
-      
+
       // Get the token from localStorage
       const token = localStorage.getItem('token');
       if (!token) {
@@ -236,17 +236,17 @@ const Posts = ({ userId, showOwnPosts = false }) => {
 
   const handleAddComment = async (postId, commentText) => {
     try {
-      
+
       // Debug: Check what's in localStorage
-      
+
       // Get the token from localStorage
       let token = localStorage.getItem('token');
-      
+
       // If token not found, try next-auth.session-token
       if (!token) {
         token = localStorage.getItem('next-auth.session-token');
       }
-      
+
       if (!token) {
         // console.error('No authentication token found');
         alert('Yorum eklemek için giriş yapmanız gerekiyor.');
@@ -274,7 +274,7 @@ const Posts = ({ userId, showOwnPosts = false }) => {
       //   user_id: userId,
       //   content: commentText
       // });
-      
+
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -290,7 +290,7 @@ const Posts = ({ userId, showOwnPosts = false }) => {
 
 
       if (response.ok) {
-        
+
         // Get the response data to get the new comment details
         const newComment = await response.json();
         //   user_name: newComment.user_name,
@@ -298,13 +298,13 @@ const Posts = ({ userId, showOwnPosts = false }) => {
         //   user_photo_url: newComment.user_photo_url,
         //   avatar: newComment.avatar
         // });
-        
+
         // Update the comments state immediately without refetching
         setPostComments(prev => ({
           ...prev,
           [postId]: [...(prev[postId] || []), newComment]
         }));
-        
+
         // Remove refetch to prevent page scroll reset
         // refetch();
       } else {
@@ -328,7 +328,7 @@ const Posts = ({ userId, showOwnPosts = false }) => {
       }
 
       const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/user-post-comments/post/${postId}`;
-      
+
       const response = await fetch(apiUrl, {
         method: 'GET',
         headers: {
@@ -352,9 +352,9 @@ const Posts = ({ userId, showOwnPosts = false }) => {
 
   const loadComments = async (postId) => {
     if (postComments[postId] || loadingComments[postId]) return;
-    
+
     setLoadingComments(prev => ({ ...prev, [postId]: true }));
-    
+
     try {
       const comments = await fetchComments(postId);
       setPostComments(prev => ({ ...prev, [postId]: comments }));
@@ -380,11 +380,11 @@ const Posts = ({ userId, showOwnPosts = false }) => {
 
   const handleUpdatePost = async (postData) => {
     if (!editingPost) return;
-    
+
     setIsEditing(true);
-    
+
     try {
-      
+
       // Get the token from localStorage
       const token = localStorage.getItem('token');
       if (!token) {
@@ -397,7 +397,7 @@ const Posts = ({ userId, showOwnPosts = false }) => {
       //   'Authorization': `Bearer ${token.substring(0, 20)}...`,
       //   'Content-Type': 'application/json'
       // });
-      
+
       const response = await fetch(apiUrl, {
         method: 'PUT',
         headers: {
@@ -417,28 +417,23 @@ const Posts = ({ userId, showOwnPosts = false }) => {
         setEditingPost(null);
         refetch();
       } else {
-        // console.error('Failed to update post:', response.status, response.statusText);
         const errorData = await response.text();
-        // console.error('Error details:', errorData);
         alert('Gönderi güncellenirken bir hata oluştu. Lütfen tekrar deneyin.');
       }
     } catch (error) {
-      // console.error('Error updating post:', error);
       alert('Gönderi güncellenirken bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setIsEditing(false);
     }
   };
-
-  // Fetch user's own posts if showOwnPosts is true
   useEffect(() => {
     const fetchOwnPosts = async () => {
       if (!showOwnPosts) return;
-      
+
       try {
         setOwnPostsLoading(true);
         setOwnPostsError(null);
-        
+
         const token = localStorage.getItem('token');
         if (!token) {
           throw new Error('Kullanıcı girişi yapılmamış');
@@ -483,7 +478,7 @@ const Posts = ({ userId, showOwnPosts = false }) => {
 
   // Debug information and load comments
   useEffect(() => {
-    
+
     // Load comments only for user posts (not scholar posts)
     if (posts && posts.length > 0) {
       posts.forEach(post => {
@@ -524,14 +519,14 @@ const Posts = ({ userId, showOwnPosts = false }) => {
             Environment: {process.env.NODE_ENV}
           </small>
         </div>
-        <button 
-          className="btn btn-outline-danger btn-sm me-2" 
+        <button
+          className="btn btn-outline-danger btn-sm me-2"
           onClick={refetch}
         >
           Tekrar Dene
         </button>
-        <button 
-          className="btn btn-outline-secondary btn-sm" 
+        <button
+          className="btn btn-outline-secondary btn-sm"
           onClick={() => window.location.reload()}
         >
           Sayfayı Yenile
@@ -550,7 +545,7 @@ const Posts = ({ userId, showOwnPosts = false }) => {
           {showOwnPosts ? 'Henüz gönderi paylaşmadınız' : 'Henüz gönderi bulunmuyor'}
         </h6>
         <p className="text-muted mb-0">
-          {showOwnPosts 
+          {showOwnPosts
             ? 'İlk gönderinizi paylaşmak için yukarıdaki formu kullanın.'
             : 'Takip ettiğiniz kişiler henüz gönderi paylaşmamış veya henüz kimseyi takip etmiyorsunuz.'
           }
@@ -610,7 +605,7 @@ const Posts = ({ userId, showOwnPosts = false }) => {
         if (post.user_id && !post.scholar_id) {
           // User post - use PostCard component
           return (
-            <PostCard 
+            <PostCard
               key={`user-${post.id}`}
               postId={post.id}
               createdAt={post.created_at}
@@ -636,22 +631,22 @@ const Posts = ({ userId, showOwnPosts = false }) => {
               onHidePost={() => handleHidePost(post.id)}
               onBlock={() => handleBlock(post.user_id)}
               onReportPost={() => handleReportPost(post.id)}
-                              onSavePost={() => handleSavePost(post.id)}
-                onAddComment={handleAddComment}
-                comments={postComments[post.id] || []}
-                onLoadComments={() => loadComments(post.id)}
-              />
+              onSavePost={() => handleSavePost(post.id)}
+              onAddComment={handleAddComment}
+              comments={postComments[post.id] || []}
+              onLoadComments={() => loadComments(post.id)}
+            />
           );
         } else if (post.type === 'scholar') {
           // Manuel seçim varsa onu kullan, yoksa global dil seç, yoksa Türkçe, yoksa ilk mevcut
           const currentLanguage = selectedLanguages[post.id] || locale || 'tr';
-          const currentTranslation = post.translations?.find(t => t.language === currentLanguage) 
-                                  || post.translations?.find(t => t.language === 'tr')
-                                  || post.translations?.[0];
+          const currentTranslation = post.translations?.find(t => t.language === currentLanguage)
+            || post.translations?.find(t => t.language === 'tr')
+            || post.translations?.[0];
 
           // Scholar post - use PostCard component with scholar info
           return (
-            <PostCard 
+            <PostCard
               key={`scholar-${post.id}`}
               postId={post.id}
               createdAt={post.created_at}
@@ -681,7 +676,7 @@ const Posts = ({ userId, showOwnPosts = false }) => {
               onSavePost={() => handleSavePost(post.id)}
               onAddComment={null}
               comments={[]}
-              onLoadComments={() => {}}
+              onLoadComments={() => { }}
               translations={post.translations}
               onLanguageChange={(lang) => setSelectedLanguages(prev => ({ ...prev, [post.id]: lang }))}
             />
