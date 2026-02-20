@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { DropdownMenu4 } from '@/partials/dropdown-menu/dropdown-menu-4';
 import { DropdownMenu5 } from '@/partials/dropdown-menu/dropdown-menu-5';
@@ -86,7 +87,7 @@ const Connections = ({ url }) => {
               {item.name}
             </Link>
             <span className="text-xs font-normal text-secondary-foreground leading-3">
-              {item.connections} connections
+              {item.connections} <FormattedMessage id="UI.CONNECTIONS" />
             </span>
           </div>
         </div>
@@ -122,7 +123,7 @@ const Connections = ({ url }) => {
   return (
     <Card className="min-w-full">
       <CardHeader>
-        <CardTitle>Connections</CardTitle>
+        <CardTitle><FormattedMessage id="UI.CONNECTIONS_1" /></CardTitle>
         <DropdownMenu4
           trigger={
             <Button variant="ghost" mode="icon">
@@ -137,13 +138,13 @@ const Connections = ({ url }) => {
             <TableBody>
               <TableRow className="bg-accent/60">
                 <TableCell className="text-start font-normal min-w-48 py-2.5">
-                  Name
+                  <FormattedMessage id="UI.NAME" />
                 </TableCell>
                 <TableCell className="text-end font-medium min-w-20 py-2.5">
-                  Joint Links
+                  <FormattedMessage id="UI.JOINT_LINKS" />
                 </TableCell>
                 <TableCell className="text-end font-medium min-w-20 py-2.5">
-                  Status
+                  <FormattedMessage id="UI.STATUS" />
                 </TableCell>
                 <TableCell className="min-w-16" />
               </TableRow>
@@ -154,7 +155,7 @@ const Connections = ({ url }) => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to={url}>View 64 more</Link>
+          <Link to={url}><FormattedMessage id="UI.VIEW_64_MORE" /></Link>
         </Button>
       </CardFooter>
     </Card>

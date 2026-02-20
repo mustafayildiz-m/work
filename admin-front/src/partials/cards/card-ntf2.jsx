@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Copy, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -97,7 +98,7 @@ const CardNFT2 = ({ avatar, bgImage, name, email, info, statistics }) => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed">
-          <Link to="/public-profile/profiles/nft">View NFT’s</Link>
+          <Link to="/public-profile/profiles/nft"><FormattedMessage id="UI.VIEW_NFTS_1" /></Link>
         </Button>
       </CardFooter>
     </Card>

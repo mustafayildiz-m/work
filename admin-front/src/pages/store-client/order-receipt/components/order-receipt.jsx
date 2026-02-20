@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { ListChecks } from 'lucide-react';
 import { Link } from 'react-router';
@@ -40,15 +41,15 @@ export function OrderReceipt() {
               </Link>
 
               <h3 className="text-2xl text-dark font-semibold mt-6">
-                Order Confirmation
+                <FormattedMessage id="UI.ORDER_CONFIRMATION" />
               </h3>
               <span className="text-sm text-secondary-foreground font-medium">
-                Thank you! Your order
+                <FormattedMessage id="UI.THANK_YOU_YOUR_ORDER" />
                 <span className="text-sm text-dark font-semibold">
                   {' '}
-                  #X319330-S24{' '}
+                  <FormattedMessage id="UI.X319330S24" />{' '}
                 </span>
-                is confirmed and being processed.
+                <FormattedMessage id="UI.IS_CONFIRMED_AND_BEING_PROCESSED" />
               </span>
             </div>
 
@@ -60,44 +61,43 @@ export function OrderReceipt() {
               <div className="flex justify-start gap-9">
                 <div className="flex flex-col gap-1.5">
                   <span className="text-sm font-normal text-secondary-foreground">
-                    Order placed
+                    <FormattedMessage id="UI.ORDER_PLACED" />
                   </span>
                   <span className="text-sm font-medium text-dark">
-                    26 June, 2025 ID
+                    <FormattedMessage id="UI.26_JUNE_2025_ID" />
                   </span>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <span className="text-sm font-normal text-secondary-foreground">
-                    Total
+                    <FormattedMessage id="UI.TOTAL" />
                   </span>
                   <span className="text-sm font-medium text-dark">$512.60</span>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <span className="text-sm font-normal text-secondary-foreground">
-                    Ship to
+                    <FormattedMessage id="UI.SHIP_TO" />
                   </span>
                   <span className="text-sm font-medium text-dark">
-                    Jeroen van Dijk
+                    <FormattedMessage id="UI.JEROEN_VAN_DIJK" />
                   </span>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <span className="text-sm font-normal text-secondary-foreground">
-                    Estimated Delivery
+                    <FormattedMessage id="UI.ESTIMATED_DELIVERY" />
                   </span>
                   <span className="text-sm font-medium text-dark">
-                    07 July, 2025
+                    <FormattedMessage id="UI.07_JULY_2025" />
                   </span>
                 </div>
               </div>
             </Card>
             <Button variant="outline" className="lg:mt-5">
               <ListChecks />
-              <Link to="/store-client/my-orders">My Orders</Link>
+              <Link to="/store-client/my-orders"><FormattedMessage id="UI.MY_ORDERS" /></Link>
             </Button>
           </div>
         </Card>
       </div>
-
       <style>
         {`
           body {

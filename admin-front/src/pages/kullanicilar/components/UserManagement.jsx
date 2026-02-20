@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState, useEffect } from 'react';
 import { Search, RefreshCw, Users as UsersIcon, Filter, X } from 'lucide-react';
 import { toast } from 'sonner';
@@ -198,7 +199,6 @@ const UserManagement = ({ role, title, description }) => {
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{title}</h1>
         <p className="text-gray-500 dark:text-gray-400 mt-2">{description}</p>
       </div>
-
       {/* Stats */}
       <Card className="p-6">
         <div className="flex items-center gap-4">
@@ -206,12 +206,11 @@ const UserManagement = ({ role, title, description }) => {
             <UsersIcon className="w-8 h-8 text-white" />
           </div>
           <div>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Toplam Kullanıcı</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.TOPLAM_KULLANICI" /></p>
             <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.total}</p>
           </div>
         </div>
       </Card>
-
       {/* Filters */}
       <Card className="p-6">
         <div className="flex flex-col md:flex-row gap-4">
@@ -232,16 +231,16 @@ const UserManagement = ({ role, title, description }) => {
               onChange={(e) => setIsActiveFilter(e.target.value)}
               className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
             >
-              <option value="all">Tümü</option>
-              <option value="true">Aktif</option>
-              <option value="false">Pasif</option>
+              <option value="all"><FormattedMessage id="UI.TUMU" /></option>
+              <option value="true"><FormattedMessage id="UI.AKTIF" /></option>
+              <option value="false"><FormattedMessage id="UI.PASIF" /></option>
             </select>
             <button
               onClick={() => handleSearch()}
               className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
             >
               <Search className="w-5 h-5" />
-              Ara
+              <FormattedMessage id="UI.ARA" />
             </button>
             <button
               onClick={() => {
@@ -264,7 +263,6 @@ const UserManagement = ({ role, title, description }) => {
           </div>
         </div>
       </Card>
-
       {/* User Table */}
       <UserTable
         users={users}
@@ -274,7 +272,6 @@ const UserManagement = ({ role, title, description }) => {
         onToggleStatus={handleToggleStatus}
         onDelete={handleDelete}
       />
-
       {/* Load More */}
       {pagination.hasMore && !loading && (
         <div className="flex justify-center">
@@ -282,11 +279,10 @@ const UserManagement = ({ role, title, description }) => {
             onClick={handleLoadMore}
             className="px-8 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium"
           >
-            Daha Fazla Yükle
+            <FormattedMessage id="UI.DAHA_FAZLA_YUKLE" />
           </button>
         </div>
       )}
-
       {/* Modals */}
       <UserDetailModal
         user={selectedUser}
@@ -296,7 +292,6 @@ const UserManagement = ({ role, title, description }) => {
           setSelectedUser(null);
         }}
       />
-
       <UserEditModal
         user={selectedUser}
         isOpen={editModalOpen}

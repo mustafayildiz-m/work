@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { PageNavbar } from '@/pages/account';
 import {
@@ -26,17 +27,17 @@ export function AccountGetStartedPage() {
               <ToolbarDescription>
                 <div className="flex items-center gap-2 text-sm font-medium">
                   <span className="text-foreground font-medium">
-                    Jayson Tatum
+                    <FormattedMessage id="UI.JAYSON_TATUM" />
                   </span>
                   <Link
                     to="mailto:jaytatum@ktstudio.com"
                     className="text-secondary-foreground hover:text-primary"
                   >
-                    jaytatum@ktstudio.com
+                    <FormattedMessage id="UI.JAYTATUMKTSTUDIOCOM" />
                   </Link>
                   <span className="size-0.75 bg-mono/50 rounded-full"></span>
                   <Button mode="link" underlined="dashed" asChild>
-                    <Link to="/account/members/team-info">Personal Info</Link>
+                    <Link to="/account/members/team-info"><FormattedMessage id="UI.PERSONAL_INFO" /></Link>
                   </Button>
                 </div>
               </ToolbarDescription>

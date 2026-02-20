@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { Faq } from '@/partials/common/faq';
 import { Help2 } from '@/partials/common/help2';
@@ -26,10 +27,9 @@ export function AccountMembersStarterContent() {
         title="New Member Onboarding and Registration"
         subTitle={
           <Fragment>
-            A streamlined process to welcome and integrate new members into the
-            team,
+            <FormattedMessage id="UI.A_STREAMLINED_PROCESS_TO_WELCOME_AND_INT" />
             <br />
-            ensuring a smooth and efficient start.
+            <FormattedMessage id="UI.ENSURING_A_SMOOTH_AND_EFFICIENT_START" />
           </Fragment>
         }
         engage={{
@@ -38,7 +38,6 @@ export function AccountMembersStarterContent() {
           btnColor: 'btn-primary',
         }}
       />
-
       <Faq />
       <Help2 />
     </div>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { PageNavbar } from '@/pages/account';
 import {
@@ -25,15 +26,15 @@ export function AccountSettingsSidebarPage() {
             <ToolbarHeading>
               <ToolbarPageTitle />
               <ToolbarDescription>
-                Intuitive Access to In-Depth Customization
+                <FormattedMessage id="UI.INTUITIVE_ACCESS_TO_INDEPTH_CUSTOMIZATIO" />
               </ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
               <Button variant="outline">
-                <Link to="#">Public Profile</Link>
+                <Link to="#"><FormattedMessage id="UI.PUBLIC_PROFILE" /></Link>
               </Button>
               <Button>
-                <Link to="#">Get Started</Link>
+                <Link to="#"><FormattedMessage id="UI.GET_STARTED" /></Link>
               </Button>
             </ToolbarActions>
           </Toolbar>

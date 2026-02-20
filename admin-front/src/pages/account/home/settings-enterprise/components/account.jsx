@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { AvatarInput } from '@/partials/common/avatar-input';
 import { Copy, SquarePen } from 'lucide-react';
 import { Link } from 'react-router';
@@ -16,7 +17,7 @@ const Account = ({ title }) => {
         <CardTitle>{title}</CardTitle>
         <div className="flex items-center gap-2">
           <Label htmlFor="auto-update" className="text-sm">
-            Public Profile
+            <FormattedMessage id="UI.PUBLIC_PROFILE" />
           </Label>
           <Switch defaultChecked size="sm" />
         </div>
@@ -26,10 +27,10 @@ const Account = ({ title }) => {
           <TableBody>
             <TableRow>
               <TableCell className="w-28 text-secondary-foreground font-normal">
-                Photo
+                <FormattedMessage id="UI.PHOTO" />
               </TableCell>
               <TableCell className="text-secondary-foreground text-sm font-normal min-w-32">
-                150x150px JPEG, PNG Image
+                <FormattedMessage id="UI.150X150PX_JPEG_PNG_IMAGE" />
               </TableCell>
               <TableCell className="text-center">
                 <div className="flex justify-center items-center">
@@ -39,10 +40,10 @@ const Account = ({ title }) => {
             </TableRow>
             <TableRow>
               <TableCell className="text-secondary-foreground font-normal">
-                Name
+                <FormattedMessage id="UI.NAME" />
               </TableCell>
               <TableCell className="text-foreground font-normal">
-                Jason Tatum
+                <FormattedMessage id="UI.JASON_TATUM" />
               </TableCell>
               <TableCell className="text-center">
                 <Button variant="ghost" mode="icon">
@@ -52,11 +53,11 @@ const Account = ({ title }) => {
             </TableRow>
             <TableRow>
               <TableCell className="text-secondary-foreground font-normal">
-                Availability
+                <FormattedMessage id="UI.AVAILABILITY" />
               </TableCell>
               <TableCell className="text-secondary-foreground">
                 <Badge size="md" variant="success" appearance="outline">
-                  Available now
+                  <FormattedMessage id="UI.AVAILABLE_NOW" />
                 </Badge>
               </TableCell>
               <TableCell className="text-center">
@@ -67,14 +68,14 @@ const Account = ({ title }) => {
             </TableRow>
             <TableRow>
               <TableCell className="text-secondary-foreground font-normal min-w-36">
-                Email
+                <FormattedMessage id="UI.EMAIL" />
               </TableCell>
               <TableCell className="text-foreground font-normal min-w-60">
                 <Link
                   to="#"
                   className="text-secondary-foreground hover:text-primary-active"
                 >
-                  jasontt@studio.co
+                  <FormattedMessage id="UI.JASONTTSTUDIOCO" />
                 </Link>
               </TableCell>
               <TableCell className="max-w-16 text-center">
@@ -85,10 +86,10 @@ const Account = ({ title }) => {
             </TableRow>
             <TableRow>
               <TableCell className="text-secondary-foreground font-normal">
-                Password
+                <FormattedMessage id="UI.PASSWORD" />
               </TableCell>
               <TableCell className="text-secondary-foreground text-sm font-normal">
-                Password last changed 2 months ago
+                <FormattedMessage id="UI.PASSWORD_LAST_CHANGED_2_MONTHS_AGO" />
               </TableCell>
               <TableCell className="text-center">
                 <Button variant="ghost" mode="icon">
@@ -98,7 +99,7 @@ const Account = ({ title }) => {
             </TableRow>
             <TableRow>
               <TableCell className="text-secondary-foreground font-normal">
-                Sign-in with
+                <FormattedMessage id="UI.SIGNIN_WITH" />
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2.5">
@@ -148,20 +149,20 @@ const Account = ({ title }) => {
             </TableRow>
             <TableRow>
               <TableCell className="text-secondary-foreground font-normal">
-                Team Account
+                <FormattedMessage id="UI.TEAM_ACCOUNT" />
               </TableCell>
               <TableCell className="text-secondary-foreground text-sm font-normal">
-                To be set
+                <FormattedMessage id="UI.TO_BE_SET" />
               </TableCell>
               <TableCell className="text-center">
                 <Button mode="link" underlined="dashed" asChild>
-                  <Link to="#">Add</Link>
+                  <Link to="#"><FormattedMessage id="UI.ADD" /></Link>
                 </Button>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className="text-secondary-foreground font-normal">
-                Social Profiles
+                <FormattedMessage id="UI.SOCIAL_PROFILES" />
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2.5">
@@ -223,7 +224,7 @@ const Account = ({ title }) => {
             </TableRow>
             <TableRow>
               <TableCell className="text-secondary-foreground font-normal">
-                Referral Link
+                <FormattedMessage id="UI.REFERRAL_LINK" />
               </TableCell>
               <TableCell className="text-secondary-foreground text-sm font-normal">
                 <div className="flex items-center gap-1">
@@ -231,7 +232,7 @@ const Account = ({ title }) => {
                     to="#"
                     className="text-foreground font-normal text-sm hover:text-primary-active"
                   >
-                    https://studio.co/W3gvQOI35dt
+                    <FormattedMessage id="UI.HTTPSSTUDIOCOW3GVQOI35DT" />
                   </Link>
                   <Button variant="dim" mode="icon">
                     <Copy size={16} />
@@ -240,7 +241,7 @@ const Account = ({ title }) => {
               </TableCell>
               <TableCell className="text-center">
                 <Button mode="link" underlined="dashed" asChild>
-                  <Link to="#">Re-create</Link>
+                  <Link to="#"><FormattedMessage id="UI.RECREATE" /></Link>
                 </Button>
               </TableCell>
             </TableRow>

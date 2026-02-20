@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { RiFacebookCircleLine, RiYoutubeLine } from '@remixicon/react';
 import {
   BriefcaseBusiness,
@@ -41,8 +42,7 @@ const Summary = ({ title }) => {
       </CardHeader>
       <CardContent>
         <p className="text-sm text-foreground leading-5.5 mb-4">
-          Experienced and creative professional with a passion great as for
-          problem-solving and a commitment to excellence.
+          <FormattedMessage id="UI.EXPERIENCED_AND_CREATIVE_PROFESSIONAL_WI" />
         </p>
         <div className="grid gap-y-5">
           {items.map((item, index) => {

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { Faq } from '@/partials/common/faq';
 import { Help2 } from '@/partials/common/help2';
@@ -26,10 +27,9 @@ export function AccountTeamsStarterContent() {
         title="Swift Setup for New Teams"
         subTitle={
           <Fragment>
-            Enhance team formation and management with easy-to-use tools for
-            communication,
+            <FormattedMessage id="UI.ENHANCE_TEAM_FORMATION_AND_MANAGEMENT_WI" />
             <br />
-            task organization, and progress tracking, all in one place.
+            <FormattedMessage id="UI.TASK_ORGANIZATION_AND_PROGRESS_TRACKING_" />
           </Fragment>
         }
         engage={{
@@ -38,7 +38,6 @@ export function AccountTeamsStarterContent() {
           btnColor: 'btn-primary',
         }}
       />
-
       <Faq />
       <Help2 />
     </div>

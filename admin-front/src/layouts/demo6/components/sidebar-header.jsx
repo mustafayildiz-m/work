@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useEffect, useState } from 'react';
 import { ChevronDown, Search } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -45,7 +46,7 @@ export function SidebarHeader() {
 
         <DropdownMenu>
           <DropdownMenuTrigger className="cursor-pointer text-mono font-medium flex items-center justify-between gap-2 w-[150px]">
-            Metronic Cloud
+            <FormattedMessage id="UI.METRONIC_CLOUD" />
             <ChevronDown className="size-3.5! text-muted-foreground" />
           </DropdownMenuTrigger>
           <DropdownMenuContent sideOffset={10} side="bottom" align="start">
@@ -64,7 +65,6 @@ export function SidebarHeader() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-
       <div className="pt-2.5 px-3.5 mb-1">
         <div className="relative">
           <Search className="text-muted-foreground absolute top-1/2 start-3.5 -translate-y-1/2 size-4" />
@@ -76,7 +76,7 @@ export function SidebarHeader() {
           />
 
           <span className="text-xs text-muted-foreground absolute end-3.5 top-1/2 -translate-y-1/2">
-            cmd + /
+            <FormattedMessage id="UI.CMD__" />
           </span>
         </div>
       </div>

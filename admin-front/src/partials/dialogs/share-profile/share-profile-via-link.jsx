@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { Copy, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,11 +10,10 @@ export function ShareProfileViaLink() {
     <div className="flex flex-col px-5 gap-2.5">
       <div className="flex flex-center gap-1">
         <h2 className="text-mono font-semibold text-sm">
-          Share read-only link
+          <FormattedMessage id="UI.SHARE_READONLY_LINK" />
         </h2>
         <Info size={16} className="text-muted-foreground text-sm" />
       </div>
-
       <div className="relative w-full">
         <Input
           className="pe-10"

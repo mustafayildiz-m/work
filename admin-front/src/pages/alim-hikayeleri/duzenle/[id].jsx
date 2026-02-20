@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -160,7 +161,7 @@ export default function AlimHikayesiDuzenle() {
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
             <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
-            <p>Hikaye yükleniyor...</p>
+            <p><FormattedMessage id="UI.HIKAYE_YUKLENIYOR" /></p>
           </div>
         </div>
       </div>
@@ -171,12 +172,12 @@ export default function AlimHikayesiDuzenle() {
     return (
       <div className="container mx-auto p-6 max-w-4xl">
         <div className="text-center py-12">
-          <p className="text-muted-foreground">Hikaye bulunamadı</p>
+          <p className="text-muted-foreground"><FormattedMessage id="UI.HIKAYE_BULUNAMADI" /></p>
           <Button 
             className="mt-4" 
             onClick={() => navigate('/alim-hikayeleri/liste')}
           >
-            Geri Dön
+            <FormattedMessage id="UI.GERI_DON" />
           </Button>
         </div>
       </div>
@@ -193,32 +194,30 @@ export default function AlimHikayesiDuzenle() {
           onClick={() => navigate('/alim-hikayeleri/liste')}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Geri Dön
+          <FormattedMessage id="UI.GERI_DON" />
         </Button>
         <div>
-          <h1 className="text-3xl font-bold">Hikaye Düzenle</h1>
-          <p className="text-muted-foreground">
-            "{currentStory.title}" hikayesini düzenleyin
+          <h1 className="text-3xl font-bold"><FormattedMessage id="UI.HIKAYE_DUZENLE" /></h1>
+          <p className="text-muted-foreground">"{currentStory.title}<FormattedMessage id="UI._HIKAYESINI_DUZENLEYIN" />
           </p>
         </div>
       </div>
-
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Temel Bilgiler */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Video className="h-5 w-5" />
-              Temel Bilgiler
+              <FormattedMessage id="UI.TEMEL_BILGILER" />
             </CardTitle>
             <CardDescription>
-              Hikayenin temel bilgilerini güncelleyin
+              <FormattedMessage id="UI.HIKAYENIN_TEMEL_BILGILERINI_GUNCELLEYIN" />
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="title">Başlık *</Label>
+                <Label htmlFor="title"><FormattedMessage id="UI.BASLIK_" /></Label>
                 <Input
                   id="title"
                   {...register('title')}
@@ -231,7 +230,7 @@ export default function AlimHikayesiDuzenle() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="scholar_id">Alim Seçimi *</Label>
+                <Label htmlFor="scholar_id"><FormattedMessage id="UI.ALIM_SECIMI_" /></Label>
                 <Select
                   onValueChange={(value) => setValue('scholar_id', parseInt(value))}
                   disabled={scholarsLoading}
@@ -255,7 +254,7 @@ export default function AlimHikayesiDuzenle() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Açıklama *</Label>
+              <Label htmlFor="description"><FormattedMessage id="UI.ACIKLAMA_" /></Label>
               <Textarea
                 id="description"
                 {...register('description')}
@@ -270,7 +269,7 @@ export default function AlimHikayesiDuzenle() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="language">Dil *</Label>
+                <Label htmlFor="language"><FormattedMessage id="UI.DIL_" /></Label>
                 <Select
                   onValueChange={(value) => setValue('language', value)}
                   defaultValue={currentStory.language}
@@ -279,15 +278,15 @@ export default function AlimHikayesiDuzenle() {
                     <SelectValue placeholder="Dil seçiniz" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="tr">Türkçe</SelectItem>
-                    <SelectItem value="en">İngilizce</SelectItem>
-                    <SelectItem value="ar">Arapça</SelectItem>
+                    <SelectItem value="tr"><FormattedMessage id="UI.TURKCE" /></SelectItem>
+                    <SelectItem value="en"><FormattedMessage id="UI.INGILIZCE" /></SelectItem>
+                    <SelectItem value="ar"><FormattedMessage id="UI.ARAPCA" /></SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="duration">Süre (Dakika)</Label>
+                <Label htmlFor="duration"><FormattedMessage id="UI.SURE_DAKIKA" /></Label>
                 <Input
                   id="duration"
                   type="number"
@@ -305,15 +304,15 @@ export default function AlimHikayesiDuzenle() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Image className="h-5 w-5" />
-              Medya Bilgileri
+              <FormattedMessage id="UI.MEDYA_BILGILERI" />
             </CardTitle>
             <CardDescription>
-              Video ve thumbnail URL'lerini güncelleyin
+              <FormattedMessage id="UI.VIDEO_VE_THUMBNAIL_URLLERINI_GUNCELLEYIN" />
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="video_url">Video URL</Label>
+              <Label htmlFor="video_url"><FormattedMessage id="UI.VIDEO_URL" /></Label>
               <Input
                 id="video_url"
                 {...register('video_url')}
@@ -326,7 +325,7 @@ export default function AlimHikayesiDuzenle() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="thumbnail_url">Thumbnail URL</Label>
+              <Label htmlFor="thumbnail_url"><FormattedMessage id="UI.THUMBNAIL_URL" /></Label>
               <Input
                 id="thumbnail_url"
                 {...register('thumbnail_url')}
@@ -343,17 +342,17 @@ export default function AlimHikayesiDuzenle() {
         {/* Ayarlar */}
         <Card>
           <CardHeader>
-            <CardTitle>Ayarlar</CardTitle>
+            <CardTitle><FormattedMessage id="UI.AYARLAR" /></CardTitle>
             <CardDescription>
-              Hikayenin görünürlük ve öne çıkarma ayarları
+              <FormattedMessage id="UI.HIKAYENIN_GORUNURLUK_VE_ONE_CIKARMA_AYAR" />
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="is_active">Aktif</Label>
+                <Label htmlFor="is_active"><FormattedMessage id="UI.AKTIF" /></Label>
                 <p className="text-sm text-muted-foreground">
-                  Hikayenin görünür olup olmayacağını belirler
+                  <FormattedMessage id="UI.HIKAYENIN_GORUNUR_OLUP_OLMAYACAGINI_BELI" />
                 </p>
               </div>
               <Switch
@@ -367,9 +366,9 @@ export default function AlimHikayesiDuzenle() {
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="is_featured">Öne Çıkan</Label>
+                <Label htmlFor="is_featured"><FormattedMessage id="UI.ONE_CIKAN" /></Label>
                 <p className="text-sm text-muted-foreground">
-                  Hikayeyi öne çıkan hikayeler arasında göster
+                  <FormattedMessage id="UI.HIKAYEYI_ONE_CIKAN_HIKAYELER_ARASINDA_GO" />
                 </p>
               </div>
               <Switch
@@ -384,26 +383,26 @@ export default function AlimHikayesiDuzenle() {
         {/* İstatistikler */}
         <Card>
           <CardHeader>
-            <CardTitle>İstatistikler</CardTitle>
+            <CardTitle><FormattedMessage id="UI.ISTATISTIKLER" /></CardTitle>
             <CardDescription>
-              Hikayenin performans verileri
+              <FormattedMessage id="UI.HIKAYENIN_PERFORMANS_VERILERI" />
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center p-4 border rounded-lg">
                 <div className="text-2xl font-bold text-blue-600">{currentStory.view_count || 0}</div>
-                <div className="text-sm text-muted-foreground">Görüntülenme</div>
+                <div className="text-sm text-muted-foreground"><FormattedMessage id="UI.GORUNTULENME" /></div>
               </div>
               <div className="text-center p-4 border rounded-lg">
                 <div className="text-2xl font-bold text-green-600">{currentStory.like_count || 0}</div>
-                <div className="text-sm text-muted-foreground">Beğeni</div>
+                <div className="text-sm text-muted-foreground"><FormattedMessage id="UI.BEGENI" /></div>
               </div>
               <div className="text-center p-4 border rounded-lg">
                 <div className="text-2xl font-bold text-purple-600">
                   {formatDuration(currentStory.duration)}
                 </div>
-                <div className="text-sm text-muted-foreground">Dakika</div>
+                <div className="text-sm text-muted-foreground"><FormattedMessage id="UI.DAKIKA" /></div>
               </div>
             </div>
           </CardContent>
@@ -416,7 +415,7 @@ export default function AlimHikayesiDuzenle() {
             variant="outline"
             onClick={() => navigate('/alim-hikayeleri/liste')}
           >
-            İptal
+            <FormattedMessage id="UI.IPTAL" />
           </Button>
           <Button
             type="submit"
@@ -426,12 +425,12 @@ export default function AlimHikayesiDuzenle() {
             {loading ? (
               <div className="flex items-center gap-2">
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-background border-t-foreground" />
-                Güncelleniyor...
+                <FormattedMessage id="UI.GUNCELLENIYOR" />
               </div>
             ) : (
               <div className="flex items-center gap-2">
                 <Save className="h-4 w-4" />
-                Güncelle
+                <FormattedMessage id="UI.GUNCELLE" />
               </div>
             )}
           </Button>

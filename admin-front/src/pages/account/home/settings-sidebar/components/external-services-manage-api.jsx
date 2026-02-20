@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment, useState } from 'react';
 import { HexagonBadge } from '@/partials/common/hexagon-badge';
 import { Copy, User } from 'lucide-react';
@@ -25,14 +26,13 @@ const ExternalServicesManageApi = ({ title, switch: showSwitch }) => {
           }
         `}
       </style>
-
       <Card>
         <CardHeader className="mb-5" id="external_services_manage_api">
           <CardTitle>{title || 'Manage API'}</CardTitle>
           {showSwitch && (
             <div className="flex items-center gap-2">
               <Label htmlFor="auto-update" className="text-sm">
-                Pause
+                <FormattedMessage id="UI.PAUSE" />
               </Label>
               <Switch size="sm" id="auto-update" />
             </div>
@@ -41,7 +41,7 @@ const ExternalServicesManageApi = ({ title, switch: showSwitch }) => {
         <CardContent className="lg:py-7.5 grid gap-5 lg:gap-7.5">
           <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
             <Label className="flex w-full max-w-56 text-foreground font-normal">
-              API Key
+              <FormattedMessage id="UI.API_KEY" />
             </Label>
             <InputWrapper>
               <Input
@@ -75,32 +75,29 @@ const ExternalServicesManageApi = ({ title, switch: showSwitch }) => {
                     to="#"
                     className="text-base font-medium text-mono hover:text-primary-active"
                   >
-                    User Access
+                    <FormattedMessage id="UI.USER_ACCESS" />
                   </Link>
                   <Badge size="sm" variant="secondary" appearance="outline">
-                    16 days left
+                    <FormattedMessage id="UI.16_DAYS_LEFT" />
                   </Badge>
                 </div>
                 <div className="form-info text-foreground font-normal">
-                  This API key can only access{' '}
+                  <FormattedMessage id="UI.THIS_API_KEY_CAN_ONLY_ACCESS" />{' '}
                   <Button mode="link" asChild>
-                    <Link to="https://keenthemes.com/">@keenthemes</Link>
+                    <Link to="https://keenthemes.com/"><FormattedMessage id="UI.KEENTHEMES" /></Link>
                   </Button>
                   <br />
-                  Secure access with a unique API key for enhanced
-                  functionality.
+                  <FormattedMessage id="UI.SECURE_ACCESS_WITH_A_UNIQUE_API_KEY_FOR_" />
                 </div>
               </div>
             </div>
             <div className="flex items-center flex-wrap md:flex-nowrap gap-1.5">
-              <Button variant="mono">Renew Plan</Button>
-              <Button variant="ghost">Docs</Button>
+              <Button variant="mono"><FormattedMessage id="UI.RENEW_PLAN" /></Button>
+              <Button variant="ghost"><FormattedMessage id="UI.DOCS" /></Button>
             </div>
           </div>
           <p className="text-sm text-foreground">
-            Unlock the full potential of your application with our API, a secure
-            gateway facilitating seamless integration, empowering developers to
-            create innovative and dynamic experiences effortlessly.
+            <FormattedMessage id="UI.UNLOCK_THE_FULL_POTENTIAL_OF_YOUR_APPLIC" />
           </p>
         </CardContent>
       </Card>

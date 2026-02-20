@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { DropdownMenu3 } from '@/partials/dropdown-menu/dropdown-menu-3';
 import { DropdownMenu5 } from '@/partials/dropdown-menu/dropdown-menu-5';
 import { EllipsisVertical } from 'lucide-react';
@@ -79,7 +80,7 @@ const Deals = () => {
           </Badge>
         </TableCell>
         <TableCell className="text-sm text-foreground">
-          {item.date} days
+          {item.date} <FormattedMessage id="UI.DAYS" />
         </TableCell>
         <TableCell className="text-start">
           <DropdownMenu3
@@ -97,7 +98,7 @@ const Deals = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Deals</CardTitle>
+        <CardTitle><FormattedMessage id="UI.DEALS" /></CardTitle>
         <DropdownMenu5
           trigger={
             <Button variant="ghost" mode="icon">
@@ -111,16 +112,16 @@ const Deals = () => {
           <TableHeader>
             <TableRow className="bg-accent/60">
               <TableHead className="text-start min-w-[150px] text-secondary-foreground! h-10">
-                Deal Name
+                <FormattedMessage id="UI.DEAL_NAME" />
               </TableHead>
               <TableHead className="min-w-[100px] text-secondary-foreground! h-10">
-                Amount
+                <FormattedMessage id="UI.AMOUNT" />
               </TableHead>
               <TableHead className="min-w-[100px] text-secondary-foreground! h-10">
-                Status
+                <FormattedMessage id="UI.STATUS" />
               </TableHead>
               <TableHead className="min-w-[110px] text-secondary-foreground! h-10">
-                Duration
+                <FormattedMessage id="UI.DURATION" />
               </TableHead>
               <TableCell className="w-[30px] h-10"></TableCell>
             </TableRow>
@@ -134,7 +135,7 @@ const Deals = () => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/network/user-table/store-clients">All Deals</Link>
+          <Link to="/network/user-table/store-clients"><FormattedMessage id="UI.ALL_DEALS" /></Link>
         </Button>
       </CardFooter>
     </Card>

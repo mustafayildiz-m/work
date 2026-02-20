@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { PageMenu } from '@/pages/public-profile';
 import { UserHero } from '@/partials/common/user-hero';
@@ -36,13 +37,12 @@ export function CampaignsListPage() {
           { email: 'jenny@kteam.com', icon: Mail },
         ]}
       />
-
       <Container>
         <Navbar>
           <PageMenu />
           <NavbarActions>
             <Button>
-              <Users /> Connect
+              <Users /> <FormattedMessage id="UI.CONNECT" />
             </Button>
             <Button variant="outline" mode="icon">
               <MessagesSquare />

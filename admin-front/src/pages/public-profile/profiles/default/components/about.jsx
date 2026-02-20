@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
@@ -14,7 +15,7 @@ const About = () => {
       status: 'Email:',
       info: (
         <Link to="#" className="text-foreground hover:text-primary-active">
-          jenny@ktstudio.com
+          <FormattedMessage id="UI.JENNYKTSTUDIOCOM" />
         </Link>
       ),
     },
@@ -34,7 +35,7 @@ const About = () => {
   return (
     <Card>
       <CardHeader className="ps-8">
-        <CardTitle>About</CardTitle>
+        <CardTitle><FormattedMessage id="UI.ABOUT" /></CardTitle>
       </CardHeader>
       <CardContent>
         <Table>

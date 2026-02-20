@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { BadgeCheck, CircleCheck, Mail, Users } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
@@ -99,14 +100,14 @@ const CardConnectionRow = ({
                 <Link to="#">
                   <CircleCheck size={16} />
                 </Link>{' '}
-                Connected
+                <FormattedMessage id="UI.CONNECTED" />
               </Button>
             ) : (
               <Button variant="primary">
                 <Link to="#">
                   <Users size={16} />
                 </Link>{' '}
-                Connect
+                <FormattedMessage id="UI.CONNECT" />
               </Button>
             )}
           </div>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Badge } from '@/components/ui/badge';
@@ -40,13 +41,13 @@ const CardProject = ({
       </div>
       <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
         <span className="text-sm text-secondary-foreground">
-          Start:{' '}
+          <FormattedMessage id="UI.START" />{' '}
           <span className="text-sm font-medium text-foreground">
             {startDate}
           </span>
         </span>
         <span className="text-sm text-secondary-foreground">
-          End:{' '}
+          <FormattedMessage id="UI.END" />{' '}
           <span className="text-sm font-medium text-foreground">{endDate}</span>
         </span>
       </div>
@@ -55,7 +56,6 @@ const CardProject = ({
         indicatorClassName={progress?.variant}
         className="h-1.5 mb-4 lg:mb-8"
       />
-
       <AvatarGroup group={team.group} size={team.size} more={team.more} />
     </Card>
   );

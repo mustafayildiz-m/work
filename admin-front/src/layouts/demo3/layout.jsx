@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useEffect } from 'react';
 import { Download } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
@@ -57,7 +58,7 @@ export function Demo3Layout() {
                       <Button variant="outline" size="sm" asChild>
                         <Link to={'/account/home/get-started'}>
                           <Download />
-                          Export
+                          <FormattedMessage id="UI.EXPORT" />
                         </Link>
                       </Button>
                     </ToolbarActions>

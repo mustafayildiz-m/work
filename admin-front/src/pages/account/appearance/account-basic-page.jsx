@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { PageNavbar } from '@/pages/account';
 import {
@@ -25,12 +26,12 @@ export function AccountAppearancePage() {
             <ToolbarHeading>
               <ToolbarPageTitle />
               <ToolbarDescription>
-                Central Hub for Personal Customization
+                <FormattedMessage id="UI.CENTRAL_HUB_FOR_PERSONAL_CUSTOMIZATION" />
               </ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
               <Button variant="outline" asChild>
-                <Link to="#">Privacy Settings</Link>
+                <Link to="#"><FormattedMessage id="UI.PRIVACY_SETTINGS" /></Link>
               </Button>
             </ToolbarActions>
           </Toolbar>

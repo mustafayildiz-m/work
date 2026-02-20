@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -7,6 +8,7 @@ import { FaBoxes, FaWarehouse, FaExchangeAlt, FaTruck, FaCalendar, FaMoneyBillWa
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function StockTransferAdd() {
+  const intl = useIntl();
   const [stocks, setStocks] = useState([]);
   const [warehouses, setWarehouses] = useState([]);
   const [form, setForm] = useState({
@@ -103,7 +105,9 @@ export default function StockTransferAdd() {
   return (
     <>
       <Helmet>
-        <title>Yeni Stok Transferi - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.YENI_STOK_TRANSFERI__ISLAMIC_WINDOWS_ADM"
+        })}</title>
       </Helmet>
       <div className="p-6 max-w-5xl mx-auto">
         {/* Header */}
@@ -111,16 +115,16 @@ export default function StockTransferAdd() {
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
               <FaExchangeAlt className="text-blue-600" />
-              Yeni Stok Transferi Ekle
+              <FormattedMessage id="UI.YENI_STOK_TRANSFERI_EKLE" />
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Depolar arası stok transferi oluşturun</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1"><FormattedMessage id="UI.DEPOLAR_ARASI_STOK_TRANSFERI_OLUSTURUN" /></p>
           </div>
           <Link
             to="/stok-transfer/liste"
             className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 flex items-center gap-2 shadow"
           >
             <FaArrowLeft size={14} />
-            Listeye Dön
+            <FormattedMessage id="UI.LISTEYE_DON" />
           </Link>
         </div>
 
@@ -131,14 +135,14 @@ export default function StockTransferAdd() {
               <div className="p-2 bg-blue-600 rounded-lg">
                 <FaBoxes className="text-white text-lg" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Transfer Bilgileri</h3>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.TRANSFER_BILGILERI" /></h3>
             </div>
 
             {/* Stok Seçimi */}
             <div className="mb-6">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaBoxes className="text-blue-600" />
-                Stok
+                <FormattedMessage id="UI.STOK" />
                 <span className="text-red-500">*</span>
               </label>
               <select
@@ -148,7 +152,7 @@ export default function StockTransferAdd() {
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition cursor-pointer"
                 required
               >
-                <option value="">Transfer edilecek stoğu seçin</option>
+                <option value=""><FormattedMessage id="UI.TRANSFER_EDILECEK_STOGU_SECIN" /></option>
                 {stocks.map(stock => {
                   const bookTitle = stock.book?.translations?.[0]?.title || stock.book?.title || `Stok #${stock.id}`;
                   return (
@@ -165,7 +169,7 @@ export default function StockTransferAdd() {
                 <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                   <p className="text-sm text-blue-800 dark:text-blue-200">
                     <FaInfoCircle className="inline mr-1" />
-                    <span className="font-semibold">Mevcut Stok:</span> {selectedStock.quantity} adet
+                    <span className="font-semibold"><FormattedMessage id="UI.MEVCUT_STOK" /></span> {selectedStock.quantity} <FormattedMessage id="UI.ADET" />
                   </p>
                 </div>
               )}
@@ -175,7 +179,7 @@ export default function StockTransferAdd() {
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   <FaWarehouse className="text-red-600" />
-                  Kaynak Depo
+                  <FormattedMessage id="UI.KAYNAK_DEPO" />
                   <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
@@ -186,7 +190,7 @@ export default function StockTransferAdd() {
                     className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 cursor-not-allowed opacity-75"
                     required
                   >
-                    <option value="">Stok seçildiğinde otomatik gelir</option>
+                    <option value=""><FormattedMessage id="UI.STOK_SECILDIGINDE_OTOMATIK_GELIR" /></option>
                     {warehouses
                       .filter(w => w.id === Number(form.fromWarehouseId))
                       .map(w => (
@@ -199,14 +203,14 @@ export default function StockTransferAdd() {
                 </div>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   <FaInfoCircle className="inline mr-1" />
-                  Stok seçimine göre otomatik belirlenir
+                  <FormattedMessage id="UI.STOK_SECIMINE_GORE_OTOMATIK_BELIRLENIR" />
                 </p>
               </div>
 
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   <FaWarehouse className="text-green-600" />
-                  Hedef Depo
+                  <FormattedMessage id="UI.HEDEF_DEPO" />
                   <span className="text-red-500">*</span>
                 </label>
                 <select
@@ -216,7 +220,7 @@ export default function StockTransferAdd() {
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition cursor-pointer"
                   required
                 >
-                  <option value="">Transfer edilecek depoyu seçin</option>
+                  <option value=""><FormattedMessage id="UI.TRANSFER_EDILECEK_DEPOYU_SECIN" /></option>
                   {filteredToWarehouses.map(w => (
                     <option key={w.id} value={w.id}>{w.name}</option>
                   ))}
@@ -232,14 +236,14 @@ export default function StockTransferAdd() {
                     <div className="font-bold text-blue-600 dark:text-blue-400">
                       {warehouses.find(w => w.id === Number(form.fromWarehouseId))?.name}
                     </div>
-                    <div className="text-xs text-gray-500">Kaynak</div>
+                    <div className="text-xs text-gray-500"><FormattedMessage id="UI.KAYNAK" /></div>
                   </div>
                   <FaExchangeAlt className="text-3xl text-gray-400 dark:text-gray-500 animate-pulse" />
                   <div className="text-center">
                     <div className="font-bold text-green-600 dark:text-green-400">
                       {warehouses.find(w => w.id === Number(form.toWarehouseId))?.name}
                     </div>
-                    <div className="text-xs text-gray-500">Hedef</div>
+                    <div className="text-xs text-gray-500"><FormattedMessage id="UI.HEDEF" /></div>
                   </div>
                 </div>
               </div>
@@ -249,7 +253,7 @@ export default function StockTransferAdd() {
             <div className="mb-6">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaBoxes className="text-purple-600" />
-                Transfer Miktarı
+                <FormattedMessage id="UI.TRANSFER_MIKTARI" />
                 <span className="text-red-500">*</span>
               </label>
               <input
@@ -271,7 +275,7 @@ export default function StockTransferAdd() {
                 <div className="mt-2 p-2 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800 flex items-center gap-2">
                   <FaExclamationTriangle className="text-red-600 dark:text-red-400" />
                   <span className="text-sm text-red-600 dark:text-red-400 font-semibold">
-                    Yetersiz stok! Maksimum {maxQuantity} adet transfer edebilirsiniz.
+                    <FormattedMessage id="UI.YETERSIZ_STOK_MAKSIMUM" /> {maxQuantity} <FormattedMessage id="UI.ADET_TRANSFER_EDEBILIRSINIZ" />
                   </span>
                 </div>
               )}
@@ -279,7 +283,7 @@ export default function StockTransferAdd() {
                 <div className="mt-2 p-2 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
                   <span className="text-sm text-green-600 dark:text-green-400">
                     <FaCheckCircle className="inline mr-1" />
-                    Transfer sonrası kalan: {maxQuantity - Number(form.quantity)} adet
+                    <FormattedMessage id="UI.TRANSFER_SONRASI_KALAN" /> {maxQuantity - Number(form.quantity)} <FormattedMessage id="UI.ADET" />
                   </span>
                 </div>
               )}
@@ -289,7 +293,7 @@ export default function StockTransferAdd() {
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaInfoCircle className="text-gray-600" />
-                Açıklama / Notlar
+                <FormattedMessage id="UI.ACIKLAMA__NOTLAR" />
               </label>
               <textarea
                 name="notes"
@@ -309,8 +313,8 @@ export default function StockTransferAdd() {
                 <FaTruck className="text-white text-lg" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white">Kargo Bilgileri</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400">İsteğe bağlı</p>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.KARGO_BILGILERI" /></h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.ISTEGE_BAGLI" /></p>
               </div>
             </div>
             
@@ -318,7 +322,7 @@ export default function StockTransferAdd() {
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   <FaTruck className="text-orange-600" />
-                  Kargo Şirketi
+                  <FormattedMessage id="UI.KARGO_SIRKETI" />
                 </label>
                 <select
                   name="cargoCompany"
@@ -326,23 +330,23 @@ export default function StockTransferAdd() {
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition cursor-pointer"
                 >
-                  <option value="">Seçiniz (İsteğe Bağlı)</option>
-                  <option value="MNG Kargo">MNG Kargo</option>
-                  <option value="Yurtiçi Kargo">Yurtiçi Kargo</option>
-                  <option value="Aras Kargo">Aras Kargo</option>
-                  <option value="PTT Kargo">PTT Kargo</option>
-                  <option value="Sürat Kargo">Sürat Kargo</option>
-                  <option value="UPS">UPS</option>
-                  <option value="DHL">DHL</option>
-                  <option value="FedEx">FedEx</option>
-                  <option value="Diğer">Diğer</option>
+                  <option value=""><FormattedMessage id="UI.SECINIZ_ISTEGE_BAGLI" /></option>
+                  <option value="MNG Kargo"><FormattedMessage id="UI.MNG_KARGO" /></option>
+                  <option value="Yurtiçi Kargo"><FormattedMessage id="UI.YURTICI_KARGO" /></option>
+                  <option value="Aras Kargo"><FormattedMessage id="UI.ARAS_KARGO" /></option>
+                  <option value="PTT Kargo"><FormattedMessage id="UI.PTT_KARGO" /></option>
+                  <option value="Sürat Kargo"><FormattedMessage id="UI.SURAT_KARGO" /></option>
+                  <option value="UPS"><FormattedMessage id="UI.UPS" /></option>
+                  <option value="DHL"><FormattedMessage id="UI.DHL" /></option>
+                  <option value="FedEx"><FormattedMessage id="UI.FEDEX" /></option>
+                  <option value="Diğer"><FormattedMessage id="UI.DIGER" /></option>
                 </select>
               </div>
 
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   <FaInfoCircle className="text-blue-600" />
-                  Kargo Takip Numarası
+                  <FormattedMessage id="UI.KARGO_TAKIP_NUMARASI" />
                 </label>
                 <input
                   type="text"
@@ -357,7 +361,7 @@ export default function StockTransferAdd() {
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   <FaCalendar className="text-green-600" />
-                  Tahmini Teslimat Tarihi
+                  <FormattedMessage id="UI.TAHMINI_TESLIMAT_TARIHI" />
                 </label>
                 <input
                   type="date"
@@ -371,7 +375,7 @@ export default function StockTransferAdd() {
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   <FaMoneyBillWave className="text-green-600" />
-                  Kargo Ücreti (₺)
+                  <FormattedMessage id="UI.KARGO_UCRETI_" />
                 </label>
                 <input
                   type="number"
@@ -391,7 +395,7 @@ export default function StockTransferAdd() {
                 <p className="text-sm text-orange-800 dark:text-orange-200 flex items-start gap-2">
                   <FaTruck className="mt-0.5 flex-shrink-0" />
                   <span>
-                    <span className="font-semibold">Kargo Seçildi:</span> {form.cargoCompany} ile gönderilecek. 
+                    <span className="font-semibold"><FormattedMessage id="UI.KARGO_SECILDI" /></span> {form.cargoCompany} <FormattedMessage id="UI.ILE_GONDERILECEK" />
                     {form.trackingNumber && ' Takip numarası ile sevkiyat durumunu kolayca izleyebilirsiniz.'}
                   </span>
                 </p>
@@ -405,7 +409,7 @@ export default function StockTransferAdd() {
               to="/stok-transfer/liste"
               className="px-6 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition"
             >
-              İptal
+              <FormattedMessage id="UI.IPTAL" />
             </Link>
             <button
               type="submit"
@@ -415,12 +419,12 @@ export default function StockTransferAdd() {
               {loading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  Ekleniyor...
+                  <FormattedMessage id="UI.EKLENIYOR" />
                 </>
               ) : (
                 <>
                   <FaCheckCircle />
-                  Transfer Ekle
+                  <FormattedMessage id="UI.TRANSFER_EKLE" />
                 </>
               )}
             </button>

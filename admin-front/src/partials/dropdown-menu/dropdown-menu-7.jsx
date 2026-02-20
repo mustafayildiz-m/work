@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Copy, FileUp, Pencil, Search, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
@@ -16,33 +17,33 @@ export function DropdownMenu7({ trigger }) {
         <DropdownMenuItem asChild>
           <Link to="#">
             <Search />
-            <span>View</span>
+            <span><FormattedMessage id="UI.VIEW" /></span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="#">
             <FileUp />
-            <span>Export</span>
+            <span><FormattedMessage id="UI.EXPORT" /></span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link to="#">
             <Pencil />
-            <span>Edit</span>
+            <span><FormattedMessage id="UI.EDIT" /></span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="#">
             <Copy />
-            <span>Make a copy</span>
+            <span><FormattedMessage id="UI.MAKE_A_COPY" /></span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link to="#">
             <Trash2 />
-            <span>Remove</span>
+            <span><FormattedMessage id="UI.REMOVE" /></span>
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

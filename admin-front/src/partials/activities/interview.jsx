@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { LogIn } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -8,15 +9,15 @@ const ActivitiesInterview = () => {
     <TimelineItem icon={LogIn} line={true}>
       <div className="flex flex-col">
         <div className="text-sm text-foreground">
-          I had the privilege of interviewing an industry expert for an{' '}
+          <FormattedMessage id="UI.I_HAD_THE_PRIVILEGE_OF_INTERVIEWING_AN_I" />{' '}
           <Button mode="link" asChild>
             <Link to="/public-profile/profiles/blogger">
-              upcoming blog post
+              <FormattedMessage id="UI.UPCOMING_BLOG_POST" />
             </Link>
           </Button>
         </div>
         <span className="text-xs text-secondary-foreground">
-          2 days ago, 4:07 PM
+          <FormattedMessage id="UI.2_DAYS_AGO_407_PM" />
         </span>
       </div>
     </TimelineItem>

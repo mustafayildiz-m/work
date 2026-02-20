@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { DropdownMenu3 } from '@/partials/dropdown-menu/dropdown-menu-3';
 import { EllipsisVertical } from 'lucide-react';
 import { Link } from 'react-router';
@@ -54,7 +55,7 @@ const YourCurrentPlan = () => {
   return (
     <Card>
       <CardHeader className="gap-2" id="settings_auth_two_factor">
-        <CardTitle>Your Current Plan</CardTitle>
+        <CardTitle><FormattedMessage id="UI.YOUR_CURRENT_PLAN" /></CardTitle>
         <DropdownMenu3
           trigger={
             <Button variant="ghost" mode="icon">
@@ -77,13 +78,13 @@ const YourCurrentPlan = () => {
                 to="#"
                 className="text-base text-mono font-medium hover:text-primary"
               >
-                Premium Plan
+                <FormattedMessage id="UI.PREMIUM_PLAN" />
               </Link>
               <p className="text-sm text-secondary-foreground mb-2">
-                Access premium perks through our exclusive Premium Plan
+                <FormattedMessage id="UI.ACCESS_PREMIUM_PERKS_THROUGH_OUR_EXCLUSI" />
               </p>
               <div>
-                <Button variant="outline">Change Plan</Button>
+                <Button variant="outline"><FormattedMessage id="UI.CHANGE_PLAN" /></Button>
               </div>
             </div>
           </div>
@@ -98,7 +99,7 @@ const YourCurrentPlan = () => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="#">Go to Billing</Link>
+          <Link to="#"><FormattedMessage id="UI.GO_TO_BILLING" /></Link>
         </Button>
       </CardFooter>
     </Card>

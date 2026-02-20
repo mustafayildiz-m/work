@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { CardNotification } from '@/partials/cards';
 import {
   CalendarClock,
@@ -34,7 +35,7 @@ const OtherNotifications = () => {
       description: 'Alert for new and unpaid invoices.',
       actions: (
         <Button variant="outline">
-          <Link to="#">View Invoices</Link>
+          <Link to="#"><FormattedMessage id="UI.VIEW_INVOICES" /></Link>
         </Button>
       ),
     },
@@ -56,7 +57,7 @@ const OtherNotifications = () => {
       description: 'Reminder of scheduled meetings for the day.',
       actions: (
         <Button variant="outline">
-          <Link to="#">Show Meetings</Link>
+          <Link to="#"><FormattedMessage id="UI.SHOW_MEETINGS" /></Link>
         </Button>
       ),
     },
@@ -84,10 +85,10 @@ const OtherNotifications = () => {
   return (
     <Card>
       <CardHeader className="gap-2">
-        <CardTitle>Other Notifications</CardTitle>
+        <CardTitle><FormattedMessage id="UI.OTHER_NOTIFICATIONS" /></CardTitle>
         <div className="flex items-center gap-2">
           <Label htmlFor="size-sm" className="text-sm">
-            Team-Wide Alerts
+            <FormattedMessage id="UI.TEAMWIDE_ALERTS" />
           </Label>
           <Switch id="size-sm" size="sm" />
         </div>

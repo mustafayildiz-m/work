@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
 import {
@@ -109,13 +110,13 @@ const PermissionsCheck = () => {
       <CardHeader className="gap-2">
         <CardTitle>
           <Button mode="link" asChild className="text-xl">
-            <Link to="#">Project Manager</Link>
+            <Link to="#"><FormattedMessage id="UI.PROJECT_MANAGER" /></Link>
           </Button>{' '}
-          Role Permissions
+          <FormattedMessage id="UI.ROLE_PERMISSIONS" />
         </CardTitle>
         <div className="flex gap-5">
           <Button variant="outline">
-            <Link to="#">New Permission</Link>
+            <Link to="#"><FormattedMessage id="UI.NEW_PERMISSION" /></Link>
           </Button>
         </div>
       </CardHeader>
@@ -124,19 +125,19 @@ const PermissionsCheck = () => {
           <TableHeader>
             <TableRow className="bg-accent/60">
               <TableHead className="text-start text-secondary-foreground font-normal min-w-[300px] h-10">
-                Module
+                <FormattedMessage id="UI.MODULE" />
               </TableHead>
               <TableHead className="min-w-24 text-secondary-foreground font-normal text-center h-10">
-                View
+                <FormattedMessage id="UI.VIEW" />
               </TableHead>
               <TableHead className="min-w-24 text-secondary-foreground font-normal text-center h-10">
-                Modify
+                <FormattedMessage id="UI.MODIFY" />
               </TableHead>
               <TableHead className="min-w-24 text-secondary-foreground font-normal text-center h-10">
-                Publish
+                <FormattedMessage id="UI.PUBLISH" />
               </TableHead>
               <TableHead className="min-w-24 text-secondary-foreground font-normal text-center h-10">
-                Configure
+                <FormattedMessage id="UI.CONFIGURE" />
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -149,10 +150,10 @@ const PermissionsCheck = () => {
       </CardContent>
       <CardFooter className="justify-end py-7.5 gap-2.5">
         <Button variant="outline">
-          <Link to="#">Restore Defaults</Link>
+          <Link to="#"><FormattedMessage id="UI.RESTORE_DEFAULTS" /></Link>
         </Button>
         <Button>
-          <Link to="#">Save Changes</Link>
+          <Link to="#"><FormattedMessage id="UI.SAVE_CHANGES" /></Link>
         </Button>
       </CardFooter>
     </Card>

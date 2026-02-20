@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Bell } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
@@ -17,12 +18,11 @@ const DoNotDistrub = ({ title, icon, text }) => {
       </CardHeader>
       <CardContent className="flex flex-col gap-2.5">
         <p className="text-sm text-secondary-foreground">
-          Activate 'Do Not Disturb' to silence all notifications and focus
-          without interruptions during specified hours or tasks.
+          <FormattedMessage id="UI.ACTIVATE_DO_NOT_DISTURB_TO_SILENCE_ALL_N" />
         </p>
         <div>
           <Button mode="link" underlined="dashed">
-            <Link to="#">Learn more</Link>
+            <Link to="#"><FormattedMessage id="UI.LEARN_MORE" /></Link>
           </Button>
         </div>
       </CardContent>

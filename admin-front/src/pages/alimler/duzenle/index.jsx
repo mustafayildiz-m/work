@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -21,6 +22,7 @@ function getImageUrl(url) {
 }
 
 const EditScholarPage = () => {
+  const intl = useIntl();
   const { id } = useParams();
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -303,7 +305,7 @@ const EditScholarPage = () => {
   if (loading) {
     return (
       <div className="p-6 max-w-7xl mx-auto">
-        <div className="text-center py-10">Yükleniyor...</div>
+        <div className="text-center py-10"><FormattedMessage id="UI.YUKLENIYOR" /></div>
       </div>
     );
   }
@@ -319,38 +321,40 @@ const EditScholarPage = () => {
   return (
     <>
       <Helmet>
-        <title>Âlim Düzenle - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.LIM_DUZENLE__ISLAMIC_WINDOWS_ADMIN"
+        })}</title>
       </Helmet>
       <div className="p-6 max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">Alim Düzenle</h2>
+          <h2 className="text-2xl font-bold"><FormattedMessage id="UI.ALIM_DUZENLE" /></h2>
         <button
           onClick={() => navigate('/alimler/liste')}
           className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
         >
-          Geri Dön
+          <FormattedMessage id="UI.GERI_DON" />
         </button>
       </div>
       <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col">
-            <label className="mb-1 text-xs font-semibold">Adı Soyad</label>
+            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.ADI_SOYAD" /></label>
             <input name="fullName" value={form.fullName} onChange={handleChange} required placeholder="Adı" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
           </div>
           <div className="flex flex-col">
-            <label className="mb-1 text-xs font-semibold">Nesebi (isteğe bağlı)</label>
+            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.NESEBI_ISTEGE_BAGLI" /></label>
             <input name="lineage" value={form.lineage} onChange={handleChange} placeholder="Nesebi (isteğe bağlı)" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
           </div>
           <div className="flex flex-col">
-            <label className="mb-1 text-xs font-semibold">Doğum Yılı</label>
+            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.DOGUM_YILI" /></label>
             <input name="birthDate" value={form.birthDate} onChange={handleChange} type="text" placeholder="Doğum Yılı" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
           </div>
           <div className="flex flex-col">
-            <label className="mb-1 text-xs font-semibold">Vefat Yılı (isteğe bağlı)</label>
+            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.VEFAT_YILI_ISTEGE_BAGLI" /></label>
             <input name="deathDate" value={form.deathDate} onChange={handleChange} type="text" placeholder="Vefat Yılı (isteğe bağlı)" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
           </div>
           <div className="flex flex-col md:col-span-2">
-            <label className="mb-1 text-xs font-semibold">Portre (URL) veya Dosya</label>
+            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.PORTRE_URL_VEYA_DOSYA" /></label>
             <div className="flex gap-2 items-center">
               <input name="photoUrl" value={form.photoUrl} onChange={handleChange} placeholder="Portre (URL)" className="px-3 py-2 border rounded bg-white dark:bg-gray-800 flex-1" />
               <div className="relative">
@@ -365,7 +369,7 @@ const EditScholarPage = () => {
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 16v-4m0 0V8m0 4h4m-4 0H8m12 4.5V19a2 2 0 01-2 2H6a2 2 0 01-2-2v-2.5M16 3.5V5m0 0A2.5 2.5 0 0118.5 7.5h-13A2.5 2.5 0 013 5V3.5" />
                   </svg>
-                  Dosya Seç
+                  <FormattedMessage id="UI.DOSYA_SEC" />
                 </label>
               </div>
               <span className="text-xs text-gray-500 dark:text-gray-300">
@@ -377,7 +381,7 @@ const EditScholarPage = () => {
             )}
           </div>
           <div className="flex flex-col md:col-span-2">
-            <label className="mb-1 text-xs font-semibold">Biyografi</label>
+            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.BIYOGRAFI" /></label>
             <CKEditor
               editor={ClassicEditor}
               data={form.biography}
@@ -395,8 +399,8 @@ const EditScholarPage = () => {
         </div>
         <div className="mt-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="font-semibold text-sm">Kendi Kitapları</span>
-            <button type="button" onClick={addOwnBook} className="text-xs text-blue-500 bg-blue-100 px-2 py-1 rounded hover:bg-blue-200 transition">+ Kitap Ekle</button>
+            <span className="font-semibold text-sm"><FormattedMessage id="UI.KENDI_KITAPLARI" /></span>
+            <button type="button" onClick={addOwnBook} className="text-xs text-blue-500 bg-blue-100 px-2 py-1 rounded hover:bg-blue-200 transition"><FormattedMessage id="UI._KITAP_EKLE" /></button>
           </div>
           {form.ownBooks.map((book, idx) => (
             <div key={book.tempId || `ownbook-${idx}`} className="flex flex-col gap-2 mb-2 bg-gray-50 dark:bg-gray-800 p-3 rounded">
@@ -417,7 +421,7 @@ const EditScholarPage = () => {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                     </svg>
-                    PDF Seç
+                    <FormattedMessage id="UI.PDF_SEC" />
                   </label>
                 </div>
               </div>
@@ -425,31 +429,31 @@ const EditScholarPage = () => {
                 {ownBookPdfFiles[idx] ? `PDF seçildi: ${ownBookPdfFiles[idx].name}` : 'PDF dosyası seçilmedi'}
               </div>
               {form.ownBooks.length > 1 && (
-                <button type="button" onClick={() => removeOwnBook(idx)} className="text-red-500 text-xs">Sil</button>
+                <button type="button" onClick={() => removeOwnBook(idx)} className="text-red-500 text-xs"><FormattedMessage id="UI.SIL" /></button>
               )}
             </div>
           ))}
         </div>
         <div className="mt-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="font-semibold text-sm">Kaynaklar</span>
-            <button type="button" onClick={addSource} className="text-xs text-blue-500 bg-blue-100 px-2 py-1 rounded hover:bg-blue-200 transition">+ Kaynak Ekle</button>
+            <span className="font-semibold text-sm"><FormattedMessage id="UI.KAYNAKLAR" /></span>
+            <button type="button" onClick={addSource} className="text-xs text-blue-500 bg-blue-100 px-2 py-1 rounded hover:bg-blue-200 transition"><FormattedMessage id="UI._KAYNAK_EKLE" /></button>
           </div>
           {form.sources.map((source, idx) => (
             <div key={`source-${idx}`} className="flex flex-col md:flex-row gap-2 mb-2">
               <input value={source.content} onChange={e => handleSourceChange(idx, 'content', e.target.value)} placeholder="Başlık" className="px-2 py-1 border rounded bg-white dark:bg-gray-800 flex-1" />
               <input value={source.url} onChange={e => handleSourceChange(idx, 'url', e.target.value)} placeholder="URL" className="px-2 py-1 border rounded bg-white dark:bg-gray-800 flex-1" />
               {form.sources.length > 1 && (
-                <button type="button" onClick={() => removeSource(idx)} className="text-red-500 text-xs">Sil</button>
+                <button type="button" onClick={() => removeSource(idx)} className="text-red-500 text-xs"><FormattedMessage id="UI.SIL" /></button>
               )}
             </div>
           ))}
         </div>
         <div className="mt-4">
-          <label className="block font-semibold text-sm mb-2">İlişkili Kitaplar</label>
+          <label className="block font-semibold text-sm mb-2"><FormattedMessage id="UI.ILISKILI_KITAPLAR" /></label>
           {books.length === 0 ? (
             <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-              Henüz kitap bulunmuyor. Önce kitap ekleyin.
+              <FormattedMessage id="UI.HENUZ_KITAP_BULUNMUYOR_ONCE_KITAP_EKLEYI" />
             </div>
           ) : (
             <Select
@@ -533,7 +537,7 @@ const EditScholarPage = () => {
           )}
         </div>
         <div className="mt-4">
-          <h4 className="text-sm font-semibold mb-2">Konum Bilgileri</h4>
+          <h4 className="text-sm font-semibold mb-2"><FormattedMessage id="UI.KONUM_BILGILERI" /></h4>
           <div className="grid grid-cols-1 gap-4">
             <div className="flex gap-2">
               <input
@@ -548,7 +552,7 @@ const EditScholarPage = () => {
                 onClick={handleSearch}
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               >
-                Ara
+                <FormattedMessage id="UI.ARA" />
               </button>
             </div>
             <div className="h-[300px] rounded-lg overflow-hidden">
@@ -560,7 +564,7 @@ const EditScholarPage = () => {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col">
-                <label className="mb-1 text-xs font-semibold">Konum Adı</label>
+                <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.KONUM_ADI" /></label>
                 <input
                   name="locationName"
                   value={form.locationName}
@@ -570,7 +574,7 @@ const EditScholarPage = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <label className="mb-1 text-xs font-semibold">Konum Açıklaması (İsteğe bağlı)</label>
+                <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.KONUM_ACIKLAMASI_ISTEGE_BAGLI" /></label>
                 <input
                   name="locationDescription"
                   value={form.locationDescription}
@@ -582,7 +586,7 @@ const EditScholarPage = () => {
             </div>
             <div className="grid grid-cols-2 gap-4 mt-2">
               <div className="flex flex-col">
-                <label className="mb-1 text-xs font-semibold">Enlem (Latitude)</label>
+                <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.ENLEM_LATITUDE" /></label>
                 <input
                   type="number"
                   step="any"
@@ -596,7 +600,7 @@ const EditScholarPage = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <label className="mb-1 text-xs font-semibold">Boylam (Longitude)</label>
+                <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.BOYLAM_LONGITUDE" /></label>
                 <input
                   type="number"
                   step="any"
@@ -614,7 +618,7 @@ const EditScholarPage = () => {
         </div>
         {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
         <div className="flex justify-end gap-2 mt-6">
-          <button type="button" onClick={() => navigate('/alimler/liste')} className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">İptal</button>
+          <button type="button" onClick={() => navigate('/alimler/liste')} className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"><FormattedMessage id="UI.IPTAL" /></button>
           <button type="submit" className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors" disabled={saving || !isFormValid}>
             {saving ? 'Güncelleniyor...' : 'Güncelle'}
           </button>

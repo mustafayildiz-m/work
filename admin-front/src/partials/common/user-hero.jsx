@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useTheme } from 'next-themes';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -66,12 +67,11 @@ export function UserHero({ image, name, info, coverImage, onCoverImageEdit, show
               className="bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-800 backdrop-blur-sm"
             >
               <Camera className="h-4 w-4 mr-2" />
-              Kapak Resmi Güncelle
+              <FormattedMessage id="UI.KAPAK_RESMI_GUNCELLE" />
             </Button>
           </div>
         )}
       </div>
-
       {/* Profile Section */}
       <div className="bg-white dark:bg-gray-800 rounded-b-xl">
         <Container>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState, useRef } from 'react';
 import { X, Upload, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -67,16 +68,16 @@ export function CoverImageDialog({ open, onOpenChange, onImageUpload, loading = 
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Kapak Resmi Güncelle</DialogTitle>
+          <DialogTitle><FormattedMessage id="UI.KAPAK_RESMI_GUNCELLE" /></DialogTitle>
           <DialogDescription>
-            Yeni bir kapak resmi yükleyin. Desteklenen formatlar: JPG, PNG, GIF. Maksimum dosya boyutu: 5MB.
+            <FormattedMessage id="UI.YENI_BIR_KAPAK_RESMI_YUKLEYIN_DESTEKLENE" />
           </DialogDescription>
         </DialogHeader>
         
         <div className="space-y-4">
           {/* File Input */}
           <div className="space-y-2">
-            <Label htmlFor="cover-image">Resim Seçin</Label>
+            <Label htmlFor="cover-image"><FormattedMessage id="UI.RESIM_SECIN" /></Label>
             <div className="flex items-center gap-2">
               <Input
                 id="cover-image"
@@ -100,7 +101,7 @@ export function CoverImageDialog({ open, onOpenChange, onImageUpload, loading = 
           {/* Preview */}
           {preview && (
             <div className="space-y-2">
-              <Label>Önizleme</Label>
+              <Label><FormattedMessage id="UI.ONIZLEME" /></Label>
               <div className="relative">
                 <img
                   src={preview}
@@ -130,7 +131,7 @@ export function CoverImageDialog({ open, onOpenChange, onImageUpload, loading = 
             <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center">
               <ImageIcon className="h-12 w-12 text-gray-400 mx-auto mb-2" />
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Bir resim dosyası seçin
+                <FormattedMessage id="UI.BIR_RESIM_DOSYASI_SECIN" />
               </p>
             </div>
           )}
@@ -139,7 +140,7 @@ export function CoverImageDialog({ open, onOpenChange, onImageUpload, loading = 
         {/* Actions */}
         <div className="flex justify-end gap-2 pt-4">
           <Button variant="outline" onClick={handleCancel}>
-            İptal
+            <FormattedMessage id="UI.IPTAL" />
           </Button>
           <Button
             onClick={handleUpload}

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { AvatarGroup } from '@/partials/common/avatar-group';
 import { Link } from 'react-router-dom';
@@ -18,7 +19,6 @@ const EntryCallout = ({ className }) => {
           }
         `}
       </style>
-
       <Card className={`h-full ${className}`}>
         <CardContent className="p-10 bg-[length:80%] rtl:[background-position:-70%_25%] [background-position:175%_25%] bg-no-repeat entry-callout-bg">
           <div className="flex flex-col justify-center gap-4">
@@ -36,22 +36,22 @@ const EntryCallout = ({ className }) => {
             />
 
             <h2 className="text-xl font-semibold text-mono">
-              Connect Today & Join <br />
-              the{' '}
+              <FormattedMessage id="UI.CONNECT_TODAY__JOIN" /> <br />
+              <FormattedMessage id="UI.THE" />{' '}
               <Button mode="link" asChild className="text-xl font-semibold">
-                <Link to="#">KeenThemes Network</Link>
+                <Link to="#"><FormattedMessage id="UI.KEENTHEMES_NETWORK" /></Link>
               </Button>
             </h2>
             <p className="text-sm font-normal text-secondary-foreground leading-5.5">
-              Enhance your projects with premium themes and <br />
-              templates. Join the KeenThemes community today <br />
-              for top-quality designs and resources.
+              <FormattedMessage id="UI.ENHANCE_YOUR_PROJECTS_WITH_PREMIUM_THEME" /> <br />
+              <FormattedMessage id="UI.TEMPLATES_JOIN_THE_KEENTHEMES_COMMUNITY_" /> <br />
+              <FormattedMessage id="UI.FOR_TOPQUALITY_DESIGNS_AND_RESOURCES" />
             </p>
           </div>
         </CardContent>
         <CardFooter className="justify-center">
           <Button mode="link" underlined="dashed" asChild>
-            <Link to="#">Get Started</Link>
+            <Link to="#"><FormattedMessage id="UI.GET_STARTED" /></Link>
           </Button>
         </CardFooter>
       </Card>

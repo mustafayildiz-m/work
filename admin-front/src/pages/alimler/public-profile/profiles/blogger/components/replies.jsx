@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -60,9 +61,9 @@ const Replies = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Jenny’s Replies</CardTitle>
+        <CardTitle><FormattedMessage id="UI.JENNYS_REPLIES" /></CardTitle>
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/public-profile/profiles/feeds">View All</Link>
+          <Link to="/public-profile/profiles/feeds"><FormattedMessage id="UI.VIEW_ALL" /></Link>
         </Button>
       </CardHeader>
       <CardContent className="pb-7">

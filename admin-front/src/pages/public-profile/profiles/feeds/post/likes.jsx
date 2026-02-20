@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment, useState } from 'react';
 import { CircleCheck, PersonStanding } from 'lucide-react';
 import { Link } from 'react-router';
@@ -65,7 +66,7 @@ const Likes = () => {
               {item.name}
             </Link>
             <span className="text-sm text-secondary-foreground">
-              {item.subscribers} mutual subscribers
+              {item.subscribers} <FormattedMessage id="UI.MUTUAL_SUBSCRIBERS" />
             </span>
           </div>
         </div>
@@ -75,11 +76,11 @@ const Likes = () => {
         >
           {item.connected ? (
             <>
-              <CircleCheck /> Connect
+              <CircleCheck /> <FormattedMessage id="UI.CONNECT" />
             </>
           ) : (
             <>
-              <PersonStanding /> Connected
+              <PersonStanding /> <FormattedMessage id="UI.CONNECTED" />
             </>
           )}
         </Button>
@@ -96,7 +97,7 @@ const Likes = () => {
       </div>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="#">Show more Likes</Link>
+          <Link to="#"><FormattedMessage id="UI.SHOW_MORE_LIKES" /></Link>
         </Button>
       </CardFooter>
     </Fragment>

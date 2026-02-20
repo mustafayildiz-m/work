@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useMemo, useState, useEffect } from 'react';
 import {
   flexRender,
@@ -14,12 +15,13 @@ import { FaCheckCircle, FaTimesCircle, FaClock, FaTruck, FaWarehouse, FaFilter, 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function StockTransferList() {
+  const intl = useIntl();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [transferAction, setTransferAction] = useState(null);
   const [confirmModal, setConfirmModal] = useState({ open: false, transfer: null, type: null });
-  
+
   // Filter states
   const [filters, setFilters] = useState({
     fromWarehouseId: 'all',
@@ -27,10 +29,10 @@ export default function StockTransferList() {
     cargoCompany: '',
     status: 'all',
   });
-  
+
   // Options for dropdowns
   const [warehouses, setWarehouses] = useState([]);
-  
+
   // All data for statistics
   const [allData, setAllData] = useState([]);
 
@@ -195,14 +197,14 @@ export default function StockTransferList() {
                   onClick={() => handleCompleteTransfer(row.original)}
                   disabled={transferAction === 'completing'}
                 >
-                  Onayla
+                  <FormattedMessage id="UI.ONAYLA" />
                 </button>
                 <button
                   className="px-2 py-1 bg-red-500 text-white rounded text-xs hover:bg-red-600 transition"
                   onClick={() => handleCancelTransferWithConfirm(row.original)}
                   disabled={transferAction === 'cancelling'}
                 >
-                  Reddet
+                  <FormattedMessage id="UI.REDDET" />
                 </button>
               </>
             )}
@@ -210,7 +212,7 @@ export default function StockTransferList() {
               to={`/stok-transfer/detay/${row.original.id}`}
               className="px-2 py-1 bg-gray-500 text-white rounded text-xs hover:bg-gray-600 transition"
             >
-              Detay
+              <FormattedMessage id="UI.DETAY" />
             </Link>
           </div>
         );
@@ -274,19 +276,21 @@ export default function StockTransferList() {
   return (
     <>
       <Helmet>
-        <title>Stok Transferleri - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.STOK_TRANSFERLERI__ISLAMIC_WINDOWS_ADMIN"
+        })}</title>
       </Helmet>
       <div className="p-6 max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Stok Transfer Yönetimi</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Tüm stok transferlerinizi yönetin ve takip edin</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.STOK_TRANSFER_YONETIMI" /></h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1"><FormattedMessage id="UI.TUM_STOK_TRANSFERLERINIZI_YONETIN_VE_TAK" /></p>
           </div>
           <Link
             to="/stok-transfer/ekle"
             className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all duration-300 flex items-center gap-2"
           >
-            <span className="text-lg">+</span> Transfer Ekle
+            <span className="text-lg">+</span> <FormattedMessage id="UI.TRANSFER_EKLE" />
           </Link>
         </div>
 
@@ -295,9 +299,9 @@ export default function StockTransferList() {
           <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-5 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-blue-100 text-sm font-medium">Toplam Transfer</p>
+                <p className="text-blue-100 text-sm font-medium"><FormattedMessage id="UI.TOPLAM_TRANSFER" /></p>
                 <p className="text-3xl font-bold mt-1">{stats.total}</p>
-                <p className="text-blue-100 text-xs mt-1">Tüm transferler</p>
+                <p className="text-blue-100 text-xs mt-1"><FormattedMessage id="UI.TUM_TRANSFERLER" /></p>
               </div>
               <FaExchangeAlt className="text-5xl text-blue-200 opacity-30" />
             </div>
@@ -306,9 +310,9 @@ export default function StockTransferList() {
           <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl shadow-lg p-5 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-yellow-100 text-sm font-medium">Beklemede</p>
+                <p className="text-yellow-100 text-sm font-medium"><FormattedMessage id="UI.BEKLEMEDE" /></p>
                 <p className="text-3xl font-bold mt-1">{stats.pending}</p>
-                <p className="text-yellow-100 text-xs mt-1">İşlem bekliyor</p>
+                <p className="text-yellow-100 text-xs mt-1"><FormattedMessage id="UI.ISLEM_BEKLIYOR" /></p>
               </div>
               <FaClock className="text-5xl text-yellow-200 opacity-30" />
             </div>
@@ -317,9 +321,9 @@ export default function StockTransferList() {
           <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-5 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-green-100 text-sm font-medium">Tamamlandı</p>
+                <p className="text-green-100 text-sm font-medium"><FormattedMessage id="UI.TAMAMLANDI" /></p>
                 <p className="text-3xl font-bold mt-1">{stats.completed}</p>
-                <p className="text-green-100 text-xs mt-1">Başarılı</p>
+                <p className="text-green-100 text-xs mt-1"><FormattedMessage id="UI.BASARILI" /></p>
               </div>
               <FaCheckCircle className="text-5xl text-green-200 opacity-30" />
             </div>
@@ -328,9 +332,9 @@ export default function StockTransferList() {
           <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl shadow-lg p-5 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-red-100 text-sm font-medium">İptal Edildi</p>
+                <p className="text-red-100 text-sm font-medium"><FormattedMessage id="UI.IPTAL_EDILDI" /></p>
                 <p className="text-3xl font-bold mt-1">{stats.cancelled}</p>
-                <p className="text-red-100 text-xs mt-1">İptal edilenler</p>
+                <p className="text-red-100 text-xs mt-1"><FormattedMessage id="UI.IPTAL_EDILENLER" /></p>
               </div>
               <FaTimesCircle className="text-5xl text-red-200 opacity-30" />
             </div>
@@ -343,7 +347,7 @@ export default function StockTransferList() {
             <div className="p-2 bg-indigo-600 rounded-lg">
               <FaFilter className="text-white text-lg" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white">Filtrele & Ara</h3>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.FILTRELE__ARA" /></h3>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -351,14 +355,14 @@ export default function StockTransferList() {
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaWarehouse className="text-blue-600" />
-                Kaynak Depo
+                <FormattedMessage id="UI.KAYNAK_DEPO" />
               </label>
               <select
                 value={filters.fromWarehouseId}
                 onChange={e => setFilters(prev => ({ ...prev, fromWarehouseId: e.target.value }))}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm transition cursor-pointer"
               >
-                <option value="all">Tüm Depolar</option>
+                <option value="all"><FormattedMessage id="UI.TUM_DEPOLAR" /></option>
                 {warehouses.map(wh => (
                   <option key={wh.id} value={wh.id}>{wh.name}</option>
                 ))}
@@ -369,14 +373,14 @@ export default function StockTransferList() {
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaWarehouse className="text-green-600" />
-                Hedef Depo
+                <FormattedMessage id="UI.HEDEF_DEPO" />
               </label>
               <select
                 value={filters.toWarehouseId}
                 onChange={e => setFilters(prev => ({ ...prev, toWarehouseId: e.target.value }))}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm transition cursor-pointer"
               >
-                <option value="all">Tüm Depolar</option>
+                <option value="all"><FormattedMessage id="UI.TUM_DEPOLAR" /></option>
                 {warehouses.map(wh => (
                   <option key={wh.id} value={wh.id}>{wh.name}</option>
                 ))}
@@ -387,7 +391,7 @@ export default function StockTransferList() {
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaTruck className="text-orange-600" />
-                Kargo Şirketi
+                <FormattedMessage id="UI.KARGO_SIRKETI" />
               </label>
               <input
                 type="text"
@@ -402,17 +406,17 @@ export default function StockTransferList() {
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaBoxes className="text-purple-600" />
-                Durum
+                <FormattedMessage id="UI.DURUM" />
               </label>
               <select
                 value={filters.status}
                 onChange={e => setFilters(prev => ({ ...prev, status: e.target.value }))}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm transition cursor-pointer"
               >
-                <option value="all">Tüm Durumlar</option>
-                <option value="pending">Beklemede</option>
-                <option value="completed">Tamamlandı</option>
-                <option value="cancelled">İptal Edildi</option>
+                <option value="all"><FormattedMessage id="UI.TUM_DURUMLAR" /></option>
+                <option value="pending"><FormattedMessage id="UI.BEKLEMEDE" /></option>
+                <option value="completed"><FormattedMessage id="UI.TAMAMLANDI" /></option>
+                <option value="cancelled"><FormattedMessage id="UI.IPTAL_EDILDI" /></option>
               </select>
             </div>
           </div>
@@ -420,11 +424,11 @@ export default function StockTransferList() {
           {/* Reset Button & Results Count */}
           <div className="flex items-center justify-between mt-4 pt-4 border-t border-indigo-200 dark:border-gray-700">
             <div className="flex items-center gap-2 text-sm">
-              <span className="text-gray-600 dark:text-gray-400">Bulunan:</span>
+              <span className="text-gray-600 dark:text-gray-400"><FormattedMessage id="UI.BULUNAN" /></span>
               <span className="px-3 py-1 bg-indigo-600 text-white rounded-full font-bold">
                 {data.length}
               </span>
-              <span className="text-gray-600 dark:text-gray-400">transfer</span>
+              <span className="text-gray-600 dark:text-gray-400"><FormattedMessage id="UI.TRANSFER" /></span>
             </div>
             
             {(filters.fromWarehouseId !== 'all' || filters.toWarehouseId !== 'all' || filters.cargoCompany || filters.status !== 'all') && (
@@ -433,14 +437,14 @@ export default function StockTransferList() {
                 className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 font-medium text-sm flex items-center gap-2"
               >
                 <FaTimesCircle />
-                Filtreleri Temizle
+                <FormattedMessage id="UI.FILTRELERI_TEMIZLE" />
               </button>
             )}
           </div>
         </div>
       <div className="overflow-x-auto rounded-lg shadow-lg">
         {loading ? (
-          <div className="py-10 text-center text-gray-500 dark:text-gray-400">Yükleniyor...</div>
+          <div className="py-10 text-center text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.YUKLENIYOR" /></div>
         ) : error ? (
           <div className="py-10 text-center text-red-500">{error}</div>
         ) : (
@@ -485,7 +489,7 @@ export default function StockTransferList() {
                           to="/stok-transfer/ekle"
                           className="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                         >
-                          İlk Transferi Ekle
+                          <FormattedMessage id="UI.ILK_TRANSFERI_EKLE" />
                         </Link>
                       )}
                     </td>
@@ -516,10 +520,10 @@ export default function StockTransferList() {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Önceki
+            <FormattedMessage id="UI.ONCEKI" />
           </button>
           <span className="text-sm">
-            Sayfa{' '}
+            <FormattedMessage id="UI.SAYFA" />{' '}
             <strong>
               {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
             </strong>
@@ -529,11 +533,11 @@ export default function StockTransferList() {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Sonraki
+            <FormattedMessage id="UI.SONRAKI" />
           </button>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm">Göster:</span>
+          <span className="text-sm"><FormattedMessage id="UI.GOSTER" /></span>
           <select
             className="px-2 py-1 border border-gray-300 dark:border-gray-700 rounded text-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
             value={table.getState().pagination.pageSize}
@@ -554,16 +558,16 @@ export default function StockTransferList() {
             {confirmModal.type === 'complete' ? (
               <>
                 <p className="mb-2">
-                  <strong>{confirmModal.transfer.quantity}</strong> adet stok <strong>{confirmModal.transfer.fromWarehouse.name}</strong> deposundan eksilip <strong>{confirmModal.transfer.toWarehouse.name}</strong> deposuna eklenecek.
+                  <strong>{confirmModal.transfer.quantity}</strong> <FormattedMessage id="UI.ADET_STOK" /> <strong>{confirmModal.transfer.fromWarehouse.name}</strong> <FormattedMessage id="UI.DEPOSUNDAN_EKSILIP" /> <strong>{confirmModal.transfer.toWarehouse.name}</strong> <FormattedMessage id="UI.DEPOSUNA_EKLENECEK" />
                 </p>
-                <p className="mb-4">Bu işlemi onaylıyor musunuz?</p>
+                <p className="mb-4"><FormattedMessage id="UI.BU_ISLEMI_ONAYLIYOR_MUSUNUZ" /></p>
               </>
             ) : (
               <>
                 <p className="mb-2">
-                  <strong>{confirmModal.transfer.quantity}</strong> adet stok <strong>{confirmModal.transfer.fromWarehouse.name}</strong> deposuna geri aktarılacak.
+                  <strong>{confirmModal.transfer.quantity}</strong> <FormattedMessage id="UI.ADET_STOK" /> <strong>{confirmModal.transfer.fromWarehouse.name}</strong> <FormattedMessage id="UI.DEPOSUNA_GERI_AKTARILACAK" />
                 </p>
-                <p className="mb-4">Bu işlemi onaylıyor musunuz?</p>
+                <p className="mb-4"><FormattedMessage id="UI.BU_ISLEMI_ONAYLIYOR_MUSUNUZ" /></p>
               </>
             )}
             <div className="flex justify-end gap-2">
@@ -571,13 +575,13 @@ export default function StockTransferList() {
                 className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
                 onClick={() => setConfirmModal({ open: false, transfer: null, type: null })}
               >
-                Vazgeç
+                <FormattedMessage id="UI.VAZGEC" />
               </button>
               <button
                 className="px-4 py-2 rounded bg-green-600 text-white font-semibold hover:bg-green-700 transition"
                 onClick={confirmModalAction}
               >
-                Onayla
+                <FormattedMessage id="UI.ONAYLA" />
               </button>
             </div>
           </div>

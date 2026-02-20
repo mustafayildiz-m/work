@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useEffect, useState } from 'react';
 import { addDays, format } from 'date-fns';
 import { CalendarDays } from 'lucide-react';
@@ -70,7 +71,7 @@ export function Demo2Layout() {
                           format(date.from, 'LLL dd, y')
                         )
                       ) : (
-                        <span>Pick a date range</span>
+                        <span><FormattedMessage id="UI.PICK_A_DATE_RANGE" /></span>
                       )}
                     </Button>
                   </PopoverTrigger>

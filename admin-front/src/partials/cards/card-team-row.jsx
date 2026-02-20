@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { CircleCheck, Users } from 'lucide-react';
 import { Link } from 'react-router';
 import { Badge } from '@/components/ui/badge';
@@ -44,7 +45,7 @@ const CardTeamRow = ({
         <div className="flex flex-wrap items-center gap-6 lg:gap-12">
           <div className="grid gap-5 justify-end lg:text-end">
             <span className="text-xs font-normal text-muted-foreground uppercase">
-              skills
+              <FormattedMessage id="UI.SKILLS" />
             </span>
             <div className="flex gap-1.5">
               {labels.map((label, index) => {
@@ -54,13 +55,13 @@ const CardTeamRow = ({
           </div>
           <div className="grid justify-end gap-6 lg:text-end">
             <div className="text-xs text-secondary-foreground uppercase">
-              rating
+              <FormattedMessage id="UI.RATING" />
             </div>
             <Rating rating={rating.value} round={rating.round} />
           </div>
           <div className="grid justify-end gap-3.5 lg:text-end lg:min-w-24 shrink-0 max-w-auto">
             <span className="text-xs text-secondary-foreground uppercase">
-              memebers
+              <FormattedMessage id="UI.MEMEBERS" />
             </span>
             <AvatarGroup
               group={team.group}
@@ -75,14 +76,14 @@ const CardTeamRow = ({
                 <Link to="#">
                   <CircleCheck size={16} />
                 </Link>{' '}
-                Joined
+                <FormattedMessage id="UI.JOINED" />
               </Button>
             ) : (
               <Button variant="primary">
                 <Link to="#">
                   <Users size={16} />
                 </Link>{' '}
-                Join
+                <FormattedMessage id="UI.JOIN" />
               </Button>
             )}
           </div>

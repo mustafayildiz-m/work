@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { PageNavbar } from '@/pages/account';
 import {
   Toolbar,
@@ -23,11 +24,11 @@ export function AccountEnterprisePage() {
             <ToolbarHeading>
               <ToolbarPageTitle />
               <ToolbarDescription>
-                Advanced Billing Solutions for Large Businesses
+                <FormattedMessage id="UI.ADVANCED_BILLING_SOLUTIONS_FOR_LARGE_BUS" />
               </ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
-              <Button variant="outline">Order History</Button>
+              <Button variant="outline"><FormattedMessage id="UI.ORDER_HISTORY" /></Button>
             </ToolbarActions>
           </Toolbar>
         </Container>

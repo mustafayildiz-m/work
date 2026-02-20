@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { Image as ImageIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -26,12 +27,11 @@ export default function Item1({
     <div className="flex grow gap-2.5 px-5">
       <Avatar>
         <AvatarImage src={`/media/avatars/${avatar}`} alt="avatar" />
-        <AvatarFallback>CH</AvatarFallback>
+        <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
         <AvatarIndicator className="-end-1.5 -bottom-1.5">
           <AvatarStatus variant="online" className="size-2.5" />
         </AvatarIndicator>
       </Avatar>
-
       <div className="flex flex-col gap-3.5">
         <div className="flex flex-col gap-1">
           <div className="text-sm font-medium">
@@ -55,7 +55,7 @@ export default function Item1({
         <Card className="shadow-none flex flex-col gap-2.5 p-3.5 rounded-lg bg-muted/70">
           <div className="text-sm font-semibold text-secondary-foreground mb-px">
             <Link to="#" className="hover:text-primary text-mono font-semibold">
-              @Cody{' '}
+              <FormattedMessage id="UI.CODY" />{' '}
             </Link>
             <span className="text-secondary-foreground font-medium">
               {text}

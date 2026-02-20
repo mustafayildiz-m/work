@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import L from 'leaflet';
 import { Link } from 'react-router';
 import 'leaflet/dist/leaflet.css';
@@ -92,11 +93,11 @@ const CompanyProfile = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Company Profile</CardTitle>
+        <CardTitle><FormattedMessage id="UI.COMPANY_PROFILE" /></CardTitle>
       </CardHeader>
       <CardContent>
         <h3 className="text-base font-semibold text-mono leading-none mb-5">
-          Headquarter
+          <FormattedMessage id="UI.HEADQUARTER" />
         </h3>
         <div className="flex flex-wrap items-center gap-5 mb-10">
           <MapContainer
@@ -110,7 +111,7 @@ const CompanyProfile = () => {
             />
 
             <Marker position={[40.724716, -73.984789]} icon={customIcon}>
-              <Popup>430 E 6th St, New York, 10009.</Popup>
+              <Popup><FormattedMessage id="UI.430_E_6TH_ST_NEW_YORK_10009" /></Popup>
             </Marker>
           </MapContainer>
           <div className="flex flex-col gap-2.5">
@@ -120,17 +121,13 @@ const CompanyProfile = () => {
           </div>
         </div>
         <div className="grid gap-2.5 mb-7">
-          <div className="text-base font-semibold text-mono">About</div>
+          <div className="text-base font-semibold text-mono"><FormattedMessage id="UI.ABOUT" /></div>
           <p className="text-sm text-foreground leading-5.5">
-            Now that I’m done thoroughly mangling that vague metaphor, let’s get
-            down to business. You know you need to start blogging to grow your
-            business, but you don’t know how. In this post, I’ll show you how to
-            write a great blog post in five simple steps that people will
-            actually want to read.
+            <FormattedMessage id="UI.NOW_THAT_IM_DONE_THOROUGHLY_MANGLING_THA_1" />
           </p>
         </div>
         <div className="flex flex-col gap-4 mb-2.5">
-          <div className="text-base font-semibold text-mono">Products</div>
+          <div className="text-base font-semibold text-mono"><FormattedMessage id="UI.PRODUCTS" /></div>
           <div className="flex flex-wrap gap-2.5">
             {products.map((product, index) => {
               return renderProducts(product, index);

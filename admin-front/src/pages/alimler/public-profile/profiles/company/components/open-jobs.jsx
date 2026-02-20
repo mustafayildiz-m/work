@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { ChartLine, Milk, Rocket, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -62,7 +63,7 @@ const OpenJobs = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Open Jobs</CardTitle>
+        <CardTitle><FormattedMessage id="UI.OPEN_JOBS" /></CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid gap-5">
@@ -73,7 +74,7 @@ const OpenJobs = () => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/public-profile/works">View & Apply</Link>
+          <Link to="/public-profile/works"><FormattedMessage id="UI.VIEW__APPLY" /></Link>
         </Button>
       </CardFooter>
     </Card>

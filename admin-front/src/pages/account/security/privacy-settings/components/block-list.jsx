@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -40,7 +41,7 @@ const BlockList = ({ text, limit, className }) => {
               alt="image"
             />
 
-            <AvatarFallback>CH</AvatarFallback>
+            <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
           </Avatar>
           <div className="flex flex-col gap-0.5">
             <Link
@@ -50,7 +51,7 @@ const BlockList = ({ text, limit, className }) => {
               {item.name}
             </Link>
             <span className="text-sm text-secondary-foreground">
-              {item.commits} commit{item.commits > 1 ? 's' : ''}
+              {item.commits} <FormattedMessage id="UI.COMMIT" />{item.commits > 1 ? 's' : ''}
             </span>
           </div>
         </div>
@@ -66,7 +67,7 @@ const BlockList = ({ text, limit, className }) => {
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle>Block List</CardTitle>
+        <CardTitle><FormattedMessage id="UI.BLOCK_LIST" /></CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-5">
         <div className="text-sm text-foreground">{text}</div>
@@ -77,7 +78,7 @@ const BlockList = ({ text, limit, className }) => {
             className="rounded-r-none border-r-0 focus:ring-0 focus:ring-offset-0"
           />
 
-          <Button className="rounded-l-none border-l-0">Add</Button>
+          <Button className="rounded-l-none border-l-0"><FormattedMessage id="UI.ADD" /></Button>
         </div>
         <div className="flex flex-col gap-5">
           {items.map((item, index) => {

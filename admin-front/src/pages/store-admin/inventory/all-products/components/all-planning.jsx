@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 'use client';
 
 import { useMemo, useState } from 'react';
@@ -424,11 +425,11 @@ function ActionsCell({ row }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="bottom" align="end">
-        <DropdownMenuItem onClick={() => {}}>Edit</DropdownMenuItem>
-        <DropdownMenuItem onClick={handleCopyId}>Copy ID</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => {}}><FormattedMessage id="UI.EDIT" /></DropdownMenuItem>
+        <DropdownMenuItem onClick={handleCopyId}><FormattedMessage id="UI.COPY_ID" /></DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" onClick={() => {}}>
-          Delete
+          <FormattedMessage id="UI.DELETE" />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -505,7 +506,7 @@ export function AllPlanning() {
                 {row.original.info.name}
               </a>
               <div className="text-xs text-secondary-foreground">
-                SKU:{' '}
+                <FormattedMessage id="UI.SKU_1" />{' '}
                 <span className="text-foreground font-medium">
                   {row.original.info.sku}
                 </span>
@@ -737,11 +738,11 @@ export function AllPlanning() {
                   <SelectValue placeholder="2 June - 9 June" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="outdoor">Outdoor</SelectItem>
-                  <SelectItem value="runners">Runners</SelectItem>
-                  <SelectItem value="sneakers">Sneakers</SelectItem>
-                  <SelectItem value="outdoor">Outdoor</SelectItem>
-                  <SelectItem value="runners">Runners</SelectItem>
+                  <SelectItem value="outdoor"><FormattedMessage id="UI.OUTDOOR" /></SelectItem>
+                  <SelectItem value="runners"><FormattedMessage id="UI.RUNNERS" /></SelectItem>
+                  <SelectItem value="sneakers"><FormattedMessage id="UI.SNEAKERS" /></SelectItem>
+                  <SelectItem value="outdoor"><FormattedMessage id="UI.OUTDOOR" /></SelectItem>
+                  <SelectItem value="runners"><FormattedMessage id="UI.RUNNERS" /></SelectItem>
                 </SelectContent>
               </Select>
 
@@ -750,11 +751,11 @@ export function AllPlanning() {
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="outdoor">Outdoor</SelectItem>
-                  <SelectItem value="runners">Runners</SelectItem>
-                  <SelectItem value="sneakers">Sneakers</SelectItem>
-                  <SelectItem value="outdoor">Outdoor</SelectItem>
-                  <SelectItem value="runners">Runners</SelectItem>
+                  <SelectItem value="outdoor"><FormattedMessage id="UI.OUTDOOR" /></SelectItem>
+                  <SelectItem value="runners"><FormattedMessage id="UI.RUNNERS" /></SelectItem>
+                  <SelectItem value="sneakers"><FormattedMessage id="UI.SNEAKERS" /></SelectItem>
+                  <SelectItem value="outdoor"><FormattedMessage id="UI.OUTDOOR" /></SelectItem>
+                  <SelectItem value="runners"><FormattedMessage id="UI.RUNNERS" /></SelectItem>
                 </SelectContent>
               </Select>
 
@@ -763,10 +764,10 @@ export function AllPlanning() {
                   <SelectValue placeholder="Supplier" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="swift-stock">SwiftStock</SelectItem>
-                  <SelectItem value="core-mart">CoreMart</SelectItem>
-                  <SelectItem value="prime-stock">PrimeStock</SelectItem>
-                  <SelectItem value="stock-lab">StockLab</SelectItem>
+                  <SelectItem value="swift-stock"><FormattedMessage id="UI.SWIFTSTOCK" /></SelectItem>
+                  <SelectItem value="core-mart"><FormattedMessage id="UI.COREMART" /></SelectItem>
+                  <SelectItem value="prime-stock"><FormattedMessage id="UI.PRIMESTOCK" /></SelectItem>
+                  <SelectItem value="stock-lab"><FormattedMessage id="UI.STOCKLAB" /></SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -774,10 +775,10 @@ export function AllPlanning() {
 
           <>
             <Button variant="mono" onClick={handleTrackShippingSheetOpen}>
-              Stock Planner
+              <FormattedMessage id="UI.STOCK_PLANNER" />
             </Button>
             <Button variant="mono" onClick={handleCreateShippingLabelSheetOpen}>
-              Create Shipping Label
+              <FormattedMessage id="UI.CREATE_SHIPPING_LABEL" />
             </Button>
 
             <StoreAdminTrackShippingSheet

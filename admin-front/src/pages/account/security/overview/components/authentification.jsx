@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { SquarePen } from 'lucide-react';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -9,17 +10,17 @@ const Authentification = () => {
   return (
     <Card className="min-w-full">
       <CardHeader>
-        <CardTitle>Authentication</CardTitle>
+        <CardTitle><FormattedMessage id="UI.AUTHENTICATION" /></CardTitle>
       </CardHeader>
       <CardContent className="kt-scrollable-x-auto pb-3 p-0">
         <Table className="align-middle text-sm text-muted-foreground">
           <TableBody>
             <TableRow>
               <TableCell className="text-secondary-foreground font-normal">
-                Password
+                <FormattedMessage id="UI.PASSWORD" />
               </TableCell>
               <TableCell className="text-secondary-foreground font-normal">
-                Password last changed 2 months ago
+                <FormattedMessage id="UI.PASSWORD_LAST_CHANGED_2_MONTHS_AGO" />
               </TableCell>
               <TableCell className="text-end">
                 <Button variant="ghost" mode="icon">
@@ -29,19 +30,19 @@ const Authentification = () => {
             </TableRow>
             <TableRow>
               <TableCell className="text-secondary-foreground font-normal">
-                2FA
+                <FormattedMessage id="UI.2FA" />
               </TableCell>
               <TableCell className="text-secondary-foreground font-normal">
-                To be set
+                <FormattedMessage id="UI.TO_BE_SET" />
               </TableCell>
               <TableCell className="text-end">
                 <Button mode="link" underlined="dashed" asChild>
-                  <Link to="#">Setup</Link>
+                  <Link to="#"><FormattedMessage id="UI.SETUP" /></Link>
                 </Button>
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>Sign-in with</TableCell>
+              <TableCell><FormattedMessage id="UI.SIGNIN_WITH" /></TableCell>
               <TableCell>
                 <div className="flex items-center gap-2.5">
                   <Link

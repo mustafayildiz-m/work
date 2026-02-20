@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -78,14 +79,14 @@ const BookDetailModal = ({ book, onClose }) => {
             <div className="space-y-3">
               {/* Author */}
               <div>
-                <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Yazar:</span>
+                <span className="text-sm font-semibold text-gray-700 dark:text-gray-300"><FormattedMessage id="UI.YAZAR_1" /></span>
                 <p className="text-base text-gray-900 dark:text-white">{book.author || 'Bilinmeyen'}</p>
               </div>
 
               {/* Categories */}
               {book.categories && book.categories.length > 0 && (
                 <div>
-                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Kategoriler:</span>
+                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300"><FormattedMessage id="UI.KATEGORILER_1" /></span>
                   <div className="flex flex-wrap gap-2 mt-1">
                     {book.categories.map((cat, idx) => (
                       <span
@@ -102,7 +103,7 @@ const BookDetailModal = ({ book, onClose }) => {
               {/* Publish Date */}
               {book.publishDate && (
                 <div>
-                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Yayın Tarihi:</span>
+                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300"><FormattedMessage id="UI.YAYIN_TARIHI_1" /></span>
                   <p className="text-base text-gray-900 dark:text-white">
                     {new Date(book.publishDate).toLocaleDateString('tr-TR')}
                   </p>
@@ -112,7 +113,7 @@ const BookDetailModal = ({ book, onClose }) => {
               {/* Description */}
               {book.description && (
                 <div>
-                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Açıklama:</span>
+                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300"><FormattedMessage id="UI.ACIKLAMA_1" /></span>
                   <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">{book.description}</p>
                 </div>
               )}
@@ -120,7 +121,7 @@ const BookDetailModal = ({ book, onClose }) => {
               {/* Summary */}
               {book.summary && (
                 <div>
-                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Özet:</span>
+                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300"><FormattedMessage id="UI.OZET_1" /></span>
                   <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">{book.summary}</p>
                 </div>
               )}
@@ -130,7 +131,7 @@ const BookDetailModal = ({ book, onClose }) => {
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                      Çeviriler ve PDF'ler:
+                      <FormattedMessage id="UI.CEVIRILER_VE_PDFLER" />
                     </span>
                     <button
                       onClick={() => {
@@ -139,7 +140,7 @@ const BookDetailModal = ({ book, onClose }) => {
                       }}
                       className="text-xs px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
                     >
-                      Düzenle
+                      <FormattedMessage id="UI.DUZENLE" />
                     </button>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -165,11 +166,11 @@ const BookDetailModal = ({ book, onClose }) => {
                             rel="noopener noreferrer"
                             className="flex items-center justify-center gap-2 w-full px-3 py-2 bg-purple-600 text-white text-sm rounded hover:bg-purple-700 transition"
                           >
-                            📄 PDF Görüntüle
+                            <FormattedMessage id="UI._PDF_GORUNTULE" />
                           </a>
                         ) : (
                           <div className="flex items-center justify-center gap-2 w-full px-3 py-2 bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-300 text-sm rounded cursor-not-allowed">
-                            📄 PDF Yok
+                            <FormattedMessage id="UI._PDF_YOK" />
                           </div>
                         )}
                       </div>
@@ -186,6 +187,7 @@ const BookDetailModal = ({ book, onClose }) => {
 };
 
 const BookListCards = () => {
+  const intl = useIntl();
   const navigate = useNavigate();
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -353,14 +355,15 @@ const BookListCards = () => {
   return (
     <>
       <Helmet>
-        <title>Kitap Listesi - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.KITAP_LISTESI__ISLAMIC_WINDOWS_ADMIN"
+        })}</title>
       </Helmet>
-
       <div className="p-6 max-w-full mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Kitap Listesi</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.KITAP_LISTESI" /></h2>
 
             {/* View Mode Toggle */}
             <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
@@ -395,7 +398,7 @@ const BookListCards = () => {
             onClick={() => navigate('/kitaplar/ekle')}
             className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition"
           >
-            + Kitap Ekle
+            <FormattedMessage id="UI._KITAP_EKLE" />
           </button>
         </div>
 
@@ -412,7 +415,7 @@ const BookListCards = () => {
             />
             {searchQuery && (
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                Backend'de arama yapılıyor...
+                <FormattedMessage id="UI.BACKENDDE_ARAMA_YAPILIYOR" />
               </p>
             )}
           </div>
@@ -426,7 +429,7 @@ const BookListCards = () => {
               >
                 <div className="flex items-center gap-2">
                   <span className="font-semibold text-gray-900 dark:text-white">
-                    Kategoriler
+                    <FormattedMessage id="UI.KATEGORILER" />
                   </span>
                   {selectedCategory && (
                     <span className="px-2 py-0.5 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-full">
@@ -455,7 +458,7 @@ const BookListCards = () => {
                           : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                         }`}
                     >
-                      Tümü
+                      <FormattedMessage id="UI.TUMU" />
                     </button>
                     {categories.map(category => (
                       <button
@@ -472,7 +475,7 @@ const BookListCards = () => {
                   </div>
                   {selectedCategory && (
                     <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                      🏷️ Backend'den "{selectedCategory}" kategorisi filtreleniyor
+                      <FormattedMessage id="UI._BACKENDDEN_" />{selectedCategory}<FormattedMessage id="UI._KATEGORISI_FILTRELENIYOR" />
                     </p>
                   )}
                 </div>
@@ -485,19 +488,19 @@ const BookListCards = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 text-center">
             <div className="text-3xl font-bold text-blue-600">{pagination?.totalCount || 0}</div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">Toplam Kitap</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.TOPLAM_KITAP" /></div>
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 text-center">
             <div className="text-3xl font-bold text-green-600">{filteredBooks.length}</div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">Bu Sayfada</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.BU_SAYFADA" /></div>
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 text-center">
             <div className="text-3xl font-bold text-purple-600">{categories.length}</div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">Kategori</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.KATEGORI" /></div>
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 text-center">
             <div className="text-3xl font-bold text-orange-600">{pagination?.totalPages || 0}</div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">Sayfa</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.SAYFA" /></div>
           </div>
         </div>
 
@@ -505,7 +508,7 @@ const BookListCards = () => {
         {loading && (
           <div className="text-center py-12">
             <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">Kitaplar yükleniyor...</p>
+            <p className="mt-4 text-gray-600 dark:text-gray-400"><FormattedMessage id="UI.KITAPLAR_YUKLENIYOR" /></p>
           </div>
         )}
 
@@ -533,7 +536,7 @@ const BookListCards = () => {
           }>
             {filteredBooks.map((book) => viewMode === 'grid' ? (
               // Grid View (Card)
-              <div
+              (<div
                 key={book.id}
                 className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer"
                 onClick={() => setSelectedBook(book)}
@@ -559,7 +562,7 @@ const BookListCards = () => {
                       }}
                       className="px-3 py-1.5 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition"
                     >
-                      Detay
+                      <FormattedMessage id="UI.DETAY" />
                     </button>
                     <button
                       onClick={(e) => {
@@ -568,7 +571,7 @@ const BookListCards = () => {
                       }}
                       className="px-3 py-1.5 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 transition"
                     >
-                      Düzenle
+                      <FormattedMessage id="UI.DUZENLE" />
                     </button>
                     <button
                       onClick={(e) => {
@@ -577,11 +580,10 @@ const BookListCards = () => {
                       }}
                       className="px-3 py-1.5 bg-red-600 text-white rounded text-sm hover:bg-red-700 transition"
                     >
-                      Sil
+                      <FormattedMessage id="UI.SIL" />
                     </button>
                   </div>
                 </div>
-
                 {/* Book Info */}
                 <div className="p-4">
                   <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-1 line-clamp-2 min-h-[2.5rem]">
@@ -639,10 +641,10 @@ const BookListCards = () => {
                     </p>
                   )}
                 </div>
-              </div>
+              </div>)
             ) : (
               // List View
-              <div
+              (<div
                 key={book.id}
                 className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer"
                 onClick={() => setSelectedBook(book)}
@@ -669,7 +671,7 @@ const BookListCards = () => {
                         {book.title}
                       </h3>
                       <span className="flex-shrink-0 text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
-                        ID: {book.id}
+                        <FormattedMessage id="UI.ID" /> {book.id}
                       </span>
                     </div>
 
@@ -707,7 +709,7 @@ const BookListCards = () => {
                     {/* Translations with PDF buttons */}
                     {book.translations && book.translations.length > 0 && (
                       <div className="flex flex-wrap gap-2 mb-2">
-                        <span className="text-xs text-gray-500 dark:text-gray-400 font-semibold mr-1">🌍 Diller:</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400 font-semibold mr-1"><FormattedMessage id="UI._DILLER" /></span>
                         {book.translations.map((trans, idx) => (
                           <div key={idx} className="inline-flex items-center gap-1">
                             <span className="px-2 py-0.5 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded text-xs">
@@ -740,7 +742,7 @@ const BookListCards = () => {
                       }}
                       className="flex-1 sm:flex-none px-4 py-2 bg-green-600 text-white rounded-md text-sm hover:bg-green-700 transition"
                     >
-                      Detay
+                      <FormattedMessage id="UI.DETAY" />
                     </button>
                     <button
                       onClick={(e) => {
@@ -749,7 +751,7 @@ const BookListCards = () => {
                       }}
                       className="flex-1 sm:flex-none px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition"
                     >
-                      Düzenle
+                      <FormattedMessage id="UI.DUZENLE" />
                     </button>
                     <button
                       onClick={(e) => {
@@ -758,11 +760,11 @@ const BookListCards = () => {
                       }}
                       className="flex-1 sm:flex-none px-4 py-2 bg-red-600 text-white rounded-md text-sm hover:bg-red-700 transition"
                     >
-                      Sil
+                      <FormattedMessage id="UI.SIL" />
                     </button>
                   </div>
                 </div>
-              </div>
+              </div>)
             ))}
           </div>
         )}
@@ -772,7 +774,7 @@ const BookListCards = () => {
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white dark:bg-gray-800 rounded-lg shadow p-4">
             {/* Sayfa başına öğe seçici */}
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600 dark:text-gray-400">Sayfa başına:</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400"><FormattedMessage id="UI.SAYFA_BASINA" /></span>
               <select
                 value={itemsPerPage}
                 onChange={handleItemsPerPageChange}
@@ -787,7 +789,7 @@ const BookListCards = () => {
 
             {/* Sayfa bilgisi */}
             <div className="text-sm text-gray-600 dark:text-gray-400">
-              Sayfa {pagination.currentPage} / {pagination.totalPages} ({pagination.totalCount} kitap)
+              <FormattedMessage id="UI.SAYFA" /> {pagination.currentPage}/ {pagination.totalPages}({pagination.totalCount} <FormattedMessage id="UI.KITAP_2" />
             </div>
 
             {/* Sayfa numaraları */}

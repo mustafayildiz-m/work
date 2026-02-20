@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { HexagonBadge } from '@/partials/common/hexagon-badge';
 import { CalendarDays, Check } from 'lucide-react';
 import { Link } from 'react-router';
@@ -8,7 +9,7 @@ const NextPayment = () => {
   return (
     <Card className="grow">
       <CardHeader>
-        <CardTitle>Next Payment</CardTitle>
+        <CardTitle><FormattedMessage id="UI.NEXT_PAYMENT" /></CardTitle>
       </CardHeader>
       <CardContent className="lg:7.5">
         <div className="flex flex-col gap-5">
@@ -26,9 +27,9 @@ const NextPayment = () => {
                   to="#"
                   className="text-sm font-medium hover:text-primary text-mono"
                 >
-                  on 17 Aug, 2024
+                  <FormattedMessage id="UI.ON_17_AUG_2024" />
                 </Link>
-                <p className="text-sm text-secondary-foreground">Due date</p>
+                <p className="text-sm text-secondary-foreground"><FormattedMessage id="UI.DUE_DATE" /></p>
               </div>
             </div>
             <Button
@@ -41,7 +42,7 @@ const NextPayment = () => {
             </Button>
           </div>
           <div className="place-self-end lg:pb-2.5">
-            <Button>Manage Payment</Button>
+            <Button><FormattedMessage id="UI.MANAGE_PAYMENT" /></Button>
           </div>
         </div>
       </CardContent>

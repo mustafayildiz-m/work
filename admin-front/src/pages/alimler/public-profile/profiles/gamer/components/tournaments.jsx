@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import React from 'react';
 import { CardTournament } from '@/partials/cards';
 import { Link } from 'react-router';
@@ -92,9 +93,9 @@ const Tournaments = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Floyd's Tournaments</CardTitle>
+        <CardTitle><FormattedMessage id="UI.FLOYDS_TOURNAMENTS" /></CardTitle>
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="#">View All</Link>
+          <Link to="#"><FormattedMessage id="UI.VIEW_ALL" /></Link>
         </Button>
       </CardHeader>
       <CardContent className="p-5 lg:p-7.5 lg:pb-7">

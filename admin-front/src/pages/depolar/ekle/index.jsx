@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -7,6 +8,7 @@ import { FaWarehouse, FaMapMarkerAlt, FaInfoCircle, FaCheckCircle, FaArrowLeft }
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function AddStorePage() {
+  const intl = useIntl();
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '',
@@ -51,23 +53,25 @@ export default function AddStorePage() {
   return (
     <>
       <Helmet>
-        <title>Yeni Depo Ekle - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.YENI_DEPO_EKLE__ISLAMIC_WINDOWS_ADMIN"
+        })}</title>
       </Helmet>
       <div className="p-6 max-w-4xl mx-auto">
         <div className="mb-6 flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
               <FaWarehouse className="text-blue-600" />
-              Yeni Depo Ekle
+              <FormattedMessage id="UI.YENI_DEPO_EKLE" />
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Sisteme yeni bir depo ekleyin</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1"><FormattedMessage id="UI.SISTEME_YENI_BIR_DEPO_EKLEYIN" /></p>
           </div>
           <Link
             to="/depolar/liste"
             className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 flex items-center gap-2 shadow"
           >
             <FaArrowLeft size={14} />
-            Listeye Dön
+            <FormattedMessage id="UI.LISTEYE_DON" />
           </Link>
         </div>
 
@@ -77,7 +81,7 @@ export default function AddStorePage() {
             <div>
               <label className="flex items-center gap-2 font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaWarehouse className="text-blue-600" />
-                Depo Adı
+                <FormattedMessage id="UI.DEPO_ADI" />
                 <span className="text-red-500">*</span>
               </label>
               <input
@@ -95,7 +99,7 @@ export default function AddStorePage() {
             <div>
               <label className="flex items-center gap-2 font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaMapMarkerAlt className="text-red-600" />
-                Konum
+                <FormattedMessage id="UI.KONUM" />
                 <span className="text-red-500">*</span>
               </label>
               <input
@@ -113,7 +117,7 @@ export default function AddStorePage() {
             <div>
               <label className="flex items-center gap-2 font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaInfoCircle className="text-gray-600" />
-                Açıklama
+                <FormattedMessage id="UI.ACIKLAMA" />
               </label>
               <textarea
                 name="description"
@@ -138,11 +142,11 @@ export default function AddStorePage() {
                 />
                 <label htmlFor="isActive" className="flex items-center gap-2 font-semibold text-gray-800 dark:text-gray-200 cursor-pointer">
                   <FaCheckCircle className="text-green-600" />
-                  Depo Aktif
+                  <FormattedMessage id="UI.DEPO_AKTIF" />
                 </label>
               </div>
               <p className="text-xs text-gray-600 dark:text-gray-400 mt-2 ml-8">
-                Aktif depolarda stok işlemleri yapılabilir
+                <FormattedMessage id="UI.AKTIF_DEPOLARDA_STOK_ISLEMLERI_YAPILABIL" />
               </p>
             </div>
 
@@ -152,7 +156,7 @@ export default function AddStorePage() {
                 to="/depolar/liste"
                 className="px-6 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition"
               >
-                İptal
+                <FormattedMessage id="UI.IPTAL" />
               </Link>
               <button
                 type="submit"
@@ -162,12 +166,12 @@ export default function AddStorePage() {
                 {loading ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Kaydediliyor...
+                    <FormattedMessage id="UI.KAYDEDILIYOR" />
                   </>
                 ) : (
                   <>
                     <FaCheckCircle />
-                    Kaydet
+                    <FormattedMessage id="UI.KAYDET" />
                   </>
                 )}
               </button>

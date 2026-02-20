@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { PageNavbar } from '@/pages/account';
 import {
@@ -24,11 +25,11 @@ export function AccountBasicPage() {
             <ToolbarHeading>
               <ToolbarPageTitle />
               <ToolbarDescription>
-                Central Hub for Personal Customization
+                <FormattedMessage id="UI.CENTRAL_HUB_FOR_PERSONAL_CUSTOMIZATION" />
               </ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
-              <Button variant="outline">Order History</Button>
+              <Button variant="outline"><FormattedMessage id="UI.ORDER_HISTORY" /></Button>
             </ToolbarActions>
           </Toolbar>
         </Container>

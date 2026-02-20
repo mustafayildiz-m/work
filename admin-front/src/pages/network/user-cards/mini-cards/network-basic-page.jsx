@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import {
   Toolbar,
@@ -22,12 +23,12 @@ export function NetworkMiniCardsPage() {
             <ToolbarHeading>
               <ToolbarPageTitle />
               <ToolbarDescription>
-                Central Hub for Personal Customization
+                <FormattedMessage id="UI.CENTRAL_HUB_FOR_PERSONAL_CUSTOMIZATION" />
               </ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
-              <Button variant="outline">Upload CSV</Button>
-              <Button variant="primary">Add User</Button>
+              <Button variant="outline"><FormattedMessage id="UI.UPLOAD_CSV" /></Button>
+              <Button variant="primary"><FormattedMessage id="UI.ADD_USER" /></Button>
             </ToolbarActions>
           </Toolbar>
         </Container>

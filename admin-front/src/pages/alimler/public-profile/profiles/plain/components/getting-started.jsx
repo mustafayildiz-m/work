@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Card, CardContent } from '@/components/ui/card';
@@ -20,17 +21,17 @@ const GettingStarted = () => {
           />
         </div>
         <div className="text-lg font-medium text-mono text-center">
-          Upload Item to Get Started
+          <FormattedMessage id="UI.UPLOAD_ITEM_TO_GET_STARTED" />
         </div>
         <div className="flex items-center justify-center gap-1">
           <span className="text-sm text-secondary-foreground">
-            Begin by crafting your inaugural list in minutes.
+            <FormattedMessage id="UI.BEGIN_BY_CRAFTING_YOUR_INAUGURAL_LIST_IN" />
           </span>
           <Link
             to="/account/billing/plans"
             className="text-sm font-medium link"
           >
-            Get Started!
+            <FormattedMessage id="UI.GET_STARTED" />
           </Link>
         </div>
       </CardContent>

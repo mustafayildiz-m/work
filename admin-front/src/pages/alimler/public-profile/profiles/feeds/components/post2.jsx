@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Comments, Heading, Likes, Saves, Tabs } from '../post';
@@ -27,10 +28,8 @@ const Post2 = () => {
         avatar={{ image: '300-1.png', imageClass: 'rounded-full size-[50px]' }}
         date="2 days ago"
       />
-
       <p className="mb-5 text-sm text-foreground leading-5.5 px-7.5">
-        I can hear your objections already. “But Dan, I have to blog for a
-        cardboard box manufacturing company.” I feel your pain, I really do.
+        <FormattedMessage id="UI.I_CAN_HEAR_YOUR_OBJECTIONS_ALREADY_BUT_D" />
       </p>
       <div>
         <Tabs

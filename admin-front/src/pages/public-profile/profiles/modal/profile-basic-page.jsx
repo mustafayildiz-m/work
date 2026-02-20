@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { PageMenu } from '@/pages/public-profile';
 import { UserHero } from '@/partials/common/user-hero';
@@ -35,13 +36,12 @@ export function ProfileModalPage() {
           { email: 'jenny@kteam.com', icon: Mail },
         ]}
       />
-
       <Container>
         <Navbar>
           <PageMenu />
           <NavbarActions>
             <Button>
-              <Users /> Follow
+              <Users /> <FormattedMessage id="UI.FOLLOW" />
             </Button>
             <Button variant="outline" mode="icon">
               <MessagesSquare />

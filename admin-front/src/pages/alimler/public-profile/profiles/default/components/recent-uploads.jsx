@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { DropdownMenu4 } from '@/partials/dropdown-menu/dropdown-menu-4';
 import { DropdownMenu7 } from '@/partials/dropdown-menu/dropdown-menu-7';
 import { EllipsisVertical } from 'lucide-react';
@@ -86,7 +87,7 @@ const RecentUploads = ({ title }) => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/account/integrations">All Files</Link>
+          <Link to="/account/integrations"><FormattedMessage id="UI.ALL_FILES" /></Link>
         </Button>
       </CardFooter>
     </Card>

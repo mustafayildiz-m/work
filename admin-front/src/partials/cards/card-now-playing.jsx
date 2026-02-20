@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Badge } from '@/components/ui/badge';
@@ -33,7 +34,6 @@ const CardNowPlaying = ({
         className="rounded-t-xl max-w-[280px] shrink-0"
         alt="image"
       />
-
       <div className="card-border card-rounded-b grid gap-6 px-5 py-3.5 mb-4.5">
         <div className="flex items-center gap-2.5">
           <img
@@ -62,7 +62,7 @@ const CardNowPlaying = ({
         <div className="flex items-center place-content-between gap-2">
           <AvatarGroup group={team.group} more={team.more} />
           <Badge size="sm" variant="warning" appearance="outline">
-            Rank {label}
+            <FormattedMessage id="UI.RANK" /> {label}
           </Badge>
         </div>
       </div>

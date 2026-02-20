@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { Image as ImageIcon } from 'lucide-react';
 import { Link } from 'react-router';
@@ -16,7 +17,6 @@ const Comments = ({ items }) => {
           className="rounded-full w-9 h-9 lg:w-[50px] lg:h-[50px] mt-1"
           alt="image"
         />
-
         <div className="grid gap-2.5 grow">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-1.5">
@@ -31,7 +31,7 @@ const Comments = ({ items }) => {
               </span>
             </div>
             <Button mode="link" underlined="dashed" asChild>
-              <Link to="#">Reply</Link>
+              <Link to="#"><FormattedMessage id="UI.REPLY" /></Link>
             </Button>
           </div>
           <p className="text-sm text-foreground heading-5.5">{item.text}</p>

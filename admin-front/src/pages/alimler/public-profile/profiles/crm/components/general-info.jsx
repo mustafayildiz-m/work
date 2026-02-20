@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
@@ -10,7 +11,7 @@ const GeneralInfo = () => {
       label: 'Status:',
       info: (
         <Badge size="md" variant="success" appearance="outline">
-          Subscribed
+          <FormattedMessage id="UI.SUBSCRIBED" />
         </Badge>
       ),
     },
@@ -42,7 +43,7 @@ const GeneralInfo = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>General Info</CardTitle>
+        <CardTitle><FormattedMessage id="UI.GENERAL_INFO" /></CardTitle>
       </CardHeader>
       <CardContent className="pt-3.5 pb-3.5">
         <Table>

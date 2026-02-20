@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Card, CardContent } from '@/components/ui/card';
 
 const locations = [
@@ -33,27 +34,27 @@ export const Order = () => {
         <div className="flex justify-start gap-9 p-5 pt-4">
           <div className="flex flex-col gap-1">
             <span className="text-sm font-normal text-secondary-foreground">
-              Order ID
+              <FormattedMessage id="UI.ORDER_ID" />
             </span>
-            <span className="text-sm font-medium text-mono">SO-AMS-4620</span>
+            <span className="text-sm font-medium text-mono"><FormattedMessage id="UI.SOAMS4620" /></span>
           </div>
           <div className="flex flex-col gap-1">
             <span className="text-sm font-normal text-secondary-foreground">
-              Placed
+              <FormattedMessage id="UI.PLACED" />
             </span>
-            <span className="text-sm font-medium text-mono">28 Jul, 2025</span>
+            <span className="text-sm font-medium text-mono"><FormattedMessage id="UI.28_JUL_2025" /></span>
           </div>
           <div className="flex flex-col gap-1">
             <span className="text-sm font-normal text-secondary-foreground">
-              Total Price
+              <FormattedMessage id="UI.TOTAL_PRICE" />
             </span>
             <span className="text-sm font-medium text-mono">$320.00</span>
           </div>
           <div className="flex flex-col gap-1">
             <span className="text-sm font-normal text-secondary-foreground">
-              Shipping Priority
+              <FormattedMessage id="UI.SHIPPING_PRIORITY" />
             </span>
-            <span className="text-sm font-medium text-mono">High</span>
+            <span className="text-sm font-medium text-mono"><FormattedMessage id="UI.HIGH" /></span>
           </div>
         </div>
       </CardContent>

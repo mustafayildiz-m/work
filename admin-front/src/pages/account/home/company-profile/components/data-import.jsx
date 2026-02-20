@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Info } from 'lucide-react';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Button } from '@/components/ui/button';
@@ -7,15 +8,14 @@ const DataImport = () => {
   return (
     <Card>
       <CardHeader className="gap-2" id="auth_social_sign_in">
-        <CardTitle>Data import from Google Analytics</CardTitle>
+        <CardTitle><FormattedMessage id="UI.DATA_IMPORT_FROM_GOOGLE_ANALYTICS" /></CardTitle>
         <Button variant="dim" mode="icon">
           <Info size={16} />
         </Button>
       </CardHeader>
       <CardContent className="lg:py-7.5 py-5">
         <div className="text-sm text-foreground mb-4">
-          Define aspirations, outline the path. Set a goal to transform dreams
-          into measurable achievements.
+          <FormattedMessage id="UI.DEFINE_ASPIRATIONS_OUTLINE_THE_PATH_SET_" />
         </div>
         <Button variant="outline">
           <img
@@ -23,7 +23,7 @@ const DataImport = () => {
             className="size-4 shrink-0"
             alt="image"
           />
-          Continue with Google
+          <FormattedMessage id="UI.CONTINUE_WITH_GOOGLE" />
         </Button>
       </CardContent>
     </Card>

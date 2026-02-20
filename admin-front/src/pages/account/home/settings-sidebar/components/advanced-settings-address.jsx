@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,12 +22,12 @@ const AdvancedSettingsAddress = () => {
   return (
     <Card>
       <CardHeader id="advanced_settings_address">
-        <CardTitle>Address</CardTitle>
+        <CardTitle><FormattedMessage id="UI.ADDRESS" /></CardTitle>
       </CardHeader>
       <CardContent className="grid gap-5 lg:py-7.5">
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
           <Label className="flex w-full items-center gap-1 max-w-56">
-            Address
+            <FormattedMessage id="UI.ADDRESS" />
           </Label>
           <Input
             id="address"
@@ -37,22 +38,22 @@ const AdvancedSettingsAddress = () => {
           />
         </div>
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <Label className="flex w-full max-w-56">Country</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.COUNTRY" /></Label>
           <div className="grow">
             <Select value={country} onValueChange={setCountry}>
               <SelectTrigger>
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="1">Spain</SelectItem>
-                <SelectItem value="2">Option 2</SelectItem>
-                <SelectItem value="3">Option 3</SelectItem>
+                <SelectItem value="1"><FormattedMessage id="UI.SPAIN" /></SelectItem>
+                <SelectItem value="2"><FormattedMessage id="UI.OPTION_2" /></SelectItem>
+                <SelectItem value="3"><FormattedMessage id="UI.OPTION_3" /></SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <Label className="flex w-full max-w-56">State</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.STATE" /></Label>
           <Input
             id="state"
             type="text"
@@ -62,7 +63,7 @@ const AdvancedSettingsAddress = () => {
           />
         </div>
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <Label className="flex w-full max-w-56">City</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.CITY" /></Label>
           <Input
             id="city"
             type="text"
@@ -72,7 +73,7 @@ const AdvancedSettingsAddress = () => {
           />
         </div>
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <Label className="flex w-full max-w-56">Postcode</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.POSTCODE" /></Label>
           <Input
             id="postcode"
             type="text"
@@ -82,7 +83,7 @@ const AdvancedSettingsAddress = () => {
           />
         </div>
         <div className="flex justify-end pt-2.5">
-          <Button>Save Changes</Button>
+          <Button><FormattedMessage id="UI.SAVE_CHANGES" /></Button>
         </div>
       </CardContent>
     </Card>

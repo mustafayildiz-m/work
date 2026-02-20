@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import {
   Accordion,
   AccordionContent,
@@ -50,7 +51,7 @@ export function Faq() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>FAQ</CardTitle>
+        <CardTitle><FormattedMessage id="UI.FAQ" /></CardTitle>
       </CardHeader>
       <CardContent className="py-3">{generateItems()}</CardContent>
     </Card>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Comments, Heading, Likes, Saves, Tabs } from '../post';
@@ -27,13 +28,8 @@ const Post4 = () => {
         avatar={{ image: '300-1.png', imageClass: 'rounded-full size-[50px]' }}
         date="Week ago"
       />
-
       <p className="text-sm text-foreground leading-5.5 mb-5 px-7.5">
-        This doesn’t mean that all bloggers are insincere fakers. On the
-        contrary, many bloggers’ natural curiosity is what makes them great at
-        what they do. If you blog for a living, you have to be comfortable
-        jumping from one topic to the next, even if you don’t know anything
-        about it.
+        <FormattedMessage id="UI.THIS_DOESNT_MEAN_THAT_ALL_BLOGGERS_ARE_I" />
       </p>
       <div>
         <Tabs

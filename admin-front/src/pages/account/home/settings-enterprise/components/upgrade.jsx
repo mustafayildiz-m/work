@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { HexagonBadge } from '@/partials/common/hexagon-badge';
 import { OctagonAlert } from 'lucide-react';
 import { Link } from 'react-router';
@@ -19,7 +20,6 @@ const Upgrade = () => {
           }
         `}
       </style>
-
       <Card className="rounded-xl">
         <div className="flex items-center flex-wrap sm:flex-wrap justify-between grow gap-2 p-5 rtl:[background-position:-30%_41%] [background-position:121%_41%] bg-no-repeat bg-[length:660px_310px] upgrade-bg">
           <div className="flex items-center gap-4">
@@ -38,23 +38,22 @@ const Upgrade = () => {
                   to="#"
                   className="text-base font-medium text-mono hover:text-primary-active"
                 >
-                  Upgrade your business info
+                  <FormattedMessage id="UI.UPGRADE_YOUR_BUSINESS_INFO" />
                 </Link>
                 <Badge variant="secondary" appearance="outline">
-                  16 days left
+                  <FormattedMessage id="UI.16_DAYS_LEFT" />
                 </Badge>
               </div>
               <div className="text-sm text-foreground">
-                Elevate business information for a standout profile. Utilize
-                premium features, ensuring success with enhanced details.
+                <FormattedMessage id="UI.ELEVATE_BUSINESS_INFORMATION_FOR_A_STAND" />
                 <br />
-                Upgrade now for heightened visibility and broader impact.
+                <FormattedMessage id="UI.UPGRADE_NOW_FOR_HEIGHTENED_VISIBILITY_AN" />
               </div>
             </div>
           </div>
           <div className="flex items-center gap-1.5">
-            <Button variant="mono">Start</Button>
-            <Button variant="ghost">Skip</Button>
+            <Button variant="mono"><FormattedMessage id="UI.START" /></Button>
+            <Button variant="ghost"><FormattedMessage id="UI.SKIP" /></Button>
           </div>
         </div>
       </Card>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { RiFacebookBoxLine, RiInstagramLine } from '@remixicon/react';
 import { Dribbble, EllipsisVertical, Mails, MapPin } from 'lucide-react';
 import { Link } from 'react-router';
@@ -72,7 +73,7 @@ const CardUserSocialRow = ({ avatar, name, description, verify }) => {
             <Link to="#">
               <Mails size={16} />
             </Link>{' '}
-            Message
+            <FormattedMessage id="UI.MESSAGE" />
           </Button>
           <Button variant="dim" mode="icon">
             <EllipsisVertical size={16} />

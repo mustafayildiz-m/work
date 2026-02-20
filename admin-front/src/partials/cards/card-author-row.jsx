@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { BadgeCheck, MapPin } from 'lucide-react';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -24,7 +25,7 @@ const CardAuthorRow = ({ avatar, name, location, works }) => {
             {work.title}
           </Link>
           <div className="text-sm text-secondary-foreground">
-            Token ID:{' '}
+            <FormattedMessage id="UI.TOKEN_ID" />{' '}
             <span className="text-sm font-medium text-foreground">
               {work.id}
             </span>
@@ -89,10 +90,10 @@ const CardAuthorRow = ({ avatar, name, location, works }) => {
             </ScrollArea>
           </Card>
           <Button mode="link" underlined="dashed">
-            <Link to="#">View Profile</Link>
+            <Link to="#"><FormattedMessage id="UI.VIEW_PROFILE" /></Link>
           </Button>
           <Button variant="outline">
-            <BadgeCheck size={16} /> Work with me
+            <BadgeCheck size={16} /> <FormattedMessage id="UI.WORK_WITH_ME" />
           </Button>
         </div>
       </CardContent>

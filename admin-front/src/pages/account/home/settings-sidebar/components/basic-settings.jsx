@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { AvatarInput } from '@/partials/common/avatar-input';
 import { format } from 'date-fns';
@@ -31,14 +32,14 @@ const BasicSettings = () => {
   return (
     <Card className="pb-2.5">
       <CardHeader id="basic_settings">
-        <CardTitle>Basic Settings</CardTitle>
+        <CardTitle><FormattedMessage id="UI.BASIC_SETTINGS" /></CardTitle>
       </CardHeader>
       <CardContent className="grid gap-5">
         <div className="flex items-center flex-wrap gap-2.5">
-          <Label className="flex w-full max-w-56">Photo</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.PHOTO" /></Label>
           <div className="flex items-center justify-between flex-wrap grow gap-2.5">
             <span className="text-sm text-secondary-foreground">
-              150x150px JPEG, PNG Image
+              <FormattedMessage id="UI.150X150PX_JPEG_PNG_IMAGE" />
             </span>
             <AvatarInput />
           </div>
@@ -46,7 +47,7 @@ const BasicSettings = () => {
         <div className="w-full">
           <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
             <Label className="flex w-full items-center gap-1 max-w-56">
-              Name
+              <FormattedMessage id="UI.NAME" />
             </Label>
             <Input
               type="text"
@@ -58,7 +59,7 @@ const BasicSettings = () => {
         <div className="w-full">
           <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
             <Label className="flex w-full items-center gap-1 max-w-56">
-              Birth Date
+              <FormattedMessage id="UI.BIRTH_DATE" />
             </Label>
             <Popover>
               <PopoverTrigger asChild>
@@ -72,7 +73,7 @@ const BasicSettings = () => {
                   )}
                 >
                   <CalendarDays className="-ms-0.5" />
-                  {date ? format(date, 'LLL dd, y') : <span>Pick a date</span>}
+                  {date ? format(date, 'LLL dd, y') : <span><FormattedMessage id="UI.PICK_A_DATE" /></span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
@@ -91,7 +92,7 @@ const BasicSettings = () => {
         <div className="w-full">
           <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
             <Label className="flex w-full items-center gap-1 max-w-56">
-              Company
+              <FormattedMessage id="UI.COMPANY" />
             </Label>
             <Input
               type="text"
@@ -103,7 +104,7 @@ const BasicSettings = () => {
         <div className="w-full">
           <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
             <Label className="flex w-full items-center gap-1 max-w-56">
-              Phone number
+              <FormattedMessage id="UI.PHONE_NUMBER" />
             </Label>
             <Input
               type="text"
@@ -114,31 +115,31 @@ const BasicSettings = () => {
           </div>
         </div>
         <div className="flex items-center flex-wrap gap-2.5">
-          <Label className="flex w-full max-w-56">Visibility</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.VISIBILITY" /></Label>
           <div className="grow">
             <Select defaultValue="1">
               <SelectTrigger>
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="1">Public</SelectItem>
-                <SelectItem value="2">Option 2</SelectItem>
-                <SelectItem value="3">Option 2</SelectItem>
+                <SelectItem value="1"><FormattedMessage id="UI.PUBLIC" /></SelectItem>
+                <SelectItem value="2"><FormattedMessage id="UI.OPTION_2" /></SelectItem>
+                <SelectItem value="3"><FormattedMessage id="UI.OPTION_2" /></SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
         <div className="flex items-center flex-wrap gap-2.5">
-          <Label className="flex w-full max-w-56">Avaibality</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.AVAIBALITY" /></Label>
           <div className="flex items-center gap-2">
             <Label htmlFor="auto-update" className="text-sm">
-              Available to hire
+              <FormattedMessage id="UI.AVAILABLE_TO_HIRE" />
             </Label>
             <Switch defaultChecked size="sm" />
           </div>
         </div>
         <div className="flex justify-end pt-2.5">
-          <Button>Save Changes</Button>
+          <Button><FormattedMessage id="UI.SAVE_CHANGES" /></Button>
         </div>
       </CardContent>
     </Card>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { StoreClientTopbar } from '@/pages/store-client/components/common/topbar';
 import { UserDropdownMenu } from '@/partials/topbar/user-dropdown-menu';
 import { ArrowUp, Crown } from 'lucide-react';
@@ -17,16 +18,16 @@ const HeaderTopbar = () => {
             <div className="flex flex-col items-end pt-0.5">
               <span className="inline-flex gap-0.5 text-foreground font-medium text-xs uppercase">
                 <Crown className="size-3.5" />
-                free
+                <FormattedMessage id="UI.FREE" />
               </span>
               <span className="text-secondary-foreground text-xs">
-                182/200 <span className="hidden sm:inline-block">Uploads</span>
+                182/200 <span className="hidden sm:inline-block"><FormattedMessage id="UI.UPLOADS" /></span>
               </span>
             </div>
 
             <Button size="sm" asChild>
               <Link to="/account/security/privacy-settings">
-                Upgrade
+                <FormattedMessage id="UI.UPGRADE" />
                 <ArrowUp />
               </Link>
             </Button>

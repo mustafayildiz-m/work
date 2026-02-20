@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { DropdownMenu9 } from '@/partials/dropdown-menu/dropdown-menu-9';
 import { EllipsisVertical, Luggage, Mail, Users, X } from 'lucide-react';
 import { Link } from 'react-router';
@@ -59,7 +60,7 @@ export function ProfileDialog({ open, onOpenChange }) {
                       to="#"
                       className="text-lg leading-5 font-semibold text-foreground hover:text-primary"
                     >
-                      Jenny Klabbe
+                      <FormattedMessage id="UI.JENNY_KLABBE" />
                     </Link>
 
                     <svg
@@ -89,7 +90,7 @@ export function ProfileDialog({ open, onOpenChange }) {
                         className="text-secondary-foreground hover:text-primary"
                         rel="noopener noreferrer"
                       >
-                        Keenthemes
+                        <FormattedMessage id="UI.KEENTHEMES" />
                       </Link>
                     </div>
                     <div className="flex gap-1 items-center">
@@ -102,7 +103,7 @@ export function ProfileDialog({ open, onOpenChange }) {
                         to="mailto:jenny@kteam.com"
                         className="text-secondary-foreground hover:text-primary"
                       >
-                        jenny@kteam.com
+                        <FormattedMessage id="UI.JENNYKTEAMCOM" />
                       </Link>
                     </div>
                   </div>
@@ -110,7 +111,7 @@ export function ProfileDialog({ open, onOpenChange }) {
 
                 <div className="flex justify-end gap-2">
                   <Button>
-                    <Users /> Connect
+                    <Users /> <FormattedMessage id="UI.CONNECT" />
                   </Button>
                   <Button variant="outline" mode="icon">
                     <Mail />

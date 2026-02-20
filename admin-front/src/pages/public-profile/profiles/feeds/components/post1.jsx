@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Card } from '@/components/ui/card';
@@ -28,14 +29,9 @@ const Post1 = () => {
         avatar={{ image: '300-1.png', imageClass: 'rounded-full size-[50px]' }}
         date="Yesterday at  5:06 PM"
       />
-
       <div className="grid gap-5 mb-5 px-7.5">
         <p className="text-sm text-foreground leading-5.5">
-          Now that I’m done thoroughly mangling that vague metaphor, let’s get
-          down to business. You know you need to start blogging to grow your
-          business, but you don’t know how. In this post, I’ll show you how to
-          write a great blog post in five simple steps that people will actually
-          want to read. Ready? Let’s get started.
+          <FormattedMessage id="UI.NOW_THAT_IM_DONE_THOROUGHLY_MANGLING_THA" />
         </p>
         <div className="grid grid-cols-2 gap-2.5 xl:gap-7.5">
           <div>

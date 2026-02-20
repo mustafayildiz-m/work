@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import {
   Card,
   CardContent,
@@ -25,20 +26,18 @@ export function Order() {
   return (
     <Card className="bg-accent/50">
       <CardHeader className="px-5">
-        <CardTitle>Order Summary</CardTitle>
+        <CardTitle><FormattedMessage id="UI.ORDER_SUMMARY" /></CardTitle>
       </CardHeader>
-
       <CardContent className="px-5 py-4 space-y-2">
-        <h4 className="text-sm font-medium text-mono mb-3.5">Price Details</h4>
+        <h4 className="text-sm font-medium text-mono mb-3.5"><FormattedMessage id="UI.PRICE_DETAILS" /></h4>
 
         {items.map((item, index) => {
           return renderItem(item, index);
         })}
       </CardContent>
-
       <CardFooter className="flex justify-between items-center px-5">
         <span className="text-sm font-normal text-secondary-foreground">
-          Total
+          <FormattedMessage id="UI.TOTAL" />
         </span>
         <span className="text-base font-semibold text-mono">$492.00</span>
       </CardFooter>

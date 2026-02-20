@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -24,6 +25,7 @@ function getCoverUrl(coverImage) {
 }
 
 export default function PodcastList() {
+  const intl = useIntl();
   const [podcasts, setPodcasts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ open: false, podcast: null });
@@ -226,9 +228,10 @@ export default function PodcastList() {
   return (
     <>
       <Helmet>
-        <title>Podcast Yönetimi - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.PODCAST_YONETIMI__ISLAMIC_WINDOWS_ADMIN"
+        })}</title>
       </Helmet>
-      
       <div className="p-6 max-w-7xl mx-auto">
         {/* Audio Player (Hidden) */}
         <audio
@@ -276,8 +279,8 @@ export default function PodcastList() {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Podcast Yönetimi</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Tüm podcastleri yönetin ve düzenleyin</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.PODCAST_YONETIMI" /></h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1"><FormattedMessage id="UI.TUM_PODCASTLERI_YONETIN_VE_DUZENLEYIN" /></p>
           </div>
           <div className="flex items-center gap-3">
             {/* View Mode Toggle */}
@@ -290,7 +293,7 @@ export default function PodcastList() {
                     : 'text-gray-600 dark:text-gray-400'
                 }`}
               >
-                <FaTh /> Kart
+                <FaTh /> <FormattedMessage id="UI.KART" />
               </button>
               <button
                 onClick={() => setViewMode('table')}
@@ -300,14 +303,14 @@ export default function PodcastList() {
                     : 'text-gray-600 dark:text-gray-400'
                 }`}
               >
-                <FaList /> Liste
+                <FaList /> <FormattedMessage id="UI.LISTE" />
               </button>
             </div>
             <Link
               to="/podcast/ekle"
               className="px-4 py-2 rounded-lg bg-purple-600 text-white font-semibold shadow-lg hover:bg-purple-700 hover:shadow-xl transition-all duration-300 flex items-center gap-2"
             >
-              <FaPlus /> Podcast Ekle
+              <FaPlus /> <FormattedMessage id="UI.PODCAST_EKLE" />
             </Link>
           </div>
         </div>
@@ -317,7 +320,7 @@ export default function PodcastList() {
           <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-5 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-100 text-sm font-medium">Toplam Podcast</p>
+                <p className="text-purple-100 text-sm font-medium"><FormattedMessage id="UI.TOPLAM_PODCAST" /></p>
                 <p className="text-3xl font-bold mt-1">{stats.total}</p>
               </div>
               <FaMicrophone className="text-5xl text-purple-200 opacity-30" />
@@ -327,7 +330,7 @@ export default function PodcastList() {
           <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-5 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-green-100 text-sm font-medium">Aktif</p>
+                <p className="text-green-100 text-sm font-medium"><FormattedMessage id="UI.AKTIF" /></p>
                 <p className="text-3xl font-bold mt-1">{stats.active}</p>
               </div>
               <FaPlay className="text-5xl text-green-200 opacity-30" />
@@ -337,7 +340,7 @@ export default function PodcastList() {
           <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl shadow-lg p-5 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-yellow-100 text-sm font-medium">Öne Çıkan</p>
+                <p className="text-yellow-100 text-sm font-medium"><FormattedMessage id="UI.ONE_CIKAN" /></p>
                 <p className="text-3xl font-bold mt-1">{stats.featured}</p>
               </div>
               <FaStar className="text-5xl text-yellow-200 opacity-30" />
@@ -347,7 +350,7 @@ export default function PodcastList() {
           <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-5 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-blue-100 text-sm font-medium">Toplam Dinlenme</p>
+                <p className="text-blue-100 text-sm font-medium"><FormattedMessage id="UI.TOPLAM_DINLENME" /></p>
                 <p className="text-3xl font-bold mt-1">{stats.totalListens}</p>
               </div>
               <FaEye className="text-5xl text-blue-200 opacity-30" />
@@ -361,14 +364,14 @@ export default function PodcastList() {
             <div className="p-2 bg-purple-600 rounded-lg">
               <FaFilter className="text-white text-lg" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white">Filtrele & Ara</h3>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.FILTRELE__ARA" /></h3>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaMicrophone className="text-purple-600" />
-                Podcast Başlığı / Yazar
+                <FormattedMessage id="UI.PODCAST_BASLIGI__YAZAR" />
               </label>
               <input
                 type="text"
@@ -382,14 +385,14 @@ export default function PodcastList() {
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaGlobe className="text-blue-600" />
-                Dil
+                <FormattedMessage id="USER.MENU.LANGUAGE" />
               </label>
               <select
                 value={filters.language}
                 onChange={e => setFilters(prev => ({ ...prev, language: e.target.value }))}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm transition cursor-pointer"
               >
-                <option value="all">Tüm Diller</option>
+                <option value="all"><FormattedMessage id="UI.TUM_DILLER" /></option>
                 {languages.map(lang => (
                   <option key={lang.id} value={lang.code}>{lang.name}</option>
                 ))}
@@ -398,14 +401,14 @@ export default function PodcastList() {
 
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
-                Kategori
+                <FormattedMessage id="UI.KATEGORI" />
               </label>
               <select
                 value={filters.category}
                 onChange={e => setFilters(prev => ({ ...prev, category: e.target.value }))}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm transition cursor-pointer"
               >
-                <option value="all">Tüm Kategoriler</option>
+                <option value="all"><FormattedMessage id="UI.TUM_KATEGORILER" /></option>
                 {categories.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
                 ))}
@@ -414,27 +417,27 @@ export default function PodcastList() {
 
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
-                Durum
+                <FormattedMessage id="UI.DURUM" />
               </label>
               <select
                 value={filters.isActive}
                 onChange={e => setFilters(prev => ({ ...prev, isActive: e.target.value }))}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm transition cursor-pointer"
               >
-                <option value="all">Tüm Durumlar</option>
-                <option value="true">Aktif</option>
-                <option value="false">Pasif</option>
+                <option value="all"><FormattedMessage id="UI.TUM_DURUMLAR" /></option>
+                <option value="true"><FormattedMessage id="UI.AKTIF" /></option>
+                <option value="false"><FormattedMessage id="UI.PASIF" /></option>
               </select>
             </div>
           </div>
 
           <div className="flex items-center justify-between mt-4 pt-4 border-t border-purple-200 dark:border-gray-700">
             <div className="flex items-center gap-2 text-sm">
-              <span className="text-gray-600 dark:text-gray-400">Bulunan:</span>
+              <span className="text-gray-600 dark:text-gray-400"><FormattedMessage id="UI.BULUNAN" /></span>
               <span className="px-3 py-1 bg-purple-600 text-white rounded-full font-bold">
                 {podcasts.length}
               </span>
-              <span className="text-gray-600 dark:text-gray-400">podcast</span>
+              <span className="text-gray-600 dark:text-gray-400"><FormattedMessage id="UI.PODCAST" /></span>
             </div>
             
             {(filters.search || filters.category !== 'all' || filters.isActive !== 'all' || filters.language !== 'all') && (
@@ -443,7 +446,7 @@ export default function PodcastList() {
                 className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 font-medium text-sm flex items-center gap-2"
               >
                 <FaTimesCircle />
-                Filtreleri Temizle
+                <FormattedMessage id="UI.FILTRELERI_TEMIZLE" />
               </button>
             )}
           </div>
@@ -454,7 +457,7 @@ export default function PodcastList() {
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
               <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-t-4 border-purple-600 mb-4"></div>
-              <p className="text-lg text-gray-600 dark:text-gray-400 font-medium">Podcastler yükleniyor...</p>
+              <p className="text-lg text-gray-600 dark:text-gray-400 font-medium"><FormattedMessage id="UI.PODCASTLER_YUKLENIYOR" /></p>
             </div>
           </div>
         ) : podcasts.length === 0 ? (
@@ -470,13 +473,13 @@ export default function PodcastList() {
                 to="/podcast/ekle"
                 className="mt-4 inline-flex items-center gap-2 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold"
               >
-                <FaPlus /> İlk Podcast'i Ekle
+                <FaPlus /> <FormattedMessage id="UI.ILK_PODCASTI_EKLE" />
               </Link>
             )}
           </div>
         ) : viewMode === 'card' ? (
           /* Card View */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          (<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {podcasts.map(podcast => (
               <div key={podcast.id} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700 group">
                 {/* Cover Image */}
@@ -498,7 +501,7 @@ export default function PodcastList() {
                   <div className="absolute top-2 right-2 flex flex-col gap-2">
                     {podcast.isFeatured && (
                       <span className="px-2 py-1 bg-yellow-500 text-white text-xs font-bold rounded-lg flex items-center gap-1 shadow-lg">
-                        <FaStar size={10} /> Öne Çıkan
+                        <FaStar size={10} /> <FormattedMessage id="UI.ONE_CIKAN" />
                       </span>
                     )}
                     <span className={`px-2 py-1 text-xs font-bold rounded-lg shadow-lg ${
@@ -572,43 +575,43 @@ export default function PodcastList() {
                       to={`/podcast/duzenle/${podcast.id}`}
                       className="flex-1 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all duration-200 text-center font-semibold flex items-center justify-center gap-2"
                     >
-                      <FaEdit /> Düzenle
+                      <FaEdit /> <FormattedMessage id="UI.DUZENLE" />
                     </Link>
                     <button
                       onClick={() => setDeleteModal({ open: true, podcast })}
                       className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-200 font-semibold flex items-center justify-center gap-2"
                     >
-                      <FaTrash /> Sil
+                      <FaTrash /> <FormattedMessage id="UI.SIL" />
                     </button>
                   </div>
                 </div>
               </div>
             ))}
-          </div>
+          </div>)
         ) : (
           /* Table View */
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+          (<div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
                   <tr>
                     <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
-                      Podcast
+                      <FormattedMessage id="UI.PODCAST_1" />
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
-                      Kategori
+                      <FormattedMessage id="UI.KATEGORI" />
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
-                      Dil
+                      <FormattedMessage id="USER.MENU.LANGUAGE" />
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
-                      İstatistikler
+                      <FormattedMessage id="UI.ISTATISTIKLER" />
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
-                      Durum
+                      <FormattedMessage id="UI.DURUM" />
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
-                      İşlemler
+                      <FormattedMessage id="UI.ISLEMLER" />
                     </th>
                   </tr>
                 </thead>
@@ -659,11 +662,11 @@ export default function PodcastList() {
                           </span>
                           <span className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
                             <FaEye size={12} className="text-green-500" />
-                            {podcast.listenCount || 0} dinlenme
+                            {podcast.listenCount || 0} <FormattedMessage id="UI.DINLENME" />
                           </span>
                           <span className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
                             <FaHeart size={12} className="text-red-500" />
-                            {podcast.likeCount || 0} beğeni
+                            {podcast.likeCount || 0} <FormattedMessage id="UI.BEGENI_1" />
                           </span>
                         </div>
                       </td>
@@ -671,7 +674,7 @@ export default function PodcastList() {
                         <div className="flex flex-col gap-2">
                           {podcast.isFeatured && (
                             <span className="px-2 py-1 bg-yellow-500 text-white text-xs font-bold rounded flex items-center gap-1 w-fit">
-                              <FaStar size={10} /> Öne Çıkan
+                              <FaStar size={10} /> <FormattedMessage id="UI.ONE_CIKAN" />
                             </span>
                           )}
                           <span className={`px-2 py-1 text-xs font-bold rounded w-fit ${
@@ -717,7 +720,7 @@ export default function PodcastList() {
                 </tbody>
               </table>
             </div>
-          </div>
+          </div>)
         )}
 
         {/* Pagination */}
@@ -725,13 +728,13 @@ export default function PodcastList() {
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             {/* Pagination Info */}
             <div className="text-sm text-gray-600 dark:text-gray-400">
-              Gösterilen: <span className="font-semibold text-gray-900 dark:text-white">
-                {((currentPage - 1) * itemsPerPage) + 1}
-              </span> - <span className="font-semibold text-gray-900 dark:text-white">
-                {Math.min(currentPage * itemsPerPage, pagination.total)}
-              </span> / <span className="font-semibold text-gray-900 dark:text-white">
-                {pagination.total}
-              </span> podcast
+              <FormattedMessage id="UI.GOSTERILEN" /> <span className="font-semibold text-gray-900 dark:text-white">
+                  {((currentPage - 1) * itemsPerPage) + 1}
+                </span>- <span className="font-semibold text-gray-900 dark:text-white">
+                  {Math.min(currentPage * itemsPerPage, pagination.total)}
+                </span>/ <span className="font-semibold text-gray-900 dark:text-white">
+                  {pagination.total}
+                </span> <FormattedMessage id="UI.PODCAST" />
             </div>
 
             {/* Pagination Buttons */}
@@ -747,7 +750,7 @@ export default function PodcastList() {
                 }`}
                 title="İlk Sayfa"
               >
-                <span className="sr-only">İlk</span>
+                <span className="sr-only"><FormattedMessage id="UI.ILK" /></span>
                 ««
               </button>
 
@@ -762,7 +765,7 @@ export default function PodcastList() {
                 }`}
                 title="Önceki Sayfa"
               >
-                <span className="sr-only">Önceki</span>
+                <span className="sr-only"><FormattedMessage id="UI.ONCEKI" /></span>
                 «
               </button>
 
@@ -815,7 +818,7 @@ export default function PodcastList() {
                 }`}
                 title="Sonraki Sayfa"
               >
-                <span className="sr-only">Sonraki</span>
+                <span className="sr-only"><FormattedMessage id="UI.SONRAKI" /></span>
                 »
               </button>
 
@@ -830,7 +833,7 @@ export default function PodcastList() {
                 }`}
                 title="Son Sayfa"
               >
-                <span className="sr-only">Son</span>
+                <span className="sr-only"><FormattedMessage id="UI.SON" /></span>
                 »»
               </button>
             </div>
@@ -852,16 +855,16 @@ export default function PodcastList() {
                   <FaTrash className="text-red-600 dark:text-red-400 text-xl" />
                 </div>
                 <Dialog.Title className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                  Podcast'i Sil
+                  <FormattedMessage id="UI.PODCASTI_SIL" />
                 </Dialog.Title>
               </div>
               
               <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border-l-4 border-red-500">
                 <p className="text-gray-700 dark:text-gray-300">
-                  <span className="font-bold text-red-600 dark:text-red-400">"{deleteModal.podcast?.title}"</span> başlıklı podcast'i silmek üzeresiniz.
+                  <span className="font-bold text-red-600 dark:text-red-400">"{deleteModal.podcast?.title}"</span> <FormattedMessage id="UI.BASLIKLI_PODCASTI_SILMEK_UZERESINIZ" />
                 </p>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                  ⚠️ Bu işlem geri alınamaz ve tüm ilgili veriler kalıcı olarak silinecektir.
+                  <FormattedMessage id="UI._BU_ISLEM_GERI_ALINAMAZ_VE_TUM_ILGILI_VE" />
                 </p>
               </div>
               
@@ -870,13 +873,13 @@ export default function PodcastList() {
                   onClick={() => setDeleteModal({ open: false, podcast: null })}
                   className="px-5 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 font-medium"
                 >
-                  İptal
+                  <FormattedMessage id="UI.IPTAL" />
                 </button>
                 <button
                   onClick={handleDelete}
                   className="px-5 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl"
                 >
-                  Evet, Sil
+                  <FormattedMessage id="UI.EVET_SIL" />
                 </button>
               </div>
             </Dialog.Panel>

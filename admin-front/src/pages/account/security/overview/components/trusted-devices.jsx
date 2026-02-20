@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { DropdownMenu2 } from '@/partials/dropdown-menu/dropdown-menu-2';
 import { EllipsisVertical, LogOut } from 'lucide-react';
 import { Link } from 'react-router';
@@ -77,7 +78,7 @@ const TrustedDevices = () => {
   return (
     <Card className="min-w-full">
       <CardHeader>
-        <CardTitle>Trusted Devices</CardTitle>
+        <CardTitle><FormattedMessage id="UI.TRUSTED_DEVICES" /></CardTitle>
         <DropdownMenu2
           trigger={
             <Button variant="ghost" mode="icon">
@@ -99,7 +100,7 @@ const TrustedDevices = () => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="#">Manage Trusted Devices</Link>
+          <Link to="#"><FormattedMessage id="UI.MANAGE_TRUSTED_DEVICES" /></Link>
         </Button>
       </CardFooter>
     </Card>

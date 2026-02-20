@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 'use client';
 
 import { useMemo, useState } from 'react';
@@ -650,11 +651,11 @@ function ActionsCell({ row }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="bottom" align="end">
-        <DropdownMenuItem onClick={() => {}}>Edit</DropdownMenuItem>
-        <DropdownMenuItem onClick={handleCopyId}>Copy ID</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => {}}><FormattedMessage id="UI.EDIT" /></DropdownMenuItem>
+        <DropdownMenuItem onClick={handleCopyId}><FormattedMessage id="UI.COPY_ID" /></DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" onClick={() => {}}>
-          Delete
+          <FormattedMessage id="UI.DELETE" />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -746,7 +747,7 @@ const Invites = () => {
                 {row.original.member.name}
               </Link>
               <span className="text-sm text-secondary-foreground font-normal">
-                {row.original.member.tasks} tasks
+                {row.original.member.tasks} <FormattedMessage id="UI.TASKS" />
               </span>
             </div>
           </div>
@@ -865,7 +866,7 @@ const Invites = () => {
     return (
       <CardToolbar>
         <Label htmlFor="auto-update" className="text-sm">
-          Active Users
+          <FormattedMessage id="UI.ACTIVE_USERS" />
         </Label>
         <Switch size="sm" id="auto-update" defaultChecked />
         <DataGridColumnVisibility
@@ -873,7 +874,7 @@ const Invites = () => {
           trigger={
             <Button variant="outline">
               <Settings2 />
-              Columns
+              <FormattedMessage id="UI.COLUMNS" />
             </Button>
           }
         />
@@ -920,7 +921,7 @@ const Invites = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline">
                     <Filter />
-                    Status
+                    <FormattedMessage id="UI.STATUS" />
                     {selectedStatuses.length > 0 && (
                       <Badge appearance="stroke">
                         {selectedStatuses.length}
@@ -931,7 +932,7 @@ const Invites = () => {
                 <PopoverContent className="w-40 p-3" align="start">
                   <div className="space-y-3">
                     <div className="text-xs font-medium text-muted-foreground">
-                      Filters
+                      <FormattedMessage id="UI.FILTERS" />
                     </div>
                     <div className="space-y-3">
                       {Object.keys(statusCounts).map((status) => (

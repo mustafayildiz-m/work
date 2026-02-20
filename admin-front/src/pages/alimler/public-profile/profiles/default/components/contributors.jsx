@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { DropdownMenu3 } from '@/partials/dropdown-menu/dropdown-menu-3';
 import { DropdownMenu6 } from '@/partials/dropdown-menu/dropdown-menu-6';
 import { EllipsisVertical } from 'lucide-react';
@@ -58,7 +59,7 @@ const Contributors = () => {
               {item.name}
             </Link>
             <span className="text-xs font-semibold text-secondary-foreground">
-              {item.connections} contributors
+              {item.connections} <FormattedMessage id="UI.CONTRIBUTORS" />
             </span>
           </div>
         </div>
@@ -76,7 +77,7 @@ const Contributors = () => {
   return (
     <Card>
       <CardHeader className="gap-2">
-        <CardTitle>Contributors</CardTitle>
+        <CardTitle><FormattedMessage id="UI.CONTRIBUTORS_1" /></CardTitle>
         <DropdownMenu6
           trigger={
             <Button variant="ghost" mode="icon">
@@ -94,7 +95,7 @@ const Contributors = () => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/public-profile/network">All Contributors</Link>
+          <Link to="/public-profile/network"><FormattedMessage id="UI.ALL_CONTRIBUTORS" /></Link>
         </Button>
       </CardFooter>
     </Card>

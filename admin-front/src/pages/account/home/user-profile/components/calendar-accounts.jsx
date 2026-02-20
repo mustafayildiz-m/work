@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { CalendarCog, Trash2 } from 'lucide-react';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -57,13 +58,13 @@ const CalendarAccounts = () => {
     <Card>
       <CardHeader>
         <CardTitle>
-          Calendar Accounts{' '}
+          <FormattedMessage id="UI.CALENDAR_ACCOUNTS" />{' '}
           <span className="text-secondary-foreground font-medium text-sm">
             1/5
           </span>
         </CardTitle>
         <Button variant="outline">
-          <CalendarCog size={16} /> Add New
+          <CalendarCog size={16} /> <FormattedMessage id="UI.ADD_NEW" />
         </Button>
       </CardHeader>
       <CardContent>

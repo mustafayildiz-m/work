@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import React, { useMemo, useState, useEffect } from 'react';
 import {
   useReactTable,
@@ -82,10 +83,10 @@ function AddLanguageModal({ open, onClose, onAdded }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
       <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 w-full max-w-sm">
-        <h2 className="text-lg font-bold mb-4">Dil Ekle</h2>
+        <h2 className="text-lg font-bold mb-4"><FormattedMessage id="UI.DIL_EKLE" /></h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Dil Adı</label>
+            <label className="block text-sm font-medium mb-1"><FormattedMessage id="UI.DIL_ADI" /></label>
             <input
               name="name"
               value={form.name}
@@ -95,7 +96,7 @@ function AddLanguageModal({ open, onClose, onAdded }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Dil Kodu</label>
+            <label className="block text-sm font-medium mb-1"><FormattedMessage id="UI.DIL_KODU" /></label>
             <input
               name="code"
               value={form.code}
@@ -106,7 +107,7 @@ function AddLanguageModal({ open, onClose, onAdded }) {
           </div>
           {error && <div className="text-red-500 text-sm">{error}</div>}
           <div className="flex justify-end gap-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100">İptal</button>
+            <button type="button" onClick={onClose} className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100"><FormattedMessage id="UI.IPTAL" /></button>
             <button type="submit" disabled={loading} className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
               {loading ? 'Ekleniyor...' : 'Ekle'}
             </button>
@@ -180,10 +181,10 @@ function EditLanguageModal({ open, onClose, language, onUpdated }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
       <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 w-full max-w-sm">
-        <h2 className="text-lg font-bold mb-4">Dili Düzenle</h2>
+        <h2 className="text-lg font-bold mb-4"><FormattedMessage id="UI.DILI_DUZENLE" /></h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Dil Adı</label>
+            <label className="block text-sm font-medium mb-1"><FormattedMessage id="UI.DIL_ADI" /></label>
             <input
               name="name"
               value={form.name}
@@ -193,7 +194,7 @@ function EditLanguageModal({ open, onClose, language, onUpdated }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Dil Kodu</label>
+            <label className="block text-sm font-medium mb-1"><FormattedMessage id="UI.DIL_KODU" /></label>
             <input
               name="code"
               value={form.code}
@@ -204,7 +205,7 @@ function EditLanguageModal({ open, onClose, language, onUpdated }) {
           </div>
           {error && <div className="text-red-500 text-sm">{error}</div>}
           <div className="flex justify-end gap-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100">İptal</button>
+            <button type="button" onClick={onClose} className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100"><FormattedMessage id="UI.IPTAL" /></button>
             <button type="submit" disabled={loading} className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
               {loading ? 'Kaydediliyor...' : 'Kaydet'}
             </button>
@@ -353,13 +354,13 @@ const LanguageList = () => {
                 setEditOpen(true);
               }}
             >
-              Düzenle
+              <FormattedMessage id="UI.DUZENLE" />
             </button>
             <button
               className="px-3 py-1 rounded bg-red-600 text-white hover:bg-red-700 text-xs"
               onClick={() => handleDelete(row.original)}
             >
-              Sil
+              <FormattedMessage id="UI.SIL" />
             </button>
           </div>
         ),
@@ -383,8 +384,8 @@ const LanguageList = () => {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  if (loading) return <div className="p-6">Yükleniyor...</div>;
-  if (error) return <div className="p-6 text-red-500">Hata: {error}</div>;
+  if (loading) return <div className="p-6"><FormattedMessage id="UI.YUKLENIYOR" /></div>;
+  if (error) return <div className="p-6 text-red-500"><FormattedMessage id="UI.HATA" /> {error}</div>;
 
   return (
     <div className="p-6">
@@ -392,17 +393,16 @@ const LanguageList = () => {
       <EditLanguageModal open={editOpen} onClose={() => setEditOpen(false)} language={editLanguage} onUpdated={handleUpdated} />
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Kitap Dilleri</h1>
-          <p className="text-gray-600 dark:text-gray-400">Kitap dillerinin listesi</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.KITAP_DILLERI" /></h1>
+          <p className="text-gray-600 dark:text-gray-400"><FormattedMessage id="UI.KITAP_DILLERININ_LISTESI" /></p>
         </div>
         <button
           onClick={() => setAddOpen(true)}
           className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
         >
-          + Dil Ekle
+          <FormattedMessage id="UI._DIL_EKLE" />
         </button>
       </div>
-
       <div className="mb-4">
         <input
           type="text"
@@ -412,7 +412,6 @@ const LanguageList = () => {
           className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
         />
       </div>
-
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead className="bg-gray-50 dark:bg-gray-800">
@@ -447,7 +446,6 @@ const LanguageList = () => {
           </tbody>
         </table>
       </div>
-
       <div className="mt-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <button
@@ -480,7 +478,7 @@ const LanguageList = () => {
           </button>
         </div>
         <span className="text-sm text-gray-700 dark:text-gray-300">
-          Sayfa {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
+          <FormattedMessage id="UI.SAYFA" /> {table.getState().pagination.pageIndex + 1}/ {table.getPageCount()}
         </span>
       </div>
     </div>

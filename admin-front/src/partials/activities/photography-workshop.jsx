@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { SquareDashedBottomCode } from 'lucide-react';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -10,10 +11,10 @@ const ActivitiesPhotographyWorkshop = () => {
     <TimelineItem icon={SquareDashedBottomCode} line={true}>
       <div className="flex flex-col pb-2.5">
         <span className="text-sm text-foreground">
-          Jenny attended a Nature Photography Immersion workshop
+          <FormattedMessage id="UI.JENNY_ATTENDED_A_NATURE_PHOTOGRAPHY_IMME" />
         </span>
         <span className="text-xs text-secondary-foreground">
-          3 days ago, 11:45 AM
+          <FormattedMessage id="UI.3_DAYS_AGO_1145_AM" />
         </span>
       </div>
       <Card className="shadow-none">
@@ -24,7 +25,7 @@ const ActivitiesPhotographyWorkshop = () => {
                 <div className="border border-orange-200 rounded-lg  max-h-20">
                   <div className="flex items-center justify-center border-b border-b-orange-200 bg-orange-50 dark:border-orange-950 dark:bg-orange-950/30 rounded-t-lg">
                     <span className="text-sm text-orange-400 font-medium p-2">
-                      Apr
+                      <FormattedMessage id="UI.APR" />
                     </span>
                   </div>
                   <div className="flex items-center justify-center size-12">
@@ -45,18 +46,17 @@ const ActivitiesPhotographyWorkshop = () => {
                   asChild
                   className="text-xs text-orange-400 leading-[14px] hover:text-primary-active mb-px"
                 >
-                  <Link to="#">Nature Photography Immersion</Link>
+                  <Link to="#"><FormattedMessage id="UI.NATURE_PHOTOGRAPHY_IMMERSION" /></Link>
                 </Button>
                 <Button
                   mode="link"
                   asChild
                   className="text-base font-medium hover:text-primary text-mono leading-4"
                 >
-                  <Link to="#">Nature Photography Immersion</Link>
+                  <Link to="#"><FormattedMessage id="UI.NATURE_PHOTOGRAPHY_IMMERSION" /></Link>
                 </Button>
                 <p className="text-xs text-foreground leading-[22px]">
-                  Enhance your nature photography skills in a hands-on workshop
-                  guided by experienced photographers.
+                  <FormattedMessage id="UI.ENHANCE_YOUR_NATURE_PHOTOGRAPHY_SKILLS_I" />
                 </p>
               </div>
             </div>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { CardNotification } from '@/partials/cards';
 import { Mail, Monitor, Phone, Slack } from 'lucide-react';
 import { Link } from 'react-router';
@@ -29,7 +30,7 @@ const Channels = () => {
         'Receive instant alerts for messages and updates directly in Slack.',
       actions: (
         <Button variant="outline">
-          <Link to="#">Connect Slack</Link>
+          <Link to="#"><FormattedMessage id="UI.CONNECT_SLACK" /></Link>
         </Button>
       ),
     },
@@ -57,10 +58,10 @@ const Channels = () => {
   return (
     <Card>
       <CardHeader className="gap-2">
-        <CardTitle>Notification Channels</CardTitle>
+        <CardTitle><FormattedMessage id="UI.NOTIFICATION_CHANNELS" /></CardTitle>
         <div className="flex items-center gap-2">
           <Label htmlFor="size-sm" className="text-sm">
-            Team-Wide Alerts
+            <FormattedMessage id="UI.TEAMWIDE_ALERTS" />
           </Label>
           <Switch id="size-sm" size="sm" />
         </div>

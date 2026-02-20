@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Button } from '@/components/ui/button';
@@ -10,13 +11,11 @@ const UnlockPartnerships = () => {
         <div className="flex flex-wrap md:flex-nowrap items-center gap-6 md:gap-10">
           <div className="flex flex-col gap-3">
             <h2 className="text-xl font-semibold text-mono">
-              Unlock Creative <br />
-              Partnerships on Our Blog
+              <FormattedMessage id="UI.UNLOCK_CREATIVE" /> <br />
+              <FormattedMessage id="UI.PARTNERSHIPS_ON_OUR_BLOG" />
             </h2>
             <p className="text-sm text-secondary-foreground leading-5.5">
-              Explore exciting collaboration opportunities with our blog. We're
-              open to partnerships, guest posts, and more. Join us to share your
-              insights and grow your audience.
+              <FormattedMessage id="UI.EXPLORE_EXCITING_COLLABORATION_OPPORTUNI" />
             </p>
           </div>
           <img
@@ -34,7 +33,7 @@ const UnlockPartnerships = () => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/network/get-started">Get Started</Link>
+          <Link to="/network/get-started"><FormattedMessage id="UI.GET_STARTED_1" /></Link>
         </Button>
       </CardFooter>
     </Card>

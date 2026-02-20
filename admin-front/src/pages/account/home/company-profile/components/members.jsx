@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { DropdownMenu3 } from '@/partials/dropdown-menu/dropdown-menu-3';
 import { DropdownMenu4 } from '@/partials/dropdown-menu/dropdown-menu-4';
 import { EllipsisVertical } from 'lucide-react';
@@ -86,7 +87,7 @@ const Members = ({ url }) => {
                 {table.name}
               </Link>
               <span className="text-xs font-normal text-secondary-foreground">
-                {table.connections} connections
+                {table.connections} <FormattedMessage id="UI.CONNECTIONS" />
               </span>
             </div>
           </div>
@@ -123,11 +124,11 @@ const Members = ({ url }) => {
   return (
     <Card className="min-w-full">
       <CardHeader>
-        <CardTitle>Members</CardTitle>
+        <CardTitle><FormattedMessage id="UI.MEMBERS" /></CardTitle>
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-2">
             <Label htmlFor="auto-update" className="text-sm">
-              Enforce 2FA
+              <FormattedMessage id="UI.ENFORCE_2FA" />
             </Label>
             <Switch defaultChecked size="sm" />
           </div>
@@ -146,16 +147,16 @@ const Members = ({ url }) => {
             <TableHeader>
               <TableRow className="bg-accent/60">
                 <TableHead className="text-start font-medium min-w-52 h-10">
-                  Name
+                  <FormattedMessage id="UI.NAME" />
                 </TableHead>
                 <TableHead className="text-end font-medium min-w-36 h-10">
-                  Role
+                  <FormattedMessage id="UI.ROLE" />
                 </TableHead>
                 <TableHead className="text-end font-medium min-w-32 h-10">
-                  2FA
+                  <FormattedMessage id="UI.2FA" />
                 </TableHead>
                 <TableHead className="text-end font-medium min-w-20 h-10">
-                  Joined
+                  <FormattedMessage id="UI.JOINED" />
                 </TableHead>
                 <TableCell className="min-w-16 h-10"></TableCell>
               </TableRow>
@@ -170,7 +171,7 @@ const Members = ({ url }) => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to={url}>View 64 more</Link>
+          <Link to={url}><FormattedMessage id="UI.VIEW_64_MORE" /></Link>
         </Button>
       </CardFooter>
     </Card>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import {
@@ -33,16 +34,16 @@ export function AccountDeactivatedDialog({ open, onOpenChange }) {
           </div>
 
           <h3 className="text-lg font-medium text-mono text-center mb-3">
-            Account Deactivated
+            <FormattedMessage id="UI.ACCOUNT_DEACTIVATED" />
           </h3>
 
           <div className="text-sm text-center text-secondary-foreground mb-7">
-            Your account has been deactivated. Please contact <br />
-            support if this is an error or for reactivation.
+            <FormattedMessage id="UI.YOUR_ACCOUNT_HAS_BEEN_DEACTIVATED_PLEASE" /> <br />
+            <FormattedMessage id="UI.SUPPORT_IF_THIS_IS_AN_ERROR_OR_FOR_REACT" />
           </div>
 
           <Link to="/" className="btn btn-primary flex justify-center">
-            Go to Home
+            <FormattedMessage id="UI.GO_TO_HOME" />
           </Link>
         </DialogBody>
       </DialogContent>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -21,14 +22,13 @@ export const Packaging = () => {
   return (
     <Card className="overflow-hidden">
       <CardHeader className="bg-muted/50 px-5">
-        <CardTitle>Packaging</CardTitle>
+        <CardTitle><FormattedMessage id="UI.PACKAGING" /></CardTitle>
       </CardHeader>
-
       <CardContent className="px-5">
         <div className="space-y-4.5">
           {/* Package Name */}
           <div className="flex flex-col gap-2 w-full">
-            <span className="text-xs text-mono font-medium">Package Name</span>
+            <span className="text-xs text-mono font-medium"><FormattedMessage id="UI.PACKAGE_NAME" /></span>
             <Input
               className=""
               type="text"
@@ -40,7 +40,7 @@ export const Packaging = () => {
           <div className="grid sm:grid-cols-2 gap-5">
             <div className="flex flex-col gap-2 w-full">
               <span className="form-info text-xs text-mono font-medium">
-                Package Type
+                <FormattedMessage id="UI.PACKAGE_TYPE" />
               </span>
 
               <Select defaultValue="1">
@@ -48,16 +48,16 @@ export const Packaging = () => {
                   <SelectValue placeholder="" />
                 </SelectTrigger>
                 <SelectContent className="">
-                  <SelectItem value="1">Medium Box</SelectItem>
-                  <SelectItem value="2">Small Box</SelectItem>
-                  <SelectItem value="3">Large Box</SelectItem>
+                  <SelectItem value="1"><FormattedMessage id="UI.MEDIUM_BOX" /></SelectItem>
+                  <SelectItem value="2"><FormattedMessage id="UI.SMALL_BOX" /></SelectItem>
+                  <SelectItem value="3"><FormattedMessage id="UI.LARGE_BOX" /></SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="flex flex-col gap-2 w-full">
               <span className="form-info text-xs text-mono font-medium">
-                Total Weight
+                <FormattedMessage id="UI.TOTAL_WEIGHT" />
               </span>
 
               <Input
@@ -73,7 +73,7 @@ export const Packaging = () => {
           <div className="flex flex-wrap items-end gap-5">
             <div className="flex-1 min-w-[100px]">
               <div className="flex flex-col gap-2 w-full">
-                <span className="text-xs text-mono font-medium">Length</span>
+                <span className="text-xs text-mono font-medium"><FormattedMessage id="UI.LENGTH" /></span>
 
                 <Input
                   placeholder=""
@@ -87,7 +87,7 @@ export const Packaging = () => {
 
             <div className="flex-1 min-w-[100px]">
               <div className="flex flex-col gap-2 w-full">
-                <span className="text-xs text-mono font-medium">Width</span>
+                <span className="text-xs text-mono font-medium"><FormattedMessage id="UI.WIDTH" /></span>
 
                 <Input
                   placeholder=""
@@ -101,7 +101,7 @@ export const Packaging = () => {
 
             <div className="flex-1 min-w-[100px]">
               <div className="flex flex-col gap-2 w-full">
-                <span className="text-xs text-mono font-medium">Height</span>
+                <span className="text-xs text-mono font-medium"><FormattedMessage id="UI.HEIGHT" /></span>
 
                 <Input
                   placeholder=""
@@ -119,9 +119,9 @@ export const Packaging = () => {
                   <SelectValue placeholder="" />
                 </SelectTrigger>
                 <SelectContent className="">
-                  <SelectItem value="1">sm</SelectItem>
-                  <SelectItem value="2">mm</SelectItem>
-                  <SelectItem value="3">dm</SelectItem>
+                  <SelectItem value="1"><FormattedMessage id="UI.SM" /></SelectItem>
+                  <SelectItem value="2"><FormattedMessage id="UI.MM" /></SelectItem>
+                  <SelectItem value="3"><FormattedMessage id="UI.DM" /></SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -129,7 +129,7 @@ export const Packaging = () => {
 
           <div className="flex items-center space-x-2">
             <Checkbox defaultChecked />
-            <Label>Save package for future orders</Label>
+            <Label><FormattedMessage id="UI.SAVE_PACKAGE_FOR_FUTURE_ORDERS" /></Label>
           </div>
         </div>
       </CardContent>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { Copy, KeyRound } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -17,15 +18,15 @@ const ApiCredentials = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>API Credentials</CardTitle>
+        <CardTitle><FormattedMessage id="UI.API_CREDENTIALS" /></CardTitle>
       </CardHeader>
       <CardContent>
         <div className="text-sm text-foreground leading-5.5 pb-5">
-          The granted credentials serve a twofold function, enabling{' '}
+          <FormattedMessage id="UI.THE_GRANTED_CREDENTIALS_SERVE_A_TWOFOLD_" />{' '}
           <Button mode="link" asChild>
-            <Link to="#">API authentication</Link>
+            <Link to="#"><FormattedMessage id="UI.API_AUTHENTICATION" /></Link>
           </Button>{' '}
-          and governing JavaScript customization
+          <FormattedMessage id="UI.AND_GOVERNING_JAVASCRIPT_CUSTOMIZATION" />
         </div>
         <div className="flex flex-col flex-wrap gap-4">
           <InputWrapper>
@@ -41,14 +42,14 @@ const ApiCredentials = () => {
           </InputWrapper>
           <div>
             <Button>
-              <KeyRound /> Access Tokens
+              <KeyRound /> <FormattedMessage id="UI.ACCESS_TOKENS" />
             </Button>
           </div>
         </div>
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/account/api-keys">Check API’s</Link>
+          <Link to="/account/api-keys"><FormattedMessage id="UI.CHECK_APIS" /></Link>
         </Button>
       </CardFooter>
     </Card>

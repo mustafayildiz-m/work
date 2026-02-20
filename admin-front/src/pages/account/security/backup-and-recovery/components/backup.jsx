@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
@@ -679,12 +680,12 @@ const Backup = () => {
             <span className="flex items-center gap-2 text-xs text-secondary-foreground font-normal">
               <span className="flex items-center gap-1">
                 <File size={16} />
-                <p>{row.original.details.pages} pages</p>
+                <p>{row.original.details.pages} <FormattedMessage id="UI.PAGES" /></p>
               </span>
               <span className="border-e border-e-input h-4"></span>
               <span className="flex items-center gap-1">
                 <ImageIcon size={16} />
-                <p>{row.original.details.media} media</p>
+                <p>{row.original.details.media} <FormattedMessage id="UI.MEDIA" /></p>
               </span>
             </span>
           </div>
@@ -699,7 +700,7 @@ const Backup = () => {
       {
         id: 'preview',
         header: () => '',
-        cell: () => <Button variant="ghost">Preview</Button>,
+        cell: () => <Button variant="ghost"><FormattedMessage id="UI.PREVIEW" /></Button>,
         enableSorting: false,
         size: 100,
         meta: {
@@ -709,7 +710,7 @@ const Backup = () => {
       {
         id: 'restore',
         header: () => '',
-        cell: () => <Button variant="outline">Restore</Button>,
+        cell: () => <Button variant="outline"><FormattedMessage id="UI.RESTORE" /></Button>,
         enableSorting: false,
         size: 100,
         meta: {
@@ -759,7 +760,7 @@ const Backup = () => {
       <CardToolbar>
         <div className="flex flex-wrap items-center gap-2.5">
           <Label htmlFor="auto-update" className="text-sm">
-            Cloud Sync
+            <FormattedMessage id="UI.CLOUD_SYNC" />
           </Label>
           <Switch size="sm" id="auto-update" defaultChecked />
         </div>
@@ -768,7 +769,7 @@ const Backup = () => {
           trigger={
             <Button variant="outline">
               <Settings2 />
-              Columns
+              <FormattedMessage id="UI.COLUMNS" />
             </Button>
           }
         />

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import {
   Toolbar,
@@ -22,17 +23,17 @@ export function OrderPlacedPage() {
           <ToolbarHeading>
             <ToolbarPageTitle />
             <ToolbarDescription>
-              Your purchase has been successfully completed
+              <FormattedMessage id="UI.YOUR_PURCHASE_HAS_BEEN_SUCCESSFULLY_COMP" />
             </ToolbarDescription>
           </ToolbarHeading>
           <ToolbarActions>
             <Button variant="outline">
               <Captions />
-              <Link to="/store-client/my-orders">My Orders</Link>
+              <Link to="/store-client/my-orders"><FormattedMessage id="UI.MY_ORDERS" /></Link>
             </Button>
             <Button>
               <Captions />
-              <Link to="/store-client/my-orders">Continue Shopping</Link>
+              <Link to="/store-client/my-orders"><FormattedMessage id="UI.CONTINUE_SHOPPING" /></Link>
             </Button>
           </ToolbarActions>
         </Toolbar>

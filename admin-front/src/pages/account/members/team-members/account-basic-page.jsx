@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { PageNavbar } from '@/pages/account';
 import {
@@ -25,15 +26,15 @@ export function AccountTeamMembersPage() {
             <ToolbarHeading>
               <ToolbarPageTitle />
               <ToolbarDescription>
-                Overview of all team members and roles.
+                <FormattedMessage id="UI.OVERVIEW_OF_ALL_TEAM_MEMBERS_AND_ROLES" />
               </ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
               <Button variant="outline">
-                <Link to="#">Import Members</Link>
+                <Link to="#"><FormattedMessage id="UI.IMPORT_MEMBERS" /></Link>
               </Button>
               <Button>
-                <Link to="#">Add Member</Link>
+                <Link to="#"><FormattedMessage id="UI.ADD_MEMBER" /></Link>
               </Button>
             </ToolbarActions>
           </Toolbar>

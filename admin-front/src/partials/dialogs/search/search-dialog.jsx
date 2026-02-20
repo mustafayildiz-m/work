@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { DropdownMenu4 } from '@/partials/dropdown-menu/dropdown-menu-4';
 import {
@@ -257,13 +258,13 @@ export function SearchDialog({ trigger }) {
           <Tabs defaultValue="1">
             <TabsList className="justify-between px-5 mb-2.5" variant="line">
               <div className="flex items-center gap-5">
-                <TabsTrigger value="1">Mixed</TabsTrigger>
-                <TabsTrigger value="2">Settings</TabsTrigger>
-                <TabsTrigger value="3">Integrations</TabsTrigger>
-                <TabsTrigger value="4">Users</TabsTrigger>
-                <TabsTrigger value="5">Docs</TabsTrigger>
-                <TabsTrigger value="6">Empty</TabsTrigger>
-                <TabsTrigger value="7">No Results</TabsTrigger>
+                <TabsTrigger value="1"><FormattedMessage id="UI.MIXED" /></TabsTrigger>
+                <TabsTrigger value="2"><FormattedMessage id="UI.SETTINGS" /></TabsTrigger>
+                <TabsTrigger value="3"><FormattedMessage id="UI.INTEGRATIONS" /></TabsTrigger>
+                <TabsTrigger value="4"><FormattedMessage id="UI.USERS" /></TabsTrigger>
+                <TabsTrigger value="5"><FormattedMessage id="UI.DOCS" /></TabsTrigger>
+                <TabsTrigger value="6"><FormattedMessage id="UI.EMPTY" /></TabsTrigger>
+                <TabsTrigger value="7"><FormattedMessage id="UI.NO_RESULTS" /></TabsTrigger>
               </div>
 
               <DropdownMenu4

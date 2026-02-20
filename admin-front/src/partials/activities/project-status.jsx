@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Rocket } from 'lucide-react';
 import { TimelineItem } from './timeline-item';
 
@@ -6,10 +7,10 @@ const ActivitiesProjectStatus = () => {
     <TimelineItem icon={Rocket} line={false}>
       <div className="flex flex-col">
         <div className="text-sm text-mono">
-          Completed phase one of client project ahead of schedule.
+          <FormattedMessage id="UI.COMPLETED_PHASE_ONE_OF_CLIENT_PROJECT_AH" />
         </div>
         <span className="text-xs text-secondary-foreground">
-          6 days ago, 10:45 AM
+          <FormattedMessage id="UI.6_DAYS_AGO_1045_AM" />
         </span>
       </div>
     </TimelineItem>

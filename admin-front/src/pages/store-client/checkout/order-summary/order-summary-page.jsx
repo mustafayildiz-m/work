@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import {
   Toolbar,
@@ -22,13 +23,13 @@ export function OrderSummaryPage() {
           <ToolbarHeading>
             <ToolbarPageTitle />
             <ToolbarDescription>
-              Review your items before checkout
+              <FormattedMessage id="UI.REVIEW_YOUR_ITEMS_BEFORE_CHECKOUT" />
             </ToolbarDescription>
           </ToolbarHeading>
           <ToolbarActions>
             <Button variant="outline">
               <BaggageClaim />
-              <Link to="#">View Cart</Link>
+              <Link to="#"><FormattedMessage id="UI.VIEW_CART" /></Link>
             </Button>
           </ToolbarActions>
         </Toolbar>

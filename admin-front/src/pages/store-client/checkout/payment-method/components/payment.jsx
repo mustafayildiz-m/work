@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -13,7 +14,7 @@ export function Payment() {
       subTitle: 'Jeroen van Dijk',
       description: (
         <span className="text-xs font-normal text-mono">
-          Ending 3604 Expires on 12/2026
+          <FormattedMessage id="UI.ENDING_3604_EXPIRES_ON_122026" />
         </span>
       ),
 
@@ -25,7 +26,7 @@ export function Payment() {
       subTitle: 'Sophie de Vries',
       description: (
         <span className="text-xs font-normal text-mono">
-          iDeal with ABN Ambro
+          <FormattedMessage id="UI.IDEAL_WITH_ABN_AMBRO" />
         </span>
       ),
     },
@@ -38,7 +39,7 @@ export function Payment() {
           to="#"
           className="hover:text-primary text-sm font-medium text-secondary-foreground"
         >
-          emma@reui.io
+          <FormattedMessage id="UI.EMMAREUIIO" />
         </Link>
       ),
     },
@@ -51,7 +52,7 @@ export function Payment() {
           to="#"
           className="hover:text-primary text-sm font-medium text-secondary-foreground"
         >
-          bob@reui.io
+          <FormattedMessage id="UI.BOBREUIIO" />
         </Link>
       ),
     },
@@ -64,7 +65,7 @@ export function Payment() {
 
         {item.badge && (
           <Badge variant="success" appearance="outline">
-            Pay with this
+            <FormattedMessage id="UI.PAY_WITH_THIS" />
           </Badge>
         )}
       </CardHeader>
@@ -88,16 +89,16 @@ export function Payment() {
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-5">
             <Button mode="link" underlined="dashed">
-              <Link to="#">Edit</Link>
+              <Link to="#"><FormattedMessage id="UI.EDIT" /></Link>
             </Button>
 
             <Button mode="link" underlined="dashed">
-              <Link to="#">Remove</Link>
+              <Link to="#"><FormattedMessage id="UI.REMOVE" /></Link>
             </Button>
           </div>
 
           <Button size="sm" variant="outline">
-            Select Card
+            <FormattedMessage id="UI.SELECT_CARD" />
           </Button>
         </div>
       </CardContent>

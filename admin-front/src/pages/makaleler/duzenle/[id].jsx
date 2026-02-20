@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -284,7 +285,7 @@ function EditArticle() {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center py-12">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-400">Makale yükleniyor...</p>
+          <p className="mt-4 text-gray-600 dark:text-gray-400"><FormattedMessage id="UI.MAKALE_YUKLENIYOR" /></p>
         </div>
       </div>
     );
@@ -294,14 +295,14 @@ function EditArticle() {
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <h1 className="text-3xl font-bold mb-6 text-gray-900 dark:text-gray-100">
-          Makale Düzenle
+          <FormattedMessage id="UI.MAKALE_DUZENLE" />
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Kitap Seçimi */}
           <div>
             <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-              Kitap Seçimi <span className="text-red-500">*</span>
+              <FormattedMessage id="UI.KITAP_SECIMI" /> <span className="text-red-500">*</span>
             </label>
             <Select
               options={bookOptions}
@@ -319,7 +320,7 @@ function EditArticle() {
           {/* Yazar */}
           <div>
             <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-              Makale Yazarı
+              <FormattedMessage id="UI.MAKALE_YAZARI" />
             </label>
             <input
               type="text"
@@ -335,7 +336,7 @@ function EditArticle() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-                Yayın Tarihi
+                <FormattedMessage id="UI.YAYIN_TARIHI" />
               </label>
               <input
                 type="date"
@@ -347,7 +348,7 @@ function EditArticle() {
             </div>
             <div>
               <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-                Sıra (Order Index)
+                <FormattedMessage id="UI.SIRA_ORDER_INDEX" />
               </label>
               <input
                 type="number"
@@ -363,7 +364,7 @@ function EditArticle() {
           {/* Cover Image */}
           <div>
             <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-              Kapak Resmi
+              <FormattedMessage id="UI.KAPAK_RESMI" />
             </label>
             <input
               type="file"
@@ -386,7 +387,7 @@ function EditArticle() {
           <div>
             <div className="flex justify-between items-center mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Çeviriler <span className="text-red-500">*</span>
+                <FormattedMessage id="UI.CEVIRILER" /> <span className="text-red-500">*</span>
               </label>
               <button
                 type="button"
@@ -394,7 +395,7 @@ function EditArticle() {
                 className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
                 disabled={form.translations.length >= 10}
               >
-                + Çeviri Ekle
+                <FormattedMessage id="UI._CEVIRI_EKLE" />
               </button>
             </div>
 
@@ -405,7 +406,7 @@ function EditArticle() {
               >
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="font-semibold text-gray-900 dark:text-gray-100">
-                    Çeviri {idx + 1}
+                    <FormattedMessage id="UI.CEVIRI" /> {idx + 1}
                   </h3>
                   {form.translations.length > 1 && (
                     <button
@@ -413,7 +414,7 @@ function EditArticle() {
                       onClick={() => removeTranslation(idx)}
                       className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
                     >
-                      Kaldır
+                      <FormattedMessage id="UI.KALDIR" />
                     </button>
                   )}
                 </div>
@@ -422,7 +423,7 @@ function EditArticle() {
                   {/* Dil Seçimi */}
                   <div>
                     <label className="block text-xs font-medium mb-1 text-gray-700 dark:text-gray-300">
-                      Dil <span className="text-red-500">*</span>
+                      <FormattedMessage id="USER.MENU.LANGUAGE" /> <span className="text-red-500">*</span>
                     </label>
                     <Select
                       options={languageOptions}
@@ -441,7 +442,7 @@ function EditArticle() {
                   {/* Başlık */}
                   <div>
                     <label className="block text-xs font-medium mb-1 text-gray-700 dark:text-gray-300">
-                      Başlık <span className="text-red-500">*</span>
+                      <FormattedMessage id="UI.BASLIK" /> <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -458,7 +459,7 @@ function EditArticle() {
                   {/* İçerik */}
                   <div>
                     <label className="block text-xs font-medium mb-1 text-gray-700 dark:text-gray-300">
-                      İçerik <span className="text-red-500">*</span>
+                      <FormattedMessage id="UI.ICERIK" /> <span className="text-red-500">*</span>
                     </label>
                     <textarea
                       value={trans.content}
@@ -475,7 +476,7 @@ function EditArticle() {
                   {/* Özet */}
                   <div>
                     <label className="block text-xs font-medium mb-1 text-gray-700 dark:text-gray-300">
-                      Özet
+                      <FormattedMessage id="UI.OZET" />
                     </label>
                     <textarea
                       value={trans.summary}
@@ -492,7 +493,7 @@ function EditArticle() {
                   {/* PDF Dosyası */}
                   <div>
                     <label className="block text-xs font-medium mb-1 text-gray-700 dark:text-gray-300">
-                      PDF Dosyası
+                      <FormattedMessage id="UI.PDF_DOSYASI" />
                     </label>
                     {trans.existingPdfUrl && !trans.pdfFile && (
                       <div className="mb-2">
@@ -502,7 +503,7 @@ function EditArticle() {
                           rel="noopener noreferrer"
                           className="text-blue-600 hover:underline text-xs"
                         >
-                          Mevcut PDF'i görüntüle
+                          <FormattedMessage id="UI.MEVCUT_PDFI_GORUNTULE" />
                         </a>
                       </div>
                     )}
@@ -516,7 +517,7 @@ function EditArticle() {
                     />
                     {trans.pdfFile && (
                       <p className="mt-1 text-xs text-green-600">
-                        Yeni dosya seçildi: {trans.pdfFile.name}
+                        <FormattedMessage id="UI.YENI_DOSYA_SECILDI" /> {trans.pdfFile.name}
                       </p>
                     )}
                   </div>
@@ -532,7 +533,7 @@ function EditArticle() {
               onClick={() => navigate('/makaleler/liste')}
               className="px-6 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500"
             >
-              İptal
+              <FormattedMessage id="UI.IPTAL" />
             </button>
             <button
               type="submit"

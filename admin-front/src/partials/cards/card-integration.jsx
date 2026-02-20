@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { LogOut, SquareDashedMousePointer } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -37,7 +38,7 @@ const CardIntegration = ({ logo, path, name, description, actions }) => {
           <Link to="#">
             <SquareDashedMousePointer size={16} />
           </Link>{' '}
-          Connect
+          <FormattedMessage id="UI.CONNECT" />
         </Button>
         <div className="flex items-center gap-2.5">{actions}</div>
       </CardFooter>

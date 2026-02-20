@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -26,7 +27,7 @@ const Tags = ({ title, className, sources = [] }) => {
           {sources.length > 0 ? (
             sources.map((source, index) => renderSource(source, index))
           ) : (
-            <span className="text-muted-foreground text-sm">Kaynak bulunamadı.</span>
+            <span className="text-muted-foreground text-sm"><FormattedMessage id="UI.KAYNAK_BULUNAMADI" /></span>
           )}
         </div>
       </CardContent>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { DropdownMenu2 } from '@/partials/dropdown-menu/dropdown-menu-2';
 import { EllipsisVertical } from 'lucide-react';
@@ -164,7 +165,7 @@ const MediaUploads = () => {
     <Fragment>
       <Card>
         <CardHeader>
-          <CardTitle>Media Uploads</CardTitle>
+          <CardTitle><FormattedMessage id="UI.MEDIA_UPLOADS" /></CardTitle>
           <DropdownMenu2
             trigger={
               <Button variant="ghost" mode="icon">

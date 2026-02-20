@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { ShoppingCart, Star } from 'lucide-react';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -43,8 +44,8 @@ export function Card3({
 
               {badge && (
                 <Badge size="sm" variant="destructive" className="uppercase">
-                  save {badgeLabel}%
-                </Badge>
+                  <FormattedMessage id="UI.SAVE" /> {badgeLabel}%
+                                  </Badge>
               )}
             </div>
 
@@ -64,19 +65,19 @@ export function Card3({
 
               <div className="flex items-center flex-wrap gap-2 lg:gap-4">
                 <span className="text-xs font-normal text-secondary-foreground uppercase">
-                  sku:{' '}
+                  <FormattedMessage id="UI.SKU" />{' '}
                   <span className="text-xs font-medium text-foreground">
                     {sku}
                   </span>
                 </span>
                 <span className="text-xs font-normal text-secondary-foreground">
-                  Category:{' '}
+                  <FormattedMessage id="UI.CATEGORY" />{' '}
                   <span className="text-xs font-medium text-foreground">
                     {category1}
                   </span>
                 </span>
                 <span className="text-xs font-normal text-secondary-foreground">
-                  Category:{' '}
+                  <FormattedMessage id="UI.CATEGORY" />{' '}
                   <span className="text-xs font-medium text-foreground">
                     {category2}
                   </span>
@@ -96,7 +97,7 @@ export function Card3({
             className="ms-2 shrink-0"
             onClick={showCartSheet}
           >
-            <ShoppingCart /> Add to Cart
+            <ShoppingCart /> <FormattedMessage id="UI.ADD_TO_CART" />
           </Button>
         </div>
       </CardContent>

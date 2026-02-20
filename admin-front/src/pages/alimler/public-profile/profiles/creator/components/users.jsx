@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Button } from '@/components/ui/button';
@@ -35,7 +36,7 @@ const Users = ({ title, items }) => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/account/members/teams">Join Our Team</Link>
+          <Link to="/account/members/teams"><FormattedMessage id="UI.JOIN_OUR_TEAM" /></Link>
         </Button>
       </CardFooter>
     </Card>

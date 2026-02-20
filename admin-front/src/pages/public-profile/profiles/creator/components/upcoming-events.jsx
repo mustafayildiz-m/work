@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -81,9 +82,9 @@ const UpcomingEvents = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Upcoming Events</CardTitle>
+        <CardTitle><FormattedMessage id="UI.UPCOMING_EVENTS" /></CardTitle>
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/public-profile/works">View All</Link>
+          <Link to="/public-profile/works"><FormattedMessage id="UI.VIEW_ALL" /></Link>
         </Button>
       </CardHeader>
       <CardContent className="lg:pt-7 pt-5 pb-2">

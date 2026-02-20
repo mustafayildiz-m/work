@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,10 +9,9 @@ export function ShareProfileViaEmail() {
   return (
     <div className="flex flex-col px-5 gap-2.5">
       <div className="flex flex-center gap-1">
-        <h2 className="text-mono font-semibold text-sm">Share via email</h2>
+        <h2 className="text-mono font-semibold text-sm"><FormattedMessage id="UI.SHARE_VIA_EMAIL" /></h2>
         <Info size={16} className="text-muted-foreground text-sm" />
       </div>
-
       <div className="flex flex-center gap-2.5">
         <Input
           type="email"
@@ -21,7 +21,7 @@ export function ShareProfileViaEmail() {
           className="w-full"
         />
 
-        <Button size="md">Share</Button>
+        <Button size="md"><FormattedMessage id="UI.SHARE" /></Button>
       </div>
     </div>
   );

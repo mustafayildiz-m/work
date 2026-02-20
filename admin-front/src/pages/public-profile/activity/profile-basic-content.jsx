@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment, useState } from 'react';
 import { ActivitiesAnniversary } from '@/partials/activities/anniversary';
 import { ActivitiesBloggingConference } from '@/partials/activities/blogging-conference';
@@ -42,10 +43,10 @@ export function ProfileActivityContent() {
           id={`activity_${year}`}
         >
           <CardHeader>
-            <CardTitle>Activity</CardTitle>
+            <CardTitle><FormattedMessage id="UI.ACTIVITY" /></CardTitle>
             <div className="flex items-center space-x-2.5">
               <Label htmlFor="simple-switch" className="text-sm">
-                Auto refresh:
+                <FormattedMessage id="UI.AUTO_REFRESH" />
               </Label>
               {isSwitchOn ? 'On' : 'Off'}
               <Switch
@@ -95,7 +96,7 @@ export function ProfileActivityContent() {
           </CardContent>
           <CardFooter className="justify-center">
             <Button mode="link" underlined="dashed" asChild>
-              <Link to="#">All-time Activity</Link>
+              <Link to="#"><FormattedMessage id="UI.ALLTIME_ACTIVITY" /></Link>
             </Button>
           </CardFooter>
         </Card>

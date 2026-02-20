@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { SquareSigma } from 'lucide-react';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -21,14 +22,14 @@ const CardNFT = ({ image, id, title, info, date }) => {
             {title}
           </Link>
           <div className="text-sm text-secondary-foreground">
-            Token ID:
+            <FormattedMessage id="UI.TOKEN_ID" />
             <span className="text-sm font-medium text-foreground"> {id}</span>
           </div>
         </div>
         <div className="grid grid-cols-2 items-center">
           <div className="flex flex-col gap-2">
             <span className="text-sm text-secondary-foreground">
-              Current bid
+              <FormattedMessage id="UI.CURRENT_BID" />
             </span>
             <div className="flex items-center gap-1">
               <SquareSigma
@@ -42,7 +43,7 @@ const CardNFT = ({ image, id, title, info, date }) => {
             </div>
           </div>
           <div className="flex flex-col justify-self-end text-end gap-2">
-            <span className="text-sm text-secondary-foreground">Ending in</span>
+            <span className="text-sm text-secondary-foreground"><FormattedMessage id="UI.ENDING_IN" /></span>
             <span className="text-sm font-semibold text-mono leading-none tracking-tight">
               {date}
             </span>

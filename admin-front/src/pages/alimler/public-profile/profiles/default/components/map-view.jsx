@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import React from 'react';
 
 export function MapView({ latitude, longitude, locationName }) {
@@ -27,7 +28,7 @@ export function MapView({ latitude, longitude, locationName }) {
           rel="noopener noreferrer"
           className="mt-2 text-primary underline text-sm hover:text-primary-dark"
         >
-          {locationName} haritada aç
+          {locationName} <FormattedMessage id="UI.HARITADA_AC" />
         </a>
       )}
     </div>

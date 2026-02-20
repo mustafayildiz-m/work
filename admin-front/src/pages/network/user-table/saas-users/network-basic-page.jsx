@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import {
   Toolbar,
@@ -24,13 +25,13 @@ export function NetworkSaasUsersPage() {
               <ToolbarDescription>
                 <div className="flex items-center flex-wrap gap-1.5 font-medium">
                   <span className="text-base text-secondary-foreground">
-                    All Members:
+                    <FormattedMessage id="UI.ALL_MEMBERS" />
                   </span>
                   <span className="text-base text-foreground font-semibold me-2">
                     49,053
                   </span>
                   <span className="text-base text-secondary-foreground">
-                    Pro Licenses
+                    <FormattedMessage id="UI.PRO_LICENSES" />
                   </span>
                   <span className="text-base text-foreground font-semibold">
                     1724
@@ -39,8 +40,8 @@ export function NetworkSaasUsersPage() {
               </ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
-              <Button variant="outline">Import CSV</Button>
-              <Button variant="primary">Add Member</Button>
+              <Button variant="outline"><FormattedMessage id="UI.IMPORT_CSV" /></Button>
+              <Button variant="primary"><FormattedMessage id="UI.ADD_MEMBER" /></Button>
             </ToolbarActions>
           </Toolbar>
         </Container>

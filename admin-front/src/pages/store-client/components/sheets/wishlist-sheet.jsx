@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { ShoppingCart, Star, TrashIcon } from 'lucide-react';
 import { Link } from 'react-router';
 import { Badge } from '@/components/ui/badge';
@@ -52,7 +53,7 @@ export function StoreClientWishlistSheet({ open, onOpenChange }) {
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="sm:w-[560px] sm:max-w-none inset-5 start-auto h-auto rounded-lg p-0 [&_[data-slot=sheet-close]]:top-4.5 [&_[data-slot=sheet-close]]:end-5">
         <SheetHeader className="border-b py-3.5 px-5 border-border">
-          <SheetTitle>Wishlist</SheetTitle>
+          <SheetTitle><FormattedMessage id="UI.WISHLIST" /></SheetTitle>
         </SheetHeader>
         <SheetBody className="px-5 py-0">
           <ScrollArea className="text-sm h-[calc(100dvh-12rem)] pe-3 -me-3">
@@ -81,7 +82,7 @@ export function StoreClientWishlistSheet({ open, onOpenChange }) {
                           variant="destructive"
                           className="uppercase"
                         >
-                          save 25%
+                          <FormattedMessage id="UI.SAVE_25" />
                         </Badge>
                       )}
                     </div>
@@ -98,7 +99,7 @@ export function StoreClientWishlistSheet({ open, onOpenChange }) {
                           {item.star}
                         </Badge>
                         <span className="text-xs font-normal text-secondary-foreground">
-                          Brand:
+                          <FormattedMessage id="UI.BRAND" />
                           <span className="text-xs font-medium text-foreground">
                             {item.brand}
                           </span>
@@ -114,7 +115,7 @@ export function StoreClientWishlistSheet({ open, onOpenChange }) {
                         </span>
                         <Button variant="outline" size="sm">
                           <ShoppingCart />
-                          Add
+                          <FormattedMessage id="UI.ADD" />
                         </Button>
                         <Button
                           variant="outline"
@@ -134,7 +135,7 @@ export function StoreClientWishlistSheet({ open, onOpenChange }) {
         </SheetBody>
         <SheetFooter className="border-t py-3.5 px-5 border-border">
           <Button variant="outline" className="w-full justify-center">
-            Remove all
+            <FormattedMessage id="UI.REMOVE_ALL" />
           </Button>
         </SheetFooter>
       </SheetContent>

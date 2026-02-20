@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Trash2 } from 'lucide-react';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -112,7 +113,7 @@ const AuthSocialSignIn = () => {
   return (
     <Card>
       <CardHeader id="auth_social_sign_in">
-        <CardTitle>Social Sign in</CardTitle>
+        <CardTitle><FormattedMessage id="UI.SOCIAL_SIGN_IN" /></CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid gap-5 mb-7">
@@ -122,11 +123,10 @@ const AuthSocialSignIn = () => {
         </div>
         <div className="flex flex-col gap-0.5 mb-5">
           <div className="text-base font-medium text-mono">
-            More Social Sign in options
+            <FormattedMessage id="UI.MORE_SOCIAL_SIGN_IN_OPTIONS" />
           </div>
           <div className="text-sm text-foreground">
-            Effortless access awaits! Connect seamlessly with your preferred
-            social account.
+            <FormattedMessage id="UI.EFFORTLESS_ACCESS_AWAITS_CONNECT_SEAMLES" />
           </div>
         </div>
         <div className="flex items-center flex-wrap gap-2.5 mb-7.5">
@@ -135,7 +135,7 @@ const AuthSocialSignIn = () => {
           })}
         </div>
         <div className="flex justify-end">
-          <Button>Save Changes</Button>
+          <Button><FormattedMessage id="UI.SAVE_CHANGES" /></Button>
         </div>
       </CardContent>
     </Card>

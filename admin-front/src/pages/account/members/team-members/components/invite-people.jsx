@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { SquarePlus } from 'lucide-react';
 import { Link } from 'react-router';
@@ -24,11 +25,11 @@ const InvitePeople = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Invite People</CardTitle>
+        <CardTitle><FormattedMessage id="UI.INVITE_PEOPLE" /></CardTitle>
       </CardHeader>
       <CardContent className="grid gap-5">
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <Label className="flex w-full max-w-32">Email</Label>
+          <Label className="flex w-full max-w-32"><FormattedMessage id="UI.EMAIL" /></Label>
           <Input
             type="text"
             value={emailInput}
@@ -36,29 +37,29 @@ const InvitePeople = () => {
           />
         </div>
         <div className="flex items-baseline flex-wrap gap-2.5">
-          <Label className="flex w-full max-w-32">Role</Label>
+          <Label className="flex w-full max-w-32"><FormattedMessage id="UI.ROLE" /></Label>
           <div className="flex flex-col items-start grow gap-5">
             <Select defaultValue="1">
               <SelectTrigger>
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="1">Member</SelectItem>
-                <SelectItem value="2">Editor</SelectItem>
-                <SelectItem value="3">Designer</SelectItem>
-                <SelectItem value="4">Admin</SelectItem>
+                <SelectItem value="1"><FormattedMessage id="UI.MEMBER" /></SelectItem>
+                <SelectItem value="2"><FormattedMessage id="UI.EDITOR" /></SelectItem>
+                <SelectItem value="3"><FormattedMessage id="UI.DESIGNER" /></SelectItem>
+                <SelectItem value="4"><FormattedMessage id="UI.ADMIN" /></SelectItem>
               </SelectContent>
             </Select>
             <Button variant="outline">
               <SquarePlus size={12} />
-              Add more
+              <FormattedMessage id="UI.ADD_MORE" />
             </Button>
           </div>
         </div>
       </CardContent>
       <CardFooter className="justify-center">
         <Button>
-          <Link to="#">Invite People</Link>
+          <Link to="#"><FormattedMessage id="UI.INVITE_PEOPLE" /></Link>
         </Button>
       </CardFooter>
     </Card>

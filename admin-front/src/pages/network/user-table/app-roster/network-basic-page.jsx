@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import {
   Toolbar,
@@ -22,12 +23,12 @@ export function NetworkAppRosterPage() {
             <ToolbarHeading>
               <ToolbarPageTitle />
               <ToolbarDescription>
-                Central Hub for Personal Customization
+                <FormattedMessage id="UI.CENTRAL_HUB_FOR_PERSONAL_CUSTOMIZATION" />
               </ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
-              <Button variant="outline">Import CSV</Button>
-              <Button variant="primary">Add Member</Button>
+              <Button variant="outline"><FormattedMessage id="UI.IMPORT_CSV" /></Button>
+              <Button variant="primary"><FormattedMessage id="UI.ADD_MEMBER" /></Button>
             </ToolbarActions>
           </Toolbar>
         </Container>

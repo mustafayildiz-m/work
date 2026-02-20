@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -12,7 +13,7 @@ const Highlights = () => {
       label: 'Status:',
       info: (
         <Badge size="md" variant="success" appearance="outline">
-          Subscribed
+          <FormattedMessage id="UI.SUBSCRIBED" />
         </Badge>
       ),
     },
@@ -21,7 +22,7 @@ const Highlights = () => {
       label: 'CEO:',
       info: (
         <Button mode="link" asChild>
-          <Link to="#">Luis von Ahn</Link>
+          <Link to="#"><FormattedMessage id="UI.LUIS_VON_AHN" /></Link>
         </Button>
       ),
     },
@@ -48,7 +49,7 @@ const Highlights = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Highlights</CardTitle>
+        <CardTitle><FormattedMessage id="UI.HIGHLIGHTS" /></CardTitle>
       </CardHeader>
       <CardContent className="pt-3.5 pb-3.5">
         <Table>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useEffect, useMemo, useState } from 'react';
 import {
   getCoreRowModel,
@@ -346,7 +347,7 @@ const Invoicing = () => {
         cell: () => {
           return (
             <Button mode="link" underlined="dashed">
-              Download
+              <FormattedMessage id="UI.DOWNLOAD" />
             </Button>
           );
         },
@@ -397,14 +398,14 @@ const Invoicing = () => {
       <CardToolbar>
         <Button variant="outline">
           <Download />
-          Download PDF
+          <FormattedMessage id="UI.DOWNLOAD_PDF" />
         </Button>
         <DataGridColumnVisibility
           table={table}
           trigger={
             <Button variant="outline">
               <Settings2 />
-              Columns
+              <FormattedMessage id="UI.COLUMNS" />
             </Button>
           }
         />
@@ -425,7 +426,7 @@ const Invoicing = () => {
     >
       <Card>
         <CardHeader>
-          <CardTitle>Billing and Invoicing</CardTitle>
+          <CardTitle><FormattedMessage id="UI.BILLING_AND_INVOICING" /></CardTitle>
           <Toolbar />
         </CardHeader>
         <CardTable>

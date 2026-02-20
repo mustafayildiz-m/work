@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { CommunityBadges, Tags } from '../default';
@@ -59,7 +60,7 @@ export function ProfileCreatorContent() {
             }
             title={
               <>
-                Restyle Your Space: <br /> Soft Goods Makeover Ideas
+                <FormattedMessage id="UI.RESTYLE_YOUR_SPACE" /> <br /> <FormattedMessage id="UI.SOFT_GOODS_MAKEOVER_IDEAS" />
               </>
             }
             description="Transform your living space beautifully with our Restyle Your Space: Soft Goods Makeover Ideas tutorial"

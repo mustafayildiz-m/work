@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Download } from 'lucide-react';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Button } from '@/components/ui/button';
@@ -35,10 +36,10 @@ const LatestPayment = () => {
   return (
     <Card className="grow">
       <CardHeader>
-        <CardTitle>Latest Payment</CardTitle>
+        <CardTitle><FormattedMessage id="UI.LATEST_PAYMENT" /></CardTitle>
         <Button variant="outline">
           <Download size={20} />
-          Download PDF
+          <FormattedMessage id="UI.DOWNLOAD_PDF" />
         </Button>
       </CardHeader>
       <CardContent className="pt-4 pb-3 p-0">

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -27,7 +28,7 @@ const FavoriteGames = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Favorite Games</CardTitle>
+        <CardTitle><FormattedMessage id="UI.FAVORITE_GAMES" /></CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap gap-2.5 xl:me-14 mb-1.5">

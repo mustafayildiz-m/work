@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useId } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,26 +21,26 @@ const AdvancedSettingsPreferences = () => {
   return (
     <Card>
       <CardHeader id="advanced_settings_preferences">
-        <CardTitle>Preferences</CardTitle>
+        <CardTitle><FormattedMessage id="UI.PREFERENCES" /></CardTitle>
       </CardHeader>
       <CardContent className="grid gap-5 lg:py-7.5">
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <Label className="flex w-full max-w-56">Language</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.LANGUAGE" /></Label>
           <div className="grow">
             <Select defaultValue="1">
               <SelectTrigger>
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="1">American English</SelectItem>
-                <SelectItem value="2">Option 2</SelectItem>
-                <SelectItem value="3">Option 3</SelectItem>
+                <SelectItem value="1"><FormattedMessage id="UI.AMERICAN_ENGLISH" /></SelectItem>
+                <SelectItem value="2"><FormattedMessage id="UI.OPTION_2" /></SelectItem>
+                <SelectItem value="3"><FormattedMessage id="UI.OPTION_3" /></SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <Label className="flex w-full max-w-56">Time zone</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.TIME_ZONE" /></Label>
           <div className="grow">
             <Select defaultValue="4">
               <SelectTrigger>
@@ -47,31 +48,31 @@ const AdvancedSettingsPreferences = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="4">
-                  GMT -5:00 - Eastern Time(US & Canada)
+                  <FormattedMessage id="UI.GMT_500__EASTERN_TIMEUS__CANADA" />
                 </SelectItem>
-                <SelectItem value="5">Option 2</SelectItem>
-                <SelectItem value="6">Option 3</SelectItem>
+                <SelectItem value="5"><FormattedMessage id="UI.OPTION_2" /></SelectItem>
+                <SelectItem value="6"><FormattedMessage id="UI.OPTION_3" /></SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 mb-2">
-          <Label className="flex w-full max-w-56">Currency</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.CURRENCY" /></Label>
           <div className="grow">
             <Select defaultValue="7">
               <SelectTrigger>
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="7">United States Dollar (USD)</SelectItem>
-                <SelectItem value="8">Option 2</SelectItem>
-                <SelectItem value="9">Option 3</SelectItem>
+                <SelectItem value="7"><FormattedMessage id="UI.UNITED_STATES_DOLLAR_USD" /></SelectItem>
+                <SelectItem value="8"><FormattedMessage id="UI.OPTION_2" /></SelectItem>
+                <SelectItem value="9"><FormattedMessage id="UI.OPTION_3" /></SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
         <div className="flex items-center flex-wrap lg:flex-nowrap gap-2.5">
-          <Label className="flex w-full max-w-56">Open tasks as...</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.OPEN_TASKS_AS" /></Label>
           <div className="flex items-center gap-5">
             <RadioGroup
               defaultValue="intermediate"
@@ -83,7 +84,7 @@ const AdvancedSettingsPreferences = () => {
                   htmlFor={id1}
                   className="text-foreground text-sm font-normal"
                 >
-                  Modal
+                  <FormattedMessage id="UI.MODAL" />
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
@@ -92,42 +93,42 @@ const AdvancedSettingsPreferences = () => {
                   htmlFor={id2}
                   className="text-foreground text-sm font-normal"
                 >
-                  Fullscreen
+                  <FormattedMessage id="UI.FULLSCREEN" />
                 </Label>
               </div>
             </RadioGroup>
           </div>
         </div>
         <div className="flex flex-wrap gap-2.5 mb-1.5">
-          <Label className="flex w-full max-w-56">Attributes</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.ATTRIBUTES" /></Label>
           <div className="flex flex-col items-start gap-5">
             <div className="flex flex-col gap-2.5">
               <div className="flex items-center space-x-2">
                 <Checkbox />
-                <Label>Show list names</Label>
+                <Label><FormattedMessage id="UI.SHOW_LIST_NAMES" /></Label>
               </div>
-              <div className="form-hint">See the name next to each icon</div>
+              <div className="form-hint"><FormattedMessage id="UI.SEE_THE_NAME_NEXT_TO_EACH_ICON" /></div>
             </div>
             <div className="flex flex-col gap-2.5">
               <div className="flex items-center space-x-2">
                 <Checkbox defaultChecked />
-                <Label>Show linked task names</Label>
+                <Label><FormattedMessage id="UI.SHOW_LINKED_TASK_NAMES" /></Label>
               </div>
               <div className="form-hint">
-                Show task names next to ids for linked project tasks.
+                <FormattedMessage id="UI.SHOW_TASK_NAMES_NEXT_TO_IDS_FOR_LINKED_P" />
               </div>
             </div>
           </div>
         </div>
         <div className="flex items-center flex-wrap gap-2.5">
-          <Label className="flex w-full max-w-56">Email visibility</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.EMAIL_VISIBILITY" /></Label>
           <Switch defaultChecked size="sm" />
           <Label htmlFor="auto-update" className="text-foreground text-sm">
-            Visible
+            <FormattedMessage id="UI.VISIBLE" />
           </Label>
         </div>
         <div className="flex justify-end">
-          <Button>Save Changes</Button>
+          <Button><FormattedMessage id="UI.SAVE_CHANGES" /></Button>
         </div>
       </CardContent>
     </Card>

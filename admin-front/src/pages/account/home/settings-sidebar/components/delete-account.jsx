@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,30 +9,28 @@ const DeleteAccount = () => {
   return (
     <Card>
       <CardHeader id="delete_account">
-        <CardTitle>Delete Account</CardTitle>
+        <CardTitle><FormattedMessage id="UI.DELETE_ACCOUNT" /></CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col lg:py-7.5 lg:gap-7.5 gap-3">
         <div className="flex flex-col gap-5">
           <div className="text-sm text-foreground">
-            We regret to see you leave. Confirm account deletion below. Your
-            data will be permanently removed. Thank you for being part of our
-            community. Please check our{' '}
+            <FormattedMessage id="UI.WE_REGRET_TO_SEE_YOU_LEAVE_CONFIRM_ACCOU" />{' '}
             <Button mode="link" asChild>
-              <Link to="#">Setup Guidelines</Link>
+              <Link to="#"><FormattedMessage id="UI.SETUP_GUIDELINES" /></Link>
             </Button>{' '}
-            if you still wish continue.
+            <FormattedMessage id="UI.IF_YOU_STILL_WISH_CONTINUE" />
           </div>
           <div className="flex items-center space-x-2">
             <Checkbox />
-            <Label>Confirm deleting account</Label>
+            <Label><FormattedMessage id="UI.CONFIRM_DELETING_ACCOUNT" /></Label>
           </div>
         </div>
         <div className="flex justify-end gap-2.5">
           <Button variant="outline">
-            <Link to="#">Deactivate Instead</Link>
+            <Link to="#"><FormattedMessage id="UI.DEACTIVATE_INSTEAD" /></Link>
           </Button>
           <Button variant="destructive">
-            <Link to="#">Delete Account</Link>
+            <Link to="#"><FormattedMessage id="UI.DELETE_ACCOUNT" /></Link>
           </Button>
         </div>
       </CardContent>

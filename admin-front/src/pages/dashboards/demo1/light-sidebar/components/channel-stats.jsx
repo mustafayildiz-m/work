@@ -6,7 +6,10 @@ import { motion } from 'framer-motion';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
+import { useIntl } from 'react-intl';
+
 const ChannelStats = () => {
+  const intl = useIntl();
   const [stats, setStats] = useState({
     scholars: 0,
     books: 0,
@@ -35,43 +38,43 @@ const ChannelStats = () => {
   }, []);
 
   const items = [
-    { 
-      logo: 'alim.svg', 
-      info: stats.scholars, 
-      desc: 'Kayıtlı İslam Âlimleri',
+    {
+      logo: 'alim.svg',
+      info: stats.scholars,
+      desc: intl.formatMessage({ id: 'UI.KAYITLI_ISLAM_ALIMLERI' }),
       color: 'from-emerald-500 to-emerald-600',
       bgColor: 'bg-emerald-50 dark:bg-emerald-950',
       iconBg: 'bg-emerald-100 dark:bg-emerald-900',
       trend: 'up',
       trendValue: '+12%',
-      trendText: 'Son ay'
+      trendText: intl.formatMessage({ id: 'UI.SON_AY' })
     },
-    { 
-      logo: 'kitap.svg', 
-      info: stats.books, 
-      desc: 'Kayıtlı Kitaplar',
+    {
+      logo: 'kitap.svg',
+      info: stats.books,
+      desc: intl.formatMessage({ id: 'UI.KAYITLI_KITAPLAR' }),
       color: 'from-blue-500 to-blue-600',
       bgColor: 'bg-blue-50 dark:bg-blue-950',
       iconBg: 'bg-blue-100 dark:bg-blue-900',
       trend: 'up',
       trendValue: '+8%',
-      trendText: 'Son ay'
+      trendText: intl.formatMessage({ id: 'UI.SON_AY' })
     },
-    { 
-      logo: 'post.svg', 
-      info: stats.posts, 
-      desc: 'Toplam Gönderiler',
+    {
+      logo: 'post.svg',
+      info: stats.posts,
+      desc: intl.formatMessage({ id: 'UI.TOPLAM_GONDERILER' }),
       color: 'from-purple-500 to-purple-600',
       bgColor: 'bg-purple-50 dark:bg-purple-950',
       iconBg: 'bg-purple-100 dark:bg-purple-900',
       trend: 'up',
       trendValue: '+24%',
-      trendText: 'Son ay'
+      trendText: intl.formatMessage({ id: 'UI.SON_AY' })
     },
-    { 
-      logo: 'language.svg', 
-      info: stats.languages, 
-      desc: 'Çeviri Dilleri',
+    {
+      logo: 'language.svg',
+      info: stats.languages,
+      desc: intl.formatMessage({ id: 'UI.CEVIRI_DILLERI' }),
       progress: true,
       total: 200,
       percentage: (stats.languages / 200) * 100,
@@ -80,7 +83,7 @@ const ChannelStats = () => {
       iconBg: 'bg-amber-100 dark:bg-amber-900',
       trend: 'up',
       trendValue: '+5%',
-      trendText: 'Son ay'
+      trendText: intl.formatMessage({ id: 'UI.SON_AY' })
     },
   ];
 
@@ -125,13 +128,13 @@ const ChannelStats = () => {
 
             {/* Stats number */}
             <div className="flex-1">
-              <motion.div 
+              <motion.div
                 className="text-4xl font-bold text-gray-900 dark:text-white mb-2"
                 initial={{ scale: 0.5 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                {item.info.toLocaleString('tr-TR')}
+                {item.info.toLocaleString(intl.locale === 'tr' ? 'tr-TR' : 'en-US')}
               </motion.div>
               <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 {item.desc}
@@ -145,8 +148,8 @@ const ChannelStats = () => {
                   <span className="font-medium">{item.info} / {item.total}</span>
                   <span className="font-medium">{Math.round(item.percentage)}%</span>
                 </div>
-                <Progress 
-                  value={item.percentage} 
+                <Progress
+                  value={item.percentage}
                   className="h-2"
                 />
               </div>

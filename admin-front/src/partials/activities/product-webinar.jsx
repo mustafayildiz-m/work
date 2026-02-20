@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { CalendarCheck2, SquareDashedBottomCode } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -11,10 +12,10 @@ const ActivitiesProductWebinar = () => {
     <TimelineItem icon={CalendarCheck2} line={true}>
       <div className="flex flex-col pb-2.5">
         <span className="text-sm text-foreground">
-          Jenny attended a webinar on new product features.
+          <FormattedMessage id="UI.JENNY_ATTENDED_A_WEBINAR_ON_NEW_PRODUCT_" />
         </span>
         <span className="text-xs text-secondary-foreground">
-          3 days ago, 11:45 AM
+          <FormattedMessage id="UI.3_DAYS_AGO_1145_AM" />
         </span>
       </div>
       <Card className="shadow-none p-4">
@@ -28,26 +29,26 @@ const ActivitiesProductWebinar = () => {
             <div className="flex flex-wrap items-center justify-between">
               <div className="flex flex-col gap-0.5">
                 <span className="text-base font-medium text-mono cursor-pointer hover:text-primary mb-px">
-                  Leadership Development Series: Part 1
+                  <FormattedMessage id="UI.LEADERSHIP_DEVELOPMENT_SERIES_PART_1" />
                 </span>
                 <span className="text-xs text-secondary-foreground">
-                  The first installment of a leadership development series.
+                  <FormattedMessage id="UI.THE_FIRST_INSTALLMENT_OF_A_LEADERSHIP_DE" />
                 </span>
               </div>
               <Button mode="link" underlined="dashed">
-                <Link to="/account/members/teams">View</Link>
+                <Link to="/account/members/teams"><FormattedMessage id="UI.VIEW" /></Link>
               </Button>
             </div>
             <div className="flex flex-wrap gap-7.5">
               <div className="flex items-center gap-1.5">
                 <span className="text-sm font-medium text-secondary-foreground">
-                  Code:
+                  <FormattedMessage id="UI.CODE" />
                 </span>
-                <span className="text-sm text-primary">#leaderdev-1</span>
+                <span className="text-sm text-primary"><FormattedMessage id="UI.LEADERDEV1" /></span>
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="text-sm text-secondary-foreground">
-                  Progress:
+                  <FormattedMessage id="UI.PROGRESS" />
                 </span>
                 <Progress
                   value={80}
@@ -57,7 +58,7 @@ const ActivitiesProductWebinar = () => {
               </div>
               <div className="flex items-center gap-1.5 lg:min-w-24 shrink-0 max-w-auto">
                 <span className="text-sm text-secondary-foreground">
-                  Guests:
+                  <FormattedMessage id="UI.GUESTS" />
                 </span>
                 <AvatarGroup
                   size="size-7"

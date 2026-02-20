@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import {
@@ -14,27 +15,26 @@ export default function Item17() {
     <div className="flex grow gap-2.5 px-5">
       <Avatar>
         <AvatarImage src="/media/avatars/300-19.png" alt="avatar" />
-        <AvatarFallback>CH</AvatarFallback>
+        <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
         <AvatarIndicator className="-end-1.5 -bottom-1.5">
           <AvatarStatus variant="online" className="size-2.5" />
         </AvatarIndicator>
       </Avatar>
-
       <div className="flex flex-col gap-2.5 grow">
         <div className="flex flex-col gap-1 mb-1">
           <div className="text-sm font-medium mb-px">
             <Link to="#" className="hover:text-primary text-mono font-semibold">
-              Natalie Wood
+              <FormattedMessage id="UI.NATALIE_WOOD" />
             </Link>
             <span className="text-secondary-foreground">
               {' '}
-              wants to edit marketing project{' '}
+              <FormattedMessage id="UI.WANTS_TO_EDIT_MARKETING_PROJECT" />{' '}
             </span>
           </div>
           <span className="flex items-center text-xs font-medium text-muted-foreground">
-            1 day ago
+            <FormattedMessage id="UI.1_DAY_AGO" />
             <span className="rounded-full size-1 bg-mono/30 mx-1.5"></span>
-            Designer
+            <FormattedMessage id="UI.DESIGNER" />
           </span>
         </div>
 
@@ -51,19 +51,19 @@ export default function Item17() {
             to="#"
             className="hover:text-primary font-medium text-secondary-foreground text-xs me-1"
           >
-            User-feedback.jira
+            <FormattedMessage id="UI.USERFEEDBACKJIRA" />
           </Link>
           <span className="font-medium text-muted-foreground text-xs">
-            Edited 1 hour ago
+            <FormattedMessage id="UI.EDITED_1_HOUR_AGO" />
           </span>
         </div>
 
         <div className="flex flex-wrap gap-2.5">
           <Button size="sm" variant="outline">
-            Decline
+            <FormattedMessage id="UI.DECLINE" />
           </Button>
           <Button size="sm" variant="mono">
-            Accept
+            <FormattedMessage id="UI.ACCEPT" />
           </Button>
         </div>
       </div>

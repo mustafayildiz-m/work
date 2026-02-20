@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Button } from '@/components/ui/button';
 
@@ -19,14 +20,14 @@ export function SearchNoResults() {
       </div>
       <div className="flex flex-col gap-1.5">
         <h3 className="text-base font-semibold text-mono text-center">
-          No Results Found
+          <FormattedMessage id="UI.NO_RESULTS_FOUND" />
         </h3>
         <span className="text-sm font-medium text-center text-secondary-foreground">
-          Refine your query to discover relevant items
+          <FormattedMessage id="UI.REFINE_YOUR_QUERY_TO_DISCOVER_RELEVANT_I" />
         </span>
       </div>
       <div className="flex justify-center">
-        <Button variant="outline">View Projects</Button>
+        <Button variant="outline"><FormattedMessage id="UI.VIEW_PROJECTS" /></Button>
       </div>
     </div>
   );

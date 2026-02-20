@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { DropdownMenu5 } from '@/partials/dropdown-menu/dropdown-menu-5';
 import { Check, EllipsisVertical, Plus } from 'lucide-react';
@@ -66,7 +67,7 @@ const Connections = ({ title }) => {
               {item.name}
             </Link>
             <span className="text-xs text-secondary-foreground">
-              {item.connections} connections
+              {item.connections} <FormattedMessage id="UI.CONNECTIONS" />
             </span>
           </div>
         </div>
@@ -108,7 +109,7 @@ const Connections = ({ title }) => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/public-profile/network">All Contributors</Link>
+          <Link to="/public-profile/network"><FormattedMessage id="UI.ALL_CONTRIBUTORS" /></Link>
         </Button>
       </CardFooter>
     </Card>

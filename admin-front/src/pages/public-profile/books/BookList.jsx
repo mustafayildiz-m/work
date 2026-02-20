@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import {
   useReactTable,
@@ -315,7 +316,7 @@ function EditButton({ book, onUpdated }) {
         className="px-2 py-1 text-xs rounded bg-blue-600 text-white hover:bg-blue-700 transition"
         title="Düzenle"
       >
-        Düzenle
+        <FormattedMessage id="UI.DUZENLE" />
       </button>
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 overflow-y-auto" onClick={() => setOpen(false)}>
@@ -338,12 +339,12 @@ function EditButton({ book, onUpdated }) {
                 <img src={preview} alt="Kapak Önizleme" className="w-24 h-24 object-cover rounded shadow border border-gray-200 dark:border-gray-700" />
               </div>
             )}
-            <h3 className="text-xl font-bold mb-6 text-center">Kitap Düzenle</h3>
+            <h3 className="text-xl font-bold mb-6 text-center"><FormattedMessage id="UI.KITAP_DUZENLE" /></h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input name="author" value={form.author} onChange={handleChange} required placeholder="Yazar" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
               <input name="publishDate" value={form.publishDate} onChange={handleChange} required type="date" placeholder="Yayın Tarihi" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
               <div className="md:col-span-2">
-                <label className="block text-sm font-semibold mb-2">Kategoriler</label>
+                <label className="block text-sm font-semibold mb-2"><FormattedMessage id="UI.KATEGORILER" /></label>
                 <div className="flex flex-wrap gap-2 mb-2">
                   {form.categories.map(cat => (
                     <span key={cat} className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm flex items-center gap-2">
@@ -363,8 +364,8 @@ function EditButton({ book, onUpdated }) {
               </div>
               <div className="md:col-span-2">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="font-semibold text-base">Dil Çevirileri</span>
-                  <button type="button" onClick={addTranslation} className="px-3 py-1 text-sm bg-green-600 hover:bg-green-700 text-white rounded" disabled={form.translations.length >= 10}>+ Çeviri Ekle</button>
+                  <span className="font-semibold text-base"><FormattedMessage id="UI.DIL_CEVIRILERI" /></span>
+                  <button type="button" onClick={addTranslation} className="px-3 py-1 text-sm bg-green-600 hover:bg-green-700 text-white rounded" disabled={form.translations.length >= 10}><FormattedMessage id="UI._CEVIRI_EKLE" /></button>
                 </div>
                 <div className="flex flex-col gap-4">
                   {form.translations.map((trans, idx) => (
@@ -424,7 +425,7 @@ function EditButton({ book, onUpdated }) {
                             onClick={() => removeTranslation(idx)} 
                             className="text-red-500 text-sm px-2"
                           >
-                            Sil
+                            <FormattedMessage id="UI.SIL" />
                           </button>
                         )}
                       </div>
@@ -478,7 +479,7 @@ function EditButton({ book, onUpdated }) {
                 </div>
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-semibold mb-2">Kapak Görseli</label>
+                <label className="block text-sm font-semibold mb-2"><FormattedMessage id="UI.KAPAK_GORSELI" /></label>
                 <div className="flex items-center gap-2">
                   <input
                     type="file"
@@ -495,7 +496,7 @@ function EditButton({ book, onUpdated }) {
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                       <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm0 2h12v10H4V5zm3 2a1 1 0 110 2 1 1 0 010-2zm-2 8l2.293-2.293a1 1 0 011.414 0L11 13l3.293-3.293a1 1 0 011.414 0L18 12v2H4v-1z" />
                     </svg>
-                    <span className="text-sm font-medium">Kapak Yükle</span>
+                    <span className="text-sm font-medium"><FormattedMessage id="UI.KAPAK_YUKLE" /></span>
                   </label>
                   {file && (
                     <span className="text-xs text-gray-700 dark:text-gray-200 truncate max-w-[120px]">{file.name}</span>
@@ -506,7 +507,7 @@ function EditButton({ book, onUpdated }) {
             </div>
             {error && <div className="text-red-500 text-sm mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded">{error}</div>}
             <div className="flex justify-end gap-3 mt-6 pt-4 border-t sticky bottom-0 bg-white dark:bg-gray-900">
-              <button type="button" onClick={() => setOpen(false)} className="px-6 py-2.5 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 font-medium transition">Kapat</button>
+              <button type="button" onClick={() => setOpen(false)} className="px-6 py-2.5 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 font-medium transition"><FormattedMessage id="UI.KAPAT" /></button>
               <button type="submit" className="px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed" disabled={loading}>
                 {loading ? '⏳ Kaydediliyor...' : '✓ Kaydet'}
               </button>
@@ -557,7 +558,7 @@ function DeleteButton({ bookId, onDeleted }) {
         className="px-2 py-1 text-xs rounded bg-red-600 text-white hover:bg-red-700 transition"
         title="Sil"
       >
-        Sil
+        <FormattedMessage id="UI.SIL" />
       </button>
       <Dialog
         as={Fragment}
@@ -576,10 +577,10 @@ function DeleteButton({ bookId, onDeleted }) {
               </div>
               <div>
                 <Dialog.Title className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                  Kitabı Sil
+                  <FormattedMessage id="UI.KITABI_SIL" />
                 </Dialog.Title>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  Bu işlem geri alınamaz
+                  <FormattedMessage id="UI.BU_ISLEM_GERI_ALINAMAZ" />
                 </p>
               </div>
             </div>
@@ -587,15 +588,14 @@ function DeleteButton({ bookId, onDeleted }) {
             {/* Warning Message */}
             <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 rounded-xl border-l-4 border-red-500">
               <Dialog.Description className="text-sm text-gray-700 dark:text-gray-300">
-                Bu kitabı <span className="font-bold text-red-600 dark:text-red-400">kalıcı olarak</span> silmek üzeresiniz. 
-                Bu işlem geri alınamaz ve kitaba ait tüm veriler (çeviriler, PDF'ler, kapak görseli) silinecektir.
+                <FormattedMessage id="UI.BU_KITABI" /> <span className="font-bold text-red-600 dark:text-red-400"><FormattedMessage id="UI.KALICI_OLARAK" /></span> <FormattedMessage id="UI.SILMEK_UZERESINIZ_BU_ISLEM_GERI_ALINAMAZ" />
               </Dialog.Description>
               <div className="mt-3 flex items-start gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                 </svg>
                 <p className="text-xs text-red-700 dark:text-red-300">
-                  <strong>Dikkat:</strong> Bu kitap başka sayfalarda veya sistemlerde kullanılıyor olabilir.
+                  <strong><FormattedMessage id="UI.DIKKAT" /></strong> <FormattedMessage id="UI.BU_KITAP_BASKA_SAYFALARDA_VEYA_SISTEMLER" />
                 </p>
               </div>
             </div>
@@ -619,7 +619,7 @@ function DeleteButton({ bookId, onDeleted }) {
                 className="px-6 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-semibold hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 disabled:opacity-50"
                 disabled={loading}
               >
-                Vazgeç
+                <FormattedMessage id="UI.VAZGEC" />
               </button>
               <button
                 onClick={handleDelete}
@@ -629,14 +629,14 @@ function DeleteButton({ bookId, onDeleted }) {
                 {loading ? (
                   <>
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                    Siliniyor...
+                    <FormattedMessage id="UI.SILINIYOR" />
                   </>
                 ) : (
                   <>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
                     </svg>
-                    Evet, Sil
+                    <FormattedMessage id="UI.EVET_SIL" />
                   </>
                 )}
               </button>
@@ -674,22 +674,22 @@ function BookDetailModal({ book, onClose }) {
           )}
           <h3 className="text-xl font-bold mb-1 text-center">{book.title}</h3>
           <div className="text-sm text-gray-700 dark:text-gray-200 mb-2 text-center">
-            <span className="font-semibold">Yazar:</span> {book.author}
+            <span className="font-semibold"><FormattedMessage id="UI.YAZAR_1" /></span> {book.author}
             <br />
-            <span className="font-semibold">Kategoriler:</span> {book.categories?.join(', ')}
+            <span className="font-semibold"><FormattedMessage id="UI.KATEGORILER_1" /></span> {book.categories?.join(', ')}
             <br />
-            <span className="font-semibold">Yayın Tarihi:</span> {book.publishDate?.slice(0, 10)}
+            <span className="font-semibold"><FormattedMessage id="UI.YAYIN_TARIHI_1" /></span> {book.publishDate?.slice(0, 10)}
           </div>
           <div className="w-full text-sm text-gray-700 dark:text-gray-200 mb-2">
-            <span className="font-semibold">Açıklama:</span>
+            <span className="font-semibold"><FormattedMessage id="UI.ACIKLAMA_1" /></span>
             <div className="ml-2 mt-1">{book.description}</div>
           </div>
           <div className="w-full text-sm text-gray-700 dark:text-gray-200 mb-2">
-            <span className="font-semibold">Özet:</span>
+            <span className="font-semibold"><FormattedMessage id="UI.OZET_1" /></span>
             <div className="ml-2 mt-1">{book.summary}</div>
           </div>
           <div className="w-full text-sm text-gray-700 dark:text-gray-200 mb-2">
-            <span className="font-semibold">Çeviriler:</span>
+            <span className="font-semibold"><FormattedMessage id="UI.CEVIRILER" /></span>
             <div className="ml-2 mt-1 flex flex-wrap gap-2">
               {(book.translations || []).map(trans => (
                 <div key={trans.languageId} className="border rounded p-2 bg-gray-50 dark:bg-gray-700">
@@ -702,7 +702,7 @@ function BookDetailModal({ book, onClose }) {
                       rel="noopener noreferrer"
                       className="text-blue-500 underline text-xs"
                     >
-                      PDF İndir
+                      <FormattedMessage id="UI.PDF_INDIR" />
                     </a>
                   )}
                 </div>
@@ -889,12 +889,12 @@ function AddBookModal({ open, onClose, onAdd }) {
         >
           ×
         </button>
-        <h3 className="text-xl font-bold mb-6 text-center">Kitap Ekle</h3>
+        <h3 className="text-xl font-bold mb-6 text-center"><FormattedMessage id="UI.KITAP_EKLE" /></h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input name="author" value={form.author} onChange={handleChange} required placeholder="Yazar" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
           <input name="publishDate" value={form.publishDate} onChange={handleChange} required type="date" placeholder="Yayın Tarihi" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
           <div className="md:col-span-2">
-            <label className="block text-sm font-semibold mb-2">Kategoriler</label>
+            <label className="block text-sm font-semibold mb-2"><FormattedMessage id="UI.KATEGORILER" /></label>
             <div className="flex flex-wrap gap-2 mb-2">
               {form.categories.map(cat => (
                 <span key={cat} className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm flex items-center gap-2">
@@ -914,8 +914,8 @@ function AddBookModal({ open, onClose, onAdd }) {
           </div>
           <div className="md:col-span-2">
             <div className="flex items-center justify-between mb-3">
-              <span className="font-semibold text-base">Dil Çevirileri</span>
-              <button type="button" onClick={addTranslation} className="px-3 py-1 text-sm bg-green-600 hover:bg-green-700 text-white rounded" disabled={form.translations.length >= 10}>+ Çeviri Ekle</button>
+              <span className="font-semibold text-base"><FormattedMessage id="UI.DIL_CEVIRILERI" /></span>
+              <button type="button" onClick={addTranslation} className="px-3 py-1 text-sm bg-green-600 hover:bg-green-700 text-white rounded" disabled={form.translations.length >= 10}><FormattedMessage id="UI._CEVIRI_EKLE" /></button>
             </div>
             <div className="flex flex-col gap-4">
               {form.translations.map((trans, idx) => (
@@ -975,7 +975,7 @@ function AddBookModal({ open, onClose, onAdd }) {
                         onClick={() => removeTranslation(idx)} 
                         className="text-red-500 text-sm px-2"
                       >
-                        Sil
+                        <FormattedMessage id="UI.SIL" />
                       </button>
                     )}
                   </div>
@@ -1029,7 +1029,7 @@ function AddBookModal({ open, onClose, onAdd }) {
             </div>
           </div>
           <div className="md:col-span-2">
-            <label className="block text-sm font-semibold mb-2">Kapak Görseli</label>
+            <label className="block text-sm font-semibold mb-2"><FormattedMessage id="UI.KAPAK_GORSELI" /></label>
             <div className="flex items-center gap-2">
               <input
                 type="file"
@@ -1046,7 +1046,7 @@ function AddBookModal({ open, onClose, onAdd }) {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm0 2h12v10H4V5zm3 2a1 1 0 110 2 1 1 0 010-2zm-2 8l2.293-2.293a1 1 0 011.414 0L11 13l3.293-3.293a1 1 0 011.414 0L18 12v2H4v-1z" />
                 </svg>
-                <span className="text-sm font-medium">Kapak Yükle</span>
+                <span className="text-sm font-medium"><FormattedMessage id="UI.KAPAK_YUKLE" /></span>
               </label>
               {file && (
                 <span className="text-xs text-gray-700 dark:text-gray-200 truncate max-w-[120px]">{file.name}</span>
@@ -1057,7 +1057,7 @@ function AddBookModal({ open, onClose, onAdd }) {
         </div>
         {error && <div className="text-red-500 text-sm mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded">{error}</div>}
         <div className="flex justify-end gap-3 mt-6 pt-4 border-t sticky bottom-0 bg-white dark:bg-gray-900">
-          <button type="button" onClick={onClose} className="px-6 py-2.5 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 font-medium transition">Kapat</button>
+          <button type="button" onClick={onClose} className="px-6 py-2.5 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 font-medium transition"><FormattedMessage id="UI.KAPAT" /></button>
           <button type="submit" className="px-6 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed" disabled={loading}>
             {loading ? '⏳ Ekleniyor...' : '+ Ekle'}
           </button>
@@ -1173,12 +1173,12 @@ const BookList = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">Kitap Listesi</h2>
+        <h2 className="text-2xl font-bold"><FormattedMessage id="UI.KITAP_LISTESI" /></h2>
         <button
           onClick={() => setAddModalOpen(true)}
           className="px-4 py-2 rounded bg-blue-600 text-white font-semibold shadow border border-blue-600/20 hover:bg-blue-700 transition"
         >
-          + Kitap Ekle
+          <FormattedMessage id="UI._KITAP_EKLE" />
         </button>
       </div>
       <div className="mb-4 flex flex-col sm:flex-row sm:items-center gap-2">
@@ -1192,7 +1192,7 @@ const BookList = () => {
       </div>
       <div className="overflow-x-auto rounded-lg shadow-lg">
         {loading ? (
-          <div className="py-10 text-center text-gray-500 dark:text-gray-400">Yükleniyor...</div>
+          <div className="py-10 text-center text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.YUKLENIYOR" /></div>
         ) : error ? (
           <div className="py-10 text-center text-red-500">{error}</div>
         ) : (
@@ -1233,7 +1233,7 @@ const BookList = () => {
               {table.getRowModel().rows.length === 0 ? (
                 <tr>
                   <td colSpan={columns.length} className="py-8 text-center text-gray-500 dark:text-gray-400">
-                    Kayıt bulunamadı.
+                    <FormattedMessage id="UI.KAYIT_BULUNAMADI" />
                   </td>
                 </tr>
               ) : (
@@ -1263,10 +1263,10 @@ const BookList = () => {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Önceki
+            <FormattedMessage id="UI.ONCEKI" />
           </button>
           <span className="text-sm">
-            Sayfa{' '}
+            <FormattedMessage id="UI.SAYFA" />{' '}
             <strong>
               {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
             </strong>
@@ -1276,11 +1276,11 @@ const BookList = () => {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Sonraki
+            <FormattedMessage id="UI.SONRAKI" />
           </button>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm">Göster:</span>
+          <span className="text-sm"><FormattedMessage id="UI.GOSTER" /></span>
           <select
             className="px-2 py-1 border border-gray-300 dark:border-gray-700 rounded text-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
             value={table.getState().pagination.pageSize}

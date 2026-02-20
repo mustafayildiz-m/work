@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Button } from '@/components/ui/button';
@@ -46,7 +47,7 @@ export function Bestsellers() {
             {item.name}
           </Link>
           <div className="text-xs text-secondary-foreground">
-            SKU:
+            <FormattedMessage id="UI.SKU" />
             <span className="text-foreground font-medium">{item.sku}</span>
           </div>
         </div>
@@ -57,12 +58,11 @@ export function Bestsellers() {
   return (
     <Card>
       <CardHeader className="gap-2">
-        <CardTitle>Bestsellers</CardTitle>
+        <CardTitle><FormattedMessage id="UI.BESTSELLERS" /></CardTitle>
         <Button mode="link" asChild>
-          <Link to="#">See All</Link>
+          <Link to="#"><FormattedMessage id="UI.SEE_ALL" /></Link>
         </Button>
       </CardHeader>
-
       <CardContent>
         <div className="flex flex-col gap-2 lg:gap-7.5">
           {items.map((item, index) => {

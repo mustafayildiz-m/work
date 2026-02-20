@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -7,6 +8,7 @@ import { FaArrowLeft, FaSave, FaMicrophone, FaImage, FaMusic, FaUser, FaClock, F
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function AddPodcast() {
+  const intl = useIntl();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [languages, setLanguages] = useState([]);
@@ -108,9 +110,10 @@ export default function AddPodcast() {
   return (
     <>
       <Helmet>
-        <title>Yeni Podcast Ekle - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.YENI_PODCAST_EKLE__ISLAMIC_WINDOWS_ADMIN"
+        })}</title>
       </Helmet>
-      
       <div className="p-6 max-w-5xl mx-auto">
         {/* Modern Header */}
         <div className="mb-8">
@@ -127,10 +130,10 @@ export default function AddPodcast() {
                   <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-lg">
                     <FaMicrophone className="text-2xl" />
                   </div>
-                  Yeni Podcast Ekle
+                  <FormattedMessage id="UI.YENI_PODCAST_EKLE" />
                 </h1>
                 <p className="text-gray-500 dark:text-gray-400 mt-2 ml-1">
-                  Sesli içerik ekleyin ve yayınlayın
+                  <FormattedMessage id="UI.SESLI_ICERIK_EKLEYIN_VE_YAYINLAYIN" />
                 </p>
               </div>
             </div>
@@ -149,7 +152,7 @@ export default function AddPodcast() {
                 <div className="p-2 bg-purple-600 rounded-lg">
                   <FaMicrophone className="text-white" />
                 </div>
-                Temel Bilgiler
+                <FormattedMessage id="UI.TEMEL_BILGILER" />
               </h3>
             </div>
 
@@ -157,7 +160,7 @@ export default function AddPodcast() {
               <div>
                 <label className="flex items-center gap-2 font-bold mb-3 text-base">
                   <FaMicrophone className="text-purple-500" />
-                  Başlık *
+                  <FormattedMessage id="UI.BASLIK_" />
                 </label>
                 <input
                   type="text"
@@ -173,7 +176,7 @@ export default function AddPodcast() {
               <div>
                 <label className="flex items-center gap-2 font-bold mb-3 text-base">
                   <FaList className="text-blue-500" />
-                  Açıklama
+                  <FormattedMessage id="UI.ACIKLAMA" />
                 </label>
                 <textarea
                   name="description"
@@ -184,7 +187,7 @@ export default function AddPodcast() {
                   className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all resize-none"
                 />
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                  💡 Podcast içeriğini detaylı bir şekilde anlatın
+                  <FormattedMessage id="UI._PODCAST_ICERIGINI_DETAYLI_BIR_SEKILDE_A" />
                 </p>
               </div>
 
@@ -192,7 +195,7 @@ export default function AddPodcast() {
                 <div>
                   <label className="flex items-center gap-2 font-bold mb-3 text-base">
                     <FaUser className="text-green-500" />
-                    Konuşmacı / Yazar
+                    <FormattedMessage id="UI.KONUSMACI__YAZAR" />
                   </label>
                   <input
                     type="text"
@@ -207,7 +210,7 @@ export default function AddPodcast() {
                 <div>
                   <label className="flex items-center gap-2 font-bold mb-3 text-base">
                     <FaList className="text-orange-500" />
-                    Kategori
+                    <FormattedMessage id="UI.KATEGORI" />
                   </label>
                   <select
                     name="category"
@@ -215,7 +218,7 @@ export default function AddPodcast() {
                     onChange={handleChange}
                     className="w-full px-4 py-3 h-11 border-2 border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all cursor-pointer"
                   >
-                    <option value="">Seçiniz</option>
+                    <option value=""><FormattedMessage id="UI.SECINIZ" /></option>
                     {categories.map(cat => (
                       <option key={cat} value={cat}>{cat}</option>
                     ))}
@@ -225,7 +228,7 @@ export default function AddPodcast() {
                 <div>
                   <label className="flex items-center gap-2 font-bold mb-3 text-base">
                     <FaGlobe className="text-indigo-500" />
-                    Dil
+                    <FormattedMessage id="USER.MENU.LANGUAGE" />
                   </label>
                   <select
                     name="language"
@@ -242,7 +245,7 @@ export default function AddPodcast() {
                 <div>
                   <label className="flex items-center gap-2 font-bold mb-3 text-base">
                     <FaClock className="text-teal-500" />
-                    Süre (Dakika)
+                    <FormattedMessage id="UI.SURE_DAKIKA" />
                   </label>
                   <input
                     type="number"
@@ -254,13 +257,13 @@ export default function AddPodcast() {
                     className="w-full px-4 py-3 h-11 border-2 border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                    🎙️ Podcast süresini dakika cinsinden girin
+                    <FormattedMessage id="UI._PODCAST_SURESINI_DAKIKA_CINSINDEN_GIRIN" />
                   </p>
                 </div>
 
                 <div className="md:col-span-2">
                   <label className="flex items-center gap-2 font-bold mb-3 text-base">
-                    📅 Yayın Tarihi
+                    <FormattedMessage id="UI._YAYIN_TARIHI" />
                   </label>
                   <input
                     type="date"
@@ -281,7 +284,7 @@ export default function AddPodcast() {
                 <div className="p-2 bg-blue-600 rounded-lg">
                   <FaMusic className="text-white" />
                 </div>
-                Medya Dosyaları
+                <FormattedMessage id="UI.MEDYA_DOSYALARI" />
               </h3>
             </div>
 
@@ -290,7 +293,7 @@ export default function AddPodcast() {
               <div>
                 <label className="flex items-center gap-2 font-bold mb-3 text-base">
                   <FaMusic className="text-red-500" />
-                  Ses Dosyası *
+                  <FormattedMessage id="UI.SES_DOSYASI_" />
                 </label>
                 <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-6 hover:border-purple-500 transition-all">
                   <input
@@ -309,7 +312,7 @@ export default function AddPodcast() {
                         <FaMusic className="text-5xl text-purple-500" />
                         <p className="font-semibold text-gray-900 dark:text-white">{audioFile.name}</p>
                         <p className="text-sm text-gray-500">
-                          Boyut: {(audioFile.size / 1024 / 1024).toFixed(2)} MB
+                          <FormattedMessage id="UI.BOYUT" /> {(audioFile.size / 1024 / 1024).toFixed(2)} <FormattedMessage id="UI.MB" />
                         </p>
                         <button
                           type="button"
@@ -319,17 +322,17 @@ export default function AddPodcast() {
                           }}
                           className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all flex items-center gap-2"
                         >
-                          <FaTrash /> Dosyayı Kaldır
+                          <FaTrash /> <FormattedMessage id="UI.DOSYAYI_KALDIR" />
                         </button>
                       </>
                     ) : (
                       <>
                         <FaUpload className="text-5xl text-gray-400" />
                         <p className="font-semibold text-gray-700 dark:text-gray-300">
-                          Ses dosyası yüklemek için tıklayın
+                          <FormattedMessage id="UI.SES_DOSYASI_YUKLEMEK_ICIN_TIKLAYIN" />
                         </p>
                         <p className="text-sm text-gray-500">
-                          MP3, WAV, M4A (Max 100MB)
+                          <FormattedMessage id="UI.MP3_WAV_M4A_MAX_100MB" />
                         </p>
                       </>
                     )}
@@ -341,7 +344,7 @@ export default function AddPodcast() {
               <div>
                 <label className="flex items-center gap-2 font-bold mb-3 text-base">
                   <FaImage className="text-green-500" />
-                  Kapak Resmi
+                  <FormattedMessage id="UI.KAPAK_RESMI" />
                 </label>
                 <div className="flex flex-col md:flex-row items-start gap-4">
                   {coverPreview ? (
@@ -368,7 +371,7 @@ export default function AddPodcast() {
                     <div className="w-48 h-48 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl flex items-center justify-center bg-gray-50 dark:bg-gray-800">
                       <div className="text-center">
                         <FaImage className="text-4xl text-gray-400 mx-auto mb-2" />
-                        <p className="text-sm text-gray-500">Önizleme</p>
+                        <p className="text-sm text-gray-500"><FormattedMessage id="UI.ONIZLEME" /></p>
                       </div>
                     </div>
                   )}
@@ -382,10 +385,10 @@ export default function AddPodcast() {
                     <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                       <p className="text-sm text-blue-700 dark:text-blue-300 flex items-center gap-2">
                         <FaUpload className="text-blue-500" />
-                        Podcast kapak resmi yükleyin
+                        <FormattedMessage id="UI.PODCAST_KAPAK_RESMI_YUKLEYIN" />
                       </p>
                       <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
-                        📷 JPG, PNG, WEBP (Max 5MB, 1:1 oran önerilir)
+                        <FormattedMessage id="UI._JPG_PNG_WEBP_MAX_5MB_11_ORAN_ONERILIR" />
                       </p>
                     </div>
                   </div>
@@ -401,7 +404,7 @@ export default function AddPodcast() {
                 <div className="p-2 bg-orange-600 rounded-lg">
                   <FaEye className="text-white" />
                 </div>
-                Görünürlük Ayarları
+                <FormattedMessage id="UI.GORUNURLUK_AYARLARI" />
               </h3>
             </div>
 
@@ -410,10 +413,10 @@ export default function AddPodcast() {
                 <div className="flex-1">
                   <label htmlFor="isActive" className="flex items-center gap-2 font-bold text-base cursor-pointer">
                     <FaEye className="text-green-600 dark:text-green-400" />
-                    Aktif
+                    <FormattedMessage id="UI.AKTIF" />
                   </label>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    Podcast'in kullanıcılara görünür olup olmayacağını belirler
+                    <FormattedMessage id="UI.PODCASTIN_KULLANICILARA_GORUNUR_OLUP_OLM" />
                   </p>
                 </div>
                 <input
@@ -430,10 +433,10 @@ export default function AddPodcast() {
                 <div className="flex-1">
                   <label htmlFor="isFeatured" className="flex items-center gap-2 font-bold text-base cursor-pointer">
                     <FaStar className="text-yellow-600 dark:text-yellow-400" />
-                    Öne Çıkan
+                    <FormattedMessage id="UI.ONE_CIKAN" />
                   </label>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    Podcast'i öne çıkan içerikler arasında gösterir
+                    <FormattedMessage id="UI.PODCASTI_ONE_CIKAN_ICERIKLER_ARASINDA_GO" />
                   </p>
                 </div>
                 <input
@@ -456,7 +459,7 @@ export default function AddPodcast() {
               className="h-12 px-6 text-base font-medium border-2 border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
             >
               <FaArrowLeft />
-              İptal
+              <FormattedMessage id="UI.IPTAL" />
             </button>
             <button
               type="submit"
@@ -466,12 +469,12 @@ export default function AddPodcast() {
               {loading ? (
                 <>
                   <div className="h-5 w-5 animate-spin rounded-full border-3 border-white border-t-transparent" />
-                  Kaydediliyor...
+                  <FormattedMessage id="UI.KAYDEDILIYOR" />
                 </>
               ) : (
                 <>
                   <FaSave />
-                  Kaydet
+                  <FormattedMessage id="UI.KAYDET" />
                 </>
               )}
             </button>

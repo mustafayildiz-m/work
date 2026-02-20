@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { AvatarInput } from '@/partials/common/avatar-input';
 import { format } from 'date-fns';
@@ -36,23 +37,23 @@ const BasicSettings = ({ title }) => {
         <CardTitle>{title}</CardTitle>
         <div className="flex items-center gap-2">
           <Label htmlFor="auto-update" className="text-sm">
-            Public Profile
+            <FormattedMessage id="UI.PUBLIC_PROFILE" />
           </Label>
           <Switch defaultChecked size="sm" />
         </div>
       </CardHeader>
       <CardContent className="grid gap-5">
         <div className="flex items-center flex-wrap lg:flex-nowrap gap-2.5">
-          <Label className="flex w-full max-w-56">Photo</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.PHOTO" /></Label>
           <div className="flex items-center justify-between flex-wrap grow gap-2.5">
             <span className="text-sm font-medium text-secondary-foreground">
-              150x150px JPEG, PNG Image
+              <FormattedMessage id="UI.150X150PX_JPEG_PNG_IMAGE" />
             </span>
             <AvatarInput />
           </div>
         </div>
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <Label className="flex w-full max-w-56">Name</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.NAME" /></Label>
           <Input
             type="text"
             value={nameInput}
@@ -62,7 +63,7 @@ const BasicSettings = ({ title }) => {
         <div className="w-full">
           <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
             <Label className="flex w-full items-center gap-1 max-w-56">
-              Birth Date
+              <FormattedMessage id="UI.BIRTH_DATE" />
             </Label>
             <Popover>
               <PopoverTrigger asChild>
@@ -76,7 +77,7 @@ const BasicSettings = ({ title }) => {
                   )}
                 >
                   <CalendarDays className="-ms-0.5" />
-                  {date ? format(date, 'LLL dd, y') : <span>Pick a date</span>}
+                  {date ? format(date, 'LLL dd, y') : <span><FormattedMessage id="UI.PICK_A_DATE" /></span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
@@ -93,11 +94,11 @@ const BasicSettings = ({ title }) => {
           </div>
         </div>
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <Label className="flex w-full max-w-56">Phone number</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.PHONE_NUMBER" /></Label>
           <Input type="text" placeholder="Phone number" />
         </div>
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <Label className="flex w-full max-w-56">Email</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.EMAIL" /></Label>
           <Input
             type="text"
             value={emailInput}
@@ -105,7 +106,7 @@ const BasicSettings = ({ title }) => {
           />
         </div>
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <Label className="flex w-full max-w-56">Address</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.ADDRESS" /></Label>
           <Input
             type="text"
             value={addressInput}
@@ -113,24 +114,24 @@ const BasicSettings = ({ title }) => {
           />
         </div>
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <Label className="flex w-full max-w-56">Country</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.COUNTRY" /></Label>
           <Select defaultValue="1">
             <SelectTrigger>
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">Spain</SelectItem>
-              <SelectItem value="2">Option 2</SelectItem>
-              <SelectItem value="3">Option 3</SelectItem>
+              <SelectItem value="1"><FormattedMessage id="UI.SPAIN" /></SelectItem>
+              <SelectItem value="2"><FormattedMessage id="UI.OPTION_2" /></SelectItem>
+              <SelectItem value="3"><FormattedMessage id="UI.OPTION_3" /></SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <Label className="flex w-full max-w-56">State</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.STATE" /></Label>
           <Input type="text" placeholder="State" />
         </div>
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <Label className="flex w-full max-w-56">City</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.CITY" /></Label>
           <Input
             type="text"
             value={cityInput}
@@ -138,7 +139,7 @@ const BasicSettings = ({ title }) => {
           />
         </div>
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 mb-2.5">
-          <Label className="flex w-full max-w-56">Postcode</Label>
+          <Label className="flex w-full max-w-56"><FormattedMessage id="UI.POSTCODE" /></Label>
           <Input
             type="text"
             value={postcodeInput}
@@ -146,7 +147,7 @@ const BasicSettings = ({ title }) => {
           />
         </div>
         <div className="flex justify-end">
-          <Button>Save Changes</Button>
+          <Button><FormattedMessage id="UI.SAVE_CHANGES" /></Button>
         </div>
       </CardContent>
     </Card>

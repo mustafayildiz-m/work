@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { DropdownMenu1 } from '@/partials/dropdown-menu/dropdown-menu-1';
 import { DropdownMenu2 } from '@/partials/dropdown-menu/dropdown-menu-2';
 import {
@@ -81,7 +82,7 @@ const RecentInvoices = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Recent Invoices</CardTitle>
+        <CardTitle><FormattedMessage id="UI.RECENT_INVOICES" /></CardTitle>
         <DropdownMenu2
           trigger={
             <Button variant="ghost" mode="icon">

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { LoaderPinwheel, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -5,42 +6,39 @@ import { Button } from '@/components/ui/button';
 export function ShareProfileSettings() {
   return (
     <div className="flex flex-col px-5 gap-4">
-      <h2 className="text-mono font-semibold text-sm">Settings</h2>
-
+      <h2 className="text-mono font-semibold text-sm"><FormattedMessage id="UI.SETTINGS" /></h2>
       <div className="flex flex-center justify-between flex-wrap gap-2">
         <div className="flex flex-center gap-1.5">
           <User size={16} className="text-muted-foreground" />
 
           <div className="flex flex-center text-secondary-foreground font-medium text-xs">
-            Anyone at
+            <FormattedMessage id="UI.ANYONE_AT" />
             <Link to="#" className="text-xs font-medium link mx-1">
-              KeenThemes
+              <FormattedMessage id="UI.KEENTHEMES" />
             </Link>
-            can view
+            <FormattedMessage id="UI.CAN_VIEW" />
           </div>
         </div>
 
         <Button mode="link" underlined="dashed">
-          <Link to="#">Change Access</Link>
+          <Link to="#"><FormattedMessage id="UI.CHANGE_ACCESS" /></Link>
         </Button>
       </div>
-
       <div className="flex flex-center justify-between flex-wrap gap-2 mb-1">
         <div className="flex flex-center gap-1.5">
           <LoaderPinwheel size={16} className="text-muted-foreground" />
 
           <div className="flex flex-center text-secondary-foreground font-medium text-xs">
-            Anyone with link can edit
+            <FormattedMessage id="UI.ANYONE_WITH_LINK_CAN_EDIT" />
           </div>
         </div>
 
         <Button mode="link" underlined="dashed">
-          <Link to="#">Set Password</Link>
+          <Link to="#"><FormattedMessage id="UI.SET_PASSWORD" /></Link>
         </Button>
       </div>
-
       <Button variant="primary" className="mx-auto w-full max-w-full">
-        Done
+        <FormattedMessage id="UI.DONE" />
       </Button>
     </div>
   );

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { HexagonBadge } from '@/partials/common/hexagon-badge';
 import {
@@ -20,9 +21,9 @@ const PrivacySettings = () => {
       icon: Search,
       title: (
         <Fragment>
-          Show up in search results
+          <FormattedMessage id="UI.SHOW_UP_IN_SEARCH_RESULTS" />
           <Badge size="sm" variant="primary" appearance="outline">
-            Pro
+            <FormattedMessage id="UI.PRO" />
           </Badge>
         </Fragment>
       ),
@@ -35,9 +36,9 @@ const PrivacySettings = () => {
       icon: MailCheck,
       title: (
         <Fragment>
-          Manage Read Receipts for Messages
+          <FormattedMessage id="UI.MANAGE_READ_RECEIPTS_FOR_MESSAGES" />
           <Badge size="sm" variant="primary" appearance="outline">
-            Pro
+            <FormattedMessage id="UI.PRO" />
           </Badge>
         </Fragment>
       ),
@@ -56,15 +57,15 @@ const PrivacySettings = () => {
       icon: BadgePercent,
       title: (
         <Fragment>
-          Ad Personalization Settings
+          <FormattedMessage id="UI.AD_PERSONALIZATION_SETTINGS" />
           <Badge variant="info" appearance="outline">
-            Beta
+            <FormattedMessage id="UI.BETA" />
           </Badge>
         </Fragment>
       ),
 
       description: 'Customize how ads are targeted to your interests.',
-      actions: <Button variant="outline">Setup</Button>,
+      actions: <Button variant="outline"><FormattedMessage id="UI.SETUP" /></Button>,
     },
     {
       icon: UserCircle2,
@@ -82,9 +83,9 @@ const PrivacySettings = () => {
       icon: ShieldQuestion,
       title: (
         <Fragment>
-          Private vulnerability reporting
+          <FormattedMessage id="UI.PRIVATE_VULNERABILITY_REPORTING" />
           <Badge variant="info" appearance="outline">
-            Beta
+            <FormattedMessage id="UI.BETA" />
           </Badge>
         </Fragment>
       ),
@@ -96,9 +97,9 @@ const PrivacySettings = () => {
             variant="outline"
             className="bg-red-100 border-red-200 text-red-600 hover:text-white hover:bg-red-500 dark:border-red-950 dark:bg-red-950/30"
           >
-            Disable all
+            <FormattedMessage id="UI.DISABLE_ALL" />
           </Button>
-          <Button variant="outline">Enable all</Button>
+          <Button variant="outline"><FormattedMessage id="UI.ENABLE_ALL" /></Button>
         </Fragment>
       ),
     },

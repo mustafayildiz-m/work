@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { StoreClientTopbar } from '@/pages/store-client/components/common/topbar';
 import { SearchDialog } from '@/partials/dialogs/search/search-dialog';
 import { AppsDropdownMenu } from '@/partials/topbar/apps-dropdown-menu';
@@ -28,7 +29,7 @@ export function HeaderTopbar() {
             <Button variant="outline" asChild>
               <Link to="/account/members/team-members">
                 <Users />
-                Add <span className="hidden md:inline">Teammate</span>
+                <FormattedMessage id="UI.ADD" /> <span className="hidden md:inline"><FormattedMessage id="UI.TEAMMATE" /></span>
               </Link>
             </Button>
 

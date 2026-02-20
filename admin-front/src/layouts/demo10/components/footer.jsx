@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { generalSettings } from '@/config/general.config';
 import { Container } from '@/components/common/container';
 
@@ -15,7 +16,7 @@ export function Footer() {
               target="_blank"
               className="text-secondary-foreground hover:text-primary"
             >
-              Keenthemes Inc.
+              <FormattedMessage id="UI.KEENTHEMES_INC" />
             </a>
           </div>
           <nav className="flex order-1 md:order-2 gap-4 font-normal text-sm text-muted-foreground">
@@ -24,35 +25,35 @@ export function Footer() {
               target="_blank"
               className="hover:text-primary"
             >
-              Docs
+              <FormattedMessage id="UI.DOCS" />
             </a>
             <a
               href={generalSettings.purchaseLink}
               target="_blank"
               className="hover:text-primary"
             >
-              Purchase
+              <FormattedMessage id="UI.PURCHASE" />
             </a>
             <a
               href={generalSettings.faqLink}
               target="_blank"
               className="hover:text-primary"
             >
-              FAQ
+              <FormattedMessage id="UI.FAQ" />
             </a>
             <a
               href="https://devs.keenthemes.com"
               target="_blank"
               className="hover:text-primary"
             >
-              Support
+              <FormattedMessage id="UI.SUPPORT" />
             </a>
             <a
               href={generalSettings.licenseLink}
               target="_blank"
               className="hover:text-primary"
             >
-              License
+              <FormattedMessage id="UI.LICENSE" />
             </a>
           </nav>
         </div>

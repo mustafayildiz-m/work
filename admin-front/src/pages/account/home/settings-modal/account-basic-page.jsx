@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment, useState } from 'react';
 import { PageMenu } from '@/pages/public-profile';
 import { UserHero } from '@/partials/common/user-hero';
@@ -40,13 +41,12 @@ export function AccountSettingsModalPage() {
           { email: 'jenny@kteam.com', icon: Mail },
         ]}
       />
-
       <Container>
         <Navbar>
           <PageMenu />
           <NavbarActions>
             <Button>
-              <Users /> Connect
+              <Users /> <FormattedMessage id="UI.CONNECT" />
             </Button>
             <Button mode="icon" variant="outline">
               <MessageSquareText />

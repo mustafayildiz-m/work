@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { CardNFT2, CardNFT2Row } from '@/partials/cards';
 import { LayoutGrid, List, Search, Settings2 } from 'lucide-react';
@@ -291,7 +292,7 @@ export function NetworkNFTContent() {
     <div className="flex flex-col items-stretch gap-5 lg:gap-7.5">
       <div className="flex flex-wrap items-center gap-5 justify-between">
         <h3 className="text-base text-mono font-medium">
-          Showing {items.length} Users
+          <FormattedMessage id="UI.SHOWING" /> {items.length} <FormattedMessage id="UI.USERS" />
         </h3>
         <div className="flex items-center flex-wrap gap-5">
           <div className="flex items-center gap-2.5">
@@ -300,9 +301,9 @@ export function NetworkNFTContent() {
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent className="w-32">
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="disabled">Disabled</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="active"><FormattedMessage id="UI.ACTIVE" /></SelectItem>
+                <SelectItem value="disabled"><FormattedMessage id="UI.DISABLED" /></SelectItem>
+                <SelectItem value="pending"><FormattedMessage id="UI.PENDING" /></SelectItem>
               </SelectContent>
             </Select>
             <Select defaultValue="latest">
@@ -310,13 +311,13 @@ export function NetworkNFTContent() {
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent className="w-32">
-                <SelectItem value="latest">Latest</SelectItem>
-                <SelectItem value="older">Older</SelectItem>
-                <SelectItem value="oldest">Oldest</SelectItem>
+                <SelectItem value="latest"><FormattedMessage id="UI.LATEST" /></SelectItem>
+                <SelectItem value="older"><FormattedMessage id="UI.OLDER" /></SelectItem>
+                <SelectItem value="oldest"><FormattedMessage id="UI.OLDEST" /></SelectItem>
               </SelectContent>
             </Select>
             <Button>
-              <Settings2 size={16} /> Filters
+              <Settings2 size={16} /> <FormattedMessage id="UI.FILTERS" />
             </Button>
           </div>
           <div className="flex relative">
@@ -354,7 +355,7 @@ export function NetworkNFTContent() {
           </div>
           <div className="flex grow justify-center pt-5 lg:pt-7.5">
             <Button mode="link" underlined="dashed" asChild>
-              <Link to="/public-profile/profiles/nft">Show more Users</Link>
+              <Link to="/public-profile/profiles/nft"><FormattedMessage id="UI.SHOW_MORE_USERS" /></Link>
             </Button>
           </div>
         </div>
@@ -367,7 +368,7 @@ export function NetworkNFTContent() {
           </div>
           <div className="flex grow justify-center pt-5 lg:pt-7.5">
             <Button mode="link" underlined="dashed" asChild>
-              <Link to="/public-profile/profiles/nft">Show more Users</Link>
+              <Link to="/public-profile/profiles/nft"><FormattedMessage id="UI.SHOW_MORE_USERS" /></Link>
             </Button>
           </div>
         </div>

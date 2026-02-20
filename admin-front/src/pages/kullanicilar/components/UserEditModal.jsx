@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState, useEffect } from 'react';
 import { X, Save, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -103,7 +104,7 @@ const UserEditModal = ({ user, isOpen, onClose, onSuccess }) => {
         >
           <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Kullanıcı Düzenle
+              <FormattedMessage id="UI.KULLANICI_DUZENLE" />
             </h2>
             <button
               onClick={onClose}
@@ -117,7 +118,7 @@ const UserEditModal = ({ user, isOpen, onClose, onSuccess }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Ad *
+                  <FormattedMessage id="UI.AD_" />
                 </label>
                 <input
                   type="text"
@@ -130,7 +131,7 @@ const UserEditModal = ({ user, isOpen, onClose, onSuccess }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Soyad *
+                  <FormattedMessage id="UI.SOYAD_" />
                 </label>
                 <input
                   type="text"
@@ -143,7 +144,7 @@ const UserEditModal = ({ user, isOpen, onClose, onSuccess }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Email *
+                  <FormattedMessage id="UI.EMAIL_" />
                 </label>
                 <input
                   type="email"
@@ -156,7 +157,7 @@ const UserEditModal = ({ user, isOpen, onClose, onSuccess }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Kullanıcı Adı *
+                  <FormattedMessage id="UI.KULLANICI_ADI_" />
                 </label>
                 <input
                   type="text"
@@ -169,7 +170,7 @@ const UserEditModal = ({ user, isOpen, onClose, onSuccess }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Telefon
+                  <FormattedMessage id="UI.TELEFON" />
                 </label>
                 <input
                   type="tel"
@@ -181,7 +182,7 @@ const UserEditModal = ({ user, isOpen, onClose, onSuccess }) => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Konum
+                  <FormattedMessage id="UI.KONUM" />
                 </label>
                 <input
                   type="text"
@@ -194,7 +195,7 @@ const UserEditModal = ({ user, isOpen, onClose, onSuccess }) => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Biyografi
+                <FormattedMessage id="UI.BIYOGRAFI" />
               </label>
               <textarea
                 value={formData.biography}
@@ -208,30 +209,30 @@ const UserEditModal = ({ user, isOpen, onClose, onSuccess }) => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   <Shield className="w-4 h-4 inline mr-1" />
-                  Rol
+                  <FormattedMessage id="UI.ROL" />
                 </label>
                 <select
                   value={formData.role}
                   onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                 >
-                  <option value="user">Kullanıcı</option>
-                  <option value="editor">Editör</option>
-                  <option value="admin">Yönetici</option>
+                  <option value="user"><FormattedMessage id="UI.KULLANICI" /></option>
+                  <option value="editor"><FormattedMessage id="UI.EDITOR" /></option>
+                  <option value="admin"><FormattedMessage id="UI.YONETICI" /></option>
                 </select>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Durum
+                  <FormattedMessage id="UI.DURUM" />
                 </label>
                 <select
                   value={formData.isActive.toString()}
                   onChange={(e) => setFormData({ ...formData, isActive: e.target.value === 'true' })}
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                 >
-                  <option value="true">Aktif</option>
-                  <option value="false">Pasif</option>
+                  <option value="true"><FormattedMessage id="UI.AKTIF" /></option>
+                  <option value="false"><FormattedMessage id="UI.PASIF" /></option>
                 </select>
               </div>
             </div>
@@ -250,7 +251,7 @@ const UserEditModal = ({ user, isOpen, onClose, onSuccess }) => {
                 onClick={onClose}
                 className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium"
               >
-                İptal
+                <FormattedMessage id="UI.IPTAL" />
               </button>
             </div>
           </form>

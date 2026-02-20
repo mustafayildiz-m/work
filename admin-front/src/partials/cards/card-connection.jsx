@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { BadgeCheck, CircleCheck, Mail, Users } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
@@ -82,7 +83,7 @@ const CardConnection = ({
         </div>
         <div className="grid justify-center gap-1.5 mb-7.5">
           <span className="text-xs uppercase text-secondary-foreground text-center">
-            team
+            <FormattedMessage id="UI.TEAM_1" />
           </span>
           <AvatarGroup group={team.group} more={team.more} size={team.size} />
         </div>
@@ -98,14 +99,14 @@ const CardConnection = ({
             <Link to="#">
               <CircleCheck size={16} />
             </Link>{' '}
-            Connected
+            <FormattedMessage id="UI.CONNECTED" />
           </Button>
         ) : (
           <Button variant="primary">
             <Link to="#">
               <Users size={16} />
             </Link>{' '}
-            Connect
+            <FormattedMessage id="UI.CONNECT" />
           </Button>
         )}
       </CardFooter>

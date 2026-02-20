@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -23,15 +24,15 @@ const Empty = () => {
             />
           </div>
           <div className="text-lg font-medium text-mono text-center">
-            Upload Item to Get Started
+            <FormattedMessage id="UI.UPLOAD_ITEM_TO_GET_STARTED" />
           </div>
           <div className="text-sm text-secondary-foreground text-center gap-1">
-            Begin by crafting your inaugural list in minutes.&nbsp;
+            <FormattedMessage id="UI.BEGIN_BY_CRAFTING_YOUR_INAUGURAL_LIST_IN" />
             <Link
               to="/account/billing/plans"
               className="text-sm font-medium link"
             >
-              Get Started!
+              <FormattedMessage id="UI.GET_STARTED" />
             </Link>
           </div>
         </CardContent>
@@ -39,7 +40,7 @@ const Empty = () => {
       <div className="flex grow justify-center pt-5 lg:pt-7.5">
         <Button mode="link" underlined="dashed" asChild>
           <Link to="/public-profile/profiles/default">
-            Check ready Templates
+            <FormattedMessage id="UI.CHECK_READY_TEMPLATES" />
           </Link>
         </Button>
       </div>

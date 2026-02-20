@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import {
   Dialog,
   DialogContent,
@@ -19,7 +20,7 @@ export function ShareProfileDialog({ open, onOpenChange }) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="p-0 space-y-0 max-w-[500px]">
         <DialogHeader className="p-5 m-0">
-          <DialogTitle>Share Profile</DialogTitle>
+          <DialogTitle><FormattedMessage id="UI.SHARE_PROFILE" /></DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <div className="grid gap-5 px-0 pt-1 pb-5">

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
@@ -581,7 +582,7 @@ const Device = () => {
                 </div>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Time is based on your local timezone.</p>
+                <p><FormattedMessage id="UI.TIME_IS_BASED_ON_YOUR_LOCAL_TIMEZONE" /></p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -690,14 +691,14 @@ const Device = () => {
     return (
       <CardToolbar>
         <div className="flex flex-wrap items-center gap-2.5">
-          <Button>Add Device</Button>
+          <Button><FormattedMessage id="UI.ADD_DEVICE" /></Button>
         </div>
         <DataGridColumnVisibility
           table={table}
           trigger={
             <Button variant="outline">
               <Settings2 />
-              Columns
+              <FormattedMessage id="UI.COLUMNS" />
             </Button>
           }
         />

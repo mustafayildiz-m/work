@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { CloudDownload, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
@@ -86,20 +87,20 @@ const Invoicing = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Billing and Invoicing</CardTitle>
+        <CardTitle><FormattedMessage id="UI.BILLING_AND_INVOICING" /></CardTitle>
         <Button variant="outline">
           <CloudDownload size={16} />
-          Download All
+          <FormattedMessage id="UI.DOWNLOAD_ALL" />
         </Button>
       </CardHeader>
       <CardContent className="kt-scrollable-x-auto p-0">
         <Table>
           <TableHeader>
             <TableRow className="bg-accent/60">
-              <TableHead className="min-w-52 h-10">Invoice</TableHead>
-              <TableHead className="min-w-24 text-end h-10">Status</TableHead>
-              <TableHead className="min-w-32 text-end h-10">Date</TableHead>
-              <TableHead className="min-w-20 text-end h-10">Amount</TableHead>
+              <TableHead className="min-w-52 h-10"><FormattedMessage id="UI.INVOICE" /></TableHead>
+              <TableHead className="min-w-24 text-end h-10"><FormattedMessage id="UI.STATUS" /></TableHead>
+              <TableHead className="min-w-32 text-end h-10"><FormattedMessage id="UI.DATE" /></TableHead>
+              <TableHead className="min-w-20 text-end h-10"><FormattedMessage id="UI.AMOUNT" /></TableHead>
               <TableHead className="w-8 h-10"></TableHead>
             </TableRow>
           </TableHeader>
@@ -112,7 +113,7 @@ const Invoicing = () => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/account/billing/history">View all Payments</Link>
+          <Link to="/account/billing/history"><FormattedMessage id="UI.VIEW_ALL_PAYMENTS" /></Link>
         </Button>
       </CardFooter>
     </Card>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 'use client';
 
 import { useMemo, useState } from 'react';
@@ -730,7 +731,7 @@ const Users = () => {
         cell: () => {
           return (
             <Button mode="link" underlined="dashed">
-              Download
+              <FormattedMessage id="UI.DOWNLOAD" />
             </Button>
           );
         },
@@ -769,14 +770,14 @@ const Users = () => {
       <CardToolbar>
         <Button>
           <Settings2 size={16} />
-          Filters
+          <FormattedMessage id="UI.FILTERS" />
         </Button>
         <DataGridColumnVisibility
           table={table}
           trigger={
             <Button variant="outline">
               <Settings2 />
-              Columns
+              <FormattedMessage id="UI.COLUMNS" />
             </Button>
           }
         />
@@ -823,7 +824,7 @@ const Users = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline">
                     <Filter />
-                    Status
+                    <FormattedMessage id="UI.STATUS" />
                     {selectedStatuses.length > 0 && (
                       <Badge size="sm" appearance="stroke">
                         {selectedStatuses.length}
@@ -834,7 +835,7 @@ const Users = () => {
                 <PopoverContent className="w-40 p-3" align="start">
                   <div className="space-y-3">
                     <div className="text-xs font-medium text-muted-foreground">
-                      Filters
+                      <FormattedMessage id="UI.FILTERS" />
                     </div>
                     <div className="space-y-3">
                       {Object.keys(statusCounts).map((status) => (
@@ -866,7 +867,7 @@ const Users = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline">
                     <Filter />
-                    Sort Order
+                    <FormattedMessage id="UI.SORT_ORDER" />
                     {sortOrder !== 'latest' && (
                       <Badge size="sm" appearance="stroke">
                         {sortOrder.charAt(0).toUpperCase() + sortOrder.slice(1)}
@@ -877,7 +878,7 @@ const Users = () => {
                 <PopoverContent className="w-40 p-3" align="start">
                   <div className="space-y-3">
                     <div className="text-xs font-medium text-muted-foreground">
-                      Sort By
+                      <FormattedMessage id="UI.SORT_BY" />
                     </div>
                     <div className="space-y-3">
                       {['latest', 'older', 'oldest'].map((order) => (

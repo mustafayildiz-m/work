@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -7,6 +8,7 @@ import { FaBoxes, FaWarehouse, FaExchangeAlt, FaTruck, FaCalendar, FaMoneyBillWa
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function EditStockTransferPage() {
+  const intl = useIntl();
   const { id } = useParams();
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -90,12 +92,14 @@ export default function EditStockTransferPage() {
     return (
       <>
         <Helmet>
-          <title>Transfer Düzenle - Islamic Windows Admin</title>
+          <title>{intl.formatMessage({
+            id: "UI.TRANSFER_DUZENLE__ISLAMIC_WINDOWS_ADMIN"
+          })}</title>
         </Helmet>
         <div className="p-6 max-w-5xl mx-auto text-center">
           <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mb-4"></div>
-            <p className="text-gray-500 dark:text-gray-400">Transfer bilgileri yükleniyor...</p>
+            <p className="text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.TRANSFER_BILGILERI_YUKLENIYOR" /></p>
           </div>
         </div>
       </>
@@ -106,7 +110,9 @@ export default function EditStockTransferPage() {
     return (
       <>
         <Helmet>
-          <title>Hata - Islamic Windows Admin</title>
+          <title>{intl.formatMessage({
+            id: "UI.HATA__ISLAMIC_WINDOWS_ADMIN"
+          })}</title>
         </Helmet>
         <div className="p-6 max-w-5xl mx-auto text-center">
           <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-12">
@@ -116,7 +122,7 @@ export default function EditStockTransferPage() {
               to="/stok-transfer/liste"
               className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
             >
-              Listeye Dön
+              <FormattedMessage id="UI.LISTEYE_DON" />
             </Link>
           </div>
         </div>
@@ -128,17 +134,23 @@ export default function EditStockTransferPage() {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'pending':
-        return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400">
-          <FaClock /> Beklemede
-        </span>;
+        return (
+          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400">
+            <FaClock /> <FormattedMessage id="UI.BEKLEMEDE" />
+          </span>
+        );
       case 'completed':
-        return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
-          <FaCheckCircle /> Tamamlandı
-        </span>;
+        return (
+          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+            <FaCheckCircle /> <FormattedMessage id="UI.TAMAMLANDI" />
+          </span>
+        );
       case 'cancelled':
-        return <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
-          <FaTimesCircle /> İptal Edildi
-        </span>;
+        return (
+          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
+            <FaTimesCircle /> <FormattedMessage id="UI.IPTAL_EDILDI" />
+          </span>
+        );
       default:
         return status;
     }
@@ -147,7 +159,11 @@ export default function EditStockTransferPage() {
   return (
     <>
       <Helmet>
-        <title>Transfer Düzenle #{id} - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.TRANSFER_DUZENLE_"
+        })}{id} {intl.formatMessage({
+          id: "UI._ISLAMIC_WINDOWS_ADMIN"
+        })}</title>
       </Helmet>
       <div className="p-6 max-w-5xl mx-auto">
         {/* Header */}
@@ -155,16 +171,16 @@ export default function EditStockTransferPage() {
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
               <FaExchangeAlt className="text-blue-600" />
-              Transfer Düzenle #{id}
+              <FormattedMessage id="UI.TRANSFER_DUZENLE_" />{id}
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Transfer bilgilerini güncelleyin</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1"><FormattedMessage id="UI.TRANSFER_BILGILERINI_GUNCELLEYIN" /></p>
           </div>
           <Link
             to="/stok-transfer/liste"
             className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 flex items-center gap-2 shadow"
           >
             <FaArrowLeft size={14} />
-            Listeye Dön
+            <FormattedMessage id="UI.LISTEYE_DON" />
           </Link>
         </div>
 
@@ -175,14 +191,14 @@ export default function EditStockTransferPage() {
               <div className="p-2 bg-gray-600 rounded-lg">
                 <FaInfoCircle className="text-white text-lg" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Transfer Özeti</h3>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.TRANSFER_OZETI" /></h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-white dark:bg-gray-800 p-4 rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
                   <FaWarehouse className="text-red-600" />
-                  <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Kaynak Depo</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 font-medium"><FormattedMessage id="UI.KAYNAK_DEPO" /></span>
                 </div>
                 <p className="font-bold text-gray-900 dark:text-gray-100">{transfer?.fromWarehouse?.name}</p>
               </div>
@@ -190,7 +206,7 @@ export default function EditStockTransferPage() {
               <div className="bg-white dark:bg-gray-800 p-4 rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
                   <FaWarehouse className="text-green-600" />
-                  <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Hedef Depo</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 font-medium"><FormattedMessage id="UI.HEDEF_DEPO" /></span>
                 </div>
                 <p className="font-bold text-gray-900 dark:text-gray-100">{transfer?.toWarehouse?.name}</p>
               </div>
@@ -198,7 +214,7 @@ export default function EditStockTransferPage() {
               <div className="bg-white dark:bg-gray-800 p-4 rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
                   <FaBoxes className="text-purple-600" />
-                  <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Durum</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 font-medium"><FormattedMessage id="UI.DURUM" /></span>
                 </div>
                 <div>{getStatusBadge(transfer?.status)}</div>
               </div>
@@ -209,12 +225,12 @@ export default function EditStockTransferPage() {
               <div className="flex items-center justify-center gap-4">
                 <div className="text-center">
                   <div className="font-bold text-blue-600 dark:text-blue-400">{transfer?.fromWarehouse?.name}</div>
-                  <div className="text-xs text-gray-500">Çıkış</div>
+                  <div className="text-xs text-gray-500"><FormattedMessage id="UI.CIKIS" /></div>
                 </div>
                 <FaExchangeAlt className="text-3xl text-gray-400 dark:text-gray-500" />
                 <div className="text-center">
                   <div className="font-bold text-green-600 dark:text-green-400">{transfer?.toWarehouse?.name}</div>
-                  <div className="text-xs text-gray-500">Varış</div>
+                  <div className="text-xs text-gray-500"><FormattedMessage id="UI.VARIS" /></div>
                 </div>
               </div>
             </div>
@@ -226,13 +242,13 @@ export default function EditStockTransferPage() {
               <div className="p-2 bg-purple-600 rounded-lg">
                 <FaBoxes className="text-white text-lg" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Düzenlenebilir Bilgiler</h3>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.DUZENLENEBILIR_BILGILER" /></h3>
             </div>
 
             <div className="mb-6">
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaBoxes className="text-purple-600" />
-                Miktar
+                <FormattedMessage id="UI.MIKTAR" />
                 <span className="text-red-500">*</span>
               </label>
               <input
@@ -249,7 +265,7 @@ export default function EditStockTransferPage() {
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaInfoCircle className="text-gray-600" />
-                Açıklama / Notlar
+                <FormattedMessage id="UI.ACIKLAMA__NOTLAR" />
               </label>
               <textarea
                 name="notes"
@@ -269,8 +285,8 @@ export default function EditStockTransferPage() {
                 <FaTruck className="text-white text-lg" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white">Kargo Bilgileri</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400">İsteğe bağlı</p>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.KARGO_BILGILERI" /></h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.ISTEGE_BAGLI" /></p>
               </div>
             </div>
             
@@ -278,7 +294,7 @@ export default function EditStockTransferPage() {
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   <FaTruck className="text-orange-600" />
-                  Kargo Şirketi
+                  <FormattedMessage id="UI.KARGO_SIRKETI" />
                 </label>
                 <select
                   name="cargoCompany"
@@ -286,23 +302,23 @@ export default function EditStockTransferPage() {
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition cursor-pointer"
                 >
-                  <option value="">Seçiniz (İsteğe Bağlı)</option>
-                  <option value="MNG Kargo">MNG Kargo</option>
-                  <option value="Yurtiçi Kargo">Yurtiçi Kargo</option>
-                  <option value="Aras Kargo">Aras Kargo</option>
-                  <option value="PTT Kargo">PTT Kargo</option>
-                  <option value="Sürat Kargo">Sürat Kargo</option>
-                  <option value="UPS">UPS</option>
-                  <option value="DHL">DHL</option>
-                  <option value="FedEx">FedEx</option>
-                  <option value="Diğer">Diğer</option>
+                  <option value=""><FormattedMessage id="UI.SECINIZ_ISTEGE_BAGLI" /></option>
+                  <option value="MNG Kargo"><FormattedMessage id="UI.MNG_KARGO" /></option>
+                  <option value="Yurtiçi Kargo"><FormattedMessage id="UI.YURTICI_KARGO" /></option>
+                  <option value="Aras Kargo"><FormattedMessage id="UI.ARAS_KARGO" /></option>
+                  <option value="PTT Kargo"><FormattedMessage id="UI.PTT_KARGO" /></option>
+                  <option value="Sürat Kargo"><FormattedMessage id="UI.SURAT_KARGO" /></option>
+                  <option value="UPS"><FormattedMessage id="UI.UPS" /></option>
+                  <option value="DHL"><FormattedMessage id="UI.DHL" /></option>
+                  <option value="FedEx"><FormattedMessage id="UI.FEDEX" /></option>
+                  <option value="Diğer"><FormattedMessage id="UI.DIGER" /></option>
                 </select>
               </div>
 
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   <FaInfoCircle className="text-blue-600" />
-                  Kargo Takip Numarası
+                  <FormattedMessage id="UI.KARGO_TAKIP_NUMARASI" />
                 </label>
                 <input
                   type="text"
@@ -317,7 +333,7 @@ export default function EditStockTransferPage() {
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   <FaCalendar className="text-green-600" />
-                  Tahmini Teslimat Tarihi
+                  <FormattedMessage id="UI.TAHMINI_TESLIMAT_TARIHI" />
                 </label>
                 <input
                   type="date"
@@ -331,7 +347,7 @@ export default function EditStockTransferPage() {
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   <FaMoneyBillWave className="text-green-600" />
-                  Kargo Ücreti (₺)
+                  <FormattedMessage id="UI.KARGO_UCRETI_" />
                 </label>
                 <input
                   type="number"
@@ -351,7 +367,7 @@ export default function EditStockTransferPage() {
                 <p className="text-sm text-orange-800 dark:text-orange-200 flex items-start gap-2">
                   <FaTruck className="mt-0.5 flex-shrink-0" />
                   <span>
-                    <span className="font-semibold">Kargo Seçildi:</span> {form.cargoCompany} ile gönderilecek. 
+                    <span className="font-semibold"><FormattedMessage id="UI.KARGO_SECILDI" /></span> {form.cargoCompany} <FormattedMessage id="UI.ILE_GONDERILECEK" />
                     {form.trackingNumber && ' Takip numarası ile sevkiyat durumunu kolayca izleyebilirsiniz.'}
                   </span>
                 </p>
@@ -365,7 +381,7 @@ export default function EditStockTransferPage() {
               to="/stok-transfer/liste"
               className="px-6 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition"
             >
-              İptal
+              <FormattedMessage id="UI.IPTAL" />
             </Link>
             <button
               type="submit"
@@ -375,12 +391,12 @@ export default function EditStockTransferPage() {
               {saving ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  Güncelleniyor...
+                  <FormattedMessage id="UI.GUNCELLENIYOR" />
                 </>
               ) : (
                 <>
                   <FaSave />
-                  Değişiklikleri Kaydet
+                  <FormattedMessage id="UI.DEGISIKLIKLERI_KAYDET" />
                 </>
               )}
             </button>

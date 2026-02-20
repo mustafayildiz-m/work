@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { SquarePen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -30,10 +31,10 @@ const Details = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Billing Details</CardTitle>
+        <CardTitle><FormattedMessage id="UI.BILLING_DETAILS" /></CardTitle>
         <Button variant="outline">
           <SquarePen size={16} />
-          Edit Billing
+          <FormattedMessage id="UI.EDIT_BILLING" />
         </Button>
       </CardHeader>
       <CardContent className="pt-4 pb-2">

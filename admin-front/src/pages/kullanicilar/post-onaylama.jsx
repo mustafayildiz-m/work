@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, RefreshCw, Eye, Clock } from 'lucide-react';
 import { toast } from 'sonner';
@@ -8,6 +9,7 @@ import { Helmet } from 'react-helmet-async';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const PostOnaylama = () => {
+  const intl = useIntl();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedPost, setSelectedPost] = useState(null);
@@ -224,24 +226,25 @@ const PostOnaylama = () => {
   return (
     <>
       <Helmet>
-        <title>Onay Bekleyen Postlar - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.ONAY_BEKLEYEN_POSTLAR__ISLAMIC_WINDOWS_A"
+        })}</title>
       </Helmet>
-
       <Container>
         <div className="p-6 space-y-6">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Onay Bekleyen Postlar
+                <FormattedMessage id="UI.ONAY_BEKLEYEN_POSTLAR" />
               </h1>
               <p className="text-gray-600 dark:text-gray-400 mt-1">
-                Kullanıcılar tarafından paylaşılan postları inceleyin ve onaylayın
+                <FormattedMessage id="UI.KULLANICILAR_TARAFINDAN_PAYLASILAN_POSTL" />
               </p>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 p-2 rounded-lg border border-gray-200 dark:border-gray-700">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300 ml-2">
-                  Post Onay Sistemi:
+                  <FormattedMessage id="UI.POST_ONAY_SISTEMI" />
                 </span>
                 <button
                   onClick={toggleApprovalSetting}
@@ -264,7 +267,7 @@ const PostOnaylama = () => {
                 className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
               >
                 <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                Yenile
+                <FormattedMessage id="UI.YENILE" />
               </button>
             </div>
           </div>
@@ -277,10 +280,10 @@ const PostOnaylama = () => {
             <Card className="p-12 text-center">
               <Clock className="w-16 h-16 mx-auto text-gray-400 mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Onay Bekleyen Post Yok
+                <FormattedMessage id="UI.ONAY_BEKLEYEN_POST_YOK" />
               </h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Şu anda onay bekleyen post bulunmamaktadır.
+                <FormattedMessage id="UI.SU_ANDA_ONAY_BEKLEYEN_POST_BULUNMAMAKTAD" />
               </p>
             </Card>
           ) : (
@@ -377,7 +380,7 @@ const PostOnaylama = () => {
                           className="flex items-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                         >
                           <Eye className="w-4 h-4" />
-                          Detaylı İncele
+                          <FormattedMessage id="UI.DETAYLI_INCELE" />
                         </button>
                       </div>
                     </div>
@@ -394,7 +397,7 @@ const PostOnaylama = () => {
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                      Post Detayları
+                      <FormattedMessage id="UI.POST_DETAYLARI" />
                     </h2>
                     <button
                       onClick={() => {
@@ -438,7 +441,7 @@ const PostOnaylama = () => {
                     {selectedPost.title && (
                       <div>
                         <h4 className="font-medium text-gray-900 dark:text-white mb-2">
-                          Başlık
+                          <FormattedMessage id="UI.BASLIK" />
                         </h4>
                         <p className="text-gray-700 dark:text-gray-300">{selectedPost.title}</p>
                       </div>
@@ -446,7 +449,7 @@ const PostOnaylama = () => {
 
                     <div>
                       <h4 className="font-medium text-gray-900 dark:text-white mb-2">
-                        İçerik
+                        <FormattedMessage id="UI.ICERIK" />
                       </h4>
                       <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
                         {selectedPost.content}
@@ -456,7 +459,7 @@ const PostOnaylama = () => {
                     {selectedPost.image_url && (
                       <div>
                         <h4 className="font-medium text-gray-900 dark:text-white mb-2">
-                          Resim
+                          <FormattedMessage id="UI.RESIM" />
                         </h4>
                         <img
                           src={getImageUrl(selectedPost.image_url)}
@@ -469,7 +472,7 @@ const PostOnaylama = () => {
                     {selectedPost.video_url && (
                       <div>
                         <h4 className="font-medium text-gray-900 dark:text-white mb-2">
-                          Video
+                          <FormattedMessage id="UI.VIDEO" />
                         </h4>
                         <video
                           src={getVideoUrl(selectedPost.video_url)}

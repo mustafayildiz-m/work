@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Calendar, Settings, Settings2, Shield, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -45,19 +46,19 @@ export function NotificationsSheet({ trigger }) {
       <SheetTrigger asChild>{trigger}</SheetTrigger>
       <SheetContent className="p-0 gap-0 sm:w-[500px] sm:max-w-none inset-5 start-auto h-auto rounded-lg p-0 sm:max-w-none [&_[data-slot=sheet-close]]:top-4.5 [&_[data-slot=sheet-close]]:end-5">
         <SheetHeader className="mb-0">
-          <SheetTitle className="p-3">Notifications</SheetTitle>
+          <SheetTitle className="p-3"><FormattedMessage id="UI.NOTIFICATIONS" /></SheetTitle>
         </SheetHeader>
         <SheetBody className="grow p-0">
           <ScrollArea className="h-[calc(100vh-10.5rem)]">
             <Tabs defaultValue="all" className="w-full relative">
               <TabsList variant="line" className="w-full px-5 mb-5">
-                <TabsTrigger value="all">All</TabsTrigger>
+                <TabsTrigger value="all"><FormattedMessage id="UI.ALL" /></TabsTrigger>
                 <TabsTrigger value="inbox" className="relative">
-                  Inbox
+                  <FormattedMessage id="UI.INBOX" />
                   <div className="w-1.5 h-1.5 rounded-full bg-green-500 absolute top-1 -end-1" />
                 </TabsTrigger>
-                <TabsTrigger value="team">Team</TabsTrigger>
-                <TabsTrigger value="following">Following</TabsTrigger>
+                <TabsTrigger value="team"><FormattedMessage id="UI.TEAM" /></TabsTrigger>
+                <TabsTrigger value="following"><FormattedMessage id="UI.FOLLOWING" /></TabsTrigger>
                 <div className="grow flex items-center justify-end">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -77,30 +78,30 @@ export function NotificationsSheet({ trigger }) {
                     >
                       <DropdownMenuItem asChild>
                         <Link to="/account/members/teams">
-                          <Users /> Invite Users
+                          <Users /> <FormattedMessage id="UI.INVITE_USERS" />
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuSub>
                         <DropdownMenuSubTrigger>
                           <Settings2 />
-                          <span>Team Settings</span>
+                          <span><FormattedMessage id="UI.TEAM_SETTINGS" /></span>
                         </DropdownMenuSubTrigger>
                         <DropdownMenuPortal>
                           <DropdownMenuSubContent className="w-44">
                             <DropdownMenuItem asChild>
                               <Link to="/account/members/import-members">
                                 <Shield />
-                                Find Members
+                                <FormattedMessage id="UI.FIND_MEMBERS" />
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
                               <Link to="/account/members/import-members">
-                                <Calendar /> Meetings
+                                <Calendar /> <FormattedMessage id="UI.MEETINGS" />
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
                               <Link to="/account/members/import-members">
-                                <Shield /> Group Settings
+                                <Shield /> <FormattedMessage id="UI.GROUP_SETTINGS" />
                               </Link>
                             </DropdownMenuItem>
                           </DropdownMenuSubContent>
@@ -108,7 +109,7 @@ export function NotificationsSheet({ trigger }) {
                       </DropdownMenuSub>
                       <DropdownMenuItem asChild>
                         <Link to="/account/security/privacy-settings">
-                          <Shield /> Group Settings
+                          <Shield /> <FormattedMessage id="UI.GROUP_SETTINGS" />
                         </Link>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -282,8 +283,8 @@ export function NotificationsSheet({ trigger }) {
           </ScrollArea>
         </SheetBody>
         <SheetFooter className="border-t border-border p-5 grid grid-cols-2 gap-2.5">
-          <Button variant="outline">Archive all</Button>
-          <Button variant="outline">Mark all as read</Button>
+          <Button variant="outline"><FormattedMessage id="UI.ARCHIVE_ALL" /></Button>
+          <Button variant="outline"><FormattedMessage id="UI.MARK_ALL_AS_READ" /></Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>

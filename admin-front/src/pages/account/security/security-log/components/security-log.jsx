@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 'use client';
 
 import { useMemo, useState } from 'react';
@@ -426,7 +427,7 @@ const SecurityLog = () => {
       <CardToolbar>
         <div className="flex flex-wrap items-center gap-2.5">
           <Label htmlFor="auto-update" className="text-sm">
-            Push Alerts
+            <FormattedMessage id="UI.PUSH_ALERTS" />
           </Label>
           <Switch size="sm" id="auto-update" defaultChecked />
         </div>
@@ -435,7 +436,7 @@ const SecurityLog = () => {
           trigger={
             <Button variant="outline">
               <Settings2 />
-              Columns
+              <FormattedMessage id="UI.COLUMNS" />
             </Button>
           }
         />
@@ -482,7 +483,7 @@ const SecurityLog = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline">
                     <Filter />
-                    Severity
+                    <FormattedMessage id="UI.SEVERITY" />
                     {selectedSeverities.length > 0 && (
                       <Badge appearance="stroke">
                         {selectedSeverities.length}
@@ -493,7 +494,7 @@ const SecurityLog = () => {
                 <PopoverContent className="w-40 p-3" align="start">
                   <div className="space-y-3">
                     <div className="text-xs font-medium text-muted-foreground">
-                      Filters
+                      <FormattedMessage id="UI.FILTERS" />
                     </div>
                     <div className="space-y-3">
                       {Object.keys(severityCounts).map((severity) => (

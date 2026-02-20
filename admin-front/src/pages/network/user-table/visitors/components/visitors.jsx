@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 'use client';
 
 import { useMemo, useState } from 'react';
@@ -520,12 +521,12 @@ function ActionsCell({ row }) {
             alert(`Clicked on action button for row ${row.original.user.name}`)
           }
         >
-          Action
+          <FormattedMessage id="UI.ACTION" />
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleCopyId}>Copy ID</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleCopyId}><FormattedMessage id="UI.COPY_ID" /></DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" onClick={() => {}}>
-          Delete
+          <FormattedMessage id="UI.DELETE" />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -774,14 +775,14 @@ const Visitors = () => {
       <CardToolbar>
         <Button>
           <Settings2 size={16} />
-          Filters
+          <FormattedMessage id="UI.FILTERS" />
         </Button>
         <DataGridColumnVisibility
           table={table}
           trigger={
             <Button variant="outline">
               <Settings2 />
-              Columns
+              <FormattedMessage id="UI.COLUMNS" />
             </Button>
           }
         />
@@ -828,7 +829,7 @@ const Visitors = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline">
                     <Filter />
-                    Activity
+                    <FormattedMessage id="UI.ACTIVITY" />
                     {selectedActivities.length > 0 && (
                       <Badge size="sm" appearance="stroke">
                         {selectedActivities.length}
@@ -839,7 +840,7 @@ const Visitors = () => {
                 <PopoverContent className="w-40 p-3" align="start">
                   <div className="space-y-3">
                     <div className="text-xs font-medium text-muted-foreground">
-                      Filters
+                      <FormattedMessage id="UI.FILTERS" />
                     </div>
                     <div className="space-y-3">
                       {Object.keys(activityCounts).map((activity) => (
@@ -874,7 +875,7 @@ const Visitors = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline">
                     <Filter />
-                    Sort Order
+                    <FormattedMessage id="UI.SORT_ORDER" />
                     {sortOrder !== 'latest' && (
                       <Badge size="sm" appearance="stroke">
                         {sortOrder.charAt(0).toUpperCase() + sortOrder.slice(1)}
@@ -885,7 +886,7 @@ const Visitors = () => {
                 <PopoverContent className="w-40 p-3" align="start">
                   <div className="space-y-3">
                     <div className="text-xs font-medium text-muted-foreground">
-                      Sort By
+                      <FormattedMessage id="UI.SORT_BY" />
                     </div>
                     <div className="space-y-3">
                       {['latest', 'older', 'oldest'].map((order) => (

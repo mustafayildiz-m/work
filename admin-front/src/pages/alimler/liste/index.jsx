@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useMemo, useState, useEffect, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -291,26 +292,26 @@ function AddScholarModal({ open, onClose, onAdd }) {
         >
           ×
         </button>
-        <h3 className="text-lg font-bold mb-4 text-center">Alim Ekle <span className="text-xs font-normal">(Nesebi ve Vefat Yılı isteğe bağlı)</span></h3>
+        <h3 className="text-lg font-bold mb-4 text-center"><FormattedMessage id="UI.ALIM_EKLE" /> <span className="text-xs font-normal"><FormattedMessage id="UI.NESEBI_VE_VEFAT_YILI_ISTEGE_BAGLI" /></span></h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col">
-            <label className="mb-1 text-xs font-semibold">Adı</label>
+            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.ADI" /></label>
             <input name="fullName" value={form.fullName} onChange={handleChange} required placeholder="Adı" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
           </div>
           <div className="flex flex-col">
-            <label className="mb-1 text-xs font-semibold">Nesebi (isteğe bağlı)</label>
+            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.NESEBI_ISTEGE_BAGLI" /></label>
             <input name="lineage" value={form.lineage} onChange={handleChange} placeholder="Nesebi (isteğe bağlı)" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
           </div>
           <div className="flex flex-col">
-            <label className="mb-1 text-xs font-semibold">Doğum Yılı</label>
+            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.DOGUM_YILI" /></label>
             <input name="birthDate" value={form.birthDate} onChange={handleChange} type="date" placeholder="Doğum Yılı" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
           </div>
           <div className="flex flex-col">
-            <label className="mb-1 text-xs font-semibold">Vefat Yılı (isteğe bağlı)</label>
+            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.VEFAT_YILI_ISTEGE_BAGLI" /></label>
             <input name="deathDate" value={form.deathDate} onChange={handleChange} type="date" placeholder="Vefat Yılı (isteğe bağlı)" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
           </div>
           <div className="flex flex-col md:col-span-2">
-            <label className="mb-1 text-xs font-semibold">Portre (URL) veya Dosya</label>
+            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.PORTRE_URL_VEYA_DOSYA" /></label>
             <div className="flex gap-2 items-center">
               <input name="photoUrl" value={form.photoUrl} onChange={handleChange} placeholder="Portre (URL)" className="px-3 py-2 border rounded bg-white dark:bg-gray-800 flex-1" />
               <div className="relative">
@@ -325,7 +326,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 16v-4m0 0V8m0 4h4m-4 0H8m12 4.5V19a2 2 0 01-2 2H6a2 2 0 01-2-2v-2.5M16 3.5V5m0 0A2.5 2.5 0 0118.5 7.5h-13A2.5 2.5 0 013 5V3.5" />
                   </svg>
-                  Dosya Seç
+                  <FormattedMessage id="UI.DOSYA_SEC" />
                 </label>
               </div>
               <span className="text-xs text-gray-500 dark:text-gray-300">
@@ -337,14 +338,14 @@ function AddScholarModal({ open, onClose, onAdd }) {
             )}
           </div>
           <div className="flex flex-col md:col-span-2">
-            <label className="mb-1 text-xs font-semibold">Biyografi</label>
+            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.BIYOGRAFI" /></label>
             <textarea name="biography" value={form.biography} onChange={handleChange} placeholder="Biyografi" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
           </div>
         </div>
         <div className="mt-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="font-semibold text-sm">Kendi Kitapları</span>
-            <button type="button" onClick={addOwnBook} className="text-xs text-blue-500">+ Kitap Ekle</button>
+            <span className="font-semibold text-sm"><FormattedMessage id="UI.KENDI_KITAPLARI" /></span>
+            <button type="button" onClick={addOwnBook} className="text-xs text-blue-500"><FormattedMessage id="UI._KITAP_EKLE" /></button>
           </div>
           {form.ownBooks.map((book, idx) => (
             <div key={book.tempId || `ownbook-${idx}`} className="flex flex-col gap-2 mb-2 bg-gray-50 dark:bg-gray-800 p-3 rounded">
@@ -365,7 +366,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                     </svg>
-                    PDF Seç
+                    <FormattedMessage id="UI.PDF_SEC" />
                   </label>
                 </div>
               </div>
@@ -385,7 +386,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 16v-4m0 0V8m0 4h4m-4 0H8m12 4.5V19a2 2 0 01-2 2H6a2 2 0 01-2-2v-2.5M16 3.5V5m0 0A2.5 2.5 0 0118.5 7.5h-13A2.5 2.5 0 013 5V3.5" />
                     </svg>
-                    Kapak Dosyası Seç
+                    <FormattedMessage id="UI.KAPAK_DOSYASI_SEC" />
                   </label>
                 </div>
                 <span className="text-xs text-gray-500 dark:text-gray-300">
@@ -395,7 +396,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
                   <img src={ownBookPreviews[idx] || getImageUrl(book.coverUrl)} alt="Kapak" className="w-10 h-10 object-cover rounded border" />
                 ) : null}
                 {form.ownBooks.length > 1 && (
-                  <button type="button" onClick={() => removeOwnBook(idx)} className="text-red-500 text-xs">Sil</button>
+                  <button type="button" onClick={() => removeOwnBook(idx)} className="text-red-500 text-xs"><FormattedMessage id="UI.SIL" /></button>
                 )}
               </div>
             </div>
@@ -403,21 +404,21 @@ function AddScholarModal({ open, onClose, onAdd }) {
         </div>
         <div className="mt-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="font-semibold text-sm">Kaynaklar</span>
-            <button type="button" onClick={addSource} className="text-xs text-blue-500">+ Kaynak Ekle</button>
+            <span className="font-semibold text-sm"><FormattedMessage id="UI.KAYNAKLAR" /></span>
+            <button type="button" onClick={addSource} className="text-xs text-blue-500"><FormattedMessage id="UI._KAYNAK_EKLE" /></button>
           </div>
           {form.sources.map((source, idx) => (
             <div key={`source-${idx}`} className="flex flex-col md:flex-row gap-2 mb-2">
               <input value={source.content} onChange={e => handleSourceChange(idx, 'content', e.target.value)} placeholder="Başlık" className="px-2 py-1 border rounded bg-white dark:bg-gray-800 flex-1" />
               <input value={source.url} onChange={e => handleSourceChange(idx, 'url', e.target.value)} placeholder="URL" className="px-2 py-1 border rounded bg-white dark:bg-gray-800 flex-1" />
               {form.sources.length > 1 && (
-                <button type="button" onClick={() => removeSource(idx)} className="text-red-500 text-xs">Sil</button>
+                <button type="button" onClick={() => removeSource(idx)} className="text-red-500 text-xs"><FormattedMessage id="UI.SIL" /></button>
               )}
             </div>
           ))}
         </div>
         <div className="mt-4">
-          <label className="block font-semibold text-sm mb-2">İlişkili Kitaplar</label>
+          <label className="block font-semibold text-sm mb-2"><FormattedMessage id="UI.ILISKILI_KITAPLAR" /></label>
           <div className="flex flex-wrap gap-2 mb-2">
             {books.filter(b => form.relatedBooks.includes(b.id)).map(book => (
               <span key={`selected-book-${book.id}`} className="inline-flex items-center bg-primary-600 text-white rounded-full px-3 py-1 text-xs font-semibold">
@@ -452,7 +453,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
           </div>
         </div>
         <div className="mt-4">
-          <h4 className="text-sm font-semibold mb-2">Konum Bilgileri</h4>
+          <h4 className="text-sm font-semibold mb-2"><FormattedMessage id="UI.KONUM_BILGILERI" /></h4>
           <div className="grid grid-cols-1 gap-4">
             <div className="flex gap-2">
               <input
@@ -467,7 +468,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
                 onClick={handleSearch}
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               >
-                Ara
+                <FormattedMessage id="UI.ARA" />
               </button>
             </div>
             <div className="h-[300px] rounded-lg overflow-hidden">
@@ -478,7 +479,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col">
-                <label className="mb-1 text-xs font-semibold">Konum Adı</label>
+                <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.KONUM_ADI" /></label>
                 <input
                   name="locationName"
                   value={form.locationName}
@@ -488,7 +489,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
                 />
               </div>
               <div className="flex flex-col">
-                <label className="mb-1 text-xs font-semibold">Konum Açıklaması (İsteğe bağlı)</label>
+                <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.KONUM_ACIKLAMASI_ISTEGE_BAGLI" /></label>
                 <input
                   name="locationDescription"
                   value={form.locationDescription}
@@ -502,7 +503,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
         </div>
         {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
         <div className="flex justify-end gap-2 mt-6">
-          <button type="button" onClick={onClose} className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">Kapat</button>
+          <button type="button" onClick={onClose} className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"><FormattedMessage id="UI.KAPAT" /></button>
           <button type="submit" className="px-4 py-2 rounded bg-primary-600 text-white font-semibold" disabled={loading || !isFormValid}>
             {loading ? 'Kaydediliyor...' : 'Kaydet'}
           </button>
@@ -538,12 +539,12 @@ const ScholarPreviewModal = ({ scholar, onClose }) => {
           )}
           <h3 className="text-xl font-bold mb-1 text-center">{scholar.fullName}</h3>
           <div className="text-sm text-gray-700 dark:text-gray-200 mb-2 text-center">
-            {scholar.lineage && <><span className="font-semibold">Nesebi:</span> {scholar.lineage}<br /></>}
-            {scholar.birthDate && <><span className="font-semibold">Doğum Yılı:</span> {scholar.birthDate.slice(0, 10)}<br /></>}
-            {scholar.deathDate && <><span className="font-semibold">Vefat Yılı:</span> {scholar.deathDate.slice(0, 10)}<br /></>}
+            {scholar.lineage && <><span className="font-semibold"><FormattedMessage id="UI.NESEBI" /></span> {scholar.lineage}<br /></>}
+            {scholar.birthDate && <><span className="font-semibold"><FormattedMessage id="UI.DOGUM_YILI_1" /></span> {scholar.birthDate.slice(0, 10)}<br /></>}
+            {scholar.deathDate && <><span className="font-semibold"><FormattedMessage id="UI.VEFAT_YILI" /></span> {scholar.deathDate.slice(0, 10)}<br /></>}
           </div>
           <div className="w-full text-sm text-gray-700 dark:text-gray-200 mb-2">
-            <span className="font-semibold">Biyografi:</span>
+            <span className="font-semibold"><FormattedMessage id="UI.BIYOGRAFI_1" /></span>
             <div 
               className="ml-2 mt-1 prose prose-sm dark:prose-invert max-w-none"
               dangerouslySetInnerHTML={{ __html: scholar.biography }}
@@ -551,7 +552,7 @@ const ScholarPreviewModal = ({ scholar, onClose }) => {
           </div>
           {scholar.ownBooks && scholar.ownBooks.length > 0 && (
             <div className="w-full text-sm text-gray-700 dark:text-gray-200 mb-2">
-              <span className="font-semibold">Kendi Kitapları:</span>
+              <span className="font-semibold"><FormattedMessage id="UI.KENDI_KITAPLARI_1" /></span>
               <ul className="ml-4 mt-1 list-disc">
                 {scholar.ownBooks.map((b, i) => {
                   // coverUrl kontrolü - uploads/ ile başlıyorsa tam URL oluştur
@@ -596,7 +597,7 @@ const ScholarPreviewModal = ({ scholar, onClose }) => {
                             rel="noopener noreferrer"
                             className="text-blue-500 underline text-xs hover:text-blue-700"
                           >
-                            📄 PDF İndir
+                            <FormattedMessage id="UI._PDF_INDIR" />
                           </a>
                         )}
                       </div>
@@ -608,7 +609,7 @@ const ScholarPreviewModal = ({ scholar, onClose }) => {
           )}
           {scholar.sources && scholar.sources.length > 0 && (
             <div className="w-full text-sm text-gray-700 dark:text-gray-200 mb-2">
-              <span className="font-semibold">Kaynaklar:</span>
+              <span className="font-semibold"><FormattedMessage id="UI.KAYNAKLAR_1" /></span>
               <ul className="ml-4 mt-1 list-disc">
                 {scholar.sources.map((s, i) => (
                   <li key={s.id || i}>
@@ -622,7 +623,7 @@ const ScholarPreviewModal = ({ scholar, onClose }) => {
                           rel="noopener noreferrer"
                           className="text-blue-500 underline"
                         >
-                          (Kaynak Linki)
+                          <FormattedMessage id="UI.KAYNAK_LINKI" />
                         </a>
                       </>
                     )}
@@ -633,7 +634,7 @@ const ScholarPreviewModal = ({ scholar, onClose }) => {
           )}
           {scholar.relatedBooks && scholar.relatedBooks.length > 0 && (
             <div className="w-full text-sm text-gray-700 dark:text-gray-200 mb-2">
-              <span className="font-semibold">İlişkili Kitaplar:</span>
+              <span className="font-semibold"><FormattedMessage id="UI.ILISKILI_KITAPLAR_1" /></span>
               <ul className="ml-4 mt-1 list-disc">
                 {scholar.relatedBooks.map((b, i) => {
                   const bookTitle = b.translations?.[0]?.title || b.title || 'İsimsiz Kitap';
@@ -679,7 +680,7 @@ const ScholarPreviewModal = ({ scholar, onClose }) => {
                             rel="noopener noreferrer"
                             className="text-blue-500 underline text-xs hover:text-blue-700"
                           >
-                            📄 PDF İndir
+                            <FormattedMessage id="UI._PDF_INDIR" />
                           </a>
                         )}
                       </div>
@@ -717,6 +718,7 @@ const ScholarPreviewModal = ({ scholar, onClose }) => {
 };
 
 const ScholarList = () => {
+  const intl = useIntl();
   const navigate = useNavigate();
   const [globalFilter, setGlobalFilter] = useState('');
   const [debouncedFilter, setDebouncedFilter] = useState('');
@@ -893,7 +895,7 @@ const ScholarList = () => {
               }
             }}
           >
-            Düzenle
+            <FormattedMessage id="UI.DUZENLE" />
           </button>
           <button
             className="px-2 py-1 text-xs rounded bg-red-600 text-white hover:bg-red-700 transition"
@@ -903,7 +905,7 @@ const ScholarList = () => {
               setDeleteModalOpen(true);
             }}
           >
-            Sil
+            <FormattedMessage id="UI.SIL" />
           </button>
         </div>
       ),
@@ -960,16 +962,18 @@ const ScholarList = () => {
   return (
     <>
       <Helmet>
-        <title>İslam Âlimleri Listesi - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.ISLAM_LIMLERI_LISTESI__ISLAMIC_WINDOWS_A"
+        })}</title>
       </Helmet>
       <div className="p-6 max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">İslam Alimleri Listesi</h2>
+          <h2 className="text-2xl font-bold"><FormattedMessage id="UI.ISLAM_ALIMLERI_LISTESI" /></h2>
         <button
           onClick={() => navigate('/alimler/ekle')}
           className="px-4 py-2 rounded bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 transition border border-blue-700"
         >
-          + Alim Ekle
+          <FormattedMessage id="UI._ALIM_EKLE" />
         </button>
       </div>
       <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -996,7 +1000,7 @@ const ScholarList = () => {
             }`}
           >
             <Grid3x3 size={18} />
-            <span className="hidden sm:inline text-sm font-medium">Kart</span>
+            <span className="hidden sm:inline text-sm font-medium"><FormattedMessage id="UI.KART" /></span>
           </button>
           <button
             onClick={() => {
@@ -1010,14 +1014,14 @@ const ScholarList = () => {
             }`}
           >
             <List size={18} />
-            <span className="hidden sm:inline text-sm font-medium">Liste</span>
+            <span className="hidden sm:inline text-sm font-medium"><FormattedMessage id="UI.LISTE" /></span>
           </button>
         </div>
       </div>
       {loading ? (
         <div className="py-10 text-center text-gray-500 dark:text-gray-400">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
-          <p className="mt-2">Yükleniyor...</p>
+          <p className="mt-2"><FormattedMessage id="UI.YUKLENIYOR" /></p>
         </div>
       ) : error && token ? (
         <div className="py-10 text-center text-red-500">{error}</div>
@@ -1100,7 +1104,7 @@ const ScholarList = () => {
                   <div className="flex items-center justify-center gap-1 mt-2 w-full">
                     <BookOpen size={12} className="text-primary-600 dark:text-primary-400" />
                     <span className="text-xs text-gray-600 dark:text-gray-300 font-medium">
-                      {scholar.ownBooks.length} Kitap
+                      {scholar.ownBooks.length} <FormattedMessage id="UI.KITAP" />
                     </span>
                   </div>
                 )}
@@ -1110,21 +1114,21 @@ const ScholarList = () => {
         </div>
       ) : (
         /* Table View */
-        <div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
+        (<div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Âlim
+                  <FormattedMessage id="UI.LIM" />
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider hidden md:table-cell">
-                  Doğum/Vefat
+                  <FormattedMessage id="UI.DOGUMVEFAT" />
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider hidden lg:table-cell">
-                  Kitapları
+                  <FormattedMessage id="UI.KITAPLARI" />
                 </th>
                 <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  İşlemler
+                  <FormattedMessage id="UI.ISLEMLER" />
                 </th>
               </tr>
             </thead>
@@ -1178,8 +1182,7 @@ const ScholarList = () => {
                           </span>
                         ))}
                         {scholar.ownBooks.length > 2 && (
-                          <span className="text-xs text-gray-500 dark:text-gray-400">
-                            +{scholar.ownBooks.length - 2} daha
+                          <span className="text-xs text-gray-500 dark:text-gray-400">+{scholar.ownBooks.length - 2} <FormattedMessage id="UI.DAHA" />
                           </span>
                         )}
                       </div>
@@ -1229,14 +1232,14 @@ const ScholarList = () => {
               {globalFilter ? 'Arama sonucu bulunamadı' : 'Henüz alim eklenmemiş'}
             </div>
           )}
-        </div>
+        </div>)
       )}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
         <div className="flex flex-col sm:flex-row items-center gap-2">
-          <span className="text-sm text-gray-400">Toplam {totalCount} alim</span>
+          <span className="text-sm text-gray-400"><FormattedMessage id="UI.TOPLAM" /> {totalCount} <FormattedMessage id="UI.ALIM" /></span>
           {totalPages > 1 && (
             <span className="text-sm text-gray-500">
-              Sayfa {currentPage} / {totalPages}
+              <FormattedMessage id="UI.SAYFA" /> {currentPage}/ {totalPages}
             </span>
           )}
         </div>
@@ -1252,7 +1255,7 @@ const ScholarList = () => {
               className="flex items-center gap-1"
             >
               <ChevronLeft className="h-4 w-4" />
-              Önceki
+              <FormattedMessage id="UI.ONCEKI" />
             </Button>
             
             <div className="flex items-center gap-1">
@@ -1290,7 +1293,7 @@ const ScholarList = () => {
               disabled={currentPage === totalPages}
               className="flex items-center gap-1"
             >
-              Sonraki
+              <FormattedMessage id="UI.SONRAKI" />
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
@@ -1300,22 +1303,22 @@ const ScholarList = () => {
       <Dialog open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} className="z-50">
         <div className="fixed inset-0 flex items-center justify-center bg-black/40">
           <Dialog.Panel className="bg-white dark:bg-gray-900 rounded-lg shadow-lg max-w-sm w-full p-6">
-            <Dialog.Title className="text-lg font-bold mb-2">Alimi Sil</Dialog.Title>
+            <Dialog.Title className="text-lg font-bold mb-2"><FormattedMessage id="UI.ALIMI_SIL" /></Dialog.Title>
             <Dialog.Description className="mb-4 text-gray-700 dark:text-gray-200">
-              Bu alimi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.
+              <FormattedMessage id="UI.BU_ALIMI_SILMEK_ISTEDIGINIZE_EMIN_MISINI" />
             </Dialog.Description>
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setDeleteModalOpen(false)}
                 className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
               >
-                Vazgeç
+                <FormattedMessage id="UI.VAZGEC" />
               </button>
               <button
                 onClick={() => handleDeleteScholar(deletingScholar?.id)}
                 className="px-4 py-2 rounded bg-red-600 text-white font-semibold hover:bg-red-700 transition"
               >
-                Evet, Sil
+                <FormattedMessage id="UI.EVET_SIL" />
               </button>
             </div>
           </Dialog.Panel>

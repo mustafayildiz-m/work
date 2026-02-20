@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { FileDown, FilePlus, FileUp, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
@@ -18,34 +19,34 @@ export function DropdownMenu5({ trigger }) {
         <DropdownMenuItem asChild>
           <Link to="/account/home/settings-plain">
             <FilePlus />
-            <span>Add</span>
+            <span><FormattedMessage id="UI.ADD" /></span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/account/members/import-members">
             <FileDown />
-            <span>Import</span>
+            <span><FormattedMessage id="UI.IMPORT" /></span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <FileUp />
-            <span>Export</span>
+            <span><FormattedMessage id="UI.EXPORT" /></span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent className="w-[150px]">
             <DropdownMenuItem asChild>
               <Link to="/account/home/settings-sidebar">
-                <span>PDF</span>
+                <span><FormattedMessage id="UI.PDF" /></span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to="/account/home/settings-sidebar">
-                <span>CSV</span>
+                <span><FormattedMessage id="UI.CSV" /></span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to="/account/home/settings-sidebar">
-                <span>Excel</span>
+                <span><FormattedMessage id="UI.EXCEL" /></span>
               </Link>
             </DropdownMenuItem>
           </DropdownMenuSubContent>
@@ -53,7 +54,7 @@ export function DropdownMenu5({ trigger }) {
         <DropdownMenuItem asChild>
           <Link to="/account/security/privacy-settings">
             <Settings />
-            <span>Settings</span>
+            <span><FormattedMessage id="UI.SETTINGS" /></span>
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

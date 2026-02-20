@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { CardLocation } from '@/partials/cards';
 import { MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -49,9 +50,9 @@ const Locations = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Locations</CardTitle>
+        <CardTitle><FormattedMessage id="UI.LOCATIONS" /></CardTitle>
         <Button className="bg-green-500">
-          <MapPin /> Offer Location
+          <MapPin /> <FormattedMessage id="UI.OFFER_LOCATION" />
         </Button>
       </CardHeader>
       <CardContent className="p-5 lg:p-7.5 lg:pb-7">

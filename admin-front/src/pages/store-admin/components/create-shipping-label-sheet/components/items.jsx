@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import React from 'react';
 import { Label } from '@radix-ui/react-label';
 import { Link } from 'react-router';
@@ -26,9 +27,8 @@ export const Items = () => {
   return (
     <Card className="overflow-hidden">
       <CardHeader className="bg-muted px-5">
-        <CardTitle className="">Items</CardTitle>
+        <CardTitle className=""><FormattedMessage id="UI.ITEMS" /></CardTitle>
       </CardHeader>
-
       <CardContent className="px-5 py-4">
         {items.map((item, index) => (
           <React.Fragment key={item.sku}>
@@ -52,7 +52,7 @@ export const Items = () => {
                   <div className="flex items-center">
                     <div className="flex items-center gap-0.5 text-xs me-0.5">
                       <span className="font-normal text-gray-700 uppercase">
-                        sku:
+                        <FormattedMessage id="UI.SKU" />
                       </span>
                       <span className="font-medium text-mono">{item.sku}</span>
                     </div>
@@ -63,7 +63,7 @@ export const Items = () => {
 
                     <div className="flex items-center gap-1 text-xs">
                       <span className="font-normal text-secondary-foreground">
-                        Color
+                        <FormattedMessage id="UI.COLOR" />
                       </span>
                       <span className="font-medium text-foreground">
                         {item.color}
@@ -75,7 +75,7 @@ export const Items = () => {
 
               <div className="flex flex-col gap-2">
                 <span className="text-xs font-normal text-dark text-end">
-                  Weight
+                  <FormattedMessage id="UI.WEIGHT" />
                 </span>
                 <Label className="bg-background">
                   <Input
@@ -84,7 +84,7 @@ export const Items = () => {
                     className="w-[66px]"
                     onChange={() => {}}
                   />
-                  kg
+                  <FormattedMessage id="UI.KG" />
                 </Label>
               </div>
             </div>

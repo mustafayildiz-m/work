@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { Copy, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router';
@@ -20,11 +21,11 @@ const InviteWithLink = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Invite with Link</CardTitle>
+        <CardTitle><FormattedMessage id="UI.INVITE_WITH_LINK" /></CardTitle>
       </CardHeader>
       <CardContent className="grid gap-5">
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-          <Label className="flex w-full max-w-32">Link</Label>
+          <Label className="flex w-full max-w-32"><FormattedMessage id="UI.LINK" /></Label>
           <div className="flex flex-col items-start grow gap-5">
             <InputWrapper>
               <Input
@@ -39,19 +40,17 @@ const InviteWithLink = () => {
             </InputWrapper>
             <Button variant="outline">
               <RefreshCw size={12} />
-              Reset Link
+              <FormattedMessage id="UI.RESET_LINK" />
             </Button>
           </div>
         </div>
         <p className="text-foreground text-sm">
-          Click below to RSVP for our exclusive event. Limited spaces available,
-          so don't miss out. Reserve your spot now with this special invitation
-          link!
+          <FormattedMessage id="UI.CLICK_BELOW_TO_RSVP_FOR_OUR_EXCLUSIVE_EV" />
         </p>
       </CardContent>
       <CardFooter className="justify-center">
         <Button>
-          <Link to="#">Invite People</Link>
+          <Link to="#"><FormattedMessage id="UI.INVITE_PEOPLE" /></Link>
         </Button>
       </CardFooter>
     </Card>

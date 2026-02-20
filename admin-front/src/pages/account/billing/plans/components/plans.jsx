@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment, useState } from 'react';
 import { Check } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -157,7 +158,7 @@ const Plans = () => {
       <div className="py-4">
         {info.free ? (
           <h4 className="text-2xl text-mono font-semibold leading-none">
-            Free
+            <FormattedMessage id="UI.FREE" />
           </h4>
         ) : (
           <div className="flex items-end gap-1.5" data-plan-type={type}>
@@ -239,7 +240,7 @@ const Plans = () => {
                 onCheckedChange={handleToggleBilling}
               />
 
-              <Label className="text-sm">Annual Billing</Label>
+              <Label className="text-sm"><FormattedMessage id="UI.ANNUAL_BILLING" /></Label>
             </div>
           </TableCell>
           <TableCell className="relative! border-b-0! border-t ltr:border-l rtl:border-s ltr:rounded-tl-xl rtl:rounded-tr-xl bg-muted/40 dark:bg-coal-100 p-5! pt-7.5!">
@@ -248,7 +249,7 @@ const Plans = () => {
               appearance="outline"
               className="absolute top-0 start-1/2 rtl:translate-x-1/2 -translate-x-1/2 -translate-y-1/2"
             >
-              Current Plan
+              <FormattedMessage id="UI.CURRENT_PLAN" />
             </Badge>
             {renderPlanInfo('basic', plans.info.basic)}
           </TableCell>

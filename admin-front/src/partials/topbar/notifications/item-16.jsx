@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import {
@@ -14,31 +15,30 @@ export default function Item16() {
     <div className="flex grow gap-2 px-5">
       <Avatar>
         <AvatarImage src="/media/avatars/300-29.png" alt="avatar" />
-        <AvatarFallback>CH</AvatarFallback>
+        <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
         <AvatarIndicator className="-end-1.5 -bottom-1.5">
           <AvatarStatus variant="online" className="size-2.5" />
         </AvatarIndicator>
       </Avatar>
-
       <div className="flex flex-col gap-3 grow">
         <div className="flex flex-col gap-1">
           <div className="text-sm font-medium mb-px">
             <Link to="#" className="hover:text-primary text-mono font-semibold">
-              Ethan Parker
+              <FormattedMessage id="UI.ETHAN_PARKER" />
             </Link>
             <span className="text-secondary-foreground">
               {' '}
-              created a new tasks to{' '}
+              <FormattedMessage id="UI.CREATED_A_NEW_TASKS_TO" />{' '}
             </span>
             <Link to="#" className="hover:text-primary text-primary">
-              Site Sculpt
+              <FormattedMessage id="UI.SITE_SCULPT" />
             </Link>
-            <span className="text-secondary-foreground"> project</span>
+            <span className="text-secondary-foreground"> <FormattedMessage id="UI.PROJECT" /></span>
           </div>
           <span className="flex items-center text-xs font-medium text-muted-foreground">
-            3 days ago
+            <FormattedMessage id="UI.3_DAYS_AGO" />
             <span className="rounded-full size-1 bg-mono/30 mx-1.5"></span>
-            Web Designer
+            <FormattedMessage id="UI.WEB_DESIGNER" />
           </span>
         </div>
 
@@ -46,10 +46,10 @@ export default function Item16() {
           <div className="flex items-center justify-between flex-wrap gap-2.5">
             <div className="flex flex-col gap-1">
               <span className="font-medium text-mono text-xs">
-                Location history is erased after Logging In
+                <FormattedMessage id="UI.LOCATION_HISTORY_IS_ERASED_AFTER_LOGGING" />
               </span>
               <span className="font-medium text-muted-foreground text-xs">
-                Due Date: 15 May, 2024
+                <FormattedMessage id="UI.DUE_DATE_15_MAY_2024" />
               </span>
             </div>
 
@@ -60,7 +60,7 @@ export default function Item16() {
                   alt="image"
                 />
 
-                <AvatarFallback>CH</AvatarFallback>
+                <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
               </Avatar>
               <Avatar className="size-6">
                 <AvatarImage
@@ -68,17 +68,17 @@ export default function Item16() {
                   alt="image"
                 />
 
-                <AvatarFallback>CH</AvatarFallback>
+                <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
               </Avatar>
             </div>
           </div>
 
           <div className="flex items-center gap-2.5">
             <Badge size="sm" variant="success" appearance="outline">
-              Improvement
+              <FormattedMessage id="UI.IMPROVEMENT" />
             </Badge>
             <Badge size="sm" variant="destructive" appearance="outline">
-              Bug
+              <FormattedMessage id="UI.BUG" />
             </Badge>
           </div>
         </div>

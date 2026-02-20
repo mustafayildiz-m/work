@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Trophy } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -8,14 +9,14 @@ const ActivitiesAnniversary = () => {
     <TimelineItem icon={Trophy} line={false} removeSpace={true}>
       <div className="flex flex-col">
         <div className="text-sm text-foreground">
-          We recently{' '}
+          <FormattedMessage id="UI.WE_RECENTLY" />{' '}
           <Button mode="link" asChild>
-            <Link to="/public-profile/profiles/nft">celebrated</Link>
+            <Link to="/public-profile/profiles/nft"><FormattedMessage id="UI.CELEBRATED" /></Link>
           </Button>{' '}
-          the blog's 1-year anniversary
+          <FormattedMessage id="UI.THE_BLOGS_1YEAR_ANNIVERSARY" />
         </div>
         <span className="text-xs text-secondary-foreground">
-          3 months ago, 4:07 PM
+          <FormattedMessage id="UI.3_MONTHS_AGO_407_PM" />
         </span>
       </div>
     </TimelineItem>

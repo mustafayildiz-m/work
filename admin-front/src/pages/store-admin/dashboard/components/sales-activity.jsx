@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { CheckCircle, FileText, PackageCheck, Truck } from 'lucide-react';
 import { Link } from 'react-router';
@@ -63,12 +64,11 @@ export function SalesActivity() {
   return (
     <Card>
       <CardHeader className="px- bg-accent/50">
-        <CardTitle>Sales Activity</CardTitle>
+        <CardTitle><FormattedMessage id="UI.SALES_ACTIVITY" /></CardTitle>
         <Button mode="link" asChild>
-          <Link to="#">See All</Link>
+          <Link to="#"><FormattedMessage id="UI.SEE_ALL" /></Link>
         </Button>
       </CardHeader>
-
       <CardContent className="flex gap-2 lg:pb-7">
         {items.map((item, index) => {
           return renderItem(item, index);

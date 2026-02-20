@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import ApexCharts from 'react-apexcharts';
 import { Link } from 'react-router';
@@ -244,13 +245,12 @@ export function Orders() {
   return (
     <Card>
       <CardHeader className="gap-2">
-        <CardTitle>Orders</CardTitle>
+        <CardTitle><FormattedMessage id="UI.ORDERS" /></CardTitle>
 
         <Button mode="link" asChild>
-          <Link to="#">See All</Link>
+          <Link to="#"><FormattedMessage id="UI.SEE_ALL" /></Link>
         </Button>
       </CardHeader>
-
       <CardContent className="px-0 pt-5 lg:pt-7.5">
         <ToggleGroup
           type="single"
@@ -260,27 +260,27 @@ export function Orders() {
           className="flex flex-row px-5 lg:px-7.5 mb-8"
         >
           <ToggleGroupItem className="basis-1/6 justify-center" value="1H">
-            1H
+            <FormattedMessage id="UI.1H" />
           </ToggleGroupItem>
           <ToggleGroupItem className="basis-1/6 justify-center" value="1D">
-            1D
+            <FormattedMessage id="UI.1D" />
           </ToggleGroupItem>
           <ToggleGroupItem className="basis-1/6 justify-center" value="14D">
-            14D
+            <FormattedMessage id="UI.14D" />
           </ToggleGroupItem>
           <ToggleGroupItem className="basis-1/6 justify-center" value="1M">
-            1M
+            <FormattedMessage id="UI.1M" />
           </ToggleGroupItem>
           <ToggleGroupItem className="basis-1/6 justify-center" value="3M">
-            3M
+            <FormattedMessage id="UI.3M" />
           </ToggleGroupItem>
           <ToggleGroupItem className="basis-1/6 justify-center" value="1Y">
-            1Y
+            <FormattedMessage id="UI.1Y" />
           </ToggleGroupItem>
         </ToggleGroup>
 
         <div className="flex items-center gap-2.5 px-5 lg:px-7.5 mb-3">
-          <span className="text-3xl font-semibold text-mono">$329.7k</span>
+          <span className="text-3xl font-semibold text-mono"><FormattedMessage id="UI.3297K" /></span>
           <Badge variant="success" appearance="outline">
             +4.7%
           </Badge>

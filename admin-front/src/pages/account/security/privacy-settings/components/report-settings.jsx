@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useId } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -59,7 +60,7 @@ const ReportSettings = ({ limit, className }) => {
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle>Report Sharing Settings</CardTitle>
+        <CardTitle><FormattedMessage id="UI.REPORT_SHARING_SETTINGS" /></CardTitle>
       </CardHeader>
       {items.map((item, index) => {
         if (limit === undefined || index < limit) {

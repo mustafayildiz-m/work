@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useEffect, useState } from 'react';
 import ApexChart from 'react-apexcharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -181,11 +182,11 @@ const EarningsChart = () => {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle>Earnings</CardTitle>
+        <CardTitle><FormattedMessage id="UI.EARNINGS" /></CardTitle>
         <div className="flex gap-5">
           <div className="flex items-center gap-2">
             <Label htmlFor="auto-update" className="text-sm">
-              Referrals only
+              <FormattedMessage id="UI.REFERRALS_ONLY" />
             </Label>
             <Switch id="auto-update" defaultChecked size="sm" />
           </div>
@@ -194,10 +195,10 @@ const EarningsChart = () => {
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent className="w-28">
-              <SelectItem value="1">1 month</SelectItem>
-              <SelectItem value="3">3 months</SelectItem>
-              <SelectItem value="6">6 months</SelectItem>
-              <SelectItem value="12">12 months</SelectItem>
+              <SelectItem value="1"><FormattedMessage id="UI.1_MONTH" /></SelectItem>
+              <SelectItem value="3"><FormattedMessage id="UI.3_MONTHS" /></SelectItem>
+              <SelectItem value="6"><FormattedMessage id="UI.6_MONTHS" /></SelectItem>
+              <SelectItem value="12"><FormattedMessage id="UI.12_MONTHS" /></SelectItem>
             </SelectContent>
           </Select>
         </div>

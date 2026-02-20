@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export const Summary = () => {
@@ -10,24 +11,23 @@ export const Summary = () => {
   return (
     <Card>
       <CardHeader className="px-5">
-        <CardTitle>Summary</CardTitle>
+        <CardTitle><FormattedMessage id="UI.SUMMARY" /></CardTitle>
       </CardHeader>
-
       <CardContent className="p-5 pb-4 space-y-2">
         <div className="flex flex-col ">
           <span className="text-sm font-medium text-mono mb-1.5">
-            Shipping to Jeroen’s Home
+            <FormattedMessage id="UI.SHIPPING_TO_JEROENS_HOME" />
           </span>
 
           <div className="flex flex-col gap-1 text-xs font-normal text-secondary-foreground">
-            <span>Prinsengracht 24</span>
-            <span>1015 DV Amsterdam, NL</span>
+            <span><FormattedMessage id="UI.PRINSENGRACHT_24" /></span>
+            <span><FormattedMessage id="UI.1015_DV_AMSTERDAM_NL" /></span>
           </div>
         </div>
 
         <div className="border-b border-border mb-4 mt-5"></div>
         <span className="text-sm font-medium block text-mono mb-3.5">
-          Price Details
+          <FormattedMessage id="UI.PRICE_DETAILS" />
         </span>
 
         {items.map((item, index) => (
@@ -44,7 +44,7 @@ export const Summary = () => {
 
         <div className="flex justify-between items-center">
           <span className="text-sm font-normal text-secondary-foreground">
-            Total
+            <FormattedMessage id="UI.TOTAL" />
           </span>
           <span className="text-base font-semibold text-mono">$22.99</span>
         </div>

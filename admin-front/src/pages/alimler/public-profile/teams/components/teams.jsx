@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { CardTeam, CardTeamRow } from '@/partials/cards';
 import {
@@ -220,7 +221,7 @@ const Teams = () => {
     <div className="flex flex-col items-stretch gap-5 lg:gap-7.5">
       <div className="flex flex-wrap items-center gap-5 justify-between">
         <h3 className="text-lg text-foreground font-semibold">
-          {items.length} Teams
+          {items.length} <FormattedMessage id="UI.TEAMS" />
         </h3>
         <ToggleGroup
           type="single"
@@ -247,7 +248,7 @@ const Teams = () => {
           </div>
           <div className="flex grow justify-center pt-5 lg:pt-7.5">
             <Button mode="link" underlined="dashed" asChild>
-              <Link to="/account/members/teams">Show more Teams</Link>
+              <Link to="/account/members/teams"><FormattedMessage id="UI.SHOW_MORE_TEAMS" /></Link>
             </Button>
           </div>
         </div>
@@ -261,7 +262,7 @@ const Teams = () => {
           </div>
           <div className="flex grow justify-center pt-5 lg:pt-7.5">
             <Button mode="link" underlined="dashed" asChild>
-              <Link to="/account/members/teams">Show more Teams</Link>
+              <Link to="/account/members/teams"><FormattedMessage id="UI.SHOW_MORE_TEAMS" /></Link>
             </Button>
           </div>
         </div>

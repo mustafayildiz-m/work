@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { CloudCog, FileInput, Settings, ThumbsDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
@@ -15,25 +16,25 @@ export function DropdownMenu2({ trigger }) {
         <DropdownMenuItem asChild>
           <Link to="/account/home/settings-enterprise">
             <Settings />
-            <span>Settings</span>
+            <span><FormattedMessage id="UI.SETTINGS" /></span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/account/members/import-members">
             <FileInput />
-            <span>Import</span>
+            <span><FormattedMessage id="UI.IMPORT" /></span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/account/activity">
             <CloudCog />
-            <span>Activity</span>
+            <span><FormattedMessage id="UI.ACTIVITY" /></span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="#">
             <ThumbsDown />
-            <span>Report</span>
+            <span><FormattedMessage id="UI.REPORT" /></span>
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

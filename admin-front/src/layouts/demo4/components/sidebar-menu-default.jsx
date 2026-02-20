@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 'use client';
 
 import { useCallback } from 'react';
@@ -102,7 +103,7 @@ export function SidebarMenuDefault() {
         <span data-slot="accordion-menu-title">{item.title}</span>
         {item.disabled && (
           <Badge variant="secondary" size="sm" className="ms-auto me-[-10px]">
-            Soon
+            <FormattedMessage id="UI.SOON" />
           </Badge>
         )}
       </AccordionMenuItem>
@@ -182,7 +183,7 @@ export function SidebarMenuDefault() {
         <span data-slot="accordion-menu-title">{item.title}</span>
         {item.disabled && (
           <Badge variant="secondary" size="sm" className="ms-auto me-[-10px]">
-            Soon
+            <FormattedMessage id="UI.SOON" />
           </Badge>
         )}
       </AccordionMenuItem>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
@@ -7,15 +8,14 @@ export function SpecialOffers() {
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between gap-4">
-        <span className="text-lg font-medium text-mono">Special Offers</span>
+        <span className="text-lg font-medium text-mono"><FormattedMessage id="UI.SPECIAL_OFFERS" /></span>
 
         <Button mode="link" asChild>
           <Link to="/account/home/get-started" className="text-xs">
-            See All <ChevronRight />
+            <FormattedMessage id="UI.SEE_ALL" /> <ChevronRight />
           </Link>
         </Button>
       </div>
-
       <div className="grid xl:grid-cols-2 gap-5 mb-2">
         <div className="lg:col-span-1">
           <Card1 />

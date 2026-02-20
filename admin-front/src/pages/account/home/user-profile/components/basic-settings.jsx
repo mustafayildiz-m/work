@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Copy, SquarePen } from 'lucide-react';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -14,7 +15,7 @@ const BasicSettings = ({ title }) => {
         <CardTitle>{title}</CardTitle>
         <div className="flex items-center gap-2">
           <Label htmlFor="auto-update" className="text-sm">
-            Public Profile
+            <FormattedMessage id="UI.PUBLIC_PROFILE" />
           </Label>
           <Switch defaultChecked size="sm" />
         </div>
@@ -24,14 +25,14 @@ const BasicSettings = ({ title }) => {
           <TableBody>
             <TableRow>
               <TableCell className="py-2 min-w-36 text-secondary-foreground font-normal">
-                Email
+                <FormattedMessage id="UI.EMAIL" />
               </TableCell>
               <TableCell className="py-2 min-w-60">
                 <Link
                   to="#"
                   className="text-foreground font-normal text-sm hover:text-primary-active"
                 >
-                  jasontt@studio.co
+                  <FormattedMessage id="UI.JASONTTSTUDIOCO" />
                 </Link>
               </TableCell>
               <TableCell className="py-2 max-w-16 text-end">
@@ -42,10 +43,10 @@ const BasicSettings = ({ title }) => {
             </TableRow>
             <TableRow>
               <TableCell className="py-2 text-secondary-foreground font-normal">
-                Password
+                <FormattedMessage id="UI.PASSWORD" />
               </TableCell>
               <TableCell className="py-2 text-secondary-foreground font-normal">
-                Password last changed 2 months ago
+                <FormattedMessage id="UI.PASSWORD_LAST_CHANGED_2_MONTHS_AGO" />
               </TableCell>
               <TableCell className="py-2 text-end">
                 <Button variant="ghost" mode="icon">
@@ -55,20 +56,20 @@ const BasicSettings = ({ title }) => {
             </TableRow>
             <TableRow>
               <TableCell className="py-3.5text-secondary-foreground font-normal">
-                2FA
+                <FormattedMessage id="UI.2FA" />
               </TableCell>
               <TableCell className="py-3.5 text-secondary-foreground font-normal">
-                To be set
+                <FormattedMessage id="UI.TO_BE_SET" />
               </TableCell>
               <TableCell className="py-3 text-end">
                 <Button mode="link" size="sm" underlined="dashed" asChild>
-                  <Link to="#">Setup</Link>
+                  <Link to="#"><FormattedMessage id="UI.SETUP" /></Link>
                 </Button>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className="py-2text-secondary-foreground font-normal">
-                Sign-in with
+                <FormattedMessage id="UI.SIGNIN_WITH" />
               </TableCell>
               <TableCell className="py-0.5">
                 <div className="flex items-center gap-2.5">
@@ -118,20 +119,20 @@ const BasicSettings = ({ title }) => {
             </TableRow>
             <TableRow>
               <TableCell className="py-3text-secondary-foreground font-normal">
-                Team Account
+                <FormattedMessage id="UI.TEAM_ACCOUNT" />
               </TableCell>
               <TableCell className="py-3 text-secondary-foreground font-normal">
-                To be set
+                <FormattedMessage id="UI.TO_BE_SET" />
               </TableCell>
               <TableCell className="py-3 text-end">
                 <Button mode="link" size="sm" underlined="dashed" asChild>
-                  <Link to="#">Setup</Link>
+                  <Link to="#"><FormattedMessage id="UI.SETUP" /></Link>
                 </Button>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className="py-2 text-secondary-foreground font-normal">
-                Social Profiles
+                <FormattedMessage id="UI.SOCIAL_PROFILES" />
               </TableCell>
               <TableCell className="py-0.5">
                 <div className="flex items-center gap-2.5">
@@ -193,7 +194,7 @@ const BasicSettings = ({ title }) => {
             </TableRow>
             <TableRow>
               <TableCell className="py-3 text-secondary-foreground text-sm font-normal">
-                Referral Link
+                <FormattedMessage id="UI.REFERRAL_LINK" />
               </TableCell>
               <TableCell className="py-3 text-secondary-foreground text-sm font-normal">
                 <div className="flex items-center gap-0.5">
@@ -201,7 +202,7 @@ const BasicSettings = ({ title }) => {
                     to="#"
                     className="text-foreground text-sm hover:text-primary-active"
                   >
-                    https://studio.co/W3gvQOI35dt
+                    <FormattedMessage id="UI.HTTPSSTUDIOCOW3GVQOI35DT" />
                   </Link>
                   <Button variant="dim" mode="icon">
                     <Copy size={16} />
@@ -210,7 +211,7 @@ const BasicSettings = ({ title }) => {
               </TableCell>
               <TableCell className="py-3 text-end">
                 <Button mode="link" underlined="dashed" asChild>
-                  <Link to="#">Re-create</Link>
+                  <Link to="#"><FormattedMessage id="UI.RECREATE" /></Link>
                 </Button>
               </TableCell>
             </TableRow>

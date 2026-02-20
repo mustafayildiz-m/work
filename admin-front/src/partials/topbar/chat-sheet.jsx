@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import {
   Calendar,
@@ -98,7 +99,7 @@ export function ChatSheet({ trigger }) {
       <SheetContent className="p-0 gap-0 sm:w-[450px] sm:max-w-none inset-5 start-auto h-auto rounded-lg p-0 sm:max-w-none [&_[data-slot=sheet-close]]:top-4.5 [&_[data-slot=sheet-close]]:end-5">
         <SheetHeader>
           <div className="flex items-center justify-between p-3 border-b border-border">
-            <SheetTitle>Chat</SheetTitle>
+            <SheetTitle><FormattedMessage id="UI.CHAT" /></SheetTitle>
           </div>
           <div className="border-b border-border p-3 shadow-xs">
             <div className="flex items-center justify-between gap-2">
@@ -115,10 +116,10 @@ export function ChatSheet({ trigger }) {
                     to="#"
                     className="text-sm font-semibold text-mono hover:text-blue-600"
                   >
-                    HR Team
+                    <FormattedMessage id="UI.HR_TEAM" />
                   </Link>
                   <span className="text-xs italic text-muted-foreground block">
-                    Jessy is typing...
+                    <FormattedMessage id="UI.JESSY_IS_TYPING" />
                   </span>
                 </div>
               </div>
@@ -149,30 +150,30 @@ export function ChatSheet({ trigger }) {
                   >
                     <DropdownMenuItem asChild>
                       <Link to="/account/members/teams">
-                        <Users /> Invite Users
+                        <Users /> <FormattedMessage id="UI.INVITE_USERS" />
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSub>
                       <DropdownMenuSubTrigger>
                         <Settings2 />
-                        <span>Team Settings</span>
+                        <span><FormattedMessage id="UI.TEAM_SETTINGS" /></span>
                       </DropdownMenuSubTrigger>
                       <DropdownMenuPortal>
                         <DropdownMenuSubContent className="w-44">
                           <DropdownMenuItem asChild>
                             <Link to="/account/members/import-members">
                               <Shield />
-                              Find Members
+                              <FormattedMessage id="UI.FIND_MEMBERS" />
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem asChild>
                             <Link to="/account/members/import-members">
-                              <Calendar /> Meetings
+                              <Calendar /> <FormattedMessage id="UI.MEETINGS" />
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem asChild>
                             <Link to="/account/members/import-members">
-                              <Shield /> Group Settings
+                              <Shield /> <FormattedMessage id="UI.GROUP_SETTINGS" />
                             </Link>
                           </DropdownMenuItem>
                         </DropdownMenuSubContent>
@@ -180,7 +181,7 @@ export function ChatSheet({ trigger }) {
                     </DropdownMenuSub>
                     <DropdownMenuItem asChild>
                       <Link to="/account/security/privacy-settings">
-                        <Shield /> Group Settings
+                        <Shield /> <FormattedMessage id="UI.GROUP_SETTINGS" />
                       </Link>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -223,7 +224,7 @@ export function ChatSheet({ trigger }) {
                       alt=""
                     />
 
-                    <AvatarFallback>CH</AvatarFallback>
+                    <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
                     <AvatarIndicator className="-end-2 -bottom-2">
                       <AvatarStatus variant="online" className="size-2.5" />
                     </AvatarIndicator>
@@ -234,7 +235,7 @@ export function ChatSheet({ trigger }) {
               <div key={index} className="flex items-end gap-3 px-5">
                 <Avatar className="size-9">
                   <AvatarImage src={toAbsoluteUrl(message.avatar)} alt="" />
-                  <AvatarFallback>CH</AvatarFallback>
+                  <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col gap-1">
                   <div
@@ -258,7 +259,7 @@ export function ChatSheet({ trigger }) {
                 alt=""
               />
 
-              <AvatarFallback>CH</AvatarFallback>
+              <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
               <AvatarIndicator className="-end-2 -bottom-2">
                 <AvatarStatus variant="online" className="size-2.5" />
               </AvatarIndicator>
@@ -270,22 +271,22 @@ export function ChatSheet({ trigger }) {
                     to="#"
                     className="font-semibold text-mono hover:text-primary"
                   >
-                    Jane Perez
+                    <FormattedMessage id="UI.JANE_PEREZ" />
                   </Link>
                   <span className="text-muted-foreground">
-                    wants to join chat
+                    <FormattedMessage id="UI.WANTS_TO_JOIN_CHAT" />
                   </span>
                 </div>
                 <span className="text-xs text-muted-foreground">
-                  1 day ago • Design Team
+                  <FormattedMessage id="UI.1_DAY_AGO__DESIGN_TEAM" />
                 </span>
               </div>
               <div className="flex gap-2">
                 <Button size="sm" variant="outline">
-                  Decline
+                  <FormattedMessage id="UI.DECLINE" />
                 </Button>
                 <Button size="sm" variant="mono">
-                  Accept
+                  <FormattedMessage id="UI.ACCEPT" />
                 </Button>
               </div>
             </div>
@@ -310,7 +311,7 @@ export function ChatSheet({ trigger }) {
                 <Upload className="size-4!" />
               </Button>
               <Button size="sm" variant="mono">
-                Send
+                <FormattedMessage id="UI.SEND" />
               </Button>
             </div>
           </div>
