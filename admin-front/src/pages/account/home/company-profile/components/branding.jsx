@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useId, useState } from 'react';
 import { Image as ImageIcon, SquareMousePointer } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -25,13 +26,12 @@ const Branding = () => {
           }
         `}
       </style>
-
       <Card className="min-w-full">
         <CardHeader className="gap-2">
-          <CardTitle>Branding</CardTitle>
+          <CardTitle><FormattedMessage id="UI.BRANDING" /></CardTitle>
           <div className="flex items-center gap-2">
             <Label htmlFor="auto-update" className="text-sm">
-              Publish
+              <FormattedMessage id="UI.PUBLISH" />
             </Label>
             <Switch defaultChecked size="sm" />
           </div>
@@ -39,9 +39,9 @@ const Branding = () => {
         <CardContent className="lg:py-7.5 py-5">
           <div className="flex flex-wrap justify-between gap-5">
             <div className="flex flex-col">
-              <div className="text-mono text-sm font-medium">Company Logo</div>
+              <div className="text-mono text-sm font-medium"><FormattedMessage id="UI.COMPANY_LOGO" /></div>
               <span className="text-secondary-foreground text-sm">
-                Emblematic Corporate Identity Symbol
+                <FormattedMessage id="UI.EMBLEMATIC_CORPORATE_IDENTITY_SYMBOL" />
               </span>
             </div>
             <div className="flex flex-wrap sm:flex-nowrap gap-5 lg:gap-7.5 max-w-96 w-full">
@@ -87,10 +87,10 @@ const Branding = () => {
                     to="/network/user-cards/mini-cards"
                     className="text-mono text-xs font-medium hover:text-primary-active mb-px"
                   >
-                    Click or Drag & Drop
+                    <FormattedMessage id="UI.CLICK_OR_DRAG__DROP" />
                   </Link>
                   <span className="text-xs text-secondary-foreground text-nowrap">
-                    SVG,PNG, JPG (max. 800x400)
+                    <FormattedMessage id="UI.SVGPNG_JPG_MAX_800X400" />
                   </span>
                 </div>
               </div>
@@ -99,9 +99,9 @@ const Branding = () => {
           <div className="border-t border-border my-7.5"></div>
           <div className="flex flex-wrap justify-between gap-5">
             <div className="flex flex-col">
-              <div className="text-mono text-sm font-medium">Brand Color</div>
+              <div className="text-mono text-sm font-medium"><FormattedMessage id="UI.BRAND_COLOR" /></div>
               <span className="text-secondary-foreground text-sm">
-                Signature Palette Branding Element
+                <FormattedMessage id="UI.SIGNATURE_PALETTE_BRANDING_ELEMENT" />
               </span>
             </div>
             <InputWrapper className="sm:max-w-full xl:max-w-96 w-full">
@@ -118,44 +118,44 @@ const Branding = () => {
           <div className="border-t border-border my-7.5"></div>
           <div className="flex flex-wrap justify-between gap-5">
             <div className="flex flex-col">
-              <div className="text-mono text-sm font-medium">Branding</div>
+              <div className="text-mono text-sm font-medium"><FormattedMessage id="UI.BRANDING" /></div>
               <span className="text-secondary-foreground text-sm">
-                Comprehensive Image Identity Design
+                <FormattedMessage id="UI.COMPREHENSIVE_IMAGE_IDENTITY_DESIGN" />
               </span>
             </div>
             <div className="flex flex-col gap-5 max-w-96 w-full">
               <div className="flex flex-col gap-2.5">
                 <div className="flex items-center space-x-2">
                   <Checkbox id={id} />
-                  <Label htmlFor={id}>Security Questionaries</Label>
+                  <Label htmlFor={id}><FormattedMessage id="UI.SECURITY_QUESTIONARIES" /></Label>
                 </div>
                 <span className="text-secondary-foreground text-sm">
-                  Detailed Risk Assessment & Compliance Verification
+                  <FormattedMessage id="UI.DETAILED_RISK_ASSESSMENT__COMPLIANCE_VER" />
                 </span>
               </div>
               <div className="flex flex-col gap-2.5">
                 <div className="flex items-center space-x-2">
                   <Checkbox id={id} defaultChecked />
-                  <Label htmlFor={id}>Emails</Label>
+                  <Label htmlFor={id}><FormattedMessage id="UI.EMAILS" /></Label>
                 </div>
                 <span className="text-secondary-foreground text-sm">
-                  Electronic Message Communication
+                  <FormattedMessage id="UI.ELECTRONIC_MESSAGE_COMMUNICATION" />
                 </span>
               </div>
               <div className="flex flex-col gap-2.5">
                 <div className="flex items-center space-x-2">
                   <Checkbox id={id} defaultChecked />
-                  <Label htmlFor={id}>Vendor Reports</Label>
+                  <Label htmlFor={id}><FormattedMessage id="UI.VENDOR_REPORTS" /></Label>
                 </div>
                 <span className="text-secondary-foreground text-sm">
-                  Supplier Performance & Reliability Evaluations
+                  <FormattedMessage id="UI.SUPPLIER_PERFORMANCE__RELIABILITY_EVALUA" />
                 </span>
               </div>
             </div>
           </div>
           <div className="border-t border-border my-7.5"></div>
           <div className="flex justify-end">
-            <Button>Save Changes</Button>
+            <Button><FormattedMessage id="UI.SAVE_CHANGES" /></Button>
           </div>
         </CardContent>
       </Card>

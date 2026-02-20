@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { EllipsisVertical, Heart, Mails } from 'lucide-react';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -57,7 +58,7 @@ const CardWorkRow = ({
               {likes}
             </span>
             <span className="text-sm font-medium text-secondary-foreground">
-              Likes
+              <FormattedMessage id="UI.LIKES" />
             </span>
           </div>
           <div className="flex gap-1 items-center w-28 justify-end">
@@ -66,7 +67,7 @@ const CardWorkRow = ({
               {comments}
             </span>
             <span className="text-sm font-medium text-secondary-foreground">
-              Comments
+              <FormattedMessage id="UI.COMMENTS" />
             </span>
           </div>
           <DropdownMenu2

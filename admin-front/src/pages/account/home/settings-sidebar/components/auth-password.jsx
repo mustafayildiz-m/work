@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,12 +13,12 @@ const AuthPassword = () => {
   return (
     <Card>
       <CardHeader id="auth_password">
-        <CardTitle>Password</CardTitle>
+        <CardTitle><FormattedMessage id="UI.PASSWORD" /></CardTitle>
       </CardHeader>
       <CardContent className="grid gap-5">
         <div className="w-full">
           <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-            <Label className="flex w-full max-w-56">Current Password</Label>
+            <Label className="flex w-full max-w-56"><FormattedMessage id="UI.CURRENT_PASSWORD" /></Label>
             <Input
               type="password"
               placeholder="Your current password"
@@ -28,7 +29,7 @@ const AuthPassword = () => {
         </div>
         <div className="w-full">
           <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-            <Label className="flex w-full max-w-56">New Password</Label>
+            <Label className="flex w-full max-w-56"><FormattedMessage id="UI.NEW_PASSWORD" /></Label>
             <Input
               type="password"
               placeholder="New password"
@@ -39,7 +40,7 @@ const AuthPassword = () => {
         </div>
         <div className="w-full">
           <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-            <Label className="flex w-full max-w-56">Confirm New Password</Label>
+            <Label className="flex w-full max-w-56"><FormattedMessage id="UI.CONFIRM_NEW_PASSWORD" /></Label>
             <Input
               type="password"
               placeholder="Confirm new password"
@@ -49,7 +50,7 @@ const AuthPassword = () => {
           </div>
         </div>
         <div className="flex justify-end pt-2.5">
-          <Button>Reset Password</Button>
+          <Button><FormattedMessage id="UI.RESET_PASSWORD" /></Button>
         </div>
       </CardContent>
     </Card>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { ActivitiesBloggingConference } from '@/partials/activities/blogging-conference';
 import { ActivitiesLogin } from '@/partials/activities/login';
@@ -26,10 +27,10 @@ const Activity = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Recent Activity</CardTitle>
+        <CardTitle><FormattedMessage id="UI.RECENT_ACTIVITY" /></CardTitle>
         <div className="flex items-center space-x-2.5">
           <Label htmlFor="simple-switch" className="text-sm">
-            Auto refresh:
+            <FormattedMessage id="UI.AUTO_REFRESH" />
           </Label>
           {isSwitchOn ? 'On' : 'Off'}
           <Switch
@@ -55,7 +56,7 @@ const Activity = () => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/public-profile/activity">All-time Activities</Link>
+          <Link to="/public-profile/activity"><FormattedMessage id="UI.ALLTIME_ACTIVITIES" /></Link>
         </Button>
       </CardFooter>
     </Card>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { Funnel, LayoutGrid, List, Search as SearchIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -180,23 +181,21 @@ export function SearchResults({ mode }) {
             appearance="outline"
             size="sm"
           >
-            ⌘ K
+            <FormattedMessage id="UI._K" />
           </Badge>
         </div>
 
         <StoreClientFiltersSheet
           trigger={
             <Button>
-              <Funnel /> Filter
+              <Funnel /> <FormattedMessage id="UI.FILTER" />
             </Button>
           }
         />
       </div>
-
       <div className="flex flex-wrap items-center gap-5 justify-between mt-3">
-        <h3 className="text-sm text-mono font-medium">
-          1 - {items.length} over 280 results for
-          <span className="text-destructive"> Nike</span>
+        <h3 className="text-sm text-mono font-medium">1 - {items.length} <FormattedMessage id="UI.OVER_280_RESULTS_FOR" />
+          <span className="text-destructive"> <FormattedMessage id="UI.NIKE" /></span>
         </h3>
 
         <div className="flex items-center gap-2.5">
@@ -205,8 +204,8 @@ export function SearchResults({ mode }) {
               <SelectValue placeholder="Price Hight to Low" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="low-to-high">Price: Low to High</SelectItem>
-              <SelectItem value="high-to-low">Price: High to Low</SelectItem>
+              <SelectItem value="low-to-high"><FormattedMessage id="UI.PRICE_LOW_TO_HIGH" /></SelectItem>
+              <SelectItem value="high-to-low"><FormattedMessage id="UI.PRICE_HIGH_TO_LOW" /></SelectItem>
               <SelectItem value="0-50">$0 - $50</SelectItem>
               <SelectItem value="50-100">$50 - $100</SelectItem>
               <SelectItem value="100-200">$100 - $200</SelectItem>
@@ -248,7 +247,6 @@ export function SearchResults({ mode }) {
           </ToggleGroup>
         </div>
       </div>
-
       <div
         className={
           activeTab === 'card'

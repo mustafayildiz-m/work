@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { SquarePen, SquarePlus, Trash2 } from 'lucide-react';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -55,7 +56,7 @@ const PaymentMethods = () => {
         <div className="flex items-center gap-5">
           {item.label && (
             <Badge variant="success" appearance="outline">
-              Primary
+              <FormattedMessage id="UI.PRIMARY" />
             </Badge>
           )}
           <div className="flex gap-0.5">
@@ -74,10 +75,10 @@ const PaymentMethods = () => {
   return (
     <Card className="grow">
       <CardHeader>
-        <CardTitle>Payment Methods</CardTitle>
+        <CardTitle><FormattedMessage id="UI.PAYMENT_METHODS" /></CardTitle>
         <Button variant="outline">
           <SquarePlus size={16} />
-          Add New
+          <FormattedMessage id="UI.ADD_NEW" />
         </Button>
       </CardHeader>
       <CardContent className="lg:pb-7.5">

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { HexagonBadge } from '@/partials/common/hexagon-badge';
 import {
   BarChart3,
@@ -123,9 +124,9 @@ const PermissionsToggle = () => {
     <Card>
       <CardHeader>
         <CardTitle>
-          Role Permissions for{' '}
+          <FormattedMessage id="UI.ROLE_PERMISSIONS_FOR" />{' '}
           <Button mode="link" asChild>
-            <Link to="#">Project Manager</Link>
+            <Link to="#"><FormattedMessage id="UI.PROJECT_MANAGER" /></Link>
           </Button>
         </CardTitle>
       </CardHeader>
@@ -136,7 +137,7 @@ const PermissionsToggle = () => {
       </CardContent>
       <CardFooter className="justify-center py-3.5">
         <Button variant="outline">
-          <Link to="#">New Permission</Link>
+          <Link to="#"><FormattedMessage id="UI.NEW_PERMISSION" /></Link>
         </Button>
       </CardFooter>
     </Card>

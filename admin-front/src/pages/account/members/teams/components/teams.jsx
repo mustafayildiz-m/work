@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 'use client';
 
 import { useMemo, useState } from 'react';
@@ -743,7 +744,7 @@ const Teams = () => {
       <CardToolbar>
         <div className="flex flex-wrap items-center gap-2.5">
           <Label htmlFor="auto-update" className="text-sm">
-            Only Active Groups
+            <FormattedMessage id="UI.ONLY_ACTIVE_GROUPS" />
           </Label>
           <Switch size="sm" id="auto-update" defaultChecked />
         </div>
@@ -752,7 +753,7 @@ const Teams = () => {
           trigger={
             <Button variant="outline">
               <Settings2 />
-              Columns
+              <FormattedMessage id="UI.COLUMNS" />
             </Button>
           }
         />

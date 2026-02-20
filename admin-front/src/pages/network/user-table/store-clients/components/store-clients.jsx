@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 'use client';
 
 import { useMemo, useState } from 'react';
@@ -553,12 +554,12 @@ function ActionsCell({ row }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="bottom" align="end">
-        <DropdownMenuItem onClick={() => {}}>View Invoice</DropdownMenuItem>
-        <DropdownMenuItem onClick={handleCopyId}>Copy ID</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => {}}><FormattedMessage id="UI.VIEW_INVOICE" /></DropdownMenuItem>
+        <DropdownMenuItem onClick={handleCopyId}><FormattedMessage id="UI.COPY_ID" /></DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => {}}>Edit</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => {}}><FormattedMessage id="UI.EDIT" /></DropdownMenuItem>
         <DropdownMenuItem variant="destructive" onClick={() => {}}>
-          Delete
+          <FormattedMessage id="UI.DELETE" />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -780,7 +781,7 @@ const StoreClients = () => {
           return (
             <div className="text-center">
               <Button mode="link" underlined="dashed">
-                View
+                <FormattedMessage id="UI.VIEW" />
               </Button>
             </div>
           );
@@ -830,14 +831,14 @@ const StoreClients = () => {
       <CardToolbar>
         <Button>
           <Settings2 size={16} />
-          Filters
+          <FormattedMessage id="UI.FILTERS" />
         </Button>
         <DataGridColumnVisibility
           table={table}
           trigger={
             <Button variant="outline">
               <Settings2 />
-              Columns
+              <FormattedMessage id="UI.COLUMNS" />
             </Button>
           }
         />
@@ -884,7 +885,7 @@ const StoreClients = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline">
                     <Filter />
-                    Activity
+                    <FormattedMessage id="UI.ACTIVITY" />
                     {selectedActivities.length > 0 && (
                       <Badge size="sm" appearance="stroke">
                         {selectedActivities.length}
@@ -895,7 +896,7 @@ const StoreClients = () => {
                 <PopoverContent className="w-40 p-3" align="start">
                   <div className="space-y-3">
                     <div className="text-xs font-medium text-muted-foreground">
-                      Filters
+                      <FormattedMessage id="UI.FILTERS" />
                     </div>
                     <div className="space-y-3">
                       {Object.keys(activityCounts).map((activity) => (
@@ -930,7 +931,7 @@ const StoreClients = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline">
                     <Filter />
-                    Sort Order
+                    <FormattedMessage id="UI.SORT_ORDER" />
                     {sortOrder !== 'latest' && (
                       <Badge size="sm" appearance="stroke">
                         {sortOrder.charAt(0).toUpperCase() + sortOrder.slice(1)}
@@ -941,7 +942,7 @@ const StoreClients = () => {
                 <PopoverContent className="w-40 p-3" align="start">
                   <div className="space-y-3">
                     <div className="text-xs font-medium text-muted-foreground">
-                      Sort By
+                      <FormattedMessage id="UI.SORT_BY" />
                     </div>
                     <div className="space-y-3">
                       {['latest', 'older', 'oldest'].map((order) => (

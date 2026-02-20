@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -5,6 +6,7 @@ import { Helmet } from 'react-helmet-async';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function EditStockPage() {
+  const intl = useIntl();
   const { id } = useParams();
   const [form, setForm] = useState({
     quantity: '',
@@ -74,35 +76,37 @@ export default function EditStockPage() {
   };
 
   if (loading) {
-    return <div className="p-6 max-w-2xl mx-auto text-center text-gray-500">Yükleniyor...</div>;
+    return <div className="p-6 max-w-2xl mx-auto text-center text-gray-500"><FormattedMessage id="UI.YUKLENIYOR" /></div>;
   }
 
   return (
     <>
       <Helmet>
-        <title>Stok Düzenle - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.STOK_DUZENLE__ISLAMIC_WINDOWS_ADMIN"
+        })}</title>
       </Helmet>
       <div className="p-6 max-w-2xl mx-auto">
         <div className="mb-2 flex items-center justify-between">
-          <h2 className="text-2xl font-bold">Stok Düzenle</h2>
+          <h2 className="text-2xl font-bold"><FormattedMessage id="UI.STOK_DUZENLE" /></h2>
         <Link
           to="/stoklar/liste"
           className="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold border border-gray-300 dark:border-gray-600 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
         >
-          Listeye Dön
+          <FormattedMessage id="UI.LISTEYE_DON" />
         </Link>
       </div>
       <div className="rounded-lg shadow-lg bg-white dark:bg-gray-900 p-6">
         {stock && (
           <div className="mb-4 text-sm text-gray-700 dark:text-gray-200">
-            <div><b>Kitap:</b> {stock.book?.title || '-'}</div>
-            <div><b>Dil:</b> {stock.language?.name || '-'}</div>
-            <div><b>Depo:</b> {stock.warehouse?.name || '-'}</div>
+            <div><b><FormattedMessage id="UI.KITAP_1" /></b> {stock.book?.title || '-'}</div>
+            <div><b><FormattedMessage id="UI.DIL" /></b> {stock.language?.name || '-'}</div>
+            <div><b><FormattedMessage id="UI.DEPO_1" /></b> {stock.warehouse?.name || '-'}</div>
           </div>
         )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block font-semibold mb-1">Miktar</label>
+            <label className="block font-semibold mb-1"><FormattedMessage id="UI.MIKTAR" /></label>
             <input
               type="number"
               name="quantity"
@@ -115,7 +119,7 @@ export default function EditStockPage() {
             />
           </div>
           <div>
-            <label className="block font-semibold mb-1">Birim Fiyat</label>
+            <label className="block font-semibold mb-1"><FormattedMessage id="UI.BIRIM_FIYAT" /></label>
             <input
               type="number"
               name="unitPrice"

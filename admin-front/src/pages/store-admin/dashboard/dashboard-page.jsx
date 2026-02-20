@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import {
   Toolbar,
@@ -19,15 +20,15 @@ export function DashboardPage() {
           <ToolbarHeading>
             <ToolbarPageTitle />
             <ToolbarDescription>
-              Sales, inventory, and activity overview
+              <FormattedMessage id="UI.SALES_INVENTORY_AND_ACTIVITY_OVERVIEW" />
             </ToolbarDescription>
           </ToolbarHeading>
           <ToolbarActions>
             <Button variant="outline">
-              <Link to="#">Reports</Link>
+              <Link to="#"><FormattedMessage id="UI.REPORTS" /></Link>
             </Button>
             <Button>
-              <Link to="#">New Product</Link>
+              <Link to="#"><FormattedMessage id="UI.NEW_PRODUCT" /></Link>
             </Button>
           </ToolbarActions>
         </Toolbar>

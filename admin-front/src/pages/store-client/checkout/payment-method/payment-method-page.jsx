@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import {
   Toolbar,
@@ -21,12 +22,12 @@ export function PaymentMethodPage() {
         <Toolbar>
           <ToolbarHeading>
             <ToolbarPageTitle />
-            <ToolbarDescription>Select how you want to pay</ToolbarDescription>
+            <ToolbarDescription><FormattedMessage id="UI.SELECT_HOW_YOU_WANT_TO_PAY" /></ToolbarDescription>
           </ToolbarHeading>
           <ToolbarActions>
             <Button variant="outline">
               <WalletCards />
-              <Link to="#">Add Cart</Link>
+              <Link to="#"><FormattedMessage id="UI.ADD_CART" /></Link>
             </Button>
           </ToolbarActions>
         </Toolbar>

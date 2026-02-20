@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -43,21 +44,21 @@ const Plan = () => {
           <div className="flex flex-wrap items-center gap-5 justify-between">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2.5">
-                <h2 className="text-2xl font-semibold text-mono">Basic Plan</h2>
+                <h2 className="text-2xl font-semibold text-mono"><FormattedMessage id="UI.BASIC_PLAN" /></h2>
                 <Badge size="md" variant="success" appearance="outline">
-                  Monthly
+                  <FormattedMessage id="UI.MONTHLY" />
                 </Badge>
               </div>
               <p className="text-sm text-secondary-foreground">
-                Essential Features for Startups and Individuals
+                <FormattedMessage id="UI.ESSENTIAL_FEATURES_FOR_STARTUPS_AND_INDI" />
               </p>
             </div>
             <div className="flex gap-2.5">
               <Button variant="outline">
-                <Link to="#">Cancel Plan</Link>
+                <Link to="#"><FormattedMessage id="UI.CANCEL_PLAN" /></Link>
               </Button>
               <Button>
-                <Link to="#">Upgrade Plan</Link>
+                <Link to="#"><FormattedMessage id="UI.UPGRADE_PLAN" /></Link>
               </Button>
             </div>
           </div>
@@ -68,7 +69,7 @@ const Plan = () => {
           </div>
           <div className="flex flex-col gap-3.5">
             <span className="text-sm text-secondary-foreground">
-              Usage (32 of 40 users)
+              <FormattedMessage id="UI.USAGE_32_OF_40_USERS" />
             </span>
             <Slider defaultValue={[80]} max={100} step={1}></Slider>
           </div>

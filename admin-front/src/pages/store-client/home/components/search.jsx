@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { Search as SearchInput } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -25,7 +26,7 @@ export function Search() {
         />
 
         <Badge className="absolute end-3 gap-1" appearance="outline" size="sm">
-          ⌘ K
+          <FormattedMessage id="UI._K" />
         </Badge>
       </div>
       <div className="absolute top-1/2 start-1/2 -translate-1/2 w-[90%] text-white dark:text-black/30">

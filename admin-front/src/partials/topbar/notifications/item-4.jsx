@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import {
@@ -14,28 +15,27 @@ export default function Item4() {
     <div className="flex grow gap-2.5 px-5">
       <Avatar>
         <AvatarImage src="/media/avatars/300-10.png" alt="avatar" />
-        <AvatarFallback>CH</AvatarFallback>
+        <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
         <AvatarIndicator className="-end-1.5 -bottom-1.5">
           <AvatarStatus variant="offline" className="size-2.5" />
         </AvatarIndicator>
       </Avatar>
-
       <div className="flex flex-col gap-3.5 grow">
         <div className="flex flex-col gap-1">
           <div className="text-sm font-medium mb-px">
             <Link to="#" className="hover:text-primary text-mono font-semibold">
-              Jane Perez
+              <FormattedMessage id="UI.JANE_PEREZ" />
             </Link>
             <span className="text-secondary-foreground">
               {' '}
-              invites you to review a file.{' '}
+              <FormattedMessage id="UI.INVITES_YOU_TO_REVIEW_A_FILE" />{' '}
             </span>
           </div>
 
           <span className="flex items-center text-xs font-medium text-muted-foreground">
-            3 hours ago
+            <FormattedMessage id="UI.3_HOURS_AGO" />
             <span className="rounded-full size-1 bg-mono/30 mx-1.5"></span>
-            742kb
+            <FormattedMessage id="UI.742KB" />
           </span>
         </div>
 
@@ -50,10 +50,10 @@ export default function Item4() {
             to="#"
             className="hover:text-primary font-medium text-secondary-foreground text-xs me-1"
           >
-            Launch_nov24.pptx
+            <FormattedMessage id="UI.LAUNCH_NOV24PPTX" />
           </Link>
           <span className="font-medium text-muted-foreground text-xs">
-            Edited 39 mins ago
+            <FormattedMessage id="UI.EDITED_39_MINS_AGO" />
           </span>
         </Card>
       </div>

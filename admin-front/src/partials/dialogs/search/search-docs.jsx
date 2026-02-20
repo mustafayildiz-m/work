@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { EllipsisVertical } from 'lucide-react';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import {
@@ -47,7 +48,7 @@ export function SearchDocs({ items }) {
         </div>
         <AccordionMenuItem className="px-4 pt-2.5" value={''}>
           <Button variant="outline" className="mx-auto w-full max-w-full">
-            Go to Users
+            <FormattedMessage id="UI.GO_TO_USERS" />
           </Button>
         </AccordionMenuItem>
       </AccordionMenuGroup>

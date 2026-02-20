@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { DropdownMenu4 } from '@/partials/dropdown-menu/dropdown-menu-4';
 import {
   RiBankLine,
@@ -89,7 +90,7 @@ const Highlights = ({ limit }) => {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle>Highlights</CardTitle>
+        <CardTitle><FormattedMessage id="UI.HIGHLIGHTS" /></CardTitle>
         <DropdownMenu4
           trigger={
             <Button variant="ghost" mode="icon">
@@ -101,10 +102,10 @@ const Highlights = ({ limit }) => {
       <CardContent className="flex flex-col gap-4 p-5 lg:p-7.5 lg:pt-4">
         <div className="flex flex-col gap-0.5">
           <span className="text-sm font-normal text-secondary-foreground">
-            All time sales
+            <FormattedMessage id="UI.ALL_TIME_SALES" />
           </span>
           <div className="flex items-center gap-2.5">
-            <span className="text-3xl font-semibold text-mono">$295.7k</span>
+            <span className="text-3xl font-semibold text-mono"><FormattedMessage id="UI.2957K" /></span>
             <Badge size="sm" variant="success" appearance="outline">
               +2.7%
             </Badge>

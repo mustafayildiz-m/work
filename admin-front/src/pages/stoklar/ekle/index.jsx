@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -9,6 +10,7 @@ import { FaArrowLeft, FaBoxes, FaBook, FaGlobe, FaWarehouse, FaHashtag, FaDollar
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function AddStockPage() {
+  const intl = useIntl();
   const [mode, setMode] = useState('add'); // 'add' veya 'update'
   const [form, setForm] = useState({
     bookId: '',
@@ -184,7 +186,9 @@ export default function AddStockPage() {
   return (
     <>
       <Helmet>
-        <title>Stok Yönetimi - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.STOK_YONETIMI__ISLAMIC_WINDOWS_ADMIN"
+        })}</title>
       </Helmet>
       <div className="p-6 max-w-5xl mx-auto">
         {/* Modern Header with Gradient */}
@@ -202,10 +206,10 @@ export default function AddStockPage() {
                   <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 text-white shadow-lg">
                     <FaBoxes className="text-2xl" />
                   </div>
-                  Stok Yönetimi
+                  <FormattedMessage id="UI.STOK_YONETIMI" />
                 </h1>
                 <p className="text-gray-500 dark:text-gray-400 mt-2 ml-1">
-                  Yeni stok ekleyin veya mevcut stokları güncelleyin
+                  <FormattedMessage id="UI.YENI_STOK_EKLEYIN_VEYA_MEVCUT_STOKLARI_G" />
                 </p>
               </div>
             </div>
@@ -232,7 +236,7 @@ export default function AddStockPage() {
                 : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-white/50 dark:hover:bg-gray-700/50'
             }`}
           >
-            <FaPlus className="text-lg" /> Yeni Stok Ekle
+            <FaPlus className="text-lg" /> <FormattedMessage id="UI.YENI_STOK_EKLE" />
           </button>
           <button
             type="button"
@@ -243,29 +247,29 @@ export default function AddStockPage() {
                 : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-white/50 dark:hover:bg-gray-700/50'
             }`}
           >
-            <span className="text-lg">↕</span> Var Olan Stoğu Güncelle
+            <span className="text-lg">↕</span> <FormattedMessage id="UI.VAR_OLAN_STOGU_GUNCELLE" />
           </button>
         </div>
 
       {mode === 'add' ? (
         /* Yeni Stok Ekle Formu */
-        <div className="rounded-xl shadow-xl bg-white dark:bg-gray-900 p-8 border-2 border-blue-100 dark:border-blue-900 hover:shadow-2xl transition-all duration-300">
+        (<div className="rounded-xl shadow-xl bg-white dark:bg-gray-900 p-8 border-2 border-blue-100 dark:border-blue-900 hover:shadow-2xl transition-all duration-300">
           <div className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950 dark:to-cyan-950 rounded-xl p-5 mb-6 border border-blue-200 dark:border-blue-800">
             <h3 className="text-2xl font-bold flex items-center gap-3 text-blue-700 dark:text-blue-300">
               <div className="p-2 bg-blue-600 rounded-lg">
                 <FaPlus className="text-white" />
               </div>
-              Yeni Stok Kaydı Oluştur
+              <FormattedMessage id="UI.YENI_STOK_KAYDI_OLUSTUR" />
             </h3>
             <p className="text-sm text-blue-600 dark:text-blue-400 mt-2 ml-12">
-              Sisteme yeni bir stok kaydı ekleyin
+              <FormattedMessage id="UI.SISTEME_YENI_BIR_STOK_KAYDI_EKLEYIN" />
             </p>
           </div>
           <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="flex items-center gap-2 font-bold mb-3 text-base">
               <FaBook className="text-purple-500" />
-              Kitap
+              <FormattedMessage id="UI.KITAP" />
             </label>
             <Select
               name="bookId"
@@ -334,7 +338,7 @@ export default function AddStockPage() {
           <div>
             <label className="flex items-center gap-2 font-bold mb-3 text-base">
               <FaGlobe className="text-indigo-500" />
-              Dil
+              <FormattedMessage id="USER.MENU.LANGUAGE" />
             </label>
             <select
               name="languageId"
@@ -345,24 +349,24 @@ export default function AddStockPage() {
               className="w-full px-4 py-3 h-11 border-2 border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {!form.bookId ? (
-                <option value="">Önce kitap seçin</option>
+                <option value=""><FormattedMessage id="UI.ONCE_KITAP_SECIN" /></option>
               ) : languages.length === 0 ? (
-                <option value="">Bu kitap için dil yok</option>
+                <option value=""><FormattedMessage id="UI.BU_KITAP_ICIN_DIL_YOK" /></option>
               ) : (
-                <option value="">Seçiniz</option>
+                <option value=""><FormattedMessage id="UI.SECINIZ" /></option>
               )}
               {languages.map(lang => (
                 <option key={lang.id} value={lang.id}>{lang.name}</option>
               ))}
             </select>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-              🌍 Seçilen kitabın mevcut dillerinden birini seçin
+              <FormattedMessage id="UI._SECILEN_KITABIN_MEVCUT_DILLERINDEN_BIRI" />
             </p>
           </div>
           <div>
             <label className="flex items-center gap-2 font-bold mb-3 text-base">
               <FaWarehouse className="text-orange-500" />
-              Depo
+              <FormattedMessage id="UI.DEPO" />
             </label>
             <select
               name="warehouseId"
@@ -371,13 +375,13 @@ export default function AddStockPage() {
               required
               className="w-full px-4 py-3 h-11 border-2 border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             >
-              <option value="">Seçiniz</option>
+              <option value=""><FormattedMessage id="UI.SECINIZ" /></option>
               {warehouses.map(wh => (
                 <option key={wh.id} value={wh.id}>{wh.name}</option>
               ))}
             </select>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-              🏭 Stokun bulunacağı depoyu seçin
+              <FormattedMessage id="UI._STOKUN_BULUNACAGI_DEPOYU_SECIN" />
             </p>
           </div>
           
@@ -385,7 +389,7 @@ export default function AddStockPage() {
             <div>
               <label className="flex items-center gap-2 font-bold mb-3 text-base">
                 <FaHashtag className="text-green-500" />
-                Miktar
+                <FormattedMessage id="UI.MIKTAR" />
               </label>
               <input
                 type="number"
@@ -398,13 +402,13 @@ export default function AddStockPage() {
                 placeholder="Örn: 100"
               />
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                📦 Eklenecek stok miktarı (adet)
+                <FormattedMessage id="UI._EKLENECEK_STOK_MIKTARI_ADET" />
               </p>
             </div>
             <div>
               <label className="flex items-center gap-2 font-bold mb-3 text-base">
                 <FaDollarSign className="text-emerald-500" />
-                Birim Fiyat
+                <FormattedMessage id="UI.BIRIM_FIYAT" />
               </label>
               <input
                 type="number"
@@ -418,7 +422,7 @@ export default function AddStockPage() {
                 placeholder="Örn: 45.50"
               />
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                💰 Birim fiyat (TL)
+                <FormattedMessage id="UI._BIRIM_FIYAT_TL" />
               </p>
             </div>
           </div>
@@ -440,7 +444,7 @@ export default function AddStockPage() {
               onClick={() => setForm({ bookId: '', languageId: '', warehouseId: '', quantity: '', unitPrice: '' })}
               className="px-6 py-3 h-12 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
             >
-              Temizle
+              <FormattedMessage id="UI.TEMIZLE" />
             </button>
             <button
               type="submit"
@@ -450,37 +454,37 @@ export default function AddStockPage() {
               {loading ? (
                 <>
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  Kaydediliyor...
+                  <FormattedMessage id="UI.KAYDEDILIYOR" />
                 </>
               ) : (
                 <>
                   <FaSave />
-                  Kaydet
+                  <FormattedMessage id="UI.KAYDET" />
                 </>
               )}
             </button>
           </div>
         </form>
-        </div>
+        </div>)
       ) : (
         /* Var Olan Stok Güncelleme Formu */
-        <div className="rounded-xl shadow-xl bg-white dark:bg-gray-900 p-8 border-2 border-green-100 dark:border-green-900 hover:shadow-2xl transition-all duration-300">
+        (<div className="rounded-xl shadow-xl bg-white dark:bg-gray-900 p-8 border-2 border-green-100 dark:border-green-900 hover:shadow-2xl transition-all duration-300">
           <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950 dark:to-emerald-950 rounded-xl p-5 mb-6 border border-green-200 dark:border-green-800">
             <h3 className="text-2xl font-bold flex items-center gap-3 text-green-700 dark:text-green-300">
               <div className="p-2 bg-green-600 rounded-lg">
                 <span className="text-white text-xl">↕</span>
               </div>
-              Mevcut Stoğa Ekleme/Çıkarma
+              <FormattedMessage id="UI.MEVCUT_STOGA_EKLEMECIKARMA" />
             </h3>
             <p className="text-sm text-green-600 dark:text-green-400 mt-2 ml-12">
-              Var olan stok kayıtlarını güncelleyin
+              <FormattedMessage id="UI.VAR_OLAN_STOK_KAYITLARINI_GUNCELLEYIN" />
             </p>
           </div>
           <form onSubmit={handleUpdateSubmit} className="space-y-6">
             <div>
               <label className="flex items-center gap-2 font-bold mb-3 text-base">
                 <FaBoxes className="text-purple-500" />
-                Stok Seçin
+                <FormattedMessage id="UI.STOK_SECIN" />
               </label>
               <Select
                 name="stockId"
@@ -565,15 +569,15 @@ export default function AddStockPage() {
               <div className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 p-5 rounded-xl border-2 border-blue-200 dark:border-blue-800">
                 <div className="flex items-center gap-2 mb-3">
                   <FaInfoCircle className="text-blue-600 dark:text-blue-400" />
-                  <span className="font-bold text-blue-700 dark:text-blue-300">Mevcut Stok Bilgisi</span>
+                  <span className="font-bold text-blue-700 dark:text-blue-300"><FormattedMessage id="UI.MEVCUT_STOK_BILGISI" /></span>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-white dark:bg-gray-800 p-3 rounded-lg">
-                    <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Mevcut Miktar</span>
-                    <span className="text-xl font-bold text-blue-600 dark:text-blue-400">{selectedStock.quantity} adet</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1"><FormattedMessage id="UI.MEVCUT_MIKTAR" /></span>
+                    <span className="text-xl font-bold text-blue-600 dark:text-blue-400">{selectedStock.quantity} <FormattedMessage id="UI.ADET" /></span>
                   </div>
                   <div className="bg-white dark:bg-gray-800 p-3 rounded-lg">
-                    <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Birim Fiyat</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1"><FormattedMessage id="UI.BIRIM_FIYAT" /></span>
                     <span className="text-xl font-bold text-green-600 dark:text-green-400">{selectedStock.unitPrice} ₺</span>
                   </div>
                 </div>
@@ -583,7 +587,7 @@ export default function AddStockPage() {
             <div>
               <label className="flex items-center gap-2 font-bold mb-3 text-base">
                 <span className="text-lg">↕</span>
-                İşlem Türü
+                <FormattedMessage id="UI.ISLEM_TURU" />
               </label>
               <div className="grid grid-cols-2 gap-4">
                 <button
@@ -595,7 +599,7 @@ export default function AddStockPage() {
                       : 'border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-green-400 hover:shadow-md'
                   }`}
                 >
-                  <FaPlus className="text-xl" /> Stok Ekle
+                  <FaPlus className="text-xl" /> <FormattedMessage id="UI.STOK_EKLE" />
                 </button>
                 <button
                   type="button"
@@ -606,7 +610,7 @@ export default function AddStockPage() {
                       : 'border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-red-400 hover:shadow-md'
                   }`}
                 >
-                  <FaMinus className="text-xl" /> Stok Çıkar
+                  <FaMinus className="text-xl" /> <FormattedMessage id="UI.STOK_CIKAR" />
                 </button>
               </div>
             </div>
@@ -614,7 +618,7 @@ export default function AddStockPage() {
             <div>
               <label className="flex items-center gap-2 font-bold mb-3 text-base">
                 <FaHashtag className={updateForm.operation === 'add' ? 'text-green-500' : 'text-red-500'} />
-                {updateForm.operation === 'add' ? 'Eklenecek' : 'Çıkarılacak'} Miktar
+                {updateForm.operation === 'add' ? 'Eklenecek' : 'Çıkarılacak'} <FormattedMessage id="UI.MIKTAR" />
               </label>
               <input
                 type="number"
@@ -630,7 +634,7 @@ export default function AddStockPage() {
               {updateForm.operation === 'subtract' && selectedStock && Number(updateForm.quantity) > Number(selectedStock.quantity) && (
                 <div className="mt-2 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
                   <p className="text-red-600 dark:text-red-400 text-sm flex items-center gap-2">
-                    <span>⚠️</span> Mevcut stoktan ({selectedStock.quantity} adet) fazla çıkaramazsınız!
+                    <span>⚠️</span> <FormattedMessage id="UI.MEVCUT_STOKTAN_" />{selectedStock.quantity} <FormattedMessage id="UI.ADET_FAZLA_CIKARAMAZSINIZ" />
                   </p>
                 </div>
               )}
@@ -645,11 +649,11 @@ export default function AddStockPage() {
                       ? 'text-green-700 dark:text-green-300' 
                       : 'text-orange-700 dark:text-orange-300'
                   }`}>
-                    <span>Yeni Miktar:</span>
+                    <span><FormattedMessage id="UI.YENI_MIKTAR" /></span>
                     <span className="text-2xl">{updateForm.operation === 'add' 
-                      ? Number(selectedStock.quantity) + Number(updateForm.quantity)
-                      : Number(selectedStock.quantity) - Number(updateForm.quantity)
-                    } adet</span>
+                        ? Number(selectedStock.quantity) + Number(updateForm.quantity)
+                        : Number(selectedStock.quantity) - Number(updateForm.quantity)
+                      } <FormattedMessage id="UI.ADET" /></span>
                   </p>
                 </div>
               )}
@@ -672,7 +676,7 @@ export default function AddStockPage() {
                 onClick={() => setUpdateForm({ stockId: '', quantity: '', operation: 'add' })}
                 className="px-6 py-3 h-12 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-bold hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
               >
-                Temizle
+                <FormattedMessage id="UI.TEMIZLE" />
               </button>
               <button
                 type="submit"
@@ -686,7 +690,7 @@ export default function AddStockPage() {
                 {loading ? (
                   <>
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    İşleniyor...
+                    <FormattedMessage id="UI.ISLENIYOR" />
                   </>
                 ) : (
                   <>
@@ -697,7 +701,7 @@ export default function AddStockPage() {
               </button>
             </div>
           </form>
-        </div>
+        </div>)
       )}
       </div>
     </>

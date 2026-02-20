@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -34,6 +35,7 @@ const schema = yup.object({
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function AlimHikayesiEkle() {
+  const intl = useIntl();
   const navigate = useNavigate();
   const [selectedScholar, setSelectedScholar] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -93,10 +95,10 @@ export default function AlimHikayesiEkle() {
           <div className="flex-1 p-4">
             <h3 className="text-sm font-semibold text-gray-900 mb-1 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-red-500"></span>
-              Kapak Resmi Bulundu
+              <FormattedMessage id="UI.KAPAK_RESMI_BULUNDU" />
             </h3>
             <p className="text-sm text-gray-500 mb-3 leading-tight">
-              Videodaki kapak resmini kullanmak ister misiniz?
+              <FormattedMessage id="UI.VIDEODAKI_KAPAK_RESMINI_KULLANMAK_ISTER_" />
             </p>
             <div className="flex gap-2">
               <button
@@ -109,13 +111,13 @@ export default function AlimHikayesiEkle() {
                 }}
                 className="bg-indigo-600 text-white text-xs px-3 py-2 rounded-md font-medium hover:bg-indigo-700 transition shadow-sm"
               >
-                Evet, Kullan
+                <FormattedMessage id="UI.EVET_KULLAN" />
               </button>
               <button
                 onClick={() => toast.dismiss(id)}
                 className="text-gray-500 text-xs px-3 py-2 rounded-md font-medium hover:bg-gray-100 transition border"
               >
-                Hayır
+                <FormattedMessage id="UI.HAYIR" />
               </button>
             </div>
           </div>
@@ -251,9 +253,10 @@ export default function AlimHikayesiEkle() {
   return (
     <>
       <Helmet>
-        <title>Yeni Video Ekle - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.YENI_VIDEO_EKLE__ISLAMIC_WINDOWS_ADMIN"
+        })}</title>
       </Helmet>
-
       <div className="p-6 max-w-5xl mx-auto">
         {/* Modern Header with Gradient */}
         <div className="mb-8">
@@ -270,10 +273,10 @@ export default function AlimHikayesiEkle() {
                   <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-lg">
                     <FaVideo className="text-2xl" />
                   </div>
-                  Yeni Video Ekle
+                  <FormattedMessage id="UI.YENI_VIDEO_EKLE" />
                 </h1>
                 <p className="text-gray-500 dark:text-gray-400 mt-2 ml-1">
-                  İslam'la şereflenen kişilerin videolarını sisteme ekleyin
+                  <FormattedMessage id="UI.ISLAMLA_SEREFLENEN_KISILERIN_VIDEOLARINI" />
                 </p>
               </div>
             </div>
@@ -293,10 +296,10 @@ export default function AlimHikayesiEkle() {
                 <div className="p-2 rounded-lg bg-purple-500 text-white">
                   <FaVideo className="text-lg" />
                 </div>
-                Temel Bilgiler
+                <FormattedMessage id="UI.TEMEL_BILGILER" />
               </CardTitle>
               <CardDescription className="text-base">
-                Videonun temel bilgilerini girin
+                <FormattedMessage id="UI.VIDEONUN_TEMEL_BILGILERINI_GIRIN" />
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5 pt-6">
@@ -304,7 +307,7 @@ export default function AlimHikayesiEkle() {
                 <div className="space-y-2">
                   <Label htmlFor="title" className="flex items-center gap-2 text-base font-semibold">
                     <FaVideo className="text-purple-500" />
-                    Başlık *
+                    <FormattedMessage id="UI.BASLIK_" />
                   </Label>
                   <Input
                     id="title"
@@ -322,7 +325,7 @@ export default function AlimHikayesiEkle() {
                 <div className="space-y-2">
                   <Label htmlFor="scholar_id" className="flex items-center gap-2 text-base font-semibold">
                     <FaUser className="text-green-500" />
-                    Âlim Seçimi *
+                    <FormattedMessage id="UI.LIM_SECIMI_" />
                   </Label>
                   <AsyncSelect
                     cacheOptions
@@ -404,7 +407,7 @@ export default function AlimHikayesiEkle() {
               <div className="space-y-2">
                 <Label htmlFor="description" className="flex items-center gap-2 text-base font-semibold">
                   <FaVideo className="text-blue-500" />
-                  Açıklama *
+                  <FormattedMessage id="UI.ACIKLAMA_" />
                 </Label>
                 <Textarea
                   id="description"
@@ -419,7 +422,7 @@ export default function AlimHikayesiEkle() {
                   </p>
                 )}
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  💡 Videonun içeriğini detaylı bir şekilde anlatın
+                  <FormattedMessage id="UI._VIDEONUN_ICERIGINI_DETAYLI_BIR_SEKILDE_" />
                 </p>
               </div>
 
@@ -427,7 +430,7 @@ export default function AlimHikayesiEkle() {
                 <div className="space-y-2">
                   <Label htmlFor="language" className="flex items-center gap-2 text-base font-semibold">
                     <FaGlobe className="text-indigo-500" />
-                    Dil *
+                    <FormattedMessage id="UI.DIL_" />
                   </Label>
                   <Select
                     onValueChange={(value) => setValue('language', value)}
@@ -439,7 +442,7 @@ export default function AlimHikayesiEkle() {
                     </SelectTrigger>
                     <SelectContent>
                       {languages.length === 0 && !languagesLoading ? (
-                        <SelectItem value="" disabled>Dil bulunamadı</SelectItem>
+                        <SelectItem value="" disabled><FormattedMessage id="UI.DIL_BULUNAMADI" /></SelectItem>
                       ) : (
                         languages.map((language) => (
                           <SelectItem key={language.id} value={language.code}>
@@ -459,7 +462,7 @@ export default function AlimHikayesiEkle() {
                 <div className="space-y-2">
                   <Label htmlFor="duration" className="flex items-center gap-2 text-base font-semibold">
                     <FaClock className="text-orange-500" />
-                    Süre (Dakika)
+                    <FormattedMessage id="UI.SURE_DAKIKA" />
                   </Label>
                   <Input
                     id="duration"
@@ -470,7 +473,7 @@ export default function AlimHikayesiEkle() {
                     className="h-11 focus-visible:ring-purple-500"
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    📹 Video süresini dakika cinsinden girin
+                    <FormattedMessage id="UI._VIDEO_SURESINI_DAKIKA_CINSINDEN_GIRIN" />
                   </p>
                 </div>
               </div>
@@ -484,17 +487,17 @@ export default function AlimHikayesiEkle() {
                 <div className="p-2 rounded-lg bg-blue-500 text-white">
                   <FaImage className="text-lg" />
                 </div>
-                Medya Bilgileri
+                <FormattedMessage id="UI.MEDYA_BILGILERI" />
               </CardTitle>
               <CardDescription className="text-base">
-                Video ve kapak resmi bilgilerini girin
+                <FormattedMessage id="UI.VIDEO_VE_KAPAK_RESMI_BILGILERINI_GIRIN" />
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5 pt-6">
               <div className="space-y-2">
                 <Label htmlFor="video_url" className="flex items-center gap-2 text-base font-semibold">
                   <FaVideo className="text-red-500" />
-                  Video URL
+                  <FormattedMessage id="UI.VIDEO_URL" />
                 </Label>
                 <Input
                   id="video_url"
@@ -508,7 +511,7 @@ export default function AlimHikayesiEkle() {
                   </p>
                 )}
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  🔗 Video dosyasının URL adresini girin
+                  <FormattedMessage id="UI._VIDEO_DOSYASININ_URL_ADRESINI_GIRIN" />
                 </p>
               </div>
 
@@ -517,7 +520,7 @@ export default function AlimHikayesiEkle() {
               <div className="space-y-2">
                 <Label htmlFor="thumbnail" className="flex items-center gap-2 text-base font-semibold">
                   <FaImage className="text-green-500" />
-                  Kapak Resmi
+                  <FormattedMessage id="UI.KAPAK_RESMI" />
                 </Label>
                 <div className="flex flex-col md:flex-row items-start gap-4">
                   {thumbnailPreview ? (
@@ -546,7 +549,7 @@ export default function AlimHikayesiEkle() {
                     <div className="w-48 h-48 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl flex items-center justify-center bg-gray-50 dark:bg-gray-800">
                       <div className="text-center">
                         <FaImage className="text-4xl text-gray-400 mx-auto mb-2" />
-                        <p className="text-sm text-gray-500">Önizleme</p>
+                        <p className="text-sm text-gray-500"><FormattedMessage id="UI.ONIZLEME" /></p>
                       </div>
                     </div>
                   )}
@@ -568,10 +571,10 @@ export default function AlimHikayesiEkle() {
                     <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                       <p className="text-sm text-blue-700 dark:text-blue-300 flex items-center gap-2">
                         <FaUpload className="text-blue-500" />
-                        Video kapak resmi yükleyin
+                        <FormattedMessage id="UI.VIDEO_KAPAK_RESMI_YUKLEYIN" />
                       </p>
                       <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
-                        📷 Desteklenen formatlar: JPG, PNG, WEBP (Max 5MB)
+                        <FormattedMessage id="UI._DESTEKLENEN_FORMATLAR_JPG_PNG_WEBP_MAX_" />
                       </p>
                     </div>
                   </div>
@@ -587,10 +590,10 @@ export default function AlimHikayesiEkle() {
                 <div className="p-2 rounded-lg bg-orange-500 text-white">
                   <FaEye className="text-lg" />
                 </div>
-                Görünürlük Ayarları
+                <FormattedMessage id="UI.GORUNURLUK_AYARLARI" />
               </CardTitle>
               <CardDescription className="text-base">
-                Videonun görünürlük ve öne çıkarma ayarlarını belirleyin
+                <FormattedMessage id="UI.VIDEONUN_GORUNURLUK_VE_ONE_CIKARMA_AYARL" />
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5 pt-6">
@@ -598,10 +601,10 @@ export default function AlimHikayesiEkle() {
                 <div className="space-y-1 flex-1">
                   <Label htmlFor="is_active" className="flex items-center gap-2 text-base font-semibold cursor-pointer">
                     <FaEye className="text-green-600 dark:text-green-400" />
-                    Aktif
+                    <FormattedMessage id="UI.AKTIF" />
                   </Label>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Videonun kullanıcılara görünür olup olmayacağını belirler
+                    <FormattedMessage id="UI.VIDEONUN_KULLANICILARA_GORUNUR_OLUP_OLMA" />
                   </p>
                 </div>
                 <Switch
@@ -618,10 +621,10 @@ export default function AlimHikayesiEkle() {
                 <div className="space-y-1 flex-1">
                   <Label htmlFor="is_featured" className="flex items-center gap-2 text-base font-semibold cursor-pointer">
                     <FaStar className="text-yellow-600 dark:text-yellow-400" />
-                    Öne Çıkan
+                    <FormattedMessage id="UI.ONE_CIKAN" />
                   </Label>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Videoyu öne çıkan videolar arasında gösterir
+                    <FormattedMessage id="UI.VIDEOYU_ONE_CIKAN_VIDEOLAR_ARASINDA_GOST" />
                   </p>
                 </div>
                 <Switch
@@ -633,8 +636,7 @@ export default function AlimHikayesiEkle() {
               </div>
 
               <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                <p className="text-sm text-blue-700 dark:text-blue-300">
-                  💡 <strong>İpucu:</strong> Öne çıkan videolar ana sayfada ve liste başında gösterilir
+                <p className="text-sm text-blue-700 dark:text-blue-300">💡 <strong><FormattedMessage id="UI.IPUCU" /></strong> <FormattedMessage id="UI.ONE_CIKAN_VIDEOLAR_ANA_SAYFADA_VE_LISTE_" />
                 </p>
               </div>
             </CardContent>
@@ -649,7 +651,7 @@ export default function AlimHikayesiEkle() {
               className="h-12 px-6 text-base font-medium border-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
             >
               <FaTrash className="mr-2" />
-              Formu Temizle
+              <FormattedMessage id="UI.FORMU_TEMIZLE" />
             </Button>
             <Button
               type="button"
@@ -658,7 +660,7 @@ export default function AlimHikayesiEkle() {
               className="h-12 px-6 text-base font-medium border-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
             >
               <FaArrowLeft className="mr-2" />
-              İptal
+              <FormattedMessage id="UI.IPTAL" />
             </Button>
             <Button
               type="submit"
@@ -668,12 +670,12 @@ export default function AlimHikayesiEkle() {
               {loading ? (
                 <div className="flex items-center gap-2">
                   <div className="h-5 w-5 animate-spin rounded-full border-3 border-white border-t-transparent" />
-                  Kaydediliyor...
+                  <FormattedMessage id="UI.KAYDEDILIYOR" />
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
                   <FaSave className="text-lg" />
-                  Kaydet
+                  <FormattedMessage id="UI.KAYDET" />
                 </div>
               )}
             </Button>

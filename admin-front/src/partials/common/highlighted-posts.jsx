@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -30,7 +31,7 @@ export function HighlightedPosts({ posts }) {
           </Link>
           <p className="text-sm text-secondary-foreground">{post.summary}</p>
           <Button mode="link" underlined="dashed" asChild>
-            <Link to={`${post.path}`}>Learn more</Link>
+            <Link to={`${post.path}`}><FormattedMessage id="UI.LEARN_MORE" /></Link>
           </Button>
         </div>
         <span className="hidden not-last:block not-last:border-b border-b-border"></span>

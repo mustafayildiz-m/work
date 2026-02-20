@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import {
   Bell,
   CloudCog,
@@ -28,37 +29,37 @@ export function DropdownMenu1({ trigger }) {
         <DropdownMenuItem asChild>
           <Link to="/account/activity">
             <CloudCog />
-            <span>Activity</span>
+            <span><FormattedMessage id="UI.ACTIVITY" /></span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="#">
             <Share2 />
-            <span>Share</span>
+            <span><FormattedMessage id="UI.SHARE" /></span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <Bell />
-            <span>Notifications</span>
+            <span><FormattedMessage id="UI.NOTIFICATIONS" /></span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent className="w-[150px]">
             <DropdownMenuItem asChild>
               <Link to="/account/home/settings-sidebar">
                 <Mail />
-                <span>Email</span>
+                <span><FormattedMessage id="UI.EMAIL" /></span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to="/account/home/settings-sidebar">
                 <MessageSquare />
-                <span>SMS</span>
+                <span><FormattedMessage id="UI.SMS" /></span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to="/account/home/settings-sidebar">
                 <Send />
-                <span>Push</span>
+                <span><FormattedMessage id="UI.PUSH" /></span>
               </Link>
             </DropdownMenuItem>
           </DropdownMenuSubContent>
@@ -66,14 +67,14 @@ export function DropdownMenu1({ trigger }) {
         <DropdownMenuItem asChild>
           <Link to="#">
             <ThumbsDown />
-            <span>Report</span>
+            <span><FormattedMessage id="UI.REPORT" /></span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link to="/account/home/settings-enterprise">
             <Settings />
-            <span>Settings</span>
+            <span><FormattedMessage id="UI.SETTINGS" /></span>
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

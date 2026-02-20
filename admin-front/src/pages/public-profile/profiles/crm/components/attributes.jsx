@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
@@ -35,7 +36,7 @@ const Attributes = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Attributes</CardTitle>
+        <CardTitle><FormattedMessage id="UI.ATTRIBUTES" /></CardTitle>
       </CardHeader>
       <CardContent className="pt-3.5 pb-1">
         <Table>
@@ -48,7 +49,7 @@ const Attributes = () => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/network/user-table/store-clients">All Attributes</Link>
+          <Link to="/network/user-table/store-clients"><FormattedMessage id="UI.ALL_ATTRIBUTES" /></Link>
         </Button>
       </CardFooter>
     </Card>

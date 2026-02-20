@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { StoreClientTopbar } from '@/pages/store-client/components/common/topbar';
 import { SearchDialog } from '@/partials/dialogs/search/search-dialog';
 import { AppsDropdownMenu } from '@/partials/topbar/apps-dropdown-menu';
@@ -25,7 +26,7 @@ export function HeaderTopbar() {
         ) : (
           <>
             <Button asChild className="hidden md:inline-flex">
-              <Link to="account/home/get-started">Get Started</Link>
+              <Link to="account/home/get-started"><FormattedMessage id="UI.GET_STARTED" /></Link>
             </Button>
             <SearchDialog
               trigger={

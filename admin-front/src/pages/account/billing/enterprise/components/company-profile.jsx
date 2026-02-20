@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { AvatarGroup } from '@/partials/common/avatar-group';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -67,29 +68,29 @@ const CompanyProfile = () => {
               alt="image"
             />
 
-            <span className="text-sm font-semibold text-mono">Cloud One</span>
+            <span className="text-sm font-semibold text-mono"><FormattedMessage id="UI.CLOUD_ONE" /></span>
           </div>
           <div className="flex flex-col gap-5 lg:gap-7.5 grow">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2.5">
                   <h2 className="text-2xl font-semibold text-mono">
-                    Cloud One Enterprise
+                    <FormattedMessage id="UI.CLOUD_ONE_ENTERPRISE" />
                   </h2>
                   <Badge size="md" variant="success" appearance="outline">
-                    Monthly Plan
+                    <FormattedMessage id="UI.MONTHLY_PLAN" />
                   </Badge>
                 </div>
                 <p className="text-sm text-secondary-foreground">
-                  Essential Features for Startups and Individuals
+                  <FormattedMessage id="UI.ESSENTIAL_FEATURES_FOR_STARTUPS_AND_INDI" />
                 </p>
               </div>
               <div className="flex items-center gap-2.5">
                 <Button variant="outline">
-                  <Link to="#">Cancel Plan</Link>
+                  <Link to="#"><FormattedMessage id="UI.CANCEL_PLAN" /></Link>
                 </Button>
                 <Button>
-                  <Link to="#">Upgrade Plan</Link>
+                  <Link to="#"><FormattedMessage id="UI.UPGRADE_PLAN" /></Link>
                 </Button>
               </div>
             </div>
@@ -101,18 +102,18 @@ const CompanyProfile = () => {
             <div className="flex flex-wrap gap-6 lg:gap-12">
               <div className="flex flex-col gap-3.5 grow">
                 <div className="text-sm text-secondary-foreground">
-                  UQuery runs:{' '}
+                  <FormattedMessage id="UI.UQUERY_RUNS" />{' '}
                   <span className="text-sm font-medium text-mono">
-                    2239 of 10,000 used
+                    <FormattedMessage id="UI.2239_OF_10000_USED" />
                   </span>
                 </div>
                 <Slider defaultValue={[40]} max={100} step={1}></Slider>
               </div>
               <div className="flex flex-col gap-2.5 lg:min-w-24 shrink-0 -mt-3 max-w-auto">
                 <div className="text-sm font-medium text-secondary-foreground">
-                  Seats:{' '}
+                  <FormattedMessage id="UI.SEATS_1" />{' '}
                   <span className="text-sm font-semibold text-foreground">
-                    29 of 120 used
+                    <FormattedMessage id="UI.29_OF_120_USED" />
                   </span>
                 </div>
                 <AvatarGroup group={group} />

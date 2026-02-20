@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { ShoppingCart, TrashIcon } from 'lucide-react';
 import { Link } from 'react-router';
 import { Badge } from '@/components/ui/badge';
@@ -54,7 +55,7 @@ export function StoreClientCartSheet({ open, onOpenChange }) {
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="sm:w-[560px] sm:max-w-none inset-5 start-auto h-auto rounded-lg p-0 sm:max-w-none [&_[data-slot=sheet-close]]:top-4.5 [&_[data-slot=sheet-close]]:end-5">
         <SheetHeader className="border-b py-3.5 px-5 border-border">
-          <SheetTitle>Cart</SheetTitle>
+          <SheetTitle><FormattedMessage id="UI.CART" /></SheetTitle>
         </SheetHeader>
         <SheetBody className="px-5 py-0">
           <ScrollArea className="h-[calc(100dvh-12rem)] pe-3 -me-3 space-y-5">
@@ -79,7 +80,7 @@ export function StoreClientCartSheet({ open, onOpenChange }) {
                       </Link>
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-normal text-secondary-foreground">
-                          SKU:{' '}
+                          <FormattedMessage id="UI.SKU" />{' '}
                           <span className="text-xs font-medium text-foreground">
                             {item.sku}
                           </span>
@@ -90,7 +91,7 @@ export function StoreClientCartSheet({ open, onOpenChange }) {
                             variant="destructive"
                             className="uppercase"
                           >
-                            save 25%
+                            <FormattedMessage id="UI.SAVE_25" />
                           </Badge>
                         )}
                       </div>
@@ -130,16 +131,16 @@ export function StoreClientCartSheet({ open, onOpenChange }) {
             ))}
 
             <div className="flex items-center justify-end border-none rounded-md bg-accent/50 gap-5 py-2 px-3 !mt-[30px]">
-              <span className="text-sm font-medium text-mono">Total</span>
+              <span className="text-sm font-medium text-mono"><FormattedMessage id="UI.TOTAL" /></span>
               <span className="text-sm font-semibold text-dark">$492.00</span>
             </div>
           </ScrollArea>
         </SheetBody>
         <SheetFooter className="border-t py-3.5 px-5 border-border">
-          <Button variant="outline">Clear Cart</Button>
+          <Button variant="outline"><FormattedMessage id="UI.CLEAR_CART" /></Button>
           <Button variant="primary" className="grow">
             <ShoppingCart />
-            Checkout
+            <FormattedMessage id="UI.CHECKOUT" />
           </Button>
         </SheetFooter>
       </SheetContent>

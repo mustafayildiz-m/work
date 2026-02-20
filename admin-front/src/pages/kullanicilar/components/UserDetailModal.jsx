@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { X, Mail, Phone, MapPin, Calendar, User, Shield, CheckCircle, XCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -34,7 +35,7 @@ const UserDetailModal = ({ user, isOpen, onClose }) => {
           {/* Header */}
           <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Kullanıcı Detayları
+              <FormattedMessage id="UI.KULLANICI_DETAYLARI" />
             </h2>
             <button
               onClick={onClose}
@@ -97,7 +98,7 @@ const UserDetailModal = ({ user, isOpen, onClose }) => {
             {user.biography && (
               <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-4">
                 <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  Hakkında
+                  <FormattedMessage id="UI.HAKKINDA" />
                 </h4>
                 <p className="text-gray-600 dark:text-gray-400">
                   {user.biography}
@@ -108,13 +109,13 @@ const UserDetailModal = ({ user, isOpen, onClose }) => {
             {/* Contact Information */}
             <div>
               <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">
-                İletişim Bilgileri
+                <FormattedMessage id="UI.ILETISIM_BILGILERI" />
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
                   <Mail className="w-5 h-5 text-blue-500" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Email</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.EMAIL" /></p>
                     <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                       {user.email}
                     </p>
@@ -125,7 +126,7 @@ const UserDetailModal = ({ user, isOpen, onClose }) => {
                   <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
                     <Phone className="w-5 h-5 text-green-500" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Telefon</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.TELEFON" /></p>
                       <p className="text-sm font-medium text-gray-900 dark:text-white">
                         {user.phoneNo}
                       </p>
@@ -137,7 +138,7 @@ const UserDetailModal = ({ user, isOpen, onClose }) => {
                   <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
                     <MapPin className="w-5 h-5 text-red-500" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Konum</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.KONUM" /></p>
                       <p className="text-sm font-medium text-gray-900 dark:text-white">
                         {user.location}
                       </p>
@@ -149,7 +150,7 @@ const UserDetailModal = ({ user, isOpen, onClose }) => {
                   <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
                     <Calendar className="w-5 h-5 text-purple-500" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs text-gray-500 dark:text-gray-400">Doğum Tarihi</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.DOGUM_TARIHI" /></p>
                       <p className="text-sm font-medium text-gray-900 dark:text-white">
                         {new Date(user.birthDate).toLocaleDateString('tr-TR')}
                       </p>
@@ -162,11 +163,11 @@ const UserDetailModal = ({ user, isOpen, onClose }) => {
             {/* Account Information */}
             <div>
               <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">
-                Hesap Bilgileri
+                <FormattedMessage id="UI.HESAP_BILGILERI" />
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Kayıt Tarihi</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.KAYIT_TARIHI" /></p>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">
                     {new Date(user.createdAt).toLocaleDateString('tr-TR', {
                       year: 'numeric',
@@ -179,7 +180,7 @@ const UserDetailModal = ({ user, isOpen, onClose }) => {
                 </div>
 
                 <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Son Güncelleme</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.SON_GUNCELLEME" /></p>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">
                     {new Date(user.updatedAt).toLocaleDateString('tr-TR', {
                       year: 'numeric',
@@ -200,7 +201,7 @@ const UserDetailModal = ({ user, isOpen, onClose }) => {
               onClick={onClose}
               className="px-6 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium"
             >
-              Kapat
+              <FormattedMessage id="UI.KAPAT" />
             </button>
           </div>
         </motion.div>

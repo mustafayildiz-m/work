@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { CircleCheck } from 'lucide-react';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Button } from '@/components/ui/button';
@@ -62,9 +63,9 @@ const AdvancedSettingsAppearance = ({ title }) => {
       </CardHeader>
       <CardContent className="lg:py-7.5">
         <div className="mb-5">
-          <h3 className="text-base font-medium text-mono">Theme mode</h3>
+          <h3 className="text-base font-medium text-mono"><FormattedMessage id="UI.THEME_MODE" /></h3>
           <span className="text-sm text-secondary-foreground">
-            Select or customize your ui theme
+            <FormattedMessage id="UI.SELECT_OR_CUSTOMIZE_YOUR_UI_THEME" />
           </span>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
@@ -75,21 +76,20 @@ const AdvancedSettingsAppearance = ({ title }) => {
         <div className="border-t border-border mt-7 mb-8"></div>
         <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 mb-8">
           <Label className="flex w-full max-w-48 text-foreground font-normal">
-            Transparent sidebar
+            <FormattedMessage id="UI.TRANSPARENT_SIDEBAR" />
           </Label>
           <div className="flex items-center gap-7.5 grow">
             <Label htmlFor="auto-update" className="text-sm">
-              Active
+              <FormattedMessage id="UI.ACTIVE" />
             </Label>
             <Switch defaultChecked size="sm" />
             <span className="form-info text-foreground font-normal">
-              Toggle the transparent sidebar for a sleek interface.Switch it on
-              for transparency or off for a solid background.
+              <FormattedMessage id="UI.TOGGLE_THE_TRANSPARENT_SIDEBAR_FOR_A_SLE" />
             </span>
           </div>
         </div>
         <div className="flex justify-end">
-          <Button>Save Changes</Button>
+          <Button><FormattedMessage id="UI.SAVE_CHANGES" /></Button>
         </div>
       </CardContent>
     </Card>

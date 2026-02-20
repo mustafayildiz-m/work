@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import { motion } from 'framer-motion';
 import { Plus, BookOpen, Users, FileText, Podcast, Calendar, Package } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -5,10 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const QuickActions = () => {
   const navigate = useNavigate();
+  const intl = useIntl();
 
   const actions = [
     {
-      title: 'Yeni Kitap',
+      title: intl.formatMessage({ id: 'UI.YENI_KITAP' }),
       icon: BookOpen,
       path: '/kitaplar/ekle',
       color: 'from-blue-500 to-blue-600',
@@ -16,7 +18,7 @@ const QuickActions = () => {
       hoverColor: 'hover:bg-blue-100 dark:hover:bg-blue-900',
     },
     {
-      title: 'Yeni Âlim',
+      title: intl.formatMessage({ id: 'UI.YENI_ALIM' }),
       icon: Users,
       path: '/alimler/ekle',
       color: 'from-emerald-500 to-emerald-600',
@@ -24,7 +26,7 @@ const QuickActions = () => {
       hoverColor: 'hover:bg-emerald-100 dark:hover:bg-emerald-900',
     },
     {
-      title: 'Yeni Makale',
+      title: intl.formatMessage({ id: 'UI.YENI_MAKALE' }),
       icon: FileText,
       path: '/makaleler/ekle',
       color: 'from-purple-500 to-purple-600',
@@ -32,7 +34,7 @@ const QuickActions = () => {
       hoverColor: 'hover:bg-purple-100 dark:hover:bg-purple-900',
     },
     {
-      title: 'Yeni Podcast',
+      title: intl.formatMessage({ id: 'UI.YENI_PODCAST' }),
       icon: Podcast,
       path: '/podcast/ekle',
       color: 'from-pink-500 to-pink-600',
@@ -40,7 +42,7 @@ const QuickActions = () => {
       hoverColor: 'hover:bg-pink-100 dark:hover:bg-pink-900',
     },
     {
-      title: 'Yeni Hikaye',
+      title: intl.formatMessage({ id: 'UI.YENI_HIKAYE' }),
       icon: Calendar,
       path: '/alim-hikayeleri/ekle',
       color: 'from-amber-500 to-amber-600',
@@ -48,7 +50,7 @@ const QuickActions = () => {
       hoverColor: 'hover:bg-amber-100 dark:hover:bg-amber-900',
     },
     {
-      title: 'Yeni Stok',
+      title: intl.formatMessage({ id: 'UI.YENI_STOK' }),
       icon: Package,
       path: '/stoklar/ekle',
       color: 'from-cyan-500 to-cyan-600',
@@ -62,7 +64,7 @@ const QuickActions = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg">
           <Plus className="w-5 h-5" />
-          Hızlı İşlemler
+          <FormattedMessage id="UI.HIZLI_ISLEMLER" />
         </CardTitle>
       </CardHeader>
       <CardContent>

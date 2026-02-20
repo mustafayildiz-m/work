@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { PageNavbar } from '@/pages/account';
 import {
@@ -26,12 +27,12 @@ export function AccountSecurityGetStartedPage() {
               <ToolbarDescription>
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-secondary-foreground">
-                    19 issues need your attention
+                    <FormattedMessage id="UI.19_ISSUES_NEED_YOUR_ATTENTION" />
                   </span>
                   <span className="size-0.75 bg-mono/50 rounded-full"></span>
                   <Button mode="link" underlined="dashed" asChild>
                     <Link to="/account/security/security-log">
-                      Security Log
+                      <FormattedMessage id="UI.SECURITY_LOG" />
                     </Link>
                   </Button>
                 </div>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { HexagonBadge } from '@/partials/common/hexagon-badge';
 import { LogOut, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router';
@@ -19,7 +20,7 @@ const QuickSettings = () => {
       description: 'Instantly sign out all users from all devices.',
       actions: (
         <Button variant="outline">
-          <Link to="#">Logout everyone</Link>
+          <Link to="#"><FormattedMessage id="UI.LOGOUT_EVERYONE" /></Link>
         </Button>
       ),
     },

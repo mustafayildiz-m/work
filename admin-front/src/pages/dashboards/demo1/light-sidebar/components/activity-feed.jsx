@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Clock, BookOpen, Users, FileText, Podcast, TrendingUp } from 'lucide-react';
@@ -7,6 +8,7 @@ import { Avatar } from '@/components/ui/avatar';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const ActivityFeed = () => {
+  const intl = useIntl();
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -19,10 +21,10 @@ const ActivityFeed = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        
+
         if (response.ok) {
           const data = await response.json();
-          
+
           // Icon mapping
           const iconMap = {
             BookOpen: BookOpen,
@@ -31,18 +33,27 @@ const ActivityFeed = () => {
             Podcast: Podcast,
             TrendingUp: TrendingUp,
           };
-          
-          // Format activities with time ago
+
+          // Format activities with time ago and translate titles
+          const titleMap = {
+            'Yeni kitap eklendi': 'UI.YENI_KITAP_EKLENDI',
+            'Yeni âlim eklendi': 'UI.YENI_ALIM_EKLENDI',
+            'Yeni gönderi': 'UI.YENI_GONDERI',
+          };
+
           const formattedActivities = data.map((activity, index) => {
             const timeAgo = getTimeAgo(new Date(activity.createdAt));
             return {
               id: index + 1,
               ...activity,
+              title: titleMap[activity.title]
+                ? intl.formatMessage({ id: titleMap[activity.title] })
+                : activity.title,
               icon: iconMap[activity.icon] || FileText,
               time: timeAgo,
             };
           });
-          
+
           setActivities(formattedActivities);
         } else {
           console.error('Failed to fetch activities');
@@ -55,7 +66,7 @@ const ActivityFeed = () => {
     };
 
     fetchActivities();
-  }, []);
+  }, [intl.locale]); // Re-fetch or re-format when locale changes
 
   // Helper function to format time ago
   const getTimeAgo = (date) => {
@@ -65,12 +76,12 @@ const ActivityFeed = () => {
     const diffHours = Math.floor(diffMs / 3600000);
     const diffDays = Math.floor(diffMs / 86400000);
 
-    if (diffMins < 1) return 'Az önce';
-    if (diffMins < 60) return `${diffMins} dakika önce`;
-    if (diffHours < 24) return `${diffHours} saat önce`;
-    if (diffDays < 7) return `${diffDays} gün önce`;
-    
-    return date.toLocaleDateString('tr-TR');
+    if (diffMins < 1) return intl.formatMessage({ id: 'UI.AZ_ONCE' });
+    if (diffMins < 60) return `${diffMins} ${intl.formatMessage({ id: 'UI.DAKIKA_ONCE' })}`;
+    if (diffHours < 24) return `${diffHours} ${intl.formatMessage({ id: 'UI.SAAT_ONCE' })}`;
+    if (diffDays < 7) return `${diffDays} ${intl.formatMessage({ id: 'UI.GUN_ONCE' })}`;
+
+    return date.toLocaleDateString(intl.locale === 'tr' ? 'tr-TR' : 'en-US');
   };
 
   if (loading) {
@@ -79,7 +90,7 @@ const ActivityFeed = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
             <Clock className="w-5 h-5" />
-            Son Aktiviteler
+            <FormattedMessage id="UI.SON_AKTIVITELER" />
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -104,7 +115,7 @@ const ActivityFeed = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg">
           <Clock className="w-5 h-5" />
-          Son Aktiviteler
+          <FormattedMessage id="UI.SON_AKTIVITELER" />
         </CardTitle>
       </CardHeader>
       <CardContent>

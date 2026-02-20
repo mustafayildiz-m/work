@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Users } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
@@ -8,18 +9,17 @@ const ActivitiesNewProduct = () => {
     <TimelineItem icon={Users} line={true}>
       <div className="flex flex-col">
         <div className="text-sm text-foreground">
-          Jenny sent an{' '}
+          <FormattedMessage id="UI.JENNY_SENT_AN" />{' '}
           <Button mode="link" asChild>
-            <Link to="#">inquiry</Link>
+            <Link to="#"><FormattedMessage id="UI.INQUIRY" /></Link>
           </Button>{' '}
-          about a{' '}
+          <FormattedMessage id="UI.ABOUT_A" />{' '}
           <Button mode="link" asChild>
-            <Link to="#">new product</Link>
-          </Button>{' '}
-          .
-        </div>
+            <Link to="#"><FormattedMessage id="UI.NEW_PRODUCT_1" /></Link>
+          </Button>{' '}.
+                  </div>
         <span className="text-xs text-secondary-foreground">
-          Today, 9:00 AM
+          <FormattedMessage id="UI.TODAY_900_AM" />
         </span>
       </div>
     </TimelineItem>

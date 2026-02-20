@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
 
@@ -23,7 +24,7 @@ export function SidebarMenuSecondary() {
   return (
     <div>
       <h3 className="text-xs text-muted-foreground uppercase ps-5 inline-block mb-3">
-        Outline
+        <FormattedMessage id="UI.OUTLINE" />
       </h3>
       <div className="flex flex-col w-full gap-1.5 px-3.5">
         {items.map((item, index) => (

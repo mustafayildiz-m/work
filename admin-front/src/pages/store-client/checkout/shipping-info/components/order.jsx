@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import {
   Card,
   CardContent,
@@ -25,36 +26,34 @@ export function Order() {
   return (
     <Card className="bg-accent/50">
       <CardHeader className="px-5">
-        <CardTitle>Order Summary</CardTitle>
+        <CardTitle><FormattedMessage id="UI.ORDER_SUMMARY" /></CardTitle>
       </CardHeader>
-
       <CardContent className="px-0 py-5 space-y-2">
         <div className="flex flex-col px-5">
           <span className="text-sm font-medium text-mono mb-1.5">
-            Shipping to Jeroen's Home
+            <FormattedMessage id="UI.SHIPPING_TO_JEROENS_HOME" />
           </span>
 
           <div className="flex flex-col gap-1 text-xs font-normal text-secondary-foreground">
-            <span>Jeroen van Dijk</span>
-            <span>Keizersgracht 172</span>
-            <span>1016 DW, Amsterdam</span>
-            <span>Netherlands</span>
+            <span><FormattedMessage id="UI.JEROEN_VAN_DIJK" /></span>
+            <span><FormattedMessage id="UI.KEIZERSGRACHT_172" /></span>
+            <span><FormattedMessage id="UI.1016_DW_AMSTERDAM" /></span>
+            <span><FormattedMessage id="UI.NETHERLANDS" /></span>
           </div>
         </div>
 
         <div className="border-b border-border mb-4 mt-5"></div>
         <span className="text-sm font-medium block text-mono mb-3.5 px-5">
-          Price Details
+          <FormattedMessage id="UI.PRICE_DETAILS" />
         </span>
 
         {items.map((item, index) => {
           return renderItem(item, index);
         })}
       </CardContent>
-
       <CardFooter className="flex justify-between items-center px-5">
         <span className="text-sm font-normal text-secondary-foreground">
-          Total
+          <FormattedMessage id="UI.TOTAL" />
         </span>
         <span className="text-base font-semibold text-mono">$492.00</span>
       </CardFooter>

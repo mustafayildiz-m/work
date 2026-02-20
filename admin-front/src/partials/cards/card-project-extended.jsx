@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { EllipsisVertical } from 'lucide-react';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -67,7 +68,7 @@ const CardProjectExtended = ({
         </div>
         <div className="grid justify-center gap-1.5 mb-7.5">
           <span className="text-xs uppercase text-secondary-foreground text-center">
-            team
+            <FormattedMessage id="UI.TEAM_1" />
           </span>
           <AvatarGroup group={team.group} size={team.size} />
         </div>

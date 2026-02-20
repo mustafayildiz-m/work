@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { CardNotification } from '@/partials/cards';
 import { ArrowRight, ArrowRightCircle, EyeOff, Monitor } from 'lucide-react';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
@@ -35,9 +36,9 @@ const Accessibility = () => {
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1">System preferences</SelectItem>
-              <SelectItem value="2">Sound</SelectItem>
-              <SelectItem value="3">Focus</SelectItem>
+              <SelectItem value="1"><FormattedMessage id="UI.SYSTEM_PREFERENCES" /></SelectItem>
+              <SelectItem value="2"><FormattedMessage id="UI.SOUND" /></SelectItem>
+              <SelectItem value="3"><FormattedMessage id="UI.FOCUS" /></SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -66,7 +67,7 @@ const Accessibility = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Accessibility</CardTitle>
+        <CardTitle><FormattedMessage id="UI.ACCESSIBILITY" /></CardTitle>
       </CardHeader>
       <div id="notifications_cards">
         {items.map((item, index) => {

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Button } from '@/components/ui/button';
@@ -67,12 +68,12 @@ const AuthSingleSingOn = () => {
       </style>
       <Card>
         <CardHeader id="auth_social_sign_in_sso">
-          <CardTitle>Single Sign On(SSO)</CardTitle>
+          <CardTitle><FormattedMessage id="UI.SINGLE_SIGN_ONSSO" /></CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-7.5">
           <div className="grid gap-7">
             <div className="text-base font-semibold text-mono">
-              1. Select SSO integration Type
+              <FormattedMessage id="UI.1_SELECT_SSO_INTEGRATION_TYPE" />
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
               {items.map((item, index) => {
@@ -93,17 +94,17 @@ const AuthSingleSingOn = () => {
           <div className="border-b border-border"></div>
           <div className="grid gap-7">
             <div className="text-base font-semibold text-mono">
-              2. Configure Google authentication
+              <FormattedMessage id="UI.2_CONFIGURE_GOOGLE_AUTHENTICATION" />
             </div>
             <div className="w-full">
               <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                <Label className="flex w-full max-w-56">Client ID</Label>
+                <Label className="flex w-full max-w-56"><FormattedMessage id="UI.CLIENT_ID" /></Label>
                 <Input type="text" placeholder="02874374-367145773" />
               </div>
             </div>
             <div className="w-full">
               <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                <Label className="flex w-full max-w-56">Client Secret</Label>
+                <Label className="flex w-full max-w-56"><FormattedMessage id="UI.CLIENT_SECRET" /></Label>
                 <Input
                   type="text"
                   placeholder="23djfn784957f8022we2232307822-cey2442"
@@ -111,17 +112,17 @@ const AuthSingleSingOn = () => {
               </div>
             </div>
             <div className="flex justify-end">
-              <Button>Save Changes</Button>
+              <Button><FormattedMessage id="UI.SAVE_CHANGES" /></Button>
             </div>
           </div>
           <div className="border-b border-border"></div>
           <div className="grid gap-7">
             <div className="text-base font-semibold text-mono">
-              3. Note down custom URL for Google SSO authentication
+              <FormattedMessage id="UI.3_NOTE_DOWN_CUSTOM_URL_FOR_GOOGLE_SSO_AU" />
             </div>
             <div className="w-full">
               <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
-                <Label className="flex w-full max-w-56">Custom Login UTL</Label>
+                <Label className="flex w-full max-w-56"><FormattedMessage id="UI.CUSTOM_LOGIN_UTL" /></Label>
                 <div className="grow">
                   <div className="flex items-center">
                     <Input
@@ -130,7 +131,7 @@ const AuthSingleSingOn = () => {
                       className="rounded-r-none border-r-0 focus:ring-0 focus:ring-offset-0"
                     />
 
-                    <Button className="rounded-l-none border-l-0">Copy</Button>
+                    <Button className="rounded-l-none border-l-0"><FormattedMessage id="UI.COPY" /></Button>
                   </div>
                 </div>
               </div>
@@ -138,9 +139,7 @@ const AuthSingleSingOn = () => {
           </div>
           <div className="border-b border-border"></div>
           <div className="form-info pb-5 text-foreground font-normal">
-            Single Sign-On (SSO) authentication streamlines access across
-            multiple platforms. Users log in once, gaining seamless entry to
-            various systems without repetitive credentials.
+            <FormattedMessage id="UI.SINGLE_SIGNON_SSO_AUTHENTICATION_STREAML" />
           </div>
         </CardContent>
       </Card>

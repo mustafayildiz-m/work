@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Badge } from '@/components/ui/badge';
@@ -56,10 +57,10 @@ const CardTournament = ({ image, logo, title, time, labels, progress }) => {
 
           <div className="flex items-center place-content-between">
             <span className="text-secondary-foreground text-xs font-medium">
-              {progress.slotNumber} slots
+              {progress.slotNumber} <FormattedMessage id="UI.SLOTS" />
             </span>
             <span className="text-muted-foreground text-xs font-medium">
-              {progress.leftNumber} left
+              {progress.leftNumber} <FormattedMessage id="UI.LEFT" />
             </span>
           </div>
         </div>

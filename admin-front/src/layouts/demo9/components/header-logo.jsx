@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useEffect, useState } from 'react';
 import { Menu } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -40,10 +41,9 @@ export function HeaderLogo() {
           />
         </Link>
         <h3 className="text-mono text-lg font-medium hidden md:block">
-          Metronic
+          <FormattedMessage id="UI.METRONIC" />
         </h3>
       </div>
-
       {isMobile && (
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>

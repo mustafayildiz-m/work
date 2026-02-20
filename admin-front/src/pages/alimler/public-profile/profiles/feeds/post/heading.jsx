@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { DropdownMenu5 } from '@/partials/dropdown-menu/dropdown-menu-5';
 import { EllipsisVertical } from 'lucide-react';
 import { Link } from 'react-router';
@@ -15,7 +16,7 @@ const Heading = ({ author, avatar, date }) => {
             alt="image"
           />
 
-          <AvatarFallback>CH</AvatarFallback>
+          <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
           <Link

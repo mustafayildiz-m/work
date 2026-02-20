@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -9,7 +10,7 @@ const About = () => {
       label: 'Status:',
       info: (
         <Badge size="md" variant="success" appearance="outline">
-          Subscribed
+          <FormattedMessage id="UI.SUBSCRIBED" />
         </Badge>
       ),
     },
@@ -29,7 +30,7 @@ const About = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>About</CardTitle>
+        <CardTitle><FormattedMessage id="UI.ABOUT" /></CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-3.5 mb-3.5">
@@ -38,8 +39,7 @@ const About = () => {
           })}
         </div>
         <p className="text-sm text-foreground leading-5.5 mb-2.5">
-          Experienced and creative professional with a passion great as a
-          commitment to best excellence.
+          <FormattedMessage id="UI.EXPERIENCED_AND_CREATIVE_PROFESSIONAL_WI" />
         </p>
       </CardContent>
     </Card>

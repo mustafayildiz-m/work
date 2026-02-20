@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useMemo, useState } from 'react';
 import { RiCheckboxCircleFill } from '@remixicon/react';
 import {
@@ -52,7 +53,7 @@ const MembersData = [
     location: { name: 'Estonia', flag: 'estonia.svg' },
     status: (
       <Badge variant="success" appearance="outline">
-        Active
+        <FormattedMessage id="UI.ACTIVE" />
       </Badge>
     ),
 
@@ -64,7 +65,7 @@ const MembersData = [
     location: { name: 'Malaysia', flag: 'malaysia.svg' },
     status: (
       <Badge variant="warning" appearance="outline">
-        Pending
+        <FormattedMessage id="UI.PENDING" />
       </Badge>
     ),
 
@@ -76,7 +77,7 @@ const MembersData = [
     location: { name: 'Ukraine', flag: 'ukraine.svg' },
     status: (
       <Badge variant="primary" appearance="outline">
-        Active
+        <FormattedMessage id="UI.ACTIVE" />
       </Badge>
     ),
 
@@ -88,7 +89,7 @@ const MembersData = [
     location: { name: 'Canada', flag: 'canada.svg' },
     status: (
       <Badge variant="destructive" appearance="outline">
-        Deleted
+        <FormattedMessage id="UI.DELETED" />
       </Badge>
     ),
 
@@ -100,7 +101,7 @@ const MembersData = [
     location: { name: 'India', flag: 'india.svg' },
     status: (
       <Badge variant="success" appearance="outline">
-        Active
+        <FormattedMessage id="UI.ACTIVE" />
       </Badge>
     ),
 
@@ -112,7 +113,7 @@ const MembersData = [
     location: { name: 'Spain', flag: 'spain.svg' },
     status: (
       <Badge size="sm" variant="success" appearance="outline">
-        Active
+        <FormattedMessage id="UI.ACTIVE" />
       </Badge>
     ),
 
@@ -124,7 +125,7 @@ const MembersData = [
     location: { name: 'Germany', flag: 'germany.svg' },
     status: (
       <Badge variant="warning" appearance="outline">
-        Pending
+        <FormattedMessage id="UI.PENDING" />
       </Badge>
     ),
 
@@ -136,7 +137,7 @@ const MembersData = [
     location: { name: 'France', flag: 'france.svg' },
     status: (
       <Badge variant="success" appearance="outline">
-        Active
+        <FormattedMessage id="UI.ACTIVE" />
       </Badge>
     ),
 
@@ -148,7 +149,7 @@ const MembersData = [
     location: { name: 'Japan', flag: 'japan.svg' },
     status: (
       <Badge variant="success" appearance="outline">
-        Active
+        <FormattedMessage id="UI.ACTIVE" />
       </Badge>
     ),
 
@@ -160,7 +161,7 @@ const MembersData = [
     location: { name: 'South Korea', flag: 'south-korea.svg' },
     status: (
       <Badge variant="warning" appearance="outline">
-        Pending
+        <FormattedMessage id="UI.PENDING" />
       </Badge>
     ),
 
@@ -172,7 +173,7 @@ const MembersData = [
     location: { name: 'Brazil', flag: 'brazil.svg' },
     status: (
       <Badge variant="success" appearance="outline">
-        Active
+        <FormattedMessage id="UI.ACTIVE" />
       </Badge>
     ),
 
@@ -184,7 +185,7 @@ const MembersData = [
     location: { name: 'United Kingdom', flag: 'united-kingdom.svg' },
     status: (
       <Badge variant="success" appearance="outline">
-        Active
+        <FormattedMessage id="UI.ACTIVE" />
       </Badge>
     ),
 
@@ -196,7 +197,7 @@ const MembersData = [
     location: { name: 'Australia', flag: 'australia.svg' },
     status: (
       <Badge variant="warning" appearance="outline">
-        Pending
+        <FormattedMessage id="UI.PENDING" />
       </Badge>
     ),
 
@@ -208,7 +209,7 @@ const MembersData = [
     location: { name: 'Italy', flag: 'italy.svg' },
     status: (
       <Badge variant="success" appearance="outline">
-        Active
+        <FormattedMessage id="UI.ACTIVE" />
       </Badge>
     ),
 
@@ -220,7 +221,7 @@ const MembersData = [
     location: { name: 'Russia', flag: 'russia.svg' },
     status: (
       <Badge variant="destructive" appearance="outline">
-        Deleted
+        <FormattedMessage id="UI.DELETED" />
       </Badge>
     ),
 
@@ -232,7 +233,7 @@ const MembersData = [
     location: { name: 'India', flag: 'india.svg' },
     status: (
       <Badge variant="success" appearance="outline">
-        Active
+        <FormattedMessage id="UI.ACTIVE" />
       </Badge>
     ),
 
@@ -244,7 +245,7 @@ const MembersData = [
     location: { name: 'Spain', flag: 'spain.svg' },
     status: (
       <Badge variant="warning" appearance="outline">
-        Pending
+        <FormattedMessage id="UI.PENDING" />
       </Badge>
     ),
 
@@ -256,7 +257,7 @@ const MembersData = [
     location: { name: 'Canada', flag: 'canada.svg' },
     status: (
       <Badge variant="destructive" appearance="outline">
-        Deleted
+        <FormattedMessage id="UI.DELETED" />
       </Badge>
     ),
 
@@ -268,7 +269,7 @@ const MembersData = [
     location: { name: 'Malaysia', flag: 'malaysia.svg' },
     status: (
       <Badge variant="success" appearance="outline">
-        Active
+        <FormattedMessage id="UI.ACTIVE" />
       </Badge>
     ),
 
@@ -280,7 +281,7 @@ const MembersData = [
     location: { name: 'Estonia', flag: 'estonia.svg' },
     status: (
       <Badge variant="warning" appearance="outline">
-        Pending
+        <FormattedMessage id="UI.PENDING" />
       </Badge>
     ),
 
@@ -292,7 +293,7 @@ const MembersData = [
     location: { name: 'Ukraine', flag: 'ukraine.svg' },
     status: (
       <Badge variant="success" appearance="outline">
-        Active
+        <FormattedMessage id="UI.ACTIVE" />
       </Badge>
     ),
 
@@ -304,7 +305,7 @@ const MembersData = [
     location: { name: 'India', flag: 'india.svg' },
     status: (
       <Badge variant="destructive" appearance="outline">
-        Deleted
+        <FormattedMessage id="UI.DELETED" />
       </Badge>
     ),
 
@@ -316,7 +317,7 @@ const MembersData = [
     location: { name: 'France', flag: 'france.svg' },
     status: (
       <Badge variant="success" appearance="outline">
-        Active
+        <FormattedMessage id="UI.ACTIVE" />
       </Badge>
     ),
 
@@ -328,7 +329,7 @@ const MembersData = [
     location: { name: 'Japan', flag: 'japan.svg' },
     status: (
       <Badge variant="warning" appearance="outline">
-        Pending
+        <FormattedMessage id="UI.PENDING" />
       </Badge>
     ),
 
@@ -340,7 +341,7 @@ const MembersData = [
     location: { name: 'South Korea', flag: 'south-korea.svg' },
     status: (
       <Badge variant="destructive" appearance="outline">
-        Deleted
+        <FormattedMessage id="UI.DELETED" />
       </Badge>
     ),
 
@@ -352,7 +353,7 @@ const MembersData = [
     location: { name: 'Italy', flag: 'italy.svg' },
     status: (
       <Badge variant="success" appearance="outline">
-        Active
+        <FormattedMessage id="UI.ACTIVE" />
       </Badge>
     ),
 
@@ -364,7 +365,7 @@ const MembersData = [
     location: { name: 'Russia', flag: 'russia.svg' },
     status: (
       <Badge variant="warning" appearance="outline">
-        Pending
+        <FormattedMessage id="UI.PENDING" />
       </Badge>
     ),
 
@@ -376,7 +377,7 @@ const MembersData = [
     location: { name: 'Spain', flag: 'spain.svg' },
     status: (
       <Badge variant="success" appearance="outline">
-        Active
+        <FormattedMessage id="UI.ACTIVE" />
       </Badge>
     ),
 
@@ -388,7 +389,7 @@ const MembersData = [
     location: { name: 'Canada', flag: 'canada.svg' },
     status: (
       <Badge variant="destructive" appearance="outline">
-        Deleted
+        <FormattedMessage id="UI.DELETED" />
       </Badge>
     ),
 
@@ -400,7 +401,7 @@ const MembersData = [
     location: { name: 'Malaysia', flag: 'malaysia.svg' },
     status: (
       <Badge variant="success" appearance="outline">
-        Active
+        <FormattedMessage id="UI.ACTIVE" />
       </Badge>
     ),
 
@@ -412,7 +413,7 @@ const MembersData = [
     location: { name: 'Estonia', flag: 'estonia.svg' },
     status: (
       <Badge variant="warning" appearance="outline">
-        Pending
+        <FormattedMessage id="UI.PENDING" />
       </Badge>
     ),
 
@@ -424,7 +425,7 @@ const MembersData = [
     location: { name: 'Ukraine', flag: 'ukraine.svg' },
     status: (
       <Badge variant="destructive" appearance="outline">
-        Deleted
+        <FormattedMessage id="UI.DELETED" />
       </Badge>
     ),
 
@@ -436,7 +437,7 @@ const MembersData = [
     location: { name: 'India', flag: 'india.svg' },
     status: (
       <Badge variant="success" appearance="outline">
-        Active
+        <FormattedMessage id="UI.ACTIVE" />
       </Badge>
     ),
 
@@ -478,11 +479,11 @@ function ActionsCell({ row }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="bottom" align="end">
-        <DropdownMenuItem onClick={() => {}}>Edit</DropdownMenuItem>
-        <DropdownMenuItem onClick={handleCopyId}>Copy ID</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => {}}><FormattedMessage id="UI.EDIT" /></DropdownMenuItem>
+        <DropdownMenuItem onClick={handleCopyId}><FormattedMessage id="UI.COPY_ID" /></DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" onClick={() => {}}>
-          Delete
+          <FormattedMessage id="UI.DELETE" />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -554,7 +555,7 @@ const Members = ({ title }) => {
                 {info.row.original.member.name}
               </Link>
               <span className="text-sm text-secondary-foreground font-normal">
-                {info.row.original.member.tasks} tasks
+                {info.row.original.member.tasks} <FormattedMessage id="UI.TASKS" />
               </span>
             </div>
           </div>
@@ -675,7 +676,7 @@ const Members = ({ title }) => {
       <CardToolbar>
         <div className="flex flex-wrap items-center gap-2.5">
           <Label htmlFor="auto-update" className="text-sm">
-            Active Users
+            <FormattedMessage id="UI.ACTIVE_USERS" />
           </Label>
           <Switch size="sm" id="auto-update" defaultChecked />
         </div>
@@ -684,7 +685,7 @@ const Members = ({ title }) => {
           trigger={
             <Button variant="outline">
               <Settings2 />
-              Columns
+              <FormattedMessage id="UI.COLUMNS" />
             </Button>
           }
         />

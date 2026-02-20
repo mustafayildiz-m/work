@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { PageNavbar } from '@/pages/account';
 import {
@@ -25,12 +26,12 @@ export function AccountCurrentSessionsPage() {
             <ToolbarHeading>
               <ToolbarPageTitle />
               <ToolbarDescription>
-                Authorized Devices for Report Access
+                <FormattedMessage id="UI.AUTHORIZED_DEVICES_FOR_REPORT_ACCESS" />
               </ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
               <Button variant="outline">
-                <Link to="/account/security/security-log">Activity Log</Link>
+                <Link to="/account/security/security-log"><FormattedMessage id="UI.ACTIVITY_LOG" /></Link>
               </Button>
             </ToolbarActions>
           </Toolbar>

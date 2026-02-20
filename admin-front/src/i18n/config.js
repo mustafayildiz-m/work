@@ -1,28 +1,15 @@
 import { toAbsoluteUrl } from '@/lib/helpers';
-import arMessages from './messages/ar.json';
 import enMessages from './messages/en.json';
-import frMessages from './messages/fr.json';
-import zhMessages from './messages/zh.json';
 import trMessages from './messages/tr.json';
 
 const I18N_MESSAGES = {
   en: enMessages,
-  ar: arMessages,
-  fr: frMessages,
-  zh: zhMessages,
   tr: trMessages,
 };
 
 const I18N_CONFIG_KEY = 'i18nConfig';
 
 const I18N_LANGUAGES = [
-  {
-    label: 'Türkçe',
-    code: 'tr',
-    direction: 'ltr',
-    flag: toAbsoluteUrl('/media/flags/turkey.svg'),
-    messages: I18N_MESSAGES.tr,
-  },
   {
     label: 'English',
     code: 'en',
@@ -31,29 +18,15 @@ const I18N_LANGUAGES = [
     messages: I18N_MESSAGES.en,
   },
   {
-    label: 'Arabic (Saudi)',
-    code: 'ar',
-    direction: 'rtl',
-    flag: toAbsoluteUrl('/media/flags/saudi-arabia.svg'),
-    messages: I18N_MESSAGES.ar,
-  },
-  {
-    label: 'French',
-    code: 'fr',
+    label: 'Türkçe',
+    code: 'tr',
     direction: 'ltr',
-    flag: toAbsoluteUrl('/media/flags/france.svg'),
-    messages: I18N_MESSAGES.fr,
-  },
-  {
-    label: 'Chinese',
-    code: 'zh',
-    direction: 'ltr',
-    flag: toAbsoluteUrl('/media/flags/china.svg'),
-    messages: I18N_MESSAGES.zh,
+    flag: toAbsoluteUrl('/media/flags/turkey.svg'),
+    messages: I18N_MESSAGES.tr,
   },
 ];
 
-const I18N_DEFAULT_LANGUAGE = I18N_LANGUAGES[0];
+const I18N_DEFAULT_LANGUAGE = I18N_LANGUAGES[0]; // English is default
 
 export {
   I18N_CONFIG_KEY,

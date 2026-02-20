@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { ShoppingCart, Star } from 'lucide-react';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Badge } from '@/components/ui/badge';
@@ -19,7 +20,7 @@ export function Card2({ badge, logo, title, total, star, label }) {
                 variant="destructive"
                 className="absolute top-2 right-2 uppercase"
               >
-                save 40%
+                <FormattedMessage id="UI.SAVE_40" />
               </Badge>
             )}
 
@@ -65,7 +66,7 @@ export function Card2({ badge, logo, title, total, star, label }) {
               className="ms-1"
               onClick={showCartSheet}
             >
-              <ShoppingCart /> Add
+              <ShoppingCart /> <FormattedMessage id="UI.ADD" />
             </Button>
           </div>
         </div>

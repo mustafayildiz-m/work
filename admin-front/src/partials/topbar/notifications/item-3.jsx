@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router-dom';
 import {
   Avatar,
@@ -22,12 +23,11 @@ export default function Item3({
     <div className="flex grow gap-2.5 px-5">
       <Avatar>
         <AvatarImage src={`/media/avatars/${avatar}`} alt="avatar" />
-        <AvatarFallback>CH</AvatarFallback>
+        <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
         <AvatarIndicator className="-end-1.5 -bottom-1.5">
           <AvatarStatus variant={badgeColor} className="size-2.5" />
         </AvatarIndicator>
       </Avatar>
-
       <div className="flex flex-col gap-3.5">
         <div className="flex flex-col gap-1">
           <div className="text-sm font-medium mb-px">
@@ -49,10 +49,10 @@ export default function Item3({
 
         <div className="flex flex-wrap gap-2.5">
           <Button size="sm" variant="outline">
-            Decline
+            <FormattedMessage id="UI.DECLINE" />
           </Button>
           <Button size="sm" variant="mono">
-            Accept
+            <FormattedMessage id="UI.ACCEPT" />
           </Button>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { RiFacebookBoxLine, RiInstagramLine } from '@remixicon/react';
 import { Dribbble, Mails } from 'lucide-react';
 import { Link } from 'react-router';
@@ -67,7 +68,7 @@ const CardUserSocial = ({ avatar, name, description, verify }) => {
           <Link to="#">
             <Mails size={16} />
           </Link>{' '}
-          Message
+          <FormattedMessage id="UI.MESSAGE" />
         </Button>
       </CardFooter>
     </Card>

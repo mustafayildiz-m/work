@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useEffect } from 'react';
 import { StoreClientTopbar } from '@/pages/store-client/components/common/topbar';
 import { SearchDialog } from '@/partials/dialogs/search/search-dialog';
@@ -89,7 +90,7 @@ export function Demo4Layout() {
                           >
                             <Link to={'/account/home/get-started'}>
                               <Download />
-                              Export
+                              <FormattedMessage id="UI.EXPORT" />
                             </Link>
                           </Button>
                         </>

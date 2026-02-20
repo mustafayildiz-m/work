@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useEffect, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -39,11 +40,10 @@ export function HeaderLogo() {
           alt="logo"
         />
       </Link>
-
       {/* Menu Section */}
       <div className="flex items-center gap-3">
         <h3 className="text-accent-foreground text-base hidden md:block">
-          Metronic Team
+          <FormattedMessage id="UI.METRONIC_TEAM" />
         </h3>
         <span className="text-sm text-muted-foreground font-medium hidden md:inline">
           /

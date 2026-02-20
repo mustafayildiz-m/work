@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 'use client';
 
 import { useCallback } from 'react';
@@ -156,7 +157,7 @@ export function SidebarMenuPrimary() {
       classNames={classNames}
     >
       <AccordionMenuLabel className="text-xs uppercase">
-        Pages
+        <FormattedMessage id="UI.PAGES" />
       </AccordionMenuLabel>
       {buildMenu(MENU_SIDEBAR_COMPACT)}
     </AccordionMenu>

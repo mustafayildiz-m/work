@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Button } from '@/components/ui/button';
@@ -47,8 +48,8 @@ export function AppsDropdownMenu({ trigger }) {
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
       <DropdownMenuContent className="w-[325px] p-0" side="bottom" align="end">
         <div className="flex items-center justify-between gap-2.5 text-xs text-secondary-foreground font-medium px-5 py-3 border-b border-b-gray-100">
-          <span>Apps</span>
-          <span>Enabled</span>
+          <span><FormattedMessage id="UI.APPS" /></span>
+          <span><FormattedMessage id="UI.ENABLED" /></span>
         </div>
         <div className="flex flex-col scrollable-y-auto max-h-[400px] divide-y divide-gray-100">
           {items.map((item, index) => (
@@ -83,7 +84,7 @@ export function AppsDropdownMenu({ trigger }) {
         </div>
         <div className="grid p-5 border-t border-t-border">
           <Button asChild variant="outline" size="sm">
-            <Link to="/account/api-keys">Go to Apps</Link>
+            <Link to="/account/api-keys"><FormattedMessage id="UI.GO_TO_APPS" /></Link>
           </Button>
         </div>
       </DropdownMenuContent>

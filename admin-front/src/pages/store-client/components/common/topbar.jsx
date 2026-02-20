@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { UserDropdownMenu } from '@/partials/topbar/user-dropdown-menu';
 import { Heart, Search, ShoppingCart, UserCircle } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
@@ -26,7 +27,7 @@ export function StoreClientTopbar() {
                 appearance="outline"
                 size="sm"
               >
-                ⌘ K
+                <FormattedMessage id="UI._K" />
               </Badge>
             </div>
           )}
@@ -77,7 +78,7 @@ export function StoreClientTopbar() {
           </Button>
           <div className="flex flex-col">
             <span className="text-xs font-medium text-secondary-foreground">
-              Total
+              <FormattedMessage id="UI.TOTAL" />
             </span>
             <span className="text-xs font-medium text-dark">$94.56</span>
           </div>

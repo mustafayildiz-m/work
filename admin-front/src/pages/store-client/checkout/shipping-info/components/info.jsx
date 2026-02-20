@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { Link } from 'react-router';
 import { Badge } from '@/components/ui/badge';
@@ -48,7 +49,7 @@ export function Info() {
 
         {item.badge && (
           <Badge variant="success" appearance="outline">
-            Ship here
+            <FormattedMessage id="UI.SHIP_HERE" />
           </Badge>
         )}
       </CardHeader>
@@ -62,25 +63,25 @@ export function Info() {
           <div className="flex flex-col gap-2 text-sm font-normal text-mono">
             <span>{item.street}</span>
             <span>{item.city}</span>
-            <span>Netherlands</span>
-            <span>Phone number: {item.number}</span>
+            <span><FormattedMessage id="UI.NETHERLANDS" /></span>
+            <span><FormattedMessage id="UI.PHONE_NUMBER" /> {item.number}</span>
           </div>
         </div>
 
         <div className="flex justify-between items-center min-h-8.5">
           <div className="flex items-center gap-5">
             <Button mode="link" underlined="dashed">
-              <Link to="#">Edit</Link>
+              <Link to="#"><FormattedMessage id="UI.EDIT" /></Link>
             </Button>
 
             <Button mode="link" underlined="dashed">
-              <Link to="#">Remove</Link>
+              <Link to="#"><FormattedMessage id="UI.REMOVE" /></Link>
             </Button>
           </div>
 
           {item.default === false && (
             <Button size="sm" variant="outline">
-              Select Address
+              <FormattedMessage id="UI.SELECT_ADDRESS" />
             </Button>
           )}
         </div>

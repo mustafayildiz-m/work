@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import {
   Toolbar,
@@ -25,7 +26,7 @@ export function AccountPlansPage() {
             />
 
             <ToolbarActions>
-              <Button variant="outline">View Billing</Button>
+              <Button variant="outline"><FormattedMessage id="UI.VIEW_BILLING" /></Button>
             </ToolbarActions>
           </Toolbar>
         </Container>

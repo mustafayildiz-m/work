@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useId, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -26,13 +27,12 @@ export function ReportUserDialog({ open, onOpenChange }) {
             alt="image"
           />
         </div>
-
         <div className="flex items-center justify-center gap-1">
           <Link
             to="#"
             className="hover:text-primary-active text-sm leading-5 font-semibold text-mono"
           >
-            Jenny Klabber
+            <FormattedMessage id="UI.JENNY_KLABBER" />
           </Link>
 
           <svg
@@ -83,9 +83,8 @@ export function ReportUserDialog({ open, onOpenChange }) {
     return (
       <div className="flex flex-col gap-5 px-5">
         <div className="text-sm text-mono font-semibold">
-          Let us know why you're reporting this person
+          <FormattedMessage id="UI.LET_US_KNOW_WHY_YOURE_REPORTING_THIS_PER" />
         </div>
-
         <div className="flex flex-col gap-3.5">
           {items.map((item, index) => (
             <RadioGroup
@@ -112,9 +111,9 @@ export function ReportUserDialog({ open, onOpenChange }) {
   const buildFooter = () => {
     return (
       <div className="text-sm font-medium text-center text-foreground p-x">
-        Don't worry, your report is completely anonymous; the person you're{' '}
+        <FormattedMessage id="UI.DONT_WORRY_YOUR_REPORT_IS_COMPLETELY_ANO" />{' '}
         <br />
-        reporting will not be informed that you've submitted it
+        <FormattedMessage id="UI.REPORTING_WILL_NOT_BE_INFORMED_THAT_YOUV" />
       </div>
     );
   };
@@ -122,8 +121,8 @@ export function ReportUserDialog({ open, onOpenChange }) {
   const buildButton = () => {
     return (
       <div className="flex items-center gap-2.5 justify-end px-5">
-        <Button variant="primary">Report this person</Button>
-        <Button variant="outline">Cancel</Button>
+        <Button variant="primary"><FormattedMessage id="UI.REPORT_THIS_PERSON" /></Button>
+        <Button variant="outline"><FormattedMessage id="UI.CANCEL" /></Button>
       </div>
     );
   };
@@ -132,7 +131,7 @@ export function ReportUserDialog({ open, onOpenChange }) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="p-0 space-y-0 max-w-[600px]">
         <DialogHeader className="py-5 m-0 px-5">
-          <DialogTitle>Report User</DialogTitle>
+          <DialogTitle><FormattedMessage id="UI.REPORT_USER" /></DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <div className="grid gap-5 px-0 pt-1 pb-5">

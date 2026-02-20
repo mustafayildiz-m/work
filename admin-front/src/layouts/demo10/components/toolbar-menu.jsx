@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 'use client';
 
 import { Calendar, ChevronDown } from 'lucide-react';
@@ -36,9 +37,9 @@ export function ToolbarMenu() {
         >
           <Calendar className="h-4 w-4" />
           <span className="hidden md:inline whitespace-nowrap">
-            September, 2024
+            <FormattedMessage id="UI.SEPTEMBER_2024" />
           </span>
-          <span className="inline md:hidden whitespace-nowrap">Sep, 2024</span>
+          <span className="inline md:hidden whitespace-nowrap"><FormattedMessage id="UI.SEP_2024" /></span>
           <ChevronDown className="h-3 w-3 ml-1 lg:ml-4" />
         </Button>
       </DropdownMenuTrigger>

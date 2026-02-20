@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { SquareDashedBottomCode, Users, Volleyball } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
@@ -12,18 +13,18 @@ const ActivitiesNewTeam = () => {
       <div className="grow">
         <div className="flex flex-col pb-2.5">
           <div className="text-sm text-foreground">
-            A new team{' '}
+            <FormattedMessage id="UI.A_NEW_TEAM" />{' '}
             <Button
               mode="link"
               asChild
               className="text-sm font-medium text-mono hover:text-primary-active"
             >
-              <Link to="#">Market Mavericks</Link>
+              <Link to="#"><FormattedMessage id="UI.MARKET_MAVERICKS" /></Link>
             </Button>{' '}
-            joined community
+            <FormattedMessage id="UI.JOINED_COMMUNITY" />
           </div>
           <span className="text-xs text-secondary-foreground">
-            1 month ago, 11:45 AM
+            <FormattedMessage id="UI.1_MONTH_AGO_1145_AM" />
           </span>
         </div>
         <Card className="shadow-none p-4">
@@ -63,23 +64,23 @@ const ActivitiesNewTeam = () => {
                   asChild
                   className="text-base font-medium hover:text-primary text-mono"
                 >
-                  <Link to="#">Market Mavericks</Link>
+                  <Link to="#"><FormattedMessage id="UI.MARKET_MAVERICKS" /></Link>
                 </Button>
                 <p className="text-sm text-secondary-foreground">
-                  Navigating markets with strategic solutions
+                  <FormattedMessage id="UI.NAVIGATING_MARKETS_WITH_STRATEGIC_SOLUTI" />
                 </p>
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-6 lg:gap-12">
               <div className="flex flex-col items-end gap-5">
                 <span className="text-xs text-secondary-foreground uppercase">
-                  rating
+                  <FormattedMessage id="UI.RATING" />
                 </span>
                 <Rating rating={4} round={0.5} />
               </div>
               <div className="flex flex-col items-end gap-3 lg:min-w-24 shrink-0 max-w-auto">
                 <span className="text-xs text-secondary-foreground uppercase">
-                  members
+                  <FormattedMessage id="UI.MEMBERS" />
                 </span>
                 <AvatarGroup
                   size="size-7"
@@ -100,7 +101,7 @@ const ActivitiesNewTeam = () => {
                   <Link to="#">
                     <Users />
                   </Link>{' '}
-                  Join
+                  <FormattedMessage id="UI.JOIN" />
                 </Button>
               </div>
             </div>

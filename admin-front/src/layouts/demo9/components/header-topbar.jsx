@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { StoreClientTopbar } from '@/pages/store-client/components/common/topbar';
 import { DropdownMenu2 } from '@/partials/dropdown-menu/dropdown-menu-2';
 import { ChatSheet } from '@/partials/topbar/chat-sheet';
@@ -61,7 +62,7 @@ export function HeaderTopbar() {
 
           <div className="flex items-center space-x-2">
             <Switch id="auto-update" size="sm" defaultChecked />
-            <Label htmlFor="auto-update">Pro</Label>
+            <Label htmlFor="auto-update"><FormattedMessage id="UI.PRO" /></Label>
           </div>
 
           <div className="border-e border-border h-5"></div>
@@ -69,7 +70,7 @@ export function HeaderTopbar() {
           <DropdownMenu2
             trigger={
               <Button variant="mono">
-                Create
+                <FormattedMessage id="UI.CREATE" />
                 <ChevronDown />
               </Button>
             }

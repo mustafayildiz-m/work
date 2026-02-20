@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { SquareSigma } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -5,7 +6,7 @@ const Assets = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Assets</CardTitle>
+        <CardTitle><FormattedMessage id="UI.ASSETS" /></CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid gap-y-5">
@@ -13,7 +14,7 @@ const Assets = () => {
             <SquareSigma className="text-2xl leading-none text-orange-400" />
             <div className="flex flex-col gap-2">
               <span className="text-2xl font-semibold text-mono leading-none tracking-tight">
-                302.97 XMR
+                <FormattedMessage id="UI.30297_XMR" />
               </span>
               <span className="text-sm font-medium text-secondary-foreground">
                 $42,074.81

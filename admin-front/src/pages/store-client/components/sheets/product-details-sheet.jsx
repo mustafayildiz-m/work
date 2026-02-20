@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { ShoppingCart, Star } from 'lucide-react';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Badge } from '@/components/ui/badge';
@@ -18,19 +19,19 @@ const items = [
     text: 'Availability',
     info: (
       <Badge size="sm" variant="success">
-        In Stock
+        <FormattedMessage id="UI.IN_STOCK" />
       </Badge>
     ),
   },
   {
     text: 'SKU',
     info: (
-      <span className="text-xs font-medium text-foreground">SH-001-BLK-42</span>
+      <span className="text-xs font-medium text-foreground"><FormattedMessage id="UI.SH001BLK42" /></span>
     ),
   },
   {
     text: 'Category',
-    info: <span className="text-xs font-medium text-foreground">Sneakers</span>,
+    info: <span className="text-xs font-medium text-foreground"><FormattedMessage id="UI.SNEAKERS" /></span>,
   },
   {
     text: 'Rating',
@@ -40,7 +41,7 @@ const items = [
     text: 'More Info',
     info: (
       <span className="text-xs font-normal text-foreground">
-        10g powder, powder measure & water dispensing bottle (empty)
+        <FormattedMessage id="UI.10G_POWDER_POWDER_MEASURE__WATER_DISPENS" />
       </span>
     ),
   },
@@ -72,7 +73,7 @@ export function StoreClientProductDetailsSheet({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="sm:w-[520px] sm:max-w-none inset-5 start-auto h-auto rounded-lg p-0 [&_[data-slot=sheet-close]]:top-4.5 [&_[data-slot=sheet-close]]:end-5">
         <SheetHeader className="border-b py-3.5 px-5 border-border">
-          <SheetTitle>Product Details</SheetTitle>
+          <SheetTitle><FormattedMessage id="UI.PRODUCT_DETAILS" /></SheetTitle>
         </SheetHeader>
         <SheetBody className="px-5 py-0">
           <ScrollArea className="h-[calc(100dvh-11.75rem)] pe-3 -me-3">
@@ -83,7 +84,7 @@ export function StoreClientProductDetailsSheet({
                   variant="destructive"
                   className="absolute top-4 right-4 uppercase"
                 >
-                  save 40%
+                  <FormattedMessage id="UI.SAVE_40" />
                 </Badge>
                 <img
                   src={toAbsoluteUrl('/media/store/client/600x600/1.png')}
@@ -101,15 +102,12 @@ export function StoreClientProductDetailsSheet({
               </Card>
 
               <span className="text-base font-medium text-mono">
-                Cloud Shift Lightweight Runner Pro Edition
+                <FormattedMessage id="UI.CLOUD_SHIFT_LIGHTWEIGHT_RUNNER_PRO_EDITI" />
               </span>
               <span className="text-sm font-normal text-foreground block mb-7">
-                Lightweight and stylish, these sneakers offer all-day comfort
-                with <br />
-                breathable mesh, cushioned soles, and a durable grip. Perfect
-                for <br />
-                casual wear, workouts, or daily adventures. Available in
-                multiple colors and sizes.
+                <FormattedMessage id="UI.LIGHTWEIGHT_AND_STYLISH_THESE_SNEAKERS_O" /> <br />
+                <FormattedMessage id="UI.BREATHABLE_MESH_CUSHIONED_SOLES_AND_A_DU" /> <br />
+                <FormattedMessage id="UI.CASUAL_WEAR_WORKOUTS_OR_DAILY_ADVENTURES" />
               </span>
 
               <div className="flex flex-col gap-2.5 lg:mb-11">
@@ -150,7 +148,7 @@ export function StoreClientProductDetailsSheet({
             className="grow"
           >
             <ShoppingCart />
-            Add to Cart
+            <FormattedMessage id="UI.ADD_TO_CART" />
           </Button>
         </SheetFooter>
       </SheetContent>

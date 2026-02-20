@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import {
@@ -15,27 +16,26 @@ export default function Item11() {
     <div className="flex grow gap-2.5 px-5">
       <Avatar>
         <AvatarImage src="/media/avatars/300-12.png" alt="avatar" />
-        <AvatarFallback>CH</AvatarFallback>
+        <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
         <AvatarIndicator className="-end-1.5 -bottom-1.5">
           <AvatarStatus variant="online" className="size-2.5" />
         </AvatarIndicator>
       </Avatar>
-
       <div className="flex flex-col gap-3.5 grow">
         <div className="flex flex-col gap-1">
           <div className="text-sm font-medium mb-px">
             <Link to="#" className="hover:text-primary text-mono font-semibold">
-              Skylar Frost
+              <FormattedMessage id="UI.SKYLAR_FROST" />
             </Link>
             <span className="text-secondary-foreground">
               {' '}
-              uploaded 2 attachments{' '}
+              <FormattedMessage id="UI.UPLOADED_2_ATTACHMENTS" />{' '}
             </span>
           </div>
           <span className="flex items-center text-xs font-medium text-muted-foreground">
-            3 days ago
+            <FormattedMessage id="UI.3_DAYS_AGO" />
             <span className="rounded-full size-1 bg-mono/30 mx-1.5"></span>
-            Web Design
+            <FormattedMessage id="UI.WEB_DESIGN" />
           </span>
         </div>
 
@@ -52,10 +52,10 @@ export default function Item11() {
                 to="#"
                 className="hover:text-primary font-medium text-secondary-foreground text-xs"
               >
-                Landing-page.docx
+                <FormattedMessage id="UI.LANDINGPAGEDOCX" />
               </Link>
               <span className="font-medium text-muted-foreground text-xs">
-                1.9 MB
+                <FormattedMessage id="UI.19_MB" />
               </span>
             </div>
           </div>
@@ -105,10 +105,10 @@ export default function Item11() {
                 to="#"
                 className="hover:text-primary font-medium text-secondary-foreground text-xs"
               >
-                New-icon.svg
+                <FormattedMessage id="UI.NEWICONSVG" />
               </Link>
               <span className="font-medium text-muted-foreground text-xs">
-                2.3 MB
+                <FormattedMessage id="UI.23_MB" />
               </span>
             </div>
           </div>

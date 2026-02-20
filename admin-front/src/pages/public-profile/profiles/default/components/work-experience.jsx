@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Button } from '@/components/ui/button';
@@ -77,7 +78,7 @@ const WorkExperience = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Work Experience</CardTitle>
+        <CardTitle><FormattedMessage id="UI.WORK_EXPERIENCE" /></CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid gap-y-5">
@@ -88,7 +89,7 @@ const WorkExperience = () => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/public-profile/works">Open to Work</Link>
+          <Link to="/public-profile/works"><FormattedMessage id="UI.OPEN_TO_WORK" /></Link>
         </Button>
       </CardFooter>
     </Card>

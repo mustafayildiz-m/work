@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { FileText, FileUp, Share2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
@@ -15,19 +16,19 @@ export function DropdownMenu3({ trigger }) {
         <DropdownMenuItem asChild>
           <Link to="#">
             <FileText />
-            <span>Details</span>
+            <span><FormattedMessage id="UI.DETAILS" /></span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="#">
             <Share2 />
-            <span>Share</span>
+            <span><FormattedMessage id="UI.SHARE" /></span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="#">
             <FileUp />
-            <span>Export</span>
+            <span><FormattedMessage id="UI.EXPORT" /></span>
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

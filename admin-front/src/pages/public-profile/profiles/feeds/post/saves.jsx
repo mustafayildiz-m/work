@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Button } from '@/components/ui/button';
@@ -19,18 +20,17 @@ const Saves = () => {
           }
         `}
       </style>
-
       <div className="text-center p-7.5 pt-5">
         <div className="bg-center bg-no-repeat bg-cover post-saves-bg"></div>
         <div className="text-xl font-medium text-mono text-center my-2">
-          Access Restricted for this Option
+          <FormattedMessage id="UI.ACCESS_RESTRICTED_FOR_THIS_OPTION" />
         </div>
         <span className="text-sm text-secondary-foreground block mb-7.5">
-          The user may not have the necessary privileges or permissions <br />
-          to access this option in this page
+          <FormattedMessage id="UI.THE_USER_MAY_NOT_HAVE_THE_NECESSARY_PRIV" /> <br />
+          <FormattedMessage id="UI.TO_ACCESS_THIS_OPTION_IN_THIS_PAGE" />
         </span>
         <div className="flex justify-center">
-          <Button variant="outline">Request Access</Button>
+          <Button variant="outline"><FormattedMessage id="UI.REQUEST_ACCESS" /></Button>
         </div>
       </div>
     </Fragment>

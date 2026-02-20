@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { PageNavbar } from '@/pages/account';
 import {
@@ -25,12 +26,12 @@ export function AccountTeamsPage() {
             <ToolbarHeading>
               <ToolbarPageTitle />
               <ToolbarDescription>
-                efficient team organization with real-time updates
+                <FormattedMessage id="UI.EFFICIENT_TEAM_ORGANIZATION_WITH_REALTIM_1" />
               </ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
               <Button variant="outline">
-                <Link to="#">Add New Team</Link>
+                <Link to="#"><FormattedMessage id="UI.ADD_NEW_TEAM" /></Link>
               </Button>
             </ToolbarActions>
           </Toolbar>

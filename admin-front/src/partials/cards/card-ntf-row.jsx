@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Copy, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -79,7 +80,7 @@ const CardNFT2Row = ({ avatar, name, email, info, statistics }) => {
             })}
           </div>
           <Button mode="link" underlined="dashed">
-            <Link to="/public-profile/profiles/nft">View NFT's</Link>
+            <Link to="/public-profile/profiles/nft"><FormattedMessage id="UI.VIEW_NFTS" /></Link>
           </Button>
           <Settings size={20} className="text-secondary-foreground text-lg" />
         </div>

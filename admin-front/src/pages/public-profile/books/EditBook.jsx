@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -10,6 +11,7 @@ const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/bo
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 function EditBook() {
+  const intl = useIntl();
   const { id } = useParams();
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -276,13 +278,14 @@ function EditBook() {
     return (
       <>
         <Helmet>
-          <title>Kitap Düzenle - Islamic Windows Admin</title>
+          <title>{intl.formatMessage({
+            id: "UI.KITAP_DUZENLE__ISLAMIC_WINDOWS_ADMIN"
+          })}</title>
         </Helmet>
-
         <div className="p-6 max-w-6xl mx-auto text-center">
           <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mb-4"></div>
-            <p className="text-gray-500 dark:text-gray-400">Kitap bilgileri yükleniyor...</p>
+            <p className="text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.KITAP_BILGILERI_YUKLENIYOR" /></p>
           </div>
         </div>
       </>
@@ -292,25 +295,28 @@ function EditBook() {
   return (
     <>
       <Helmet>
-        <title>Kitap Düzenle #{id} - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.KITAP_DUZENLE_"
+        })}{id} {intl.formatMessage({
+          id: "UI._ISLAMIC_WINDOWS_ADMIN"
+        })}</title>
       </Helmet>
-
       <div className="p-6 max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
               <FaBook className="text-blue-600" />
-              Kitap Düzenle
+              <FormattedMessage id="UI.KITAP_DUZENLE" />
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Kitap bilgilerini ve çevirilerini güncelleyin</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1"><FormattedMessage id="UI.KITAP_BILGILERINI_VE_CEVIRILERINI_GUNCEL" /></p>
           </div>
           <Link
             to="/kitaplar/liste"
             className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 flex items-center gap-2 shadow"
           >
             <FaArrowLeft size={14} />
-            Listeye Dön
+            <FormattedMessage id="UI.LISTEYE_DON" />
           </Link>
         </div>
 
@@ -321,7 +327,7 @@ function EditBook() {
               <div className="p-2 bg-blue-600 rounded-lg">
                 <FaBook className="text-white text-lg" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Temel Bilgiler</h3>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.TEMEL_BILGILER" /></h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -329,7 +335,7 @@ function EditBook() {
               <div className="md:col-span-2">
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   <FaImage className="text-purple-600" />
-                  Kapak Resmi
+                  <FormattedMessage id="UI.KAPAK_RESMI" />
                 </label>
                 <div className="flex items-start gap-4">
                   <div className="w-40 h-56 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center bg-gray-50 dark:bg-gray-800">
@@ -338,7 +344,7 @@ function EditBook() {
                     ) : (
                       <div className="text-center p-4">
                         <FaImage className="text-4xl text-gray-400 mx-auto mb-2" />
-                        <span className="text-xs text-gray-400">Önizleme</span>
+                        <span className="text-xs text-gray-400"><FormattedMessage id="UI.ONIZLEME" /></span>
                       </div>
                     )}
                   </div>
@@ -351,7 +357,7 @@ function EditBook() {
                     />
                     <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                       <FaInfoCircle className="inline mr-1" />
-                      Yeni resim yüklemezseniz mevcut resim korunur
+                      <FormattedMessage id="UI.YENI_RESIM_YUKLEMEZSENIZ_MEVCUT_RESIM_KO" />
                     </p>
                   </div>
                 </div>
@@ -361,7 +367,7 @@ function EditBook() {
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   <FaUser className="text-green-600" />
-                  Yazar
+                  <FormattedMessage id="UI.YAZAR" />
                   <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -379,7 +385,7 @@ function EditBook() {
               <div>
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   <FaCalendar className="text-orange-600" />
-                  Yayın Tarihi
+                  <FormattedMessage id="UI.YAYIN_TARIHI" />
                 </label>
                 <input
                   type="date"
@@ -394,11 +400,11 @@ function EditBook() {
               <div className="md:col-span-2">
                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                   <FaTags className="text-pink-600" />
-                  Kategoriler
+                  <FormattedMessage id="UI.KATEGORILER" />
                 </label>
                 <div className="flex flex-wrap gap-2 mb-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg min-h-[50px] border border-gray-200 dark:border-gray-700">
                   {form.categories.length === 0 ? (
-                    <span className="text-sm text-gray-400 italic">Henüz kategori eklenmedi</span>
+                    <span className="text-sm text-gray-400 italic"><FormattedMessage id="UI.HENUZ_KATEGORI_EKLENMEDI" /></span>
                   ) : (
                     form.categories.map((cat, index) => (
                       <span
@@ -427,7 +433,7 @@ function EditBook() {
                 />
                 <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                   <FaInfoCircle className="inline mr-1" />
-                  Kategori eklemek için yazıp Enter veya Tab tuşuna basın
+                  <FormattedMessage id="UI.KATEGORI_EKLEMEK_ICIN_YAZIP_ENTER_VEYA_T" />
                 </p>
               </div>
             </div>
@@ -440,11 +446,11 @@ function EditBook() {
                 <FaGlobe className="text-white text-lg" />
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white">Dil Çevirileri</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Her dil için başlık, açıklama ve PDF ekleyin</p>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.DIL_CEVIRILERI" /></h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.HER_DIL_ICIN_BASLIK_ACIKLAMA_VE_PDF_EKLE" /></p>
               </div>
               <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full text-xs font-bold">
-                {form.translations.length} Dil
+                {form.translations.length} <FormattedMessage id="USER.MENU.LANGUAGE" />
               </span>
             </div>
 
@@ -468,7 +474,7 @@ function EditBook() {
                       className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200 flex items-center gap-1.5"
                     >
                       <FaTrash size={14} />
-                      <span className="text-xs font-medium">Sil</span>
+                      <span className="text-xs font-medium"><FormattedMessage id="UI.SIL" /></span>
                     </button>
                   )}
                 </div>
@@ -478,7 +484,7 @@ function EditBook() {
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                       <FaGlobe className="text-green-600" />
-                      Dil
+                      <FormattedMessage id="USER.MENU.LANGUAGE" />
                       <span className="text-red-500">*</span>
                     </label>
                     <Select
@@ -497,7 +503,7 @@ function EditBook() {
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                       <FaBook className="text-blue-600" />
-                      Başlık
+                      <FormattedMessage id="UI.BASLIK" />
                       <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -514,7 +520,7 @@ function EditBook() {
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                       <FaInfoCircle className="text-gray-600" />
-                      Açıklama
+                      <FormattedMessage id="UI.ACIKLAMA" />
                     </label>
                     <textarea
                       value={translation.description}
@@ -529,7 +535,7 @@ function EditBook() {
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                       <FaInfoCircle className="text-gray-600" />
-                      Özet
+                      <FormattedMessage id="UI.OZET" />
                     </label>
                     <textarea
                       value={translation.summary}
@@ -544,7 +550,7 @@ function EditBook() {
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                       <FaFilePdf className="text-red-600" />
-                      PDF Dosyası
+                      <FormattedMessage id="UI.PDF_DOSYASI" />
                       {!translation.pdfUrl && <span className="text-red-500">*</span>}
                     </label>
                     <input
@@ -558,7 +564,7 @@ function EditBook() {
                       <div className="mt-2 p-2 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
                         <p className="text-sm text-green-700 dark:text-green-400 flex items-center gap-2">
                           <FaFilePdf />
-                          Yeni: {translation.file.name}
+                          <FormattedMessage id="UI.YENI" /> {translation.file.name}
                         </p>
                       </div>
                     )}
@@ -566,7 +572,7 @@ function EditBook() {
                       <div className="mt-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                         <p className="text-sm text-blue-700 dark:text-blue-400 flex items-center gap-2">
                           <FaFilePdf />
-                          Mevcut PDF korunacak (değiştirmek için yeni dosya yükleyin)
+                          <FormattedMessage id="UI.MEVCUT_PDF_KORUNACAK_DEGISTIRMEK_ICIN_YE" />
                         </p>
                       </div>
                     )}
@@ -581,7 +587,7 @@ function EditBook() {
                 onClick={addTranslation}
                 className="w-full py-3 px-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:border-green-500 dark:hover:border-green-500 hover:text-green-600 dark:hover:text-green-400 transition-all flex items-center justify-center gap-2 font-semibold"
               >
-                <FaPlus /> Yeni Dil Çevirisi Ekle
+                <FaPlus /> <FormattedMessage id="UI.YENI_DIL_CEVIRISI_EKLE" />
               </button>
             )}
           </div>
@@ -592,7 +598,7 @@ function EditBook() {
               to="/kitaplar/liste"
               className="px-6 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition"
             >
-              İptal
+              <FormattedMessage id="UI.IPTAL" />
             </Link>
             <button
               type="submit"
@@ -602,12 +608,12 @@ function EditBook() {
               {loading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  Güncelleniyor...
+                  <FormattedMessage id="UI.GUNCELLENIYOR" />
                 </>
               ) : (
                 <>
                   <FaSave />
-                  Değişiklikleri Kaydet
+                  <FormattedMessage id="UI.DEGISIKLIKLERI_KAYDET" />
                 </>
               )}
             </button>

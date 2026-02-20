@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { Collaborate } from '../blogger';
@@ -29,7 +30,7 @@ export function ProfileFeedsContent() {
           <Post4 />
           <div className="flex justify-center">
             <Button mode="link" underlined="dashed" asChild>
-              <Link to="#">Show more posts</Link>
+              <Link to="#"><FormattedMessage id="UI.SHOW_MORE_POSTS" /></Link>
             </Button>
           </div>
         </div>

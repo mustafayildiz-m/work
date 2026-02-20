@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { CardPost } from '@/partials/cards';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -53,9 +54,9 @@ const Posts = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Jenny’s Posts</CardTitle>
+        <CardTitle><FormattedMessage id="UI.JENNYS_POSTS" /></CardTitle>
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/public-profile/profiles/feeds">View All</Link>
+          <Link to="/public-profile/profiles/feeds"><FormattedMessage id="UI.VIEW_ALL" /></Link>
         </Button>
       </CardHeader>
       <CardContent className="p-5 lg:p-7.5 lg:pb-7">

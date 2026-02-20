@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Settings } from 'lucide-react';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -96,7 +97,7 @@ const ExternalServicesIntegrations = () => {
   return (
     <Card>
       <CardHeader id="external_services_integrations">
-        <CardTitle>Integrations</CardTitle>
+        <CardTitle><FormattedMessage id="UI.INTEGRATIONS" /></CardTitle>
       </CardHeader>
       <CardContent className="grid gap-5 lg:gap-7.5 lg:py-7.5 py-5">
         <div className="grid gap-5">
@@ -106,7 +107,7 @@ const ExternalServicesIntegrations = () => {
         </div>
         <div className="flex justify-end">
           <Button>
-            <Link to="#">Save Changes</Link>
+            <Link to="#"><FormattedMessage id="UI.SAVE_CHANGES" /></Link>
           </Button>
         </div>
       </CardContent>

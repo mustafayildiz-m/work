@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { AvatarGroup } from '@/partials/common/avatar-group';
 import { MapPin, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -12,7 +13,7 @@ const TeamMeeting = () => {
         <div className="flex items-center justify-between flex-wrap gap-5 mb-7.5">
           <div className="flex flex-col gap-1">
             <span className="text-xl font-semibold text-mono">
-              Team Meeting
+              <FormattedMessage id="UI.TEAM_MEETING" />
             </span>
             <span className="text-sm font-semibold text-foreground">
               09:00 - 09:30
@@ -25,24 +26,24 @@ const TeamMeeting = () => {
           />
         </div>
         <p className="text-sm font-normal text-foreground leading-5.5 mb-8">
-          Team meeting to discuss strategies, outline <br />
-          project milestones, define key goals, and <br />
-          establish clear timelines.
+          <FormattedMessage id="UI.TEAM_MEETING_TO_DISCUSS_STRATEGIES_OUTLI" /> <br />
+          <FormattedMessage id="UI.PROJECT_MILESTONES_DEFINE_KEY_GOALS_AND" /> <br />
+          <FormattedMessage id="UI.ESTABLISH_CLEAR_TIMELINES" />
         </p>
         <div className="flex rounded-lg bg-accent/50 gap-10 p-5">
           <div className="flex flex-col gap-5">
             <div className="flex items-center gap-1.5 text-sm font-normal text-foreground">
               <MapPin size={16} className="text-base text-muted-foreground" />
-              Location
+              <FormattedMessage id="UI.LOCATION" />
             </div>
             <div className="text-sm font-medium text-foreground pt-1.5">
-              Amsterdam
+              <FormattedMessage id="UI.AMSTERDAM" />
             </div>
           </div>
           <div className="flex flex-col gap-5">
             <div className="flex items-center gap-1.5 text-sm font-normal text-foreground">
               <Users size={16} className="text-base text-muted-foreground" />
-              Team
+              <FormattedMessage id="UI.TEAM" />
             </div>
             <AvatarGroup
               size="size-[30px]"
@@ -61,7 +62,7 @@ const TeamMeeting = () => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="#">Join Meeting</Link>
+          <Link to="#"><FormattedMessage id="UI.JOIN_MEETING" /></Link>
         </Button>
       </CardFooter>
     </Card>

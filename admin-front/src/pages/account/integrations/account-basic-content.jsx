@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { Faq } from '@/partials/common/faq';
 import { Help2 } from '@/partials/common/help2';
@@ -28,10 +29,9 @@ export function AccountIntegrationsContent() {
         title="Add New Integration"
         subTitle={
           <Fragment>
-            Explore New Integration: Expand Your Toolkit with Cutting-Edge,
+            <FormattedMessage id="UI.EXPLORE_NEW_INTEGRATION_EXPAND_YOUR_TOOL" />
             <br />
-            User-Friendly Solutions Tailored for Efficient and Innovative
-            Project Management.
+            <FormattedMessage id="UI.USERFRIENDLY_SOLUTIONS_TAILORED_FOR_EFFI" />
           </Fragment>
         }
         engage={{
@@ -40,7 +40,6 @@ export function AccountIntegrationsContent() {
           btnColor: 'btn-primary',
         }}
       />
-
       <Faq />
       <Help2 />
     </div>

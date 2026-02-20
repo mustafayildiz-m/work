@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useEffect, useState } from 'react';
 import { addDays, format } from 'date-fns';
 import { CalendarDays, Download } from 'lucide-react';
@@ -58,7 +59,7 @@ const Demo7Layout = () => {
                 <Button variant="outline" asChild>
                   <Link to={'/account/home/get-started'}>
                     <Download />
-                    Export
+                    <FormattedMessage id="UI.EXPORT" />
                   </Link>
                 </Button>
 
@@ -76,7 +77,7 @@ const Demo7Layout = () => {
                           format(date.from, 'LLL dd, y')
                         )
                       ) : (
-                        <span>Pick a date range</span>
+                        <span><FormattedMessage id="UI.PICK_A_DATE_RANGE" /></span>
                       )}
                     </Button>
                   </PopoverTrigger>

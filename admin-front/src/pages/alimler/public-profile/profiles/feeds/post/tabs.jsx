@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Archive, Heart, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -25,7 +26,7 @@ const Tabs = ({
         onClick={() => setActiveTab('comments')}
         data-tab-toggle={`#post_${postId}_comments`}
       >
-        <MessageSquare /> {comments} Comments
+        <MessageSquare /> {comments} <FormattedMessage id="UI.COMMENTS" />
       </Button>
       <Button
         variant={activeTab === 'likes' ? 'primary' : 'ghost'}
@@ -37,7 +38,7 @@ const Tabs = ({
         onClick={() => setActiveTab('likes')}
         data-tab-toggle={`#post_${postId}_likes`}
       >
-        <Heart /> {likes} Likes
+        <Heart /> {likes} <FormattedMessage id="UI.LIKES" />
       </Button>
       <Button
         variant={activeTab === 'saves' ? 'primary' : 'ghost'}
@@ -49,7 +50,7 @@ const Tabs = ({
         onClick={() => setActiveTab('saves')}
         data-tab-toggle={`#post_${postId}_saves`}
       >
-        <Archive /> {saves} Saves
+        <Archive /> {saves} <FormattedMessage id="UI.SAVES" />
       </Button>
     </div>
   );

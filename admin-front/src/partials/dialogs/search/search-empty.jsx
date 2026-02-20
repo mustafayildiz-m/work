@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Button } from '@/components/ui/button';
 
@@ -19,15 +20,15 @@ export function SearchEmpty() {
       </div>
       <div className="flex flex-col gap-1.5">
         <h3 className="text-base font-semibold text-mono text-center">
-          Looking for something..
+          <FormattedMessage id="UI.LOOKING_FOR_SOMETHING" />
         </h3>
         <span className="text-sm font-medium text-center text-secondary-foreground">
-          Initiate your digital experience with <br />
-          our intuitive dashboard
+          <FormattedMessage id="UI.INITIATE_YOUR_DIGITAL_EXPERIENCE_WITH" /> <br />
+          <FormattedMessage id="UI.OUR_INTUITIVE_DASHBOARD" />
         </span>
       </div>
       <div className="flex justify-center">
-        <Button variant="outline">View Projects</Button>
+        <Button variant="outline"><FormattedMessage id="UI.VIEW_PROJECTS" /></Button>
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 'use client';
 
 import { useMemo, useState } from 'react';
@@ -902,12 +903,12 @@ function ActionsCell({ row }) {
             alert(`Clicked on action button for row ${row.original.user.name}`)
           }
         >
-          Action
+          <FormattedMessage id="UI.ACTION" />
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleCopyId}>Copy ID</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleCopyId}><FormattedMessage id="UI.COPY_ID" /></DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" onClick={() => {}}>
-          Delete
+          <FormattedMessage id="UI.DELETE" />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -1131,7 +1132,7 @@ const CurrentSessions = () => {
       <CardToolbar>
         <div className="flex flex-wrap items-center gap-2.5">
           <Label htmlFor="auto-update" className="text-sm">
-            Only Active Users
+            <FormattedMessage id="UI.ONLY_ACTIVE_USERS" />
           </Label>
           <Switch size="sm" id="auto-update" defaultChecked />
         </div>
@@ -1140,7 +1141,7 @@ const CurrentSessions = () => {
           trigger={
             <Button variant="outline">
               <Settings2 />
-              Columns
+              <FormattedMessage id="UI.COLUMNS" />
             </Button>
           }
         />
@@ -1187,7 +1188,7 @@ const CurrentSessions = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline">
                     <Filter />
-                    Browser
+                    <FormattedMessage id="UI.BROWSER" />
                     {selectedBrowsers.length > 0 && (
                       <Badge size="sm" appearance="stroke">
                         {selectedBrowsers.length}
@@ -1198,7 +1199,7 @@ const CurrentSessions = () => {
                 <PopoverContent className="w-40 p-3" align="start">
                   <div className="space-y-3">
                     <div className="text-xs font-medium text-muted-foreground">
-                      Filters
+                      <FormattedMessage id="UI.FILTERS" />
                     </div>
                     <div className="space-y-3">
                       {Object.keys(browserCounts).map((browser) => (
@@ -1233,7 +1234,7 @@ const CurrentSessions = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline">
                     <Filter />
-                    Location
+                    <FormattedMessage id="UI.LOCATION" />
                     {selectedLocations.length > 0 && (
                       <Badge size="sm" appearance="stroke">
                         {selectedLocations.length}
@@ -1244,7 +1245,7 @@ const CurrentSessions = () => {
                 <PopoverContent className="w-40 p-3" align="start">
                   <div className="space-y-3">
                     <div className="text-xs font-medium text-muted-foreground">
-                      Filters
+                      <FormattedMessage id="UI.FILTERS" />
                     </div>
                     <div className="space-y-3">
                       {Object.keys(locationCounts).map((location) => (

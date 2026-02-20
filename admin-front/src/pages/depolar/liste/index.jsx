@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useMemo, useState, useEffect } from 'react';
 import {
   flexRender,
@@ -14,12 +15,13 @@ import { FaWarehouse, FaMapMarkerAlt, FaCheckCircle, FaTimesCircle, FaEdit, FaTr
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function StoreList() {
+  const intl = useIntl();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [warehouseToDelete, setWarehouseToDelete] = useState(null);
-  
+
   // Filters
   const [filters, setFilters] = useState({
     name: '',
@@ -167,7 +169,7 @@ export default function StoreList() {
             title="Düzenle"
           >
             <FaEdit size={16} />
-            <span className="text-xs font-medium hidden lg:inline">Düzenle</span>
+            <span className="text-xs font-medium hidden lg:inline"><FormattedMessage id="UI.DUZENLE" /></span>
           </Link>
           <button
             className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all duration-200 flex items-center gap-1.5"
@@ -178,7 +180,7 @@ export default function StoreList() {
             title="Sil"
           >
             <FaTrash size={16} />
-            <span className="text-xs font-medium hidden lg:inline">Sil</span>
+            <span className="text-xs font-medium hidden lg:inline"><FormattedMessage id="UI.SIL" /></span>
           </button>
         </div>
       ),
@@ -198,19 +200,21 @@ export default function StoreList() {
   return (
     <>
       <Helmet>
-        <title>Depo Yönetimi - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.DEPO_YONETIMI__ISLAMIC_WINDOWS_ADMIN"
+        })}</title>
       </Helmet>
       <div className="p-6 max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Depo Yönetimi</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Tüm depolarınızı yönetin ve stok durumlarını takip edin</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.DEPO_YONETIMI" /></h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1"><FormattedMessage id="UI.TUM_DEPOLARINIZI_YONETIN_VE_STOK_DURUMLA" /></p>
           </div>
           <Link
             to="/depolar/ekle"
             className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all duration-300 flex items-center gap-2"
           >
-            <span className="text-lg">+</span> Depo Ekle
+            <span className="text-lg">+</span> <FormattedMessage id="UI.DEPO_EKLE" />
           </Link>
         </div>
 
@@ -219,9 +223,9 @@ export default function StoreList() {
           <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-5 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-blue-100 text-sm font-medium">Toplam Depo</p>
+                <p className="text-blue-100 text-sm font-medium"><FormattedMessage id="UI.TOPLAM_DEPO" /></p>
                 <p className="text-3xl font-bold mt-1">{stats.total}</p>
-                <p className="text-blue-100 text-xs mt-1">Kayıtlı depo sayısı</p>
+                <p className="text-blue-100 text-xs mt-1"><FormattedMessage id="UI.KAYITLI_DEPO_SAYISI" /></p>
               </div>
               <FaWarehouse className="text-5xl text-blue-200 opacity-30" />
             </div>
@@ -230,9 +234,9 @@ export default function StoreList() {
           <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-5 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-green-100 text-sm font-medium">Aktif Depo</p>
+                <p className="text-green-100 text-sm font-medium"><FormattedMessage id="UI.AKTIF_DEPO" /></p>
                 <p className="text-3xl font-bold mt-1">{stats.active}</p>
-                <p className="text-green-100 text-xs mt-1">Kullanımda olan</p>
+                <p className="text-green-100 text-xs mt-1"><FormattedMessage id="UI.KULLANIMDA_OLAN" /></p>
               </div>
               <FaCheckCircle className="text-5xl text-green-200 opacity-30" />
             </div>
@@ -241,9 +245,9 @@ export default function StoreList() {
           <div className="bg-gradient-to-br from-gray-500 to-gray-600 rounded-xl shadow-lg p-5 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-100 text-sm font-medium">Pasif Depo</p>
+                <p className="text-gray-100 text-sm font-medium"><FormattedMessage id="UI.PASIF_DEPO" /></p>
                 <p className="text-3xl font-bold mt-1">{stats.inactive}</p>
-                <p className="text-gray-100 text-xs mt-1">Kullanımda değil</p>
+                <p className="text-gray-100 text-xs mt-1"><FormattedMessage id="UI.KULLANIMDA_DEGIL" /></p>
               </div>
               <FaTimesCircle className="text-5xl text-gray-200 opacity-30" />
             </div>
@@ -256,7 +260,7 @@ export default function StoreList() {
             <div className="p-2 bg-blue-600 rounded-lg">
               <FaBoxes className="text-white text-lg" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white">Filtrele & Ara</h3>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.FILTRELE__ARA" /></h3>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -264,7 +268,7 @@ export default function StoreList() {
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaWarehouse className="text-blue-600" />
-                Depo Adı
+                <FormattedMessage id="UI.DEPO_ADI" />
               </label>
               <input
                 type="text"
@@ -279,7 +283,7 @@ export default function StoreList() {
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaMapMarkerAlt className="text-red-600" />
-                Konum
+                <FormattedMessage id="UI.KONUM" />
               </label>
               <input
                 type="text"
@@ -294,16 +298,16 @@ export default function StoreList() {
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaCheckCircle className="text-green-600" />
-                Durum
+                <FormattedMessage id="UI.DURUM" />
               </label>
               <select
                 value={filters.isActive}
                 onChange={e => setFilters(prev => ({ ...prev, isActive: e.target.value }))}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm transition cursor-pointer"
               >
-                <option value="all">Tüm Durumlar</option>
-                <option value="true">Aktif Depolar</option>
-                <option value="false">Pasif Depolar</option>
+                <option value="all"><FormattedMessage id="UI.TUM_DURUMLAR" /></option>
+                <option value="true"><FormattedMessage id="UI.AKTIF_DEPOLAR" /></option>
+                <option value="false"><FormattedMessage id="UI.PASIF_DEPOLAR" /></option>
               </select>
             </div>
           </div>
@@ -311,11 +315,11 @@ export default function StoreList() {
           {/* Reset Button & Results Count */}
           <div className="flex items-center justify-between mt-4 pt-4 border-t border-blue-200 dark:border-gray-700">
             <div className="flex items-center gap-2 text-sm">
-              <span className="text-gray-600 dark:text-gray-400">Bulunan:</span>
+              <span className="text-gray-600 dark:text-gray-400"><FormattedMessage id="UI.BULUNAN" /></span>
               <span className="px-3 py-1 bg-blue-600 text-white rounded-full font-bold">
                 {data.length}
               </span>
-              <span className="text-gray-600 dark:text-gray-400">depo</span>
+              <span className="text-gray-600 dark:text-gray-400"><FormattedMessage id="UI.DEPO" /></span>
             </div>
             
             {(filters.name || filters.location || filters.isActive !== 'all') && (
@@ -324,7 +328,7 @@ export default function StoreList() {
                 className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 font-medium text-sm flex items-center gap-2"
               >
                 <FaTimesCircle />
-                Filtreleri Temizle
+                <FormattedMessage id="UI.FILTRELERI_TEMIZLE" />
               </button>
             )}
           </div>
@@ -333,7 +337,7 @@ export default function StoreList() {
         {loading ? (
           <div className="py-20 text-center bg-white dark:bg-gray-900">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mb-4"></div>
-            <p className="text-gray-500 dark:text-gray-400">Depolar yükleniyor...</p>
+            <p className="text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.DEPOLAR_YUKLENIYOR" /></p>
           </div>
         ) : error ? (
           <div className="py-20 text-center text-red-500 bg-white dark:bg-gray-900">
@@ -382,7 +386,7 @@ export default function StoreList() {
                           to="/depolar/ekle"
                           className="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                         >
-                          İlk Depoyu Ekle
+                          <FormattedMessage id="UI.ILK_DEPOYU_EKLE" />
                         </Link>
                       )}
                     </td>
@@ -413,21 +417,21 @@ export default function StoreList() {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            ← Önceki
+            <FormattedMessage id="UI._ONCEKI" />
           </button>
           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Sayfa <strong className="text-primary-600 dark:text-primary-400">{table.getState().pagination.pageIndex + 1}</strong> / <strong>{table.getPageCount()}</strong>
+            <FormattedMessage id="UI.SAYFA" /> <strong className="text-primary-600 dark:text-primary-400">{table.getState().pagination.pageIndex + 1}</strong>/ <strong>{table.getPageCount()}</strong>
           </span>
           <button
             className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition font-medium"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Sonraki →
+            <FormattedMessage id="UI.SONRAKI_" />
           </button>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-sm text-gray-600 dark:text-gray-400">Sayfa başına:</span>
+          <span className="text-sm text-gray-600 dark:text-gray-400"><FormattedMessage id="UI.SAYFA_BASINA" /></span>
           <select
             className="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg text-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 font-medium"
             value={table.getState().pagination.pageSize}
@@ -435,7 +439,7 @@ export default function StoreList() {
           >
             {[5, 10, 20, 50, 100].map(pageSize => (
               <option key={pageSize} value={pageSize}>
-                {pageSize} kayıt
+                {pageSize} <FormattedMessage id="UI.KAYIT" />
               </option>
             ))}
           </select>
@@ -449,36 +453,36 @@ export default function StoreList() {
                 <FaTrash className="text-red-600 dark:text-red-400 text-2xl" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                Depoyu Silmek İstediğinize Emin misiniz?
+                <FormattedMessage id="UI.DEPOYU_SILMEK_ISTEDIGINIZE_EMIN_MISINIZ" />
               </h3>
               
               <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg mb-4 text-left">
                 <p className="text-sm text-gray-800 dark:text-gray-200 mb-3">
-                  <span className="font-bold text-red-600 dark:text-red-400">{warehouseToDelete.name}</span> deposu silinecek.
+                  <span className="font-bold text-red-600 dark:text-red-400">{warehouseToDelete.name}</span> <FormattedMessage id="UI.DEPOSU_SILINECEK" />
                 </p>
                 <ul className="space-y-2 text-xs text-red-700 dark:text-red-400">
                   <li className="flex items-start gap-2">
                     <span className="mt-0.5">⚠️</span>
-                    <span>Bu depoya ait tüm stok kayıtları silinecektir</span>
+                    <span><FormattedMessage id="UI.BU_DEPOYA_AIT_TUM_STOK_KAYITLARI_SILINEC" /></span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="mt-0.5">⚠️</span>
-                    <span>Bu depo ile ilgili tüm transfer kayıtları silinecektir</span>
+                    <span><FormattedMessage id="UI.BU_DEPO_ILE_ILGILI_TUM_TRANSFER_KAYITLAR" /></span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="mt-0.5">⚠️</span>
-                    <span className="font-bold">Bu işlem geri alınamaz!</span>
+                    <span className="font-bold"><FormattedMessage id="UI.BU_ISLEM_GERI_ALINAMAZ" /></span>
                   </li>
                 </ul>
               </div>
 
               <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg text-left text-xs space-y-1">
                 <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Depo ID:</span>
+                  <span className="text-gray-600 dark:text-gray-400"><FormattedMessage id="UI.DEPO_ID" /></span>
                   <span className="font-semibold text-gray-900 dark:text-white">{warehouseToDelete.id}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Konum:</span>
+                  <span className="text-gray-600 dark:text-gray-400"><FormattedMessage id="UI.KONUM_1" /></span>
                   <span className="font-semibold text-gray-900 dark:text-white">{warehouseToDelete.location || '-'}</span>
                 </div>
               </div>
@@ -492,7 +496,7 @@ export default function StoreList() {
                   setWarehouseToDelete(null);
                 }}
               >
-                İptal
+                <FormattedMessage id="UI.IPTAL" />
               </button>
               <button
                 className="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium shadow-lg hover:shadow-xl"
@@ -502,7 +506,7 @@ export default function StoreList() {
                   setWarehouseToDelete(null);
                 }}
               >
-                Evet, Sil
+                <FormattedMessage id="UI.EVET_SIL" />
               </button>
             </div>
           </div>

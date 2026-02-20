@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { HexagonBadge } from '@/partials/common/hexagon-badge';
 import { DropdownMenu2 } from '@/partials/dropdown-menu/dropdown-menu-2';
 import {
@@ -96,7 +97,7 @@ const CommunityBadges = () => {
   return (
     <Card>
       <CardHeader className="gap-2">
-        <CardTitle>Badges</CardTitle>
+        <CardTitle><FormattedMessage id="UI.BADGES" /></CardTitle>
         <DropdownMenu2
           trigger={
             <Button variant="ghost" mode="icon">

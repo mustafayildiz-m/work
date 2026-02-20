@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { BadgeCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -29,7 +30,7 @@ const CardAuthor = ({ avatar, bgImage, name, location, works }) => {
             {work.title}
           </Link>
           <div className="text-sm text-secondary-foreground">
-            Token ID:{' '}
+            <FormattedMessage id="UI.TOKEN_ID" />{' '}
             <span className="text-sm font-medium text-foreground">
               {work.id}
             </span>
@@ -85,7 +86,7 @@ const CardAuthor = ({ avatar, bgImage, name, location, works }) => {
                 </span>
               </div>
               <Button variant="outline">
-                <BadgeCheck size={16} /> Work with me
+                <BadgeCheck size={16} /> <FormattedMessage id="UI.WORK_WITH_ME" />
               </Button>
             </div>
           </div>
@@ -101,7 +102,7 @@ const CardAuthor = ({ avatar, bgImage, name, location, works }) => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed">
-          <Link to="/account/members/team-members">View Profile</Link>
+          <Link to="/account/members/team-members"><FormattedMessage id="UI.VIEW_PROFILE" /></Link>
         </Button>
       </CardFooter>
     </Card>

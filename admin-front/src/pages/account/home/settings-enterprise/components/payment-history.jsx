@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { DropdownMenu2 } from '@/partials/dropdown-menu/dropdown-menu-2';
 import { DropdownMenu5 } from '@/partials/dropdown-menu/dropdown-menu-5';
 import { EllipsisVertical } from 'lucide-react';
@@ -71,7 +72,7 @@ const PaymentHistory = () => {
   return (
     <Card>
       <CardHeader className="gap-2">
-        <CardTitle>Payment History</CardTitle>
+        <CardTitle><FormattedMessage id="UI.PAYMENT_HISTORY" /></CardTitle>
         <DropdownMenu2
           trigger={
             <Button variant="ghost" mode="icon">
@@ -84,10 +85,10 @@ const PaymentHistory = () => {
         <Table>
           <TableHeader>
             <TableRow className="bg-accent/60">
-              <TableHead className="min-w-40 h-10">Date</TableHead>
-              <TableHead className="min-w-40 lg:text-end h-10">Type</TableHead>
+              <TableHead className="min-w-40 h-10"><FormattedMessage id="UI.DATE" /></TableHead>
+              <TableHead className="min-w-40 lg:text-end h-10"><FormattedMessage id="UI.TYPE" /></TableHead>
               <TableHead className="min-w-40 lg:text-end h-10">
-                Amount
+                <FormattedMessage id="UI.AMOUNT" />
               </TableHead>
               <TableHead className="w-8 h-10"></TableHead>
             </TableRow>
@@ -101,7 +102,7 @@ const PaymentHistory = () => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="#">View all Payments</Link>
+          <Link to="#"><FormattedMessage id="UI.VIEW_ALL_PAYMENTS" /></Link>
         </Button>
       </CardFooter>
     </Card>

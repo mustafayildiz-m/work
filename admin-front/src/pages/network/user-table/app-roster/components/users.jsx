@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 'use client';
 
 import { useMemo, useState } from 'react';
@@ -449,11 +450,11 @@ function ActionsCell({ row }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="bottom" align="end">
-        <DropdownMenuItem onClick={() => {}}>Edit</DropdownMenuItem>
-        <DropdownMenuItem onClick={handleCopyId}>Copy ID</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => {}}><FormattedMessage id="UI.EDIT" /></DropdownMenuItem>
+        <DropdownMenuItem onClick={handleCopyId}><FormattedMessage id="UI.COPY_ID" /></DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" onClick={() => {}}>
-          Delete
+          <FormattedMessage id="UI.DELETE" />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -739,13 +740,13 @@ const Users = () => {
     return (
       <CardToolbar>
         <Button>
-          <Settings2 /> Filters
+          <Settings2 /> <FormattedMessage id="UI.FILTERS" />
         </Button>
         <DataGridColumnVisibility
           table={table}
           trigger={
             <Button variant="outline">
-              <Settings2 /> Columns
+              <Settings2 /> <FormattedMessage id="UI.COLUMNS" />
             </Button>
           }
         />
@@ -792,7 +793,7 @@ const Users = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline">
                     <Filter />
-                    Status
+                    <FormattedMessage id="UI.STATUS" />
                     {selectedStatuses.length > 0 && (
                       <Badge size="sm" appearance="stroke">
                         {selectedStatuses.length}
@@ -803,7 +804,7 @@ const Users = () => {
                 <PopoverContent className="w-40 p-3" align="start">
                   <div className="space-y-3">
                     <div className="text-xs font-medium text-muted-foreground">
-                      Filters
+                      <FormattedMessage id="UI.FILTERS" />
                     </div>
                     <div className="space-y-3">
                       {Object.keys(statusCounts).map((status) => (
@@ -835,7 +836,7 @@ const Users = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline">
                     <Filter />
-                    Sort Order
+                    <FormattedMessage id="UI.SORT_ORDER" />
                     {sortOrder !== 'latest' && (
                       <Badge size="sm" appearance="stroke">
                         {sortOrder.charAt(0).toUpperCase() + sortOrder.slice(1)}
@@ -846,7 +847,7 @@ const Users = () => {
                 <PopoverContent className="w-40 p-3" align="start">
                   <div className="space-y-3">
                     <div className="text-xs font-medium text-muted-foreground">
-                      Sort By
+                      <FormattedMessage id="UI.SORT_BY" />
                     </div>
                     <div className="space-y-3">
                       {['latest', 'older', 'oldest'].map((order) => (

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { AvatarGroup } from '@/partials/common/avatar-group';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -57,7 +58,7 @@ export function SearchIntegrations({ items, more }) {
         {!more || (
           <AccordionMenuItem className="px-4 pt-2" value={''}>
             <Button variant="outline" className="mx-auto w-full max-w-full">
-              Go to Users
+              <FormattedMessage id="UI.GO_TO_USERS" />
             </Button>
           </AccordionMenuItem>
         )}

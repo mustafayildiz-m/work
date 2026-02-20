@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { CardNFT } from '@/partials/cards';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -59,9 +60,9 @@ const Tokens3dArt = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>3d Art</CardTitle>
+        <CardTitle><FormattedMessage id="UI.3D_ART" /></CardTitle>
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/network/user-cards/author">View All</Link>
+          <Link to="/network/user-cards/author"><FormattedMessage id="UI.VIEW_ALL" /></Link>
         </Button>
       </CardHeader>
       <CardContent className="p-5 lg:p-7.5 lg:pb-7">

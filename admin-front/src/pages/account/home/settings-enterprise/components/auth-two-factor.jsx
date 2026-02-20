@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { HexagonBadge } from '@/partials/common/hexagon-badge';
 import { DropdownMenu2 } from '@/partials/dropdown-menu/dropdown-menu-2';
 import { EllipsisVertical, MessageSquareText, ShieldCheck } from 'lucide-react';
@@ -57,7 +58,7 @@ const AuthTwoFactor = () => {
   return (
     <Card>
       <CardHeader className="gap-2" id="settings_auth_two_factor">
-        <CardTitle>Two-Factor authentication(2FA)</CardTitle>
+        <CardTitle><FormattedMessage id="UI.TWOFACTOR_AUTHENTICATION2FA" /></CardTitle>
         <DropdownMenu2
           trigger={
             <Button variant="ghost" mode="icon">

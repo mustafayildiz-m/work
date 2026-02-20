@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -25,7 +26,7 @@ export function TotalAssetValue() {
       <CardContent className="flex items-center flex-wrap sm:flex-nowrap gap-8">
         <div className="flex flex-col gap-0.5">
           <span className="text-sm font-medium text-secondary-foreground">
-            Total Asset Value
+            <FormattedMessage id="UI.TOTAL_ASSET_VALUE" />
           </span>
           <span className="text-3xl font-semibold text-mono">$106,576.00</span>
         </div>
@@ -36,7 +37,7 @@ export function TotalAssetValue() {
           <div className="flex items-center gap-1">
             <span className="text-lg font-semibold text-mono">2258</span>
             <span className="text-xs font-medium text-secondary-foreground">
-              products
+              <FormattedMessage id="UI.PRODUCTS" />
             </span>
           </div>
 

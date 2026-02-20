@@ -32,6 +32,12 @@ const getInitialLanguage = () => {
   }
 
   const currenLanguage = getData(I18N_CONFIG_KEY);
+  if (currenLanguage && currenLanguage.code) {
+    const matchedLanguage = I18N_LANGUAGES.find((lang) => lang.code === currenLanguage.code);
+    if (matchedLanguage) {
+      return matchedLanguage;
+    }
+  }
   return currenLanguage ?? I18N_DEFAULT_LANGUAGE;
 };
 

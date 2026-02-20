@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { MoveLeft, MoveRight } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
@@ -14,18 +15,17 @@ export function ShippingInfoContent() {
         <div className="flex justify-end items-center flex-wrap gap-3">
           <Button variant="outline">
             <MoveLeft className="text-base" />
-            <Link to="/store-client/checkout/order-summary">Order Summary</Link>
+            <Link to="/store-client/checkout/order-summary"><FormattedMessage id="UI.ORDER_SUMMARY" /></Link>
           </Button>
 
           <Button>
             <Link to="/store-client/checkout/payment-method">
-              Payment Method
+              <FormattedMessage id="UI.PAYMENT_METHOD" />
             </Link>
             <MoveRight className="text-base" />
           </Button>
         </div>
       </div>
-
       <div className="lg:col-span-1">
         <div className="space-y-5">
           <Order />

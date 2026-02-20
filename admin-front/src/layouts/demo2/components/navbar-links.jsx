@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 export function NavbarLinks() {
   return (
     <div className="flex items-center text-sm gap-5 lg:pb-1">
@@ -5,16 +6,16 @@ export function NavbarLinks() {
         className="hover:text-primary"
         href="https://www.youtube.com/c/KeenThemesTuts/videos"
       >
-        Videos
+        <FormattedMessage id="UI.VIDEOS" />
       </a>
       <a
         className="hover:text-primary"
         href="https://keenthemes.com/metronic/tailwind/docs/"
       >
-        User Guides
+        <FormattedMessage id="UI.USER_GUIDES" />
       </a>
       <a className="hover:text-primary" href="https://devs.keenthemes.com">
-        Support
+        <FormattedMessage id="UI.SUPPORT" />
       </a>
     </div>
   );

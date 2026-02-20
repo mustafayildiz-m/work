@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
@@ -58,7 +59,7 @@ const Import = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Start Import</CardTitle>
+        <CardTitle><FormattedMessage id="UI.START_IMPORT" /></CardTitle>
       </CardHeader>
       <CardContent className="grid gap-7.5 py-5 lg:py-7.5">
         {options.map((option, index) => {
@@ -66,17 +67,16 @@ const Import = () => {
         })}
         <div className="flex flex-col gap-2.5">
           <div className="flex gap-2.5">
-            <Button>Select CSV File</Button>
-            <Button variant="ghost">Choose File</Button>
+            <Button><FormattedMessage id="UI.SELECT_CSV_FILE" /></Button>
+            <Button variant="ghost"><FormattedMessage id="UI.CHOOSE_FILE" /></Button>
           </div>
           <p className="text-secondary-foreground text-sm">
-            Use the 'Choose file' button to locate and upload the CSV file that
-            contains the user data.
+            <FormattedMessage id="UI.USE_THE_CHOOSE_FILE_BUTTON_TO_LOCATE_AND" />
           </p>
         </div>
         <div className="flex flex-col gap-4">
           <div className="text-mono text-sm font-medium">
-            Custom welcome message
+            <FormattedMessage id="UI.CUSTOM_WELCOME_MESSAGE" />
           </div>
           <Textarea
             placeholder="Your welcome message here"
@@ -89,20 +89,18 @@ const Import = () => {
           <div className="flex items-center space-x-2">
             <Checkbox />
             <Label className="text-foreground text-sm font-medium">
-              Send welcome email to new users
+              <FormattedMessage id="UI.SEND_WELCOME_EMAIL_TO_NEW_USERS" />
             </Label>
           </div>
         </div>
         <div className="text-foreground text-sm">
-          <span className="text-destructive uppercase">Warning: </span>
-          An email will be sent to all users created unless the welcome message
-          is disabled in settings. Ensure the correct communication preferences
-          are set.
+          <span className="text-destructive uppercase"><FormattedMessage id="UI.WARNING" /> </span>
+          <FormattedMessage id="UI.AN_EMAIL_WILL_BE_SENT_TO_ALL_USERS_CREAT" />
         </div>
       </CardContent>
       <CardFooter className="justify-center py-3.5">
         <Button>
-          <Link to="#">Import Member</Link>
+          <Link to="#"><FormattedMessage id="UI.IMPORT_MEMBER" /></Link>
         </Button>
       </CardFooter>
     </Card>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { HexagonBadge } from '@/partials/common/hexagon-badge';
 import {
@@ -20,9 +21,9 @@ const GeneralSettings = () => {
       icon: Users,
       title: (
         <Fragment>
-          Prevent members from inviting others
+          <FormattedMessage id="UI.PREVENT_MEMBERS_FROM_INVITING_OTHERS" />
           <Badge size="sm" variant="primary" appearance="outline">
-            Pro
+            <FormattedMessage id="UI.PRO" />
           </Badge>
         </Fragment>
       ),
@@ -35,9 +36,9 @@ const GeneralSettings = () => {
       icon: Puzzle,
       title: (
         <Fragment>
-          Prevent members from installing third-party integrations
+          <FormattedMessage id="UI.PREVENT_MEMBERS_FROM_INSTALLING_THIRDPAR" />
           <Badge size="sm" variant="primary" appearance="outline">
-            Pro
+            <FormattedMessage id="UI.PRO" />
           </Badge>
         </Fragment>
       ),
@@ -56,15 +57,15 @@ const GeneralSettings = () => {
       icon: ShieldCheck,
       title: (
         <Fragment>
-          Push protection for yourself
+          <FormattedMessage id="UI.PUSH_PROTECTION_FOR_YOURSELF" />
           <Badge variant="info" appearance="outline">
-            Beta
+            <FormattedMessage id="UI.BETA" />
           </Badge>
         </Fragment>
       ),
 
       description: 'Enable users to create and display a profile publicly.',
-      actions: <Button variant="outline">Setup</Button>,
+      actions: <Button variant="outline"><FormattedMessage id="UI.SETUP" /></Button>,
     },
     {
       icon: BadgeCheck,
@@ -82,9 +83,9 @@ const GeneralSettings = () => {
       icon: TabletSmartphone,
       title: (
         <Fragment>
-          Private vulnerability reporting
+          <FormattedMessage id="UI.PRIVATE_VULNERABILITY_REPORTING" />
           <Badge variant="info" appearance="outline">
-            Beta
+            <FormattedMessage id="UI.BETA" />
           </Badge>
         </Fragment>
       ),
@@ -96,9 +97,9 @@ const GeneralSettings = () => {
             variant="outline"
             className="bg-red-100 border-red-200 text-red-600 hover:text-white hover:bg-red-500 dark:border-red-950 dark:bg-red-950/30"
           >
-            Disable all
+            <FormattedMessage id="UI.DISABLE_ALL" />
           </Button>
-          <Button variant="outline">Enable all</Button>
+          <Button variant="outline"><FormattedMessage id="UI.ENABLE_ALL" /></Button>
         </Fragment>
       ),
     },

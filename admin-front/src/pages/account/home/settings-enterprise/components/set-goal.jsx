@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { DropdownMenu5 } from '@/partials/dropdown-menu/dropdown-menu-5';
 import { EllipsisVertical } from 'lucide-react';
@@ -15,7 +16,7 @@ const SetGoal = () => {
   return (
     <Card>
       <CardHeader className="gap-2" id="settings_set_goal">
-        <CardTitle>Set a Goal</CardTitle>
+        <CardTitle><FormattedMessage id="UI.SET_A_GOAL" /></CardTitle>
         <DropdownMenu5
           trigger={
             <Button variant="ghost" mode="icon">
@@ -26,20 +27,18 @@ const SetGoal = () => {
       </CardHeader>
       <CardContent className="lg:p-7.5 p-5">
         <p className="text-sm text-foreground leading-5 mb-3.5">
-          Define aspirations, outline the path. Set a goal to transform dreams
-          into <br />
-          measurable achievements.
+          <FormattedMessage id="UI.DEFINE_ASPIRATIONS_OUTLINE_THE_PATH_SET__1" /> <br />
+          <FormattedMessage id="UI.MEASURABLE_ACHIEVEMENTS" />
         </p>
         <Card className="shadow-none p-3.5">
           <div className="flex justify-between items-center flex-wrap gap-2 mb-7">
             <div className="flex items-center gap-3.5 pt-1">
               <span className="text-2xl font-semibold text-foreground">$0</span>
               <span className="text-sm text-secondary-foreground">
-                Pursuing opportunities, earning zero. Growth <br /> beyond
-                monetary measures.
+                <FormattedMessage id="UI.PURSUING_OPPORTUNITIES_EARNING_ZERO_GROW" /> <br /> <FormattedMessage id="UI.BEYOND_MONETARY_MEASURES" />
               </span>
             </div>
-            <Button variant="outline">Add a Goal</Button>
+            <Button variant="outline"><FormattedMessage id="UI.ADD_A_GOAL" /></Button>
           </div>
           <div className="mb-3">
             <Slider

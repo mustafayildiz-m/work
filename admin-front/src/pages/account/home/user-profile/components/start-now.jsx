@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -17,19 +18,18 @@ const StartNow = () => {
           }
         `}
       </style>
-
       <Card className="flex-col gap-5 justify-between bg-[center_top_1.3rem] bg-no-repeat pt-5 lg:pt-10 px-5 start-now-bg bg-[length:700px]">
         <div className="text-center">
           <h3 className="text-mono text-lg font-semibold leading-6 mb-1.5">
-            Individually Tailored
+            <FormattedMessage id="UI.INDIVIDUALLY_TAILORED" />
             <br />
-            Deals for Personal Satisfaction
+            <FormattedMessage id="UI.DEALS_FOR_PERSONAL_SATISFACTION" />
           </h3>
           <span className="text-secondary-foreground text-sm block mb-5">
-            Discover promotions crafted to match your preferences.
+            <FormattedMessage id="UI.DISCOVER_PROMOTIONS_CRAFTED_TO_MATCH_YOU" />
           </span>
           <Button variant="mono">
-            <Link to="/network/user-table/visitors">Start Now</Link>
+            <Link to="/network/user-table/visitors"><FormattedMessage id="UI.START_NOW" /></Link>
           </Button>
         </div>
         <div className="text-center">

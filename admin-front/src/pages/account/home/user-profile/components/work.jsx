@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { SquarePen } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -10,10 +11,10 @@ const Work = () => {
   return (
     <Card className="min-w-full">
       <CardHeader>
-        <CardTitle>Work</CardTitle>
+        <CardTitle><FormattedMessage id="UI.WORK" /></CardTitle>
         <div className="flex items-center gap-2">
           <Label htmlFor="auto-update" className="text-sm">
-            Available now
+            <FormattedMessage id="UI.AVAILABLE_NOW" />
           </Label>
           <Switch defaultChecked size="sm" />
         </div>
@@ -23,12 +24,12 @@ const Work = () => {
           <TableBody>
             <TableRow>
               <TableCell className="py-2 min-w-36text-secondary-foreground font-normal">
-                Language
+                <FormattedMessage id="UI.LANGUAGE" />
               </TableCell>
               <TableCell className="py-2 min-w-72 w-full text-foreground font-normal">
-                English{' '}
+                <FormattedMessage id="UI.ENGLISH" />{' '}
                 <span className="text-secondary-foreground font-normal">
-                  -Fluent
+                  <FormattedMessage id="UI.FLUENT" />
                 </span>
               </TableCell>
               <TableCell className="py-2 text-end min-w-24">
@@ -39,10 +40,10 @@ const Work = () => {
             </TableRow>
             <TableRow>
               <TableCell className="py-2 text-secondary-foreground font-normal">
-                Hourly Rate
+                <FormattedMessage id="UI.HOURLY_RATE" />
               </TableCell>
               <TableCell className="py-2 text-foreground font-normal">
-                $28 / hour
+                <FormattedMessage id="UI.28__HOUR" />
               </TableCell>
               <TableCell className="py-2 text-end">
                 <Button variant="ghost" mode="icon">
@@ -52,10 +53,10 @@ const Work = () => {
             </TableRow>
             <TableRow>
               <TableCell className="py-2text-secondary-foreground font-normal">
-                Avaibilaty
+                <FormattedMessage id="UI.AVAIBILATY" />
               </TableCell>
               <TableCell className="py-2 text-foreground font-normal">
-                32 hours a week
+                <FormattedMessage id="UI.32_HOURS_A_WEEK" />
               </TableCell>
               <TableCell className="py-2 text-end">
                 <Button variant="ghost" mode="icon">
@@ -65,18 +66,18 @@ const Work = () => {
             </TableRow>
             <TableRow>
               <TableCell className="py-3 text-secondary-foreground font-normal">
-                Skills
+                <FormattedMessage id="UI.SKILLS" />
               </TableCell>
               <TableCell className="py-3 text-secondary-foreground">
                 <div className="flex flex-wrap gap-2.5">
-                  <Badge variant="secondary">Web Design</Badge>
-                  <Badge variant="secondary">Code Review</Badge>
-                  <Badge variant="secondary">noCode</Badge>
-                  <Badge variant="secondary">UX</Badge>
-                  <Badge variant="secondary">Figma</Badge>
-                  <Badge variant="secondary">Webflow</Badge>
-                  <Badge variant="secondary">AI</Badge>
-                  <Badge variant="secondary">Management</Badge>
+                  <Badge variant="secondary"><FormattedMessage id="UI.WEB_DESIGN" /></Badge>
+                  <Badge variant="secondary"><FormattedMessage id="UI.CODE_REVIEW" /></Badge>
+                  <Badge variant="secondary"><FormattedMessage id="UI.NOCODE" /></Badge>
+                  <Badge variant="secondary"><FormattedMessage id="UI.UX" /></Badge>
+                  <Badge variant="secondary"><FormattedMessage id="UI.FIGMA" /></Badge>
+                  <Badge variant="secondary"><FormattedMessage id="UI.WEBFLOW" /></Badge>
+                  <Badge variant="secondary"><FormattedMessage id="UI.AI" /></Badge>
+                  <Badge variant="secondary"><FormattedMessage id="UI.MANAGEMENT" /></Badge>
                 </div>
               </TableCell>
               <TableCell className="py-3 text-end">
@@ -87,12 +88,12 @@ const Work = () => {
             </TableRow>
             <TableRow>
               <TableCell className="py-4 text-secondary-foreground font-normal">
-                About
+                <FormattedMessage id="UI.ABOUT" />
               </TableCell>
               <TableCell className="py-4 text-foreground font-normal">
-                We're open to partnerships, guest posts, and <br />
-                more. Join us to share your insights and grow <br />
-                your audience.
+                <FormattedMessage id="UI.WERE_OPEN_TO_PARTNERSHIPS_GUEST_POSTS_AN" /> <br />
+                <FormattedMessage id="UI.MORE_JOIN_US_TO_SHARE_YOUR_INSIGHTS_AND_" /> <br />
+                <FormattedMessage id="UI.YOUR_AUDIENCE" />
               </TableCell>
               <TableCell className="py-4 text-end">
                 <Button variant="ghost" mode="icon">

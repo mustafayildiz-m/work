@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { CardConnection, CardConnectionRow } from '@/partials/cards';
 import { LayoutGrid, List } from 'lucide-react';
@@ -275,7 +276,7 @@ const Network = () => {
     <div className="flex flex-col items-stretch gap-5 lg:gap-7.5">
       <div className="flex flex-wrap items-center gap-5 justify-between">
         <h3 className="text-lg text-mono font-semibold">
-          {items.length} Connections
+          {items.length} <FormattedMessage id="UI.CONNECTIONS" />
         </h3>
         <ToggleGroup
           type="single"
@@ -302,7 +303,7 @@ const Network = () => {
           </div>
           <div className="flex grow justify-center pt-5 lg:pt-7.5">
             <Button mode="link" underlined="dashed" asChild>
-              <Link to="/account/members/team-info">Show more Connections</Link>
+              <Link to="/account/members/team-info"><FormattedMessage id="UI.SHOW_MORE_CONNECTIONS" /></Link>
             </Button>
           </div>
         </div>
@@ -316,7 +317,7 @@ const Network = () => {
           </div>
           <div className="flex grow justify-center pt-5 lg:pt-7.5">
             <Button mode="link" underlined="dashed" asChild>
-              <Link to="/account/members/team-info">Show more Connections</Link>
+              <Link to="/account/members/team-info"><FormattedMessage id="UI.SHOW_MORE_CONNECTIONS" /></Link>
             </Button>
           </div>
         </div>

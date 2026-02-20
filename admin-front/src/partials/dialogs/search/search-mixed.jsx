@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import {
   AccordionMenu,
   AccordionMenuGroup,
@@ -10,7 +11,7 @@ export function SearchMixed({ settings, integrations, users }) {
   return (
     <div className="flex flex-col gap-2.5">
       <div className="text-xs text-secondary-foreground font-medium pt-2.5 pb-1.5 ps-3">
-        <span className="ps-2">Settings</span>
+        <span className="ps-2"><FormattedMessage id="UI.SETTINGS" /></span>
 
         <div className="pt-2">
           <AccordionMenu
@@ -26,21 +27,17 @@ export function SearchMixed({ settings, integrations, users }) {
           </AccordionMenu>
         </div>
       </div>
-
       <div className="border-b border-b-border"></div>
-
       <div className="text-xs text-secondary-foreground font-medium pt-2.5 pb-1.5">
-        <span className="ps-4">Integrations</span>
+        <span className="ps-4"><FormattedMessage id="UI.INTEGRATIONS" /></span>
 
         <div className="pt-2">
           <SearchIntegrations items={integrations} />
         </div>
       </div>
-
       <div className="border-b border-b-border"></div>
-
       <div className="text-xs text-secondary-foreground font-medium pt-2.5 pb-1.5">
-        <span className="ps-4">Users</span>
+        <span className="ps-4"><FormattedMessage id="UI.USERS" /></span>
 
         <div className="pt-2">
           <SearchUsers items={users} />

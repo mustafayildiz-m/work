@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import {
   Bell,
@@ -91,7 +92,7 @@ export function AccountGetStartedContent() {
       <Options items={items} dropdown={true} />
       <div className="flex grow justify-center pt-5 lg:pt-7.5">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/account/members/team-info">More Account Options</Link>
+          <Link to="/account/members/team-info"><FormattedMessage id="UI.MORE_ACCOUNT_OPTIONS" /></Link>
         </Button>
       </div>
     </Fragment>

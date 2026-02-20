@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -43,6 +44,7 @@ import {
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function AlimHikayeleriListe() {
+  const intl = useIntl();
   const navigate = useNavigate();
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -171,33 +173,34 @@ export default function AlimHikayeleriListe() {
   return (
     <>
       <Helmet>
-        <title>İslamla Şereflenenler - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.ISLAMLA_SEREFLENENLER__ISLAMIC_WINDOWS_A"
+        })}</title>
       </Helmet>
-
       <div className="container mx-auto p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-bold">İslamla Şereflenenler</h1>
+            <h1 className="text-3xl font-bold"><FormattedMessage id="UI.ISLAMLA_SEREFLENENLER" /></h1>
             <p className="text-muted-foreground">
-              İslam'la şereflenen kişilerin videolarını yönetin
+              <FormattedMessage id="UI.ISLAMLA_SEREFLENEN_KISILERIN_VIDEOLARINI_1" />
             </p>
           </div>
           <Button onClick={() => navigate('/alim-hikayeleri/ekle')}>
             <Plus className="h-4 w-4 mr-2" />
-            Yeni Video Ekle
+            <FormattedMessage id="UI.YENI_VIDEO_EKLE" />
           </Button>
         </div>
 
         {/* Filters */}
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle>Filtreler</CardTitle>
+            <CardTitle><FormattedMessage id="UI.FILTRELER" /></CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Arama</label>
+                <label className="text-sm font-medium"><FormattedMessage id="UI.ARAMA" /></label>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
@@ -210,13 +213,13 @@ export default function AlimHikayeleriListe() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">Dil</label>
+                <label className="text-sm font-medium"><FormattedMessage id="USER.MENU.LANGUAGE" /></label>
                 <Select value={languageFilter} onValueChange={setLanguageFilter}>
                   <SelectTrigger>
                     <SelectValue placeholder="Dil seçiniz" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Tüm Diller</SelectItem>
+                    <SelectItem value="all"><FormattedMessage id="UI.TUM_DILLER" /></SelectItem>
                     {languages.map((language) => (
                       <SelectItem key={language.id} value={language.code}>
                         {language.name}
@@ -227,23 +230,23 @@ export default function AlimHikayeleriListe() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">Durum</label>
+                <label className="text-sm font-medium"><FormattedMessage id="UI.DURUM" /></label>
                 <Select value={statusFilter} onValueChange={setStatusFilter}>
                   <SelectTrigger>
                     <SelectValue placeholder="Durum seçiniz" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Tüm Durumlar</SelectItem>
-                    <SelectItem value="active">Aktif</SelectItem>
-                    <SelectItem value="inactive">Pasif</SelectItem>
+                    <SelectItem value="all"><FormattedMessage id="UI.TUM_DURUMLAR" /></SelectItem>
+                    <SelectItem value="active"><FormattedMessage id="UI.AKTIF" /></SelectItem>
+                    <SelectItem value="inactive"><FormattedMessage id="UI.PASIF" /></SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">Toplam</label>
+                <label className="text-sm font-medium"><FormattedMessage id="UI.TOPLAM" /></label>
                 <div className="flex items-center h-10 px-3 py-2 border rounded-md bg-muted">
-                  <span className="text-sm">{pagination.total} video</span>
+                  <span className="text-sm">{pagination.total} <FormattedMessage id="UI.VIDEO" /></span>
                 </div>
               </div>
             </div>
@@ -253,25 +256,25 @@ export default function AlimHikayeleriListe() {
         {/* Stories Table */}
         <Card>
           <CardHeader>
-            <CardTitle>Videolar</CardTitle>
+            <CardTitle><FormattedMessage id="UI.VIDEOLAR" /></CardTitle>
             <CardDescription>
-              Tüm videoların listesi
+              <FormattedMessage id="UI.TUM_VIDEOLARIN_LISTESI" />
             </CardDescription>
           </CardHeader>
           <CardContent>
             {loading ? (
               <div className="flex items-center justify-center py-8">
                 <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                <span className="ml-2">Yükleniyor...</span>
+                <span className="ml-2"><FormattedMessage id="UI.YUKLENIYOR" /></span>
               </div>
             ) : stories.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-muted-foreground">Henüz video bulunmuyor</p>
+                <p className="text-muted-foreground"><FormattedMessage id="UI.HENUZ_VIDEO_BULUNMUYOR" /></p>
                 <Button
                   className="mt-4"
                   onClick={() => navigate('/alim-hikayeleri/ekle')}
                 >
-                  İlk Videoyu Ekle
+                  <FormattedMessage id="UI.ILK_VIDEOYU_EKLE" />
                 </Button>
               </div>
             ) : (
@@ -279,16 +282,16 @@ export default function AlimHikayeleriListe() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="w-[80px]">Kapak</TableHead>
-                      <TableHead>Başlık</TableHead>
-                      <TableHead>Alim</TableHead>
-                      <TableHead>Dil</TableHead>
-                      <TableHead>Süre</TableHead>
-                      <TableHead>Durum</TableHead>
-                      <TableHead>Görüntülenme</TableHead>
-                      <TableHead>Beğeni</TableHead>
-                      <TableHead>Tarih</TableHead>
-                      <TableHead className="w-[50px]">İşlemler</TableHead>
+                      <TableHead className="w-[80px]"><FormattedMessage id="UI.KAPAK" /></TableHead>
+                      <TableHead><FormattedMessage id="UI.BASLIK" /></TableHead>
+                      <TableHead><FormattedMessage id="UI.ALIM" /></TableHead>
+                      <TableHead><FormattedMessage id="USER.MENU.LANGUAGE" /></TableHead>
+                      <TableHead><FormattedMessage id="UI.SURE" /></TableHead>
+                      <TableHead><FormattedMessage id="UI.DURUM" /></TableHead>
+                      <TableHead><FormattedMessage id="UI.GORUNTULENME" /></TableHead>
+                      <TableHead><FormattedMessage id="UI.BEGENI" /></TableHead>
+                      <TableHead><FormattedMessage id="UI.TARIH" /></TableHead>
+                      <TableHead className="w-[50px]"><FormattedMessage id="UI.ISLEMLER" /></TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -314,7 +317,7 @@ export default function AlimHikayeleriListe() {
                             {story.is_featured && (
                               <Badge variant="secondary" className="text-xs">
                                 <Star className="h-3 w-3 mr-1" />
-                                Öne Çıkan
+                                <FormattedMessage id="UI.ONE_CIKAN" />
                               </Badge>
                             )}
                           </div>
@@ -370,7 +373,7 @@ export default function AlimHikayeleriListe() {
                                 onClick={() => navigate(`/alim-hikayeleri/duzenle/${story.id}`)}
                               >
                                 <Edit className="h-4 w-4 mr-2" />
-                                Düzenle
+                                <FormattedMessage id="UI.DUZENLE" />
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() => {
@@ -380,7 +383,7 @@ export default function AlimHikayeleriListe() {
                                 className="text-red-600"
                               >
                                 <Trash2 className="h-4 w-4 mr-2" />
-                                Sil
+                                <FormattedMessage id="UI.SIL" />
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -398,8 +401,7 @@ export default function AlimHikayeleriListe() {
         {pagination.totalPages > 1 && (
           <div className="flex items-center justify-between mt-6">
             <div className="text-sm text-muted-foreground">
-              Sayfa {pagination.page} / {pagination.totalPages}
-              ({pagination.total} toplam video)
+              <FormattedMessage id="UI.SAYFA" /> {pagination.page}/ {pagination.totalPages}({pagination.total} <FormattedMessage id="UI.TOPLAM_VIDEO" />
             </div>
             <div className="flex gap-2">
               <Button
@@ -408,7 +410,7 @@ export default function AlimHikayeleriListe() {
                 disabled={pagination.page === 1}
                 onClick={() => fetchStories(pagination.page - 1, searchQuery, languageFilter, statusFilter)}
               >
-                Önceki
+                <FormattedMessage id="UI.ONCEKI" />
               </Button>
               <Button
                 variant="outline"
@@ -416,7 +418,7 @@ export default function AlimHikayeleriListe() {
                 disabled={pagination.page === pagination.totalPages}
                 onClick={() => fetchStories(pagination.page + 1, searchQuery, languageFilter, statusFilter)}
               >
-                Sonraki
+                <FormattedMessage id="UI.SONRAKI" />
               </Button>
             </div>
           </div>
@@ -426,19 +428,17 @@ export default function AlimHikayeleriListe() {
         <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Videoyu Sil</AlertDialogTitle>
-              <AlertDialogDescription>
-                "{storyToDelete?.title}" başlıklı videoyu silmek istediğinizden emin misiniz?
-                Bu işlem geri alınamaz.
+              <AlertDialogTitle><FormattedMessage id="UI.VIDEOYU_SIL" /></AlertDialogTitle>
+              <AlertDialogDescription>"{storyToDelete?.title}<FormattedMessage id="UI._BASLIKLI_VIDEOYU_SILMEK_ISTEDIGINIZDEN_" />
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>İptal</AlertDialogCancel>
+              <AlertDialogCancel><FormattedMessage id="UI.IPTAL" /></AlertDialogCancel>
               <AlertDialogAction
                 onClick={() => handleDelete(storyToDelete?.id)}
                 className="bg-red-600 hover:bg-red-700"
               >
-                Sil
+                <FormattedMessage id="UI.SIL" />
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

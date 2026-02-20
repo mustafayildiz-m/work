@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { CardCampaign, CardCampaignRow } from '@/partials/cards';
 import { LayoutGrid, List, SquarePlus } from 'lucide-react';
@@ -221,7 +222,7 @@ export function CampaignsContent({ mode }) {
     <div className="flex flex-col items-stretch gap-5 lg:gap-7.5">
       <div className="flex flex-wrap items-center gap-5 justify-between">
         <h3 className="text-lg text-mono font-semibold">
-          {items.length} Campaigns
+          {items.length} <FormattedMessage id="UI.CAMPAIGNS" />
         </h3>
         <div className="flex gap-4">
           <ToggleGroup
@@ -240,7 +241,7 @@ export function CampaignsContent({ mode }) {
             </ToggleGroupItem>
           </ToggleGroup>
           <Button size="md" className="bg-green-500">
-            <SquarePlus /> New Campaign
+            <SquarePlus /> <FormattedMessage id="UI.NEW_CAMPAIGN" />
           </Button>
         </div>
       </div>
@@ -253,7 +254,7 @@ export function CampaignsContent({ mode }) {
           </div>
           <div className="flex grow justify-center pt-5 lg:pt-7.5">
             <Button mode="link" underlined="dashed" asChild>
-              <Link to="/account/integrations">Show more Campaigns</Link>
+              <Link to="/account/integrations"><FormattedMessage id="UI.SHOW_MORE_CAMPAIGNS" /></Link>
             </Button>
           </div>
         </div>
@@ -267,7 +268,7 @@ export function CampaignsContent({ mode }) {
           </div>
           <div className="flex grow justify-center pt-5 lg:pt-7.5">
             <Button mode="link" underlined="dashed" asChild>
-              <Link to="/account/integrations">Show more Campaigns</Link>
+              <Link to="/account/integrations"><FormattedMessage id="UI.SHOW_MORE_CAMPAIGNS" /></Link>
             </Button>
           </div>
         </div>

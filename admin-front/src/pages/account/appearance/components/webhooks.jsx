@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -15,17 +16,16 @@ const Webhooks = () => {
   return (
     <Card className="pb-2.5">
       <CardHeader id="webhooks">
-        <CardTitle>Webhooks</CardTitle>
+        <CardTitle><FormattedMessage id="UI.WEBHOOKS" /></CardTitle>
       </CardHeader>
       <CardContent className="grid gap-5">
         <p className="text-sm font-medium text-secondary-foreground">
-          Set up Webhooks to trigger actions on external services in real-time.
-          Stay informed on updates and changes to <br />
-          ensure seamless integration.
+          <FormattedMessage id="UI.SET_UP_WEBHOOKS_TO_TRIGGER_ACTIONS_ON_EX" /> <br />
+          <FormattedMessage id="UI.ENSURE_SEAMLESS_INTEGRATION" />
         </p>
         <div className="flex items-center flex-wrap lg:flex-nowrap gap-2.5">
           <span className="text-sm font-medium text-secondary-foreground max-w-56 w-full">
-            Webhook URL
+            <FormattedMessage id="UI.WEBHOOK_URL" />
           </span>
           <div className="grow min-w-48">
             <Input
@@ -39,7 +39,7 @@ const Webhooks = () => {
         </div>
         <div className="flex items-center flex-wrap lg:flex-nowrap gap-2.5">
           <span className="text-sm font-medium text-secondary-foreground max-w-56 w-full">
-            Webhook Name
+            <FormattedMessage id="UI.WEBHOOK_NAME" />
           </span>
           <div className="grow min-w-48">
             <Input
@@ -53,7 +53,7 @@ const Webhooks = () => {
         </div>
         <div className="flex items-center flex-wrap lg:flex-nowrap gap-2.5">
           <span className="text-sm font-medium text-secondary-foreground max-w-56 w-full">
-            Event Type
+            <FormattedMessage id="UI.EVENT_TYPE" />
           </span>
           <div className="grow min-w-48">
             <Select defaultValue="1">
@@ -61,28 +61,28 @@ const Webhooks = () => {
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="1">All Events</SelectItem>
-                <SelectItem value="2">Option 2</SelectItem>
-                <SelectItem value="3">Option 3</SelectItem>
+                <SelectItem value="1"><FormattedMessage id="UI.ALL_EVENTS" /></SelectItem>
+                <SelectItem value="2"><FormattedMessage id="UI.OPTION_2" /></SelectItem>
+                <SelectItem value="3"><FormattedMessage id="UI.OPTION_3" /></SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
         <div className="flex items-center flex-wrap lg:flex-nowrap gap-2.5 mb-2.5">
           <span className="text-sm font-medium text-secondary-foreground max-w-56 w-full">
-            Custom Headers
+            <FormattedMessage id="UI.CUSTOM_HEADERS" />
           </span>
           <div className="grow min-w-48">
             <div className="flex items-center space-x-2">
               <Label htmlFor="size-sm" className="text-sm">
-                Use Custom Header
+                <FormattedMessage id="UI.USE_CUSTOM_HEADER" />
               </Label>
               <Switch id="size-sm" size="sm" defaultChecked />
             </div>
           </div>
         </div>
         <div className="flex justify-end">
-          <Button>Save Changes</Button>
+          <Button><FormattedMessage id="UI.SAVE_CHANGES" /></Button>
         </div>
       </CardContent>
     </Card>

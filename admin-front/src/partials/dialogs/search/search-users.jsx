@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { EllipsisVertical } from 'lucide-react';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -39,7 +40,7 @@ export function SearchUsers({ items, more }) {
                       {item.name}
                     </Link>
                     <span className="text-sm font-normal text-muted-foreground">
-                      {item.email} connections
+                      {item.email} <FormattedMessage id="UI.CONNECTIONS" />
                     </span>
                   </div>
                 </div>
@@ -67,7 +68,7 @@ export function SearchUsers({ items, more }) {
         {!more || (
           <AccordionMenuItem className="px-4 pt-2" value={''}>
             <Button variant="outline" className="mx-auto w-full max-w-full">
-              Go to Users
+              <FormattedMessage id="UI.GO_TO_USERS" />
             </Button>
           </AccordionMenuItem>
         )}

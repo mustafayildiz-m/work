@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { ChartSpline } from 'lucide-react';
 import { TimelineItem } from './timeline-item';
 
@@ -6,11 +7,10 @@ const ActivitiesDesignerWelcome = () => {
     <TimelineItem icon={ChartSpline} line={true}>
       <div className="flex flex-col">
         <div className="text-sm text-foreground">
-          Onboarded a talented designer to our creative team, adding valuable
-          expertise to upcoming projects.
+          <FormattedMessage id="UI.ONBOARDED_A_TALENTED_DESIGNER_TO_OUR_CRE" />
         </div>
         <span className="text-xs text-secondary-foreground">
-          2 weeks ago, 10:45 AM
+          <FormattedMessage id="UI.2_WEEKS_AGO_1045_AM" />
         </span>
       </div>
     </TimelineItem>

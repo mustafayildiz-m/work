@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { HexagonBadge } from '@/partials/common/hexagon-badge';
 import { ScrollText } from 'lucide-react';
@@ -20,7 +21,6 @@ const Upgrade = () => {
           }
         `}
       </style>
-
       <Card className="rounded-xl">
         <div className="flex items-center justify-between grow gap-5 p-5 rtl:bg-[center_left_-8rem] bg-[center_right_-8rem] bg-no-repeat bg-[length:700px] upgrade-bg">
           <div className="flex items-center gap-4">
@@ -37,25 +37,23 @@ const Upgrade = () => {
                   to="#"
                   className="text-base font-medium text-mono hover:text-primary-active"
                 >
-                  Upgrade your Components.io to Enterprise
+                  <FormattedMessage id="UI.UPGRADE_YOUR_COMPONENTSIO_TO_ENTERPRISE" />
                 </Link>
                 <Badge variant="destructive" appearance="outline">
-                  Trial expires in 29 days
+                  <FormattedMessage id="UI.TRIAL_EXPIRES_IN_29_DAYS" />
                 </Badge>
               </div>
               <div className="text-sm text-secondary-foreground">
-                Enterprise Components.io is a website offering high-quality,
-                advanced UI components designed for developers, enhancing
-                efficiency and aesthetics in web and mobile app development.
+                <FormattedMessage id="UI.ENTERPRISE_COMPONENTSIO_IS_A_WEBSITE_OFF" />
               </div>
             </div>
           </div>
           <div className="flex items-center gap-1.5 shrink-0">
             <Button variant="ghost">
-              <Link to="#">Cancel Trial</Link>
+              <Link to="#"><FormattedMessage id="UI.CANCEL_TRIAL" /></Link>
             </Button>
             <Button variant="mono">
-              <Link to="#">Upgrade Now</Link>
+              <Link to="#"><FormattedMessage id="UI.UPGRADE_NOW" /></Link>
             </Button>
           </div>
         </div>

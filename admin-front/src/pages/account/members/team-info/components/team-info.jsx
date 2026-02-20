@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { AvatarInput } from '@/partials/common/avatar-input';
 import { SquarePen } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -28,10 +29,10 @@ const TeamInfo = () => {
   return (
     <Card className="min-w-full">
       <CardHeader>
-        <CardTitle>Team Info</CardTitle>
+        <CardTitle><FormattedMessage id="UI.TEAM_INFO" /></CardTitle>
         <div className="flex items-center space-x-2">
           <Label htmlFor="size-sm" className="text-sm">
-            Visible to all
+            <FormattedMessage id="UI.VISIBLE_TO_ALL" />
           </Label>
           <Switch id="size-sm" size="sm" />
         </div>
@@ -41,10 +42,10 @@ const TeamInfo = () => {
           <TableBody>
             <TableRow>
               <TableCell className="py-2 min-w-32 text-secondary-foreground font-normal">
-                Thumbnail
+                <FormattedMessage id="UI.THUMBNAIL" />
               </TableCell>
               <TableCell className="py-2 text-secondary-foreground font-normal min-w-32 text-sm">
-                150x150px JPEG, PNG Image
+                <FormattedMessage id="UI.150X150PX_JPEG_PNG_IMAGE" />
               </TableCell>
               <TableCell className="py-2 text-center min-w-16">
                 <AvatarInput />
@@ -52,10 +53,10 @@ const TeamInfo = () => {
             </TableRow>
             <TableRow>
               <TableCell className="py-2 text-secondary-foreground font-normal">
-                Team Name
+                <FormattedMessage id="UI.TEAM_NAME" />
               </TableCell>
               <TableCell className="py-2 text-secondary-foreground font-normal">
-                Product Management
+                <FormattedMessage id="UI.PRODUCT_MANAGEMENT" />
               </TableCell>
               <TableCell className="py-2 text-center">
                 <Button variant="ghost" mode="icon">
@@ -65,11 +66,10 @@ const TeamInfo = () => {
             </TableRow>
             <TableRow>
               <TableCell className="py-2 text-secondary-foreground font-normal">
-                Description
+                <FormattedMessage id="UI.DESCRIPTION" />
               </TableCell>
               <TableCell className="py-2 text-secondary-foreground font-normal">
-                We're open to partnerships, guest posts, and more. Join us to
-                share your insights and grow your audience.
+                <FormattedMessage id="UI.WERE_OPEN_TO_PARTNERSHIPS_GUEST_POSTS_AN" />
               </TableCell>
               <TableCell className="py-2 text-center">
                 <Button variant="ghost" mode="icon">
@@ -79,11 +79,11 @@ const TeamInfo = () => {
             </TableRow>
             <TableRow>
               <TableCell className="py-3 text-secondary-foreground font-normal">
-                View as
+                <FormattedMessage id="UI.VIEW_AS" />
               </TableCell>
               <TableCell className="py-3 text-secondary-foreground">
                 <Badge size="md" variant="success" appearance="outline">
-                  Public
+                  <FormattedMessage id="UI.PUBLIC" />
                 </Badge>
               </TableCell>
               <TableCell className="py-3 text-center">
@@ -94,7 +94,7 @@ const TeamInfo = () => {
             </TableRow>
             <TableRow>
               <TableCell className="py-3 text-secondary-foreground font-normal">
-                Skills
+                <FormattedMessage id="UI.SKILLS" />
               </TableCell>
               <TableCell className="py-3 text-secondary-foreground">
                 <div className="flex flex-wrap gap-2.5">

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { PageMenu } from '@/pages/public-profile';
 import { UserHero } from '@/partials/common/user-hero';
@@ -37,16 +38,15 @@ export function ProfileGamerPage() {
           { email: 'Level 22', icon: ScanEye },
         ]}
       />
-
       <Container>
         <Navbar>
           <PageMenu />
           <NavbarActions>
             <Button>
-              <Users /> Connect
+              <Users /> <FormattedMessage id="UI.CONNECT" />
             </Button>
             <Button variant="outline">
-              <SquarePlus /> Invite to Team
+              <SquarePlus /> <FormattedMessage id="UI.INVITE_TO_TEAM" />
             </Button>
             <Button variant="outline" mode="icon">
               <MessagesSquare />

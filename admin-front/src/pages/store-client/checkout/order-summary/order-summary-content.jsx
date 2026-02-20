@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { MoveRight } from 'lucide-react';
 import { Link } from 'react-router';
 import { Button } from '@/components/ui/button';
@@ -12,15 +13,14 @@ export function OrderSummaryContent() {
           <Card4 limit={4} />
         </div>
         <div className="flex justify-end items-center flex-wrap gap-3">
-          <Button variant="outline">Cancel</Button>
+          <Button variant="outline"><FormattedMessage id="UI.CANCEL" /></Button>
 
           <Button>
-            <Link to="/store-client/checkout/shipping-info">Shipping Info</Link>
+            <Link to="/store-client/checkout/shipping-info"><FormattedMessage id="UI.SHIPPING_INFO" /></Link>
             <MoveRight className="text-base" />
           </Button>
         </div>
       </div>
-
       <div className="col-span-1">
         <div className="space-y-5">
           <Order />

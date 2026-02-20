@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import {
@@ -35,7 +36,6 @@ export default function Item18() {
             backgroundImage: `url(${toAbsoluteUrl(`/media/images/600x600/${item.image}`)})`,
           }}
         ></div>
-
         <div className="px-2.5 pb-2">
           <Link
             to="#"
@@ -44,7 +44,7 @@ export default function Item18() {
             {item.title}
           </Link>
           <div className="text-xs font-medium text-muted-foreground">
-            Token ID:
+            <FormattedMessage id="UI.TOKEN_ID" />
             <span className="text-xs font-medium text-secondary-foreground">
               {item.id}
             </span>
@@ -58,34 +58,33 @@ export default function Item18() {
     <div className="flex grow gap-2.5 px-5">
       <Avatar>
         <AvatarImage src="/media/avatars/300-1.png" alt="avatar" />
-        <AvatarFallback>CH</AvatarFallback>
+        <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
         <AvatarIndicator className="-end-1.5 -bottom-1.5">
           <AvatarStatus variant="online" className="size-2.5" />
         </AvatarIndicator>
       </Avatar>
-
       <div className="flex flex-col gap-2.5 grow">
         <div className="flex flex-col gap-1 mb-1">
           <div className="text-sm font-medium mb-px">
             <Link to="#" className="hover:text-primary text-mono font-semibold">
-              Jane Perez
+              <FormattedMessage id="UI.JANE_PEREZ" />
             </Link>
             <span className="text-secondary-foreground">
               {' '}
-              added 2 new works to{' '}
+              <FormattedMessage id="UI.ADDED_2_NEW_WORKS_TO" />{' '}
             </span>
             <Link
               to="#"
               className="hover:text-primary text-primary font-semibold"
             >
-              Inspirations 2024
+              <FormattedMessage id="UI.INSPIRATIONS_2024" />
             </Link>
           </div>
 
           <span className="flex items-center text-xs font-medium text-muted-foreground">
-            23 hours ago
+            <FormattedMessage id="UI.23_HOURS_AGO" />
             <span className="rounded-full size-1 bg-mono/30 mx-1.5"></span>
-            Craftwork Design
+            <FormattedMessage id="UI.CRAFTWORK_DESIGN" />
           </span>
         </div>
 

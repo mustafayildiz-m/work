@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { UserHero } from '@/partials/common/user-hero';
@@ -150,10 +151,9 @@ export function ProfileDefaultPage() {
     <Fragment>
       <div className="mb-4 flex">
         <Button variant="outline" onClick={() => navigate('/alimler/liste')}>
-          ← Alimler Listesine Geri Dön
+          <FormattedMessage id="UI._ALIMLER_LISTESINE_GERI_DON" />
         </Button>
       </div>
-      
       <UserHero
         name={scholar?.fullName || "Loading..."}
         image={image}
@@ -162,20 +162,18 @@ export function ProfileDefaultPage() {
         onCoverImageEdit={() => setCoverImageDialogOpen(true)}
         showEditButton={true}
       />
-
       <Container>
         <Navbar>
           <NavbarActions>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList>
-                <TabsTrigger value="profile">Profil</TabsTrigger>
-                <TabsTrigger value="post">Gönderiler</TabsTrigger>
+                <TabsTrigger value="profile"><FormattedMessage id="UI.PROFIL" /></TabsTrigger>
+                <TabsTrigger value="post"><FormattedMessage id="UI.GONDERILER" /></TabsTrigger>
               </TabsList>
             </Tabs>
           </NavbarActions>
         </Navbar>
       </Container>
-
       {/* Tab içerikleri */}
       {activeTab === 'profile' && (
         <Container>
@@ -191,7 +189,6 @@ export function ProfileDefaultPage() {
           <PostList scholarId={id} refreshKey={refreshPosts} />
         </Container>
       )}
-
       {/* Cover Image Upload Dialog */}
       <CoverImageDialog
         open={coverImageDialogOpen}

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import {
   Bell,
   FileText,
@@ -26,31 +27,31 @@ export function DropdownMenu6({ trigger }) {
         <DropdownMenuItem asChild>
           <Link to="#">
             <FileText />
-            <span>View</span>
+            <span><FormattedMessage id="UI.VIEW" /></span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <Bell />
-            <span>Export</span>
+            <span><FormattedMessage id="UI.EXPORT" /></span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent className="w-[150px]">
             <DropdownMenuItem asChild>
               <Link to="/account/home/settings-sidebar">
                 <Mail />
-                <span>Email</span>
+                <span><FormattedMessage id="UI.EMAIL" /></span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to="/account/home/settings-sidebar">
                 <MessageSquare />
-                <span>SMS</span>
+                <span><FormattedMessage id="UI.SMS" /></span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to="/account/home/settings-sidebar">
                 <Send />
-                <span>Push</span>
+                <span><FormattedMessage id="UI.PUSH" /></span>
               </Link>
             </DropdownMenuItem>
           </DropdownMenuSubContent>
@@ -58,13 +59,13 @@ export function DropdownMenu6({ trigger }) {
         <DropdownMenuItem asChild>
           <Link to="#">
             <Pencil />
-            <span>Edit</span>
+            <span><FormattedMessage id="UI.EDIT" /></span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="#">
             <Trash2 />
-            <span>Delete</span>
+            <span><FormattedMessage id="UI.DELETE" /></span>
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

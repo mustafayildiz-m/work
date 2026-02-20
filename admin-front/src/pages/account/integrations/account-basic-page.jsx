@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { PageNavbar } from '@/pages/account';
 import {
@@ -25,12 +26,12 @@ export function AccountIntegrationsPage() {
             <ToolbarHeading>
               <ToolbarPageTitle />
               <ToolbarDescription>
-                Enhance Workflows with Advanced Integrations.
+                <FormattedMessage id="UI.ENHANCE_WORKFLOWS_WITH_ADVANCED_INTEGRAT" />
               </ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
               <Button variant="outline">
-                <Link to="#">Add New Integration</Link>
+                <Link to="#"><FormattedMessage id="UI.ADD_NEW_INTEGRATION" /></Link>
               </Button>
             </ToolbarActions>
           </Toolbar>

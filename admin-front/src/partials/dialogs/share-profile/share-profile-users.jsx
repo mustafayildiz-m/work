@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import {
@@ -62,9 +63,9 @@ export function ShareProfileUsers() {
               <SelectValue placeholder="Role" />
             </SelectTrigger>
             <SelectContent className="w-32">
-              <SelectItem value="owner">Owner</SelectItem>
-              <SelectItem value="editor">Editor</SelectItem>
-              <SelectItem value="viewer">Viewer</SelectItem>
+              <SelectItem value="owner"><FormattedMessage id="UI.OWNER" /></SelectItem>
+              <SelectItem value="editor"><FormattedMessage id="UI.EDITOR" /></SelectItem>
+              <SelectItem value="viewer"><FormattedMessage id="UI.VIEWER" /></SelectItem>
             </SelectContent>
           </Select>
         </div>

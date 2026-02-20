@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { Link } from 'react-router';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -56,7 +57,7 @@ export function Card4({ limit }) {
 
             <div className="flex items-center gap-1.5">
               <span className="text-xs font-normal text-secondary-foreground uppercase">
-                sku:{' '}
+                <FormattedMessage id="UI.SKU" />{' '}
                 <span className="text-xs font-medium text-foreground">
                   {item.sku}
                 </span>
@@ -64,7 +65,7 @@ export function Card4({ limit }) {
 
               {item.badge && (
                 <Badge size="sm" variant="destructive" className="uppercase">
-                  save 25%
+                  <FormattedMessage id="UI.SAVE_25" />
                 </Badge>
               )}
             </div>
@@ -73,7 +74,7 @@ export function Card4({ limit }) {
 
         <div className="flex flex-col gap-1.5">
           <span className="text-xs font-normal text-secondary-foreground text-end">
-            1&nbsp;x
+            <FormattedMessage id="UI.1_X" />
           </span>
           <div className="flex items-center flex-wrap gap-1.5">
             {item.label && (

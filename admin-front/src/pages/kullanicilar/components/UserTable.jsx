@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -58,12 +59,12 @@ const UserTable = ({ users, onEdit, onDelete, onViewDetails, onToggleStatus, loa
     return isActive ? (
       <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
         <UserCheck className="w-3 h-3" />
-        Aktif
+        <FormattedMessage id="UI.AKTIF" />
       </span>
     ) : (
       <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
         <UserX className="w-3 h-3" />
-        Pasif
+        <FormattedMessage id="UI.PASIF" />
       </span>
     );
   };
@@ -91,8 +92,8 @@ const UserTable = ({ users, onEdit, onDelete, onViewDetails, onToggleStatus, loa
       <Card className="p-12 text-center">
         <div className="text-gray-400 dark:text-gray-600">
           <UserX className="w-16 h-16 mx-auto mb-4" />
-          <p className="text-lg font-semibold">Kullanıcı bulunamadı</p>
-          <p className="text-sm mt-2">Arama kriterlerinizi değiştirerek tekrar deneyin</p>
+          <p className="text-lg font-semibold"><FormattedMessage id="UI.KULLANICI_BULUNAMADI" /></p>
+          <p className="text-sm mt-2"><FormattedMessage id="UI.ARAMA_KRITERLERINIZI_DEGISTIREREK_TEKRAR" /></p>
         </div>
       </Card>
     );
@@ -190,14 +191,14 @@ const UserTable = ({ users, onEdit, onDelete, onViewDetails, onToggleStatus, loa
                     className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800 transition-colors"
                   >
                     <Eye className="w-4 h-4" />
-                    Detaylar
+                    <FormattedMessage id="UI.DETAYLAR" />
                   </button>
                   <button
                     onClick={() => onEdit(user)}
                     className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-green-600 bg-green-50 rounded-lg hover:bg-green-100 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800 transition-colors"
                   >
                     <Edit className="w-4 h-4" />
-                    Düzenle
+                    <FormattedMessage id="UI.DUZENLE" />
                   </button>
                   <button
                     onClick={() => onToggleStatus(user)}
@@ -210,12 +211,12 @@ const UserTable = ({ users, onEdit, onDelete, onViewDetails, onToggleStatus, loa
                     {user.isActive ? (
                       <>
                         <UserX className="w-4 h-4" />
-                        Devre Dışı Bırak
+                        <FormattedMessage id="UI.DEVRE_DISI_BIRAK" />
                       </>
                     ) : (
                       <>
                         <UserCheck className="w-4 h-4" />
-                        Aktifleştir
+                        <FormattedMessage id="UI.AKTIFLESTIR" />
                       </>
                     )}
                   </button>
@@ -224,7 +225,7 @@ const UserTable = ({ users, onEdit, onDelete, onViewDetails, onToggleStatus, loa
                     className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 dark:bg-red-900 dark:text-red-300 dark:hover:bg-red-800 transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
-                    Sil
+                    <FormattedMessage id="UI.SIL" />
                   </button>
                 </div>
               </div>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useEffect, useMemo, useState } from 'react';
 import {
   getCoreRowModel,
@@ -418,17 +419,17 @@ const ApiIntegrations = () => {
         <div className="flex flex-wrap items-center gap-2.5">
           <div className="flex items-center space-x-2">
             <Label htmlFor="auto-update" className="text-sm">
-              Pause all
+              <FormattedMessage id="UI.PAUSE_ALL" />
             </Label>
             <Switch size="sm" />
           </div>
-          <Button>Add New</Button>
+          <Button><FormattedMessage id="UI.ADD_NEW" /></Button>
           <DataGridColumnVisibility
             table={table}
             trigger={
               <Button variant="outline">
                 <Settings2 />
-                Columns
+                <FormattedMessage id="UI.COLUMNS" />
               </Button>
             }
           />
@@ -450,7 +451,7 @@ const ApiIntegrations = () => {
     >
       <Card>
         <CardHeader>
-          <CardTitle>API Integrations</CardTitle>
+          <CardTitle><FormattedMessage id="UI.API_INTEGRATIONS" /></CardTitle>
           <Toolbar />
         </CardHeader>
         <CardTable>

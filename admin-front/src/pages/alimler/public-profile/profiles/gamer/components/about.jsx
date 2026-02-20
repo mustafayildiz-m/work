@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
@@ -10,7 +11,7 @@ const About = () => {
       label: 'Level:',
       info: (
         <Badge size="md" variant="success" appearance="outline">
-          Pro
+          <FormattedMessage id="UI.PRO" />
         </Badge>
       ),
     },
@@ -36,7 +37,7 @@ const About = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>About</CardTitle>
+        <CardTitle><FormattedMessage id="UI.ABOUT" /></CardTitle>
       </CardHeader>
       <CardContent className="pb-7 pt-4">
         <Table className="mb-1.5">
@@ -47,8 +48,7 @@ const About = () => {
           </TableBody>
         </Table>
         <p className="text-sm text-foreground leading-5.5">
-          Experienced and creative professional with a passion great as a
-          commitment to best excellence.
+          <FormattedMessage id="UI.EXPERIENCED_AND_CREATIVE_PROFESSIONAL_WI" />
         </p>
       </CardContent>
     </Card>

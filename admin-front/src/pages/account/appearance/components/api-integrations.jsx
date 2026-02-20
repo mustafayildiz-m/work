@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useMemo, useState } from 'react';
 import {
   getCoreRowModel,
@@ -84,9 +85,9 @@ const ApiIntegrations = () => {
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="1">System preferences</SelectItem>
-                <SelectItem value="2">Sound</SelectItem>
-                <SelectItem value="3">Focus</SelectItem>
+                <SelectItem value="1"><FormattedMessage id="UI.SYSTEM_PREFERENCES" /></SelectItem>
+                <SelectItem value="2"><FormattedMessage id="UI.SOUND" /></SelectItem>
+                <SelectItem value="3"><FormattedMessage id="UI.FOCUS" /></SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -243,7 +244,7 @@ const ApiIntegrations = () => {
                 to="#"
                 className="btn btn-sm btn-icon btn-clear text-muted-foreground hover:text-primary-active"
               >
-                <span className="text-xs">Copy</span>
+                <span className="text-xs"><FormattedMessage id="UI.COPY" /></span>
               </Link>
             </div>
           ),
@@ -276,7 +277,7 @@ const ApiIntegrations = () => {
         enableSorting: false,
         cell: () => (
           <Button variant="dim" mode="icon">
-            Edit
+            <FormattedMessage id="UI.EDIT" />
           </Button>
         ),
 
@@ -311,16 +312,16 @@ const ApiIntegrations = () => {
       <div className="flex items-center gap-2.5 justify-end">
         <div className="flex gap-7.5">
           <Label htmlFor="size-sm" className="text-sm">
-            Pause all
+            <FormattedMessage id="UI.PAUSE_ALL" />
           </Label>
           <Switch id="size-sm" size="sm" />
-          <Button>Add New</Button>
+          <Button><FormattedMessage id="UI.ADD_NEW" /></Button>
         </div>
         <DataGridColumnVisibility
           table={table}
           trigger={
             <Button variant="outline">
-              <Settings2 /> Columns
+              <Settings2 /> <FormattedMessage id="UI.COLUMNS" />
             </Button>
           }
         />
@@ -341,7 +342,7 @@ const ApiIntegrations = () => {
     >
       <Card>
         <CardHeader>
-          <CardTitle>API Integrations</CardTitle>
+          <CardTitle><FormattedMessage id="UI.API_INTEGRATIONS" /></CardTitle>
           <Toolbar />
         </CardHeader>
         <CardTable>

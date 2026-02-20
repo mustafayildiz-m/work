@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useEffect, useState } from 'react';
 import { Menu } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -42,10 +43,9 @@ const HeaderLogo = () => {
         </Link>
 
         <h3 className="text-mono text-lg font-medium hidden lg:block">
-          Metronic
+          <FormattedMessage id="UI.METRONIC" />
         </h3>
       </div>
-
       {!isMobile ? (
         <MegaMenu />
       ) : (

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import {
   RiFacebookCircleLine,
   RiTwitterXLine,
@@ -32,7 +33,7 @@ const Network = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Network</CardTitle>
+        <CardTitle><FormattedMessage id="UI.NETWORK" /></CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid gap-y-5">

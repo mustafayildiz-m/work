@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,13 +17,12 @@ const OpenToWork = ({ className, title }) => {
       </CardHeader>
       <CardContent>
         <p className="text-sm text-foreground leading-5.5">
-          Seasoned UI/UX designer with a flair for user-centric interfaces.
-          Let's create something amazing together!
+          <FormattedMessage id="UI.SEASONED_UIUX_DESIGNER_WITH_A_FLAIR_FOR_" />
         </p>
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/public-profile/works">View details</Link>
+          <Link to="/public-profile/works"><FormattedMessage id="UI.VIEW_DETAILS" /></Link>
         </Button>
       </CardFooter>
     </Card>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
@@ -26,10 +27,10 @@ const About = ({ scholar, loading }) => {
     return (
       <Card>
         <CardHeader className="ps-8">
-          <CardTitle>Hakkında</CardTitle>
+          <CardTitle><FormattedMessage id="UI.HAKKINDA" /></CardTitle>
         </CardHeader>
         <CardContent>
-          <div>Yükleniyor...</div>
+          <div><FormattedMessage id="UI.YUKLENIYOR" /></div>
         </CardContent>
       </Card>
     );
@@ -58,7 +59,7 @@ const About = ({ scholar, loading }) => {
   return (
     <Card>
       <CardHeader className="ps-8">
-        <CardTitle>Hakkında</CardTitle>
+        <CardTitle><FormattedMessage id="UI.HAKKINDA" /></CardTitle>
       </CardHeader>
       <CardContent>
         <Table>

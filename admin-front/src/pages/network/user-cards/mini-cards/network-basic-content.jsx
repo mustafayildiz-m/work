@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment, useState } from 'react';
 import { CardUserMini } from '@/partials/cards';
 import { Search, Settings2 } from 'lucide-react';
@@ -212,7 +213,7 @@ export function NetworkMiniCardsContent() {
     <Fragment>
       <div className="flex items-center justify-between gap-2.5 flex-wrap mb-7.5">
         <h3 className="text-base text-mono font-medium">
-          Showing {items.length} Users
+          <FormattedMessage id="UI.SHOWING" /> {items.length} <FormattedMessage id="UI.USERS" />
         </h3>
         <div className="flex items-center flex-wrap gap-2.5">
           <Select defaultValue="active">
@@ -220,9 +221,9 @@ export function NetworkMiniCardsContent() {
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent className="w-32">
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="disabled">Disabled</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="active"><FormattedMessage id="UI.ACTIVE" /></SelectItem>
+              <SelectItem value="disabled"><FormattedMessage id="UI.DISABLED" /></SelectItem>
+              <SelectItem value="pending"><FormattedMessage id="UI.PENDING" /></SelectItem>
             </SelectContent>
           </Select>
           <Select defaultValue="latest">
@@ -230,13 +231,13 @@ export function NetworkMiniCardsContent() {
               <SelectValue placeholder="Select" />
             </SelectTrigger>
             <SelectContent className="w-32">
-              <SelectItem value="latest">Latest</SelectItem>
-              <SelectItem value="older">Older</SelectItem>
-              <SelectItem value="oldest">Oldest</SelectItem>
+              <SelectItem value="latest"><FormattedMessage id="UI.LATEST" /></SelectItem>
+              <SelectItem value="older"><FormattedMessage id="UI.OLDER" /></SelectItem>
+              <SelectItem value="oldest"><FormattedMessage id="UI.OLDEST" /></SelectItem>
             </SelectContent>
           </Select>
           <Button>
-            <Settings2 size={16} /> Filters
+            <Settings2 size={16} /> <FormattedMessage id="UI.FILTERS" />
           </Button>
           <div className="flex relative">
             <Search className="size-4 text-muted-foreground absolute start-3 top-1/2 -translate-y-1/2" />
@@ -256,7 +257,7 @@ export function NetworkMiniCardsContent() {
       </div>
       <div className="flex grow justify-center pt-5 lg:pt-7.5">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="#">Show more Users</Link>
+          <Link to="#"><FormattedMessage id="UI.SHOW_MORE_USERS" /></Link>
         </Button>
       </div>
     </Fragment>

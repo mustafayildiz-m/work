@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useEffect } from 'react';
 import { StoreClientTopbar } from '@/pages/store-client/components/common/topbar';
 import { SearchDialog } from '@/partials/dialogs/search/search-dialog';
@@ -39,7 +40,6 @@ export function Demo8Layout() {
       <Helmet>
         <title>{item?.title}</title>
       </Helmet>
-
       <div className="flex grow">
         {isMobile && <Header />}
 
@@ -89,7 +89,7 @@ export function Demo8Layout() {
                           >
                             <Link to={'/account/home/get-started'}>
                               <Download />
-                              Export
+                              <FormattedMessage id="UI.EXPORT" />
                             </Link>
                           </Button>
                         </>

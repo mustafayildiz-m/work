@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { CardProject, CardProjectRow } from '@/partials/cards';
 import { LayoutGrid, List } from 'lucide-react';
@@ -347,7 +348,7 @@ const Projects2 = () => {
     <div className="flex flex-col items-stretch gap-5 lg:gap-7.5">
       <div className="flex flex-wrap items-center gap-5 justify-between">
         <h3 className="text-lg text-mono font-semibold">
-          {projects.length} Projects
+          {projects.length} <FormattedMessage id="UI.PROJECTS" />
         </h3>
         <ToggleGroup
           type="single"
@@ -374,7 +375,7 @@ const Projects2 = () => {
           </div>
           <div className="flex grow justify-center pt-5 lg:pt-7.5">
             <Button mode="link" underlined="dashed" asChild>
-              <Link to="#">Show more projects</Link>
+              <Link to="#"><FormattedMessage id="UI.SHOW_MORE_PROJECTS" /></Link>
             </Button>
           </div>
         </div>
@@ -388,7 +389,7 @@ const Projects2 = () => {
           </div>
           <div className="flex grow justify-center pt-5 lg:pt-7.5">
             <Button mode="link" underlined="dashed" asChild>
-              <Link to="#">Show more projects</Link>
+              <Link to="#"><FormattedMessage id="UI.SHOW_MORE_PROJECTS" /></Link>
             </Button>
           </div>
         </div>

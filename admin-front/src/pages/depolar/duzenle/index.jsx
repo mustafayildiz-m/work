@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -7,6 +8,7 @@ import { FaWarehouse, FaMapMarkerAlt, FaInfoCircle, FaCheckCircle, FaArrowLeft, 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function EditStorePage() {
+  const intl = useIntl();
   const { id } = useParams();
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -80,12 +82,14 @@ export default function EditStorePage() {
     return (
       <>
         <Helmet>
-          <title>Depo Düzenle - Islamic Windows Admin</title>
+          <title>{intl.formatMessage({
+            id: "UI.DEPO_DUZENLE__ISLAMIC_WINDOWS_ADMIN"
+          })}</title>
         </Helmet>
         <div className="p-6 max-w-4xl mx-auto text-center">
           <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mb-4"></div>
-            <p className="text-gray-500 dark:text-gray-400">Depo bilgileri yükleniyor...</p>
+            <p className="text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.DEPO_BILGILERI_YUKLENIYOR" /></p>
           </div>
         </div>
       </>
@@ -96,7 +100,9 @@ export default function EditStorePage() {
     return (
       <>
         <Helmet>
-          <title>Hata - Islamic Windows Admin</title>
+          <title>{intl.formatMessage({
+            id: "UI.HATA__ISLAMIC_WINDOWS_ADMIN"
+          })}</title>
         </Helmet>
         <div className="p-6 max-w-4xl mx-auto text-center">
           <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-12">
@@ -106,7 +112,7 @@ export default function EditStorePage() {
               to="/depolar/liste"
               className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
             >
-              Listeye Dön
+              <FormattedMessage id="UI.LISTEYE_DON" />
             </Link>
           </div>
         </div>
@@ -117,23 +123,27 @@ export default function EditStorePage() {
   return (
     <>
       <Helmet>
-        <title>Depo Düzenle #{id} - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.DEPO_DUZENLE_"
+        })}{id} {intl.formatMessage({
+          id: "UI._ISLAMIC_WINDOWS_ADMIN"
+        })}</title>
       </Helmet>
       <div className="p-6 max-w-4xl mx-auto">
         <div className="mb-6 flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
               <FaWarehouse className="text-blue-600" />
-              Depo Düzenle
+              <FormattedMessage id="UI.DEPO_DUZENLE" />
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Depo bilgilerini güncelleyin</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1"><FormattedMessage id="UI.DEPO_BILGILERINI_GUNCELLEYIN" /></p>
           </div>
           <Link
             to="/depolar/liste"
             className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 flex items-center gap-2 shadow"
           >
             <FaArrowLeft size={14} />
-            Listeye Dön
+            <FormattedMessage id="UI.LISTEYE_DON" />
           </Link>
         </div>
 
@@ -143,7 +153,7 @@ export default function EditStorePage() {
             <div>
               <label className="flex items-center gap-2 font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaWarehouse className="text-blue-600" />
-                Depo Adı
+                <FormattedMessage id="UI.DEPO_ADI" />
                 <span className="text-red-500">*</span>
               </label>
               <input
@@ -161,7 +171,7 @@ export default function EditStorePage() {
             <div>
               <label className="flex items-center gap-2 font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaMapMarkerAlt className="text-red-600" />
-                Konum
+                <FormattedMessage id="UI.KONUM" />
                 <span className="text-red-500">*</span>
               </label>
               <input
@@ -179,7 +189,7 @@ export default function EditStorePage() {
             <div>
               <label className="flex items-center gap-2 font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaInfoCircle className="text-gray-600" />
-                Açıklama
+                <FormattedMessage id="UI.ACIKLAMA" />
               </label>
               <textarea
                 name="description"
@@ -204,11 +214,11 @@ export default function EditStorePage() {
                 />
                 <label htmlFor="isActive" className="flex items-center gap-2 font-semibold text-gray-800 dark:text-gray-200 cursor-pointer">
                   <FaCheckCircle className="text-green-600" />
-                  Depo Aktif
+                  <FormattedMessage id="UI.DEPO_AKTIF" />
                 </label>
               </div>
               <p className="text-xs text-gray-600 dark:text-gray-400 mt-2 ml-8">
-                Aktif depolarda stok işlemleri yapılabilir
+                <FormattedMessage id="UI.AKTIF_DEPOLARDA_STOK_ISLEMLERI_YAPILABIL" />
               </p>
             </div>
 
@@ -218,7 +228,7 @@ export default function EditStorePage() {
                 to="/depolar/liste"
                 className="px-6 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition"
               >
-                İptal
+                <FormattedMessage id="UI.IPTAL" />
               </Link>
               <button
                 type="submit"
@@ -228,12 +238,12 @@ export default function EditStorePage() {
                 {saving ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Güncelleniyor...
+                    <FormattedMessage id="UI.GUNCELLENIYOR" />
                   </>
                 ) : (
                   <>
                     <FaSave />
-                    Değişiklikleri Kaydet
+                    <FormattedMessage id="UI.DEGISIKLIKLERI_KAYDET" />
                   </>
                 )}
               </button>

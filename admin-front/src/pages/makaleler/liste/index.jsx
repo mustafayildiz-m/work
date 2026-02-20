@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useMemo, useState, useEffect } from 'react';
 import {
   useReactTable,
@@ -105,6 +106,7 @@ const columns = [
 ];
 
 function ArticleList() {
+  const intl = useIntl();
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -112,21 +114,21 @@ function ArticleList() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [previewModalOpen, setPreviewModalOpen] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(null);
-  
+
   // Filter states
   const [filters, setFilters] = useState({
     search: '',
     languageId: 'all',
     bookId: 'all',
   });
-  
+
   // Options for dropdowns
   const [languages, setLanguages] = useState([]);
   const [books, setBooks] = useState([]);
-  
+
   // All data for statistics
   const [allData, setAllData] = useState([]);
-  
+
   // İstatistikler
   const stats = React.useMemo(() => {
     if (!allData || allData.length === 0) return { total: 0, totalBooks: 0, totalLanguages: 0 };
@@ -333,19 +335,21 @@ function ArticleList() {
   return (
     <>
       <Helmet>
-        <title>Makale Yönetimi - Islamic Windows Admin</title>
+        <title>{intl.formatMessage({
+          id: "UI.MAKALE_YONETIMI__ISLAMIC_WINDOWS_ADMIN"
+        })}</title>
       </Helmet>
       <div className="p-6 max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Makale Yönetimi</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Tüm makalelerinizi yönetin ve düzenleyin</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.MAKALE_YONETIMI" /></h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1"><FormattedMessage id="UI.TUM_MAKALELERINIZI_YONETIN_VE_DUZENLEYIN" /></p>
           </div>
           <Link
             to="/makaleler/ekle"
             className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all duration-300 flex items-center gap-2"
           >
-            <span className="text-lg">+</span> Makale Ekle
+            <span className="text-lg">+</span> <FormattedMessage id="UI.MAKALE_EKLE" />
           </Link>
         </div>
 
@@ -354,9 +358,9 @@ function ArticleList() {
           <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-5 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-blue-100 text-sm font-medium">Toplam Makale</p>
+                <p className="text-blue-100 text-sm font-medium"><FormattedMessage id="UI.TOPLAM_MAKALE" /></p>
                 <p className="text-3xl font-bold mt-1">{stats.total}</p>
-                <p className="text-blue-100 text-xs mt-1">Kayıtlı makale</p>
+                <p className="text-blue-100 text-xs mt-1"><FormattedMessage id="UI.KAYITLI_MAKALE" /></p>
               </div>
               <FaNewspaper className="text-5xl text-blue-200 opacity-30" />
             </div>
@@ -365,9 +369,9 @@ function ArticleList() {
           <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-5 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-purple-100 text-sm font-medium">İlişkili Kitap</p>
+                <p className="text-purple-100 text-sm font-medium"><FormattedMessage id="UI.ILISKILI_KITAP" /></p>
                 <p className="text-3xl font-bold mt-1">{stats.totalBooks}</p>
-                <p className="text-purple-100 text-xs mt-1">Farklı kitap</p>
+                <p className="text-purple-100 text-xs mt-1"><FormattedMessage id="UI.FARKLI_KITAP" /></p>
               </div>
               <FaBook className="text-5xl text-purple-200 opacity-30" />
             </div>
@@ -376,9 +380,9 @@ function ArticleList() {
           <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-5 text-white">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-green-100 text-sm font-medium">Dil Çeşitliliği</p>
+                <p className="text-green-100 text-sm font-medium"><FormattedMessage id="UI.DIL_CESITLILIGI" /></p>
                 <p className="text-3xl font-bold mt-1">{stats.totalLanguages}</p>
-                <p className="text-green-100 text-xs mt-1">Farklı dil</p>
+                <p className="text-green-100 text-xs mt-1"><FormattedMessage id="UI.FARKLI_DIL" /></p>
               </div>
               <FaGlobe className="text-5xl text-green-200 opacity-30" />
             </div>
@@ -391,7 +395,7 @@ function ArticleList() {
             <div className="p-2 bg-orange-600 rounded-lg">
               <FaFilter className="text-white text-lg" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white">Filtrele & Ara</h3>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.FILTRELE__ARA" /></h3>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -399,7 +403,7 @@ function ArticleList() {
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaNewspaper className="text-blue-600" />
-                Makale Başlığı
+                <FormattedMessage id="UI.MAKALE_BASLIGI" />
               </label>
               <input
                 type="text"
@@ -414,14 +418,14 @@ function ArticleList() {
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaGlobe className="text-green-600" />
-                Dil
+                <FormattedMessage id="USER.MENU.LANGUAGE" />
               </label>
               <select
                 value={filters.languageId}
                 onChange={e => setFilters(prev => ({ ...prev, languageId: e.target.value }))}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm transition cursor-pointer"
               >
-                <option value="all">Tüm Diller</option>
+                <option value="all"><FormattedMessage id="UI.TUM_DILLER" /></option>
                 {languages.map(lang => (
                   <option key={lang.id} value={lang.id}>{lang.name}</option>
                 ))}
@@ -432,14 +436,14 @@ function ArticleList() {
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaBook className="text-purple-600" />
-                Kitap
+                <FormattedMessage id="UI.KITAP" />
               </label>
               <select
                 value={filters.bookId}
                 onChange={e => setFilters(prev => ({ ...prev, bookId: e.target.value }))}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm transition cursor-pointer"
               >
-                <option value="all">Tüm Kitaplar</option>
+                <option value="all"><FormattedMessage id="UI.TUM_KITAPLAR" /></option>
                 {books.map(book => (
                   <option key={book.id} value={book.id}>
                     {book.translations?.[0]?.title || book.author || `Kitap #${book.id}`}
@@ -452,11 +456,11 @@ function ArticleList() {
           {/* Reset Button & Results Count */}
           <div className="flex items-center justify-between mt-4 pt-4 border-t border-orange-200 dark:border-gray-700">
             <div className="flex items-center gap-2 text-sm">
-              <span className="text-gray-600 dark:text-gray-400">Bulunan:</span>
+              <span className="text-gray-600 dark:text-gray-400"><FormattedMessage id="UI.BULUNAN" /></span>
               <span className="px-3 py-1 bg-orange-600 text-white rounded-full font-bold">
                 {data.length}
               </span>
-              <span className="text-gray-600 dark:text-gray-400">makale</span>
+              <span className="text-gray-600 dark:text-gray-400"><FormattedMessage id="UI.MAKALE" /></span>
             </div>
             
             {(filters.search || filters.languageId !== 'all' || filters.bookId !== 'all') && (
@@ -465,7 +469,7 @@ function ArticleList() {
                 className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 font-medium text-sm flex items-center gap-2"
               >
                 <FaTimesCircle />
-                Filtreleri Temizle
+                <FormattedMessage id="UI.FILTRELERI_TEMIZLE" />
               </button>
             )}
           </div>
@@ -473,7 +477,7 @@ function ArticleList() {
 
       {error && (
         <div className="mb-4 p-4 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-lg">
-          ⚠️ Hata: {error}
+          <FormattedMessage id="UI._HATA" /> {error}
         </div>
       )}
 
@@ -481,7 +485,7 @@ function ArticleList() {
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-4 border-t-4 border-blue-600 mb-4"></div>
-            <p className="text-lg text-gray-600 dark:text-gray-400 font-medium">Makaleler yükleniyor...</p>
+            <p className="text-lg text-gray-600 dark:text-gray-400 font-medium"><FormattedMessage id="UI.MAKALELER_YUKLENIYOR" /></p>
           </div>
         </div>
       ) : (
@@ -524,7 +528,7 @@ function ArticleList() {
                         </th>
                       ))}
                       <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wider">
-                        İşlemler
+                        <FormattedMessage id="UI.ISLEMLER" />
                       </th>
                     </tr>
                   ))}
@@ -545,7 +549,7 @@ function ArticleList() {
                               to="/makaleler/ekle"
                               className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                             >
-                              <span className="text-lg">+</span> İlk Makaleyi Ekle
+                              <span className="text-lg">+</span> <FormattedMessage id="UI.ILK_MAKALEYI_EKLE" />
                             </Link>
                           )}
                         </div>
@@ -599,7 +603,7 @@ function ArticleList() {
           {table.getPageCount() > 1 && (
             <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
               <div className="text-sm text-gray-700 dark:text-gray-300 font-medium">
-                Toplam <span className="font-bold text-blue-600 dark:text-blue-400">{data.length}</span> makale içinden{' '}
+                <FormattedMessage id="UI.TOPLAM" /> <span className="font-bold text-blue-600 dark:text-blue-400">{data.length}</span> <FormattedMessage id="UI.MAKALE_ICINDEN" />{' '}
                 <span className="font-bold">
                   {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}
                 </span>
@@ -610,7 +614,7 @@ function ArticleList() {
                     data.length
                   )}
                 </span>
-                {' '}arası gösteriliyor
+                {' '}<FormattedMessage id="UI.ARASI_GOSTERILIYOR" />
               </div>
               <div className="flex gap-2">
                 <button
@@ -626,7 +630,7 @@ function ArticleList() {
                   disabled={!table.getCanPreviousPage()}
                   className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg disabled:opacity-50 hover:bg-gray-100 dark:hover:bg-gray-600 transition-all disabled:cursor-not-allowed shadow-sm"
                 >
-                  Önceki
+                  <FormattedMessage id="UI.ONCEKI" />
                 </button>
                 <div className="px-4 py-2 bg-blue-600 text-white rounded-lg font-bold shadow-sm">
                   {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
@@ -636,7 +640,7 @@ function ArticleList() {
                   disabled={!table.getCanNextPage()}
                   className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg disabled:opacity-50 hover:bg-gray-100 dark:hover:bg-gray-600 transition-all disabled:cursor-not-allowed shadow-sm"
                 >
-                  Sonraki
+                  <FormattedMessage id="UI.SONRAKI" />
                 </button>
                 <button
                   onClick={() => table.setPageIndex(table.getPageCount() - 1)}
@@ -717,7 +721,7 @@ function ArticleList() {
                   <div>
                     <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                       <FaGlobe className="text-blue-500" />
-                      Çeviriler
+                      <FormattedMessage id="UI.CEVIRILER" />
                     </h3>
                     <div className="space-y-4">
                       {selectedArticle.translations?.map((trans) => (
@@ -741,7 +745,7 @@ function ArticleList() {
                                 rel="noopener noreferrer"
                                 className="px-3 py-1 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition-colors flex items-center gap-1"
                               >
-                                📄 PDF
+                                <FormattedMessage id="UI._PDF" />
                               </a>
                             )}
                           </div>
@@ -768,13 +772,13 @@ function ArticleList() {
                       className="flex-1 px-4 py-2.5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all duration-200 font-medium flex items-center justify-center gap-2"
                     >
                       <FaEdit />
-                      Düzenle
+                      <FormattedMessage id="UI.DUZENLE" />
                     </button>
                     <button
                       onClick={() => setPreviewModalOpen(false)}
                       className="px-4 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 font-medium"
                     >
-                      Kapat
+                      <FormattedMessage id="UI.KAPAT" />
                     </button>
                   </div>
                 </div>
@@ -799,16 +803,16 @@ function ArticleList() {
                 <FaTrash className="text-red-600 dark:text-red-400 text-xl" />
               </div>
               <Dialog.Title className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                Makaleyi Sil
+                <FormattedMessage id="UI.MAKALEYI_SIL" />
               </Dialog.Title>
             </div>
             
             <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border-l-4 border-red-500">
               <p className="text-gray-700 dark:text-gray-300">
-                <span className="font-bold text-red-600 dark:text-red-400">"{selectedArticle?.title}"</span> başlıklı makaleyi silmek üzeresiniz.
+                <span className="font-bold text-red-600 dark:text-red-400">"{selectedArticle?.title}"</span> <FormattedMessage id="UI.BASLIKLI_MAKALEYI_SILMEK_UZERESINIZ" />
               </p>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                ⚠️ Bu işlem geri alınamaz ve tüm ilgili veriler kalıcı olarak silinecektir.
+                <FormattedMessage id="UI._BU_ISLEM_GERI_ALINAMAZ_VE_TUM_ILGILI_VE" />
               </p>
             </div>
             
@@ -817,13 +821,13 @@ function ArticleList() {
                 onClick={() => setDeleteModalOpen(false)}
                 className="px-5 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-200 font-medium"
               >
-                İptal
+                <FormattedMessage id="UI.IPTAL" />
               </button>
               <button
                 onClick={handleDelete}
                 className="px-5 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl"
               >
-                Evet, Sil
+                <FormattedMessage id="UI.EVET_SIL" />
               </button>
             </div>
           </Dialog.Panel>

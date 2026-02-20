@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { PageMenu } from '@/pages/public-profile';
 import { UserHero } from '@/partials/common/user-hero';
@@ -36,13 +37,12 @@ export function ProfileActivityPage() {
           { email: 'jenny@kteam.com', icon: Mail },
         ]}
       />
-
       <Container>
         <Navbar>
           <PageMenu />
           <NavbarActions>
             <Button>
-              <Users /> Connect
+              <Users /> <FormattedMessage id="UI.CONNECT" />
             </Button>
             <Button variant="outline" mode="icon">
               <MessagesSquare size={16} />
@@ -59,7 +59,7 @@ export function ProfileActivityPage() {
       </Container>
       <Container>
         <div className="flex flex-wrap items-center gap-5 justify-between mb-7.5">
-          <h3 className="text-lg text-mono font-semibold">Activity</h3>
+          <h3 className="text-lg text-mono font-semibold"><FormattedMessage id="UI.ACTIVITY" /></h3>
         </div>
         <ProfileActivityContent />
       </Container>

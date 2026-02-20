@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useId } from 'react';
 import { HexagonBadge } from '@/partials/common/hexagon-badge';
 import { Mail } from 'lucide-react';
@@ -73,7 +74,7 @@ const AdvancedSettingsNotifications = () => {
   return (
     <Card>
       <CardHeader id="advanced_settings_notifications">
-        <CardTitle>Notifications</CardTitle>
+        <CardTitle><FormattedMessage id="UI.NOTIFICATIONS" /></CardTitle>
       </CardHeader>
       <CardContent className="lg:py-7.5">
         <div className="flex flex-wrap items-center gap-5 mb-5 lg:mb-7">
@@ -83,26 +84,26 @@ const AdvancedSettingsNotifications = () => {
         </div>
         <div className="flex flex-col gap-3.5 mb-7">
           <span className="text-base font-medium text-mono pb-0.5">
-            Desktop notifications
+            <FormattedMessage id="UI.DESKTOP_NOTIFICATIONS" />
           </span>
           <div className="flex flex-col items-start gap-4">
             <RadioGroup defaultValue="intermediate">
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="beginner" id={id1} />
                 <Label htmlFor={id1} variant="secondary">
-                  All new messages (Recommended)
+                  <FormattedMessage id="UI.ALL_NEW_MESSAGES_RECOMMENDED" />
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="intermediate" id={id2} />
                 <Label htmlFor={id2} variant="secondary">
-                  Direct @mentions
+                  <FormattedMessage id="UI.DIRECT_MENTIONS" />
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="advanced" id={id3} />
                 <Label htmlFor={id3} variant="secondary">
-                  Disabled
+                  <FormattedMessage id="UI.DISABLED" />
                 </Label>
               </div>
             </RadioGroup>
@@ -110,26 +111,26 @@ const AdvancedSettingsNotifications = () => {
         </div>
         <div className="flex flex-col gap-3.5 mb-7">
           <span className="text-base font-medium text-mono pb-0.5">
-            Email notifications
+            <FormattedMessage id="UI.EMAIL_NOTIFICATIONS" />
           </span>
           <div className="flex flex-col items-start gap-4">
             <RadioGroup defaultValue="intermediate">
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="beginner" id={id4} />
                 <Label htmlFor={id4} variant="secondary">
-                  All new messages and statuses
+                  <FormattedMessage id="UI.ALL_NEW_MESSAGES_AND_STATUSES" />
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="intermediate" id={id5} />
                 <Label htmlFor={id5} variant="secondary">
-                  AUnread messages and statuses
+                  <FormattedMessage id="UI.AUNREAD_MESSAGES_AND_STATUSES" />
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="advanced" id={id6} />
                 <Label htmlFor={id6} variant="secondary">
-                  Disabled
+                  <FormattedMessage id="UI.DISABLED" />
                 </Label>
               </div>
             </RadioGroup>
@@ -137,15 +138,15 @@ const AdvancedSettingsNotifications = () => {
         </div>
         <div className="flex flex-col gap-3.5">
           <span className="text-base font-medium text-mono pb-0.5">
-            Subscriptions
+            <FormattedMessage id="UI.SUBSCRIPTIONS" />
           </span>
           <div className="flex items-center space-x-2">
             <Checkbox />
-            <Label>Automatically subscribe to tasks you create</Label>
+            <Label><FormattedMessage id="UI.AUTOMATICALLY_SUBSCRIBE_TO_TASKS_YOU_CRE" /></Label>
           </div>
         </div>
         <div className="flex justify-end">
-          <Button>Save Changes</Button>
+          <Button><FormattedMessage id="UI.SAVE_CHANGES" /></Button>
         </div>
       </CardContent>
     </Card>

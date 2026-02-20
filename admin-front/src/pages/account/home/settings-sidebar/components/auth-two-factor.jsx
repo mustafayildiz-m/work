@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { HexagonBadge } from '@/partials/common/hexagon-badge';
 import { DropdownMenu6 } from '@/partials/dropdown-menu/dropdown-menu-6';
@@ -69,7 +70,7 @@ const AuthTwoFactor = () => {
   return (
     <Card>
       <CardHeader id="auth_two_factor">
-        <CardTitle>Two-Factor authentication(2FA)</CardTitle>
+        <CardTitle><FormattedMessage id="UI.TWOFACTOR_AUTHENTICATION2FA" /></CardTitle>
         <DropdownMenu6
           trigger={
             <Button variant="ghost" mode="icon">
@@ -86,7 +87,7 @@ const AuthTwoFactor = () => {
         </div>
         <div className="w-full">
           <div className="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5 mb-7">
-            <Label className="flex w-full max-w-56">Password</Label>
+            <Label className="flex w-full max-w-56"><FormattedMessage id="UI.PASSWORD" /></Label>
             <div className="flex flex-col tems-start grow gap-3 w-full">
               <Input
                 type="text"
@@ -96,13 +97,13 @@ const AuthTwoFactor = () => {
               />
 
               <span className="form-info text-mono font-normal">
-                Enter your password to setup Two-Factor authentication
+                <FormattedMessage id="UI.ENTER_YOUR_PASSWORD_TO_SETUP_TWOFACTOR_A" />
               </span>
             </div>
           </div>
         </div>
         <div className="flex justify-end pt-2.5">
-          <Button>Setup</Button>
+          <Button><FormattedMessage id="UI.SETUP" /></Button>
         </div>
       </CardContent>
     </Card>

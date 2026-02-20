@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { FeaturesHighlight } from '@/pages/public-profile/profiles/creator/components';
 import { HighlightedPosts } from '@/partials/common/highlighted-posts';
@@ -57,7 +58,7 @@ export function AccountOverviewContent() {
                 />
               </Fragment>
             }
-            title={<>Essential Personal Security Tips for Enhanced Safety</>}
+            title={<><FormattedMessage id="UI.ESSENTIAL_PERSONAL_SECURITY_TIPS_FOR_ENH" /></>}
             description="Transform your living space beautifully with our Restyle Your Space: Soft Goods Makeover Ideas tutorial"
             more={{ title: 'Review Security Tips', url: '#' }}
             features={[

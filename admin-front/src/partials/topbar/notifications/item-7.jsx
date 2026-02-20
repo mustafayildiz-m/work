@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { AvatarGroup } from '@/partials/common/avatar-group';
 import {
   CalendarDays,
@@ -24,34 +25,33 @@ export default function Item7() {
     <div className="flex grow gap-2.5 px-5">
       <Avatar>
         <AvatarImage src="/media/avatars/300-15.png" alt="avatar" />
-        <AvatarFallback>CH</AvatarFallback>
+        <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
         <AvatarIndicator className="-end-1.5 -bottom-1.5">
           <AvatarStatus variant="offline" className="size-2.5" />
         </AvatarIndicator>
       </Avatar>
-
       <div className="flex flex-col gap-3.5 grow">
         <div className="flex flex-col gap-1">
           <div className="text-sm font-medium mb-px">
             <Link to="#" className="hover:text-primary text-mono font-semibold">
-              Nova Hawthorne
+              <FormattedMessage id="UI.NOVA_HAWTHORNE" />
             </Link>
             <span className="text-secondary-foreground">
               {' '}
-              sent you an meeting invation{' '}
+              <FormattedMessage id="UI.SENT_YOU_AN_MEETING_INVATION" />{' '}
             </span>
           </div>
           <span className="flex items-center text-xs font-medium text-muted-foreground">
-            2 days ago
+            <FormattedMessage id="UI.2_DAYS_AGO" />
             <span className="rounded-full size-1 bg-mono/30 mx-1.5"></span>
-            Dev Team
+            <FormattedMessage id="UI.DEV_TEAM" />
           </span>
         </div>
 
         <Card className="shadow-none gap-1.5 py-2.5 rounded-lg bg-muted/70">
           <div className="flex flex-col gap-2.5 px-2.5 mb-0.5">
             <span className="font-medium text-secondary-foreground text-xs">
-              Peparation for Release
+              <FormattedMessage id="UI.PEPARATION_FOR_RELEASE" />
               <Lock size={16} />
             </span>
 
@@ -62,7 +62,7 @@ export default function Item7() {
                 appearance="outline"
                 className="text-yellow-400 me-1"
               >
-                <NotepadText /> Project
+                <NotepadText /> <FormattedMessage id="UI.PROJECT" />
               </Badge>
               <Badge
                 size="sm"
@@ -70,7 +70,7 @@ export default function Item7() {
                 appearance="outline"
                 className="text-secondary-foreground me-1"
               >
-                <Users /> DigitalDream
+                <Users /> <FormattedMessage id="UI.DIGITALDREAM" />
               </Badge>
             </div>
           </div>
@@ -87,14 +87,14 @@ export default function Item7() {
                   />
 
                   <span className="font-medium text-muted-foreground text-xs">
-                    22 April 2024
+                    <FormattedMessage id="UI.22_APRIL_2024" />
                   </span>
                 </div>
 
                 <div className="flex items-center gap-0.5">
                   <Timer size={16} className="text-muted-foreground text-xs" />
                   <span className="font-medium text-muted-foreground text-xs">
-                    12:00 PM - 14:00 PM
+                    <FormattedMessage id="UI.1200_PM__1400_PM" />
                   </span>
                 </div>
               </div>
@@ -102,12 +102,12 @@ export default function Item7() {
               <div className="flex items-center gap-0.5">
                 <MapPin size={16} className="text-muted-foreground text-xs" />
                 <div className="font-medium text-muted-foreground text-xs">
-                  Online
+                  <FormattedMessage id="UI.ONLINE" />
                   <Link
                     to="#"
                     className="hover:text-primary text-primary font-medium"
                   >
-                    Zoom Meeting
+                    <FormattedMessage id="UI.ZOOM_MEETING" />
                   </Link>
                 </div>
               </div>
@@ -130,10 +130,10 @@ export default function Item7() {
 
         <div className="flex flex-wrap gap-2.5">
           <Button size="sm" variant="outline">
-            Decline
+            <FormattedMessage id="UI.DECLINE" />
           </Button>
           <Button size="sm" variant="mono">
-            Accept
+            <FormattedMessage id="UI.ACCEPT" />
           </Button>
         </div>
       </div>

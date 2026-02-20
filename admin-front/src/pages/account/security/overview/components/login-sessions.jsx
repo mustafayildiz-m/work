@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { DropdownMenu5 } from '@/partials/dropdown-menu/dropdown-menu-5';
 import { DropdownMenu6 } from '@/partials/dropdown-menu/dropdown-menu-6';
 import { EllipsisVertical } from 'lucide-react';
@@ -71,7 +72,7 @@ const LoginSessions = () => {
                 alt="image"
               />
 
-              <AvatarFallback>CH</AvatarFallback>
+              <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
             </Avatar>
             <div className="flex flex-col gap-0.5">
               <Link
@@ -81,7 +82,7 @@ const LoginSessions = () => {
                 {row.name}
               </Link>
               <span className="text-xs font-normal text-secondary-foreground">
-                {row.connections} connections
+                {row.connections} <FormattedMessage id="UI.CONNECTIONS" />
               </span>
             </div>
           </div>
@@ -108,7 +109,7 @@ const LoginSessions = () => {
   return (
     <Card className="min-w-full">
       <CardHeader>
-        <CardTitle>Login Sessions</CardTitle>
+        <CardTitle><FormattedMessage id="UI.LOGIN_SESSIONS" /></CardTitle>
         <DropdownMenu6
           trigger={
             <Button variant="ghost" mode="icon">
@@ -122,12 +123,12 @@ const LoginSessions = () => {
           <Table className="align-middle text-secondary-foreground text-sm">
             <TableHeader>
               <TableRow className="bg-accent/60">
-                <TableHead className="text-start min-w-48 h-10">Name</TableHead>
+                <TableHead className="text-start min-w-48 h-10"><FormattedMessage id="UI.NAME" /></TableHead>
                 <TableHead className="text-end min-w-20 h-10">
-                  Location
+                  <FormattedMessage id="UI.LOCATION" />
                 </TableHead>
                 <TableHead className="text-end min-w-20 h-10">
-                  Recent activity
+                  <FormattedMessage id="UI.RECENT_ACTIVITY" />
                 </TableHead>
                 <TableHead className="text-end w-[70px] h-10"></TableHead>
               </TableRow>
@@ -142,7 +143,7 @@ const LoginSessions = () => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="#">View 64 more</Link>
+          <Link to="#"><FormattedMessage id="UI.VIEW_64_MORE" /></Link>
         </Button>
       </CardFooter>
     </Card>

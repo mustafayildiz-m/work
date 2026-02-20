@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useMenu } from '@/hooks/use-menu';
@@ -36,7 +37,7 @@ const MegaMenuSubDefault = (items) => {
               {item.title}
               {item.disabled && (
                 <Badge variant="secondary" size="sm">
-                  Soon
+                  <FormattedMessage id="UI.SOON" />
                 </Badge>
               )}
               {item.badge && (

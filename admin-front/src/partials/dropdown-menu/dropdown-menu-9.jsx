@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { Award, Coffee, Info, TrendingUp } from 'lucide-react';
 import {
@@ -35,11 +36,11 @@ export function DropdownMenu9({ trigger }) {
         <DropdownMenuContent className="w-[210px]" side="bottom" align="end">
           <DropdownMenuItem onClick={() => setIsShareDialogOpen(true)}>
             <Coffee />
-            <span>Share Profile</span>
+            <span><FormattedMessage id="UI.SHARE_PROFILE" /></span>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setIsAwardDialogOpen(true)}>
             <Award />
-            <span>Give Award</span>
+            <span><FormattedMessage id="UI.GIVE_AWARD" /></span>
           </DropdownMenuItem>
           <DropdownMenuItem
             className="flex items-center justify-between gap-2"
@@ -49,27 +50,24 @@ export function DropdownMenu9({ trigger }) {
           >
             <TrendingUp />
             <div className="grow flex items-center justify-between gap-2">
-              <span>Stay Updated</span>
+              <span><FormattedMessage id="UI.STAY_UPDATED" /></span>
               <Switch size="sm"></Switch>
             </div>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setIsReportDialogOpen(true)}>
             <Info />
-            <span>Report User</span>
+            <span><FormattedMessage id="UI.REPORT_USER" /></span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
       <ShareProfileDialog
         open={isShareDialogOpen}
         onOpenChange={handleShareDialogClose}
       />
-
       <GiveAwardDialog
         open={isAwardDialogOpen}
         onOpenChange={handleAwardDialogClose}
       />
-
       <ReportUserDialog
         open={isReportDialogOpen}
         onOpenChange={handleReportDialogClose}

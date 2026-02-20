@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
@@ -16,7 +17,7 @@ export function HeaderSearch() {
         />
 
         <span className="text-xs text-muted-foreground absolute end-3.5 top-1/2 -translate-y-1/2">
-          cmd + /
+          <FormattedMessage id="UI.CMD__" />
         </span>
       </div>
     </div>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router-dom';
 import {
   Avatar,
@@ -14,34 +15,33 @@ export default function Item13() {
     <div className="flex grow gap-2.5 px-5">
       <Avatar>
         <AvatarImage src="/media/avatars/300-25.png" alt="avatar" />
-        <AvatarFallback>CH</AvatarFallback>
+        <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
         <AvatarIndicator className="-end-1.5 -bottom-1.5">
           <AvatarStatus variant="online" className="size-2.5" />
         </AvatarIndicator>
       </Avatar>
-
       <div className="flex flex-col gap-3.5 grow">
         <div className="flex flex-col gap-1">
           <div className="text-sm font-medium mb-px">
             <Link to="#" className="hover:text-primary text-mono font-semibold">
-              Samuel Lee
+              <FormattedMessage id="UI.SAMUEL_LEE" />
             </Link>
             <span className="text-secondary-foreground">
               {' '}
-              requested to add user to{' '}
+              <FormattedMessage id="UI.REQUESTED_TO_ADD_USER_TO" />{' '}
             </span>
             <Link
               to="#"
               className="hover:text-primary text-primary font-semibold"
             >
-              TechSynergy
+              <FormattedMessage id="UI.TECHSYNERGY" />
             </Link>
           </div>
 
           <span className="flex items-center text-xs font-medium text-muted-foreground">
-            22 hours ago
+            <FormattedMessage id="UI.22_HOURS_AGO" />
             <span className="rounded-full size-1 bg-mono/30 mx-1.5"></span>
-            Dev Team
+            <FormattedMessage id="UI.DEV_TEAM" />
           </span>
         </div>
 
@@ -51,13 +51,13 @@ export default function Item13() {
               to="#"
               className="hover:text-primary font-medium text-mono text-xs"
             >
-              Ronald Richards
+              <FormattedMessage id="UI.RONALD_RICHARDS" />
             </Link>
             <Link
               to="#"
               className="hover:text-primary text-muted-foreground font-medium text-xs"
             >
-              ronald.richards@gmail.com
+              <FormattedMessage id="UI.RONALDRICHARDSGMAILCOM" />
             </Link>
           </div>
 
@@ -65,16 +65,16 @@ export default function Item13() {
             to="#"
             className="hover:text-primary text-secondary-foreground font-medium text-xs"
           >
-            Go to profile
+            <FormattedMessage id="UI.GO_TO_PROFILE" />
           </Link>
         </Card>
 
         <div className="flex flex-wrap gap-2.5">
           <Button size="sm" variant="outline">
-            Decline
+            <FormattedMessage id="UI.DECLINE" />
           </Button>
           <Button size="sm" variant="mono">
-            Accept
+            <FormattedMessage id="UI.ACCEPT" />
           </Button>
         </div>
       </div>

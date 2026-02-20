@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import {
   ShareProfileSettings,
   ShareProfileUsers,
@@ -17,7 +18,7 @@ export function GiveAwardDialog({ open, onOpenChange }) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="p-0 space-y-0 max-w-[600px]">
         <DialogHeader className="pt-5 pb-0 m-0 px-5">
-          <DialogTitle>Give Award</DialogTitle>
+          <DialogTitle><FormattedMessage id="UI.GIVE_AWARD" /></DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <div className="grid gap-5 px-0 py-5">

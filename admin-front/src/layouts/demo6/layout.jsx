@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useEffect, useState } from 'react';
 import { StoreClientTopbar } from '@/pages/store-client/components/common/topbar';
 import { addDays, format } from 'date-fns';
@@ -49,7 +50,6 @@ const Demo6Layout = () => {
       <Helmet>
         <title>{item?.title}</title>
       </Helmet>
-
       <div className="flex grow">
         {!isMobile && <Sidebar />}
 
@@ -71,7 +71,7 @@ const Demo6Layout = () => {
                           <Button variant="outline" asChild>
                             <Link to={'/account/home/get-started'}>
                               <Download />
-                              Export
+                              <FormattedMessage id="UI.EXPORT" />
                             </Link>
                           </Button>
                           <Popover>
@@ -88,7 +88,7 @@ const Demo6Layout = () => {
                                     format(date.from, 'LLL dd, y')
                                   )
                                 ) : (
-                                  <span>Pick a date range</span>
+                                  <span><FormattedMessage id="UI.PICK_A_DATE_RANGE" /></span>
                                 )}
                               </Button>
                             </PopoverTrigger>

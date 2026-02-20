@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Printer } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
@@ -27,14 +28,14 @@ const ActivitiesBloggingConference = ({ heading, datetime, image, title }) => {
             <div className="flex items-center justify-center gap-1">
               <Button mode="link" asChild>
                 <Link to="/public-profile/profiles/company">
-                  Axio new release
+                  <FormattedMessage id="UI.AXIO_NEW_RELEASE" />
                 </Link>
               </Button>
               <span className="text-sm text-secondary-foreground me-2">
-                email campaign
+                <FormattedMessage id="UI.EMAIL_CAMPAIGN" />
               </span>
               <Badge size="md" variant="success" appearance="outline">
-                Public
+                <FormattedMessage id="UI.PUBLIC" />
               </Badge>
             </div>
           </div>

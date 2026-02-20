@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { AvatarGroup } from '@/partials/common/avatar-group';
 import { DropdownMenu1 } from '@/partials/dropdown-menu/dropdown-menu-1';
 import { DropdownMenu2 } from '@/partials/dropdown-menu/dropdown-menu-2';
@@ -61,15 +62,15 @@ const Projects = ({ books = [] }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Kitaplar</CardTitle>
+        <CardTitle><FormattedMessage id="UI.KITAPLAR" /></CardTitle>
       </CardHeader>
       <CardContent className="kt-scrollable-x-auto p-0">
         <Table>
           <TableHeader className="bg-muted">
             <TableRow>
-              <TableHead>Kitap Adı</TableHead>
-              <TableHead>Açıklama</TableHead>
-              <TableHead>Kapak</TableHead>
+              <TableHead><FormattedMessage id="UI.KITAP_ADI" /></TableHead>
+              <TableHead><FormattedMessage id="UI.ACIKLAMA" /></TableHead>
+              <TableHead><FormattedMessage id="UI.KAPAK" /></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -78,7 +79,7 @@ const Projects = ({ books = [] }) => {
             ) : (
               <TableRow>
                 <TableCell colSpan={3} className="text-center">
-                  Kitap bulunamadı.
+                  <FormattedMessage id="UI.KITAP_BULUNAMADI" />
                 </TableCell>
               </TableRow>
             )}

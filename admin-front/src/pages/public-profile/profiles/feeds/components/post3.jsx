@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { FileText } from 'lucide-react';
 import { Card } from '@/components/ui/card';
@@ -33,12 +34,8 @@ const Post3 = () => {
         }}
         date="1 week ago"
       />
-
       <p className="text-sm text-foreground leading-5.5 px-7.5">
-        You also need to be able to accept that not every post is going to get
-        your motor running. Some posts will feel like a chore, but if you have
-        editorial control over what you write about, then choose topics you’d
-        want to read – even if they relate to niche industries.
+        <FormattedMessage id="UI.YOU_ALSO_NEED_TO_BE_ABLE_TO_ACCEPT_THAT_" />
       </p>
       <div className="p-7.5 pb-5">
         <iframe

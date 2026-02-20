@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 'use client';
 
 import { useMemo, useState } from 'react';
@@ -479,7 +480,7 @@ export function RecentOrders() {
         header: '',
         cell: () => (
           <Button mode="link" underlined="dashed">
-            <Link to="#">Details</Link>
+            <Link to="#"><FormattedMessage id="UI.DETAILS" /></Link>
           </Button>
         ),
 
@@ -523,7 +524,7 @@ export function RecentOrders() {
       <Card className="min-w-full">
         <CardHeader className="py-5 flex-wrap gap-2">
           <CardHeading>
-            <CardTitle>Recent Orders</CardTitle>
+            <CardTitle><FormattedMessage id="UI.RECENT_ORDERS" /></CardTitle>
           </CardHeading>
           <CardToolbar>
             <div className="relative">
@@ -547,7 +548,7 @@ export function RecentOrders() {
               )}
             </div>
             <Button variant="outline" onClick={() => alert('Export CSV')}>
-              Export CSV
+              <FormattedMessage id="UI.EXPORT_CSV" />
             </Button>
           </CardToolbar>
         </CardHeader>

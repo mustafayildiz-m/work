@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { AvatarGroup } from '@/partials/common/avatar-group';
 import { Link } from 'react-router-dom';
 import {
@@ -15,27 +16,26 @@ export default function Item10() {
     <div className="flex grow gap-2 px-5">
       <Avatar>
         <AvatarImage src="/media/avatars/300-15.png" alt="avatar" />
-        <AvatarFallback>CH</AvatarFallback>
+        <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
         <AvatarIndicator className="-end-1.5 -bottom-1.5">
           <AvatarStatus variant="online" className="size-2.5" />
         </AvatarIndicator>
       </Avatar>
-
       <div className="flex flex-col gap-3 grow">
         <div className="flex flex-col gap-1">
           <div className="text-sm font-medium mb-px">
             <Link to="#" className="hover:text-primary text-mono font-semibold">
-              Nova Hawthorne
+              <FormattedMessage id="UI.NOVA_HAWTHORNE" />
             </Link>
             <span className="text-secondary-foreground">
               {' '}
-              sent you an meeting invation{' '}
+              <FormattedMessage id="UI.SENT_YOU_AN_MEETING_INVATION" />{' '}
             </span>
           </div>
           <span className="flex items-center text-xs font-medium text-muted-foreground">
-            2 days ago
+            <FormattedMessage id="UI.2_DAYS_AGO" />
             <span className="rounded-full size-1 bg-mono/30 mx-1.5"></span>
-            Dev Team
+            <FormattedMessage id="UI.DEV_TEAM" />
           </span>
         </div>
 
@@ -45,7 +45,7 @@ export default function Item10() {
               <div className="border border-warning-transparent rounded-lg">
                 <div className="flex items-center justify-center border-b border-b-warning-transparent bg-yellow-400/10 rounded-t-lg">
                   <span className="text-xs text-yellow-400 fw-medium p-1.5">
-                    Apr
+                    <FormattedMessage id="UI.APR" />
                   </span>
                 </div>
                 <div className="flex items-center justify-center size-9">
@@ -60,10 +60,10 @@ export default function Item10() {
                   to="#"
                   className="hover:text-primary font-medium text-secondary-foreground text-xs"
                 >
-                  Peparation For Release
+                  <FormattedMessage id="UI.PEPARATION_FOR_RELEASE" />
                 </Link>
                 <span className="font-medium text-secondary-foreground text-xs">
-                  9:00 PM - 10:00 PM
+                  <FormattedMessage id="UI.900_PM__1000_PM" />
                 </span>
               </div>
             </div>
@@ -85,10 +85,10 @@ export default function Item10() {
 
         <div className="flex flex-wrap gap-2.5">
           <Button size="sm" variant="outline">
-            Decline
+            <FormattedMessage id="UI.DECLINE" />
           </Button>
           <Button size="sm" variant="mono">
-            Accept
+            <FormattedMessage id="UI.ACCEPT" />
           </Button>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
@@ -455,7 +456,7 @@ const IPAddresses = () => {
                 </div>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Verify the identity of a user trying to access a resource</p>
+                <p><FormattedMessage id="UI.VERIFY_THE_IDENTITY_OF_A_USER_TRYING_TO_" /></p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -546,17 +547,17 @@ const IPAddresses = () => {
       <CardToolbar>
         <div className="flex items-center space-x-2">
           <Label htmlFor="auto-update" className="text-sm">
-            IP Allowlist Enabled
+            <FormattedMessage id="UI.IP_ALLOWLIST_ENABLED" />
           </Label>
           <Switch size="sm" id="auto-update" defaultChecked />
         </div>
-        <Button>Add IP Address</Button>
+        <Button><FormattedMessage id="UI.ADD_IP_ADDRESS" /></Button>
         <DataGridColumnVisibility
           table={table}
           trigger={
             <Button variant="outline">
               <Settings2 />
-              Columns
+              <FormattedMessage id="UI.COLUMNS" />
             </Button>
           }
         />
@@ -603,7 +604,7 @@ const IPAddresses = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline">
                     <Filter />
-                    Status
+                    <FormattedMessage id="UI.STATUS" />
                     {selectedStatuses.length > 0 && (
                       <Badge size="sm" appearance="stroke">
                         {selectedStatuses.length}
@@ -614,7 +615,7 @@ const IPAddresses = () => {
                 <PopoverContent className="w-40 p-3" align="start">
                   <div className="space-y-3">
                     <div className="text-xs font-medium text-muted-foreground">
-                      Filters
+                      <FormattedMessage id="UI.FILTERS" />
                     </div>
                     <div className="space-y-3">
                       {Object.keys(statusCounts).map((status) => (

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { DropdownMenu4 } from '@/partials/dropdown-menu/dropdown-menu-4';
 import { DropdownMenu5 } from '@/partials/dropdown-menu/dropdown-menu-5';
 import { Check, EllipsisVertical } from 'lucide-react';
@@ -72,7 +73,7 @@ const Connections = () => {
                 {table.name}
               </Link>
               <span className="text-xs font-normal text-secondary-foreground">
-                {table.connections} connections
+                {table.connections} <FormattedMessage id="UI.CONNECTIONS" />
               </span>
             </div>
           </div>
@@ -101,7 +102,7 @@ const Connections = () => {
   return (
     <Card className="min-w-full">
       <CardHeader>
-        <CardTitle>Connections</CardTitle>
+        <CardTitle><FormattedMessage id="UI.CONNECTIONS_1" /></CardTitle>
         <DropdownMenu5
           trigger={
             <Button variant="ghost" mode="icon" size="sm">
@@ -116,13 +117,13 @@ const Connections = () => {
             <TableBody>
               <TableRow className="bg-accent/60">
                 <TableCell className="text-start font-medium min-w-48 py-2.5">
-                  Name
+                  <FormattedMessage id="UI.NAME" />
                 </TableCell>
                 <TableCell className="text-end font-medium min-w-28 py-2.5">
-                  Joint Links
+                  <FormattedMessage id="UI.JOINT_LINKS" />
                 </TableCell>
                 <TableCell className="text-end font-medium min-w-20 py-2.5">
-                  Status
+                  <FormattedMessage id="UI.STATUS" />
                 </TableCell>
                 <TableCell className="min-w-16"></TableCell>
               </TableRow>
@@ -135,7 +136,7 @@ const Connections = () => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="#">View 64 more</Link>
+          <Link to="#"><FormattedMessage id="UI.VIEW_64_MORE" /></Link>
         </Button>
       </CardFooter>
     </Card>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import {
   Toolbar,
@@ -22,13 +23,13 @@ export function ShippingInfoPage() {
           <ToolbarHeading>
             <ToolbarPageTitle />
             <ToolbarDescription>
-              Enter and confirm your delivery address
+              <FormattedMessage id="UI.ENTER_AND_CONFIRM_YOUR_DELIVERY_ADDRESS" />
             </ToolbarDescription>
           </ToolbarHeading>
           <ToolbarActions>
             <Button variant="outline">
               <MapPinned />
-              <Link to="#">Add Address</Link>
+              <Link to="#"><FormattedMessage id="UI.ADD_ADDRESS" /></Link>
             </Button>
           </ToolbarActions>
         </Toolbar>

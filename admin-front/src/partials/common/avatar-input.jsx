@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { X } from 'lucide-react';
 import { toAbsoluteUrl } from '@/lib/helpers';
@@ -40,7 +41,7 @@ export function AvatarInput() {
                   <X className="size-3.25!" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Click to remove or revert</TooltipContent>
+              <TooltipContent><FormattedMessage id="UI.CLICK_TO_REMOVE_OR_REVERT" /></TooltipContent>
             </Tooltip>
           </TooltipProvider>
           <div

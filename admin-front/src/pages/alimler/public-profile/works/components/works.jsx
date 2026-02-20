@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useState } from 'react';
 import { CardWork, CardWorkRow } from '@/partials/cards';
 import { LayoutGrid, List } from 'lucide-react';
@@ -117,7 +118,7 @@ const Works = () => {
     <div className="flex flex-col items-stretch gap-5 lg:gap-7.5">
       <div className="flex flex-wrap items-center gap-5 justify-between">
         <h3 className="text-lg text-mono font-semibold">
-          {items.length} Works
+          {items.length} <FormattedMessage id="UI.WORKS" />
         </h3>
         <ToggleGroup
           type="single"
@@ -150,7 +151,7 @@ const Works = () => {
           </div>
           <div className="flex grow justify-center pt-5 lg:pt-7.5">
             <Button mode="link" underlined="dashed" asChild>
-              <Link to="#">Show more works</Link>
+              <Link to="#"><FormattedMessage id="UI.SHOW_MORE_WORKS" /></Link>
             </Button>
           </div>
         </div>
@@ -170,7 +171,7 @@ const Works = () => {
           </div>
           <div className="flex grow justify-center pt-5 lg:pt-7.5">
             <Button mode="link" underlined="dashed" asChild>
-              <Link to="#">Show more works</Link>
+              <Link to="#"><FormattedMessage id="UI.SHOW_MORE_WORKS" /></Link>
             </Button>
           </div>
         </div>

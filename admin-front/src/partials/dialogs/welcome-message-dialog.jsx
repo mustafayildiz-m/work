@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import {
@@ -33,17 +34,17 @@ export function WelcomeMessageDialog({ open, onOpenChange }) {
           </div>
 
           <h3 className="text-lg font-medium text-mono text-center mb-3">
-            Welcome to Metronic
+            <FormattedMessage id="UI.WELCOME_TO_METRONIC" />
           </h3>
 
           <div className="text-sm text-center text-secondary-foreground mb-7">
-            We're thrilled to have you on board and excited for <br />
-            the journey ahead together.
+            <FormattedMessage id="UI.WERE_THRILLED_TO_HAVE_YOU_ON_BOARD_AND_E" /> <br />
+            <FormattedMessage id="UI.THE_JOURNEY_AHEAD_TOGETHER" />
           </div>
 
           <div className="flex justify-center mb-2">
             <Link to="/" className="btn btn-primary flex justify-center">
-              Show me around
+              <FormattedMessage id="UI.SHOW_ME_AROUND" />
             </Link>
           </div>
 
@@ -51,7 +52,7 @@ export function WelcomeMessageDialog({ open, onOpenChange }) {
             to="/"
             className="text-sm font-medium text-secondary-foreground hover:text-primary py-3"
           >
-            Skip the tour
+            <FormattedMessage id="UI.SKIP_THE_TOUR" />
           </Link>
         </DialogBody>
       </DialogContent>

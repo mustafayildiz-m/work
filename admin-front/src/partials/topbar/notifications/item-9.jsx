@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { CircleCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
@@ -14,31 +15,30 @@ export default function Item9() {
     <div className="flex gap-2.5 px-5">
       <Avatar>
         <AvatarImage src="/media/avatars/300-21.png" alt="avatar" />
-        <AvatarFallback>CH</AvatarFallback>
+        <AvatarFallback><FormattedMessage id="UI.CH" /></AvatarFallback>
         <AvatarIndicator className="-end-1.5 -bottom-1.5">
           <AvatarStatus variant="online" className="size-2.5" />
         </AvatarIndicator>
       </Avatar>
-
       <div className="flex flex-col gap-3.5">
         <div className="flex flex-col gap-1">
           <div className="text-sm font-medium mb-px">
             <Link to="#" className="hover:text-primary text-mono font-semibold">
-              Selene Silverleaf
+              <FormattedMessage id="UI.SELENE_SILVERLEAF" />
             </Link>
             <span className="text-secondary-foreground">
               {' '}
-              created a tasks in{' '}
+              <FormattedMessage id="UI.CREATED_A_TASKS_IN" />{' '}
             </span>
             <Link to="#" className="hover:text-primary text-primary">
-              Design Project
+              <FormattedMessage id="UI.DESIGN_PROJECT" />
             </Link>
           </div>
 
           <span className="flex items-center text-xs font-medium text-muted-foreground">
-            4 days ago
+            <FormattedMessage id="UI.4_DAYS_AGO" />
             <span className="rounded-full size-1 bg-mono/30 mx-1.5"></span>
-            Manager
+            <FormattedMessage id="UI.MANAGER" />
           </span>
         </div>
 
@@ -49,7 +49,7 @@ export default function Item9() {
             appearance="outline"
             className="text-green-500 me-1 text-xs"
           >
-            <CircleCheck /> Feature Prioritization
+            <CircleCheck /> <FormattedMessage id="UI.FEATURE_PRIORITIZATION" />
           </Badge>
           <Badge
             size="sm"
@@ -57,7 +57,7 @@ export default function Item9() {
             appearance="outline"
             className="text-secondary-foreground me-1 text-xs"
           >
-            <CircleCheck /> Last Month User Research
+            <CircleCheck /> <FormattedMessage id="UI.LAST_MONTH_USER_RESEARCH" />
           </Badge>
         </div>
       </div>

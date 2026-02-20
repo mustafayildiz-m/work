@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { AvatarGroup } from '@/partials/common/avatar-group';
 import { DropdownMenu1 } from '@/partials/dropdown-menu/dropdown-menu-1';
 import { DropdownMenu2 } from '@/partials/dropdown-menu/dropdown-menu-2';
@@ -157,7 +158,7 @@ const Projects = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Projects</CardTitle>
+        <CardTitle><FormattedMessage id="UI.PROJECTS" /></CardTitle>
         <DropdownMenu1
           trigger={
             <Button variant="ghost" mode="icon">
@@ -171,16 +172,16 @@ const Projects = () => {
           <TableHeader className="bg-muted">
             <TableRow>
               <TableHead className="min-w-52 font-normal! text-secondary-foreground! h-10">
-                Project Name
+                <FormattedMessage id="UI.PROJECT_NAME" />
               </TableHead>
               <TableHead className="min-w-40 font-normal! text-secondary-foreground! h-10">
-                Progress
+                <FormattedMessage id="UI.PROGRESS" />
               </TableHead>
               <TableHead className="text-end min-w-32 font-normal! text-secondary-foreground! h-10">
-                People
+                <FormattedMessage id="UI.PEOPLE" />
               </TableHead>
               <TableHead className="text-end min-w-32 font-normal! text-secondary-foreground! h-10">
-                Due Date
+                <FormattedMessage id="UI.DUE_DATE" />
               </TableHead>
               <TableHead className="w-[30px] h-10"></TableHead>
             </TableRow>
@@ -194,7 +195,7 @@ const Projects = () => {
       </CardContent>
       <CardFooter className="justify-center">
         <Button mode="link" underlined="dashed" asChild>
-          <Link to="/public-profile/projects/3-columns">All Projects</Link>
+          <Link to="/public-profile/projects/3-columns"><FormattedMessage id="UI.ALL_PROJECTS" /></Link>
         </Button>
       </CardFooter>
     </Card>

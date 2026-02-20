@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Link } from 'react-router';
 import { Badge, BadgeDot } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -33,9 +34,9 @@ export function Inventory() {
       <span className="text-sm text-mono">{row.text}</span>
 
       <div className="flex items-center gap-2">
-        <span className="text-sm text-mono">Qty: {row.total}</span>
+        <span className="text-sm text-mono"><FormattedMessage id="UI.QTY" /> {row.total}</span>
         <span className="border-l border-input h-[12px]"> </span>
-        <span className="text-sm font-medium text-primary">Order</span>
+        <span className="text-sm font-medium text-primary"><FormattedMessage id="UI.ORDER" /></span>
       </div>
     </div>
   );
@@ -43,18 +44,17 @@ export function Inventory() {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle>Inventory</CardTitle>
+        <CardTitle><FormattedMessage id="UI.INVENTORY" /></CardTitle>
         <Button mode="link" asChild>
-          <Link to="#">See All</Link>
+          <Link to="#"><FormattedMessage id="UI.SEE_ALL" /></Link>
         </Button>
       </CardHeader>
-
       <CardContent className="flex flex-col gap-4 p-5 lg:p-7.5 lg:pt-4">
         <div className="flex flex-col gap-0.5">
           <span className="text-sm font-normal text-secondary-foreground">
-            Total Asset Value
+            <FormattedMessage id="UI.TOTAL_ASSET_VALUE" />
           </span>
-          <span className="text-3xl font-semibold text-mono">$329.7k</span>
+          <span className="text-3xl font-semibold text-mono"><FormattedMessage id="UI.3297K" /></span>
         </div>
 
         <div className="flex items-center gap-1 mb-1.5">
@@ -80,9 +80,9 @@ export function Inventory() {
 
         <div className="grid gap-3.5">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-mono font-medium">Low stock</span>
+            <span className="text-sm text-mono font-medium"><FormattedMessage id="UI.LOW_STOCK" /></span>
             <Button mode="link" asChild>
-              <Link to="#">See All</Link>
+              <Link to="#"><FormattedMessage id="UI.SEE_ALL" /></Link>
             </Button>
           </div>
 

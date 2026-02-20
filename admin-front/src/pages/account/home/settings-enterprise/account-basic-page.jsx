@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import { PageNavbar } from '@/pages/account';
 import {
@@ -25,15 +26,15 @@ export function AccountSettingsEnterprisePage() {
             <ToolbarHeading>
               <ToolbarPageTitle />
               <ToolbarDescription>
-                Tailored Tools for Business Scalability
+                <FormattedMessage id="UI.TAILORED_TOOLS_FOR_BUSINESS_SCALABILITY" />
               </ToolbarDescription>
             </ToolbarHeading>
             <ToolbarActions>
               <Button variant="outline">
-                <Link to="#">Public Profile</Link>
+                <Link to="#"><FormattedMessage id="UI.PUBLIC_PROFILE" /></Link>
               </Button>
               <Button>
-                <Link to="#">My profile</Link>
+                <Link to="#"><FormattedMessage id="UI.MY_PROFILE" /></Link>
               </Button>
             </ToolbarActions>
           </Toolbar>

@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
@@ -7,12 +8,12 @@ const ManageData = () => {
     {
       title: 'Ony invited People',
       description: 'Invite selected people via email.',
-      control: <Button variant="outline">Start</Button>,
+      control: <Button variant="outline"><FormattedMessage id="UI.START" /></Button>,
     },
     {
       title: 'People with the link',
       description: 'Create a pubic link for your report.',
-      control: <Button variant="outline">Delete</Button>,
+      control: <Button variant="outline"><FormattedMessage id="UI.DELETE" /></Button>,
     },
     {
       title: 'No one',
@@ -43,7 +44,7 @@ const ManageData = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Manage your Data</CardTitle>
+        <CardTitle><FormattedMessage id="UI.MANAGE_YOUR_DATA" /></CardTitle>
       </CardHeader>
       {items.map((item, index) => {
         return renderItem(item, index);

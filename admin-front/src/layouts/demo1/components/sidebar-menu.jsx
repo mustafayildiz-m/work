@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 'use client';
 
 import { useCallback, useState, useEffect } from 'react';
@@ -18,6 +19,17 @@ import { Badge } from '@/components/ui/badge';
 const statusColor = {
   done: "text-accent-foreground",
   pending: "text-accent-foreground"
+};
+
+const getMenuKey = (text) => {
+  let slug = text.trim().replace(/[\s\n\r]+/g, '_').toUpperCase();
+  const trMap = {
+    'Ç': 'C', 'Ğ': 'G', 'İ': 'I', 'Ö': 'O', 'Ş': 'S', 'Ü': 'U',
+    'ç': 'C', 'ğ': 'G', 'ı': 'I', 'ö': 'O', 'ş': 'S', 'ü': 'U'
+  };
+  slug = slug.replace(/[ÇĞİÖŞÜçğıöşü]/g, match => trMap[match]);
+  slug = slug.replace(/[^A-Z0-9_]/g, '');
+  return slug.slice(0, 40);
 };
 
 export function SidebarMenu() {
@@ -127,7 +139,7 @@ export function SidebarMenu() {
           <AccordionMenuSubTrigger className={`text-sm font-medium ${colorClass} flex items-center justify-between grow gap-2 w-full`}>
             <div className="flex items-center gap-2">
               {item.icon && <item.icon data-slot="accordion-menu-icon" className={colorClass} />}
-              <span data-slot="accordion-menu-title">{item.title}</span>
+              <span data-slot="accordion-menu-title"><FormattedMessage id={`MENU.${getMenuKey(item.title)}`} defaultMessage={item.title} /></span>
             </div>
             {item.badge !== undefined && (
               <Badge variant="danger" size="sm" className="ms-auto rounded-full px-1.5 h-5 min-w-5 flex items-center justify-center bg-red-500 text-white border-none text-[10px]">
@@ -159,7 +171,7 @@ export function SidebarMenu() {
             className="flex items-center justify-between grow gap-2"
           >
             {item.icon && <item.icon data-slot="accordion-menu-icon" className={colorClass} />}
-            <span data-slot="accordion-menu-title">{item.title}</span>
+            <span data-slot="accordion-menu-title"><FormattedMessage id={`MENU.${getMenuKey(item.title)}`} defaultMessage={item.title} /></span>
             {item.badge !== undefined && (
               <Badge variant="danger" size="sm" className="ms-auto rounded-full px-1.5 h-5 min-w-5 flex items-center justify-center bg-red-500 text-white border-none">
                 {item.badge}
@@ -179,10 +191,10 @@ export function SidebarMenu() {
         className="text-sm font-medium"
       >
         {item.icon && <item.icon data-slot="accordion-menu-icon" />}
-        <span data-slot="accordion-menu-title">{item.title}</span>
+        <span data-slot="accordion-menu-title"><FormattedMessage id={`MENU.${getMenuKey(item.title)}`} defaultMessage={item.title} /></span>
         {item.disabled && (
           <Badge variant="secondary" size="sm" className="ms-auto me-[-10px]">
-            Soon
+            <FormattedMessage id="UI.SOON" />
           </Badge>
         )}
       </AccordionMenuItem>
@@ -218,7 +230,7 @@ export function SidebarMenu() {
                 </span>
               </span>
             ) : (
-              item.title
+              <FormattedMessage id={`MENU.${getMenuKey(item.title)}`} defaultMessage={item.title} />
             )}
           </AccordionMenuSubTrigger>
           <AccordionMenuSubContent
@@ -251,7 +263,7 @@ export function SidebarMenu() {
             to={item.path || '#'}
             className="flex items-center justify-between grow gap-2 w-full"
           >
-            <span>{item.title}</span>
+            <span><FormattedMessage id={`MENU.${getMenuKey(item.title)}`} defaultMessage={item.title} /></span>
             {item.badge !== undefined && (
               <Badge variant="danger" size="sm" className="ms-auto rounded-full px-1.5 h-5 min-w-5 flex items-center justify-center bg-red-500 text-white border-none text-[10px]">
                 {item.badge}
@@ -270,10 +282,10 @@ export function SidebarMenu() {
         value={`disabled-child-${level}-${index}`}
         className="text-[13px]"
       >
-        <span data-slot="accordion-menu-title">{item.title}</span>
+        <span data-slot="accordion-menu-title"><FormattedMessage id={`MENU.${getMenuKey(item.title)}`} defaultMessage={item.title} /></span>
         {item.disabled && (
           <Badge variant="secondary" size="sm" className="ms-auto me-[-10px]">
-            Soon
+            <FormattedMessage id="UI.SOON" />
           </Badge>
         )}
       </AccordionMenuItem>
@@ -281,7 +293,7 @@ export function SidebarMenu() {
   };
 
   const buildMenuHeading = (item, index) => {
-    return <AccordionMenuLabel key={index}>{item.heading}</AccordionMenuLabel>;
+    return <AccordionMenuLabel key={index}><FormattedMessage id={`MENU.${getMenuKey(item.heading)}`} defaultMessage={item.heading} /></AccordionMenuLabel>;
   };
 
   return (

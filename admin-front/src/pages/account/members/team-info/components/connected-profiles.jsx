@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { DropdownMenu2 } from '@/partials/dropdown-menu/dropdown-menu-2';
 import { EllipsisVertical } from 'lucide-react';
 import { Link } from 'react-router';
@@ -53,7 +54,7 @@ const ConnectedProfiles = () => {
               {item.user.name}
             </Link>
             <span className="text-xs text-secondary-foreground">
-              {item.user.tasks} tasks
+              {item.user.tasks} <FormattedMessage id="UI.TASKS" />
             </span>
           </div>
         </div>
@@ -94,14 +95,14 @@ const ConnectedProfiles = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>2 Profiles Connected</CardTitle>
+        <CardTitle><FormattedMessage id="UI.2_PROFILES_CONNECTED" /></CardTitle>
       </CardHeader>
       {items.map((item, index) => {
         return renderItem(item, index);
       })}
       <CardFooter className="justify-center">
         <Button variant="outline">
-          <Link to="#">Connect Profile</Link>
+          <Link to="#"><FormattedMessage id="UI.CONNECT_PROFILE" /></Link>
         </Button>
       </CardFooter>
     </Card>

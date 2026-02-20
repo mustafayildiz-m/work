@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useAuth } from '@/auth/context/auth-context';
 import { I18N_LANGUAGES } from '@/i18n/config';
 import { Globe, Moon } from 'lucide-react';
@@ -83,7 +84,7 @@ export function UserDropdownMenu({ trigger }) {
           <DropdownMenuSubTrigger className="flex items-center gap-2 [&_[data-slot=dropdown-menu-sub-trigger-indicator]]:hidden hover:[&_[data-slot=badge]]:border-input data-[state=open]:[&_[data-slot=badge]]:border-input">
             <Globe />
             <span className="flex items-center justify-between gap-2 grow relative">
-              Language
+              <FormattedMessage id="USER.MENU.LANGUAGE" />
               <Badge
                 appearance="stroke"
                 className="absolute end-0 top-1/2 -translate-y-1/2"
@@ -135,7 +136,7 @@ export function UserDropdownMenu({ trigger }) {
         >
           <Moon />
           <div className="flex items-center gap-2 justify-between grow">
-            Dark Mode
+            <FormattedMessage id="USER.MENU.DARK_MODE" />
             <Switch
               size="sm"
               checked={theme === 'dark'}
@@ -150,7 +151,7 @@ export function UserDropdownMenu({ trigger }) {
             className="w-full"
             onClick={logout}
           >
-            Logout
+            <FormattedMessage id="USER.MENU.LOGOUT" />
           </Button>
         </div>
       </DropdownMenuContent>

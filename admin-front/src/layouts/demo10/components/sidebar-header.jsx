@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useEffect, useState } from 'react';
 import { SearchDialog } from '@/partials/dialogs/search/search-dialog';
 import { ChevronsUpDown, Plus, Search } from 'lucide-react';
@@ -38,7 +39,7 @@ export function SidebarHeader() {
 
         <DropdownMenu>
           <DropdownMenuTrigger className="cursor-pointer text-mono font-medium flex items-center justify-between gap-2 w-[190px]">
-            Metronic
+            <FormattedMessage id="UI.METRONIC" />
             <ChevronsUpDown className="size-3.5! me-1" />
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -62,7 +63,6 @@ export function SidebarHeader() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-
       <div className="flex items-center gap-2.5 px-3.5">
         <Button
           asChild
@@ -70,7 +70,7 @@ export function SidebarHeader() {
           className="text-white justify-center w-full max-w-[198px]"
         >
           <Link to="/public-profile/projects/3-columns">
-            <Plus /> Add New
+            <Plus /> <FormattedMessage id="UI.ADD_NEW" />
           </Link>
         </Button>
 

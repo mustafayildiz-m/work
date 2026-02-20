@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { Fragment } from 'react';
 import {
   Toolbar,
@@ -24,12 +25,12 @@ export function NetworkGetStartedPage() {
               <ToolbarDescription>
                 <div className="flex items-center gap-2 text-sm font-medium">
                   <span className="text-secondary-foreground">
-                    19 issues need your attention
+                    <FormattedMessage id="UI.19_ISSUES_NEED_YOUR_ATTENTION" />
                   </span>
                   <span className="size-0.75 bg-mono/50 rounded-full"></span>
                   <Button mode="link" underlined="dashed">
                     <Link to="/account/security/security-log">
-                      Security Log
+                      <FormattedMessage id="UI.SECURITY_LOG" />
                     </Link>
                   </Button>
                 </div>

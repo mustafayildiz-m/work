@@ -1,3 +1,4 @@
+import { FormattedMessage } from "react-intl";
 import { useEffect, useRef, useState } from 'react';
 import { AccountSettingsSidebar } from '@/pages/account/home/settings-sidebar';
 import {
@@ -52,14 +53,14 @@ export function AccountSettingsModal({ open, onOpenChange }) {
           <div className="flex items-center justify-between flex-wrap grow gap-5 pb-7.5">
             <div className="flex flex-col justify-center gap-2">
               <h1 className="text-xl font-semibold leading-none text-mono">
-                Settings - Modal
+                <FormattedMessage id="UI.SETTINGS__MODAL" />
               </h1>
               <div className="flex items-center gap-2 text-sm font-normal text-secondary-foreground">
-                Dynamic, Focused Adjustment Interface
+                <FormattedMessage id="UI.DYNAMIC_FOCUSED_ADJUSTMENT_INTERFACE" />
               </div>
             </div>
             <Button onClick={onOpenChange} variant="outline">
-              Close
+              <FormattedMessage id="UI.CLOSE" />
             </Button>
           </div>
         </DialogHeader>
