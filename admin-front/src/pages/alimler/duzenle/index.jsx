@@ -57,7 +57,7 @@ const EditScholarPage = () => {
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     if (!token) {
-      setError('Yetkilendirme token\'ı bulunamadı');
+      setError(intl.formatMessage({ id: "UI.YETKILENDIRME_TOKENI_BULUNAMADI" }));
       setLoading(false);
       return;
     }
@@ -67,7 +67,7 @@ const EditScholarPage = () => {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => {
-        if (!res.ok) throw new Error('Alim bilgileri alınamadı');
+        if (!res.ok) throw new Error(intl.formatMessage({ id: "UI.ALIM_BILGILERI_ALINAMADI" }));
         return res.json();
       })
       .then(data => {
@@ -189,10 +189,10 @@ const EditScholarPage = () => {
           locationName: display_name
         }));
       } else {
-        toast.error('Konum bulunamadı');
+        toast.error(intl.formatMessage({ id: "UI.KONUM_BULUNAMADI" }));
       }
     } catch {
-      toast.error('Konum arama hatası');
+      toast.error(intl.formatMessage({ id: "UI.KONUM_ARAMA_HATASI" }));
     }
   };
 
@@ -238,7 +238,7 @@ const EditScholarPage = () => {
     try {
       const token = localStorage.getItem('access_token');
       if (!token) {
-        throw new Error('Yetkilendirme token\'ı bulunamadı');
+        throw new Error(intl.formatMessage({ id: "UI.YETKILENDIRME_TOKENI_BULUNAMADI" }));
       }
 
       const formData = new FormData();
@@ -285,9 +285,9 @@ const EditScholarPage = () => {
         },
         body: formData,
       });
-      if (!res.ok) throw new Error('Alim güncellenemedi');
+      if (!res.ok) throw new Error(intl.formatMessage({ id: "UI.ALIM_GUNCELLENEMEDI" }));
       const data = await res.json();
-      toast.success('Alim başarıyla güncellendi!');
+      toast.success(intl.formatMessage({ id: "UI.ALIM_BASARIYLA_GUNCELLENDI" }));
       navigate('/alimler/liste');
     } catch (err) {
       setError(err.message);
@@ -328,303 +328,303 @@ const EditScholarPage = () => {
       <div className="p-6 max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold"><FormattedMessage id="UI.ALIM_DUZENLE" /></h2>
-        <button
-          onClick={() => navigate('/alimler/liste')}
-          className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
-        >
-          <FormattedMessage id="UI.GERI_DON" />
-        </button>
-      </div>
-      <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex flex-col">
-            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.ADI_SOYAD" /></label>
-            <input name="fullName" value={form.fullName} onChange={handleChange} required placeholder="Adı" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.NESEBI_ISTEGE_BAGLI" /></label>
-            <input name="lineage" value={form.lineage} onChange={handleChange} placeholder="Nesebi (isteğe bağlı)" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.DOGUM_YILI" /></label>
-            <input name="birthDate" value={form.birthDate} onChange={handleChange} type="text" placeholder="Doğum Yılı" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.VEFAT_YILI_ISTEGE_BAGLI" /></label>
-            <input name="deathDate" value={form.deathDate} onChange={handleChange} type="text" placeholder="Vefat Yılı (isteğe bağlı)" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
-          </div>
-          <div className="flex flex-col md:col-span-2">
-            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.PORTRE_URL_VEYA_DOSYA" /></label>
-            <div className="flex gap-2 items-center">
-              <input name="photoUrl" value={form.photoUrl} onChange={handleChange} placeholder="Portre (URL)" className="px-3 py-2 border rounded bg-white dark:bg-gray-800 flex-1" />
-              <div className="relative">
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="portrait-upload"
-                  onChange={handlePortraitFile}
-                  className="hidden"
-                />
-                <label htmlFor="portrait-upload" className="px-4 py-2 bg-blue-500 text-white rounded cursor-pointer hover:bg-blue-600 transition flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 16v-4m0 0V8m0 4h4m-4 0H8m12 4.5V19a2 2 0 01-2 2H6a2 2 0 01-2-2v-2.5M16 3.5V5m0 0A2.5 2.5 0 0118.5 7.5h-13A2.5 2.5 0 013 5V3.5" />
-                  </svg>
-                  <FormattedMessage id="UI.DOSYA_SEC" />
-                </label>
-              </div>
-              <span className="text-xs text-gray-500 dark:text-gray-300">
-                {portraitFile ? portraitFile.name : 'Dosya seçilmedi'}
-              </span>
-            </div>
-            {(portraitPreview || form.photoUrl) && (
-              <img src={portraitPreview || getImageUrl(form.photoUrl)} alt="Portre" className="w-16 h-16 mt-2 object-cover rounded border" />
-            )}
-          </div>
-          <div className="flex flex-col md:col-span-2">
-            <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.BIYOGRAFI" /></label>
-            <CKEditor
-              editor={ClassicEditor}
-              data={form.biography}
-              onChange={(event, editor) => {
-                const data = editor.getData();
-                setForm({ ...form, biography: data });
-              }}
-              config={{
-                toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'undo', 'redo'],
-                placeholder: 'Biyografi'
-              }}
-              style={{ minHeight: '500px' }}
-            />
-          </div>
+          <button
+            onClick={() => navigate('/alimler/liste')}
+            className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+          >
+            <FormattedMessage id="UI.GERI_DON" />
+          </button>
         </div>
-        <div className="mt-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="font-semibold text-sm"><FormattedMessage id="UI.KENDI_KITAPLARI" /></span>
-            <button type="button" onClick={addOwnBook} className="text-xs text-blue-500 bg-blue-100 px-2 py-1 rounded hover:bg-blue-200 transition"><FormattedMessage id="UI._KITAP_EKLE" /></button>
-          </div>
-          {form.ownBooks.map((book, idx) => (
-            <div key={book.tempId || `ownbook-${idx}`} className="flex flex-col gap-2 mb-2 bg-gray-50 dark:bg-gray-800 p-3 rounded">
-              <input value={book.title} onChange={e => handleOwnBookChange(idx, 'title', e.target.value)} placeholder="Kitap Adı" className="px-2 py-1 border rounded bg-white dark:bg-gray-800" />
-              <input value={book.description || ''} onChange={e => handleOwnBookChange(idx, 'description', e.target.value)} placeholder="Açıklama" className="px-2 py-1 border rounded bg-white dark:bg-gray-800" />
-              <input value={book.coverUrl || ''} onChange={e => handleOwnBookChange(idx, 'coverUrl', e.target.value)} placeholder="Kapak URL" className="px-2 py-1 border rounded bg-white dark:bg-gray-800" />
+        <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col">
+              <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.ADI_SOYAD" /></label>
+              <input name="fullName" value={form.fullName} onChange={handleChange} required placeholder={intl.formatMessage({ id: "UI.ADI" })} className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
+            </div>
+            <div className="flex flex-col">
+              <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.NESEBI_ISTEGE_BAGLI" /></label>
+              <input name="lineage" value={form.lineage} onChange={handleChange} placeholder={intl.formatMessage({ id: "UI.NESEBI_ISTEGE_BAGLI" })} className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
+            </div>
+            <div className="flex flex-col">
+              <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.DOGUM_YILI" /></label>
+              <input name="birthDate" value={form.birthDate} onChange={handleChange} type="text" placeholder={intl.formatMessage({ id: "UI.DOGUM_YILI" })} className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
+            </div>
+            <div className="flex flex-col">
+              <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.VEFAT_YILI_ISTEGE_BAGLI" /></label>
+              <input name="deathDate" value={form.deathDate} onChange={handleChange} type="text" placeholder={intl.formatMessage({ id: "UI.VEFAT_YILI_ISTEGE_BAGLI" })} className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
+            </div>
+            <div className="flex flex-col md:col-span-2">
+              <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.PORTRE_URL_VEYA_DOSYA" /></label>
               <div className="flex gap-2 items-center">
-                <input value={book.pdfUrl || ''} onChange={e => handleOwnBookChange(idx, 'pdfUrl', e.target.value)} placeholder="PDF URL (isteğe bağlı)" className="px-2 py-1 border rounded bg-white dark:bg-gray-800 flex-1" />
+                <input name="photoUrl" value={form.photoUrl} onChange={handleChange} placeholder={intl.formatMessage({ id: "UI.PORTRE_URL_VEYA_DOSYA" })} className="px-3 py-2 border rounded bg-white dark:bg-gray-800 flex-1" />
                 <div className="relative">
                   <input
                     type="file"
-                    accept=".pdf"
-                    id={`ownbook-pdf-upload-${idx}`}
-                    onChange={e => handleOwnBookPdfFile(idx, e)}
+                    accept="image/*"
+                    id="portrait-upload"
+                    onChange={handlePortraitFile}
                     className="hidden"
                   />
-                  <label htmlFor={`ownbook-pdf-upload-${idx}`} className="px-3 py-1 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600 transition flex items-center gap-1 text-xs">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                  <label htmlFor="portrait-upload" className="px-4 py-2 bg-blue-500 text-white rounded cursor-pointer hover:bg-blue-600 transition flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 16v-4m0 0V8m0 4h4m-4 0H8m12 4.5V19a2 2 0 01-2 2H6a2 2 0 01-2-2v-2.5M16 3.5V5m0 0A2.5 2.5 0 0118.5 7.5h-13A2.5 2.5 0 013 5V3.5" />
                     </svg>
-                    <FormattedMessage id="UI.PDF_SEC" />
+                    <FormattedMessage id="UI.DOSYA_SEC" />
                   </label>
                 </div>
+                <span className="text-xs text-gray-500 dark:text-gray-300">
+                  {portraitFile ? portraitFile.name : intl.formatMessage({ id: "UI.DOSYA_SECILMADI" })}
+                </span>
               </div>
-              <div className="text-xs text-gray-500 dark:text-gray-300">
-                {ownBookPdfFiles[idx] ? `PDF seçildi: ${ownBookPdfFiles[idx].name}` : 'PDF dosyası seçilmedi'}
-              </div>
-              {form.ownBooks.length > 1 && (
-                <button type="button" onClick={() => removeOwnBook(idx)} className="text-red-500 text-xs"><FormattedMessage id="UI.SIL" /></button>
+              {(portraitPreview || form.photoUrl) && (
+                <img src={portraitPreview || getImageUrl(form.photoUrl)} alt="Portre" className="w-16 h-16 mt-2 object-cover rounded border" />
               )}
             </div>
-          ))}
-        </div>
-        <div className="mt-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="font-semibold text-sm"><FormattedMessage id="UI.KAYNAKLAR" /></span>
-            <button type="button" onClick={addSource} className="text-xs text-blue-500 bg-blue-100 px-2 py-1 rounded hover:bg-blue-200 transition"><FormattedMessage id="UI._KAYNAK_EKLE" /></button>
-          </div>
-          {form.sources.map((source, idx) => (
-            <div key={`source-${idx}`} className="flex flex-col md:flex-row gap-2 mb-2">
-              <input value={source.content} onChange={e => handleSourceChange(idx, 'content', e.target.value)} placeholder="Başlık" className="px-2 py-1 border rounded bg-white dark:bg-gray-800 flex-1" />
-              <input value={source.url} onChange={e => handleSourceChange(idx, 'url', e.target.value)} placeholder="URL" className="px-2 py-1 border rounded bg-white dark:bg-gray-800 flex-1" />
-              {form.sources.length > 1 && (
-                <button type="button" onClick={() => removeSource(idx)} className="text-red-500 text-xs"><FormattedMessage id="UI.SIL" /></button>
-              )}
-            </div>
-          ))}
-        </div>
-        <div className="mt-4">
-          <label className="block font-semibold text-sm mb-2"><FormattedMessage id="UI.ILISKILI_KITAPLAR" /></label>
-          {books.length === 0 ? (
-            <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-              <FormattedMessage id="UI.HENUZ_KITAP_BULUNMUYOR_ONCE_KITAP_EKLEYI" />
-            </div>
-          ) : (
-            <Select
-              isMulti
-              name="relatedBooks"
-              options={books.map(book => ({
-                value: book.id,
-                label: book.translations?.[0]?.title || book.title || 'İsimsiz Kitap'
-              }))}
-              value={books
-                .filter(b => form.relatedBooks.includes(b.id))
-                .map(book => ({
-                  value: book.id,
-                  label: book.translations?.[0]?.title || book.title || 'İsimsiz Kitap'
-                }))}
-              onChange={(selectedOptions) => {
-                const selectedIds = selectedOptions ? selectedOptions.map(opt => opt.value) : [];
-                setForm({ ...form, relatedBooks: selectedIds });
-              }}
-              placeholder="Kitap seçin..."
-              className="react-select-container"
-              classNamePrefix="react-select"
-              styles={{
-                control: (base, state) => ({
-                  ...base,
-                  backgroundColor: safeTheme === 'dark' ? '#18181b' : '#fff',
-                  borderColor: state.isFocused ? '#3b82f6' : (safeTheme === 'dark' ? '#374151' : '#d1d5db'),
-                  '&:hover': {
-                    borderColor: '#3b82f6'
-                  }
-                }),
-                menu: (base) => ({
-                  ...base,
-                  backgroundColor: safeTheme === 'dark' ? '#1f2937' : '#fff',
-                  zIndex: 9999
-                }),
-                option: (base, state) => ({
-                  ...base,
-                  backgroundColor: state.isSelected 
-                    ? '#3b82f6' 
-                    : state.isFocused 
-                      ? (safeTheme === 'dark' ? '#374151' : '#e5e7eb')
-                      : (safeTheme === 'dark' ? '#1f2937' : '#fff'),
-                  color: state.isSelected 
-                    ? '#fff' 
-                    : (safeTheme === 'dark' ? '#f3f4f6' : '#111827'),
-                  '&:active': {
-                    backgroundColor: '#3b82f6'
-                  }
-                }),
-                multiValue: (base) => ({
-                  ...base,
-                  backgroundColor: safeTheme === 'dark' ? '#374151' : '#e5e7eb'
-                }),
-                multiValueLabel: (base) => ({
-                  ...base,
-                  color: safeTheme === 'dark' ? '#f3f4f6' : '#111827'
-                }),
-                multiValueRemove: (base) => ({
-                  ...base,
-                  color: safeTheme === 'dark' ? '#f3f4f6' : '#111827',
-                  '&:hover': {
-                    backgroundColor: '#ef4444',
-                    color: '#fff'
-                  }
-                }),
-                input: (base) => ({
-                  ...base,
-                  color: safeTheme === 'dark' ? '#f3f4f6' : '#111827'
-                }),
-                placeholder: (base) => ({
-                  ...base,
-                  color: safeTheme === 'dark' ? '#9ca3af' : '#6b7280'
-                }),
-                singleValue: (base) => ({
-                  ...base,
-                  color: safeTheme === 'dark' ? '#f3f4f6' : '#111827'
-                })
-              }}
-            />
-          )}
-        </div>
-        <div className="mt-4">
-          <h4 className="text-sm font-semibold mb-2"><FormattedMessage id="UI.KONUM_BILGILERI" /></h4>
-          <div className="grid grid-cols-1 gap-4">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Konum ara..."
-                className="flex-1 px-3 py-2 border rounded bg-white dark:bg-gray-800"
+            <div className="flex flex-col md:col-span-2">
+              <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.BIYOGRAFI" /></label>
+              <CKEditor
+                editor={ClassicEditor}
+                data={form.biography}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  setForm({ ...form, biography: data });
+                }}
+                config={{
+                  toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'undo', 'redo'],
+                  placeholder: intl.formatMessage({ id: "UI.BIYOGRAFI" })
+                }}
+                style={{ minHeight: '500px' }}
               />
-              <button
-                type="button"
-                onClick={handleSearch}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                <FormattedMessage id="UI.ARA" />
-              </button>
             </div>
-            <div className="h-[300px] rounded-lg overflow-hidden">
-              <MapContainer center={mapCenter} zoom={5} style={{ width: '100%', height: '100%' }}>
-                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                <LocationMarker />
-                <MapUpdater position={form.latitude && form.longitude ? [parseFloat(form.latitude), parseFloat(form.longitude)] : null} />
-              </MapContainer>
+          </div>
+          <div className="mt-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-semibold text-sm"><FormattedMessage id="UI.KENDI_KITAPLARI" /></span>
+              <button type="button" onClick={addOwnBook} className="text-xs text-blue-500 bg-blue-100 px-2 py-1 rounded hover:bg-blue-200 transition"><FormattedMessage id="UI._KITAP_EKLE" /></button>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col">
-                <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.KONUM_ADI" /></label>
-                <input
-                  name="locationName"
-                  value={form.locationName}
-                  onChange={e => setForm({ ...form, locationName: e.target.value })}
-                  placeholder="Örn: İstanbul, Türkiye"
-                  className="px-3 py-2 border rounded bg-white dark:bg-gray-800"
-                />
+            {form.ownBooks.map((book, idx) => (
+              <div key={book.tempId || `ownbook-${idx}`} className="flex flex-col gap-2 mb-2 bg-gray-50 dark:bg-gray-800 p-3 rounded">
+                <input value={book.title} onChange={e => handleOwnBookChange(idx, 'title', e.target.value)} placeholder={intl.formatMessage({ id: "UI.BASLIK" })} className="px-2 py-1 border rounded bg-white dark:bg-gray-800" />
+                <input value={book.description || ''} onChange={e => handleOwnBookChange(idx, 'description', e.target.value)} placeholder={intl.formatMessage({ id: "UI.ACIKLAMA" })} className="px-2 py-1 border rounded bg-white dark:bg-gray-800" />
+                <input value={book.coverUrl || ''} onChange={e => handleOwnBookChange(idx, 'coverUrl', e.target.value)} placeholder={intl.formatMessage({ id: "UI.KAPAK_RESMI" })} className="px-2 py-1 border rounded bg-white dark:bg-gray-800" />
+                <div className="flex gap-2 items-center">
+                  <input value={book.pdfUrl || ''} onChange={e => handleOwnBookChange(idx, 'pdfUrl', e.target.value)} placeholder={intl.formatMessage({ id: "UI.PDF_DOSYASI" })} className="px-2 py-1 border rounded bg-white dark:bg-gray-800 flex-1" />
+                  <div className="relative">
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      id={`ownbook-pdf-upload-${idx}`}
+                      onChange={e => handleOwnBookPdfFile(idx, e)}
+                      className="hidden"
+                    />
+                    <label htmlFor={`ownbook-pdf-upload-${idx}`} className="px-3 py-1 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600 transition flex items-center gap-1 text-xs">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                      </svg>
+                      <FormattedMessage id="UI.PDF_SEC" />
+                    </label>
+                  </div>
+                </div>
+                <div className="text-xs text-gray-500 dark:text-gray-300">
+                  {ownBookPdfFiles[idx] ? `${intl.formatMessage({ id: "UI.YENI_DOSYA_SECILDI" })} ${ownBookPdfFiles[idx].name}` : intl.formatMessage({ id: "UI.PDF_DOSYASI_SECILMADI" })}
+                </div>
+                {form.ownBooks.length > 1 && (
+                  <button type="button" onClick={() => removeOwnBook(idx)} className="text-red-500 text-xs"><FormattedMessage id="UI.SIL" /></button>
+                )}
               </div>
-              <div className="flex flex-col">
-                <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.KONUM_ACIKLAMASI_ISTEGE_BAGLI" /></label>
-                <input
-                  name="locationDescription"
-                  value={form.locationDescription}
-                  onChange={e => setForm({ ...form, locationDescription: e.target.value })}
-                  placeholder="Örn: Doğum yeri"
-                  className="px-3 py-2 border rounded bg-white dark:bg-gray-800"
-                />
-              </div>
+            ))}
+          </div>
+          <div className="mt-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-semibold text-sm"><FormattedMessage id="UI.KAYNAKLAR" /></span>
+              <button type="button" onClick={addSource} className="text-xs text-blue-500 bg-blue-100 px-2 py-1 rounded hover:bg-blue-200 transition"><FormattedMessage id="UI._KAYNAK_EKLE" /></button>
             </div>
-            <div className="grid grid-cols-2 gap-4 mt-2">
-              <div className="flex flex-col">
-                <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.ENLEM_LATITUDE" /></label>
-                <input
-                  type="number"
-                  step="any"
-                  name="latitude"
-                  value={form.latitude}
-                  onChange={e => {
-                    setForm({ ...form, latitude: e.target.value });
-                  }}
-                  placeholder="Örn: 39.9334"
-                  className="px-3 py-2 border rounded bg-white dark:bg-gray-800"
-                />
+            {form.sources.map((source, idx) => (
+              <div key={`source-${idx}`} className="flex flex-col md:flex-row gap-2 mb-2">
+                <input value={source.content} onChange={e => handleSourceChange(idx, 'content', e.target.value)} placeholder={intl.formatMessage({ id: "UI.BASLIK" })} className="px-2 py-1 border rounded bg-white dark:bg-gray-800 flex-1" />
+                <input value={source.url} onChange={e => handleSourceChange(idx, 'url', e.target.value)} placeholder="URL" className="px-2 py-1 border rounded bg-white dark:bg-gray-800 flex-1" />
+                {form.sources.length > 1 && (
+                  <button type="button" onClick={() => removeSource(idx)} className="text-red-500 text-xs"><FormattedMessage id="UI.SIL" /></button>
+                )}
               </div>
-              <div className="flex flex-col">
-                <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.BOYLAM_LONGITUDE" /></label>
+            ))}
+          </div>
+          <div className="mt-4">
+            <label className="block font-semibold text-sm mb-2"><FormattedMessage id="UI.ILISKILI_KITAPLAR" /></label>
+            {books.length === 0 ? (
+              <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                <FormattedMessage id="UI.HENUZ_KITAP_BULUNMUYOR_ONCE_KITAP_EKLEYI" />
+              </div>
+            ) : (
+              <Select
+                isMulti
+                name="relatedBooks"
+                options={books.map(book => ({
+                  value: book.id,
+                  label: book.translations?.[0]?.title || book.title || intl.formatMessage({ id: "UI.ISIMSIZ_KITAP" })
+                }))}
+                value={books
+                  .filter(b => form.relatedBooks.includes(b.id))
+                  .map(book => ({
+                    value: book.id,
+                    label: book.translations?.[0]?.title || book.title || intl.formatMessage({ id: "UI.ISIMSIZ_KITAP" })
+                  }))}
+                onChange={(selectedOptions) => {
+                  const selectedIds = selectedOptions ? selectedOptions.map(opt => opt.value) : [];
+                  setForm({ ...form, relatedBooks: selectedIds });
+                }}
+                placeholder={intl.formatMessage({ id: "UI.KITAP_SECIN" })}
+                className="react-select-container"
+                classNamePrefix="react-select"
+                styles={{
+                  control: (base, state) => ({
+                    ...base,
+                    backgroundColor: safeTheme === 'dark' ? '#18181b' : '#fff',
+                    borderColor: state.isFocused ? '#3b82f6' : (safeTheme === 'dark' ? '#374151' : '#d1d5db'),
+                    '&:hover': {
+                      borderColor: '#3b82f6'
+                    }
+                  }),
+                  menu: (base) => ({
+                    ...base,
+                    backgroundColor: safeTheme === 'dark' ? '#1f2937' : '#fff',
+                    zIndex: 9999
+                  }),
+                  option: (base, state) => ({
+                    ...base,
+                    backgroundColor: state.isSelected
+                      ? '#3b82f6'
+                      : state.isFocused
+                        ? (safeTheme === 'dark' ? '#374151' : '#e5e7eb')
+                        : (safeTheme === 'dark' ? '#1f2937' : '#fff'),
+                    color: state.isSelected
+                      ? '#fff'
+                      : (safeTheme === 'dark' ? '#f3f4f6' : '#111827'),
+                    '&:active': {
+                      backgroundColor: '#3b82f6'
+                    }
+                  }),
+                  multiValue: (base) => ({
+                    ...base,
+                    backgroundColor: safeTheme === 'dark' ? '#374151' : '#e5e7eb'
+                  }),
+                  multiValueLabel: (base) => ({
+                    ...base,
+                    color: safeTheme === 'dark' ? '#f3f4f6' : '#111827'
+                  }),
+                  multiValueRemove: (base) => ({
+                    ...base,
+                    color: safeTheme === 'dark' ? '#f3f4f6' : '#111827',
+                    '&:hover': {
+                      backgroundColor: '#ef4444',
+                      color: '#fff'
+                    }
+                  }),
+                  input: (base) => ({
+                    ...base,
+                    color: safeTheme === 'dark' ? '#f3f4f6' : '#111827'
+                  }),
+                  placeholder: (base) => ({
+                    ...base,
+                    color: safeTheme === 'dark' ? '#9ca3af' : '#6b7280'
+                  }),
+                  singleValue: (base) => ({
+                    ...base,
+                    color: safeTheme === 'dark' ? '#f3f4f6' : '#111827'
+                  })
+                }}
+              />
+            )}
+          </div>
+          <div className="mt-4">
+            <h4 className="text-sm font-semibold mb-2"><FormattedMessage id="UI.KONUM_BILGILERI" /></h4>
+            <div className="grid grid-cols-1 gap-4">
+              <div className="flex gap-2">
                 <input
-                  type="number"
-                  step="any"
-                  name="longitude"
-                  value={form.longitude}
-                  onChange={e => {
-                    setForm({ ...form, longitude: e.target.value });
-                  }}
-                  placeholder="Örn: 32.8597"
-                  className="px-3 py-2 border rounded bg-white dark:bg-gray-800"
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={intl.formatMessage({ id: "UI.KONUM_ARA" })}
+                  className="flex-1 px-3 py-2 border rounded bg-white dark:bg-gray-800"
                 />
+                <button
+                  type="button"
+                  onClick={handleSearch}
+                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                  <FormattedMessage id="UI.ARA" />
+                </button>
+              </div>
+              <div className="h-[300px] rounded-lg overflow-hidden">
+                <MapContainer center={mapCenter} zoom={5} style={{ width: '100%', height: '100%' }}>
+                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                  <LocationMarker />
+                  <MapUpdater position={form.latitude && form.longitude ? [parseFloat(form.latitude), parseFloat(form.longitude)] : null} />
+                </MapContainer>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col">
+                  <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.KONUM_ADI" /></label>
+                  <input
+                    name="locationName"
+                    value={form.locationName}
+                    onChange={e => setForm({ ...form, locationName: e.target.value })}
+                    placeholder={intl.formatMessage({ id: "UI.ORN_ISTANBUL_TURKIYE" })}
+                    className="px-3 py-2 border rounded bg-white dark:bg-gray-800"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.KONUM_ACIKLAMASI_ISTEGE_BAGLI" /></label>
+                  <input
+                    name="locationDescription"
+                    value={form.locationDescription}
+                    onChange={e => setForm({ ...form, locationDescription: e.target.value })}
+                    placeholder={intl.formatMessage({ id: "UI.ORN_DOGUM_YERI" })}
+                    className="px-3 py-2 border rounded bg-white dark:bg-gray-800"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4 mt-2">
+                <div className="flex flex-col">
+                  <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.ENLEM_LATITUDE" /></label>
+                  <input
+                    type="number"
+                    step="any"
+                    name="latitude"
+                    value={form.latitude}
+                    onChange={e => {
+                      setForm({ ...form, latitude: e.target.value });
+                    }}
+                    placeholder="Örn: 39.9334"
+                    className="px-3 py-2 border rounded bg-white dark:bg-gray-800"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.BOYLAM_LONGITUDE" /></label>
+                  <input
+                    type="number"
+                    step="any"
+                    name="longitude"
+                    value={form.longitude}
+                    onChange={e => {
+                      setForm({ ...form, longitude: e.target.value });
+                    }}
+                    placeholder="Örn: 32.8597"
+                    className="px-3 py-2 border rounded bg-white dark:bg-gray-800"
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
-        <div className="flex justify-end gap-2 mt-6">
-          <button type="button" onClick={() => navigate('/alimler/liste')} className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"><FormattedMessage id="UI.IPTAL" /></button>
-          <button type="submit" className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors" disabled={saving || !isFormValid}>
-            {saving ? 'Güncelleniyor...' : 'Güncelle'}
-          </button>
-        </div>
-      </form>
-      <style>{`
+          {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+          <div className="flex justify-end gap-2 mt-6">
+            <button type="button" onClick={() => navigate('/alimler/liste')} className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"><FormattedMessage id="UI.IPTAL" /></button>
+            <button type="submit" className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors" disabled={saving || !isFormValid}>
+              {saving ? intl.formatMessage({ id: "UI.GUNCELLENIYOR" }) : intl.formatMessage({ id: "UI.GUNCELLE" })}
+            </button>
+          </div>
+        </form>
+        <style>{`
         .ck-editor__editable_inline {
           min-height: 500px !important;
           background: ${safeTheme === 'dark' ? '#18181b' : '#fff'} !important;
