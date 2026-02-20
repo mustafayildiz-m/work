@@ -29,6 +29,7 @@ const getPdfUrl = (pdfUrl) => {
 
 // Book Detail Modal Component
 const BookDetailModal = ({ book, onClose }) => {
+  const intl = useIntl();
   const navigate = useNavigate();
   if (!book) return null;
 
@@ -105,7 +106,7 @@ const BookDetailModal = ({ book, onClose }) => {
                 <div>
                   <span className="text-sm font-semibold text-gray-700 dark:text-gray-300"><FormattedMessage id="UI.YAYIN_TARIHI_1" /></span>
                   <p className="text-base text-gray-900 dark:text-white">
-                    {new Date(book.publishDate).toLocaleDateString('tr-TR')}
+                    {new Date(book.publishDate).toLocaleDateString(intl.locale === 'tr' ? 'tr-TR' : 'en-US')}
                   </p>
                 </div>
               )}
@@ -370,8 +371,8 @@ const BookListCards = () => {
               <button
                 onClick={() => setViewMode('grid')}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition ${viewMode === 'grid'
-                    ? 'bg-white dark:bg-gray-700 text-blue-600 shadow'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                  ? 'bg-white dark:bg-gray-700 text-blue-600 shadow'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                   }`}
                 title="Kart Görünümü"
               >
@@ -382,8 +383,8 @@ const BookListCards = () => {
               <button
                 onClick={() => setViewMode('list')}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition ${viewMode === 'list'
-                    ? 'bg-white dark:bg-gray-700 text-blue-600 shadow'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                  ? 'bg-white dark:bg-gray-700 text-blue-600 shadow'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                   }`}
                 title="Liste Görünümü"
               >
@@ -454,8 +455,8 @@ const BookListCards = () => {
                     <button
                       onClick={() => handleCategoryChange('')}
                       className={`px-4 py-2 rounded-lg text-sm font-medium transition ${selectedCategory === ''
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                         }`}
                     >
                       <FormattedMessage id="UI.TUMU" />
@@ -465,8 +466,8 @@ const BookListCards = () => {
                         key={category}
                         onClick={() => handleCategoryChange(category)}
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition ${selectedCategory === category
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                           }`}
                       >
                         {category}
@@ -618,8 +619,8 @@ const BookListCards = () => {
                       <span
                         key={idx}
                         className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs ${trans.pdfUrl || trans.pdfFile
-                            ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                          ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
                           }`}
                         title={`${trans.title} ${trans.pdfUrl || trans.pdfFile ? '(PDF mevcut)' : '(PDF yok)'}`}
                       >
@@ -637,7 +638,7 @@ const BookListCards = () => {
                   {/* Publish Date */}
                   {book.publishDate && (
                     <p className="text-xs text-gray-500 dark:text-gray-400">
-                      📅 {new Date(book.publishDate).toLocaleDateString('tr-TR')}
+                      📅 {new Date(book.publishDate).toLocaleDateString(intl.locale === 'tr' ? 'tr-TR' : 'en-US')}
                     </p>
                   )}
                 </div>
@@ -701,7 +702,7 @@ const BookListCards = () => {
 
                       {book.publishDate && (
                         <span className="text-xs text-gray-500 dark:text-gray-400">
-                          📅 {new Date(book.publishDate).toLocaleDateString('tr-TR')}
+                          📅 {new Date(book.publishDate).toLocaleDateString(intl.locale === 'tr' ? 'tr-TR' : 'en-US')}
                         </span>
                       )}
                     </div>
@@ -830,8 +831,8 @@ const BookListCards = () => {
                     key={pageNum}
                     onClick={() => handlePageChange(pageNum)}
                     className={`px-3 py-1 rounded-md border transition ${currentPage === pageNum
-                        ? 'bg-blue-600 text-white border-blue-600'
-                        : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'
                       }`}
                   >
                     {pageNum}
