@@ -171,10 +171,10 @@ function AddScholarModal({ open, onClose, onAdd }) {
           locationName: display_name
         }));
       } else {
-        toast.error('Konum bulunamadı');
+        toast.error(intl.formatMessage({ id: "UI.KONUM_BULUNAMADI" }));
       }
     } catch {
-      toast.error('Konum arama hatası');
+      toast.error(intl.formatMessage({ id: "UI.KONUM_ARAMA_HATASI" }));
     }
   };
 
@@ -257,10 +257,10 @@ function AddScholarModal({ open, onClose, onAdd }) {
         },
         body: formData,
       });
-      if (!res.ok) throw new Error('Alim eklenemedi');
+      if (!res.ok) throw new Error(intl.formatMessage({ id: "UI.ALIM_EKLENEMEDI" }));
       const data = await res.json();
       onAdd(data);
-      toast.success('Alim başarıyla eklendi!');
+      toast.success(intl.formatMessage({ id: "UI.ALIM_BASARIYLA_EKLENDI" }));
       onClose();
     } catch (err) {
       setError(err.message);
@@ -288,32 +288,32 @@ function AddScholarModal({ open, onClose, onAdd }) {
           type="button"
           onClick={onClose}
           className="absolute top-3 right-3 text-gray-500 hover:text-red-500 text-xl font-bold"
-          aria-label="Kapat"
+          aria-label={intl.formatMessage({ id: "UI.KAPAT" })}
         >
           ×
         </button>
-        <h3 className="text-lg font-bold mb-4 text-center"><FormattedMessage id="UI.ALIM_EKLE" /> <span className="text-xs font-normal"><FormattedMessage id="UI.NESEBI_VE_VEFAT_YILI_ISTEGE_BAGLI" /></span></h3>
+        <h3 className="text-lg font-bold mb-4 text-center"><FormattedMessage id="UI.ALIM_EKLE_1" /> <span className="text-xs font-normal"><FormattedMessage id="UI.NESEBI_VE_VEFAT_YILI_ISTEGE_BAGLI_1" /></span></h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col">
             <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.ADI" /></label>
-            <input name="fullName" value={form.fullName} onChange={handleChange} required placeholder="Adı" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
+            <input name="fullName" value={form.fullName} onChange={handleChange} required placeholder={intl.formatMessage({ id: "UI.ADI" })} className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
           </div>
           <div className="flex flex-col">
             <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.NESEBI_ISTEGE_BAGLI" /></label>
-            <input name="lineage" value={form.lineage} onChange={handleChange} placeholder="Nesebi (isteğe bağlı)" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
+            <input name="lineage" value={form.lineage} onChange={handleChange} placeholder={intl.formatMessage({ id: "UI.NESEBI_ISTEGE_BAGLI" })} className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
           </div>
           <div className="flex flex-col">
             <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.DOGUM_YILI" /></label>
-            <input name="birthDate" value={form.birthDate} onChange={handleChange} type="date" placeholder="Doğum Yılı" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
+            <input name="birthDate" value={form.birthDate} onChange={handleChange} type="date" placeholder={intl.formatMessage({ id: "UI.DOGUM_YILI" })} className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
           </div>
           <div className="flex flex-col">
             <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.VEFAT_YILI_ISTEGE_BAGLI" /></label>
-            <input name="deathDate" value={form.deathDate} onChange={handleChange} type="date" placeholder="Vefat Yılı (isteğe bağlı)" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
+            <input name="deathDate" value={form.deathDate} onChange={handleChange} type="date" placeholder={intl.formatMessage({ id: "UI.VEFAT_YILI_ISTEGE_BAGLI" })} className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
           </div>
           <div className="flex flex-col md:col-span-2">
             <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.PORTRE_URL_VEYA_DOSYA" /></label>
             <div className="flex gap-2 items-center">
-              <input name="photoUrl" value={form.photoUrl} onChange={handleChange} placeholder="Portre (URL)" className="px-3 py-2 border rounded bg-white dark:bg-gray-800 flex-1" />
+              <input name="photoUrl" value={form.photoUrl} onChange={handleChange} placeholder={intl.formatMessage({ id: "UI.PORTRE" })} className="px-3 py-2 border rounded bg-white dark:bg-gray-800 flex-1" />
               <div className="relative">
                 <input
                   type="file"
@@ -330,7 +330,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
                 </label>
               </div>
               <span className="text-xs text-gray-500 dark:text-gray-300">
-                {portraitFile ? portraitFile.name : 'Dosya seçilmedi'}
+                {portraitFile ? portraitFile.name : <FormattedMessage id="UI.DOSYA_SECILMADI" />}
               </span>
             </div>
             {(portraitPreview || form.photoUrl) && (
@@ -339,7 +339,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
           </div>
           <div className="flex flex-col md:col-span-2">
             <label className="mb-1 text-xs font-semibold"><FormattedMessage id="UI.BIYOGRAFI" /></label>
-            <textarea name="biography" value={form.biography} onChange={handleChange} placeholder="Biyografi" className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
+            <textarea name="biography" value={form.biography} onChange={handleChange} placeholder={intl.formatMessage({ id: "UI.BIYOGRAFI" })} className="px-3 py-2 border rounded bg-white dark:bg-gray-800" />
           </div>
         </div>
         <div className="mt-4">
@@ -349,9 +349,9 @@ function AddScholarModal({ open, onClose, onAdd }) {
           </div>
           {form.ownBooks.map((book, idx) => (
             <div key={book.tempId || `ownbook-${idx}`} className="flex flex-col gap-2 mb-2 bg-gray-50 dark:bg-gray-800 p-3 rounded">
-              <input value={book.title} onChange={e => handleOwnBookChange(idx, 'title', e.target.value)} placeholder="Başlık" className="px-2 py-1 border rounded bg-white dark:bg-gray-800" />
-              <input value={book.coverUrl} onChange={e => handleOwnBookFile(idx, e.target.value)} placeholder="Kapak URL" className="px-2 py-1 border rounded bg-white dark:bg-gray-800" />
-              <input value={book.description} onChange={e => handleOwnBookChange(idx, 'description', e.target.value)} placeholder="Açıklama" className="px-2 py-1 border rounded bg-white dark:bg-gray-800" />
+              <input value={book.title} onChange={e => handleOwnBookChange(idx, 'title', e.target.value)} placeholder={intl.formatMessage({ id: "UI.BASLIK" })} className="px-2 py-1 border rounded bg-white dark:bg-gray-800" />
+              <input value={book.coverUrl} onChange={e => handleOwnBookFile(idx, e.target.value)} placeholder={intl.formatMessage({ id: "UI.KAPAK_URL" })} className="px-2 py-1 border rounded bg-white dark:bg-gray-800" />
+              <input value={book.description} onChange={e => handleOwnBookChange(idx, 'description', e.target.value)} placeholder={intl.formatMessage({ id: "UI.ACIKLAMA" })} className="px-2 py-1 border rounded bg-white dark:bg-gray-800" />
               <div className="flex gap-2 items-center">
                 <input value={book.pdfUrl} onChange={e => handleOwnBookChange(idx, 'pdfUrl', e.target.value)} placeholder="PDF URL (isteğe bağlı)" className="px-2 py-1 border rounded bg-white dark:bg-gray-800 flex-1" />
                 <div className="relative">
@@ -371,7 +371,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
                 </div>
               </div>
               <div className="text-xs text-gray-500 dark:text-gray-300">
-                {ownBookPdfFiles[idx] ? `PDF seçildi: ${ownBookPdfFiles[idx].name}` : 'PDF dosyası seçilmedi'}
+                {ownBookPdfFiles[idx] ? `${intl.formatMessage({ id: "UI.PDF_SEC" })}: ${ownBookPdfFiles[idx].name}` : <FormattedMessage id="UI.PDF_DOSYASI_SECILMADI" />}
               </div>
               <div className="flex gap-2 items-center">
                 <div className="relative">
@@ -390,7 +390,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
                   </label>
                 </div>
                 <span className="text-xs text-gray-500 dark:text-gray-300">
-                  {ownBookFiles[idx] ? ownBookFiles[idx].name : 'Dosya seçilmedi'}
+                  {ownBookFiles[idx] ? ownBookFiles[idx].name : <FormattedMessage id="UI.DOSYA_SECILMADI" />}
                 </span>
                 {(ownBookPreviews[idx] || (book.coverUrl && book.coverUrl.trim() !== '')) ? (
                   <img src={ownBookPreviews[idx] || getImageUrl(book.coverUrl)} alt="Kapak" className="w-10 h-10 object-cover rounded border" />
@@ -409,7 +409,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
           </div>
           {form.sources.map((source, idx) => (
             <div key={`source-${idx}`} className="flex flex-col md:flex-row gap-2 mb-2">
-              <input value={source.content} onChange={e => handleSourceChange(idx, 'content', e.target.value)} placeholder="Başlık" className="px-2 py-1 border rounded bg-white dark:bg-gray-800 flex-1" />
+              <input value={source.content} onChange={e => handleSourceChange(idx, 'content', e.target.value)} placeholder={intl.formatMessage({ id: "UI.BASLIK" })} className="px-2 py-1 border rounded bg-white dark:bg-gray-800 flex-1" />
               <input value={source.url} onChange={e => handleSourceChange(idx, 'url', e.target.value)} placeholder="URL" className="px-2 py-1 border rounded bg-white dark:bg-gray-800 flex-1" />
               {form.sources.length > 1 && (
                 <button type="button" onClick={() => removeSource(idx)} className="text-red-500 text-xs"><FormattedMessage id="UI.SIL" /></button>
@@ -427,7 +427,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
                   onClick={() => setForm({ ...form, relatedBooks: form.relatedBooks.filter(id => id !== book.id) })}
                   className="mr-1 text-white hover:text-red-300 font-bold"
                   style={{ fontSize: '1.1em' }}
-                  aria-label="Kaldır"
+                  aria-label={intl.formatMessage({ id: "UI.KALDIR" })}
                 >
                   -
                 </button>
@@ -443,7 +443,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
                   onClick={() => setForm({ ...form, relatedBooks: [...form.relatedBooks, book.id] })}
                   className="mr-1 text-primary-600 hover:text-primary-800 font-bold"
                   style={{ fontSize: '1.1em' }}
-                  aria-label="Ekle"
+                  aria-label={intl.formatMessage({ id: "UI.EKLE" })}
                 >
                   +
                 </button>
@@ -460,7 +460,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Konum ara..."
+                placeholder={intl.formatMessage({ id: "UI.KONUM_ARA" })}
                 className="flex-1 px-3 py-2 border rounded bg-white dark:bg-gray-800"
               />
               <button
@@ -484,7 +484,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
                   name="locationName"
                   value={form.locationName}
                   onChange={e => setForm({ ...form, locationName: e.target.value })}
-                  placeholder="Örn: İstanbul, Türkiye"
+                  placeholder={intl.formatMessage({ id: "UI.ORN_ISTANBUL_TURKIYE" })}
                   className="px-3 py-2 border rounded bg-white dark:bg-gray-800"
                 />
               </div>
@@ -494,7 +494,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
                   name="locationDescription"
                   value={form.locationDescription}
                   onChange={e => setForm({ ...form, locationDescription: e.target.value })}
-                  placeholder="Örn: Doğum yeri"
+                  placeholder={intl.formatMessage({ id: "UI.ORN_DOGUM_YERI" })}
                   className="px-3 py-2 border rounded bg-white dark:bg-gray-800"
                 />
               </div>
@@ -505,7 +505,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
         <div className="flex justify-end gap-2 mt-6">
           <button type="button" onClick={onClose} className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"><FormattedMessage id="UI.KAPAT" /></button>
           <button type="submit" className="px-4 py-2 rounded bg-primary-600 text-white font-semibold" disabled={loading || !isFormValid}>
-            {loading ? 'Kaydediliyor...' : 'Kaydet'}
+            {loading ? <FormattedMessage id="UI.KAYDEDILIYOR" /> : <FormattedMessage id="UI.KAYDET" />}
           </button>
         </div>
       </form>
@@ -525,7 +525,7 @@ const ScholarPreviewModal = ({ scholar, onClose }) => {
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-gray-500 hover:text-red-500 text-xl font-bold"
-          aria-label="Kapat"
+          aria-label={intl.formatMessage({ id: "UI.KAPAT" })}
         >
           ×
         </button>
@@ -545,7 +545,7 @@ const ScholarPreviewModal = ({ scholar, onClose }) => {
           </div>
           <div className="w-full text-sm text-gray-700 dark:text-gray-200 mb-2">
             <span className="font-semibold"><FormattedMessage id="UI.BIYOGRAFI_1" /></span>
-            <div 
+            <div
               className="ml-2 mt-1 prose prose-sm dark:prose-invert max-w-none"
               dangerouslySetInnerHTML={{ __html: scholar.biography }}
             />
@@ -556,15 +556,15 @@ const ScholarPreviewModal = ({ scholar, onClose }) => {
               <ul className="ml-4 mt-1 list-disc">
                 {scholar.ownBooks.map((b, i) => {
                   // coverUrl kontrolü - uploads/ ile başlıyorsa tam URL oluştur
-                  const coverImageUrl = b.coverUrl 
-                    ? (b.coverUrl.startsWith('http://') || b.coverUrl.startsWith('https://') 
-                        ? b.coverUrl 
-                        : getImageUrl(b.coverUrl))
+                  const coverImageUrl = b.coverUrl
+                    ? (b.coverUrl.startsWith('http://') || b.coverUrl.startsWith('https://')
+                      ? b.coverUrl
+                      : getImageUrl(b.coverUrl))
                     : null;
-                  
+
                   return (
                     <li key={b.id ? b.id : b.tempId ? b.tempId : `ownBook_${i}_${b.title}`}
-                        className="flex items-start gap-2 mb-2">
+                      className="flex items-start gap-2 mb-2">
                       {coverImageUrl ? (
                         <img
                           src={coverImageUrl}
@@ -579,7 +579,7 @@ const ScholarPreviewModal = ({ scholar, onClose }) => {
                         />
                       ) : null}
                       {/* Fallback icon - resim yoksa veya yüklenemezse */}
-                      <div 
+                      <div
                         className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded border flex items-center justify-center text-gray-500 dark:text-gray-400"
                         style={{ display: coverImageUrl ? 'none' : 'flex' }}
                       >
@@ -637,19 +637,19 @@ const ScholarPreviewModal = ({ scholar, onClose }) => {
               <span className="font-semibold"><FormattedMessage id="UI.ILISKILI_KITAPLAR_1" /></span>
               <ul className="ml-4 mt-1 list-disc">
                 {scholar.relatedBooks.map((b, i) => {
-                  const bookTitle = b.translations?.[0]?.title || b.title || 'İsimsiz Kitap';
+                  const bookTitle = b.translations?.[0]?.title || b.title || intl.formatMessage({ id: "UI.ISIMSIZ_KITAP" });
                   const pdfUrl = b.translations?.[0]?.pdfUrl || b.pdfUrl;
                   // Cover image URL'sini al
                   const coverUrl = b.coverImage || b.coverUrl;
-                  const coverImageUrl = coverUrl 
-                    ? (coverUrl.startsWith('http://') || coverUrl.startsWith('https://') 
-                        ? coverUrl 
-                        : getImageUrl(coverUrl))
+                  const coverImageUrl = coverUrl
+                    ? (coverUrl.startsWith('http://') || coverUrl.startsWith('https://')
+                      ? coverUrl
+                      : getImageUrl(coverUrl))
                     : null;
-                  
+
                   return (
                     <li key={b.id ? b.id : b.tempId ? b.tempId : `relatedBook_${i}_${bookTitle}`}
-                        className="flex items-start gap-2 mb-2">
+                      className="flex items-start gap-2 mb-2">
                       {coverImageUrl ? (
                         <img
                           src={coverImageUrl}
@@ -663,7 +663,7 @@ const ScholarPreviewModal = ({ scholar, onClose }) => {
                         />
                       ) : null}
                       {/* Fallback icon */}
-                      <div 
+                      <div
                         className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded border flex items-center justify-center text-gray-500 dark:text-gray-400"
                         style={{ display: coverImageUrl ? 'none' : 'flex' }}
                       >
@@ -698,7 +698,7 @@ const ScholarPreviewModal = ({ scholar, onClose }) => {
               <button
                 onClick={() => setCoverPreview(null)}
                 className="absolute -top-4 -right-4 bg-white dark:bg-gray-900 rounded-full shadow p-1 text-xl font-bold text-gray-700 dark:text-gray-200 hover:text-red-500"
-                aria-label="Kapat"
+                aria-label={intl.formatMessage({ id: "UI.KAPAT" })}
                 style={{ zIndex: 10 }}
               >
                 ×
@@ -764,12 +764,12 @@ const ScholarList = () => {
     }
     setLoading(true);
     setError(null);
-    
+
     // Arama varsa search endpoint'ini kullan, yoksa normal endpoint
-    const searchUrl = debouncedFilter.trim() 
+    const searchUrl = debouncedFilter.trim()
       ? `${BASE_URL}/search/scholars?q=${encodeURIComponent(debouncedFilter)}&page=${currentPage}&limit=10`
       : `${API_URL}?page=${currentPage}&limit=10`;
-    
+
     fetch(searchUrl, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -783,7 +783,7 @@ const ScholarList = () => {
         // API response'u { scholars: [...], totalCount: 1566, ... } şeklinde geliyor
         const scholarsArray = data?.scholars || data || [];
         const count = data?.totalCount || scholarsArray.length;
-        
+
         setScholars(Array.isArray(scholarsArray) ? scholarsArray : []);
         setTotalCount(count);
         setCurrentPage(data?.currentPage || 1);
@@ -969,361 +969,359 @@ const ScholarList = () => {
       <div className="p-6 max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold"><FormattedMessage id="UI.ISLAM_ALIMLERI_LISTESI" /></h2>
-        <button
-          onClick={() => navigate('/alimler/ekle')}
-          className="px-4 py-2 rounded bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 transition border border-blue-700"
-        >
-          <FormattedMessage id="UI._ALIM_EKLE" />
-        </button>
-      </div>
-      <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <input
-          type="text"
-          placeholder="🔍 İslam âlimlerini arayın... (ad, neseb, biyografi)"
-          value={globalFilter}
-          onChange={e => {
-            setGlobalFilter(e.target.value);
-            setCurrentPage(1); // Arama değiştiğinde sayfa 1'e dön
-          }}
-          className="flex-1 sm:max-w-md px-4 py-2.5 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-sm"
-        />
-        <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg shadow-sm">
           <button
-            onClick={() => {
-              setViewMode('card');
-              localStorage.setItem('scholars_view_mode', 'card');
-            }}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all duration-200 ${
-              viewMode === 'card'
-                ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-md'
-                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
-            }`}
+            onClick={() => navigate('/alimler/ekle')}
+            className="px-4 py-2 rounded bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 transition border border-blue-700"
           >
-            <Grid3x3 size={18} />
-            <span className="hidden sm:inline text-sm font-medium"><FormattedMessage id="UI.KART" /></span>
-          </button>
-          <button
-            onClick={() => {
-              setViewMode('table');
-              localStorage.setItem('scholars_view_mode', 'table');
-            }}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all duration-200 ${
-              viewMode === 'table'
-                ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-md'
-                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
-            }`}
-          >
-            <List size={18} />
-            <span className="hidden sm:inline text-sm font-medium"><FormattedMessage id="UI.LISTE" /></span>
+            <FormattedMessage id="UI._ALIM_EKLE" />
           </button>
         </div>
-      </div>
-      {loading ? (
-        <div className="py-10 text-center text-gray-500 dark:text-gray-400">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
-          <p className="mt-2"><FormattedMessage id="UI.YUKLENIYOR" /></p>
-        </div>
-      ) : error && token ? (
-        <div className="py-10 text-center text-red-500">{error}</div>
-      ) : viewMode === 'card' ? (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {Array.isArray(scholars) && scholars.map(scholar => (
-            <Card key={scholar.id} className="flex flex-col justify-between hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-lg overflow-hidden relative group cursor-pointer"
-              onClick={() => navigate(`/alimler/profile/${scholar.id}`)}
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <input
+            type="text"
+            placeholder={intl.formatMessage({ id: "UI.ALIMLERI_ARAYIN" })}
+            value={globalFilter}
+            onChange={e => {
+              setGlobalFilter(e.target.value);
+              setCurrentPage(1); // Arama değiştiğinde sayfa 1'e dön
+            }}
+            className="flex-1 sm:max-w-md px-4 py-2.5 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-sm"
+          />
+          <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg shadow-sm">
+            <button
+              onClick={() => {
+                setViewMode('card');
+                localStorage.setItem('scholars_view_mode', 'card');
+              }}
+              className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all duration-200 ${viewMode === 'card'
+                ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-md'
+                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                }`}
             >
-              {/* Hover Actions Overlay */}
-              <div className="absolute inset-x-0 top-0 bg-gradient-to-b from-black/60 to-transparent p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-                <div className="flex justify-end gap-1">
-                  <button
-                    className="p-1.5 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow hover:bg-blue-500 hover:text-white transition-all"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setPreviewScholar(scholar);
-                    }}
-                    title="Önizle"
-                  >
-                    <Eye size={14} />
-                  </button>
-                  <button
-                    className="p-1.5 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow hover:bg-green-500 hover:text-white transition-all"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/alimler/duzenle/${scholar.id}`);
-                    }}
-                    title="Düzenle"
-                  >
-                    <Edit size={14} />
-                  </button>
-                  <button
-                    className="p-1.5 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow hover:bg-red-500 hover:text-white transition-all"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setDeletingScholar(scholar);
-                      setDeleteModalOpen(true);
-                    }}
-                    title="Sil"
-                  >
-                    <Trash2 size={14} />
-                  </button>
-                </div>
-              </div>
-              
-              <CardContent className="flex flex-col items-center gap-2 p-4">
-                {scholar.photoUrl && (
-                  <div className="relative mb-1">
-                    <img 
-                      src={getImageUrl(scholar.photoUrl)} 
-                      alt={scholar.fullName} 
-                      className="w-16 h-16 object-cover rounded-full border-2 border-primary-500 shadow-md" 
-                    />
-                  </div>
-                )}
-                <div className="text-center w-full">
-                  <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-0.5 line-clamp-1" title={scholar.fullName}>
-                    {scholar.fullName}
-                  </h3>
-                  {scholar.lineage && (
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 line-clamp-1" title={scholar.lineage}>
-                      {scholar.lineage}
-                    </p>
-                  )}
-                  <div className="flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {scholar.birthDate && (
-                      <span className="bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">
-                        🎂 {scholar.birthDate.slice(0, 4)}
-                      </span>
-                    )}
-                    {scholar.deathDate && (
-                      <span className="bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">
-                        📅 {scholar.deathDate.slice(0, 4)}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                {scholar.ownBooks && scholar.ownBooks.length > 0 && (
-                  <div className="flex items-center justify-center gap-1 mt-2 w-full">
-                    <BookOpen size={12} className="text-primary-600 dark:text-primary-400" />
-                    <span className="text-xs text-gray-600 dark:text-gray-300 font-medium">
-                      {scholar.ownBooks.length} <FormattedMessage id="UI.KITAP" />
-                    </span>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          ))}
+              <Grid3x3 size={18} />
+              <span className="hidden sm:inline text-sm font-medium"><FormattedMessage id="UI.KART" /></span>
+            </button>
+            <button
+              onClick={() => {
+                setViewMode('table');
+                localStorage.setItem('scholars_view_mode', 'table');
+              }}
+              className={`flex items-center gap-2 px-4 py-2 rounded-md transition-all duration-200 ${viewMode === 'table'
+                ? 'bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 shadow-md'
+                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                }`}
+            >
+              <List size={18} />
+              <span className="hidden sm:inline text-sm font-medium"><FormattedMessage id="UI.LISTE" /></span>
+            </button>
+          </div>
         </div>
-      ) : (
-        /* Table View */
-        (<div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
-          <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  <FormattedMessage id="UI.LIM" />
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider hidden md:table-cell">
-                  <FormattedMessage id="UI.DOGUMVEFAT" />
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider hidden lg:table-cell">
-                  <FormattedMessage id="UI.KITAPLARI" />
-                </th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  <FormattedMessage id="UI.ISLEMLER" />
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {Array.isArray(scholars) && scholars.map((scholar) => (
-                <tr 
-                  key={scholar.id} 
-                  className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer"
-                  onClick={() => navigate(`/alimler/profile/${scholar.id}`)}
-                >
-                  <td className="px-4 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-3">
-                      {scholar.photoUrl && (
-                        <img
-                          src={getImageUrl(scholar.photoUrl)}
-                          alt={scholar.fullName}
-                          className="w-10 h-10 rounded-full object-cover border-2 border-primary-500"
-                        />
-                      )}
-                      <div>
-                        <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                          {scholar.fullName}
-                        </div>
-                        {scholar.lineage && (
-                          <div className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-xs">
-                            {scholar.lineage}
-                          </div>
-                        )}
-                      </div>
+        {loading ? (
+          <div className="py-10 text-center text-gray-500 dark:text-gray-400">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+            <p className="mt-2"><FormattedMessage id="UI.YUKLENIYOR" /></p>
+          </div>
+        ) : error && token ? (
+          <div className="py-10 text-center text-red-500">{error}</div>
+        ) : viewMode === 'card' ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            {Array.isArray(scholars) && scholars.map(scholar => (
+              <Card key={scholar.id} className="flex flex-col justify-between hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-lg overflow-hidden relative group cursor-pointer"
+                onClick={() => navigate(`/alimler/profile/${scholar.id}`)}
+              >
+                {/* Hover Actions Overlay */}
+                <div className="absolute inset-x-0 top-0 bg-gradient-to-b from-black/60 to-transparent p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                  <div className="flex justify-end gap-1">
+                    <button
+                      className="p-1.5 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow hover:bg-blue-500 hover:text-white transition-all"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setPreviewScholar(scholar);
+                      }}
+                      title={intl.formatMessage({ id: "UI.ONIZLE" })}
+                    >
+                      <Eye size={14} />
+                    </button>
+                    <button
+                      className="p-1.5 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow hover:bg-green-500 hover:text-white transition-all"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/alimler/duzenle/${scholar.id}`);
+                      }}
+                      title={intl.formatMessage({ id: "UI.DUZENLE" })}
+                    >
+                      <Edit size={14} />
+                    </button>
+                    <button
+                      className="p-1.5 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow hover:bg-red-500 hover:text-white transition-all"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setDeletingScholar(scholar);
+                        setDeleteModalOpen(true);
+                      }}
+                      title={intl.formatMessage({ id: "UI.SIL" })}
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                </div>
+
+                <CardContent className="flex flex-col items-center gap-2 p-4">
+                  {scholar.photoUrl && (
+                    <div className="relative mb-1">
+                      <img
+                        src={getImageUrl(scholar.photoUrl)}
+                        alt={scholar.fullName}
+                        className="w-16 h-16 object-cover rounded-full border-2 border-primary-500 shadow-md"
+                      />
                     </div>
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap hidden md:table-cell">
-                    <div className="text-sm text-gray-700 dark:text-gray-300">
+                  )}
+                  <div className="text-center w-full">
+                    <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-0.5 line-clamp-1" title={scholar.fullName}>
+                      {scholar.fullName}
+                    </h3>
+                    {scholar.lineage && (
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 line-clamp-1" title={scholar.lineage}>
+                        {scholar.lineage}
+                      </p>
+                    )}
+                    <div className="flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-1">
                       {scholar.birthDate && (
-                        <div>🎂 {scholar.birthDate.slice(0, 10)}</div>
+                        <span className="bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">
+                          🎂 {scholar.birthDate.slice(0, 4)}
+                        </span>
                       )}
                       {scholar.deathDate && (
-                        <div>📅 {scholar.deathDate.slice(0, 10)}</div>
+                        <span className="bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">
+                          📅 {scholar.deathDate.slice(0, 4)}
+                        </span>
                       )}
                     </div>
-                  </td>
-                  <td className="px-4 py-4 hidden lg:table-cell">
-                    {scholar.ownBooks && scholar.ownBooks.length > 0 && (
-                      <div className="flex flex-wrap gap-1">
-                        {scholar.ownBooks.slice(0, 2).map((b, i) => (
-                          <span 
-                            key={b.id || i}
-                            className="inline-flex items-center gap-1 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-200 px-2 py-0.5 rounded text-xs"
-                          >
-                            <BookOpen size={12} /> {b.title}
-                          </span>
-                        ))}
-                        {scholar.ownBooks.length > 2 && (
-                          <span className="text-xs text-gray-500 dark:text-gray-400">+{scholar.ownBooks.length - 2} <FormattedMessage id="UI.DAHA" />
-                          </span>
+                  </div>
+                  {scholar.ownBooks && scholar.ownBooks.length > 0 && (
+                    <div className="flex items-center justify-center gap-1 mt-2 w-full">
+                      <BookOpen size={12} className="text-primary-600 dark:text-primary-400" />
+                      <span className="text-xs text-gray-600 dark:text-gray-300 font-medium">
+                        {scholar.ownBooks.length} <FormattedMessage id="UI.KITAP" />
+                      </span>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          /* Table View */
+          (<div className="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow">
+            <table className="w-full">
+              <thead className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+                <tr>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <FormattedMessage id="UI.LIM" />
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider hidden md:table-cell">
+                    <FormattedMessage id="UI.DOGUMVEFAT" />
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider hidden lg:table-cell">
+                    <FormattedMessage id="UI.KITAPLARI" />
+                  </th>
+                  <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    <FormattedMessage id="UI.ISLEMLER" />
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                {Array.isArray(scholars) && scholars.map((scholar) => (
+                  <tr
+                    key={scholar.id}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer"
+                    onClick={() => navigate(`/alimler/profile/${scholar.id}`)}
+                  >
+                    <td className="px-4 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-3">
+                        {scholar.photoUrl && (
+                          <img
+                            src={getImageUrl(scholar.photoUrl)}
+                            alt={scholar.fullName}
+                            className="w-10 h-10 rounded-full object-cover border-2 border-primary-500"
+                          />
+                        )}
+                        <div>
+                          <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                            {scholar.fullName}
+                          </div>
+                          {scholar.lineage && (
+                            <div className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-xs">
+                              {scholar.lineage}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-4 py-4 whitespace-nowrap hidden md:table-cell">
+                      <div className="text-sm text-gray-700 dark:text-gray-300">
+                        {scholar.birthDate && (
+                          <div>🎂 {scholar.birthDate.slice(0, 10)}</div>
+                        )}
+                        {scholar.deathDate && (
+                          <div>📅 {scholar.deathDate.slice(0, 10)}</div>
                         )}
                       </div>
-                    )}
-                  </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setPreviewScholar(scholar);
-                        }}
-                        className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
-                        title="Önizle"
-                      >
-                        <Eye size={18} />
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/alimler/duzenle/${scholar.id}`);
-                        }}
-                        className="p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors"
-                        title="Düzenle"
-                      >
-                        <Edit size={18} />
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setDeletingScholar(scholar);
-                          setDeleteModalOpen(true);
-                        }}
-                        className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                        title="Sil"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {(!scholars || scholars.length === 0) && (
-            <div className="text-center py-10 text-gray-500 dark:text-gray-400">
-              {globalFilter ? 'Arama sonucu bulunamadı' : 'Henüz alim eklenmemiş'}
-            </div>
-          )}
-        </div>)
-      )}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
-        <div className="flex flex-col sm:flex-row items-center gap-2">
-          <span className="text-sm text-gray-400"><FormattedMessage id="UI.TOPLAM" /> {totalCount} <FormattedMessage id="UI.ALIM" /></span>
-          {totalPages > 1 && (
-            <span className="text-sm text-gray-500">
-              <FormattedMessage id="UI.SAYFA" /> {currentPage}/ {totalPages}
-            </span>
-          )}
-        </div>
-        
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handlePreviousPage}
-              disabled={currentPage === 1}
-              className="flex items-center gap-1"
-            >
-              <ChevronLeft className="h-4 w-4" />
-              <FormattedMessage id="UI.ONCEKI" />
-            </Button>
-            
-            <div className="flex items-center gap-1">
-              {/* Sayfa numaraları */}
-              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                let pageNum;
-                if (totalPages <= 5) {
-                  pageNum = i + 1;
-                } else if (currentPage <= 3) {
-                  pageNum = i + 1;
-                } else if (currentPage >= totalPages - 2) {
-                  pageNum = totalPages - 4 + i;
-                } else {
-                  pageNum = currentPage - 2 + i;
-                }
-                
-                return (
-                  <Button
-                    key={pageNum}
-                    variant={currentPage === pageNum ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => handlePageChange(pageNum)}
-                    className="min-w-[40px]"
-                  >
-                    {pageNum}
-                  </Button>
-                );
-              })}
-            </div>
-            
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-              className="flex items-center gap-1"
-            >
-              <FormattedMessage id="UI.SONRAKI" />
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
+                    </td>
+                    <td className="px-4 py-4 hidden lg:table-cell">
+                      {scholar.ownBooks && scholar.ownBooks.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {scholar.ownBooks.slice(0, 2).map((b, i) => (
+                            <span
+                              key={b.id || i}
+                              className="inline-flex items-center gap-1 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-200 px-2 py-0.5 rounded text-xs"
+                            >
+                              <BookOpen size={12} /> {b.title}
+                            </span>
+                          ))}
+                          {scholar.ownBooks.length > 2 && (
+                            <span className="text-xs text-gray-500 dark:text-gray-400">+{scholar.ownBooks.length - 2} <FormattedMessage id="UI.DAHA" />
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-4 py-4 whitespace-nowrap text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setPreviewScholar(scholar);
+                          }}
+                          className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                          title={intl.formatMessage({ id: "UI.ONIZLE" })}
+                        >
+                          <Eye size={18} />
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/alimler/duzenle/${scholar.id}`);
+                          }}
+                          className="p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors"
+                          title={intl.formatMessage({ id: "UI.DUZENLE" })}
+                        >
+                          <Edit size={18} />
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDeletingScholar(scholar);
+                            setDeleteModalOpen(true);
+                          }}
+                          className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                          title={intl.formatMessage({ id: "UI.SIL" })}
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {(!scholars || scholars.length === 0) && (
+              <div className="text-center py-10 text-gray-500 dark:text-gray-400">
+                {globalFilter ? <FormattedMessage id="UI.ARAMA_SONUCU_BULUNAMADI" /> : <FormattedMessage id="UI.HENUZ_ALIM_EKLENMEMIS" />}
+              </div>
+            )}
+          </div>)
         )}
-      </div>
-      <ScholarPreviewModal scholar={previewScholar} onClose={() => setPreviewScholar(null)} />
-      <Dialog open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} className="z-50">
-        <div className="fixed inset-0 flex items-center justify-center bg-black/40">
-          <Dialog.Panel className="bg-white dark:bg-gray-900 rounded-lg shadow-lg max-w-sm w-full p-6">
-            <Dialog.Title className="text-lg font-bold mb-2"><FormattedMessage id="UI.ALIMI_SIL" /></Dialog.Title>
-            <Dialog.Description className="mb-4 text-gray-700 dark:text-gray-200">
-              <FormattedMessage id="UI.BU_ALIMI_SILMEK_ISTEDIGINIZE_EMIN_MISINI" />
-            </Dialog.Description>
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() => setDeleteModalOpen(false)}
-                className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
+          <div className="flex flex-col sm:flex-row items-center gap-2">
+            <span className="text-sm text-gray-400"><FormattedMessage id="UI.TOPLAM" /> {totalCount} <FormattedMessage id="UI.ALIM" /></span>
+            {totalPages > 1 && (
+              <span className="text-sm text-gray-500">
+                <FormattedMessage id="UI.SAYFA" /> {currentPage}/ {totalPages}
+              </span>
+            )}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+                className="flex items-center gap-1"
               >
-                <FormattedMessage id="UI.VAZGEC" />
-              </button>
-              <button
-                onClick={() => handleDeleteScholar(deletingScholar?.id)}
-                className="px-4 py-2 rounded bg-red-600 text-white font-semibold hover:bg-red-700 transition"
+                <ChevronLeft className="h-4 w-4" />
+                <FormattedMessage id="UI.ONCEKI" />
+              </Button>
+
+              <div className="flex items-center gap-1">
+                {/* Sayfa numaraları */}
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+
+                  return (
+                    <Button
+                      key={pageNum}
+                      variant={currentPage === pageNum ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => handlePageChange(pageNum)}
+                      className="min-w-[40px]"
+                    >
+                      {pageNum}
+                    </Button>
+                  );
+                })}
+              </div>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                className="flex items-center gap-1"
               >
-                <FormattedMessage id="UI.EVET_SIL" />
-              </button>
+                <FormattedMessage id="UI.SONRAKI" />
+                <ChevronRight className="h-4 w-4" />
+              </Button>
             </div>
-          </Dialog.Panel>
+          )}
         </div>
-      </Dialog>
+        <ScholarPreviewModal scholar={previewScholar} onClose={() => setPreviewScholar(null)} />
+        <Dialog open={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} className="z-50">
+          <div className="fixed inset-0 flex items-center justify-center bg-black/40">
+            <Dialog.Panel className="bg-white dark:bg-gray-900 rounded-lg shadow-lg max-w-sm w-full p-6">
+              <Dialog.Title className="text-lg font-bold mb-2"><FormattedMessage id="UI.ALIMI_SIL" /></Dialog.Title>
+              <Dialog.Description className="mb-4 text-gray-700 dark:text-gray-200">
+                <FormattedMessage id="UI.BU_ALIMI_SILMEK_ISTEDIGINIZE_EMIN_MISINI" />
+              </Dialog.Description>
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={() => setDeleteModalOpen(false)}
+                  className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+                >
+                  <FormattedMessage id="UI.VAZGEC" />
+                </button>
+                <button
+                  onClick={() => handleDeleteScholar(deletingScholar?.id)}
+                  className="px-4 py-2 rounded bg-red-600 text-white font-semibold hover:bg-red-700 transition"
+                >
+                  <FormattedMessage id="UI.EVET_SIL" />
+                </button>
+              </div>
+            </Dialog.Panel>
+          </div>
+        </Dialog>
       </div>
     </>
   );
