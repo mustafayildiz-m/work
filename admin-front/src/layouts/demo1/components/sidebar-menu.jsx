@@ -17,8 +17,8 @@ import {
 import { Badge } from '@/components/ui/badge';
 
 const statusColor = {
-  done: "text-accent-foreground",
-  pending: "text-accent-foreground"
+  done: "",
+  pending: ""
 };
 
 const getMenuKey = (text) => {
@@ -81,17 +81,17 @@ export function SidebarMenu() {
 
   // Global classNames for consistent styling
   const classNames = {
-    root: 'lg:ps-1 space-y-3',
-    group: 'gap-px',
+    root: 'lg:ps-1 space-y-3 px-2',
+    group: 'gap-1',
     label:
-      'uppercase text-xs font-medium text-muted-foreground/70 pt-2.25 pb-px',
-    separator: '',
-    item: 'h-8 px-2.5 hover:bg-transparent text-accent-foreground hover:text-primary data-[selected=true]:text-primary data-[selected=true]:bg-muted data-[selected=true]:font-medium',
-    sub: '',
+      'uppercase text-[11px] font-semibold text-muted-foreground/60 tracking-wider pt-4 pb-1 px-3',
+    separator: 'h-px bg-border/50 my-2',
+    item: 'group h-11 px-3 mb-1.5 rounded-xl text-[14px] font-medium text-muted-foreground transition-all duration-300 hover:bg-accent hover:text-foreground data-[selected=true]:bg-primary data-[selected=true]:text-primary-foreground data-[selected=true]:shadow-lg data-[selected=true]:shadow-primary/30',
+    sub: 'mt-1',
     subTrigger:
-      'h-8 px-2.5 hover:bg-transparent text-accent-foreground hover:text-primary data-[selected=true]:text-primary data-[selected=true]:bg-muted data-[selected=true]:font-medium',
-    subContent: 'py-0',
-    indicator: '',
+      'group h-11 px-3 mb-1.5 rounded-xl text-[14px] font-medium text-muted-foreground transition-all duration-300 hover:bg-accent hover:text-foreground data-[selected=true]:bg-primary/10 data-[selected=true]:text-primary',
+    subContent: 'py-1 mr-2',
+    indicator: 'transition-transform duration-300 opacity-60 group-hover:opacity-100 group-data-[selected=true]:opacity-100',
   };
 
   const buildMenu = (items) => {
@@ -132,7 +132,7 @@ export function SidebarMenu() {
   };
 
   const buildMenuItemRoot = (item, index) => {
-    const colorClass = statusColor[item.status] || "text-accent-foreground";
+    const colorClass = statusColor[item.status] || "";
     if (item.children) {
       return (
         <AccordionMenuSub key={index} value={item.path || `root-${index}`}>
@@ -214,7 +214,7 @@ export function SidebarMenu() {
   };
 
   const buildMenuItemChild = (item, index, level = 0) => {
-    const colorClass = statusColor[item.status] || "text-accent-foreground";
+    const colorClass = statusColor[item.status] || "";
     if (item.children) {
       return (
         <AccordionMenuSub
