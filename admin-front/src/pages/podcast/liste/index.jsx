@@ -11,16 +11,16 @@ const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 function getCoverUrl(coverImage) {
   if (!coverImage) return null;
-  
+
   // Eğer tam URL ise direkt döndür
   if (coverImage.startsWith('http://') || coverImage.startsWith('https://')) {
     return coverImage;
   }
-  
+
   // Relative path ise BASE_URL ile birleştir
   const baseUrl = BASE_URL?.replace(/\/$/, '') || 'http://localhost:3000';
   const imagePath = coverImage.startsWith('/') ? coverImage : `/${coverImage}`;
-  
+
   return `${baseUrl}${imagePath}`;
 }
 
@@ -61,19 +61,29 @@ export default function PodcastList() {
   // İstatistikler
   const stats = React.useMemo(() => {
     if (!allData || allData.length === 0) return { total: 0, active: 0, featured: 0, totalListens: 0 };
-    
+
     const total = allData.length;
     const active = allData.filter(p => p.isActive).length;
     const featured = allData.filter(p => p.isFeatured).length;
     const totalListens = allData.reduce((sum, p) => sum + (p.listenCount || 0), 0);
-    
+
     return { total, active, featured, totalListens };
   }, [allData]);
+
+  // Podcastlerde bulunan dilleri filtrelemek için
+  const availableLanguages = React.useMemo(() => {
+    if (!allData || !languages) return [];
+    // podcastlerde geçen language codelarını benzersiz şekilde topla
+    const activeLanguageCodes = new Set(allData.filter(p => p.language).map(p => String(p.language).toLowerCase()));
+
+    // languages içinden sadece bu kodlara sahip olanları filtrele
+    return languages.filter(lang => lang.code && activeLanguageCodes.has(String(lang.code).toLowerCase()));
+  }, [allData, languages]);
 
   // İlk yükleme: Tüm veriyi ve dilleri çek
   useEffect(() => {
     const token = localStorage.getItem('access_token');
-    
+
     // Dilleri çek
     fetch(`${BASE_URL}/languages`, {
       headers: { Authorization: `Bearer ${token}` }
@@ -81,7 +91,7 @@ export default function PodcastList() {
       .then(r => r.json())
       .then(data => setLanguages(Array.isArray(data) ? data : []))
       .catch(() => setLanguages([]));
-    
+
     // Tüm podcastleri çek
     fetch(`${API_URL}?limit=1000`, {
       headers: { Authorization: `Bearer ${token}` }
@@ -102,7 +112,7 @@ export default function PodcastList() {
       const params = new URLSearchParams();
       params.append('page', currentPage.toString());
       params.append('limit', itemsPerPage.toString());
-      
+
       if (filters.isActive !== 'all') {
         params.append('isActive', filters.isActive);
       }
@@ -112,9 +122,9 @@ export default function PodcastList() {
       if (filters.language !== 'all') {
         params.append('language', filters.language);
       }
-      
+
       let url = `${API_URL}?${params.toString()}`;
-      
+
       // Eğer arama varsa search endpoint'ini kullan
       if (filters.search) {
         url = `${API_URL}/search?q=${encodeURIComponent(filters.search)}&page=${currentPage}&limit=${itemsPerPage}`;
@@ -178,10 +188,10 @@ export default function PodcastList() {
 
       toast.success('Podcast başarıyla silindi!');
       setDeleteModal({ open: false, podcast: null });
-      
+
       // Listeyi güncelle
       setAllData(prev => prev.filter(p => p.id !== deleteModal.podcast.id));
-      
+
       // Verileri yeniden çek (pagination için)
       fetchPodcasts();
     } catch (error) {
@@ -250,8 +260,8 @@ export default function PodcastList() {
             <div className="flex items-center gap-3">
               <div className="relative w-16 h-16 flex-shrink-0">
                 {currentlyPlaying.coverImage && getCoverUrl(currentlyPlaying.coverImage) && !imageErrors[currentlyPlaying.id] ? (
-                  <img 
-                    src={getCoverUrl(currentlyPlaying.coverImage)} 
+                  <img
+                    src={getCoverUrl(currentlyPlaying.coverImage)}
                     alt={currentlyPlaying.title}
                     className="w-full h-full object-cover rounded-lg"
                     onError={() => handleImageError(currentlyPlaying.id)}
@@ -287,21 +297,19 @@ export default function PodcastList() {
             <div className="flex bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
               <button
                 onClick={() => setViewMode('card')}
-                className={`px-4 py-2 rounded-md transition-all duration-200 flex items-center gap-2 ${
-                  viewMode === 'card'
-                    ? 'bg-white dark:bg-gray-800 text-purple-600 dark:text-purple-400 shadow-md'
-                    : 'text-gray-600 dark:text-gray-400'
-                }`}
+                className={`px-4 py-2 rounded-md transition-all duration-200 flex items-center gap-2 ${viewMode === 'card'
+                  ? 'bg-white dark:bg-gray-800 text-purple-600 dark:text-purple-400 shadow-md'
+                  : 'text-gray-600 dark:text-gray-400'
+                  }`}
               >
                 <FaTh /> <FormattedMessage id="UI.KART" />
               </button>
               <button
                 onClick={() => setViewMode('table')}
-                className={`px-4 py-2 rounded-md transition-all duration-200 flex items-center gap-2 ${
-                  viewMode === 'table'
-                    ? 'bg-white dark:bg-gray-800 text-purple-600 dark:text-purple-400 shadow-md'
-                    : 'text-gray-600 dark:text-gray-400'
-                }`}
+                className={`px-4 py-2 rounded-md transition-all duration-200 flex items-center gap-2 ${viewMode === 'table'
+                  ? 'bg-white dark:bg-gray-800 text-purple-600 dark:text-purple-400 shadow-md'
+                  : 'text-gray-600 dark:text-gray-400'
+                  }`}
               >
                 <FaList /> <FormattedMessage id="UI.LISTE" />
               </button>
@@ -360,14 +368,43 @@ export default function PodcastList() {
 
         {/* Filtreleme Alanı */}
         <div className="mb-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-lg p-6 border border-purple-200 dark:border-gray-700">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="p-2 bg-purple-600 rounded-lg">
-              <FaFilter className="text-white text-lg" />
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+            <div className="flex items-center gap-2">
+              <div className="p-2 bg-purple-600 rounded-lg">
+                <FaFilter className="text-white text-lg" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.FILTRELE__ARA" /></h3>
             </div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.FILTRELE__ARA" /></h3>
+
+            {/* Dil Badge'leri */}
+            {availableLanguages.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  onClick={() => setFilters(prev => ({ ...prev, language: 'all' }))}
+                  className={`px-4 py-1.5 text-xs font-bold rounded-full transition-all duration-300 ${filters.language === 'all'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600'
+                    }`}
+                >
+                  <FormattedMessage id="UI.TUM_DILLER" />
+                </button>
+                {availableLanguages.map(lang => (
+                  <button
+                    key={lang.id}
+                    onClick={() => setFilters(prev => ({ ...prev, language: lang.code }))}
+                    className={`px-4 py-1.5 text-xs font-bold uppercase rounded-full transition-all duration-300 shadow-sm ${filters.language === lang.code
+                      ? 'bg-blue-600 text-white shadow-md'
+                      : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600'
+                      }`}
+                  >
+                    {lang.name}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                 <FaMicrophone className="text-purple-600" />
@@ -375,28 +412,11 @@ export default function PodcastList() {
               </label>
               <input
                 type="text"
-                placeholder="Ara..."
+                placeholder={intl.formatMessage({ id: 'UI.ARA_PLACEHOLDER' })}
                 value={filters.search}
                 onChange={e => setFilters(prev => ({ ...prev, search: e.target.value }))}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm transition"
               />
-            </div>
-
-            <div>
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
-                <FaGlobe className="text-blue-600" />
-                <FormattedMessage id="USER.MENU.LANGUAGE" />
-              </label>
-              <select
-                value={filters.language}
-                onChange={e => setFilters(prev => ({ ...prev, language: e.target.value }))}
-                className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm transition cursor-pointer"
-              >
-                <option value="all"><FormattedMessage id="UI.TUM_DILLER" /></option>
-                {languages.map(lang => (
-                  <option key={lang.id} value={lang.code}>{lang.name}</option>
-                ))}
-              </select>
             </div>
 
             <div>
@@ -439,7 +459,7 @@ export default function PodcastList() {
               </span>
               <span className="text-gray-600 dark:text-gray-400"><FormattedMessage id="UI.PODCAST" /></span>
             </div>
-            
+
             {(filters.search || filters.category !== 'all' || filters.isActive !== 'all' || filters.language !== 'all') && (
               <button
                 onClick={() => setFilters({ search: '', category: 'all', isActive: 'all', language: 'all' })}
@@ -485,8 +505,8 @@ export default function PodcastList() {
                 {/* Cover Image */}
                 <div className="relative h-48 bg-gradient-to-br from-purple-400 to-pink-400">
                   {podcast.coverImage && getCoverUrl(podcast.coverImage) && !imageErrors[podcast.id] ? (
-                    <img 
-                      src={getCoverUrl(podcast.coverImage)} 
+                    <img
+                      src={getCoverUrl(podcast.coverImage)}
                       alt={podcast.title}
                       className="w-full h-full object-cover"
                       onError={() => handleImageError(podcast.id)}
@@ -496,7 +516,7 @@ export default function PodcastList() {
                       <FaMicrophone className="text-6xl text-white opacity-50" />
                     </div>
                   )}
-                  
+
                   {/* Badges */}
                   <div className="absolute top-2 right-2 flex flex-col gap-2">
                     {podcast.isFeatured && (
@@ -504,11 +524,10 @@ export default function PodcastList() {
                         <FaStar size={10} /> <FormattedMessage id="UI.ONE_CIKAN" />
                       </span>
                     )}
-                    <span className={`px-2 py-1 text-xs font-bold rounded-lg shadow-lg ${
-                      podcast.isActive 
-                        ? 'bg-green-500 text-white' 
-                        : 'bg-gray-500 text-white'
-                    }`}>
+                    <span className={`px-2 py-1 text-xs font-bold rounded-lg shadow-lg ${podcast.isActive
+                      ? 'bg-green-500 text-white'
+                      : 'bg-gray-500 text-white'
+                      }`}>
                       {podcast.isActive ? 'Aktif' : 'Pasif'}
                     </span>
                   </div>
@@ -533,7 +552,7 @@ export default function PodcastList() {
                       )}
                     </button>
                   </div>
-                  
+
                   {podcast.author && (
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 flex items-center gap-2">
                       <FaMicrophone className="text-purple-500" size={12} />
@@ -541,11 +560,18 @@ export default function PodcastList() {
                     </p>
                   )}
 
-                  {podcast.category && (
-                    <span className="inline-block px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 text-xs font-semibold rounded-full mb-3">
-                      {podcast.category}
-                    </span>
-                  )}
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {podcast.category && (
+                      <span className="inline-block px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 text-xs font-semibold rounded-full">
+                        {podcast.category}
+                      </span>
+                    )}
+                    {podcast.language && (
+                      <span className="inline-block px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs font-semibold uppercase rounded-full">
+                        {podcast.language}
+                      </span>
+                    )}
+                  </div>
 
                   {podcast.description && (
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
@@ -622,8 +648,8 @@ export default function PodcastList() {
                         <div className="flex items-center gap-3">
                           <div className="relative w-16 h-16 flex-shrink-0">
                             {podcast.coverImage && getCoverUrl(podcast.coverImage) && !imageErrors[podcast.id] ? (
-                              <img 
-                                src={getCoverUrl(podcast.coverImage)} 
+                              <img
+                                src={getCoverUrl(podcast.coverImage)}
                                 alt={podcast.title}
                                 className="w-full h-full object-cover rounded-lg"
                                 onError={() => handleImageError(podcast.id)}
@@ -677,11 +703,10 @@ export default function PodcastList() {
                               <FaStar size={10} /> <FormattedMessage id="UI.ONE_CIKAN" />
                             </span>
                           )}
-                          <span className={`px-2 py-1 text-xs font-bold rounded w-fit ${
-                            podcast.isActive 
-                              ? 'bg-green-500 text-white' 
-                              : 'bg-gray-500 text-white'
-                          }`}>
+                          <span className={`px-2 py-1 text-xs font-bold rounded w-fit ${podcast.isActive
+                            ? 'bg-green-500 text-white'
+                            : 'bg-gray-500 text-white'
+                            }`}>
                             {podcast.isActive ? 'Aktif' : 'Pasif'}
                           </span>
                         </div>
@@ -690,11 +715,10 @@ export default function PodcastList() {
                         <div className="flex gap-2">
                           <button
                             onClick={() => togglePlay(podcast)}
-                            className={`p-2 rounded-lg transition-all duration-200 ${
-                              currentlyPlaying?.id === podcast.id
-                                ? 'bg-purple-700 text-white hover:bg-purple-800'
-                                : 'bg-purple-600 text-white hover:bg-purple-700'
-                            }`}
+                            className={`p-2 rounded-lg transition-all duration-200 ${currentlyPlaying?.id === podcast.id
+                              ? 'bg-purple-700 text-white hover:bg-purple-800'
+                              : 'bg-purple-600 text-white hover:bg-purple-700'
+                              }`}
                             title={currentlyPlaying?.id === podcast.id ? 'Duraklat' : 'Çal'}
                           >
                             {currentlyPlaying?.id === podcast.id ? <FaPause /> : <FaPlay />}
@@ -729,12 +753,12 @@ export default function PodcastList() {
             {/* Pagination Info */}
             <div className="text-sm text-gray-600 dark:text-gray-400">
               <FormattedMessage id="UI.GOSTERILEN" /> <span className="font-semibold text-gray-900 dark:text-white">
-                  {((currentPage - 1) * itemsPerPage) + 1}
-                </span>- <span className="font-semibold text-gray-900 dark:text-white">
-                  {Math.min(currentPage * itemsPerPage, pagination.total)}
-                </span>/ <span className="font-semibold text-gray-900 dark:text-white">
-                  {pagination.total}
-                </span> <FormattedMessage id="UI.PODCAST" />
+                {((currentPage - 1) * itemsPerPage) + 1}
+              </span>- <span className="font-semibold text-gray-900 dark:text-white">
+                {Math.min(currentPage * itemsPerPage, pagination.total)}
+              </span>/ <span className="font-semibold text-gray-900 dark:text-white">
+                {pagination.total}
+              </span> <FormattedMessage id="UI.PODCAST" />
             </div>
 
             {/* Pagination Buttons */}
@@ -743,11 +767,10 @@ export default function PodcastList() {
               <button
                 onClick={() => setCurrentPage(1)}
                 disabled={currentPage === 1}
-                className={`px-3 py-2 rounded-lg font-medium transition-all ${
-                  currentPage === 1
-                    ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900 border border-gray-300 dark:border-gray-600'
-                }`}
+                className={`px-3 py-2 rounded-lg font-medium transition-all ${currentPage === 1
+                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900 border border-gray-300 dark:border-gray-600'
+                  }`}
                 title="İlk Sayfa"
               >
                 <span className="sr-only"><FormattedMessage id="UI.ILK" /></span>
@@ -758,11 +781,10 @@ export default function PodcastList() {
               <button
                 onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
-                className={`px-3 py-2 rounded-lg font-medium transition-all ${
-                  currentPage === 1
-                    ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900 border border-gray-300 dark:border-gray-600'
-                }`}
+                className={`px-3 py-2 rounded-lg font-medium transition-all ${currentPage === 1
+                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900 border border-gray-300 dark:border-gray-600'
+                  }`}
                 title="Önceki Sayfa"
               >
                 <span className="sr-only"><FormattedMessage id="UI.ONCEKI" /></span>
@@ -773,7 +795,7 @@ export default function PodcastList() {
               <div className="flex items-center gap-1">
                 {[...Array(pagination.totalPages)].map((_, index) => {
                   const pageNumber = index + 1;
-                  
+
                   // Show first page, last page, current page and 2 pages around current
                   if (
                     pageNumber === 1 ||
@@ -784,11 +806,10 @@ export default function PodcastList() {
                       <button
                         key={pageNumber}
                         onClick={() => setCurrentPage(pageNumber)}
-                        className={`min-w-[40px] px-3 py-2 rounded-lg font-medium transition-all ${
-                          currentPage === pageNumber
-                            ? 'bg-purple-600 text-white shadow-lg'
-                            : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900 border border-gray-300 dark:border-gray-600'
-                        }`}
+                        className={`min-w-[40px] px-3 py-2 rounded-lg font-medium transition-all ${currentPage === pageNumber
+                          ? 'bg-purple-600 text-white shadow-lg'
+                          : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900 border border-gray-300 dark:border-gray-600'
+                          }`}
                       >
                         {pageNumber}
                       </button>
@@ -811,11 +832,10 @@ export default function PodcastList() {
               <button
                 onClick={() => setCurrentPage(prev => Math.min(pagination.totalPages, prev + 1))}
                 disabled={currentPage === pagination.totalPages}
-                className={`px-3 py-2 rounded-lg font-medium transition-all ${
-                  currentPage === pagination.totalPages
-                    ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900 border border-gray-300 dark:border-gray-600'
-                }`}
+                className={`px-3 py-2 rounded-lg font-medium transition-all ${currentPage === pagination.totalPages
+                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900 border border-gray-300 dark:border-gray-600'
+                  }`}
                 title="Sonraki Sayfa"
               >
                 <span className="sr-only"><FormattedMessage id="UI.SONRAKI" /></span>
@@ -826,11 +846,10 @@ export default function PodcastList() {
               <button
                 onClick={() => setCurrentPage(pagination.totalPages)}
                 disabled={currentPage === pagination.totalPages}
-                className={`px-3 py-2 rounded-lg font-medium transition-all ${
-                  currentPage === pagination.totalPages
-                    ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900 border border-gray-300 dark:border-gray-600'
-                }`}
+                className={`px-3 py-2 rounded-lg font-medium transition-all ${currentPage === pagination.totalPages
+                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-purple-900 border border-gray-300 dark:border-gray-600'
+                  }`}
                 title="Son Sayfa"
               >
                 <span className="sr-only"><FormattedMessage id="UI.SON" /></span>
@@ -858,7 +877,7 @@ export default function PodcastList() {
                   <FormattedMessage id="UI.PODCASTI_SIL" />
                 </Dialog.Title>
               </div>
-              
+
               <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border-l-4 border-red-500">
                 <p className="text-gray-700 dark:text-gray-300">
                   <span className="font-bold text-red-600 dark:text-red-400">"{deleteModal.podcast?.title}"</span> <FormattedMessage id="UI.BASLIKLI_PODCASTI_SILMEK_UZERESINIZ" />
@@ -867,7 +886,7 @@ export default function PodcastList() {
                   <FormattedMessage id="UI._BU_ISLEM_GERI_ALINAMAZ_VE_TUM_ILGILI_VE" />
                 </p>
               </div>
-              
+
               <div className="flex justify-end gap-3">
                 <button
                   onClick={() => setDeleteModal({ open: false, podcast: null })}
