@@ -168,10 +168,12 @@ export function SidebarMenu() {
         >
           <Link
             to={item.path || '#'}
-            className="flex items-center justify-between grow gap-2"
+            className="flex items-center justify-between grow gap-2 w-full"
           >
-            {item.icon && <item.icon data-slot="accordion-menu-icon" className={colorClass} />}
-            <span data-slot="accordion-menu-title"><FormattedMessage id={`MENU.${getMenuKey(item.title)}`} defaultMessage={item.title} /></span>
+            <div className="flex items-center gap-2">
+              {item.icon && <item.icon data-slot="accordion-menu-icon" className={colorClass} />}
+              <span data-slot="accordion-menu-title"><FormattedMessage id={`MENU.${getMenuKey(item.title)}`} defaultMessage={item.title} /></span>
+            </div>
             {item.badge !== undefined && (
               <Badge variant="danger" size="sm" className="ms-auto rounded-full px-1.5 h-5 min-w-5 flex items-center justify-center bg-red-500 text-white border-none">
                 {item.badge}
