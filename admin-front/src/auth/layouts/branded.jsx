@@ -1,9 +1,13 @@
 import { Link, Outlet } from 'react-router-dom';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Card, CardContent } from '@/components/ui/card';
+import { useIntl } from 'react-intl';
 
 export function BrandedLayout() {
-  const quotes = [
+  const intl = useIntl();
+  const isTr = intl.locale.startsWith('tr');
+
+  const quotesTr = [
     {
       text: "İlim öğrenmek, her Müslüman erkek ve kadına farzdır.",
       author: "Hz. Muhammed (s.a.v.)"
@@ -46,7 +50,51 @@ export function BrandedLayout() {
     }
   ];
 
-  const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+  const quotesEn = [
+    {
+      text: "Seeking knowledge is an obligation upon every Muslim.",
+      author: "Prophet Muhammad (PBUH)"
+    },
+    {
+      text: "Knowledge is the lost property of the believer. Wherever he finds it, he is most deserving of it.",
+      author: "Prophet Muhammad (PBUH)"
+    },
+    {
+      text: "Knowledge without action is like a cloud without rain.",
+      author: "Imam Al-Ghazali"
+    },
+    {
+      text: "O Allah! I seek refuge in You from knowledge that is of no benefit, from a heart that does not feel humble, from a soul that is never satisfied, and from a supplication that is not answered.",
+      author: "Prophet Muhammad (PBUH)"
+    },
+    {
+      text: "Knowledge is of three kinds: a speaking tongue, a silent heart, and acting limbs.",
+      author: "Prophet Muhammad (PBUH)"
+    },
+    {
+      text: "He who sets out in search of knowledge is in the path of Allah until he returns.",
+      author: "Prophet Muhammad (PBUH)"
+    },
+    {
+      text: "Knowledge is the shortest path to Allah.",
+      author: "Imam Al-Ghazali"
+    },
+    {
+      text: "Knowledge saves man from ignorance and exalts him.",
+      author: "Ali ibn Abi Talib (RA)"
+    },
+    {
+      text: "Knowledge is the most valuable treasure of a person.",
+      author: "Umar ibn Al-Khattab (RA)"
+    },
+    {
+      text: "Knowledge draws one closer to Allah, whereas ignorance distances one from Him.",
+      author: "Prophet Muhammad (PBUH)"
+    }
+  ];
+
+  const currentQuotes = isTr ? quotesTr : quotesEn;
+  const randomQuote = currentQuotes[Math.floor(Math.random() * currentQuotes.length)];
 
   return (
     <>
@@ -81,16 +129,16 @@ export function BrandedLayout() {
 
             <div className="flex flex-col gap-4">
               <h3 className="text-3xl font-semibold text-mono">
-                İslami Windows Yönetim Paneli
+                {intl.formatMessage({ id: 'AUTH.BRANDED_TITLE' })}
               </h3>
               <div className="text-lg font-medium text-secondary-foreground opacity-80">
-                Yönetici Girişi
+                {intl.formatMessage({ id: 'AUTH.BRANDED_SUBTITLE' })}
               </div>
               <div className="text-base font-medium text-secondary-foreground">
-                Güvenli ve etkili bir şekilde
-                <br /> İslami Windows sistemlerini&nbsp;
+                {intl.formatMessage({ id: 'AUTH.BRANDED_DESC_1' })}
+                <br /> {intl.formatMessage({ id: 'AUTH.BRANDED_DESC_2' })}&nbsp;
                 <span className="text-mono font-semibold">
-                  yönetin ve kontrol edin
+                  {intl.formatMessage({ id: 'AUTH.BRANDED_DESC_3' })}
                 </span>
               </div>
 
