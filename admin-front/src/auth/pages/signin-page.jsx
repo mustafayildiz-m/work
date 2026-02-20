@@ -17,11 +17,13 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { getSigninSchema } from '../forms/signin-schema';
+import { useIntl } from 'react-intl';
 
 export function SignInPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { login } = useAuth();
+  const intl = useIntl();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
@@ -33,13 +35,13 @@ export function SignInPage() {
     const errorDescription = searchParams.get('error_description');
 
     if (pwdReset === 'success') {
-      setSuccessMessage('Şifreniz başarıyla sıfırlandı. Yeni şifrenizle giriş yapabilirsiniz.');
+      setSuccessMessage(intl.formatMessage({ id: 'AUTH.PASSWORD_RESET_SUCCESS' }));
     }
 
     if (errorParam) {
-      setError(errorDescription || 'Bir hata oluştu. Lütfen tekrar deneyin.');
+      setError(errorDescription || intl.formatMessage({ id: 'AUTH.GENERIC_ERROR' }));
     }
-  }, [searchParams]);
+  }, [searchParams, intl]);
 
   const form = useForm({
     resolver: zodResolver(getSigninSchema()),
@@ -55,7 +57,7 @@ export function SignInPage() {
       setIsProcessing(true);
       setError(null);
       if (!values.email.trim() || !values.password) {
-        setError('E-posta ve şifre gereklidir');
+        setError(intl.formatMessage({ id: 'AUTH.EMAIL_PASSWORD_REQUIRED' }));
         return;
       }
       await login(values.email, values.password);
@@ -66,7 +68,7 @@ export function SignInPage() {
     } catch (err) {
       console.error('Login form error:', err);
       // Backend'den gelen hata mesajını direkt göster
-      const errorMessage = err instanceof Error ? err.message : 'Bir hata oluştu. Lütfen tekrar deneyin.';
+      const errorMessage = err instanceof Error ? err.message : intl.formatMessage({ id: 'AUTH.GENERIC_ERROR' });
       setError(errorMessage);
     } finally {
       setIsProcessing(false);
@@ -77,18 +79,13 @@ export function SignInPage() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="block w-full space-y-5">
         <div className="text-center space-y-1 pb-3">
-          <h1 className="text-2xl font-semibold tracking-tight">İslamic Windows Admin Panel</h1>
-          <p className="text-sm text-muted-foreground">Lütfen giriş yapın</p>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {intl.formatMessage({ id: 'AUTH.ADMIN_PANEL_TITLE' })}
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            {intl.formatMessage({ id: 'AUTH.PLEASE_LOGIN' })}
+          </p>
         </div>
-
-        {/*<Alert appearance="light" size="sm" close={false}>*/}
-        {/*  <AlertIcon>*/}
-        {/*    <AlertCircle className="text-primary" />*/}
-        {/*  </AlertIcon>*/}
-        {/*  <AlertTitle className="text-accent-foreground">*/}
-        {/*    Demo için <strong>demo@kt.com</strong> ve <strong>demo123</strong> kullanabilirsiniz.*/}
-        {/*  </AlertTitle>*/}
-        {/*</Alert>*/}
 
         {error && (
           <Alert variant="destructive" appearance="light" onClose={() => setError(null)}>
@@ -113,9 +110,9 @@ export function SignInPage() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>E-posta</FormLabel>
+              <FormLabel>{intl.formatMessage({ id: 'AUTH.EMAIL_LABEL' })}</FormLabel>
               <FormControl>
-                <Input placeholder="E-posta adresiniz" {...field} />
+                <Input placeholder={intl.formatMessage({ id: 'AUTH.EMAIL_PLACEHOLDER' })} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -128,11 +125,11 @@ export function SignInPage() {
           render={({ field }) => (
             <FormItem>
               <div className="flex justify-between items-center gap-2.5">
-                <FormLabel>Şifre</FormLabel>
+                <FormLabel>{intl.formatMessage({ id: 'AUTH.PASSWORD_LABEL' })}</FormLabel>
               </div>
               <div className="relative">
                 <Input
-                  placeholder="Şifreniz"
+                  placeholder={intl.formatMessage({ id: 'AUTH.PASSWORD_PLACEHOLDER' })}
                   type={passwordVisible ? 'text' : 'password'}
                   {...field}
                 />
@@ -161,16 +158,21 @@ export function SignInPage() {
                 <FormControl>
                   <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                 </FormControl>
-                <FormLabel className="text-sm font-normal cursor-pointer">Beni hatırla</FormLabel>
+                <FormLabel className="text-sm font-normal cursor-pointer">
+                  {intl.formatMessage({ id: 'AUTH.REMEMBER_ME' })}
+                </FormLabel>
               </div>
             </FormItem>
           )}
         />
 
         <Button type="submit" className="w-full" disabled={isProcessing}>
-          {isProcessing ? 'Giriş yapılıyor...' : 'Giriş Yap'}
+          {isProcessing
+            ? intl.formatMessage({ id: 'AUTH.LOGGING_IN' })
+            : intl.formatMessage({ id: 'AUTH.LOGIN_BUTTON' })}
         </Button>
       </form>
     </Form>
   );
 }
+

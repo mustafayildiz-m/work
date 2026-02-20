@@ -38,12 +38,15 @@ const getInitialLanguage = () => {
       return matchedLanguage;
     }
   }
-  return currenLanguage ?? I18N_DEFAULT_LANGUAGE;
+
+  // If we reach here, it means no valid language was found in local storage or URL
+  setData(I18N_CONFIG_KEY, I18N_DEFAULT_LANGUAGE);
+  return I18N_DEFAULT_LANGUAGE;
 };
 
 const initialProps = {
   currenLanguage: getInitialLanguage(),
-  changeLanguage: () => {},
+  changeLanguage: () => { },
   isRTL: () => false,
 };
 
