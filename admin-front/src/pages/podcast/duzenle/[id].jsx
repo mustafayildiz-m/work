@@ -23,7 +23,8 @@ export default function EditPodcast() {
     author: '',
     language: 'tr',
     category: '',
-    duration: '',
+    durationMinutes: '',
+    durationSeconds: '',
     publishDate: '',
     isActive: true,
     isFeatured: false,
@@ -33,31 +34,32 @@ export default function EditPodcast() {
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
-    
+
     Promise.all([
       fetch(`${API_URL}/languages`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
       fetch(`${API_URL}/podcasts/${id}`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
     ])
       .then(([langs, podcast]) => {
         setLanguages(Array.isArray(langs) ? langs : []);
-        
+
         setForm({
           title: podcast.title || '',
           description: podcast.description || '',
           author: podcast.author || '',
           language: podcast.language || 'tr',
           category: podcast.category || '',
-          duration: podcast.duration ? Math.floor(podcast.duration / 60) : '',
+          durationMinutes: podcast.duration ? Math.floor(podcast.duration / 60) : '',
+          durationSeconds: podcast.duration ? (podcast.duration % 60) : '',
           publishDate: podcast.publishDate ? podcast.publishDate.split('T')[0] : '',
           isActive: podcast.isActive ?? true,
           isFeatured: podcast.isFeatured ?? false,
           audioUrl: podcast.audioUrl || '',
           coverImage: podcast.coverImage || '',
         });
-        
+
         if (podcast.coverImage) {
-          const coverUrl = podcast.coverImage.startsWith('http') 
-            ? podcast.coverImage 
+          const coverUrl = podcast.coverImage.startsWith('http')
+            ? podcast.coverImage
             : `${API_URL}${podcast.coverImage.startsWith('/') ? '' : '/'}${podcast.coverImage}`;
           setCoverPreview(coverUrl);
         }
@@ -81,9 +83,9 @@ export default function EditPodcast() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setForm(prev => ({ 
-      ...prev, 
-      [name]: type === 'checkbox' ? checked : value 
+    setForm(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
@@ -100,19 +102,20 @@ export default function EditPodcast() {
       formData.append('category', form.category);
       formData.append('isActive', form.isActive);
       formData.append('isFeatured', form.isFeatured);
-      
-      if (form.duration) {
-        formData.append('duration', Number(form.duration) * 60);
+
+      if (form.durationMinutes || form.durationSeconds) {
+        const totalSeconds = (Number(form.durationMinutes) || 0) * 60 + (Number(form.durationSeconds) || 0);
+        formData.append('duration', totalSeconds);
       }
-      
+
       if (form.publishDate) {
         formData.append('publishDate', form.publishDate);
       }
-      
+
       if (audioFile) {
         formData.append('audio', audioFile);
       }
-      
+
       if (coverFile) {
         formData.append('cover', coverFile);
       }
@@ -162,7 +165,7 @@ export default function EditPodcast() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <Link 
+              <Link
                 to="/podcast/liste"
                 className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200"
               >
@@ -181,7 +184,7 @@ export default function EditPodcast() {
               </div>
             </div>
           </div>
-          
+
           <div className="h-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
             <div className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-pulse" style={{ width: '66%' }} />
           </div>
@@ -211,7 +214,7 @@ export default function EditPodcast() {
                   value={form.title}
                   onChange={handleChange}
                   required
-                  placeholder="Podcast başlığı..."
+                  placeholder={intl.formatMessage({ id: 'UI.PODCAST_BASLIGI_PLACEHOLDER' })}
                   className="w-full px-4 py-3 h-11 border-2 border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                 />
               </div>
@@ -226,7 +229,7 @@ export default function EditPodcast() {
                   value={form.description}
                   onChange={handleChange}
                   rows={4}
-                  placeholder="Podcast hakkında detaylı açıklama..."
+                  placeholder={intl.formatMessage({ id: 'UI.PODCAST_ACIKLAMA_PLACEHOLDER' })}
                   className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all resize-none"
                 />
               </div>
@@ -242,7 +245,7 @@ export default function EditPodcast() {
                     name="author"
                     value={form.author}
                     onChange={handleChange}
-                    placeholder="Konuşmacı adı..."
+                    placeholder={intl.formatMessage({ id: 'UI.KONUSMACI_ADI_PLACEHOLDER' })}
                     className="w-full px-4 py-3 h-11 border-2 border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                   />
                 </div>
@@ -285,17 +288,42 @@ export default function EditPodcast() {
                 <div>
                   <label className="flex items-center gap-2 font-bold mb-3 text-base">
                     <FaClock className="text-teal-500" />
-                    <FormattedMessage id="UI.SURE_DAKIKA" />
+                    <FormattedMessage id="UI.SURE_DAKIKA_SANIYE" defaultMessage="Süre (Dakika & Saniye)" />
                   </label>
-                  <input
-                    type="number"
-                    name="duration"
-                    value={form.duration}
-                    onChange={handleChange}
-                    placeholder="Örn: 45"
-                    min="0"
-                    className="w-full px-4 py-3 h-11 border-2 border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                  />
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      name="durationMinutes"
+                      value={form.durationMinutes}
+                      onChange={handleChange}
+                      onKeyDown={(e) => {
+                        if (['e', 'E', '+', '-', '.', ','].includes(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
+                      placeholder={intl.formatMessage({ id: 'UI.DAKIKA_PLACEHOLDER' })}
+                      min="0"
+                      className="w-1/2 px-4 py-3 h-11 border-2 border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                    />
+                    <input
+                      type="number"
+                      name="durationSeconds"
+                      value={form.durationSeconds}
+                      onChange={handleChange}
+                      onKeyDown={(e) => {
+                        if (['e', 'E', '+', '-', '.', ','].includes(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
+                      placeholder={intl.formatMessage({ id: 'UI.SANIYE_PLACEHOLDER' })}
+                      min="0"
+                      max="59"
+                      className="w-1/2 px-4 py-3 h-11 border-2 border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                    <FormattedMessage id="UI._PODCAST_SURESINI_DAKIKA_VE_SANIYE_OLAR" defaultMessage="Podcast süresini dakika ve saniye olarak girin." />
+                  </p>
                 </div>
 
                 <div className="md:col-span-2">
@@ -400,9 +428,9 @@ export default function EditPodcast() {
                   {coverPreview ? (
                     <div className="relative group">
                       <div className="w-48 h-48 border-2 border-dashed border-green-300 dark:border-green-700 rounded-xl overflow-hidden shadow-lg">
-                        <img 
-                          src={coverPreview} 
-                          alt="Kapak önizleme" 
+                        <img
+                          src={coverPreview}
+                          alt="Kapak önizleme"
                           className="w-full h-full object-cover"
                         />
                       </div>

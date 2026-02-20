@@ -12,7 +12,7 @@ export class PodcastService {
   constructor(
     @InjectRepository(Podcast)
     private readonly podcastRepository: Repository<Podcast>,
-  ) {}
+  ) { }
 
   async create(
     createPodcastDto: CreatePodcastDto,
@@ -70,9 +70,7 @@ export class PodcastService {
     try {
       const queryBuilder = this.podcastRepository
         .createQueryBuilder('podcast')
-        .orderBy('podcast.isFeatured', 'DESC')
-        .addOrderBy('podcast.publishDate', 'DESC')
-        .addOrderBy('podcast.id', 'DESC');
+        .orderBy('podcast.createdAt', 'DESC');
 
       if (isActive !== undefined) {
         queryBuilder.andWhere('podcast.isActive = :isActive', { isActive });
@@ -200,8 +198,7 @@ export class PodcastService {
           '(podcast.title LIKE :query OR podcast.description LIKE :query OR podcast.author LIKE :query OR podcast.category LIKE :query)',
           { query: searchQuery },
         )
-        .orderBy('podcast.isFeatured', 'DESC')
-        .addOrderBy('podcast.id', 'DESC');
+        .orderBy('podcast.createdAt', 'DESC');
 
       // Language filtresi
       if (language) {
