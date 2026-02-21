@@ -6,12 +6,11 @@ import PasswordStrengthMeter from '@/components/PasswordStrengthMeter';
 import { currentYear, developedBy, developedByLink } from '@/context/constants';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button, FormCheck } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 const SignUpForm = () => {
-  const [firstPassword, setFirstPassword] = useState('');
   const signUpSchema = yup.object({
     email: yup.string().email('Please enter a valid email').required('please enter your email'),
     password: yup.string().required('Please enter your password'),
@@ -28,10 +27,6 @@ const SignUpForm = () => {
   
   const password = watch('password');
   
-  useEffect(() => {
-    setFirstPassword(getValues().password);
-  }, [password, getValues]);
-  
   return <form className="mt-4" onSubmit={handleSubmit(() => {})}>
       <div className="mb-3">
         <TextFormInput name="email" control={control} containerClassName="input-group-lg" placeholder="Eposta adresini gir" />
@@ -40,7 +35,7 @@ const SignUpForm = () => {
       <div className="mb-3 position-relative">
         <PasswordFormInput name="password" control={control} size="lg" placeholder="Yeni şifre oluştur" />
         <div className="mt-2">
-          <PasswordStrengthMeter password={firstPassword} />
+          <PasswordStrengthMeter password={password} />
         </div>
       </div>
       <PasswordFormInput name="confirmPassword" control={control} size="lg" containerClassName="mb-3" placeholder="Şifreni doğrula" />

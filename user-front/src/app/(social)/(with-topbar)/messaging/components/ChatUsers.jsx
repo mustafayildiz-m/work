@@ -22,7 +22,7 @@ const ChatItem = ({
   return <li data-bs-dismiss="offcanvas" onClick={() => changeActiveChat(id)}>
       <div className={clsx('nav-link text-start', {
       active: activeChat?.id === id
-    })} id="chat-1-tab" data-bs-toggle="pill" role="tab">
+    })} id="chat-1-tab" data-bs-toggle="pill" role="tab" aria-selected={activeChat?.id === id}>
         <div className="d-flex">
           <div className={clsx('flex-shrink-0 avatar  me-2', status === 'online' ? 'status-online' : 'status-offline', {
           'avatar-story': isStory

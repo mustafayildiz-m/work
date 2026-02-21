@@ -5,6 +5,28 @@ import Select from 'react-select';
 import { useLanguage } from '@/context/useLanguageContext';
 import './LanguageSwitcher.css';
 
+const MenuList = (props) => {
+  const { children, innerProps, innerRef } = props;
+  return (
+    <div
+      ref={innerRef}
+      {...innerProps}
+      className="language-menu-list-responsive"
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+        gap: '0.25rem',
+        padding: '0.5rem',
+        maxHeight: 'min(400px, 70vh)',
+        overflowY: 'auto',
+        overflowX: 'hidden'
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
 const LanguageSwitcher = ({ variant = 'dropdown' }) => {
   const { locale, changeLocale, supportedLocales, t } = useLanguage();
   const [mounted, setMounted] = useState(false);
@@ -279,29 +301,6 @@ const LanguageSwitcher = ({ variant = 'dropdown' }) => {
       color: 'var(--bs-body-color, #000)',
       padding: '0.25rem'
     })
-  };
-
-  // Custom MenuList component for responsive grid
-  const MenuList = (props) => {
-    const { children, innerProps, innerRef } = props;
-    return (
-      <div
-        ref={innerRef}
-        {...innerProps}
-        className="language-menu-list-responsive"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-          gap: '0.25rem',
-          padding: '0.5rem',
-          maxHeight: 'min(400px, 70vh)',
-          overflowY: 'auto',
-          overflowX: 'hidden'
-        }}
-      >
-        {children}
-      </div>
-    );
   };
 
   // Auth variant - compact select2 for auth pages

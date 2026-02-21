@@ -73,22 +73,23 @@ const GroupCard = ({
       </CardFooter>
     </Card>;
 };
+const GroupNotFound = ({ onAdd }) => {
+  return <div className="my-sm-5 py-sm-5 text-center">
+      <BsPeople className="display-1 text-body-secondary"> </BsPeople>
+      <h4 className="mt-2 mb-3 text-body">No group founds</h4>
+      <Button variant="primary-soft" size="sm" onClick={onAdd}>
+        {' '}
+        Click here to add{' '}
+      </Button>
+    </div>;
+};
+
 const AllGroups = () => {
   const {
     isTrue: isOpen,
     toggle
   } = useToggle();
   const allGroups = useFetchData(getAllGroups);
-  const GroupNotFound = () => {
-    return <div className="my-sm-5 py-sm-5 text-center">
-        <BsPeople className="display-1 text-body-secondary"> </BsPeople>
-        <h4 className="mt-2 mb-3 text-body">No group founds</h4>
-        <Button variant="primary-soft" size="sm" onClick={toggle}>
-          {' '}
-          Click here to add{' '}
-        </Button>
-      </div>;
-  };
   return <>
       <CardBody>
         <Card>
@@ -151,10 +152,10 @@ const AllGroups = () => {
                   </Row>
                 </TabPane>
                 <TabPane eventKey="tab-3" className="fade" id="tab-3">
-                  <GroupNotFound />
+                  <GroupNotFound onAdd={toggle} />
                 </TabPane>
                 <TabPane eventKey="tab-4" className="fade" id="tab-4">
-                  <GroupNotFound />
+                  <GroupNotFound onAdd={toggle} />
                 </TabPane>
               </TabContent>
             </TabContainer>

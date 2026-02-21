@@ -28,8 +28,6 @@ const ThemeSwitcher = () => {
     const { status } = useSession();
     const { theme: themeMode, updateTheme } = useLayoutContext();
     const { t, isRTL } = useLanguage();
-
-    if (status === 'authenticated') return null;
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -44,6 +42,8 @@ const ThemeSwitcher = () => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
+
+    if (status === 'authenticated') return null;
 
     const toggleDropdown = () => setIsOpen(!isOpen);
 

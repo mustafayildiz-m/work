@@ -9,6 +9,21 @@ import {
 } from 'react-icons/bs';
 import { useLanguage } from '../../../../../context/useLanguageContext';
 
+const InfoItem = ({ icon: Icon, label, value, color = "primary" }) => {
+  const { t } = useLanguage();
+  return (
+    <div className="d-flex align-items-start mb-3 p-3 rounded-3" style={{ backgroundColor: `var(--bs-${color}-bg-subtle, rgba(var(--bs-${color}-rgb), 0.05))` }}>
+      <div className={`icon-lg rounded-circle bg-${color} text-white flex-shrink-0 d-flex align-items-center justify-content-center me-3`} style={{ width: '40px', height: '40px' }}>
+        <Icon size={20} />
+      </div>
+      <div>
+        <small className="text-muted d-block text-uppercase fw-semibold" style={{ fontSize: '0.7rem', letterSpacing: '0.5px' }}>{label}</small>
+        <span className="fw-medium text-body" style={{ fontSize: '0.95rem' }}>{value || <span className="text-muted fst-italic">{t('userProfile.notSpecified', 'Belirtilmemiş')}</span>}</span>
+      </div>
+    </div>
+  );
+};
+
 const UserProfilePage = () => {
   const params = useParams();
   const { t, locale } = useLanguage();
@@ -90,18 +105,6 @@ const UserProfilePage = () => {
       </Badge>
     );
   };
-
-  const InfoItem = ({ icon: Icon, label, value, color = "primary" }) => (
-    <div className="d-flex align-items-start mb-3 p-3 rounded-3" style={{ backgroundColor: `var(--bs-${color}-bg-subtle, rgba(var(--bs-${color}-rgb), 0.05))` }}>
-      <div className={`icon-lg rounded-circle bg-${color} text-white flex-shrink-0 d-flex align-items-center justify-content-center me-3`} style={{ width: '40px', height: '40px' }}>
-        <Icon size={20} />
-      </div>
-      <div>
-        <small className="text-muted d-block text-uppercase fw-semibold" style={{ fontSize: '0.7rem', letterSpacing: '0.5px' }}>{label}</small>
-        <span className="fw-medium text-body" style={{ fontSize: '0.95rem' }}>{value || <span className="text-muted fst-italic">{t('userProfile.notSpecified', 'Belirtilmemiş')}</span>}</span>
-      </div>
-    </div>
-  );
 
   if (loading) {
     return (

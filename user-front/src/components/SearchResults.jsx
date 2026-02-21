@@ -16,14 +16,11 @@ const TABS = [
 
 // Safe Image Component
 const SafeImage = ({ src, alt, width, height, isScholar, isFollower }) => {
-  const [imgSrc, setImgSrc] = useState(src);
-
-  useEffect(() => {
-    setImgSrc(src);
-  }, [src]);
+  const [errorSrc, setErrorSrc] = useState(null);
+  const imgSrc = errorSrc === src ? '/profile/profile.png' : src;
 
   const handleError = () => {
-    setImgSrc('/profile/profile.png');
+    setErrorSrc(src);
   };
 
   const borderColor = isScholar ? '#198754' : (isFollower ? '#0dcaf0' : 'rgba(0,0,0,0.1)');

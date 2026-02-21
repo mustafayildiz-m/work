@@ -11,6 +11,12 @@ import { useSearchParams, useRouter } from 'next/navigation';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
+const getAudioUrl = (audioUrl) => {
+  if (!audioUrl) return '';
+  if (audioUrl.startsWith('http')) return audioUrl;
+  return `${API_URL}${audioUrl.startsWith('/') ? '' : '/'}${audioUrl}`;
+};
+
 export default function PodcastsListPage() {
   const { t } = useLanguage();
   const searchParams = useSearchParams();
@@ -163,6 +169,20 @@ export default function PodcastsListPage() {
     }
   }, [languageId, router]);
 
+  useEffect(() => {
+    if (currentlyPlaying && audioRef) {
+      const audioUrl = getAudioUrl(currentlyPlaying.audioUrl);
+      audioRef.src = audioUrl;
+      audioRef.play().then(() => {
+        setIsPlaying(true);
+      }).catch((err) => {
+        console.error('Audio play error:', err);
+        toast.error('Ses çalınamadı. Lütfen tekrar deneyin.');
+        setIsPlaying(false);
+      });
+    }
+  }, [currentlyPlaying, audioRef]);
+
   if (!languageId) {
     return null;
   }
@@ -237,20 +257,6 @@ export default function PodcastsListPage() {
     }
   };
 
-  useEffect(() => {
-    if (currentlyPlaying && audioRef) {
-      const audioUrl = getAudioUrl(currentlyPlaying.audioUrl);
-      audioRef.src = audioUrl;
-      audioRef.play().then(() => {
-        setIsPlaying(true);
-      }).catch((err) => {
-        console.error('Audio play error:', err);
-        toast.error('Ses çalınamadı. Lütfen tekrar deneyin.');
-        setIsPlaying(false);
-      });
-    }
-  }, [currentlyPlaying, audioRef]);
-
   const handleLike = async (podcast) => {
     try {
       await fetch(`${API_URL}/podcasts/${podcast.id}/like`, { method: 'POST' });
@@ -276,11 +282,7 @@ export default function PodcastsListPage() {
     return `${API_URL}${coverImage.startsWith('/') ? '' : '/'}${coverImage}`;
   };
 
-  const getAudioUrl = (audioUrl) => {
-    if (!audioUrl) return '';
-    if (audioUrl.startsWith('http')) return audioUrl;
-    return `${API_URL}${audioUrl.startsWith('/') ? '' : '/'}${audioUrl}`;
-  };
+
 
   const categories = ['Hadis', 'Fıkıh', 'Tefsir', 'Siyer', 'Akaid', 'Tasavvuf', 'Genel'];
 

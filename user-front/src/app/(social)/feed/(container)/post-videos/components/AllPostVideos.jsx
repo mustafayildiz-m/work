@@ -63,22 +63,23 @@ const VideoCard = ({
       </CardBody>
     </Card>;
 };
+const VideoNotFound = ({ onAdd }) => {
+  return <div className="my-sm-5 py-sm-5 text-center">
+      <BsCameraReels className="display-1 text-body-secondary"> </BsCameraReels>
+      <h4 className="mt-2 mb-3 text-body">No video founds</h4>
+      <Button variant="primary-soft" size="sm" className="btn-sm" onClick={onAdd}>
+        {' '}
+        Click here to add{' '}
+      </Button>
+    </div>;
+};
+
 const AllPostVideos = () => {
   const allVideos = useFetchData(getAllPostVideos);
   const {
     isTrue: isOpen,
     toggle
   } = useToggle();
-  const VideoNotFound = () => {
-    return <div className="my-sm-5 py-sm-5 text-center">
-        <BsCameraReels className="display-1 text-body-secondary"> </BsCameraReels>
-        <h4 className="mt-2 mb-3 text-body">No video founds</h4>
-        <Button variant="primary-soft" size="sm" className="btn-sm" onClick={toggle}>
-          {' '}
-          Click here to add{' '}
-        </Button>
-      </div>;
-  };
   return <>
       <Card>
         <CardHeader className="d-sm-flex align-items-center justify-content-between border-0 pb-0">
@@ -124,10 +125,10 @@ const AllPostVideos = () => {
                 </Row>
               </TabPane>
               <TabPane className="fade" eventKey="tab-3">
-                <VideoNotFound />
+                <VideoNotFound onAdd={toggle} />
               </TabPane>
               <TabPane className="fade" eventKey="tab-4">
-                <VideoNotFound />
+                <VideoNotFound onAdd={toggle} />
               </TabPane>
             </TabContent>
           </TabContainer>

@@ -4,11 +4,25 @@ import { useEffect, useState, Suspense, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Card, Button, Spinner, Container, Row, Col } from 'react-bootstrap';
 import Link from 'next/link';
-import { useNotificationContext } from '@/context/useNotificationContext';
+import { useOptionalNotificationContext } from '@/context/useNotificationContext';
 
 // Icons using span + text as fallback to avoid any react-icons issues during crash
 const SuccessIcon = () => <div style={{ fontSize: '4rem', color: '#198754' }}>✓</div>;
 const ErrorIcon = () => <div style={{ fontSize: '4rem', color: '#dc3545' }}>✕</div>;
+
+async function callVerifyApi(token) {
+    const backendBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+    const response = await fetch(`${backendBase}/auth/verify?token=${token}`);
+    const text = await response.text();
+    let data;
+    try {
+        data = JSON.parse(text);
+    } catch (e) {
+        console.error('JSON parse error:', text);
+        throw new Error('Geçersiz sunucu yanıtı');
+    }
+    return { ok: response.ok, data };
+}
 
 const VerifyEmailContent = () => {
     const searchParams = useSearchParams();
@@ -17,10 +31,7 @@ const VerifyEmailContent = () => {
     const [message, setMessage] = useState('E-posta adresiniz doğrulanıyor...');
     const isverifying = useRef(false);
 
-    let notificationContext = null;
-    try {
-        notificationContext = useNotificationContext();
-    } catch (e) { }
+    const notificationContext = useOptionalNotificationContext();
 
     useEffect(() => {
         if (!token || isverifying.current) return;
