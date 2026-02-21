@@ -122,17 +122,6 @@ const CreatePostCard = () => {
     return photoUrl;
   };
 
-  // Check authentication on component mount
-  useEffect(() => {
-
-    if (!isAuthenticated) {
-      showNotification({
-        title: 'Uyarı',
-        message: 'Giriş yapmanız gerekiyor',
-        variant: 'warning'
-      });
-    }
-  }, [isAuthenticated, userInfo, showNotification]);
 
   // Fetch user profile data when authenticated
   useEffect(() => {

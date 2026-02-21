@@ -8,6 +8,7 @@ import useSignIn from './useSignIn';
 import TextFormInput from '@/components/form/TextFormInput';
 import PasswordFormInput from '@/components/form/PasswordFormInput';
 import { useLanguage } from '@/context/useLanguageContext';
+import { useNotificationContext } from '@/context/useNotificationContext';
 import styles from '../../auth-pages.module.css';
 import { signIn } from 'next-auth/react';
 import useQueryParams from '@/hooks/useQueryParams';
@@ -16,6 +17,7 @@ import { BsPerson } from 'react-icons/bs';
 
 const LoginForm = () => {
   const { t } = useLanguage();
+  const { showNotification } = useNotificationContext();
   const router = useRouter();
   const queryParams = useQueryParams();
   const [ageConfirmed, setAgeConfirmed] = useState(false);
@@ -162,15 +164,23 @@ const LoginForm = () => {
             size="lg"
             type="button"
             variant="light"
-            disabled={loading || showSuccess || !ageConfirmed}
-            onClick={() =>
+            disabled={loading || showSuccess}
+            onClick={() => {
+              if (!ageConfirmed) {
+                showNotification({
+                  variant: 'warning',
+                  message: t('auth.ageRequiredError'),
+                  title: t('common.warning')
+                });
+                return;
+              }
               signIn('google', {
                 callbackUrl: queryParams['redirectTo'] ?? '/feed/home',
-              })
-            }
+              });
+            }}
             className={styles.providerButton}
             style={{
-              opacity: ageConfirmed ? 1 : 0.6,
+              opacity: 1, // Keep it visible to allow click notification
               transition: 'all 0.3s ease'
             }}
             aria-label={t('auth.signInWithGoogle')}

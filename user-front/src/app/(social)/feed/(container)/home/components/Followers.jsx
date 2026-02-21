@@ -270,7 +270,7 @@ const Followers = () => {
       )}
 
       <div className="d-grid mt-3">
-        <Link href="/feed/who-to-follow">
+        <Link href="/feed/scholars">
           <Button variant="primary-soft" size="sm" className="w-100">
             {t('feed.viewAll')}
           </Button>
