@@ -11,6 +11,7 @@
     "submit": "Gönder",
     "success": "Başarılı",
     "error": "Hata",
+    "warning": "Uyarı",
     "justNow": "Az önce",
     "minutesAgo": "{count} dakika önce",
     "hoursAgo": "{count} saat önce",
@@ -73,6 +74,7 @@
     "birthDateRequired": "Lütfen doğum tarihinizi girin",
     "ageLimitError": "Üye olabilmek için en az 16 yaşında olmalısınız",
     "ageConfirm": "16 yaşından büyük olduğumu beyan ve kabul ediyorum.",
+    "ageRequiredError": "Google ile giriş yapabilmek için 16 yaş şartını onaylamalısınız.",
     "visitAsGuest": "Misafir olarak ziyaret et"
   },
   "navigation": {
