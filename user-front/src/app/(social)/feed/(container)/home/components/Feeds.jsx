@@ -185,12 +185,13 @@ const Feeds = ({ userId }) => {
   const [loadingComments, setLoadingComments] = useState({});
 
   // State for language selection per post - key: postId, value: languageCode
+  const [localeForLangs, setLocaleForLangs] = useState(locale);
   const [selectedLanguages, setSelectedLanguages] = useState({});
 
-  // Global dil değiştiğinde tüm post dillerini sıfırla
-  useEffect(() => {
+  if (localeForLangs !== locale) {
+    setLocaleForLangs(locale);
     setSelectedLanguages({});
-  }, [locale]);
+  }
 
   // Fetch user's own pending posts
   useEffect(() => {

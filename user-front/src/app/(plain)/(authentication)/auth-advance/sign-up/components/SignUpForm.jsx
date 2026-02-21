@@ -8,7 +8,7 @@ import PasswordStrengthMeter from '@/components/PasswordStrengthMeter';
 import { currentYear, developedBy, developedByLink } from '@/context/constants';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button, FormCheck } from 'react-bootstrap';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
@@ -19,7 +19,6 @@ import { BsPerson } from 'react-icons/bs';
 
 const SignUpForm = () => {
   const { t, locale } = useLanguage();
-  const [firstPassword, setFirstPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -75,10 +74,6 @@ const SignUpForm = () => {
 
   const password = watch('password');
   const formValues = watch();
-
-  useEffect(() => {
-    setFirstPassword(getValues().password);
-  }, [password, getValues]);
 
   const handleFileSelect = (files) => {
     if (files && files.length > 0) {

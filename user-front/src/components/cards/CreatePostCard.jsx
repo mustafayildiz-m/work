@@ -26,6 +26,129 @@ import ChoicesFormInput from '../form/ChoicesFormInput';
 import Link from 'next/link';
 import { useLanguage } from '@/context/useLanguageContext';
 
+const FilePreview = ({ fileUrls, onRemove }) => {
+  const { t } = useLanguage();
+  if (fileUrls.length === 0) return null;
+
+  return (
+    <div className="mt-4">
+      <div className="d-flex align-items-center mb-3">
+        <div className="icon-shape icon-xs rounded-circle bg-success bg-opacity-10 text-success me-2">
+          <BsCheckCircleFill size={14} />
+        </div>
+        <h6 className="mb-0 fw-bold text-success">
+          {fileUrls.length > 1 ? `${fileUrls.length} ${t('post.selectedFiles')}` : `1 ${t('post.selectedFile')}`}
+        </h6>
+      </div>
+      <div className="row g-3">
+        {fileUrls.map(({ file, url }, index) => (
+          <div key={`${file.name}-${index}`} className="col-12">
+            <div className="file-preview-card p-3 position-relative">
+              <button
+                type="button"
+                className="btn btn-sm btn-danger rounded-circle position-absolute border-2 border-white"
+                style={{
+                  top: '-10px',
+                  right: '-10px',
+                  width: '28px',
+                  height: '28px',
+                  padding: '0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  zIndex: 10,
+                  boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+                }}
+                onClick={() => onRemove(index)}
+                aria-label="Remove file"
+              >
+                <span style={{ fontSize: '18px', lineHeight: '1' }}>×</span>
+              </button>
+
+              {file.type.startsWith('video/') && (
+                <div className="mb-3 position-relative overflow-hidden rounded-3">
+                  <video
+                    className="w-100 h-100"
+                    style={{ maxHeight: '250px', objectFit: 'cover' }}
+                    controls
+                    preload="metadata"
+                  >
+                    <source src={url} type={file.type} />
+                    Tarayıcınız video oynatmayı desteklemiyor
+                  </video>
+                </div>
+              )}
+
+              {file.type.startsWith('image/') && (
+                <div className="mb-3 position-relative overflow-hidden rounded-3">
+                  <img
+                    src={url}
+                    alt="Preview"
+                    className="w-100 h-100"
+                    style={{ maxHeight: '250px', objectFit: 'cover' }}
+                  />
+                </div>
+              )}
+
+              <div className="d-flex align-items-center">
+                <div className={`icon-shape icon-sm rounded-circle me-3 ${file.type.startsWith('image/') ? 'bg-success-soft text-success' : 'bg-info-soft text-info'}`}>
+                  {file.type.startsWith('image/') ? (
+                    <BsImageFill size={16} />
+                  ) : (
+                    <BsCameraReelsFill size={16} />
+                  )}
+                </div>
+                <div className="flex-grow-1 overflow-hidden">
+                  <h6 className="mb-1 text-truncate fs-6">{file.name}</h6>
+                  <div className="d-flex align-items-center gap-3">
+                    <small className="text-muted fw-medium">
+                      {(file.size / 1024 / 1024).toFixed(2)} MB
+                    </small>
+                    {file.type.startsWith('video/') && (file.size / (1024 * 1024)) > 50 && (
+                      <small className="badge bg-warning-soft text-warning fw-normal">
+                        {t('post.largeFileWarning')}
+                      </small>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const LoadingButton = ({ variant = "success", size = "sm", children, disabled = false, onClick, className = "", loading = false }) => {
+  const { t } = useLanguage();
+  return (
+    <Button
+      variant={variant}
+      size={size}
+      onClick={onClick}
+      disabled={loading || disabled}
+      className={className}
+    >
+      {loading ? (
+        <>
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+            className="me-2"
+          />
+          {t('feed.sharing')}
+        </>
+      ) : (
+        children
+      )}
+    </Button>
+  );
+};
+
 const CreatePostCard = () => {
   const { t } = useLanguage();
   const guests = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7];
@@ -397,128 +520,6 @@ const CreatePostCard = () => {
     setSelectedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
-  // File preview component - uses memoized URLs to prevent flicker
-  const FilePreview = ({ fileUrls, onRemove }) => {
-    if (fileUrls.length === 0) return null;
-
-    return (
-      <div className="mt-4">
-        <div className="d-flex align-items-center mb-3">
-          <div className="icon-shape icon-xs rounded-circle bg-success bg-opacity-10 text-success me-2">
-            <BsCheckCircleFill size={14} />
-          </div>
-          <h6 className="mb-0 fw-bold text-success">
-            {fileUrls.length > 1 ? `${fileUrls.length} ${t('post.selectedFiles')}` : `1 ${t('post.selectedFile')}`}
-          </h6>
-        </div>
-        <div className="row g-3">
-          {fileUrls.map(({ file, url }, index) => (
-            <div key={`${file.name}-${index}`} className="col-12">
-              <div className="file-preview-card p-3 position-relative">
-                <button
-                  type="button"
-                  className="btn btn-sm btn-danger rounded-circle position-absolute border-2 border-white"
-                  style={{
-                    top: '-10px',
-                    right: '-10px',
-                    width: '28px',
-                    height: '28px',
-                    padding: '0',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    zIndex: 10,
-                    boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-                  }}
-                  onClick={() => onRemove(index)}
-                  aria-label="Remove file"
-                >
-                  <span style={{ fontSize: '18px', lineHeight: '1' }}>×</span>
-                </button>
-
-                {/* Video Preview */}
-                {file.type.startsWith('video/') && (
-                  <div className="mb-3 position-relative overflow-hidden rounded-3">
-                    <video
-                      className="w-100 h-100"
-                      style={{ maxHeight: '250px', objectFit: 'cover' }}
-                      controls
-                      preload="metadata"
-                    >
-                      <source src={url} type={file.type} />
-                      Tarayıcınız video oynatmayı desteklemiyor
-                    </video>
-                  </div>
-                )}
-
-                {/* Image Preview */}
-                {file.type.startsWith('image/') && (
-                  <div className="mb-3 position-relative overflow-hidden rounded-3">
-                    <img
-                      src={url}
-                      alt="Preview"
-                      className="w-100 h-100"
-                      style={{ maxHeight: '250px', objectFit: 'cover' }}
-                    />
-                  </div>
-                )}
-
-                <div className="d-flex align-items-center">
-                  <div className={`icon-shape icon-sm rounded-circle me-3 ${file.type.startsWith('image/') ? 'bg-success-soft text-success' : 'bg-info-soft text-info'}`}>
-                    {file.type.startsWith('image/') ? (
-                      <BsImageFill size={16} />
-                    ) : (
-                      <BsCameraReelsFill size={16} />
-                    )}
-                  </div>
-                  <div className="flex-grow-1 overflow-hidden">
-                    <h6 className="mb-1 text-truncate fs-6">{file.name}</h6>
-                    <div className="d-flex align-items-center gap-3">
-                      <small className="text-muted fw-medium">
-                        {(file.size / 1024 / 1024).toFixed(2)} MB
-                      </small>
-                      {file.type.startsWith('video/') && (file.size / (1024 * 1024)) > 50 && (
-                        <small className="badge bg-warning-soft text-warning fw-normal">
-                          {t('post.largeFileWarning')}
-                        </small>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
-  // Loading button component
-  const LoadingButton = ({ variant = "success", size = "sm", children, disabled = false, onClick, className = "" }) => (
-    <Button
-      variant={variant}
-      size={size}
-      onClick={onClick}
-      disabled={loading || disabled}
-      className={className}
-    >
-      {loading ? (
-        <>
-          <Spinner
-            as="span"
-            animation="border"
-            size="sm"
-            role="status"
-            aria-hidden="true"
-            className="me-2"
-          />
-          {t('feed.sharing')}
-        </>
-      ) : (
-        children
-      )}
-    </Button>
-  );
 
 
   return <>
@@ -633,6 +634,7 @@ const CreatePostCard = () => {
             onClick={handlePostSubmit}
             disabled={!postContent.trim()}
             className="px-3"
+            loading={loading}
           >
             {t('feed.share')}
           </LoadingButton>
@@ -734,6 +736,7 @@ const CreatePostCard = () => {
               className="flex-grow-1 py-2 fw-medium"
               onClick={handlePostSubmit}
               style={{ borderRadius: '12px' }}
+              loading={loading}
             >
               {t('post.post')}
             </LoadingButton>
@@ -835,6 +838,7 @@ const CreatePostCard = () => {
               className="flex-grow-1 py-2 fw-medium"
               onClick={handlePostSubmit}
               style={{ borderRadius: '12px' }}
+              loading={loading}
             >
               {t('post.post')}
             </LoadingButton>
@@ -893,7 +897,7 @@ const CreatePostCard = () => {
             {' '}
             {t('post.cancel')}
           </Button>
-          <LoadingButton variant="success-soft" onClick={handlePostSubmit}>
+          <LoadingButton variant="success-soft" onClick={handlePostSubmit} loading={loading}>
             {t('post.create')}
           </LoadingButton>
         </ModalFooter>
@@ -992,7 +996,7 @@ const CreatePostCard = () => {
           <Button variant="danger-soft" type="button" className="me-2" onClick={resetFormAndCloseModals}>
             {t('post.cancel')}
           </Button>
-          <LoadingButton variant="success-soft" onClick={handlePostSubmit}>
+          <LoadingButton variant="success-soft" onClick={handlePostSubmit} loading={loading}>
             {t('feed.share')}
           </LoadingButton>
         </Col>

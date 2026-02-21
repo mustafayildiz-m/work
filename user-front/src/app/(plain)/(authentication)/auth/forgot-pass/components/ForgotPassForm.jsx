@@ -5,12 +5,11 @@ import PasswordStrengthMeter from '@/components/PasswordStrengthMeter';
 import { currentYear, developedBy, developedByLink } from '@/context/constants';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 const ForgotPassForm = () => {
-  const [firstPassword, setFirstPassword] = useState('');
   const forgotPassSchema = yup.object({
     password: yup.string().required('Please enter your password')
   });
@@ -25,15 +24,11 @@ const ForgotPassForm = () => {
   
   const password = watch('password');
   
-  useEffect(() => {
-    setFirstPassword(getValues().password);
-  }, [password, getValues]);
-  
   return <form className="mt-3" onSubmit={handleSubmit(() => {})}>
       <div className="mb-3">
         <PasswordFormInput name="password" control={control} size="lg" placeholder="Enter new password" />
         <div className="mt-2">
-          <PasswordStrengthMeter password={firstPassword} />
+          <PasswordStrengthMeter password={password} />
         </div>
       </div>
       <div className="mb-3">

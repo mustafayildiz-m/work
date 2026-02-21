@@ -16,12 +16,13 @@ const ScholarFeedPage = () => {
   const [loading, setLoading] = useState(true);
   const [scholar, setScholar] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [localeForLangs, setLocaleForLangs] = useState(locale);
   const [selectedLanguages, setSelectedLanguages] = useState({});
 
-  // Global dil değiştiğinde tüm post dillerini sıfırla
-  useEffect(() => {
+  if (localeForLangs !== locale) {
+    setLocaleForLangs(locale);
     setSelectedLanguages({});
-  }, [locale]);
+  }
 
   useEffect(() => {
     const fetchData = async () => {

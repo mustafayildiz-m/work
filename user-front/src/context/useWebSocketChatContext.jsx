@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState, useCallback, useRef, us
 import { io } from 'socket.io-client';
 import { getToken } from '@/utils/auth';
 import placeholderImg from '@/assets/images/avatar/placeholder.jpg';
-import { useNotificationContext } from './useNotificationContext';
+import { useOptionalNotificationContext } from './useNotificationContext';
 
 // Helper functions - moved outside to prevent recreations
 const getCurrentUserInfo = () => {
@@ -80,14 +80,7 @@ export const WebSocketChatProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Notification context - safe access
-  let notificationContext = null;
-  try {
-    notificationContext = useNotificationContext();
-  } catch (error) {
-    console.warn('Notification context not available:', error);
-    notificationContext = null;
-  }
+  const notificationContext = useOptionalNotificationContext();
 
   // Refs for stable references
   const socketRef = useRef(null);

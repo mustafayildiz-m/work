@@ -59,12 +59,13 @@ const Posts = ({ userId, showOwnPosts = false }) => {
   const [loadingComments, setLoadingComments] = useState({});
 
   // State for language selection per post
+  const [localeForLangs, setLocaleForLangs] = useState(locale);
   const [selectedLanguages, setSelectedLanguages] = useState({});
 
-  // Global dil değiştiğinde tüm post dillerini sıfırla
-  useEffect(() => {
+  if (localeForLangs !== locale) {
+    setLocaleForLangs(locale);
     setSelectedLanguages({});
-  }, [locale]);
+  }
 
   // Handler functions for post actions
   const handleUnfollow = async (userIdToUnfollow, userType = 'user') => {
