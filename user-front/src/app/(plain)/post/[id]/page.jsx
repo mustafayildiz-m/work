@@ -388,10 +388,27 @@ const PublicPostPage = () => {
             }
           }
 
-          setPost({ ...processedPostData, postType, user: userInfo, scholar: userInfo });
+          if (userInfo) {
+            // Ensure name is present by combining first and last names if needed
+            if (!userInfo.name && (userInfo.firstName || userInfo.first_name)) {
+              userInfo.name = `${userInfo.firstName || userInfo.first_name || ''} ${userInfo.lastName || userInfo.last_name || ''}`.trim();
+            }
+            if (!userInfo.fullName && userInfo.name) {
+              userInfo.fullName = userInfo.name;
+            }
+          }
 
-          // Load comments if authenticated and it's a user post
-          if (isAuthenticated && postType === 'user') {
+          setPost({
+            ...processedPostData,
+            postType,
+            user: userInfo,
+            scholar: userInfo,
+            // Add top-level name for easier access in UI
+            authorName: userInfo?.name || userInfo?.fullName || userInfo?.username || (postType === 'scholar' ? 'Alim' : 'Kullanıcı')
+          });
+
+          // Load comments if it's a user post (regardless of auth for public view)
+          if (postType === 'user') {
             loadComments(postId, postType);
           }
 
@@ -417,18 +434,22 @@ const PublicPostPage = () => {
     try {
       setLoadingComments(true);
       const token = localStorage.getItem('token');
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user-post-comments/post/${postId}`, {
         method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+        headers: headers
       });
 
       if (response.ok) {
         const commentsData = await response.json();
-        setComments(commentsData);
+        setComments(Array.isArray(commentsData) ? commentsData : (commentsData.comments || []));
       }
     } catch (error) {
       console.error('Error loading comments:', error);
@@ -659,242 +680,305 @@ const PublicPostPage = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      padding: '2rem 0'
+      background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
+      padding: '3rem 0',
+      position: 'relative',
+      overflow: 'hidden'
     }}>
-      <Container className="py-4">
+      {/* Decorative background glow elements */}
+      <div style={{
+        position: 'absolute',
+        top: '-10%',
+        right: '-5%',
+        width: '500px',
+        height: '500px',
+        background: 'radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0) 70%)',
+        borderRadius: '50%',
+        zIndex: 0
+      }}></div>
+      <div style={{
+        position: 'absolute',
+        bottom: '10%',
+        left: '-5%',
+        width: '400px',
+        height: '400px',
+        background: 'radial-gradient(circle, rgba(5, 150, 105, 0.05) 0%, rgba(5, 150, 105, 0) 70%)',
+        borderRadius: '50%',
+        zIndex: 0
+      }}></div>
+
+      <Container className="py-4" style={{ position: 'relative', zIndex: 1 }}>
         <Row className="justify-content-center">
           <Col lg={8}>
-            {/* Back Button */}
-            <div className="mb-3">
-              <Link href="/" className="btn btn-outline-secondary btn-sm">
-                <BsArrowLeft className="me-2" />
+            {/* Header / Back Button Area */}
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <Link href="/" className="btn d-flex align-items-center gap-2 px-3 py-2 shadow" style={{
+                backgroundColor: 'rgba(255, 255, 255, 1)',
+                borderRadius: '12px',
+                border: 'none',
+                color: '#4f46e5',
+                fontWeight: '700',
+                transition: 'all 0.2s',
+                zIndex: 10
+              }}
+                onMouseEnter={(e) => e.currentTarget.style.transform = 'translateX(-4px)'}
+                onMouseLeave={(e) => e.currentTarget.style.transform = 'translateX(0)'}
+              >
+                <BsArrowLeft className="text-primary" />
                 {t.backToHome}
               </Link>
             </div>
 
             {/* Post Card */}
-            <Card className="mb-4 shadow-lg" style={{
-              borderRadius: '20px',
-              border: 'none',
-              backdropFilter: 'blur(10px)',
-              backgroundColor: 'rgba(255, 255, 255, 0.95)'
+            <Card className="mb-4 shadow-lg border-0" style={{
+              borderRadius: '24px',
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(20px)',
+              overflow: 'hidden'
             }}>
-              <CardBody className="p-4">
-                {/* User Info */}
-                <div className="d-flex align-items-center mb-3">
-                  <div className="avatar me-3">
-                    <Image
-                      className="avatar-img rounded-circle"
-                      src={getImageUrl(post.user?.avatar || post.scholar?.photoUrl)}
-                      alt={post.user?.name || post.scholar?.fullName || 'User'}
-                      width={50}
-                      height={50}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = avatar7.src || avatar7;
-                      }}
-                    />
+              <CardBody className="p-0">
+                {/* Visual Accent Header */}
+                <div style={{ height: '6px', background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)' }}></div>
+
+                {/* User Info Section */}
+                <div className="p-4 d-flex align-items-center border-bottom" style={{ borderColor: 'rgba(0, 0, 0, 0.04)' }}>
+                  <div className="avatar me-3 position-relative">
+                    <div style={{
+                      borderRadius: '50%',
+                      padding: '3px',
+                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      boxShadow: '0 4px 12px rgba(102, 126, 234, 0.2)'
+                    }}>
+                      <Image
+                        className="avatar-img rounded-circle border border-white"
+                        src={getImageUrl(post.user?.avatar || post.scholar?.photoUrl)}
+                        alt={post.authorName}
+                        width={48}
+                        height={48}
+                        style={{ objectFit: 'cover' }}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = avatar7.src || avatar7;
+                        }}
+                      />
+                    </div>
                   </div>
                   <div className="flex-grow-1">
-                    <h6 className="mb-0" style={{ color: '#2c3e50' }}>
-                      {post.user?.name || post.scholar?.fullName || post.user?.username || post.scholar?.username || 'Bilinmeyen Kullanıcı'}
+                    <h6 className="mb-0 fw-bold" style={{ color: '#1e293b', fontSize: '1.1rem' }}>
+                      {post.authorName || 'Kullanıcı'}
                     </h6>
-                    <small className="text-muted">
-                      {post.postType === 'scholar' ? 'Alim' : 'Kullanıcı'} • {formatDate(post.created_at || post.createdAt)}
-                    </small>
+                    <div className="d-flex align-items-center gap-2">
+                      <span className={`badge ${post.postType === 'scholar' ? 'bg-primary' : 'bg-dark'} bg-opacity-10 text-${post.postType === 'scholar' ? 'primary' : 'dark'} px-2 py-1`} style={{ fontSize: '0.7rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        {post.postType === 'scholar' ? 'Alim' : 'Kullanıcı'}
+                      </span>
+                      <span className="text-muted" style={{ fontSize: '0.8rem' }}>
+                        • {formatDate(post.created_at || post.createdAt)}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Post Content */}
-                {post.content && (
-                  <div className="mb-3">
-                    {post.postType === 'scholar' ? (
-                      <div
-                        className="mb-0"
-                        style={{ whiteSpace: 'pre-wrap' }}
-                        dangerouslySetInnerHTML={{ __html: post.content }}
-                      />
-                    ) : (
-                      <p className="mb-0" style={{ whiteSpace: 'pre-wrap' }}>
-                        {post.content}
-                      </p>
-                    )}
-                  </div>
-                )}
+                {/* Post Content Area */}
+                <div className="p-4">
+                  {post.content && (
+                    <div className="mb-4">
+                      {post.postType === 'scholar' ? (
+                        <div
+                          className="post-content-scholar"
+                          style={{
+                            fontSize: '1.2rem',
+                            lineHeight: '1.7',
+                            color: '#1e293b',
+                            whiteSpace: 'pre-wrap'
+                          }}
+                          dangerouslySetInnerHTML={{ __html: post.content }}
+                        />
+                      ) : (
+                        <p className="mb-0" style={{
+                          fontSize: '1.15rem',
+                          lineHeight: '1.6',
+                          color: '#334155',
+                          whiteSpace: 'pre-wrap'
+                        }}>
+                          {post.content}
+                        </p>
+                      )}
+                    </div>
+                  )}
 
-                {/* Post Media - Scholar Posts (from mediaUrls) */}
-                {post.postType === 'scholar' && post.mediaUrls && post.mediaUrls.length > 0 && (
-                  <div className="mb-3">
-                    {post.mediaUrls.map((mediaUrl, index) => {
-                      const isVideo = mediaUrl.includes('.mp4') || mediaUrl.includes('.webm') || mediaUrl.includes('.mov');
-                      return (
-                        <div key={index} className="mb-2">
-                          {isVideo ? (
-                            <video
-                              className="w-100 rounded"
-                              controls
-                              preload="metadata"
-                              style={{ maxHeight: '400px' }}
-                            >
-                              <source src={getImageUrl(mediaUrl)} type="video/mp4" />
-                              Tarayıcınız video oynatmayı desteklemiyor.
-                            </video>
-                          ) : (
-                            <img
-                              src={getImageUrl(mediaUrl)}
-                              alt={`Gönderi ${index + 1}`}
-                              className="img-fluid rounded"
-                              style={{
-                                width: '100%',
-                                height: 'auto',
-                                maxHeight: '600px',
-                                objectFit: 'contain',
-                                display: 'block',
-                                margin: '0 auto'
-                              }}
-                              onError={(e) => {
-                                console.error('Media failed to load:', e.target.src);
-                              }}
-                            />
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-
-                {/* Post Image - User Posts */}
-                {post.postType !== 'scholar' && post.image_url && (
-                  <div className="mb-3">
-                    <img
-                      src={getImageUrl(post.image_url)}
-                      alt="Gönderi"
-                      className="img-fluid rounded"
-                      style={{
-                        width: '100%',
-                        height: 'auto',
-                        maxHeight: '600px',
-                        objectFit: 'contain',
-                        display: 'block',
-                        margin: '0 auto'
-                      }}
-                      onError={(e) => {
-                        console.error('Post image failed to load:', e.target.src);
-                      }}
-                    />
-                  </div>
-                )}
-
-                {/* Post Video - User Posts */}
-                {post.postType !== 'scholar' && (post.video_url || post.video) && (
-                  <div className="mb-3">
-                    <video
-                      className="w-100 rounded"
-                      controls
-                      preload="metadata"
-                      style={{ maxHeight: '400px' }}
-                    >
-                      <source src={getImageUrl(post.video_url || post.video)} type="video/mp4" />
-                      Tarayıcınız video oynatmayı desteklemiyor.
-                    </video>
-                  </div>
-                )}
-
-                {/* File Attachments */}
-                {post.fileUrls && post.fileUrls.length > 0 && (
-                  <div className="mb-3">
-                    <h6 className="mb-2">Ekli Dosyalar:</h6>
-                    <div className="d-flex flex-wrap gap-2">
-                      {post.fileUrls.map((fileUrl, index) => {
-                        const fileName = fileUrl.split('/').pop();
-                        const fileExtension = fileName.split('.').pop().toLowerCase();
-                        const fullFileUrl = getImageUrl(fileUrl);
-                        const isImage = isImageFile(fileName);
-
+                  {/* Post Media - Scholar Posts (from mediaUrls) */}
+                  {post.postType === 'scholar' && post.mediaUrls && post.mediaUrls.length > 0 && (
+                    <div className="mb-3">
+                      {post.mediaUrls.map((mediaUrl, index) => {
+                        const isVideo = mediaUrl.includes('.mp4') || mediaUrl.includes('.webm') || mediaUrl.includes('.mov');
                         return (
-                          <div key={index} className="border rounded p-3" style={{ minWidth: '200px' }}>
-                            <div className="d-flex align-items-center mb-2">
-                              <div className="me-2">
-                                {fileExtension === 'pdf' && <span className="text-danger fs-4">📄</span>}
-                                {fileExtension === 'docx' && <span className="text-primary fs-4">📝</span>}
-                                {!['pdf', 'docx'].includes(fileExtension) && <span className="text-secondary fs-4">📎</span>}
-                              </div>
-                              <div className="flex-grow-1">
-                                <small className="d-block fw-bold">{fileName}</small>
-                                <small className="text-muted">{fileExtension.toUpperCase()} dosyası</small>
-                              </div>
-                            </div>
-
-                            <div className="d-flex gap-2">
-                              {isImage ? (
-                                <Button
-                                  variant="outline-primary"
-                                  size="sm"
-                                  className="flex-fill"
-                                  onClick={() => setSelectedImage(fullFileUrl)}
-                                >
-                                  <BsEye className="me-1" />
-                                  Önizle
-                                </Button>
-                              ) : (
-                                <Button
-                                  variant="outline-primary"
-                                  size="sm"
-                                  className="flex-fill"
-                                  onClick={() => window.open(fullFileUrl, '_blank')}
-                                >
-                                  <BsEye className="me-1" />
-                                  Önizle
-                                </Button>
-                              )}
-                              <Button
-                                variant="outline-success"
-                                size="sm"
-                                className="flex-fill"
-                                onClick={async () => {
-                                  try {
-                                    const response = await fetch(fullFileUrl);
-                                    if (response.ok) {
-                                      const blob = await response.blob();
-                                      const url = window.URL.createObjectURL(blob);
-                                      const link = document.createElement('a');
-                                      link.href = url;
-                                      link.download = fileName;
-                                      document.body.appendChild(link);
-                                      link.click();
-                                      document.body.removeChild(link);
-                                      window.URL.revokeObjectURL(url);
-                                    }
-                                  } catch (error) {
-                                    console.error('Download error:', error);
-                                  }
-                                }}
+                          <div key={index} className="mb-2">
+                            {isVideo ? (
+                              <video
+                                className="w-100 rounded"
+                                controls
+                                preload="metadata"
+                                style={{ maxHeight: '400px' }}
                               >
-                                <BsDownload className="me-1" />
-                                İndir
-                              </Button>
-                            </div>
+                                <source src={getImageUrl(mediaUrl)} type="video/mp4" />
+                                Tarayıcınız video oynatmayı desteklemiyor.
+                              </video>
+                            ) : (
+                              <img
+                                src={getImageUrl(mediaUrl)}
+                                alt={`Gönderi ${index + 1}`}
+                                className="img-fluid rounded"
+                                style={{
+                                  width: '100%',
+                                  height: 'auto',
+                                  maxHeight: '600px',
+                                  objectFit: 'contain',
+                                  display: 'block',
+                                  margin: '0 auto'
+                                }}
+                                onError={(e) => {
+                                  console.error('Media failed to load:', e.target.src);
+                                }}
+                              />
+                            )}
                           </div>
                         );
                       })}
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {/* Action Buttons */}
-                <div className="d-flex justify-content-between align-items-center">
-                  <div className="d-flex gap-3">
-                    <Button
-                      variant={sharedPosts.has(post.id) ? "success" : "light"}
-                      size="sm"
-                      onClick={() => handleSharePost(post.id)}
-                      disabled={sharingPosts.has(post.id)}
-                    >
-                      <BsShare className="me-1" />
-                      {sharingPosts.has(post.id) ? t.sharing :
-                        sharedPosts.has(post.id) ? t.shared : t.share}
-                    </Button>
+                  {/* Post Image - User Posts */}
+                  {post.postType !== 'scholar' && post.image_url && (
+                    <div className="mb-3">
+                      <img
+                        src={getImageUrl(post.image_url)}
+                        alt="Gönderi"
+                        className="img-fluid rounded"
+                        style={{
+                          width: '100%',
+                          height: 'auto',
+                          maxHeight: '600px',
+                          objectFit: 'contain',
+                          display: 'block',
+                          margin: '0 auto'
+                        }}
+                        onError={(e) => {
+                          console.error('Post image failed to load:', e.target.src);
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  {/* Post Video - User Posts */}
+                  {post.postType !== 'scholar' && (post.video_url || post.video) && (
+                    <div className="mb-3">
+                      <video
+                        className="w-100 rounded"
+                        controls
+                        preload="metadata"
+                        style={{ maxHeight: '400px' }}
+                      >
+                        <source src={getImageUrl(post.video_url || post.video)} type="video/mp4" />
+                        Tarayıcınız video oynatmayı desteklemiyor.
+                      </video>
+                    </div>
+                  )}
+
+                  {/* File Attachments */}
+                  {post.fileUrls && post.fileUrls.length > 0 && (
+                    <div className="mb-3">
+                      <h6 className="mb-2">Ekli Dosyalar:</h6>
+                      <div className="d-flex flex-wrap gap-2">
+                        {post.fileUrls.map((fileUrl, index) => {
+                          const fileName = fileUrl.split('/').pop();
+                          const fileExtension = fileName.split('.').pop().toLowerCase();
+                          const fullFileUrl = getImageUrl(fileUrl);
+                          const isImage = isImageFile(fileName);
+
+                          return (
+                            <div key={index} className="border rounded p-3" style={{ minWidth: '200px' }}>
+                              <div className="d-flex align-items-center mb-2">
+                                <div className="me-2">
+                                  {fileExtension === 'pdf' && <span className="text-danger fs-4">📄</span>}
+                                  {fileExtension === 'docx' && <span className="text-primary fs-4">📝</span>}
+                                  {!['pdf', 'docx'].includes(fileExtension) && <span className="text-secondary fs-4">📎</span>}
+                                </div>
+                                <div className="flex-grow-1">
+                                  <small className="d-block fw-bold">{fileName}</small>
+                                  <small className="text-muted">{fileExtension.toUpperCase()} dosyası</small>
+                                </div>
+                              </div>
+
+                              <div className="d-flex gap-2">
+                                {isImage ? (
+                                  <Button
+                                    variant="outline-primary"
+                                    size="sm"
+                                    className="flex-fill"
+                                    onClick={() => setSelectedImage(fullFileUrl)}
+                                  >
+                                    <BsEye className="me-1" />
+                                    Önizle
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    variant="outline-primary"
+                                    size="sm"
+                                    className="flex-fill"
+                                    onClick={() => window.open(fullFileUrl, '_blank')}
+                                  >
+                                    <BsEye className="me-1" />
+                                    Önizle
+                                  </Button>
+                                )}
+                                <Button
+                                  variant="outline-success"
+                                  size="sm"
+                                  className="flex-fill"
+                                  onClick={async () => {
+                                    try {
+                                      const response = await fetch(fullFileUrl);
+                                      if (response.ok) {
+                                        const blob = await response.blob();
+                                        const url = window.URL.createObjectURL(blob);
+                                        const link = document.createElement('a');
+                                        link.href = url;
+                                        link.download = fileName;
+                                        document.body.appendChild(link);
+                                        link.click();
+                                        document.body.removeChild(link);
+                                        window.URL.revokeObjectURL(url);
+                                      }
+                                    } catch (error) {
+                                      console.error('Download error:', error);
+                                    }
+                                  }}
+                                >
+                                  <BsDownload className="me-1" />
+                                  İndir
+                                </Button>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Action Buttons */}
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex gap-3">
+                      <Button
+                        variant={sharedPosts.has(post.id) ? "success" : "light"}
+                        size="sm"
+                        onClick={() => handleSharePost(post.id)}
+                        disabled={sharingPosts.has(post.id)}
+                      >
+                        <BsShare className="me-1" />
+                        {sharingPosts.has(post.id) ? t.sharing :
+                          sharedPosts.has(post.id) ? t.shared : t.share}
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </CardBody>
@@ -921,27 +1005,30 @@ const PublicPostPage = () => {
                   </div>
                 </CardBody>
               </Card>
-            ) : isAuthenticated ? (
-              <Card className="shadow-lg" style={{
-                borderRadius: '20px',
-                border: 'none',
-                backdropFilter: 'blur(10px)',
-                backgroundColor: 'rgba(255, 255, 255, 0.95)'
+            ) : (
+              <Card className="shadow-lg border-0" style={{
+                borderRadius: '24px',
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                backdropFilter: 'blur(20px)'
               }}>
                 <CardBody className="p-4">
-                  <h5 className="mb-3">{t.comments} ({comments.length})</h5>
+                  <h5 className="mb-4 fw-bold d-flex align-items-center gap-2">
+                    <BsChat className="text-primary" />
+                    {t.comments} ({comments.length})
+                  </h5>
 
-                  {/* Add Comment Form */}
+                  {/* Comment Form for Authenticated Users */}
                   {isAuthenticated ? (
                     <form onSubmit={handleAddComment} className="mb-4">
                       <div className="d-flex gap-2">
                         <div className="avatar">
                           <Image
-                            className="avatar-img rounded-circle"
+                            className="avatar-img rounded-circle border"
                             src={getImageUrl(userInfo?.avatar)}
                             alt={userInfo?.name || 'User'}
                             width={40}
                             height={40}
+                            style={{ objectFit: 'cover' }}
                             onError={(e) => {
                               e.target.onerror = null;
                               e.target.src = avatar7.src || avatar7;
@@ -950,17 +1037,23 @@ const PublicPostPage = () => {
                         </div>
                         <div className="flex-grow-1">
                           <textarea
-                            className="form-control"
+                            className="form-control bg-light border-0 px-3 py-2"
                             rows={2}
                             placeholder={t.commentPlaceholder}
                             value={newComment}
                             onChange={(e) => setNewComment(e.target.value)}
+                            style={{ borderRadius: '15px', resize: 'none' }}
                             maxLength={500}
                           />
                           <div className="d-flex justify-content-between align-items-center mt-2">
-                            <small className="text-muted">{newComment.length}/500</small>
-                            <Button type="submit" size="sm" disabled={!newComment.trim()}>
-                              <BsChat className="me-1" />
+                            <small className="text-muted fw-bold">{newComment.length}/500</small>
+                            <Button
+                              type="submit"
+                              size="sm"
+                              disabled={!newComment.trim()}
+                              className="px-4 rounded-pill fw-bold"
+                              style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', border: 'none' }}
+                            >
                               {t.commentButton}
                             </Button>
                           </div>
@@ -968,42 +1061,34 @@ const PublicPostPage = () => {
                       </div>
                     </form>
                   ) : (
-                    <Alert variant="info" className="mb-4">
-                      <div className="d-flex align-items-center">
-                        <BsPersonPlus className="me-2" />
-                        <div className="flex-grow-1">
-                          <strong>Yorum yapmak için giriş yapın!</strong>
-                          <p className="mb-0">Bu gönderiye yorum yapmak ve diğer özelliklerden yararlanmak için üye olmanız gerekiyor.</p>
-                        </div>
-                        <div className="ms-3">
-                          <Link href="/auth/sign-in" className="btn btn-primary btn-sm me-2">
-                            Giriş Yap
-                          </Link>
-                          <Link href="/auth/sign-up" className="btn btn-outline-primary btn-sm">
-                            Üye Ol
-                          </Link>
-                        </div>
-                      </div>
-                    </Alert>
+                    <div className="p-3 mb-4 rounded-4" style={{ backgroundColor: 'rgba(16, 185, 129, 0.05)', border: '1px dashed rgba(16, 185, 129, 0.2)' }}>
+                      <p className="mb-0 text-center text-muted small fw-medium">
+                        <i className="fas fa-lock me-2"></i>
+                        {t.loginToComment}
+                        <Link href="/auth-advance/sign-in" className="ms-2 fw-bold text-primary text-decoration-none">
+                          {t.signIn}
+                        </Link>
+                      </p>
+                    </div>
                   )}
 
-                  {/* Comments List */}
+                  {/* Global Comment List */}
                   {loadingComments ? (
-                    <div className="text-center">
-                      <Spinner animation="border" size="sm" />
-                      <p className="mt-2">Yorumlar yükleniyor...</p>
+                    <div className="text-center py-4">
+                      <Spinner animation="border" size="sm" variant="primary" />
                     </div>
                   ) : comments.length > 0 ? (
-                    <div className="comments-list">
+                    <div className="vstack gap-3">
                       {comments.map((comment, index) => (
-                        <div key={index} className="d-flex gap-3 mb-3 p-3 border rounded">
-                          <div className="avatar">
+                        <div key={index} className="d-flex gap-3 p-3 bg-white bg-opacity-50 rounded-4 border border-light">
+                          <div className="avatar flex-shrink-0">
                             <Image
-                              className="avatar-img rounded-circle"
+                              className="avatar-img rounded-circle border"
                               src={getImageUrl(comment.user_avatar || comment.avatar)}
-                              alt={comment.user_name || comment.username || 'User'}
+                              alt={comment.user_name || 'User'}
                               width={40}
                               height={40}
+                              style={{ objectFit: 'cover' }}
                               onError={(e) => {
                                 e.target.onerror = null;
                                 e.target.src = avatar7.src || avatar7;
@@ -1011,11 +1096,11 @@ const PublicPostPage = () => {
                             />
                           </div>
                           <div className="flex-grow-1">
-                            <div className="d-flex justify-content-between align-items-start mb-1">
-                              <h6 className="mb-0">{comment.user_name || comment.username || 'Bilinmeyen'}</h6>
-                              <small className="text-muted">{formatDate(comment.created_at)}</small>
+                            <div className="d-flex justify-content-between align-items-center mb-1">
+                              <h6 className="mb-0 fw-bold small">{comment.user_name || comment.username || 'Kullanıcı'}</h6>
+                              <small className="text-muted" style={{ fontSize: '0.7rem' }}>{formatDate(comment.created_at)}</small>
                             </div>
-                            <p className="mb-0" style={{ whiteSpace: 'pre-wrap' }}>
+                            <p className="mb-0 text-secondary small" style={{ whiteSpace: 'pre-wrap' }}>
                               {comment.content}
                             </p>
                           </div>
@@ -1024,36 +1109,10 @@ const PublicPostPage = () => {
                     </div>
                   ) : (
                     <div className="text-center text-muted py-4">
-                      <BsChat className="fs-1 mb-2" />
-                      <p>{t.noComments}</p>
+                      <BsChat className="fs-1 mb-2 opacity-20" />
+                      <p className="small mb-0">{t.noComments}</p>
                     </div>
                   )}
-                </CardBody>
-              </Card>
-            ) : (
-              /* Non-authenticated users see login prompt for comments */
-              <Card className="shadow-lg" style={{
-                borderRadius: '20px',
-                border: 'none',
-                backdropFilter: 'blur(10px)',
-                backgroundColor: 'rgba(255, 255, 255, 0.95)'
-              }}>
-                <CardBody className="p-4 text-center">
-                  <div className="mb-3">
-                    <i className="fas fa-comments fa-3x text-muted mb-3"></i>
-                    <h5>{t.comments}</h5>
-                    <p className="text-muted">{t.loginToComment}</p>
-                  </div>
-                  <div className="d-grid gap-2 d-md-flex justify-content-md-center">
-                    <Link href="/auth-advance/sign-in" className="btn btn-primary">
-                      <i className="fas fa-sign-in-alt me-2"></i>
-                      {t.signIn}
-                    </Link>
-                    <Link href="/auth-advance/sign-up" className="btn btn-outline-primary">
-                      <i className="fas fa-user-plus me-2"></i>
-                      {t.signUp}
-                    </Link>
-                  </div>
                 </CardBody>
               </Card>
             )}
@@ -1085,10 +1144,7 @@ const PublicPostPage = () => {
                     }}>
                       {t.platformTitle}
                     </h3>
-                    <p className="lead mb-4" style={{
-                      color: '#f8fafc',
-                      fontWeight: '500'
-                    }}>
+                    <p className="lead mb-4 opacity-100 mx-auto" style={{ maxWidth: '600px', color: '#334155', fontWeight: '500' }}>
                       {t.platformDesc}
                     </p>
                   </div>
