@@ -24,6 +24,22 @@ const InfoItem = ({ icon: Icon, label, value, color = "primary" }) => {
   );
 };
 
+async function fetchUserById(userId) {
+  const token = localStorage.getItem('token');
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!response.ok) {
+    console.error('User not found');
+    return null;
+  }
+  return response.json();
+}
+
 const UserProfilePage = () => {
   const params = useParams();
   const { t, locale } = useLanguage();
@@ -31,36 +47,11 @@ const UserProfilePage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const userId = params.id;
-
-        if (userId) {
-          const token = localStorage.getItem('token');
-
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            setUser(data);
-          } else {
-            console.error('User not found');
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
+    if (!params.id) return;
+    fetchUserById(params.id)
+      .then(data => setUser(data))
+      .catch(err => console.error('Error fetching user data:', err))
+      .finally(() => setLoading(false));
   }, [params.id]);
 
   // Tarih formatını düzenle

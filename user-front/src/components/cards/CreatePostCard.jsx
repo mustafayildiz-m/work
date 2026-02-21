@@ -149,6 +149,23 @@ const LoadingButton = ({ variant = "success", size = "sm", children, disabled = 
   );
 };
 
+async function fetchUserProfileById(userId) {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!response.ok) {
+    console.error('❌ Failed to fetch profile data:', response.status, response.statusText);
+    return null;
+  }
+  return response.json();
+}
+
 const CreatePostCard = () => {
   const { t } = useLanguage();
   const guests = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7];
@@ -250,51 +267,29 @@ const CreatePostCard = () => {
   useEffect(() => {
     let timeoutId = null;
 
-    const fetchUserProfile = async () => {
-      if (!isAuthenticated || !userInfo?.id) {
-        setImageLoading(false); // Stop loading if not authenticated
-        return;
-      }
+    if (!isAuthenticated || !userInfo?.id) {
+      setImageLoading(false);
+      return;
+    }
 
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          setImageLoading(false);
-          return;
-        }
-
-        setImageLoading(true); // Start loading
-
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userInfo.id}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        });
-
-        if (response.ok) {
-          const data = await response.json();
+    setImageLoading(true);
+    fetchUserProfileById(userInfo.id)
+      .then(data => {
+        if (data) {
           setProfileData(data);
-          // Force image reload with cache busting
           setImageKey(prev => prev + 1);
-          // Set a timeout to stop loading if image doesn't load within 3 seconds
           timeoutId = setTimeout(() => {
             setImageLoading(false);
           }, 3000);
         } else {
-          console.error('❌ Failed to fetch profile data:', response.status, response.statusText);
-          setImageLoading(false); // Stop loading on error
+          setImageLoading(false);
         }
-      } catch (error) {
-        console.error('Error fetching user profile:', error);
-        setImageLoading(false); // Stop loading on error
-      }
-    };
+      })
+      .catch(err => {
+        console.error('Error fetching user profile:', err);
+        setImageLoading(false);
+      });
 
-    fetchUserProfile();
-
-    // Cleanup function
     return () => {
       if (timeoutId) {
         clearTimeout(timeoutId);
@@ -304,36 +299,23 @@ const CreatePostCard = () => {
 
   // Listen for profile photo updates
   useEffect(() => {
-    const handleProfilePhotoUpdate = async () => {
+    const handleProfilePhotoUpdate = () => {
       if (!isAuthenticated || !userInfo?.id) return;
 
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) return;
-
-        setImageLoading(true); // Start loading for updated photo
-
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userInfo.id}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+      setImageLoading(true);
+      fetchUserProfileById(userInfo.id)
+        .then(data => {
+          if (data) {
+            setProfileData(data);
+            setImageKey(prev => prev + 1);
+          } else {
+            setImageLoading(false);
           }
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setProfileData(data);
-          // Force image reload by updating key
-          setImageKey(prev => prev + 1);
-          // Image loading will be handled by onLoad/onError handlers
-        } else {
+        })
+        .catch(err => {
+          console.error('Error updating profile photo in CreatePostCard:', err);
           setImageLoading(false);
-        }
-      } catch (error) {
-        console.error('Error updating profile photo in CreatePostCard:', error);
-        setImageLoading(false);
-      }
+        });
     };
 
     window.addEventListener('profilePhotoUpdated', handleProfilePhotoUpdate);
