@@ -9,6 +9,47 @@ import { BsX } from 'react-icons/bs';
 import PostCard from '@/components/cards/PostCard';
 import { useLanguage } from '@/context/useLanguageContext';
 
+async function loadScholarData(scholarId) {
+  const token = localStorage.getItem('token');
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const scholarResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scholars/${scholarId}`, {
+    method: 'GET',
+    headers,
+  });
+
+  let scholarData = null;
+  if (scholarResponse.ok) {
+    scholarData = await scholarResponse.json();
+  }
+
+  const postsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scholar-posts/scholar/${scholarId}`, {
+    method: 'GET',
+    headers,
+  });
+
+  let normalizedPosts = [];
+  if (postsResponse.ok) {
+    const postsData = await postsResponse.json();
+    normalizedPosts = postsData.map(post => ({
+      type: 'scholar',
+      id: post.id,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+      scholar: scholarData,
+      translations: post.translations || [],
+      isUserPost: false,
+    }));
+  } else if (postsResponse.status !== 401) {
+    console.error('❌ Posts not found, status:', postsResponse.status);
+  }
+
+  return { scholar: scholarData, posts: normalizedPosts };
+}
+
 const ScholarFeedPage = () => {
   const params = useParams();
   const { locale } = useLanguage();
@@ -25,68 +66,15 @@ const ScholarFeedPage = () => {
   }
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const scholarId = params.id;
-        if (scholarId) {
-          const token = localStorage.getItem('token');
-
-          const headers = {
-            'Content-Type': 'application/json'
-          };
-
-          if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-          }
-
-          // Alim bilgilerini çek
-          const scholarResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scholars/${scholarId}`, {
-            method: 'GET',
-            headers: headers
-          });
-
-          let scholarData = null;
-          if (scholarResponse.ok) {
-            scholarData = await scholarResponse.json();
-            setScholar(scholarData);
-          }
-
-          // Alim'in gönderilerini çek (translations ile birlikte)
-          const postsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scholar-posts/scholar/${scholarId}`, {
-            method: 'GET',
-            headers: headers
-          });
-
-          if (postsResponse.ok) {
-            const postsData = await postsResponse.json();
-
-            // Postları direkt normalize et - dil seçimi rendering sırasında yapılacak
-            const normalizedPosts = postsData.map(post => ({
-              type: 'scholar',
-              id: post.id,
-              createdAt: post.createdAt,
-              updatedAt: post.updatedAt,
-              scholar: scholarData,
-              translations: post.translations || [],
-              isUserPost: false // This is a scholar post
-            }));
-
-            setPosts(normalizedPosts);
-          } else {
-            if (postsResponse.status !== 401) {
-              console.error('❌ Posts not found, status:', postsResponse.status);
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [params.id, locale]); // locale değişince de yeniden fetch et
+    if (!params.id) return;
+    loadScholarData(params.id)
+      .then(({ scholar, posts }) => {
+        setScholar(scholar);
+        setPosts(posts);
+      })
+      .catch(err => console.error('Error fetching data:', err))
+      .finally(() => setLoading(false));
+  }, [params.id, locale]);
 
 
   // Helper function to get proper image URL

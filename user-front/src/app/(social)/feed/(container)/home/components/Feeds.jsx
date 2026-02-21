@@ -157,6 +157,22 @@ const CommonPost = ({
   </Card>;
 };
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+
+async function loadPendingPosts(userId) {
+  const token = localStorage.getItem('token');
+  if (!token) return [];
+  const response = await fetch(`${API_BASE}/user-posts/user/${userId}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!response.ok) return [];
+  const data = await response.json();
+  return data.filter(post => post.status === 'pending');
+}
+
 const Feeds = ({ userId }) => {
   const { t, locale } = useLanguage();
 
@@ -195,38 +211,12 @@ const Feeds = ({ userId }) => {
 
   // Fetch user's own pending posts
   useEffect(() => {
-    const fetchPendingPosts = async () => {
-      if (!userId) return;
-
-      try {
-        setLoadingPendingPosts(true);
-        const token = localStorage.getItem('token');
-        if (!token) return;
-
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/user-posts/user/${userId}`,
-          {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          // Filter only pending posts
-          const pending = data.filter(post => post.status === 'pending');
-          setPendingPosts(pending);
-        }
-      } catch (error) {
-        console.error('Error fetching pending posts:', error);
-      } finally {
-        setLoadingPendingPosts(false);
-      }
-    };
-
-    fetchPendingPosts();
+    if (!userId) return;
+    setLoadingPendingPosts(true);
+    loadPendingPosts(userId)
+      .then(posts => setPendingPosts(posts))
+      .catch(err => console.error('Error fetching pending posts:', err))
+      .finally(() => setLoadingPendingPosts(false));
   }, [userId]);
 
   // Listen for post creation events and add to pending posts immediately
@@ -235,9 +225,7 @@ const Feeds = ({ userId }) => {
       if (event.detail && event.detail.post) {
         const newPost = event.detail.post;
 
-        // If post has status pending or no status (defaults to pending), add to pending posts
         if (!newPost.status || newPost.status === 'pending') {
-          // Create pending post object with proper structure
           const pendingPost = {
             id: newPost.id || Date.now(),
             user_id: newPost.user_id || userId,
@@ -253,53 +241,24 @@ const Feeds = ({ userId }) => {
             user_photo_url: newPost.user_photo_url,
           };
 
-          // Add to pending posts immediately
           setPendingPosts(prev => {
-            // Check if post already exists (avoid duplicates)
             const exists = prev.some(p => p.id === pendingPost.id);
             if (exists) return prev;
             return [pendingPost, ...prev];
           });
         }
 
-        // Also refresh pending posts from server after a short delay to get the real post data
         setTimeout(() => {
-          const fetchPendingPosts = async () => {
-            if (!userId) return;
-
-            try {
-              const token = localStorage.getItem('token');
-              if (!token) return;
-
-              const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/user-posts/user/${userId}`,
-                {
-                  headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                  },
-                }
-              );
-
-              if (response.ok) {
-                const data = await response.json();
-                const pending = data.filter(post => post.status === 'pending');
-                setPendingPosts(pending);
-              }
-            } catch (error) {
-              console.error('Error refreshing pending posts:', error);
-            }
-          };
-
-          fetchPendingPosts();
-        }, 1500); // Wait 1.5 seconds for server to process
+          if (!userId) return;
+          loadPendingPosts(userId)
+            .then(posts => setPendingPosts(posts))
+            .catch(err => console.error('Error refreshing pending posts:', err));
+        }, 1500);
       }
     };
 
-    // Add event listener for post creation
     window.addEventListener('postCreated', handlePostCreated);
 
-    // Cleanup event listener
     return () => {
       window.removeEventListener('postCreated', handlePostCreated);
     };

@@ -37,43 +37,27 @@ const VerifyEmailContent = () => {
         if (!token || isverifying.current) return;
         isverifying.current = true;
 
-        const verifyToken = async () => {
-            try {
-                // Use env variable for production, fallback to localhost for development
-                const backendBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-                const finalUrl = `${backendBase}/auth/verify?token=${token}`;
+        console.log('Verifying with:', `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/auth/verify?token=${token}`);
 
-                console.log('Verifying with:', finalUrl);
-                const response = await fetch(finalUrl);
-                const text = await response.text();
-                let data;
-                try {
-                    data = JSON.parse(text);
-                } catch (e) {
-                    console.error('JSON parse error:', text);
-                    throw new Error('Geçersiz sunucu yanıtı');
-                }
-
-                if (response.ok) {
+        callVerifyApi(token)
+            .then(({ ok, data }) => {
+                if (ok) {
                     setStatus('success');
                     setMessage('Tebrikler! Hesabınız başarıyla doğrulandı.');
                     notificationContext?.showNotification?.({
                         message: 'Hesabınız doğrulandı. Şimdi giriş yapabilirsiniz.',
-                        variant: 'success'
+                        variant: 'success',
                     });
                 } else {
-                    // Token geçersizse veya daha önce kullanılmışsa (401)
                     setStatus('error');
                     setMessage(data.message || 'Doğrulama işlemi başarısız oldu.');
                 }
-            } catch (error) {
+            })
+            .catch(error => {
                 console.error('Verification error:', error);
                 setStatus('error');
                 setMessage('Bir hata oluştu. Lütfen daha sonra tekrar deneyin.');
-            }
-        };
-
-        verifyToken();
+            });
     }, [token]);
 
 
