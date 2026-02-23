@@ -334,7 +334,8 @@ const ProfilePanel = ({ links, onLinkClick }) => {
   };
 
   // Get theme-aware colors
-  const isDarkMode = theme === 'dark';
+  // Giriş yapmamış kullanıcılar için her zaman açık tema (ilk ziyarette tutarlı görünüm)
+  const isDarkMode = status === 'unauthenticated' ? false : theme === 'dark';
   const cardBg = isDarkMode ? '#141519' : '#ffffff';
   const textColor = isDarkMode ? '#a1a1a8' : '#2C3E50';
   const headingColor = isDarkMode ? '#fff' : '#000';
