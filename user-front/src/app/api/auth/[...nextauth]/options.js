@@ -51,7 +51,12 @@ export const options = {
             })
           });
 
-          const data = await response.json();
+          const text = await response.text();
+          if (!text) {
+            console.error('Empty response from backend during credentials auth');
+            throw new Error('auth.invalidCredentials');
+          }
+          const data = JSON.parse(text);
 
           if (response.ok && data.ok && data.user) {
             // API'den dönen kullanıcı bilgilerini NextAuth formatına çevir
@@ -122,7 +127,13 @@ export const options = {
             }),
           });
 
-          const data = await response.json();
+          const text = await response.text();
+          if (!text) {
+            console.error('Empty response from backend during Google auth');
+            token.error = 'Google ile giriş başarısız';
+            return token;
+          }
+          const data = JSON.parse(text);
 
           if (response.ok && data?.access_token && data?.user) {
             token.user = {

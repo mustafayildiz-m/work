@@ -67,15 +67,22 @@ const ProfilePanel = ({ links, onLinkClick }) => {
           });
 
           if (response.ok) {
-            const userData = await response.json();
-            setUser(prev => ({
-              ...prev,
-              photoUrl: userData.photoUrl,
-              firstName: userData.firstName,
-              lastName: userData.lastName,
-              username: userData.username,
-              bio: userData.biography
-            }));
+            const responseText = await response.text();
+            if (responseText) {
+              try {
+                const userData = JSON.parse(responseText);
+                setUser(prev => ({
+                  ...prev,
+                  photoUrl: userData.photoUrl,
+                  firstName: userData.firstName,
+                  lastName: userData.lastName,
+                  username: userData.username,
+                  bio: userData.biography
+                }));
+              } catch (parseError) {
+                console.error('Error parsing user profile JSON:', parseError);
+              }
+            }
           }
         } catch (error) {
           console.error('Error fetching user profile:', error);
@@ -86,8 +93,12 @@ const ProfilePanel = ({ links, onLinkClick }) => {
     } else if (status === 'unauthenticated') {
       if (typeof window !== 'undefined') {
         const userData = localStorage.getItem('user');
-        if (userData) {
-          setUser(JSON.parse(userData));
+        if (userData && userData !== 'undefined' && userData !== 'null') {
+          try {
+            setUser(JSON.parse(userData));
+          } catch (e) {
+            console.error('Error parsing user data from localStorage:', e);
+          }
         }
       }
     }
@@ -107,11 +118,18 @@ const ProfilePanel = ({ links, onLinkClick }) => {
         });
 
         if (response.ok) {
-          const data = await response.json();
-          setFollowStats({
-            followersCount: data.followersCount || 0,
-            followingCount: data.totalFollowingCount || 0
-          });
+          const responseText = await response.text();
+          if (responseText) {
+            try {
+              const data = JSON.parse(responseText);
+              setFollowStats({
+                followersCount: data.followersCount || 0,
+                followingCount: data.totalFollowingCount || 0
+              });
+            } catch (e) {
+              console.error('Error parsing follow stats:', e);
+            }
+          }
         }
       } catch (error) {
         // Silent fail
@@ -135,30 +153,41 @@ const ProfilePanel = ({ links, onLinkClick }) => {
           });
 
           if (response.ok) {
-            const userData = await response.json();
+            const responseText = await response.text();
+            if (!responseText) return;
 
-            // Eğer fotoğraf değiştiyse key'i artır
-            if (user?.photoUrl !== userData.photoUrl) {
-              setImageLoading(true);
-              setImageKey(prev => prev + 1);
-            }
+            try {
+              const userData = JSON.parse(responseText);
 
-            setUser(prev => ({
-              ...prev,
-              ...userData,
-              bio: userData.biography // biography -> bio eşleştirmesi
-            }));
-
-            // LocalStorage'daki user verisini de güncelle
-            if (typeof window !== 'undefined') {
-              const currentStoredUser = localStorage.getItem('user');
-              if (currentStoredUser) {
-                const parsedUser = JSON.parse(currentStoredUser);
-                localStorage.setItem('user', JSON.stringify({
-                  ...parsedUser,
-                  ...userData
-                }));
+              // Eğer fotoğraf değiştiyse key'i artır
+              if (user?.photoUrl !== userData.photoUrl) {
+                setImageLoading(true);
+                setImageKey(prev => prev + 1);
               }
+
+              setUser(prev => ({
+                ...prev,
+                ...userData,
+                bio: userData.biography // biography -> bio eşleştirmesi
+              }));
+
+              // LocalStorage'daki user verisini de güncelle
+              if (typeof window !== 'undefined') {
+                const currentStoredUser = localStorage.getItem('user');
+                if (currentStoredUser && currentStoredUser !== 'undefined' && currentStoredUser !== 'null') {
+                  try {
+                    const parsedUser = JSON.parse(currentStoredUser);
+                    localStorage.setItem('user', JSON.stringify({
+                      ...parsedUser,
+                      ...userData
+                    }));
+                  } catch (e) {
+                    console.error('Error parsing stored user:', e);
+                  }
+                }
+              }
+            } catch (e) {
+              console.error('Error parsing profile update JSON:', e);
             }
           }
         } catch (error) {

@@ -23,9 +23,9 @@ const SignIn = () => {
   // Eğer zaten giriş yapılmışsa ana sayfaya yönlendir
   useEffect(() => {
     if (status === 'authenticated') {
-      router.push('/feed/home');
+      window.location.href = window.location.origin + '/feed/home';
     }
-  }, [status, router]);
+  }, [status]);
 
   // Loading durumunda boş ekran göstermek yerine formu gösterelim (NextAuth bazen takılabiliyor)
   // if (status === 'loading') return null;

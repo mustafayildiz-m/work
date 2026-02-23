@@ -52,7 +52,9 @@ const useSignIn = () => {
         // Yönlendirme yap - Animasyonun tamamlanması ve okunması için bekle
         setTimeout(() => {
           const targetUrl = queryParams['redirectTo'] ?? '/feed/home';
-          push(targetUrl);
+          // Production'da daha güvenli olması için window.location.href kullan
+          // Bu şekilde tüm session state'in senkronize olduğundan emin oluruz
+          window.location.href = window.location.origin + (targetUrl.startsWith('/') ? targetUrl : '/' + targetUrl);
         }, 1500);
       } else {
         // Giriş başarısız - loading'i kapat

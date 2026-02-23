@@ -13,24 +13,21 @@ export const getUserIdFromToken = () => {
       // console.warn('No token found in localStorage');
       return null;
     }
-    
+
     // Decode the JWT token (base64 decode the payload part)
     const payload = token.split('.')[1];
     if (!payload) {
       // console.warn('Invalid token format');
       return null;
     }
-    
-    const decodedPayload = JSON.parse(atob(payload));
-    const userId = decodedPayload.sub; // 'sub' contains the user ID
-    
-    //   userId,
-    //   email: decodedPayload.email,
-    //   username: decodedPayload.username,
-    //   role: decodedPayload.role
-    // });
-    
-    return userId;
+
+    try {
+      const decodedPayload = JSON.parse(atob(payload));
+      return decodedPayload.sub; // 'sub' contains the user ID
+    } catch (e) {
+      console.error('Error parsing token payload:', e);
+      return null;
+    }
   } catch (error) {
     // console.error('Error decoding token:', error);
     return null;
@@ -45,19 +42,23 @@ export const getUserInfoFromToken = () => {
   try {
     const token = localStorage.getItem('token');
     if (!token) return null;
-    
+
     const payload = token.split('.')[1];
     if (!payload) return null;
-    
-    const decodedPayload = JSON.parse(atob(payload));
-    return {
-      id: decodedPayload.sub,
-      email: decodedPayload.email,
-      username: decodedPayload.username,
-      role: decodedPayload.role
-    };
+
+    try {
+      const decodedPayload = JSON.parse(atob(payload));
+      return {
+        id: decodedPayload.sub,
+        email: decodedPayload.email,
+        username: decodedPayload.username,
+        role: decodedPayload.role
+      };
+    } catch (e) {
+      console.error('Error parsing user info from token:', e);
+      return null;
+    }
   } catch (error) {
-    // console.error('Error getting user info from token:', error);
     return null;
   }
 };
@@ -73,15 +74,15 @@ export const storeToken = (token, clearExisting = true) => {
       // Eski token varsa sil
       localStorage.removeItem('token');
     }
-    
+
     // Yeni token'ı kaydet
     localStorage.setItem('token', token);
-    
+
     // Custom event dispatch for same-tab localStorage changes
     window.dispatchEvent(new CustomEvent('localStorageChange', {
       detail: { key: 'token', value: token }
     }));
-    
+
     // Token'ı decode edip bilgileri logla
     const userInfo = getUserInfoFromToken();
     if (userInfo) {
@@ -97,7 +98,7 @@ export const storeToken = (token, clearExisting = true) => {
 export const clearToken = () => {
   try {
     localStorage.removeItem('token');
-    
+
     // Custom event dispatch for same-tab localStorage changes
     window.dispatchEvent(new CustomEvent('localStorageChange', {
       detail: { key: 'token', value: null }
@@ -115,8 +116,9 @@ export const hasValidToken = () => {
   try {
     const token = localStorage.getItem('token');
     if (!token) return false;
-    
+
     // Token'ın geçerli olup olmadığını kontrol et
+    if (isTokenExpired(token)) return false;
     const userInfo = getUserInfoFromToken();
     return !!userInfo;
   } catch (error) {
@@ -133,17 +135,22 @@ export const hasValidToken = () => {
 export const isTokenExpired = (token) => {
   try {
     if (!token) return true;
-    
+
     const payload = token.split('.')[1];
     if (!payload) return true;
-    
-    const decodedPayload = JSON.parse(atob(payload));
-    const exp = decodedPayload.exp;
-    
-    if (!exp) return true;
-    
-    // Check if token is expired (exp is in seconds, Date.now() is in milliseconds)
-    return Date.now() >= exp * 1000;
+
+    try {
+      const decodedPayload = JSON.parse(atob(payload));
+      const exp = decodedPayload.exp;
+
+      if (!exp) return true;
+
+      // Check if token is expired (exp is in seconds, Date.now() is in milliseconds)
+      return Date.now() >= exp * 1000;
+    } catch (e) {
+      console.error('Error checking token expiration:', e);
+      return true;
+    }
   } catch (error) {
     return true; // If we can't decode, consider it expired
   }
@@ -157,18 +164,18 @@ export const isTokenExpired = (token) => {
 export const getToken = (checkExpiry = true) => {
   try {
     const token = localStorage.getItem('token');
-    
+
     if (!token) {
       return null;
     }
-    
+
     // Check if token is expired
     if (checkExpiry && isTokenExpired(token)) {
       // Token expired, clear it
       clearToken();
       return null;
     }
-    
+
     return token;
   } catch (error) {
     return null;
