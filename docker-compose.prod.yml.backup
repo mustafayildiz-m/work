@@ -1,0 +1,2 @@
+services:
+      MAIL_PORT: ${MAIL_PORT}
