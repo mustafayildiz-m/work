@@ -50,11 +50,18 @@ const useSignIn = () => {
         setLoading(false);
 
         // Yönlendirme yap - Animasyonun tamamlanması ve okunması için bekle
+        // URL'den direkt oku (closure/stale state sorunlarını önlemek için)
+        const targetUrl = typeof window !== 'undefined'
+          ? (new URLSearchParams(window.location.search).get('redirectTo') ?? '/feed/home')
+          : '/feed/home';
+
         setTimeout(() => {
-          const targetUrl = queryParams['redirectTo'] ?? '/feed/home';
-          // Production'da daha güvenli olması için window.location.href kullan
-          // Bu şekilde tüm session state'in senkronize olduğundan emin oluruz
-          window.location.href = window.location.origin + (targetUrl.startsWith('/') ? targetUrl : '/' + targetUrl);
+          try {
+            const url = targetUrl.startsWith('/') ? targetUrl : '/' + targetUrl;
+            window.location.replace(window.location.origin + url);
+          } catch (err) {
+            window.location.href = window.location.origin + '/feed/home';
+          }
         }, 1500);
       } else {
         // Giriş başarısız - loading'i kapat
