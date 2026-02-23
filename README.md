@@ -25,6 +25,7 @@ cd iw_project
 
 2. **Docker ile projeyi başlatın:**
 ```bash
+docker-compose down
 docker-compose up -d --build
 
 docker compose -f docker-compose.prod.yml up -d --build

@@ -109,7 +109,7 @@ services:
     networks:
       - islamic_windows_network
     healthcheck:
-      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:80/health || curl -f http://localhost:80/health || exit 1" ]
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:5173/admin/ || curl -f http://localhost:5173/admin/ || exit 1" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -144,10 +144,11 @@ services:
     networks:
       - islamic_windows_network
     healthcheck:
-      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3001 || curl -f http://localhost:3001 || exit 1" ]
+      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://127.0.0.1:3001 || exit 1" ]
       interval: 30s
       timeout: 10s
-      retries: 3
+      retries: 5
+      start_period: 40s
 
   # Nginx Servisi
   nginx:

@@ -178,7 +178,10 @@ const ProfileDropdown = () => {
           const token = localStorage.getItem('token');
           if (!token) return;
 
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
+          const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/users/${userId}`;
+          // console.log('Fetching fresh user data from:', fetchUrl);
+
+          const response = await fetch(fetchUrl, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'
@@ -186,13 +189,22 @@ const ProfileDropdown = () => {
           });
 
           if (response.ok) {
-            const freshData = await response.json();
-            setImageLoading(true); // Reset loading for initial load
-            setImageKey(Date.now());
-            setUser({
-              ...userData,
-              ...freshData
-            });
+            const responseText = await response.text();
+            if (responseText) {
+              try {
+                const freshData = JSON.parse(responseText);
+                setImageLoading(true); // Reset loading for initial load
+                setImageKey(Date.now());
+                setUser({
+                  ...userData,
+                  ...freshData
+                });
+              } catch (parseError) {
+                console.error('Error parsing fresh user data JSON:', parseError, 'Response text:', responseText);
+              }
+            } else {
+              console.warn('Received empty response for fresh user data');
+            }
           }
         } catch (error) {
           console.error('Error fetching fresh user data:', error);
@@ -217,7 +229,8 @@ const ProfileDropdown = () => {
       if (userId) {
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
+          const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/users/${userId}`;
+          const response = await fetch(fetchUrl, {
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'
@@ -225,7 +238,12 @@ const ProfileDropdown = () => {
           });
 
           if (response.ok) {
-            const freshUserData = await response.json();
+            const responseText = await response.text();
+            if (!responseText) {
+              console.warn('Received empty response for user profile update');
+              return;
+            }
+            const freshUserData = JSON.parse(responseText);
 
             // Reset loading state for new image
             setImageLoading(true);
