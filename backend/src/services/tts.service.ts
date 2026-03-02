@@ -88,9 +88,9 @@ export class TtsService {
 
       audioStream.on('data', (chunk: Buffer) => chunks.push(chunk));
       audioStream.on('end', () => resolve(Buffer.concat(chunks)));
-      audioStream.on('error', (err: Error) => {
-        this.logger.error(`Edge TTS stream hatası: ${err.message}`);
-        reject(err);
+      audioStream.on('error', (err: any) => {
+        this.logger.error(`Edge TTS stream hatası: ${err?.message || JSON.stringify(err) || 'Bilinmeyen hata'}`);
+        reject(err || new Error('TTS stream error'));
       });
     });
   }
