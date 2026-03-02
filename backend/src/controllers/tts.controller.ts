@@ -3,19 +3,16 @@ import {
   Post,
   Body,
   Res,
-  UseGuards,
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { TtsService } from '../services/tts.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('tts')
 export class TtsController {
   constructor(private readonly ttsService: TtsService) { }
 
-  @UseGuards(JwtAuthGuard)
   @Post('synthesize')
   async synthesize(
     @Body() body: { text: string; lang: string },
