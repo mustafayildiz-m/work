@@ -48,6 +48,7 @@ import { PublicProfileModule } from './modules/public-profile.module';
 import { PodcastModule } from './modules/podcast.module';
 import { AdminUsersModule } from './modules/admin-users.module';
 import { TranslationModule } from './modules/translation.module';
+import { TtsModule } from './modules/tts.module';
 import { MailModule } from './mail/mail.module';
 import { SystemSettingsModule } from './modules/system-settings.module';
 import { SystemSetting } from './entities/system-setting.entity';
@@ -109,6 +110,7 @@ import { SystemSetting } from './entities/system-setting.entity';
     PodcastModule,
     AdminUsersModule,
     TranslationModule,
+    TtsModule,
     MailModule,
     SystemSettingsModule,
   ],

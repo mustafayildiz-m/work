@@ -273,9 +273,75 @@ export const getLanguageCode = (lang) => {
     'id': 'id-ID',
     'ms': 'ms-MY',
     'tl': 'tl-PH',
+    // Türkî diller
+    'uz': 'uz-UZ',
+    'kk': 'kk-KZ',
+    'ky': 'ky-KG',
+    'tk': 'tk-TM',
+    'az': 'az-AZ',
+    'tt': 'tt-RU',
+    'ba': 'ba-RU',
+    'ug': 'ug-CN',
   };
 
   return languageMap[lang.toLowerCase()] || `${lang}-${lang.toUpperCase()}`;
+};
+
+/**
+ * Backend TTS servisinden MP3 audio blob alır.
+ * Browser speechSynthesis yerine Google Translate TTS kalitesi sunar.
+ *
+ * @param {string} text - Seslendirilecek metin
+ * @param {string} lang - Dil kodu (örn: 'uz', 'tr', 'ar')
+ * @param {string} apiBaseUrl - Backend API base URL
+ * @param {string|null} token - JWT auth token
+ * @returns {Promise<Blob>} - MP3 audio blob
+ */
+export const fetchTTSAudio = async (text, lang, apiBaseUrl, token) => {
+  const response = await fetch(`${apiBaseUrl}/tts/synthesize`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify({ text, lang }),
+  });
+
+  if (!response.ok) {
+    const err = await response.text().catch(() => 'Bilinmeyen hata');
+    throw new Error(`TTS isteği başarısız (${response.status}): ${err}`);
+  }
+
+  return await response.blob();
+};
+
+/**
+ * HTML entity'leri ve gereksiz boşlukları temizleyerek TTS'e uygun metin döndürür.
+ * MyMemory API gibi servislerden gelen &#39; &amp; gibi encode karakterler
+ * sesli okuyucu tarafından yanlış okunur; bu fonksiyon bunları düzeltir.
+ *
+ * @param {string} text - Ham metin
+ * @returns {string} - Temizlenmiş metin
+ */
+export const cleanTextForTTS = (text) => {
+  if (!text) return '';
+
+  return text
+    // HTML entity decode
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    // Noktalama sonrası birden fazla boşluğu tek boşluğa indir
+    .replace(/[ \t]{2,}/g, ' ')
+    // Birden fazla ardışık satır sonunu tek satıra indir
+    .replace(/\n{3,}/g, '\n\n')
+    // Başındaki ve sonundaki boşlukları temizle
+    .trim();
 };
 
 /**
