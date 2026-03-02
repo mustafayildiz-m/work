@@ -82,7 +82,9 @@ export class TtsService {
 
     return new Promise<Buffer>((resolve, reject) => {
       const chunks: Buffer[] = [];
-      const { audioStream } = tts.toStream(cleanedText);
+      // msedge-tts versiyonuna göre { audioStream } veya doğrudan Readable döner
+      const result = tts.toStream(cleanedText);
+      const audioStream = (result as any).audioStream ?? result;
 
       audioStream.on('data', (chunk: Buffer) => chunks.push(chunk));
       audioStream.on('end', () => resolve(Buffer.concat(chunks)));
