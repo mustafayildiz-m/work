@@ -1,9 +1,19 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 
+// DeepL'in resmi olarak desteklediği hedef dil kodları
+const DEEPL_SUPPORTED_LANGS = new Set([
+  'AR', 'BG', 'CS', 'DA', 'DE', 'EL', 'EN', 'EN-GB', 'EN-US',
+  'ES', 'ET', 'FI', 'FR', 'HU', 'ID', 'IT', 'JA', 'KO',
+  'LT', 'LV', 'NB', 'NL', 'PL', 'PT', 'PT-BR', 'PT-PT',
+  'RO', 'RU', 'SK', 'SL', 'SV', 'TR', 'UK', 'ZH',
+]);
+
 @Injectable()
 export class TranslationService {
+  private readonly logger = new Logger(TranslationService.name);
+
   constructor(private configService: ConfigService) { }
 
   // DeepL API endpoint - ücretsiz plan
@@ -52,26 +62,95 @@ export class TranslationService {
       ms: 'MS',
       fa: 'FA',
       ur: 'UR',
-      cs: 'CS', // Çekçe
-      sk: 'SK', // Slovakça
-      uk: 'UK', // Ukraynaca
-      bg: 'BG', // Bulgarca
-      hr: 'HR', // Hırvatça
-      ro: 'RO', // Romence
-      hu: 'HU', // Macarca
-      et: 'ET', // Estonca
-      lv: 'LV', // Letonca
-      lt: 'LT', // Litvanca
-      sl: 'SL', // Slovence
-      mt: 'MT', // Maltaca
+      cs: 'CS',
+      sk: 'SK',
+      uk: 'UK',
+      bg: 'BG',
+      hr: 'HR',
+      ro: 'RO',
+      hu: 'HU',
+      et: 'ET',
+      lv: 'LV',
+      lt: 'LT',
+      sl: 'SL',
+      mt: 'MT',
     };
 
     const mapped = langMap[langCode.toLowerCase()];
     if (!mapped) {
-      // Eğer mapping yoksa, büyük harfe çevir
       return langCode.toUpperCase();
     }
     return mapped;
+  }
+
+  /**
+   * DeepL'in desteklemediği diller için MyMemory API ile çeviri yapar.
+   * Ücretsiz, API key gerektirmez, Özbekçe dahil 100+ dil destekler.
+   * Limit: istek başına ~500 karakter
+   */
+  private async translateWithMyMemory(
+    text: string,
+    targetLangCode: string,
+    sourceLangCode?: string,
+  ): Promise<string> {
+    const source = sourceLangCode || 'autodetect';
+    const CHUNK_SIZE = 450;
+
+    const decodeHtmlEntities = (text: string): string => {
+      return text
+        .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#039;/g, "'")
+        .replace(/&apos;/g, "'");
+    };
+
+    const translateChunk = async (chunk: string): Promise<string> => {
+      const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(chunk)}&langpair=${source}|${targetLangCode}`;
+      const response = await axios.get(url, { timeout: 30000 });
+
+      if (
+        response.data?.responseStatus === 200 ||
+        response.data?.responseStatus === '200'
+      ) {
+        return decodeHtmlEntities(response.data.responseData.translatedText);
+      }
+      throw new Error(
+        `MyMemory API hatası: ${response.data?.responseDetails || 'Bilinmeyen hata'}`,
+      );
+    };
+
+    if (text.length <= CHUNK_SIZE) {
+      return translateChunk(text);
+    }
+
+    // Uzun metni cümlelere göre böl
+    const sentences = text.match(/[^.!?\n]+[.!?\n]+|[^.!?\n]+$/g) || [text];
+    const chunks: string[] = [];
+    let currentChunk = '';
+
+    for (const sentence of sentences) {
+      if ((currentChunk + sentence).length > CHUNK_SIZE && currentChunk) {
+        chunks.push(currentChunk.trim());
+        currentChunk = sentence;
+      } else {
+        currentChunk += sentence;
+      }
+    }
+    if (currentChunk.trim()) chunks.push(currentChunk.trim());
+
+    const results: string[] = [];
+    for (let i = 0; i < chunks.length; i++) {
+      const translated = await translateChunk(chunks[i]);
+      results.push(translated);
+      if (i < chunks.length - 1) {
+        await new Promise((resolve) => setTimeout(resolve, 600));
+      }
+    }
+
+    return results.join(' ');
   }
 
   /**
@@ -103,6 +182,16 @@ export class TranslationService {
       );
     }
 
+    const targetLang = this.mapLanguageCode(targetLangCode);
+
+    // DeepL bu dili desteklemiyorsa MyMemory'e yönlendir
+    if (!DEEPL_SUPPORTED_LANGS.has(targetLang)) {
+      this.logger.warn(
+        `DeepL "${targetLang}" dilini desteklemiyor. MyMemory API kullanılıyor...`,
+      );
+      return this.translateWithMyMemory(text, targetLangCode, sourceLangCode);
+    }
+
     // DeepL API key kontrolü
     if (!this.DEEPL_API_KEY) {
       throw new HttpException(
@@ -110,8 +199,6 @@ export class TranslationService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-
-    const targetLang = this.mapLanguageCode(targetLangCode);
     const sourceLang = sourceLangCode
       ? this.mapLanguageCode(sourceLangCode)
       : undefined; // DeepL otomatik tespit eder

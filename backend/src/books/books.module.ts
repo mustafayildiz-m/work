@@ -11,6 +11,7 @@ import { BookPage } from './entities/book-page.entity';
 import { BookPageTranslation } from './entities/book-page-translation.entity';
 import { TranslationModule } from '../modules/translation.module';
 import { PdfOcrService } from '../services/pdf-ocr.service';
+import { Language } from '../languages/entities/language.entity';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PdfOcrService } from '../services/pdf-ocr.service';
       BookCategory,
       BookPage,
       BookPageTranslation,
+      Language,
     ]),
     UploadModule,
     TranslationModule,

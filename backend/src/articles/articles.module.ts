@@ -9,6 +9,7 @@ import { ArticlePageTranslation } from './entities/article-page-translation.enti
 import { UploadModule } from '../upload/upload.module';
 import { TranslationModule } from '../modules/translation.module';
 import { PdfOcrService } from '../services/pdf-ocr.service';
+import { Language } from '../languages/entities/language.entity';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { PdfOcrService } from '../services/pdf-ocr.service';
       ArticleTranslation,
       ArticlePage,
       ArticlePageTranslation,
+      Language,
     ]),
     UploadModule,
     TranslationModule,

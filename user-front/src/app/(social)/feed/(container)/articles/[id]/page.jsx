@@ -12,7 +12,7 @@ import { useLanguages } from '@/hooks/useLanguages';
 import PdfViewer from '@/components/PdfViewer';
 import { generateArticleUrl } from '@/utils/articleEncoder';
 import { pdfjs } from 'react-pdf';
-import { getBestVoice, getLanguageCode, waitForVoices } from '@/utils/textToSpeech';
+import { getBestVoice, getLanguageCode, waitForVoices, cleanTextForTTS } from '@/utils/textToSpeech';
 
 // PDF.js worker'ı yapılandır
 if (typeof window !== 'undefined') {
@@ -249,6 +249,9 @@ const ArticleDetailPage = () => {
       }
       fullText = textToRead.join('. ');
     }
+
+    // HTML entity ve fazla boşlukları temizle
+    fullText = cleanTextForTTS(fullText);
 
     if (!fullText || fullText.trim().length === 0) {
       showNotification({
@@ -795,13 +798,16 @@ const ArticleDetailPage = () => {
             return;
           }
 
-          const translatedText = await translateText(
+          const rawTranslatedText = await translateText(
             textToTranslate,
             targetLanguage.code,
             null,
             pageNum,
             params.id
           );
+
+          // HTML entity ve fazla boşlukları temizle
+          const translatedText = cleanTextForTTS(rawTranslatedText);
 
           setTranslating(false);
 

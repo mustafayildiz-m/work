@@ -13,7 +13,7 @@ import { useNotificationContext } from '@/context/useNotificationContext';
 import { useLanguages } from '@/hooks/useLanguages';
 import { pdfjs } from 'react-pdf';
 import styles from './styles.module.css';
-import { getBestVoice, getLanguageCode, waitForVoices } from '@/utils/textToSpeech';
+import { getLanguageCode, cleanTextForTTS, fetchTTSAudio } from '@/utils/textToSpeech';
 
 // PDF.js worker'ı yapılandır
 if (typeof window !== 'undefined') {
@@ -37,12 +37,10 @@ const BookDetailPage = () => {
   const [isReading, setIsReading] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [readingTranslationId, setReadingTranslationId] = useState(null);
-  const [speechSynthesis, setSpeechSynthesis] = useState(null);
-  const [currentUtterance, setCurrentUtterance] = useState(null);
-  const [currentText, setCurrentText] = useState('');
-  const [currentCharIndex, setCurrentCharIndex] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [audioProgress, setAudioProgress] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1.0);
+  const currentAudioRef = useRef(null);
   const [showLanguageModal, setShowLanguageModal] = useState(false);
   const [selectedTranslationForTranslate, setSelectedTranslationForTranslate] = useState(null);
   const [selectedTranslationIndexForTranslate, setSelectedTranslationIndexForTranslate] = useState(null);
@@ -212,499 +210,64 @@ const BookDetailPage = () => {
     }
   };
 
-  // Sesli okuma fonksiyonu - Translation içeriğinden
-  const handleTextToSpeech = async (translation, translationIndex) => {
-    if (!('speechSynthesis' in window)) {
-      showNotification({
-        title: 'Uyarı',
-        message: 'Tarayıcınız sesli okuma özelliğini desteklemiyor',
-        variant: 'warning'
-      });
-      return;
+  // Mevcut audio objesini temizle
+  const disposeCurrentAudio = () => {
+    if (currentAudioRef.current) {
+      currentAudioRef.current.pause();
+      currentAudioRef.current.src = '';
+      currentAudioRef.current = null;
     }
-
-    // Önceki okumayı durdur
-    if (speechSynthesis) {
-      window.speechSynthesis.cancel();
-    }
-
-    // Translation içeriğini kullan
-    const textToRead = [];
-    if (translation?.description) {
-      textToRead.push(translation.description);
-    }
-    if (translation?.summary) {
-      textToRead.push(translation.summary);
-    }
-    const fullText = textToRead.join('. ');
-
-    if (!fullText || fullText.trim().length === 0) {
-      showNotification({
-        title: 'Uyarı',
-        message: 'Okunacak içerik bulunamadı',
-        variant: 'warning'
-      });
-      return;
-    }
-
-    const utterance = new SpeechSynthesisUtterance(fullText);
-
-    // Dil ayarı
-    const lang = translation.language?.code || languageCode || 'tr';
-    let langCode = 'tr-TR';
-    if (lang === 'tr') {
-      langCode = 'tr-TR';
-    } else if (lang === 'en') {
-      langCode = 'en-US';
-    } else if (lang === 'ar' || lang?.toLowerCase().includes('arabic')) {
-      langCode = 'ar-SA'; // Arapça için Suudi Arabistan
-    } else {
-      langCode = 'tr-TR'; // Varsayılan
-    }
-    utterance.lang = langCode;
-
-    // Arapça için ses seçimi
-    if (lang === 'ar' || lang?.toLowerCase().includes('arabic') || langCode.startsWith('ar')) {
-      // Mevcut sesleri al ve Arapça için ses seç
-      const voices = window.speechSynthesis.getVoices();
-
-      // Arapça sesleri filtrele
-      const arabicVoices = voices.filter(voice =>
-        voice.lang.startsWith('ar')
-      );
-
-      if (arabicVoices.length > 0) {
-        // Tercih edilen Arapça sesler
-        const preferredVoices = [
-          'Google العربية',
-          'Microsoft Naayf - Arabic (Saudi Arabia)',
-          'ar-SA',
-          'ar-EG',
-          'ar'
-        ];
-
-        let selectedVoice = null;
-        for (const preferredName of preferredVoices) {
-          selectedVoice = arabicVoices.find(voice =>
-            voice.name.includes(preferredName) || voice.lang === preferredName
-          );
-          if (selectedVoice) break;
-        }
-
-        // Eğer tercih edilen ses bulunamazsa, ilk Arapça sesini seç
-        if (!selectedVoice && arabicVoices.length > 0) {
-          selectedVoice = arabicVoices[0];
-        }
-
-        if (selectedVoice) {
-          utterance.voice = selectedVoice;
-        }
-      } else {
-        // Arapça ses bulunamadıysa uyarı göster ve çık
-        showNotification({
-          title: 'Uyarı',
-          message: 'Arapça ses desteği bulunamadı. Tarayıcınız Arapça sesli okuma özelliğini desteklemiyor olabilir.',
-          variant: 'warning'
-        });
-        return;
-      }
-
-      // Arapça için optimize edilmiş ayarlar
-      utterance.rate = 0.9; // Biraz daha yavaş, daha net
-      utterance.pitch = 1.0;
-      utterance.volume = 1.0;
-    }
-    // İngilizce için daha iyi ses seçimi
-    else if (lang === 'en' || langCode === 'en-US') {
-      // Mevcut sesleri al ve İngilizce için en iyi sesi seç
-      const voices = window.speechSynthesis.getVoices();
-
-      // İngilizce için tercih edilen sesler (sırayla)
-      const preferredVoices = [
-        'Google UK English Female',
-        'Google US English Female',
-        'Microsoft Zira - English (United States)',
-        'Samantha',
-        'Alex',
-        'Karen',
-        'Victoria',
-        'en-US'
-      ];
-
-      // İngilizce sesleri filtrele
-      const englishVoices = voices.filter(voice =>
-        voice.lang.startsWith('en') &&
-        (voice.name.includes('Female') || voice.name.includes('Samantha') || voice.name.includes('Alex') || voice.name.includes('Karen') || voice.name.includes('Victoria'))
-      );
-
-      // Tercih edilen sesi bul
-      let selectedVoice = null;
-      for (const preferredName of preferredVoices) {
-        selectedVoice = englishVoices.find(voice => voice.name.includes(preferredName));
-        if (selectedVoice) break;
-      }
-
-      // Eğer tercih edilen ses bulunamazsa, ilk İngilizce kadın sesini seç
-      if (!selectedVoice && englishVoices.length > 0) {
-        selectedVoice = englishVoices.find(voice => voice.name.includes('Female')) || englishVoices[0];
-      }
-
-      if (selectedVoice) {
-        utterance.voice = selectedVoice;
-      }
-
-      // İngilizce için optimize edilmiş ayarlar
-      utterance.rate = 0.95; // Biraz daha yavaş, daha net
-      utterance.pitch = 0.9; // Biraz daha düşük ton, daha doğal
-      utterance.volume = 1.0;
-    } else {
-      // Türkçe ve diğer diller için ayarlar
-      utterance.rate = 1.0;
-      utterance.pitch = 1.0;
-      utterance.volume = 1.0;
-    }
-
-    // Seslerin yüklendiğinden emin ol
-    const speakWithVoice = () => {
-      const voices = window.speechSynthesis.getVoices();
-
-      // Arapça için ses seçimi (eğer henüz seçilmediyse)
-      if ((lang === 'ar' || lang?.toLowerCase().includes('arabic') || langCode.startsWith('ar')) && !utterance.voice) {
-        const arabicVoices = voices.filter(voice => voice.lang.startsWith('ar'));
-
-        if (arabicVoices.length > 0) {
-          const preferredVoices = [
-            'Google العربية',
-            'Microsoft Naayf - Arabic (Saudi Arabia)',
-            'ar-SA',
-            'ar-EG'
-          ];
-
-          let selectedVoice = null;
-          for (const preferredName of preferredVoices) {
-            selectedVoice = arabicVoices.find(voice =>
-              voice.name.includes(preferredName) || voice.lang === preferredName
-            );
-            if (selectedVoice) break;
-          }
-
-          if (!selectedVoice && arabicVoices.length > 0) {
-            selectedVoice = arabicVoices[0];
-          }
-
-          if (selectedVoice) {
-            utterance.voice = selectedVoice;
-          }
-        } else {
-          // Arapça ses bulunamadıysa uyarı göster
-          showNotification({
-            title: 'Uyarı',
-            message: 'Arapça ses desteği bulunamadı. Tarayıcınız Arapça sesli okuma özelliğini desteklemiyor olabilir.',
-            variant: 'warning'
-          });
-          return;
-        }
-      }
-      // İngilizce için ses seçimi (eğer henüz seçilmediyse)
-      else if ((lang === 'en' || langCode === 'en-US') && !utterance.voice) {
-        const englishVoices = voices.filter(voice =>
-          voice.lang.startsWith('en') &&
-          (voice.name.includes('Female') || voice.name.includes('Samantha') || voice.name.includes('Alex') || voice.name.includes('Karen') || voice.name.includes('Victoria'))
-        );
-
-        if (englishVoices.length > 0) {
-          const preferredVoices = [
-            'Google UK English Female',
-            'Google US English Female',
-            'Microsoft Zira - English (United States)',
-            'Samantha',
-            'Alex',
-            'Karen',
-            'Victoria'
-          ];
-
-          let selectedVoice = null;
-          for (const preferredName of preferredVoices) {
-            selectedVoice = englishVoices.find(voice => voice.name.includes(preferredName));
-            if (selectedVoice) break;
-          }
-
-          if (!selectedVoice && englishVoices.length > 0) {
-            selectedVoice = englishVoices.find(voice => voice.name.includes('Female')) || englishVoices[0];
-          }
-
-          if (selectedVoice) {
-            utterance.voice = selectedVoice;
-          }
-        }
-      }
-
-      window.speechSynthesis.speak(utterance);
-    };
-
-    // Sesler yüklüyse direkt başlat, değilse bekle
-    if (window.speechSynthesis.getVoices().length > 0) {
-      speakWithVoice();
-    } else {
-      window.speechSynthesis.onvoiceschanged = () => {
-        speakWithVoice();
-        window.speechSynthesis.onvoiceschanged = null;
-      };
-    }
-
-    utterance.onstart = () => {
-      setIsReading(true);
-      setIsPaused(false);
-      setReadingTranslationId(translationIndex);
-      setSpeechSynthesis(window.speechSynthesis);
-      setCurrentUtterance(utterance);
-      setCurrentText(fullText);
-      setCurrentCharIndex(0);
-      setElapsedTime(0);
-      showNotification({
-        title: 'Sesli Okuma Başladı',
-        message: 'Kitap sesli olarak okunuyor...',
-        variant: 'info'
-      });
-    };
-
-    // İlerleme takibi için boundary event
-    utterance.onboundary = (event) => {
-      if (event.name === 'word' || event.name === 'sentence') {
-        setCurrentCharIndex(event.charIndex);
-      }
-    };
-
-    utterance.onend = () => {
-      setIsReading(false);
-      setIsPaused(false);
-      setReadingTranslationId(null);
-      setSpeechSynthesis(null);
-      setCurrentUtterance(null);
-      setCurrentText('');
-      setCurrentCharIndex(0);
-      setElapsedTime(0);
-      showNotification({
-        title: 'Sesli Okuma Tamamlandı',
-        message: 'Kitap okunması tamamlandı',
-        variant: 'success'
-      });
-    };
-
-    utterance.onerror = (error) => {
-      console.error('Speech synthesis error:', error);
-      setIsReading(false);
-      setIsPaused(false);
-      setReadingTranslationId(null);
-      setSpeechSynthesis(null);
-      setCurrentUtterance(null);
-      setCurrentText('');
-      setCurrentCharIndex(0);
-      setElapsedTime(0);
-      showNotification({
-        title: 'Hata',
-        message: 'Sesli okuma sırasında bir hata oluştu',
-        variant: 'danger'
-      });
-    };
   };
 
   // Sesli okumayı duraklat/devam ettir
   const pauseResumeTextToSpeech = () => {
-    if (!window.speechSynthesis) return;
-
+    const audio = currentAudioRef.current;
+    if (!audio) return;
     if (isPaused) {
-      window.speechSynthesis.resume();
+      audio.play();
       setIsPaused(false);
-      showNotification({
-        title: 'Devam Ediyor',
-        message: 'Sesli okuma devam ediyor...',
-        variant: 'info'
-      });
     } else {
-      window.speechSynthesis.pause();
+      audio.pause();
       setIsPaused(true);
-      showNotification({
-        title: 'Duraklatıldı',
-        message: 'Sesli okuma duraklatıldı',
-        variant: 'info'
-      });
     }
   };
 
   // Geri al (10 saniye)
   const rewindTextToSpeech = () => {
-    if (!currentUtterance || !currentText) return;
-
-    const currentIndex = currentCharIndex;
-    const rewindChars = Math.floor((currentUtterance.rate || 1.0) * 10 * 10); // ~10 saniye geri
-    const newIndex = Math.max(0, currentIndex - rewindChars);
-
-    // Yeni utterance oluştur
-    const remainingText = currentText.substring(newIndex);
-    const newUtterance = new SpeechSynthesisUtterance(remainingText);
-
-    // Ayarları kopyala
-    newUtterance.lang = currentUtterance.lang;
-    newUtterance.rate = currentUtterance.rate;
-    newUtterance.pitch = currentUtterance.pitch;
-    newUtterance.volume = currentUtterance.volume;
-    newUtterance.voice = currentUtterance.voice;
-
-    // Mevcut okumayı durdur
-    window.speechSynthesis.cancel();
-
-    // Event listener'ları ekle
-    newUtterance.onstart = () => {
-      setIsReading(true);
-      setIsPaused(false);
-    };
-
-    newUtterance.onboundary = (event) => {
-      if (event.name === 'word' || event.name === 'sentence') {
-        setCurrentCharIndex(newIndex + event.charIndex);
-      }
-    };
-
-    newUtterance.onend = () => {
-      setIsReading(false);
-      setIsPaused(false);
-      setCurrentUtterance(null);
-    };
-
-    newUtterance.onerror = () => {
-      setIsReading(false);
-      setIsPaused(false);
-      setCurrentUtterance(null);
-    };
-
-    // Yeni utterance'ı başlat
-    window.speechSynthesis.speak(newUtterance);
-    setCurrentUtterance(newUtterance);
-    setCurrentCharIndex(newIndex);
-
-    showNotification({
-      title: 'Geri Alındı',
-      message: '10 saniye geri alındı',
-      variant: 'info'
-    });
+    const audio = currentAudioRef.current;
+    if (!audio) return;
+    audio.currentTime = Math.max(0, audio.currentTime - 10);
   };
 
   // İleri al (10 saniye)
   const forwardTextToSpeech = () => {
-    if (!currentUtterance || !currentText) return;
-
-    const currentIndex = currentCharIndex;
-    const forwardChars = Math.floor((currentUtterance.rate || 1.0) * 10 * 10); // ~10 saniye ileri
-    const newIndex = Math.min(currentText.length, currentIndex + forwardChars);
-
-    // Yeni utterance oluştur
-    const remainingText = currentText.substring(newIndex);
-    const newUtterance = new SpeechSynthesisUtterance(remainingText);
-
-    // Ayarları kopyala
-    newUtterance.lang = currentUtterance.lang;
-    newUtterance.rate = currentUtterance.rate;
-    newUtterance.pitch = currentUtterance.pitch;
-    newUtterance.volume = currentUtterance.volume;
-    newUtterance.voice = currentUtterance.voice;
-
-    // Mevcut okumayı durdur
-    window.speechSynthesis.cancel();
-
-    // Event listener'ları ekle
-    newUtterance.onstart = () => {
-      setIsReading(true);
-      setIsPaused(false);
-    };
-
-    newUtterance.onboundary = (event) => {
-      if (event.name === 'word' || event.name === 'sentence') {
-        setCurrentCharIndex(newIndex + event.charIndex);
-      }
-    };
-
-    newUtterance.onend = () => {
-      setIsReading(false);
-      setIsPaused(false);
-      setCurrentUtterance(null);
-    };
-
-    newUtterance.onerror = () => {
-      setIsReading(false);
-      setIsPaused(false);
-      setCurrentUtterance(null);
-    };
-
-    // Yeni utterance'ı başlat
-    window.speechSynthesis.speak(newUtterance);
-    setCurrentUtterance(newUtterance);
-    setCurrentCharIndex(newIndex);
-
-    showNotification({
-      title: 'İleri Alındı',
-      message: '10 saniye ileri alındı',
-      variant: 'info'
-    });
+    const audio = currentAudioRef.current;
+    if (!audio) return;
+    audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 10);
   };
 
-  // Hızı değiştir
+  // Hızı değiştir - Audio API'de yeniden başlatmaya gerek yok
   const changePlaybackRate = (newRate) => {
-    if (!currentUtterance) return;
-
-    const currentIndex = currentCharIndex;
-    const remainingText = currentText.substring(currentIndex);
-    const newUtterance = new SpeechSynthesisUtterance(remainingText);
-
-    newUtterance.lang = currentUtterance.lang;
-    newUtterance.rate = newRate;
-    newUtterance.pitch = currentUtterance.pitch;
-    newUtterance.volume = currentUtterance.volume;
-    newUtterance.voice = currentUtterance.voice;
-
-    // Event listener'ları ekle
-    newUtterance.onstart = () => {
-      setIsReading(true);
-      setIsPaused(false);
-    };
-
-    newUtterance.onboundary = (event) => {
-      if (event.name === 'word' || event.name === 'sentence') {
-        setCurrentCharIndex(currentIndex + event.charIndex);
-      }
-    };
-
-    newUtterance.onend = () => {
-      setIsReading(false);
-      setIsPaused(false);
-      setCurrentUtterance(null);
-    };
-
-    newUtterance.onerror = () => {
-      setIsReading(false);
-      setIsPaused(false);
-      setCurrentUtterance(null);
-    };
-
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(newUtterance);
-    setCurrentUtterance(newUtterance);
+    if (currentAudioRef.current) {
+      currentAudioRef.current.playbackRate = newRate;
+    }
     setPlaybackRate(newRate);
   };
 
-  // Zaman göstergesi için effect
+  // Geçen süre sayacı
   useEffect(() => {
     let interval = null;
     if (isReading && !isPaused) {
       interval = setInterval(() => {
         setElapsedTime(prev => prev + 1);
-      }, 1000);
-    } else if (isPaused) {
-      clearInterval(interval);
+        // Audio progress güncelle
+        if (currentAudioRef.current && currentAudioRef.current.duration) {
+          const pct = (currentAudioRef.current.currentTime / currentAudioRef.current.duration) * 100;
+          setAudioProgress(Math.min(100, pct));
+        }
+      }, 500);
     }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
+    return () => { if (interval) clearInterval(interval); };
   }, [isReading, isPaused]);
 
   // Backend'den metni çevir (Caching desteği ile)
@@ -765,49 +328,37 @@ const BookDetailPage = () => {
     }
   };
 
-  // Seçilen dilde çeviri yap ve sesli oku
+  // Seçilen dilde çeviri yap ve sesli oku (Google Translate TTS - yüksek kalite)
   const handleTranslateAndRead = async (targetLanguage, startPage = 1) => {
     if (!selectedTranslationForTranslate) return;
 
-    if (!('speechSynthesis' in window)) {
-      showNotification({
-        title: 'Uyarı',
-        message: 'Tarayıcınız sesli okuma özelliğini desteklemiyor',
-        variant: 'warning'
-      });
-      return;
-    }
+    // Önceki audio'yu durdur
+    disposeCurrentAudio();
+    isReadingRef.current = false;
 
     setTranslating(true);
     setShowLanguageModal(false);
+    setElapsedTime(0);
+    setAudioProgress(0);
 
     try {
-      if (window.speechSynthesis) window.speechSynthesis.cancel();
-
       let activePdfDoc = pdfDoc;
       let activeTotalPages = totalPages;
 
       if (selectedPdfUrlForTranslate && !activePdfDoc) {
-        showNotification({
-          title: 'Bilgi',
-          message: 'Kitap hazırlanıyor, okuma hemen başlayacak...',
-          variant: 'info'
-        });
-
-        const loadingTask = pdfjs.getDocument({
-          url: selectedPdfUrlForTranslate,
-          withCredentials: false,
-        });
+        showNotification({ title: 'Bilgi', message: 'Kitap hazırlanıyor...', variant: 'info' });
+        const loadingTask = pdfjs.getDocument({ url: selectedPdfUrlForTranslate, withCredentials: false });
         activePdfDoc = await loadingTask.promise;
         setPdfDoc(activePdfDoc);
         setTotalPages(activePdfDoc.numPages);
         activeTotalPages = activePdfDoc.numPages;
       }
 
-      await waitForVoices();
       setTargetLang(targetLanguage);
 
       const playPage = async (pageNum) => {
+        if (!isReadingRef.current && pageNum !== startPage) return;
+
         if (activePdfDoc && pageNum > activeTotalPages) {
           setIsReading(false);
           isReadingRef.current = false;
@@ -831,79 +382,80 @@ const BookDetailPage = () => {
             textToTranslate = parts.join('. ');
           }
 
-          if (textToTranslate.length === 0) {
+          if (!textToTranslate.trim()) {
             if (activePdfDoc && pageNum < activeTotalPages) return playPage(pageNum + 1);
             setTranslating(false);
             return;
           }
 
-          const translatedText = await translateText(
-            textToTranslate,
-            targetLanguage.code,
-            null,
-            activePdfDoc ? pageNum : 1,
-            params.id
+          // Çeviri al
+          const rawTranslated = await translateText(
+            textToTranslate, targetLanguage.code, null,
+            activePdfDoc ? pageNum : 1, params.id
           );
+          const translatedText = cleanTextForTTS(rawTranslated);
+
+          if (!translatedText.trim()) {
+            if (activePdfDoc && pageNum < activeTotalPages) return playPage(pageNum + 1);
+            setTranslating(false);
+            return;
+          }
+
+          // Backend Google TTS'den MP3 al
+          const token = localStorage.getItem('token');
+          const audioBlob = await fetchTTSAudio(translatedText, targetLanguage.code, API_BASE_URL, token);
+          const audioUrl = URL.createObjectURL(audioBlob);
 
           setTranslating(false);
+          disposeCurrentAudio();
 
-          const utterance = new SpeechSynthesisUtterance(translatedText);
-          const langCode = getLanguageCode(targetLanguage.code);
-          utterance.lang = langCode;
-          utterance.rate = playbackRate || 1.0;
+          if (!isReadingRef.current && pageNum !== startPage) {
+            URL.revokeObjectURL(audioUrl);
+            return;
+          }
 
-          const bestVoice = getBestVoice(langCode);
-          if (bestVoice) utterance.voice = bestVoice;
+          const audio = new Audio(audioUrl);
+          audio.playbackRate = playbackRate || 1.0;
+          currentAudioRef.current = audio;
 
-          utterance.onstart = () => {
-            setIsReading(true);
-            isReadingRef.current = true;
-            setIsPaused(false);
-            setSpeechSynthesis(window.speechSynthesis);
-            setCurrentUtterance(utterance);
-            setCurrentText(translatedText);
-            setCurrentCharIndex(0);
+          audio.onplay = () => { setIsReading(true); isReadingRef.current = true; setIsPaused(false); };
+          audio.ontimeupdate = () => {
+            if (audio.duration) setAudioProgress((audio.currentTime / audio.duration) * 100);
           };
-
-          utterance.onboundary = (event) => {
-            if (event.name === 'word' || event.name === 'sentence') {
-              setCurrentCharIndex(event.charIndex);
-            }
-          };
-
-          utterance.onend = () => {
+          audio.onended = () => {
+            URL.revokeObjectURL(audioUrl);
             if (isReadingRef.current && activePdfDoc && pageNum < activeTotalPages) {
               playPage(pageNum + 1);
             } else {
               setIsReading(false);
               isReadingRef.current = false;
+              setAudioProgress(0);
             }
           };
-
-          utterance.onerror = (err) => {
-            console.error('TTS Error:', err);
+          audio.onerror = () => {
+            URL.revokeObjectURL(audioUrl);
             setIsReading(false);
+            isReadingRef.current = false;
+            showNotification({ title: 'Hata', message: 'Ses oynatılamadı.', variant: 'danger' });
           };
 
-          window.speechSynthesis.speak(utterance);
+          isReadingRef.current = true;
+          await audio.play();
+
         } catch (err) {
           console.error(`Page ${pageNum} error:`, err);
-
           let message = err.message || 'Bir hata oluştu';
-          if (message === 'PDF_CONTENT_INVALID' || message.includes('PDF_CONTENT_INVALID')) {
+          if (message.includes('PDF_CONTENT_INVALID')) {
             message = translate('books.detail.pdfContentInvalid', 'Bu PDF çeviri için uygun değil.');
           }
-
           setTranslating(false);
           setIsReading(false);
-          showNotification({
-            title: 'Hata',
-            message: message,
-            variant: 'danger'
-          });
+          isReadingRef.current = false;
+          showNotification({ title: 'Hata', message, variant: 'danger' });
         }
       };
 
+      isReadingRef.current = true;
       playPage(startPage);
 
     } catch (error) {
@@ -923,23 +475,14 @@ const BookDetailPage = () => {
 
   // Sesli okumayı durdur
   const stopTextToSpeech = () => {
-    if (window.speechSynthesis) {
-      isReadingRef.current = false;
-      window.speechSynthesis.cancel();
-      setIsReading(false);
-      setIsPaused(false);
-      setReadingTranslationId(null);
-      setSpeechSynthesis(null);
-      setCurrentUtterance(null);
-      setCurrentText('');
-      setCurrentCharIndex(0);
-      setElapsedTime(0);
-      showNotification({
-        title: 'Sesli Okuma Durduruldu',
-        message: 'Kitap okunması durduruldu',
-        variant: 'info'
-      });
-    }
+    isReadingRef.current = false;
+    disposeCurrentAudio();
+    setIsReading(false);
+    setIsPaused(false);
+    setReadingTranslationId(null);
+    setElapsedTime(0);
+    setAudioProgress(0);
+    showNotification({ title: 'Sesli Okuma Durduruldu', message: 'Kitap okunması durduruldu', variant: 'info' });
   };
 
   // Zamanı formatla (saniye -> mm:ss)
@@ -949,56 +492,21 @@ const BookDetailPage = () => {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const getProgress = () => {
-    if (!currentText || currentText.length === 0) return 0;
-    return Math.min(100, (currentCharIndex / currentText.length) * 100);
-  };
+  const getProgress = () => audioProgress;
 
-  // İlerleme çubuğuna tıklayarak ileri/geri al
+  // Progress bar'a tıklayarak konuma atla
   const seekTo = (percent) => {
-    if (!currentUtterance || !currentText) return;
-
-    const newIndex = Math.floor((percent / 100) * currentText.length);
-    const remainingText = currentText.substring(newIndex);
-
-    // Yeni utterance oluştur
-    const newUtterance = new SpeechSynthesisUtterance(remainingText);
-    newUtterance.lang = currentUtterance.lang;
-    newUtterance.rate = currentUtterance.rate;
-    newUtterance.voice = currentUtterance.voice;
-
-    window.speechSynthesis.cancel();
-
-    newUtterance.onstart = () => {
-      setIsReading(true);
-      setIsPaused(false);
-      setCurrentUtterance(newUtterance);
-    };
-
-    newUtterance.onboundary = (event) => {
-      if (event.name === 'word' || event.name === 'sentence') {
-        setCurrentCharIndex(newIndex + event.charIndex);
-      }
-    };
-
-    newUtterance.onend = () => {
-      if (pdfDoc && currentPage < totalPages) {
-        handleTranslateAndRead(targetLang, currentPage + 1);
-      } else {
-        setIsReading(false);
-      }
-    };
-
-    window.speechSynthesis.speak(newUtterance);
-    setCurrentCharIndex(newIndex);
+    const audio = currentAudioRef.current;
+    if (!audio || !audio.duration) return;
+    audio.currentTime = (percent / 100) * audio.duration;
+    setAudioProgress(percent);
   };
 
-  // Component unmount olduğunda sesli okumayı durdur
+  // Component unmount olduğunda audio'yu temizle
   useEffect(() => {
     return () => {
-      if (window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-      }
+      disposeCurrentAudio();
+      isReadingRef.current = false;
     };
   }, []);
 
@@ -1596,7 +1104,7 @@ const BookDetailPage = () => {
                                         variant="outline-secondary"
                                         size="sm"
                                         onClick={rewindTextToSpeech}
-                                        disabled={!currentUtterance}
+                                        disabled={!isReading}
                                         title="10 saniye geri"
                                       >
                                         <BsSkipBackward size={14} />
@@ -1605,7 +1113,7 @@ const BookDetailPage = () => {
                                         variant={isPaused ? "success" : "warning"}
                                         size="sm"
                                         onClick={pauseResumeTextToSpeech}
-                                        disabled={!currentUtterance}
+                                        disabled={!isReading}
                                         style={{ minWidth: '50px' }}
                                       >
                                         {isPaused ? <BsPlay size={16} /> : <BsPause size={16} />}
@@ -1614,7 +1122,7 @@ const BookDetailPage = () => {
                                         variant="outline-secondary"
                                         size="sm"
                                         onClick={forwardTextToSpeech}
-                                        disabled={!currentUtterance}
+                                        disabled={!isReading}
                                         title="10 saniye ileri"
                                       >
                                         <BsSkipForward size={14} />
@@ -1622,53 +1130,24 @@ const BookDetailPage = () => {
                                       <div className="mx-2" style={{ borderLeft: '1px solid #dee2e6', height: '25px' }}></div>
                                       <div className="d-flex align-items-center gap-1">
                                         <span className="small text-muted">Hız:</span>
-                                        <Button
-                                          variant={playbackRate === 0.75 ? "primary" : "outline-primary"}
-                                          size="sm"
-                                          className="px-2 py-1"
-                                          onClick={() => changePlaybackRate(0.75)}
-                                          disabled={!currentUtterance}
-                                          style={{ fontSize: '0.75rem' }}
-                                        >
-                                          0.75x
-                                        </Button>
-                                        <Button
-                                          variant={playbackRate === 1.0 ? "primary" : "outline-primary"}
-                                          size="sm"
-                                          className="px-2 py-1"
-                                          onClick={() => changePlaybackRate(1.0)}
-                                          disabled={!currentUtterance}
-                                          style={{ fontSize: '0.75rem' }}
-                                        >
-                                          1x
-                                        </Button>
-                                        <Button
-                                          variant={playbackRate === 1.25 ? "primary" : "outline-primary"}
-                                          size="sm"
-                                          className="px-2 py-1"
-                                          onClick={() => changePlaybackRate(1.25)}
-                                          disabled={!currentUtterance}
-                                          style={{ fontSize: '0.75rem' }}
-                                        >
-                                          1.25x
-                                        </Button>
-                                        <Button
-                                          variant={playbackRate === 1.5 ? "primary" : "outline-primary"}
-                                          size="sm"
-                                          className="px-2 py-1"
-                                          onClick={() => changePlaybackRate(1.5)}
-                                          disabled={!currentUtterance}
-                                          style={{ fontSize: '0.75rem' }}
-                                        >
-                                          1.5x
-                                        </Button>
+                                        {[0.75, 1.0, 1.25, 1.5].map(rate => (
+                                          <Button
+                                            key={rate}
+                                            variant={playbackRate === rate ? "primary" : "outline-primary"}
+                                            size="sm"
+                                            className="px-2 py-1"
+                                            onClick={() => changePlaybackRate(rate)}
+                                            style={{ fontSize: '0.75rem' }}
+                                          >
+                                            {rate}x
+                                          </Button>
+                                        ))}
                                       </div>
                                       <div className="mx-2" style={{ borderLeft: '1px solid #dee2e6', height: '25px' }}></div>
                                       <Button
                                         variant="danger"
                                         size="sm"
                                         onClick={stopTextToSpeech}
-                                        disabled={!currentUtterance}
                                         className="px-2"
                                       >
                                         <BsX size={16} />

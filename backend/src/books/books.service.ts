@@ -13,10 +13,13 @@ import { TranslationService } from '../services/translation.service';
 import { PdfOcrService } from '../services/pdf-ocr.service';
 import { BookPage } from './entities/book-page.entity';
 import { BookPageTranslation } from './entities/book-page-translation.entity';
+import { Language } from '../languages/entities/language.entity';
 
 @Injectable()
 export class BooksService {
   private readonly logger = new Logger(BooksService.name);
+  // Dil kodu → ID önbelleği (DB'ye tekrar tekrar sorgu atmamak için)
+  private langCodeCache: Map<string, number> = new Map();
 
   constructor(
     @InjectRepository(Book)
@@ -29,10 +32,39 @@ export class BooksService {
     private bookPageRepository: Repository<BookPage>,
     @InjectRepository(BookPageTranslation)
     private bookPageTranslationRepository: Repository<BookPageTranslation>,
+    @InjectRepository(Language)
+    private languageRepository: Repository<Language>,
     private uploadService: UploadService,
     private translationService: TranslationService,
     private pdfOcrService: PdfOcrService,
   ) { }
+
+  /**
+   * Dil koduna karşılık gelen DB kayıt ID'sini döndürür.
+   * Önce bellekte arar, yoksa DB'den çeker.
+   */
+  private async getLanguageId(langCode: string): Promise<number> {
+    const cached = this.langCodeCache.get(langCode);
+    if (cached !== undefined) return cached;
+
+    const lang = await this.languageRepository.findOne({
+      where: { code: langCode },
+    });
+
+    if (lang) {
+      this.langCodeCache.set(langCode, lang.id);
+      return lang.id;
+    }
+
+    // DB'de yoksa yeni kayıt oluştur
+    this.logger.warn(
+      `Dil kodu "${langCode}" veritabanında bulunamadı, yeni kayıt oluşturuluyor.`,
+    );
+    const newLang = this.languageRepository.create({ code: langCode, name: langCode.toUpperCase() });
+    const saved = await this.languageRepository.save(newLang);
+    this.langCodeCache.set(langCode, saved.id);
+    return saved.id;
+  }
 
   async create(createBookDto: CreateBookDto): Promise<Book> {
     const { translations, category, ...bookData } = createBookDto;
@@ -447,15 +479,7 @@ export class BooksService {
     originalText: string,
     targetLangCode: string,
   ): Promise<string> {
-    const langMap: Record<string, number> = {
-      tr: 1,
-      en: 2,
-      ar: 3,
-      de: 4,
-      fr: 5,
-      ja: 6,
-    };
-    const languageId = langMap[targetLangCode] ?? 1;
+    const languageId = await this.getLanguageId(targetLangCode);
 
     // ── 1. Önbellekte çeviri var mı? ──────────────────────────────────────
     // Sayfa kaydı (book_pages) varsa ve bu dild çeviri varsa direkt dön
