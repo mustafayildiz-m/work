@@ -13,7 +13,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('tts')
 export class TtsController {
-  constructor(private readonly ttsService: TtsService) {}
+  constructor(private readonly ttsService: TtsService) { }
 
   @UseGuards(JwtAuthGuard)
   @Post('synthesize')
@@ -42,9 +42,10 @@ export class TtsController {
       });
 
       res.send(audioBuffer);
-    } catch (err) {
+    } catch (err: any) {
+      const errorMessage = err?.message || (typeof err === 'string' ? err : JSON.stringify(err)) || 'Bilinmeyen hata';
       throw new HttpException(
-        `TTS hatası: ${err.message}`,
+        `TTS hatası: ${errorMessage}`,
         HttpStatus.BAD_GATEWAY,
       );
     }
