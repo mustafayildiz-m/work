@@ -1,7 +1,8 @@
 import { FormattedMessage, useIntl } from "react-intl";
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Clock, BookOpen, Users, FileText, Podcast, TrendingUp } from 'lucide-react';
+import { Clock, BookOpen, Users, FileText, Podcast, TrendingUp, UserPlus, ScrollText, Film } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar } from '@/components/ui/avatar';
 
@@ -9,6 +10,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const ActivityFeed = () => {
   const intl = useIntl();
+  const navigate = useNavigate();
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,6 +34,9 @@ const ActivityFeed = () => {
             FileText: FileText,
             Podcast: Podcast,
             TrendingUp: TrendingUp,
+            UserPlus: UserPlus,
+            ScrollText: ScrollText,
+            Film: Film,
           };
 
           // Format activities with time ago and translate titles
@@ -110,6 +115,23 @@ const ActivityFeed = () => {
     );
   }
 
+  const getActivityPath = (activity) => {
+    if (!activity?.entityType || !activity?.entityId) return null;
+
+    const pathMap = {
+      scholar: `/alimler/profile/${activity.entityId}`,
+      book: `/kitaplar/duzenle/${activity.entityId}`,
+      article: `/makaleler/duzenle/${activity.entityId}`,
+      podcast: `/podcast/duzenle/${activity.entityId}`,
+      story: `/alim-hikayeleri/duzenle/${activity.entityId}`,
+      user: '/kullanicilar/bireysel',
+      post: '/kullanicilar/post-onaylama',
+      news: null,
+    };
+
+    return pathMap[activity.entityType] ?? null;
+  };
+
   return (
     <Card className="shadow-lg hover:shadow-xl transition-all duration-300">
       <CardHeader>
@@ -122,13 +144,17 @@ const ActivityFeed = () => {
         <div className="space-y-4">
           {activities.map((activity, index) => {
             const Icon = activity.icon;
+            const activityPath = getActivityPath(activity);
             return (
               <motion.div
                 key={activity.id}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="flex items-start gap-3 group cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors"
+                className={`flex items-start gap-3 group p-2 rounded-lg transition-colors ${activityPath ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800' : ''}`}
+                onClick={() => {
+                  if (activityPath) navigate(activityPath);
+                }}
               >
                 <div className={`w-10 h-10 rounded-full ${activity.color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
                   <Icon className="w-5 h-5 text-white" />

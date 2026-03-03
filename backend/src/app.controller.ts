@@ -8,6 +8,10 @@ import { Inject } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { Language } from './languages/entities/language.entity';
 import { User } from './users/entities/user.entity';
+import { Article } from './articles/entities/article.entity';
+import { ScholarStory } from './entities/scholar-story.entity';
+import { Podcast } from './entities/podcast.entity';
+import { IslamicNews } from './entities/islamic-news.entity';
 
 @Controller()
 export class AppController {
@@ -22,6 +26,14 @@ export class AppController {
     private readonly languageRepository: Repository<Language>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Article)
+    private readonly articleRepository: Repository<Article>,
+    @InjectRepository(ScholarStory)
+    private readonly scholarStoryRepository: Repository<ScholarStory>,
+    @InjectRepository(Podcast)
+    private readonly podcastRepository: Repository<Podcast>,
+    @InjectRepository(IslamicNews)
+    private readonly islamicNewsRepository: Repository<IslamicNews>,
   ) { }
 
   @Get('statistics/counts')
@@ -105,6 +117,8 @@ export class AppController {
     try {
       const activities: Array<{
         type: string;
+        entityType: string;
+        entityId: number | string;
         title: string;
         description: string;
         createdAt: Date;
@@ -124,6 +138,8 @@ export class AppController {
           const bookTitle = book.translations?.[0]?.title || 'İsimsiz Kitap';
           activities.push({
             type: 'book',
+            entityType: 'book',
+            entityId: book.id,
             title: 'Yeni kitap eklendi',
             description: bookTitle,
             createdAt: book.createdAt,
@@ -145,6 +161,8 @@ export class AppController {
         recentScholars.forEach((scholar) => {
           activities.push({
             type: 'scholar',
+            entityType: 'scholar',
+            entityId: scholar.id,
             title: 'Yeni âlim eklendi',
             description: scholar.fullName,
             createdAt: scholar.createdAt,
@@ -172,6 +190,8 @@ export class AppController {
 
           activities.push({
             type: 'post',
+            entityType: 'post',
+            entityId: post.id,
             title: 'Yeni gönderi',
             description: description,
             createdAt: post.createdAt,
@@ -181,6 +201,126 @@ export class AppController {
         });
       } catch (error) {
         console.error('Error fetching recent posts:', error);
+      }
+
+      // Son eklenen kullanıcıları al
+      try {
+        const recentUsers = await this.userRepository.find({
+          order: { createdAt: 'DESC' },
+          take: 3,
+        });
+
+        recentUsers.forEach((user) => {
+          const fullName = [user.firstName, user.lastName].filter(Boolean).join(' ').trim();
+          activities.push({
+            type: 'user',
+            entityType: 'user',
+            entityId: user.id,
+            title: 'Yeni kullanıcı eklendi',
+            description: fullName || user.username || user.email,
+            createdAt: user.createdAt,
+            icon: 'UserPlus',
+            color: 'bg-cyan-500',
+          });
+        });
+      } catch (error) {
+        console.error('Error fetching recent users:', error);
+      }
+
+      // Son eklenen makaleleri al
+      try {
+        const recentArticles = await this.articleRepository.find({
+          order: { createdAt: 'DESC' },
+          take: 3,
+          relations: ['translations'],
+        });
+
+        recentArticles.forEach((article) => {
+          const articleTitle = article.translations?.[0]?.title || `Makale #${article.id}`;
+          activities.push({
+            type: 'article',
+            entityType: 'article',
+            entityId: article.id,
+            title: 'Yeni makale eklendi',
+            description: articleTitle,
+            createdAt: article.createdAt,
+            icon: 'ScrollText',
+            color: 'bg-orange-500',
+          });
+        });
+      } catch (error) {
+        console.error('Error fetching recent articles:', error);
+      }
+
+      // Son eklenen podcastleri al
+      try {
+        const recentPodcasts = await this.podcastRepository.find({
+          order: { createdAt: 'DESC' },
+          take: 3,
+        });
+
+        recentPodcasts.forEach((podcast) => {
+          activities.push({
+            type: 'podcast',
+            entityType: 'podcast',
+            entityId: podcast.id,
+            title: 'Yeni podcast eklendi',
+            description: podcast.title,
+            createdAt: podcast.createdAt,
+            icon: 'Podcast',
+            color: 'bg-fuchsia-500',
+          });
+        });
+      } catch (error) {
+        console.error('Error fetching recent podcasts:', error);
+      }
+
+      // Son eklenen alim hikayelerini al
+      try {
+        const recentStories = await this.scholarStoryRepository.find({
+          order: { created_at: 'DESC' },
+          take: 3,
+          relations: ['scholar'],
+        });
+
+        recentStories.forEach((story) => {
+          const scholarName = story.scholar?.fullName ? `${story.scholar.fullName} - ` : '';
+          activities.push({
+            type: 'story',
+            entityType: 'story',
+            entityId: story.id,
+            title: 'Yeni hikaye eklendi',
+            description: `${scholarName}${story.title}`,
+            createdAt: story.created_at,
+            icon: 'Film',
+            color: 'bg-pink-500',
+          });
+        });
+      } catch (error) {
+        console.error('Error fetching recent stories:', error);
+      }
+
+      // Son eklenen haberleri al
+      try {
+        const recentNews = await this.islamicNewsRepository.find({
+          order: { created_at: 'DESC' },
+          take: 2,
+        });
+
+        recentNews.forEach((news) => {
+          activities.push({
+            type: 'news',
+            entityType: 'news',
+            entityId: news.id,
+            title: 'Yeni haber eklendi',
+            description: news.title,
+            createdAt: news.created_at,
+            icon: 'TrendingUp',
+            color: 'bg-sky-500',
+          });
+        });
+      } catch (error) {
+        console.error('Error fetching recent news:', error);
       }
 
       // Tarihe göre sırala (en yeni en üstte)

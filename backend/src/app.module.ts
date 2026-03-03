@@ -52,6 +52,7 @@ import { TtsModule } from './modules/tts.module';
 import { MailModule } from './mail/mail.module';
 import { SystemSettingsModule } from './modules/system-settings.module';
 import { SystemSetting } from './entities/system-setting.entity';
+import { Podcast } from './entities/podcast.entity';
 
 @Module({
   imports: [
@@ -85,6 +86,7 @@ import { SystemSetting } from './entities/system-setting.entity';
       ArticleTranslation,
       User,
       SystemSetting,
+      Podcast,
     ]),
     BooksModule,
     ArticlesModule,
