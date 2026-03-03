@@ -8,6 +8,7 @@ import {
   flexRender,
   getPaginationRowModel,
 } from '@tanstack/react-table';
+import { useNavigate } from 'react-router-dom';
 
 function DefaultColumnFilter({ column }) {
   const columnFilterValue = column.getFilterValue() || '';
@@ -23,6 +24,36 @@ function DefaultColumnFilter({ column }) {
 }
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/languages';
+const BOOKS_API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/books';
+
+function getCoverUrl(coverImage) {
+  if (!coverImage) return `${import.meta.env.BASE_URL}media/images/book-placeholder.jpg`;
+  if (coverImage.startsWith('http://') || coverImage.startsWith('https://')) return coverImage;
+  const baseUrl = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '');
+  return `${baseUrl}${coverImage.startsWith('/') ? coverImage : `/${coverImage}`}`;
+}
+
+function getFlagByLanguageCode(code) {
+  if (!code) return '🏳️';
+  const normalized = String(code).toLowerCase();
+  const flagMap = {
+    tr: '🇹🇷',
+    en: '🇬🇧',
+    ar: '🇸🇦',
+    bs: '🇧🇦',
+    sq: '🇦🇱',
+    de: '🇩🇪',
+    fr: '🇫🇷',
+    ru: '🇷🇺',
+    es: '🇪🇸',
+    it: '🇮🇹',
+    fa: '🇮🇷',
+    ur: '🇵🇰',
+    id: '🇮🇩',
+    az: '🇦🇿',
+  };
+  return flagMap[normalized] || '🌐';
+}
 
 function AddLanguageModal({ open, onClose, onAdded }) {
   const [form, setForm] = useState({ name: '', code: '' });
@@ -217,7 +248,9 @@ function EditLanguageModal({ open, onClose, language, onUpdated }) {
 }
 
 const LanguageList = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const [languageBooks, setLanguageBooks] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sorting, setSorting] = useState([]);
@@ -289,6 +322,45 @@ const LanguageList = () => {
     fetchLanguages();
   }, []);
 
+  useEffect(() => {
+    const fetchBooksForLanguages = async () => {
+      try {
+        const token = localStorage.getItem('access_token');
+        const res = await fetch(`${BOOKS_API_URL}?page=1&limit=300`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) return;
+        const result = await res.json();
+        const books = Array.isArray(result) ? result : (result?.data || []);
+        const map = {};
+
+        books.forEach((book) => {
+          (book.translations || []).forEach((translation) => {
+            const langId = translation?.language?.id || translation?.languageId;
+            if (langId && !map[langId]) {
+              map[langId] = {
+                id: book.id,
+                title: translation?.title || book.author || 'Kitap',
+                coverImage: book.coverImage || book.coverUrl || '',
+                hasPdf: Boolean(translation?.pdfUrl || translation?.pdfFile),
+              };
+            }
+          });
+        });
+
+        setLanguageBooks(map);
+      } catch {
+        // Keep language list usable even if preview books fail
+      }
+    };
+
+    fetchBooksForLanguages();
+  }, []);
+
   const handleAdded = lang => setData(prev => [...prev, lang]);
   const handleUpdated = updatedLang => setData(prev => prev.map(l => l.id === updatedLang.id ? updatedLang : l));
   const handleDeleted = id => setData(prev => prev.filter(l => l.id !== id));
@@ -339,8 +411,64 @@ const LanguageList = () => {
       {
         accessorKey: 'code',
         header: 'Dil Kodu',
+        cell: ({ row }) => {
+          const code = row.original?.code || '';
+          return (
+            <div className="flex items-center gap-2">
+              <span className="text-lg leading-none" aria-hidden="true">
+                {getFlagByLanguageCode(code)}
+              </span>
+              <span className="rounded bg-gray-100 px-2 py-0.5 text-xs font-semibold uppercase text-gray-700 dark:bg-gray-800 dark:text-gray-200">
+                {code}
+              </span>
+            </div>
+          );
+        },
         filterFn: 'includesString',
         Filter: DefaultColumnFilter,
+      },
+      {
+        id: 'previewBook',
+        header: 'Dil Kitabı',
+        cell: ({ row }) => {
+          const language = row.original;
+          const previewBook = languageBooks[language.id];
+
+          if (!previewBook) {
+            return (
+              <span className="text-xs text-gray-500 dark:text-gray-400">
+                Bu dilde kitap yok
+              </span>
+            );
+          }
+
+          return (
+            <button
+              type="button"
+              onClick={() => navigate(`/kitaplar/liste?languageId=${language.id}&languageName=${encodeURIComponent(language.name)}`)}
+              className="group flex items-center gap-3 rounded-lg border border-gray-200 bg-gray-50 p-2 text-left transition hover:border-blue-300 hover:bg-blue-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-700 dark:hover:bg-gray-700"
+              title={`${language.name} kitaplarını görüntüle`}
+            >
+              <img
+                src={getCoverUrl(previewBook.coverImage)}
+                alt={previewBook.title}
+                className="h-12 w-9 rounded object-cover shadow-sm"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="min-w-0">
+                <div className="truncate text-xs font-semibold text-gray-800 group-hover:text-blue-700 dark:text-gray-100 dark:group-hover:text-blue-300">
+                  {previewBook.title}
+                </div>
+                <div className="text-[11px] text-gray-500 dark:text-gray-400">
+                  {previewBook.hasPdf ? 'PDF mevcut' : 'PDF yok'}
+                </div>
+              </div>
+            </button>
+          );
+        },
+        enableSorting: false,
+        enableColumnFilter: false,
       },
       {
         id: 'actions',
@@ -366,7 +494,7 @@ const LanguageList = () => {
         ),
       },
     ],
-    []
+    [languageBooks, navigate]
   );
 
   const table = useReactTable({

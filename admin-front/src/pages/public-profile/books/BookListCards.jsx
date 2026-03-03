@@ -1,11 +1,12 @@
 import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 const API_URL = API_BASE_URL + '/books';
+const LANGUAGES_API_URL = API_BASE_URL + '/languages';
 
 const getBookImage = (book) => {
   if (book.coverImage) {
@@ -190,11 +191,17 @@ const BookDetailModal = ({ book, onClose }) => {
 const BookListCards = () => {
   const intl = useIntl();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialLanguageId = searchParams.get('languageId') || '';
+  const initialLanguageName = searchParams.get('languageName') || '';
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedLanguageId, setSelectedLanguageId] = useState(initialLanguageId);
+  const [selectedLanguageName, setSelectedLanguageName] = useState(initialLanguageName);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [languages, setLanguages] = useState([]);
   const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20);
@@ -217,10 +224,11 @@ const BookListCards = () => {
     }, searchQuery ? 500 : 0); // Arama varsa 500ms bekle
 
     return () => clearTimeout(timeoutId);
-  }, [currentPage, itemsPerPage, selectedCategory, searchQuery]);
+  }, [currentPage, itemsPerPage, selectedCategory, searchQuery, selectedLanguageId]);
 
   useEffect(() => {
     fetchCategories();
+    fetchLanguages();
   }, []);
 
   // viewMode değiştiğinde localStorage'a kaydet
@@ -250,6 +258,23 @@ const BookListCards = () => {
     }
   };
 
+  const fetchLanguages = async () => {
+    try {
+      const token = localStorage.getItem('access_token');
+      const response = await fetch(LANGUAGES_API_URL, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setLanguages(Array.isArray(data) ? data : []);
+      }
+    } catch (err) {
+      // Error handled silently
+    }
+  };
+
   const fetchBooks = async () => {
     setLoading(true);
     setError(null);
@@ -271,6 +296,9 @@ const BookListCards = () => {
       if (searchQuery) {
         params.append('search', searchQuery);
       }
+      if (selectedLanguageId) {
+        params.append('languageId', selectedLanguageId);
+      }
 
       const response = await fetch(`${API_URL}?${params.toString()}`, {
         headers: {
@@ -281,11 +309,48 @@ const BookListCards = () => {
       if (!response.ok) throw new Error('Kitaplar alınamadı');
 
       const result = await response.json();
-      const booksData = Array.isArray(result) ? result : (result?.data || []);
+      let booksData = Array.isArray(result) ? result : (result?.data || []);
+
+      // Dil filtresi ile sonuç boş dönerse backend languageId desteklemiyor olabilir.
+      // Bu durumda fallback olarak daha geniş liste çekip client-side filtre uygula.
+      if (selectedLanguageId && booksData.length === 0) {
+        const fallbackParams = new URLSearchParams({
+          page: '1',
+          limit: '500',
+        });
+        if (selectedCategory) {
+          fallbackParams.append('category', selectedCategory);
+        }
+
+        const fallbackRes = await fetch(`${API_URL}?${fallbackParams.toString()}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (fallbackRes.ok) {
+          const fallbackResult = await fallbackRes.json();
+          const fallbackBooks = Array.isArray(fallbackResult) ? fallbackResult : (fallbackResult?.data || []);
+          booksData = fallbackBooks.filter((book) =>
+            (book.translations || []).some((trans) =>
+              String(trans?.language?.id || trans?.languageId) === String(selectedLanguageId)
+            )
+          );
+        }
+      }
 
       // Pagination bilgisini kaydet
-      if (result?.pagination) {
+      if (result?.pagination && !selectedLanguageId) {
         setPagination(result.pagination);
+      } else {
+        const totalCount = booksData.length;
+        setPagination({
+          totalCount,
+          totalPages: totalCount > 0 ? Math.ceil(totalCount / itemsPerPage) : 0,
+          currentPage,
+          hasPreviousPage: currentPage > 1,
+          hasNextPage: currentPage < Math.ceil(totalCount / itemsPerPage),
+        });
       }
 
       // Transform books - title'ı translations'dan al
@@ -296,7 +361,12 @@ const BookListCards = () => {
         summary: book.translations?.[0]?.summary || '',
       }));
 
-      setBooks(transformedBooks);
+      // Dil filtresi aktifken fallback sonrasında sayfalamayı frontend'de uygula
+      const pagedBooks = selectedLanguageId
+        ? transformedBooks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+        : transformedBooks;
+
+      setBooks(pagedBooks);
     } catch (err) {
       setError(err.message);
       toast.error('Kitaplar yüklenirken hata oluştu');
@@ -353,6 +423,32 @@ const BookListCards = () => {
     setCurrentPage(1); // İlk sayfaya dön
   };
 
+  const clearLanguageFilter = () => {
+    setSelectedLanguageId('');
+    setSelectedLanguageName('');
+    setCurrentPage(1);
+    setSearchParams({});
+  };
+
+  const handleLanguageChange = (value) => {
+    const selectedId = value || '';
+    const selectedLanguage = languages.find((lang) => String(lang.id) === String(selectedId));
+    const selectedName = selectedLanguage?.name || '';
+
+    setSelectedLanguageId(selectedId);
+    setSelectedLanguageName(selectedName);
+    setCurrentPage(1);
+
+    if (selectedId) {
+      setSearchParams({
+        languageId: String(selectedId),
+        languageName: selectedName,
+      });
+    } else {
+      setSearchParams({});
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -405,6 +501,20 @@ const BookListCards = () => {
 
         {/* Search and Filter */}
         <div className="mb-6 space-y-4">
+          {selectedLanguageId && selectedLanguageName && (
+            <div className="flex items-center justify-between gap-3 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm text-blue-900 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-100">
+              <span>
+                Dil filtresi aktif: <strong>{selectedLanguageName}</strong>
+              </span>
+              <button
+                type="button"
+                onClick={clearLanguageFilter}
+                className="rounded bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-700"
+              >
+                Filtreyi temizle
+              </button>
+            </div>
+          )}
           {/* Search */}
           <div>
             <input
@@ -419,6 +529,25 @@ const BookListCards = () => {
                 <FormattedMessage id="UI.BACKENDDE_ARAMA_YAPILIYOR" />
               </p>
             )}
+          </div>
+
+          {/* Language Filter */}
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+            <label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-white">
+              Dile Göre Filtrele
+            </label>
+            <select
+              value={selectedLanguageId}
+              onChange={(e) => handleLanguageChange(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+            >
+              <option value="">Tüm Diller</option>
+              {languages.map((language) => (
+                <option key={language.id} value={language.id}>
+                  {language.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Category Filter - Collapsible */}
@@ -524,7 +653,9 @@ const BookListCards = () => {
         {!loading && !error && filteredBooks.length === 0 && (
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-8 text-center">
             <p className="text-blue-800 dark:text-blue-200 text-lg">
-              {searchQuery || selectedCategory ? 'Arama kriterlerine uygun kitap bulunamadı' : 'Henüz kitap eklenmemiş'}
+              {selectedLanguageId
+                ? `${selectedLanguageName || 'Seçilen dil'} için kitap bulunamadı`
+                : (searchQuery || selectedCategory ? 'Arama kriterlerine uygun kitap bulunamadı' : 'Henüz kitap eklenmemiş')}
             </p>
           </div>
         )}
