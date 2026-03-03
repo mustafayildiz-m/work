@@ -41,6 +41,7 @@ export class CreateScholarStoryDto {
   @IsBoolean()
   is_featured?: boolean;
 
+  @IsOptional()
   @IsNumber()
-  scholar_id: number;
+  scholar_id?: number;
 }

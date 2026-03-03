@@ -27,7 +27,9 @@ const schema = yup.object({
   video_url: yup.string().transform((curr, orig) => orig === '' ? null : curr).nullable().url('Geçerli bir video URL\'i giriniz'),
   duration: yup.number().transform((value, originalValue) => (String(originalValue).trim() === '' ? null : value)).nullable().min(0, 'Süre negatif olamaz'),
   language: yup.string().required('Dil seçimi zorunludur'),
-  scholar_id: yup.number().required('Alim seçimi zorunludur').positive('Geçerli bir alim seçiniz'),
+  scholar_id: yup.number().transform((value, originalValue) => {
+    return originalValue === '' || originalValue === null || originalValue === undefined ? undefined : value;
+  }).optional().positive('Geçerli bir alim seçiniz'),
   is_active: yup.boolean(),
   is_featured: yup.boolean(),
 });
@@ -36,6 +38,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function AlimHikayesiDuzenle() {
   const intl = useIntl();
+  const optionalLabel = intl.locale?.startsWith('tr') ? 'Zorunlu degil' : 'Optional';
   const navigate = useNavigate();
   const { id } = useParams();
   const [scholars, setScholars] = useState([]);
@@ -251,9 +254,12 @@ export default function AlimHikayesiDuzenle() {
       formData.append('title', data.title);
       formData.append('description', data.description);
       formData.append('language', data.language);
-      formData.append('scholar_id', data.scholar_id);
       formData.append('is_active', data.is_active);
       formData.append('is_featured', data.is_featured);
+
+      if (data.scholar_id) {
+        formData.append('scholar_id', data.scholar_id);
+      }
 
       if (data.video_url) {
         formData.append('video_url', data.video_url);
@@ -287,20 +293,35 @@ export default function AlimHikayesiDuzenle() {
     }
   };
 
-  const handleDurationChange = (value) => {
-    if (!value) {
-      setValue('duration', null);
-      return;
-    }
-    const minutes = parseInt(value) || 0;
-    const seconds = minutes * 60;
-    setValue('duration', seconds);
+  const handleDurationMinutesChange = (value) => {
+    const minutes = Math.max(0, parseInt(value) || 0);
+    const currentSeconds = parseInt(watch('duration')) || 0;
+    const secondsPart = currentSeconds % 60;
+    setValue('duration', (minutes * 60) + secondsPart);
   };
 
-  const formatDuration = (seconds) => {
-    if (!seconds && seconds !== 0) return '';
+  const handleDurationSecondsChange = (value) => {
+    const secondsInput = Math.max(0, Math.min(59, parseInt(value) || 0));
+    const currentSeconds = parseInt(watch('duration')) || 0;
+    const minutesPart = Math.floor(currentSeconds / 60);
+    setValue('duration', (minutesPart * 60) + secondsInput);
+  };
+
+  const getDurationParts = (seconds) => {
+    if (!seconds && seconds !== 0) return { minutes: '', seconds: '' };
     const minutes = Math.floor(seconds / 60);
-    return minutes.toString();
+    const secondsPart = seconds % 60;
+    return {
+      minutes: minutes.toString(),
+      seconds: secondsPart.toString().padStart(2, '0'),
+    };
+  };
+
+  const formatDurationDisplay = (seconds) => {
+    if (!seconds && seconds !== 0) return '-';
+    const minutes = Math.floor(seconds / 60);
+    const secondsPart = seconds % 60;
+    return `${minutes}:${secondsPart.toString().padStart(2, '0')}`;
   };
 
   if (storyLoading) {
@@ -392,13 +413,18 @@ export default function AlimHikayesiDuzenle() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="scholar_id"><FormattedMessage id="UI.ALIM_SECIMI_" /></Label>
+                  <Label htmlFor="scholar_id" className="flex items-center gap-2">
+                    <FormattedMessage id="UI.ALIM_SECIMI_" />
+                    <span className="text-xs font-normal text-muted-foreground">({optionalLabel})</span>
+                  </Label>
                   <Controller
                     name="scholar_id"
                     control={control}
                     render={({ field }) => (
                       <ReactSelect
                         {...field}
+                        menuPortalTarget={typeof window !== 'undefined' ? document.body : null}
+                        menuPosition="fixed"
                         options={scholars.map(scholar => ({
                           value: scholar.id,
                           label: scholar.fullName || scholar.name || `Alim #${scholar.id}`
@@ -416,48 +442,60 @@ export default function AlimHikayesiDuzenle() {
                             ...base,
                             minHeight: '40px',
                             borderColor: errors.scholar_id ? '#ef4444' : base.borderColor,
-                            backgroundColor: 'hsl(var(--background))',
-                            color: 'hsl(var(--foreground))',
+                            backgroundColor: 'var(--background)',
+                            color: 'var(--foreground)',
                           }),
                           placeholder: (base) => ({
                             ...base,
-                            color: 'hsl(var(--muted-foreground))',
+                            color: 'var(--muted-foreground)',
                           }),
                           singleValue: (base) => ({
                             ...base,
-                            color: 'hsl(var(--foreground))',
+                            color: 'var(--foreground)',
                           }),
                           input: (base) => ({
                             ...base,
-                            color: 'hsl(var(--foreground))',
+                            color: 'var(--foreground)',
                           }),
                           menu: (base) => ({
                             ...base,
-                            backgroundColor: 'hsl(var(--popover))',
-                            border: '1px solid hsl(var(--border))',
+                            backgroundColor: 'var(--popover)',
+                            border: '1px solid var(--border)',
+                            zIndex: 9999,
+                            opacity: 1,
+                            backdropFilter: 'none',
+                          }),
+                          menuPortal: (base) => ({
+                            ...base,
+                            zIndex: 9999,
+                          }),
+                          menuList: (base) => ({
+                            ...base,
+                            backgroundColor: 'var(--popover)',
+                            opacity: 1,
                           }),
                           option: (base, state) => ({
                             ...base,
                             backgroundColor: state.isFocused
-                              ? 'hsl(var(--accent))'
+                              ? 'var(--accent)'
                               : state.isSelected
-                                ? 'hsl(var(--primary))'
+                                ? 'var(--primary)'
                                 : 'transparent',
                             color: state.isSelected
-                              ? 'hsl(var(--primary-foreground))'
-                              : 'hsl(var(--foreground))',
+                              ? 'var(--primary-foreground)'
+                              : 'var(--foreground)',
                             '&:hover': {
-                              backgroundColor: 'hsl(var(--accent))',
-                              color: 'hsl(var(--accent-foreground))',
+                              backgroundColor: 'var(--accent)',
+                              color: 'var(--accent-foreground)',
                             },
                           }),
                           noOptionsMessage: (base) => ({
                             ...base,
-                            color: 'hsl(var(--muted-foreground))',
+                            color: 'var(--muted-foreground)',
                           }),
                           loadingMessage: (base) => ({
                             ...base,
-                            color: 'hsl(var(--muted-foreground))',
+                            color: 'var(--muted-foreground)',
                           }),
                         }}
                       />
@@ -519,14 +557,31 @@ export default function AlimHikayesiDuzenle() {
 
                 <div className="space-y-2">
                   <Label htmlFor="duration"><FormattedMessage id="UI.SURE_DAKIKA" /></Label>
-                  <Input
-                    id="duration"
-                    type="number"
-                    placeholder="30"
-                    value={formatDuration(watchedValues.duration)}
-                    onChange={(e) => handleDurationChange(e.target.value)}
-                    className={errors.duration ? 'border-red-500' : ''}
-                  />
+                  <div className="grid grid-cols-[1fr_auto_1fr] gap-2 items-center">
+                    <Input
+                      id="duration_minutes"
+                      type="number"
+                      min="0"
+                      placeholder="10"
+                      value={getDurationParts(watchedValues.duration).minutes}
+                      onChange={(e) => handleDurationMinutesChange(e.target.value)}
+                      className={errors.duration ? 'border-red-500' : ''}
+                    />
+                    <span className="text-lg font-semibold text-gray-500">:</span>
+                    <Input
+                      id="duration_seconds"
+                      type="number"
+                      min="0"
+                      max="59"
+                      placeholder="20"
+                      value={getDurationParts(watchedValues.duration).seconds}
+                      onChange={(e) => handleDurationSecondsChange(e.target.value)}
+                      className={errors.duration ? 'border-red-500' : ''}
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Dakika:saniye formatinda girin (ornek: 10:20).
+                  </p>
                   {errors.duration && (
                     <p className="text-sm text-red-500">{errors.duration.message}</p>
                   )}
@@ -667,9 +722,9 @@ export default function AlimHikayesiDuzenle() {
                 </div>
                 <div className="text-center p-4 border rounded-lg">
                   <div className="text-2xl font-bold text-purple-600">
-                    {formatDuration(currentStory.duration)}
+                    {formatDurationDisplay(currentStory.duration)}
                   </div>
-                  <div className="text-sm text-muted-foreground"><FormattedMessage id="UI.DAKIKA" /></div>
+                  <div className="text-sm text-muted-foreground">Dakika:Saniye</div>
                 </div>
               </div>
             </CardContent>

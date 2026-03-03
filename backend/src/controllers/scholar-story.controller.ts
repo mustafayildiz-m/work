@@ -41,7 +41,7 @@ export class ScholarStoryController {
         title: body.title,
         description: body.description,
         language: body.language,
-        scholar_id: parseInt(body.scholar_id, 10),
+        scholar_id: body.scholar_id ? parseInt(body.scholar_id, 10) : undefined,
         is_active: body.is_active === 'true' || body.is_active === true,
         is_featured: body.is_featured === 'true' || body.is_featured === true,
         video_url: body.video_url || undefined,
