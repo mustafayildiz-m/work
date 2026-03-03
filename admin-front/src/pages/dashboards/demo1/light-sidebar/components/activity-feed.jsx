@@ -7,6 +7,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar } from '@/components/ui/avatar';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const ACTIVITY_COLOR_CLASSES = {
+  'bg-blue-500': 'bg-blue-500',
+  'bg-emerald-500': 'bg-emerald-500',
+  'bg-purple-500': 'bg-purple-500',
+  'bg-cyan-500': 'bg-cyan-500',
+  'bg-orange-500': 'bg-orange-500',
+  'bg-fuchsia-500': 'bg-fuchsia-500',
+  'bg-pink-500': 'bg-pink-500',
+  'bg-sky-500': 'bg-sky-500',
+};
 
 const ActivityFeed = () => {
   const intl = useIntl();
@@ -132,6 +142,10 @@ const ActivityFeed = () => {
     return pathMap[activity.entityType] ?? null;
   };
 
+  const getActivityColorClass = (color) => {
+    return ACTIVITY_COLOR_CLASSES[color] || 'bg-slate-500';
+  };
+
   return (
     <Card className="shadow-lg hover:shadow-xl transition-all duration-300">
       <CardHeader>
@@ -156,7 +170,7 @@ const ActivityFeed = () => {
                   if (activityPath) navigate(activityPath);
                 }}
               >
-                <div className={`w-10 h-10 rounded-full ${activity.color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                <div className={`w-10 h-10 rounded-full ${getActivityColorClass(activity.color)} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
                   <Icon className="w-5 h-5 text-white" />
                 </div>
                 <div className="flex-1 min-w-0">
