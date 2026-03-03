@@ -23,6 +23,7 @@
     "migration:generate": "npm run typeorm migration:generate -- -d src/config/typeorm.config.ts",
     "migration:create": "npm run typeorm migration:create",
     "migration:revert": "npm run typeorm migration:revert -- -d src/config/typeorm.config.ts",
+    "seed:language-flags-html": "ts-node scripts/seed-language-flags-from-html.ts",
     "seed:languages": "ts-node scripts/seed-languages.ts",
     "seed:multilanguage-books": "ts-node scripts/seed-multilanguage-books.ts",
     "seed:multilanguage-articles": "ts-node scripts/seed-multilanguage-articles.ts",

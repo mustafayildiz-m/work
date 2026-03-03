@@ -12,8 +12,7 @@ import { TranslateTextDto } from '../dto/translate-text.dto';
 
 @Controller('translation')
 export class TranslationController {
-  constructor(private readonly translationService: TranslationService) { }
-
+  constructor(private readonly translationService: TranslationService) {}
 
   @Post('translate')
   @HttpCode(HttpStatus.OK)

@@ -11,7 +11,7 @@ import { TtsService } from '../services/tts.service';
 
 @Controller('tts')
 export class TtsController {
-  constructor(private readonly ttsService: TtsService) { }
+  constructor(private readonly ttsService: TtsService) {}
 
   @Post('synthesize')
   async synthesize(
@@ -40,7 +40,10 @@ export class TtsController {
 
       res.send(audioBuffer);
     } catch (err: any) {
-      const errorMessage = err?.message || (typeof err === 'string' ? err : JSON.stringify(err)) || 'Bilinmeyen hata';
+      const errorMessage =
+        err?.message ||
+        (typeof err === 'string' ? err : JSON.stringify(err)) ||
+        'Bilinmeyen hata';
       throw new HttpException(
         `TTS hatası: ${errorMessage}`,
         HttpStatus.BAD_GATEWAY,

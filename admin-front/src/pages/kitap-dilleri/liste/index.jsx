@@ -55,8 +55,15 @@ function getFlagByLanguageCode(code) {
   return flagMap[normalized] || '🌐';
 }
 
+function getMediaUrl(filePath) {
+  if (!filePath) return '';
+  if (filePath.startsWith('http://') || filePath.startsWith('https://')) return filePath;
+  const baseUrl = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '');
+  return `${baseUrl}${filePath.startsWith('/') ? filePath : `/${filePath}`}`;
+}
+
 function AddLanguageModal({ open, onClose, onAdded }) {
-  const [form, setForm] = useState({ name: '', code: '' });
+  const [form, setForm] = useState({ name: '', code: '', flagFile: null });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -68,13 +75,19 @@ function AddLanguageModal({ open, onClose, onAdded }) {
     setError(null);
     try {
       const token = localStorage.getItem('access_token');
+      const formData = new FormData();
+      formData.append('name', form.name);
+      formData.append('code', form.code);
+      if (form.flagFile) {
+        formData.append('flag', form.flagFile);
+      }
+
       const res = await fetch(API_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(form),
+        body: formData,
       });
       
       const responseText = await res.text();
@@ -102,7 +115,7 @@ function AddLanguageModal({ open, onClose, onAdded }) {
       }
       onAdded(newLang);
       onClose();
-      setForm({ name: '', code: '' });
+      setForm({ name: '', code: '', flagFile: null });
     } catch (err) {
       setError(err.message);
     } finally {
@@ -136,6 +149,16 @@ function AddLanguageModal({ open, onClose, onAdded }) {
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             />
           </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Bayrak Görseli</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={e => setForm(prev => ({ ...prev, flagFile: e.target.files?.[0] || null }))}
+              className="w-full text-sm text-gray-900 dark:text-gray-100 file:mr-3 file:rounded file:border-0 file:bg-blue-600 file:px-3 file:py-1.5 file:text-white hover:file:bg-blue-700"
+            />
+            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Opsiyonel - JPG, PNG, SVG vb.</p>
+          </div>
           {error && <div className="text-red-500 text-sm">{error}</div>}
           <div className="flex justify-end gap-2">
             <button type="button" onClick={onClose} className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100"><FormattedMessage id="UI.IPTAL" /></button>
@@ -150,12 +173,12 @@ function AddLanguageModal({ open, onClose, onAdded }) {
 }
 
 function EditLanguageModal({ open, onClose, language, onUpdated }) {
-  const [form, setForm] = useState(language || { name: '', code: '' });
+  const [form, setForm] = useState(language || { name: '', code: '', flagFile: null });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setForm(language || { name: '', code: '' });
+    setForm({ ...(language || { name: '', code: '' }), flagFile: null });
     setError(null);
   }, [language, open]);
 
@@ -167,13 +190,19 @@ function EditLanguageModal({ open, onClose, language, onUpdated }) {
     setError(null);
     try {
       const token = localStorage.getItem('access_token');
+      const formData = new FormData();
+      formData.append('name', form.name);
+      formData.append('code', form.code);
+      if (form.flagFile) {
+        formData.append('flag', form.flagFile);
+      }
+
       const res = await fetch(`${API_URL}/${language.id}`, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ name: form.name, code: form.code }),
+        body: formData,
       });
       
       const responseText = await res.text();
@@ -233,6 +262,23 @@ function EditLanguageModal({ open, onClose, language, onUpdated }) {
               required
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Bayrak Görseli</label>
+            {form.flagUrl && !form.flagFile ? (
+              <img
+                src={getMediaUrl(form.flagUrl)}
+                alt={`${form.name} bayrağı`}
+                className="mb-2 h-10 w-14 rounded object-cover border border-gray-200 dark:border-gray-700"
+              />
+            ) : null}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={e => setForm(prev => ({ ...prev, flagFile: e.target.files?.[0] || null }))}
+              className="w-full text-sm text-gray-900 dark:text-gray-100 file:mr-3 file:rounded file:border-0 file:bg-blue-600 file:px-3 file:py-1.5 file:text-white hover:file:bg-blue-700"
+            />
+            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Seçerseniz mevcut bayrak görseli güncellenir.</p>
           </div>
           {error && <div className="text-red-500 text-sm">{error}</div>}
           <div className="flex justify-end gap-2">
@@ -403,6 +449,34 @@ const LanguageList = () => {
   const columns = useMemo(
     () => [
       {
+        id: 'flag',
+        header: 'Bayrak',
+        cell: ({ row }) => {
+          const code = row.original?.code || '';
+          const flagUrl = row.original?.flagUrl;
+
+          if (flagUrl) {
+            return (
+              <img
+                src={getMediaUrl(flagUrl)}
+                alt={`${row.original?.name || code} bayrağı`}
+                className="h-8 w-12 rounded-sm object-cover border border-gray-200 dark:border-gray-700"
+                loading="lazy"
+                decoding="async"
+              />
+            );
+          }
+
+          return (
+            <span className="text-lg leading-none" aria-hidden="true">
+              {getFlagByLanguageCode(code)}
+            </span>
+          );
+        },
+        enableSorting: false,
+        enableColumnFilter: false,
+      },
+      {
         accessorKey: 'name',
         header: 'Dil Adı',
         filterFn: 'includesString',
@@ -413,11 +487,22 @@ const LanguageList = () => {
         header: 'Dil Kodu',
         cell: ({ row }) => {
           const code = row.original?.code || '';
+          const flagUrl = row.original?.flagUrl;
           return (
             <div className="flex items-center gap-2">
-              <span className="text-lg leading-none" aria-hidden="true">
-                {getFlagByLanguageCode(code)}
-              </span>
+              {flagUrl ? (
+                <img
+                  src={getMediaUrl(flagUrl)}
+                  alt={`${row.original?.name || code} bayrağı`}
+                  className="h-7 w-10 rounded-sm object-cover border border-gray-200 dark:border-gray-700"
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <span className="text-lg leading-none" aria-hidden="true">
+                  {getFlagByLanguageCode(code)}
+                </span>
+              )}
               <span className="rounded bg-gray-100 px-2 py-0.5 text-xs font-semibold uppercase text-gray-700 dark:bg-gray-800 dark:text-gray-200">
                 {code}
               </span>

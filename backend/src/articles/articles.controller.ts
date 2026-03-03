@@ -27,7 +27,7 @@ export class ArticlesController {
   constructor(
     private readonly articlesService: ArticlesService,
     private readonly uploadService: UploadService,
-  ) { }
+  ) {}
 
   // Public endpoint - must be before the guarded routes
   @Get('public/:id')
@@ -74,7 +74,9 @@ export class ArticlesController {
               await this.articlesService.validatePdf(pdfAbsPath);
             } catch (error) {
               if (ignorePdfErrors === 'true') {
-                console.warn(`Kullanıcı onayı ile bozuk PDF kabul edildi: ${transData.pdfUrl}`);
+                console.warn(
+                  `Kullanıcı onayı ile bozuk PDF kabul edildi: ${transData.pdfUrl}`,
+                );
               } else {
                 // Clean up
                 try {
@@ -137,7 +139,6 @@ export class ArticlesController {
     return this.articlesService.findOne(id);
   }
 
-
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
   @UseInterceptors(AnyFilesInterceptor())
@@ -183,7 +184,9 @@ export class ArticlesController {
               await this.articlesService.validatePdf(pdfAbsPath);
             } catch (error) {
               if (ignorePdfErrors === 'true') {
-                console.warn(`Kullanıcı onayı ile bozuk PDF kabul edildi: ${transData.pdfUrl}`);
+                console.warn(
+                  `Kullanıcı onayı ile bozuk PDF kabul edildi: ${transData.pdfUrl}`,
+                );
               } else {
                 // Clean up
                 try {
@@ -218,7 +221,6 @@ export class ArticlesController {
   }
 
   @Post(':id/page-translate')
-
   async translatePage(
     @Param('id', ParseIntPipe) id: number,
     @Body()

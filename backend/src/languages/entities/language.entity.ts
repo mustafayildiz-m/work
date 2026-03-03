@@ -20,6 +20,9 @@ export class Language {
   @Column({ length: 10, unique: true })
   code: string;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  flagUrl: string | null;
+
   @Column({ default: true })
   isActive: boolean;
 

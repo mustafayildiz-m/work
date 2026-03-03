@@ -7,7 +7,7 @@ import sharp from 'sharp';
 
 @Injectable()
 export class UploadService {
-  constructor(private configService: ConfigService) { }
+  constructor(private configService: ConfigService) {}
 
   async uploadFile(file: Express.Multer.File): Promise<string> {
     const uploadDir = path.join(process.cwd(), 'uploads');

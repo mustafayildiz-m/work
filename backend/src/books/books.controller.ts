@@ -27,7 +27,7 @@ export class BooksController {
   constructor(
     private readonly booksService: BooksService,
     private readonly uploadService: UploadService,
-  ) { }
+  ) {}
 
   // Public endpoint - must be before the guarded routes
   @Get('public/:id')
@@ -56,7 +56,6 @@ export class BooksController {
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
-
     const pageNumber = page ? parseInt(page, 10) : 1;
     const limitNumber = limit ? parseInt(limit, 10) : 12;
     return this.booksService.findAll(
@@ -70,7 +69,6 @@ export class BooksController {
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
-
     return this.booksService.findOne(id);
   }
 
@@ -241,7 +239,6 @@ export class BooksController {
   }
 
   @Post(':id/page-translate')
-
   async translatePage(
     @Param('id', ParseIntPipe) id: number,
     @Body()

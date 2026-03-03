@@ -8,35 +8,35 @@ import { MailService } from './mail.service';
 
 @Global()
 @Module({
-    imports: [
-        MailerModule.forRootAsync({
-            inject: [ConfigService],
-            useFactory: (config: ConfigService) => ({
-                transport: {
-                    host: config.get('MAIL_HOST'),
-                    port: config.get('MAIL_PORT'),
-                    secure: config.get('MAIL_PORT') == 465, // SSL for 465
-                    auth: {
-                        user: config.get('MAIL_USER'),
-                        pass: config.get('MAIL_PASS'),
-                    },
-                },
-                defaults: {
-                    from: `"İslâmî Windows" <${config.get('MAIL_FROM')}>`,
-                },
-                template: {
-                    dir: existsSync(join(__dirname, 'templates'))
-                        ? join(__dirname, 'templates')
-                        : join(process.cwd(), 'src/mail/templates'),
-                    adapter: new EjsAdapter(),
-                    options: {
-                        strict: true,
-                    },
-                },
-            }),
-        }),
-    ],
-    providers: [MailService],
-    exports: [MailService],
+  imports: [
+    MailerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        transport: {
+          host: config.get('MAIL_HOST'),
+          port: config.get('MAIL_PORT'),
+          secure: config.get('MAIL_PORT') == 465, // SSL for 465
+          auth: {
+            user: config.get('MAIL_USER'),
+            pass: config.get('MAIL_PASS'),
+          },
+        },
+        defaults: {
+          from: `"İslâmî Windows" <${config.get('MAIL_FROM')}>`,
+        },
+        template: {
+          dir: existsSync(join(__dirname, 'templates'))
+            ? join(__dirname, 'templates')
+            : join(process.cwd(), 'src/mail/templates'),
+          adapter: new EjsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
+      }),
+    }),
+  ],
+  providers: [MailService],
+  exports: [MailService],
 })
-export class MailModule { }
+export class MailModule {}

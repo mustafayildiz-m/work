@@ -126,4 +126,4 @@ import { Podcast } from './entities/podcast.entity';
     MultiLanguageArticlesSeeder,
   ],
 })
-export class AppModule { }
+export class AppModule {}

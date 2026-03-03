@@ -5,9 +5,9 @@ import { SystemSettingsService } from '../services/system-settings.service';
 import { SystemSettingsController } from '../controllers/system-settings.controller';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([SystemSetting])],
-    controllers: [SystemSettingsController],
-    providers: [SystemSettingsService],
-    exports: [SystemSettingsService],
+  imports: [TypeOrmModule.forFeature([SystemSetting])],
+  controllers: [SystemSettingsController],
+  providers: [SystemSettingsService],
+  exports: [SystemSettingsService],
 })
-export class SystemSettingsModule { }
+export class SystemSettingsModule {}

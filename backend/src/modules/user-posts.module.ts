@@ -33,4 +33,4 @@ import { SystemSettingsModule } from './system-settings.module';
   providers: [UserPostsService, UserPostShareService, CacheService],
   exports: [UserPostsService, UserPostShareService],
 })
-export class UserPostsModule { }
+export class UserPostsModule {}

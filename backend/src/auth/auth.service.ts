@@ -13,7 +13,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private mailService: MailService,
-  ) { }
+  ) {}
 
   private getGoogleClientId(): string {
     const clientId = process.env.GOOGLE_CLIENT_ID;
@@ -150,7 +150,7 @@ export class AuthService {
       isVerified: false,
       verificationToken,
       verificationTokenExpires,
-    } as any);
+    });
 
     // E-posta gönder
     await this.mailService.sendVerificationEmail(
@@ -266,7 +266,7 @@ export class AuthService {
       lastName,
       photoUrl,
       role: 'user',
-      language: (payload as any)?.locale || 'tr',
+      language: payload?.locale || 'tr',
       isActive: true,
       isVerified: true, // Google ile kayıt olanlar direkt doğrulanmış sayılır
     } as any);
@@ -280,7 +280,7 @@ export class AuthService {
   async forgotPassword(email: string) {
     const user = await this.usersService.findByEmail(email);
     if (!user) {
-      // Güvenlik için kullanıcı bulunamasa bile aynı mesajı dönebiliriz 
+      // Güvenlik için kullanıcı bulunamasa bile aynı mesajı dönebiliriz
       // ama şu an geliştirme aşamasında olduğumuz için basit tutalım
       throw new UnauthorizedException('Kullanıcı bulunamadı.');
     }
@@ -300,7 +300,9 @@ export class AuthService {
       resetToken,
     );
 
-    return { message: 'Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.' };
+    return {
+      message: 'Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.',
+    };
   }
 
   async resetPassword(token: string, newPassword: string) {
@@ -309,11 +311,15 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new UnauthorizedException('Geçersiz veya süresi dolmuş şifre sıfırlama tokenı.');
+      throw new UnauthorizedException(
+        'Geçersiz veya süresi dolmuş şifre sıfırlama tokenı.',
+      );
     }
 
     if (user.resetPasswordExpires < new Date()) {
-      throw new UnauthorizedException('Şifre sıfırlama linkinin süresi dolmuş.');
+      throw new UnauthorizedException(
+        'Şifre sıfırlama linkinin süresi dolmuş.',
+      );
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -325,6 +331,9 @@ export class AuthService {
       resetPasswordExpires: null,
     });
 
-    return { message: 'Şifreniz başarıyla güncellendi. Yeni şifrenizle giriş yapabilirsiniz.' };
+    return {
+      message:
+        'Şifreniz başarıyla güncellendi. Yeni şifrenizle giriş yapabilirsiniz.',
+    };
   }
 }

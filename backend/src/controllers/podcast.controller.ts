@@ -25,7 +25,7 @@ export class PodcastController {
   constructor(
     private readonly podcastService: PodcastService,
     private readonly uploadService: UploadService,
-  ) { }
+  ) {}
 
   @Post()
   @UseGuards(JwtAuthGuard)

@@ -37,7 +37,7 @@ export class BooksService {
     private uploadService: UploadService,
     private translationService: TranslationService,
     private pdfOcrService: PdfOcrService,
-  ) { }
+  ) {}
 
   /**
    * Dil koduna karşılık gelen DB kayıt ID'sini döndürür.
@@ -60,7 +60,10 @@ export class BooksService {
     this.logger.warn(
       `Dil kodu "${langCode}" veritabanında bulunamadı, yeni kayıt oluşturuluyor.`,
     );
-    const newLang = this.languageRepository.create({ code: langCode, name: langCode.toUpperCase() });
+    const newLang = this.languageRepository.create({
+      code: langCode,
+      name: langCode.toUpperCase(),
+    });
     const saved = await this.languageRepository.save(newLang);
     this.langCodeCache.set(langCode, saved.id);
     return saved.id;
@@ -502,7 +505,7 @@ export class BooksService {
     }
 
     // ── 2. Metin kalitesi kontrolü → Gerekirse OCR ──────────────────────
-    let textToTranslate = originalText;
+    const textToTranslate = originalText;
 
     if (this.pdfOcrService.isGarbageText(originalText)) {
       this.logger.warn(

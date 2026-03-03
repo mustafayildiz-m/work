@@ -27,4 +27,4 @@ import { Language } from '../languages/entities/language.entity';
   providers: [ArticlesService, PdfOcrService],
   exports: [ArticlesService],
 })
-export class ArticlesModule { }
+export class ArticlesModule {}

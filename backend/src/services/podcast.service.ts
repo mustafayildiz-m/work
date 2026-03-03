@@ -12,7 +12,7 @@ export class PodcastService {
   constructor(
     @InjectRepository(Podcast)
     private readonly podcastRepository: Repository<Podcast>,
-  ) { }
+  ) {}
 
   async create(
     createPodcastDto: CreatePodcastDto,
