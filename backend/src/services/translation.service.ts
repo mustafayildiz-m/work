@@ -4,17 +4,47 @@ import axios from 'axios';
 
 // DeepL'in resmi olarak desteklediği hedef dil kodları
 const DEEPL_SUPPORTED_LANGS = new Set([
-  'AR', 'BG', 'CS', 'DA', 'DE', 'EL', 'EN', 'EN-GB', 'EN-US',
-  'ES', 'ET', 'FI', 'FR', 'HU', 'ID', 'IT', 'JA', 'KO',
-  'LT', 'LV', 'NB', 'NL', 'PL', 'PT', 'PT-BR', 'PT-PT',
-  'RO', 'RU', 'SK', 'SL', 'SV', 'TR', 'UK', 'ZH',
+  'AR',
+  'BG',
+  'CS',
+  'DA',
+  'DE',
+  'EL',
+  'EN',
+  'EN-GB',
+  'EN-US',
+  'ES',
+  'ET',
+  'FI',
+  'FR',
+  'HU',
+  'ID',
+  'IT',
+  'JA',
+  'KO',
+  'LT',
+  'LV',
+  'NB',
+  'NL',
+  'PL',
+  'PT',
+  'PT-BR',
+  'PT-PT',
+  'RO',
+  'RU',
+  'SK',
+  'SL',
+  'SV',
+  'TR',
+  'UK',
+  'ZH',
 ]);
 
 @Injectable()
 export class TranslationService {
   private readonly logger = new Logger(TranslationService.name);
 
-  constructor(private configService: ConfigService) { }
+  constructor(private configService: ConfigService) {}
 
   // DeepL API endpoint - ücretsiz plan
   private get DEEPL_API_URL(): string {
@@ -98,7 +128,9 @@ export class TranslationService {
 
     const decodeHtmlEntities = (text: string): string => {
       return text
-        .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
+        .replace(/&#(\d+);/g, (_, code) =>
+          String.fromCharCode(parseInt(code, 10)),
+        )
         .replace(/&amp;/g, '&')
         .replace(/&lt;/g, '<')
         .replace(/&gt;/g, '>')

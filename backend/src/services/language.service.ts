@@ -25,6 +25,9 @@ export class LanguageService {
 
   async create(createLanguageDto: CreateLanguageDto): Promise<Language> {
     try {
+      if (createLanguageDto.code) {
+        createLanguageDto.code = String(createLanguageDto.code).toLowerCase();
+      }
       const language = this.languageRepository.create(createLanguageDto);
       return await this.languageRepository.save(language);
     } catch (error) {
@@ -110,6 +113,9 @@ export class LanguageService {
     updateLanguageDto: UpdateLanguageDto,
   ): Promise<Language> {
     try {
+      if (updateLanguageDto.code) {
+        updateLanguageDto.code = String(updateLanguageDto.code).toLowerCase();
+      }
       // Önce mevcut dili kontrol et
       const existingLanguage = await this.findOne(id);
 

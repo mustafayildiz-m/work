@@ -104,7 +104,13 @@ const PodcastLanguageSelector = () => {
       'kk': '🇰🇿', 'uz': '🇺🇿', 'ky': '🇰🇬', 'tk': '🇹🇲', 'az': '🇦🇿',
       'ps': '🇦🇫', 'ha': '🇳🇬', 'ota': '🇹🇷',
     };
-    return flagMap[code] || '🌍';
+    return flagMap[code] || '🏳️';
+  };
+
+  const getFlagImageUrl = (flagUrl) => {
+    if (!flagUrl) return '';
+    if (flagUrl.startsWith('http://') || flagUrl.startsWith('https://')) return flagUrl;
+    return `${API_URL}${flagUrl.startsWith('/') ? flagUrl : `/${flagUrl}`}`;
   };
 
   if (loading || loadingCounts) {
@@ -155,10 +161,10 @@ const PodcastLanguageSelector = () => {
               <Col key={language.id} xs={6} sm={4} md={3} lg={2}>
                 <Button
                   variant={selectedLanguage?.id === language.id ? "primary" : "outline-primary"}
-                  className={`w-100 p-3 h-100 d-flex flex-column align-items-center justify-content-center position-relative lang-box ${selectedLanguage?.id === language.id ? 'active shadow' : ''
+                  className={`w-100 p-0 h-100 d-flex flex-column align-items-stretch justify-content-start position-relative lang-box ${selectedLanguage?.id === language.id ? 'active shadow' : ''
                     }`}
                   style={{
-                    minHeight: '100px',
+                    minHeight: '120px',
                     borderRadius: '15px',
                     transition: 'all 0.3s ease',
                   }}
@@ -179,16 +185,29 @@ const PodcastLanguageSelector = () => {
                   }}
                 >
                   <div
-                    className="mb-2"
+                    className="w-100"
                     style={{
-                      fontSize: '2rem',
+                      height: '56px',
+                      overflow: 'hidden',
+                      borderTopLeftRadius: '13px',
+                      borderTopRightRadius: '13px',
                       filter: selectedLanguage?.id === language.id ? 'none' : 'grayscale(0.3)'
                     }}
                   >
-                    {getFlagEmoji(language.code)}
+                    {language.flagUrl ? (
+                      <img
+                        src={getFlagImageUrl(language.flagUrl)}
+                        alt={`${language.name} flag`}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      />
+                    ) : (
+                      <div style={{ fontSize: '2rem', lineHeight: '56px', textAlign: 'center' }}>
+                        {getFlagEmoji(language.code)}
+                      </div>
+                    )}
                   </div>
                   <div
-                    className="fw-bold text-center lang-text"
+                    className="fw-bold text-center lang-text mt-2 px-2"
                     style={{
                       fontSize: '0.85rem',
                     }}
@@ -197,7 +216,7 @@ const PodcastLanguageSelector = () => {
                   </div>
                   {/* Podcast sayısı badge'i */}
                   <div
-                    className="mt-1 px-2 py-1 rounded-pill lang-badge"
+                    className="mt-1 mb-2 px-2 py-1 rounded-pill lang-badge align-self-center"
                     style={{
                       fontSize: '0.7rem',
                       fontWeight: '600',

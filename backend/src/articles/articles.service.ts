@@ -35,7 +35,7 @@ export class ArticlesService {
     private uploadService: UploadService,
     private translationService: TranslationService,
     private pdfOcrService: PdfOcrService,
-  ) { }
+  ) {}
 
   private async getLanguageId(langCode: string): Promise<number> {
     const cached = this.langCodeCache.get(langCode);
@@ -53,7 +53,10 @@ export class ArticlesService {
     this.logger.warn(
       `Dil kodu "${langCode}" veritabanında bulunamadı, yeni kayıt oluşturuluyor.`,
     );
-    const newLang = this.languageRepository.create({ code: langCode, name: langCode.toUpperCase() });
+    const newLang = this.languageRepository.create({
+      code: langCode,
+      name: langCode.toUpperCase(),
+    });
     const saved = await this.languageRepository.save(newLang);
     this.langCodeCache.set(langCode, saved.id);
     return saved.id;
@@ -85,9 +88,10 @@ export class ArticlesService {
     // 2. Bu dilde çeviri var mı bak
     const languageId = await this.getLanguageId(targetLangCode);
 
-    const cachedTranslation = await this.articlePageTranslationRepository.findOne({
-      where: { pageId: page.id, languageId },
-    });
+    const cachedTranslation =
+      await this.articlePageTranslationRepository.findOne({
+        where: { pageId: page.id, languageId },
+      });
 
     if (cachedTranslation) {
       return cachedTranslation.content;

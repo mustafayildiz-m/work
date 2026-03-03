@@ -29,7 +29,7 @@ export class WhoToFollowService {
     private readonly userFollowService: UserFollowService,
     private readonly userScholarFollowService: UserScholarFollowService,
     private readonly cacheService: CacheService,
-  ) { }
+  ) {}
 
   async getWhoToFollow(
     limit: number = 10,

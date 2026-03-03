@@ -22,7 +22,7 @@ import { UpdateTranslationDto } from './dto/update-scholar-post.dto';
 
 @Controller('scholar-posts')
 export class ScholarPostsController {
-  constructor(private readonly scholarPostsService: ScholarPostsService) { }
+  constructor(private readonly scholarPostsService: ScholarPostsService) {}
 
   // Public endpoint - must be before the guarded routes
   @Get('public/:id')

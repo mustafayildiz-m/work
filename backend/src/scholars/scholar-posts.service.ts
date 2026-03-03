@@ -27,7 +27,7 @@ export class ScholarPostsService {
     @InjectRepository(Scholar)
     private scholarRepository: Repository<Scholar>,
     private readonly cacheService: CacheService,
-  ) { }
+  ) {}
 
   async create(
     createScholarPostDto: CreateScholarPostDto,

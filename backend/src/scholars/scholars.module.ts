@@ -35,4 +35,4 @@ import { CacheService } from '../services/cache.service';
   providers: [ScholarsService, ScholarPostsService, CacheService],
   exports: [ScholarsService, ScholarPostsService],
 })
-export class ScholarsModule { }
+export class ScholarsModule {}

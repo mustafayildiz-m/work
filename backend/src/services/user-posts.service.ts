@@ -35,10 +35,13 @@ export class UserPostsService {
     private userPostShareRepository: Repository<UserPostShare>,
     private readonly cacheService: CacheService,
     private readonly settingsService: SystemSettingsService,
-  ) { }
+  ) {}
 
   async create(createUserPostDto: CreateUserPostDto) {
-    const isApprovalEnabled = await this.settingsService.getSettingBool('post_approval_enabled', true);
+    const isApprovalEnabled = await this.settingsService.getSettingBool(
+      'post_approval_enabled',
+      true,
+    );
 
     const post = this.userPostRepository.create({
       ...createUserPostDto,
@@ -67,7 +70,10 @@ export class UserPostsService {
     // DTO'dan status ve approved_by alanlarını çıkar (güvenlik için)
     const { status, approved_by, ...updateData } = updateUserPostDto as any;
 
-    const isApprovalEnabled = await this.settingsService.getSettingBool('post_approval_enabled', true);
+    const isApprovalEnabled = await this.settingsService.getSettingBool(
+      'post_approval_enabled',
+      true,
+    );
 
     // Post güncellendiğinde ayara göre status'u belirle
     // repository.update kullanarak doğrudan veritabanında güncelle
@@ -155,11 +161,11 @@ export class UserPostsService {
     const scholarPosts =
       scholarIds.length > 0
         ? await this.scholarPostRepository.find({
-          where: { scholarId: In(scholarIds) },
-          relations: ['scholar', 'translations'],
-          order: { createdAt: 'DESC' },
-          take: 50, // İlk 50 alim postu (performans için limit)
-        })
+            where: { scholarId: In(scholarIds) },
+            relations: ['scholar', 'translations'],
+            order: { createdAt: 'DESC' },
+            take: 50, // İlk 50 alim postu (performans için limit)
+          })
         : [];
 
     // Shared posts'ları al - kullanıcı ve takip ettikleri tarafından paylaşılan gönderiler
@@ -257,9 +263,16 @@ export class UserPostsService {
     const users =
       userIds.length > 0
         ? await this.userRepository.find({
-          where: { id: In(userIds) },
-          select: ['id', 'firstName', 'lastName', 'photoUrl', 'username', 'role'],
-        })
+            where: { id: In(userIds) },
+            select: [
+              'id',
+              'firstName',
+              'lastName',
+              'photoUrl',
+              'username',
+              'role',
+            ],
+          })
         : [];
     const userMap = new Map(users.map((u) => [u.id, u]));
 
@@ -270,9 +283,9 @@ export class UserPostsService {
     const scholars =
       scholarIdsForPosts.length > 0
         ? await this.scholarRepository.find({
-          where: { id: In(scholarIdsForPosts) },
-          select: ['id', 'fullName', 'photoUrl'],
-        })
+            where: { id: In(scholarIdsForPosts) },
+            select: ['id', 'fullName', 'photoUrl'],
+          })
         : [];
     const scholarMap = new Map(scholars.map((s) => [s.id, s]));
 
@@ -548,9 +561,9 @@ export class UserPostsService {
         shared_at: (post as any).shared_at || null,
         shared_by_user: (post as any).shared_by_user
           ? {
-            name: `${(post as any).shared_by_user.firstName} ${(post as any).shared_by_user.lastName}`,
-            photoUrl: (post as any).shared_by_user.photoUrl,
-          }
+              name: `${(post as any).shared_by_user.firstName} ${(post as any).shared_by_user.lastName}`,
+              photoUrl: (post as any).shared_by_user.photoUrl,
+            }
           : null,
         original_user: (post as any).original_user || null,
         // Shared profile/book/article fields existing in UserPost

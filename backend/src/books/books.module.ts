@@ -30,4 +30,4 @@ import { Language } from '../languages/entities/language.entity';
   providers: [BooksService, PdfOcrService],
   exports: [BooksService],
 })
-export class BooksModule { }
+export class BooksModule {}

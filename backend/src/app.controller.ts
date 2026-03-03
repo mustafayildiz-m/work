@@ -34,7 +34,7 @@ export class AppController {
     private readonly podcastRepository: Repository<Podcast>,
     @InjectRepository(IslamicNews)
     private readonly islamicNewsRepository: Repository<IslamicNews>,
-  ) { }
+  ) {}
 
   @Get('statistics/counts')
   @UseGuards(JwtAuthGuard)
@@ -211,7 +211,10 @@ export class AppController {
         });
 
         recentUsers.forEach((user) => {
-          const fullName = [user.firstName, user.lastName].filter(Boolean).join(' ').trim();
+          const fullName = [user.firstName, user.lastName]
+            .filter(Boolean)
+            .join(' ')
+            .trim();
           activities.push({
             type: 'user',
             entityType: 'user',
@@ -236,7 +239,8 @@ export class AppController {
         });
 
         recentArticles.forEach((article) => {
-          const articleTitle = article.translations?.[0]?.title || `Makale #${article.id}`;
+          const articleTitle =
+            article.translations?.[0]?.title || `Makale #${article.id}`;
           activities.push({
             type: 'article',
             entityType: 'article',
@@ -284,7 +288,9 @@ export class AppController {
         });
 
         recentStories.forEach((story) => {
-          const scholarName = story.scholar?.fullName ? `${story.scholar.fullName} - ` : '';
+          const scholarName = story.scholar?.fullName
+            ? `${story.scholar.fullName} - `
+            : '';
           activities.push({
             type: 'story',
             entityType: 'story',

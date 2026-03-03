@@ -61,7 +61,7 @@ function filename(req, file, cb) {
 
 @Controller('user-posts')
 export class UserPostsController {
-  constructor(private readonly userPostsService: UserPostsService) { }
+  constructor(private readonly userPostsService: UserPostsService) {}
 
   @Post()
   @UseInterceptors(

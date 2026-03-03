@@ -7,7 +7,7 @@ export class MailService {
   constructor(
     private mailerService: MailerService,
     private configService: ConfigService,
-  ) { }
+  ) {}
 
   async sendWelcomeEmail(email: string, recipientName: string) {
     await this.mailerService.sendMail({
@@ -21,8 +21,14 @@ export class MailService {
     });
   }
 
-  async sendVerificationEmail(email: string, recipientName: string, token: string) {
-    const frontendUrl = this.configService.get<string>('FRONTEND_URL') || 'https://islamicwindows.com';
+  async sendVerificationEmail(
+    email: string,
+    recipientName: string,
+    token: string,
+  ) {
+    const frontendUrl =
+      this.configService.get<string>('FRONTEND_URL') ||
+      'https://islamicwindows.com';
     const url = `${frontendUrl}/auth/verify?token=${token}`;
     await this.mailerService.sendMail({
       to: email,
@@ -36,8 +42,14 @@ export class MailService {
     });
   }
 
-  async sendPasswordResetEmail(email: string, recipientName: string, token: string) {
-    const frontendUrl = this.configService.get<string>('FRONTEND_URL') || 'https://islamicwindows.com';
+  async sendPasswordResetEmail(
+    email: string,
+    recipientName: string,
+    token: string,
+  ) {
+    const frontendUrl =
+      this.configService.get<string>('FRONTEND_URL') ||
+      'https://islamicwindows.com';
     const url = `${frontendUrl}/auth/reset-password?token=${token}`;
     await this.mailerService.sendMail({
       to: email,
