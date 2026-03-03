@@ -44,6 +44,7 @@ function getImageUrl(url) {
 }
 
 function AddScholarModal({ open, onClose, onAdd }) {
+  const intl = useIntl();
   const initialForm = {
     fullName: '',
     lineage: '',
@@ -514,6 +515,7 @@ function AddScholarModal({ open, onClose, onAdd }) {
 }
 
 const ScholarPreviewModal = ({ scholar, onClose }) => {
+  const intl = useIntl();
   const [coverPreview, setCoverPreview] = React.useState(null);
   if (!scholar) return null;
   return (

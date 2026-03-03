@@ -27,7 +27,9 @@ const schema = yup.object({
   video_url: yup.string().url('Geçerli bir video URL\'i giriniz'),
   duration: yup.number().positive('Süre pozitif bir sayı olmalıdır'),
   language: yup.string().required('Dil seçimi zorunludur'),
-  scholar_id: yup.number().required('Alim seçimi zorunludur').positive('Geçerli bir alim seçiniz'),
+  scholar_id: yup.number().transform((value, originalValue) => {
+    return originalValue === '' || originalValue === null || originalValue === undefined ? undefined : value;
+  }).optional().positive('Geçerli bir alim seçiniz'),
   is_active: yup.boolean(),
   is_featured: yup.boolean(),
 });
@@ -36,6 +38,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function AlimHikayesiEkle() {
   const intl = useIntl();
+  const optionalLabel = intl.locale?.startsWith('tr') ? 'Zorunlu degil' : 'Optional';
   const navigate = useNavigate();
   const [selectedScholar, setSelectedScholar] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -203,9 +206,12 @@ export default function AlimHikayesiEkle() {
       formData.append('title', data.title);
       formData.append('description', data.description);
       formData.append('language', data.language);
-      formData.append('scholar_id', data.scholar_id);
       formData.append('is_active', data.is_active);
       formData.append('is_featured', data.is_featured);
+
+      if (data.scholar_id) {
+        formData.append('scholar_id', data.scholar_id);
+      }
 
       if (data.video_url) {
         formData.append('video_url', data.video_url);
@@ -238,16 +244,28 @@ export default function AlimHikayesiEkle() {
     }
   };
 
-  const handleDurationChange = (value) => {
-    const minutes = parseInt(value) || 0;
-    const seconds = minutes * 60;
-    setValue('duration', seconds);
+  const handleDurationMinutesChange = (value) => {
+    const minutes = Math.max(0, parseInt(value) || 0);
+    const currentSeconds = parseInt(watch('duration')) || 0;
+    const secondsPart = currentSeconds % 60;
+    setValue('duration', (minutes * 60) + secondsPart);
   };
 
-  const formatDuration = (seconds) => {
-    if (!seconds) return '';
+  const handleDurationSecondsChange = (value) => {
+    const secondsInput = Math.max(0, Math.min(59, parseInt(value) || 0));
+    const currentSeconds = parseInt(watch('duration')) || 0;
+    const minutesPart = Math.floor(currentSeconds / 60);
+    setValue('duration', (minutesPart * 60) + secondsInput);
+  };
+
+  const getDurationParts = (seconds) => {
+    if (!seconds || seconds < 0) return { minutes: '', seconds: '' };
     const minutes = Math.floor(seconds / 60);
-    return minutes.toString();
+    const secondsPart = seconds % 60;
+    return {
+      minutes: minutes.toString(),
+      seconds: secondsPart.toString().padStart(2, '0')
+    };
   };
 
   return (
@@ -326,11 +344,14 @@ export default function AlimHikayesiEkle() {
                   <Label htmlFor="scholar_id" className="flex items-center gap-2 text-base font-semibold">
                     <FaUser className="text-green-500" />
                     <FormattedMessage id="UI.LIM_SECIMI_" />
+                    <span className="text-xs font-normal text-muted-foreground">({optionalLabel})</span>
                   </Label>
                   <AsyncSelect
                     cacheOptions
                     defaultOptions
                     loadOptions={loadScholars}
+                    menuPortalTarget={typeof window !== 'undefined' ? document.body : null}
+                    menuPosition="fixed"
                     value={selectedScholar}
                     onChange={(selectedOption) => {
                       setSelectedScholar(selectedOption);
@@ -346,53 +367,65 @@ export default function AlimHikayesiEkle() {
                       control: (base) => ({
                         ...base,
                         minHeight: '44px',
-                        borderColor: errors.scholar_id ? '#ef4444' : 'hsl(var(--border))',
-                        backgroundColor: 'hsl(var(--background))',
-                        color: 'hsl(var(--foreground))',
+                        borderColor: errors.scholar_id ? '#ef4444' : 'var(--border)',
+                        backgroundColor: 'var(--background)',
+                        color: 'var(--foreground)',
                         boxShadow: 'none',
                         '&:hover': {
-                          borderColor: 'hsl(var(--ring))',
+                          borderColor: 'var(--ring)',
                         },
                       }),
                       placeholder: (base) => ({
                         ...base,
-                        color: 'hsl(var(--muted-foreground))',
+                        color: 'var(--muted-foreground)',
                       }),
                       singleValue: (base) => ({
                         ...base,
-                        color: 'hsl(var(--foreground))',
+                        color: 'var(--foreground)',
                       }),
                       input: (base) => ({
                         ...base,
-                        color: 'hsl(var(--foreground))',
+                        color: 'var(--foreground)',
                       }),
                       menu: (base) => ({
                         ...base,
-                        backgroundColor: 'hsl(var(--popover))',
-                        border: '1px solid hsl(var(--border))',
+                        backgroundColor: 'var(--popover)',
+                        border: '1px solid var(--border)',
+                        zIndex: 9999,
+                        opacity: 1,
+                        backdropFilter: 'none',
+                      }),
+                      menuPortal: (base) => ({
+                        ...base,
+                        zIndex: 9999,
+                      }),
+                      menuList: (base) => ({
+                        ...base,
+                        backgroundColor: 'var(--popover)',
+                        opacity: 1,
                       }),
                       option: (base, state) => ({
                         ...base,
                         backgroundColor: state.isFocused
-                          ? 'hsl(var(--accent))'
+                          ? 'var(--accent)'
                           : state.isSelected
-                            ? 'hsl(var(--primary))'
+                            ? 'var(--primary)'
                             : 'transparent',
                         color: state.isSelected
-                          ? 'hsl(var(--primary-foreground))'
-                          : 'hsl(var(--foreground))',
+                          ? 'var(--primary-foreground)'
+                          : 'var(--foreground)',
                         '&:hover': {
-                          backgroundColor: 'hsl(var(--accent))',
-                          color: 'hsl(var(--accent-foreground))',
+                          backgroundColor: 'var(--accent)',
+                          color: 'var(--accent-foreground)',
                         },
                       }),
                       noOptionsMessage: (base) => ({
                         ...base,
-                        color: 'hsl(var(--muted-foreground))',
+                        color: 'var(--muted-foreground)',
                       }),
                       loadingMessage: (base) => ({
                         ...base,
-                        color: 'hsl(var(--muted-foreground))',
+                        color: 'var(--muted-foreground)',
                       }),
                     }}
                   />
@@ -464,16 +497,30 @@ export default function AlimHikayesiEkle() {
                     <FaClock className="text-orange-500" />
                     <FormattedMessage id="UI.SURE_DAKIKA" />
                   </Label>
-                  <Input
-                    id="duration"
-                    type="number"
-                    placeholder="30"
-                    value={formatDuration(watchedValues.duration)}
-                    onChange={(e) => handleDurationChange(e.target.value)}
-                    className="h-11 focus-visible:ring-purple-500"
-                  />
+                  <div className="grid grid-cols-[1fr_auto_1fr] gap-2 items-center">
+                    <Input
+                      id="duration_minutes"
+                      type="number"
+                      min="0"
+                      placeholder="10"
+                      value={getDurationParts(watchedValues.duration).minutes}
+                      onChange={(e) => handleDurationMinutesChange(e.target.value)}
+                      className="h-11 focus-visible:ring-purple-500"
+                    />
+                    <span className="text-lg font-semibold text-gray-500">:</span>
+                    <Input
+                      id="duration_seconds"
+                      type="number"
+                      min="0"
+                      max="59"
+                      placeholder="20"
+                      value={getDurationParts(watchedValues.duration).seconds}
+                      onChange={(e) => handleDurationSecondsChange(e.target.value)}
+                      className="h-11 focus-visible:ring-purple-500"
+                    />
+                  </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    <FormattedMessage id="UI._VIDEO_SURESINI_DAKIKA_CINSINDEN_GIRIN" />
+                    Dakika:saniye formatinda girin (ornek: 10:20).
                   </p>
                 </div>
               </div>

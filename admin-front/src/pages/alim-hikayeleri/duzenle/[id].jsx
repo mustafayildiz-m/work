@@ -1,4 +1,4 @@
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -34,6 +34,8 @@ const schema = yup.object({
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function AlimHikayesiDuzenle() {
+  const intl = useIntl();
+  const optionalLabel = intl.locale?.startsWith('tr') ? 'Zorunlu degil' : 'Optional';
   const navigate = useNavigate();
   const { id } = useParams();
   const [scholars, setScholars] = useState([]);
@@ -230,7 +232,10 @@ export default function AlimHikayesiDuzenle() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="scholar_id"><FormattedMessage id="UI.ALIM_SECIMI_" /></Label>
+                <Label htmlFor="scholar_id" className="flex items-center gap-2">
+                  <FormattedMessage id="UI.ALIM_SECIMI_" />
+                  <span className="text-xs font-normal text-muted-foreground">({optionalLabel})</span>
+                </Label>
                 <Select
                   onValueChange={(value) => setValue('scholar_id', parseInt(value))}
                   disabled={scholarsLoading}
