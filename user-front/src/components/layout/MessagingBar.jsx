@@ -401,7 +401,7 @@ const MessagingBar = () => {
                     </div>
 
                     {/* Search Field / Selected User Tag */}
-                    <div className="px-3 py-2 d-flex flex-wrap align-items-center gap-2" style={{ borderBottom: `1px solid ${colors.border}`, minHeight: '52px' }}>
+                    <div className="px-3 py-2 d-flex flex-wrap align-items-center gap-2" style={{ borderBottom: `1px solid ${colors.border}`, minHeight: '52px', backgroundColor: colors.bg }}>
                         {selectedUser ? (
                             <div
                                 className="d-flex align-items-center bg-success bg-opacity-10 px-2 py-1 rounded"
@@ -437,7 +437,7 @@ const MessagingBar = () => {
                     </div>
 
                     {/* Content Area: Suggestions or Chat */}
-                    <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: colors.bg }}>
                         {!selectedUser ? (
                             <SimplebarReactClient style={{ height: '100%' }}>
                                 <div className="px-3 py-2 text-muted fw-bold" style={{ fontSize: '0.75rem', textTransform: 'uppercase' }}>
