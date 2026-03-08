@@ -27,8 +27,8 @@ const TopHeader = () => {
       margin: '0 auto',
       overflow: 'visible'
     }}>
-      <div className="d-flex align-items-center" style={{
-        flex: '0 0 auto'
+      <div className="d-flex align-items-center flex-shrink-0" style={{
+        maxWidth: '120px'
       }}>
         <LogoBox />
       </div>
@@ -62,22 +62,21 @@ const TopHeader = () => {
       </ul>
 
       {/* Mobile navigation - compact layout for small screens */}
-      <div className="d-flex align-items-center d-lg-none" style={{
-        gap: '0.25rem',
+      <div className="d-flex align-items-center d-lg-none flex-nowrap" style={{
+        gap: '3px',
         flex: '1 1 auto',
         justifyContent: 'flex-end',
-        minWidth: 0
+        minWidth: 0,
+        overflow: 'visible'
       }}>
         {!isGuest && (
-          <>
+          <div className="d-flex align-items-center gap-1 flex-nowrap">
             <MessageIconWithBadge />
-            <ul className="nav flex-nowrap align-items-center list-unstyled mb-0 m-0 p-0">
-              <FollowRequestsDropdown />
-              <NotificationDropdown />
-            </ul>
-          </>
+            <FollowRequestsDropdown />
+            <NotificationDropdown />
+          </div>
         )}
-        <div className="mobile-language-switcher">
+        <div className="mobile-language-switcher flex-shrink-1" style={{ minWidth: 0 }}>
           <LanguageSwitcher />
         </div>
         <ThemeSwitcher />
@@ -97,7 +96,7 @@ const TopHeader = () => {
           }
           
           .mobile-language-switcher :global(.language-switcher-select2) {
-            min-width: 110px !important;
+            min-width: 100px !important;
             max-width: 120px !important;
           }
           
@@ -137,8 +136,8 @@ const TopHeader = () => {
         
         @media (max-width: 575.98px) {
           .container {
-            padding-left: 0.5rem !important;
-            padding-right: 0.5rem !important;
+            padding-left: 0.35rem !important;
+            padding-right: 0.35rem !important;
           }
           
           .mobile-language-switcher {
@@ -146,8 +145,8 @@ const TopHeader = () => {
           }
           
           .mobile-language-switcher :global(.language-switcher-select2) {
-            min-width: 90px !important;
-            max-width: 100px !important;
+            min-width: 45px !important;
+            max-width: 55px !important;
           }
           
           .mobile-language-switcher :global(.language-select__menu) {
@@ -170,8 +169,8 @@ const TopHeader = () => {
           }
           
           .mobile-language-switcher :global(.language-switcher-select2) {
-            min-width: 70px !important;
-            max-width: 75px !important;
+            min-width: 75px !important;
+            max-width: 90px !important;
           }
           
           .mobile-language-switcher :global(.language-select__control) {
