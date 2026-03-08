@@ -113,6 +113,21 @@ export const MENU_SIDEBAR = [
         ]
       },
       {
+        title: 'Haber Bültenleri',
+        children: [
+          {
+            title: 'Bülten Ekle',
+            path: '/haber-bultenleri/ekle',
+            status: 'done'
+          },
+          {
+            title: 'Tüm Bültenler',
+            path: '/haber-bultenleri/liste',
+            status: 'done'
+          }
+        ]
+      },
+      {
         title: 'Podcast',
         children: [
           {
