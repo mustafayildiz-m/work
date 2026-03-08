@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserPostShare } from '../entities/user-post-share.entity';
 import { UserPost } from '../entities/user-post.entity';
 import { ScholarPost } from '../scholars/entities/scholar-post.entity';
+import { UserFollow } from '../entities/user-follow.entity';
+import { CacheService } from './cache.service';
 
 @Injectable()
 export class UserPostShareService {
@@ -14,6 +16,9 @@ export class UserPostShareService {
     private userPostRepository: Repository<UserPost>,
     @InjectRepository(ScholarPost)
     private scholarPostRepository: Repository<ScholarPost>,
+    @InjectRepository(UserFollow)
+    private userFollowRepository: Repository<UserFollow>,
+    private cacheService: CacheService,
   ) {}
 
   // Gönderi paylaş (hem user hem scholar post'ları için)
@@ -38,7 +43,7 @@ export class UserPostShareService {
     }
 
     if (!postExists) {
-      throw new Error('Gönderi bulunamadı');
+      throw new NotFoundException('Gönderi bulunamadı');
     }
 
     // Zaten paylaşılmış mı kontrol et
@@ -47,7 +52,7 @@ export class UserPostShareService {
     });
 
     if (existingShare) {
-      throw new Error('Bu gönderiyi zaten paylaştınız');
+      throw new ConflictException('Bu gönderiyi zaten paylaştınız');
     }
 
     // Paylaşımı oluştur
@@ -58,6 +63,7 @@ export class UserPostShareService {
     });
 
     const savedShare = await this.userPostShareRepository.save(share);
+    await this.clearTimelineCacheForUser(userId);
     return {
       success: true,
       message: 'Gönderi başarıyla paylaşıldı',
@@ -76,10 +82,11 @@ export class UserPostShareService {
     });
 
     if (!share) {
-      throw new Error('Bu gönderiyi paylaşmamışsınız');
+      throw new NotFoundException('Bu gönderiyi paylaşmamışsınız');
     }
 
     await this.userPostShareRepository.remove(share);
+    await this.clearTimelineCacheForUser(userId);
     return { success: true, message: 'Paylaşım kaldırıldı' };
   }
 
@@ -121,5 +128,26 @@ export class UserPostShareService {
     });
 
     return !!share;
+  }
+
+  private async clearTimelineCacheForUser(userId: number) {
+    const languages = ['tr', 'en', 'ar'];
+
+    for (const lang of languages) {
+      const cacheKey = `user-posts:timeline:${userId}:${lang}:v4`;
+      await this.cacheService.del(cacheKey);
+    }
+
+    const followers = await this.userFollowRepository.find({
+      where: { following_id: userId },
+      select: ['follower_id'],
+    });
+
+    for (const follower of followers) {
+      for (const lang of languages) {
+        const cacheKey = `user-posts:timeline:${follower.follower_id}:${lang}:v4`;
+        await this.cacheService.del(cacheKey);
+      }
+    }
   }
 }
