@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { BsPencilSquare, BsChevronUp, BsChevronDown, BsSearch, BsThreeDots } from 'react-icons/bs';
 import placeholderImg from '@/assets/images/avatar/placeholder.jpg';
 import { useSession } from 'next-auth/react';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import SimplebarReactClient from '@/components/wrappers/SimplebarReactClient';
 
@@ -17,17 +17,16 @@ const MessagingBar = () => {
     const { conversationPanel } = useLayoutContext();
     const { locale, t } = useLanguage();
     const { status, data: session } = useSession();
-    const { conversations, selectConversation } = useWebSocketChatContext();
+    const { conversations, selectConversation, sendMessage, socket, fetchMessages, isConnected } = useWebSocketChatContext();
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [isNewMessageOpen, setIsNewMessageOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [newMessageQuery, setNewMessageQuery] = useState('');
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [chatInput, setChatInput] = useState('');
-    const [chatMessages, setChatMessages] = useState([]);
     const [userProfile, setUserProfile] = useState(null);
     const [connections, setConnections] = useState([]);
+    const [activeChats, setActiveChats] = useState([]); // List of { user, messages, input, isExpanded }
+    const chatInputRef = useRef(null);
 
     // Fetch fresh user data to ensure photoUrl is present
     useEffect(() => {
@@ -115,6 +114,69 @@ const MessagingBar = () => {
         );
     }, [connections, newMessageQuery]);
 
+    // WebSocket Listener for incoming messages to open/update tabs
+    useEffect(() => {
+        if (!socket || !isConnected) return;
+
+        const handleNewMessage = (message) => {
+            // Find if this message belongs to any of our active chats
+            const senderId = message.senderId;
+            const isMe = senderId === (userInfo?.id || session?.user?.id);
+            const otherUserId = isMe ? message.receiverId : senderId;
+
+            // Update existing tab or open new one
+            setActiveChats(prev => {
+                const existingChatIndex = prev.findIndex(c => c.user.id === otherUserId);
+
+                const formattedMsg = {
+                    id: message.id || Date.now() + Math.random(),
+                    senderId: senderId,
+                    text: message.content,
+                    time: new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    isMe: isMe
+                };
+
+                if (existingChatIndex !== -1) {
+                    const updated = [...prev];
+                    const chat = updated[existingChatIndex];
+                    // Avoid duplicates
+                    if (!chat.messages.some(m => m.id === formattedMsg.id)) {
+                        updated[existingChatIndex] = {
+                            ...chat,
+                            messages: [...chat.messages, formattedMsg],
+                            isExpanded: true // Pop up on new message
+                        };
+                    }
+                    return updated;
+                } else {
+                    // Open new tab for the sender
+                    // Need to find user info from connections or conversations
+                    const senderConv = conversations.find(c => c.participantId === otherUserId);
+                    const senderConn = connections.find(c => c.id === otherUserId);
+
+                    const user = {
+                        id: otherUserId,
+                        firstName: senderConv?.participantName?.split(' ')[0] || senderConn?.firstName || 'Kullanıcı',
+                        lastName: senderConv?.participantName?.split(' ').slice(1).join(' ') || senderConn?.lastName || '',
+                        photoUrl: senderConv?.participantAvatar || senderConn?.photoUrl
+                    };
+
+                    return [{
+                        user,
+                        messages: [formattedMsg],
+                        input: '',
+                        isExpanded: true
+                    }, ...prev];
+                }
+            });
+        };
+
+        socket.on('newMessage', handleNewMessage);
+        return () => {
+            socket.off('newMessage', handleNewMessage);
+        };
+    }, [socket, isConnected, conversations, connections, userInfo?.id, session?.user?.id]);
+
     const formatDate = (date) => {
         if (!date) return '';
         const d = new Date(date);
@@ -126,10 +188,14 @@ const MessagingBar = () => {
     };
 
     const handleConversationClick = async (conv) => {
-        await selectConversation(conv);
-        if (conversationPanel?.toggle) {
-            conversationPanel.toggle();
-        }
+        // Find user details from connection or create a simple user object
+        const user = connections.find(c => c.id === conv.participantId) || {
+            id: conv.participantId,
+            firstName: conv.participantName.split(' ')[0],
+            lastName: conv.participantName.split(' ').slice(1).join(' '),
+            photoUrl: conv.participantAvatar
+        };
+        openChatWindow(user);
     };
 
     const { theme } = useLayoutContext();
@@ -161,30 +227,97 @@ const MessagingBar = () => {
 
     const handleNewMessageClick = (e) => {
         e.stopPropagation();
-        setSelectedUser(null);
         setNewMessageQuery('');
         setIsNewMessageOpen(true);
     };
 
     const handleSelectUser = (user) => {
-        setSelectedUser(user);
-        setNewMessageQuery('');
-        setChatMessages([]);
+        setIsNewMessageOpen(false);
+        openChatWindow(user);
     };
 
-    const handleSendMessage = () => {
-        if (!chatInput.trim() || !selectedUser) return;
+    const openChatWindow = async (user) => {
+        setActiveChats(prev => {
+            if (prev.find(chat => chat.user.id === user.id)) {
+                return prev.map(chat =>
+                    chat.user.id === user.id ? { ...chat, isExpanded: true } : chat
+                );
+            }
+            return [{
+                user,
+                messages: [],
+                input: '',
+                isExpanded: true
+            }, ...prev];
+        });
 
-        const newMessage = {
-            id: Date.now(),
-            senderId: userInfo?.id || session?.user?.id,
-            text: chatInput,
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            isMe: true
-        };
+        // Fetch messages for this user
+        // We need to find the conversationId first or use recipientId
+        try {
+            const conv = conversations.find(c => c.participantId === user.id);
+            if (conv && conv.id && !conv.id.startsWith('temp-')) {
+                const history = await fetchMessages(conv.id);
+                if (history && Array.isArray(history)) {
+                    setActiveChats(prev => prev.map(chat =>
+                        chat.user.id === user.id
+                            ? {
+                                ...chat,
+                                messages: history.map(m => ({
+                                    id: m.id,
+                                    senderId: m.senderId,
+                                    text: m.content,
+                                    time: new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                                    isMe: m.senderId === (userInfo?.id || session?.user?.id)
+                                }))
+                            }
+                            : chat
+                    ));
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching history for tab:', error);
+        }
+    };
 
-        setChatMessages(prev => [...prev, newMessage]);
-        setChatInput('');
+    const closeChatWindow = (userId) => {
+        setActiveChats(prev => prev.filter(chat => chat.user.id !== userId));
+    };
+
+    const toggleChatWindow = (userId) => {
+        setActiveChats(prev => prev.map(chat =>
+            chat.user.id === userId ? { ...chat, isExpanded: !chat.isExpanded } : chat
+        ));
+    };
+
+    const updateChatInput = (userId, value) => {
+        setActiveChats(prev => prev.map(chat =>
+            chat.user.id === userId ? { ...chat, input: value } : chat
+        ));
+    };
+
+    const handleSendMessage = async (userId) => {
+        const chat = activeChats.find(c => c.user.id === userId);
+        if (!chat || !chat.input.trim()) return;
+
+        try {
+            await sendMessage(chat.input, userId);
+
+            const newMessage = {
+                id: Date.now(),
+                senderId: userInfo?.id || session?.user?.id,
+                text: chat.input,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                isMe: true
+            };
+
+            setActiveChats(prev => prev.map(c =>
+                c.user.id === userId
+                    ? { ...c, messages: [...c.messages, newMessage], input: '' }
+                    : c
+            ));
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
     };
 
     return (
@@ -377,7 +510,173 @@ const MessagingBar = () => {
                 </div>
             )}
 
-            {/* LinkedIn Style New Message Popup */}
+            {/* Active Chat Windows (Tabs) */}
+            {activeChats.map((chat, index) => (
+                <div
+                    key={chat.user.id}
+                    className="position-absolute bottom-0 shadow-lg overflow-hidden d-flex flex-column"
+                    style={{
+                        right: `calc(100% + ${(index * 432) + (isNewMessageOpen ? 432 : 12)}px)`,
+                        width: '420px',
+                        height: chat.isExpanded ? '750px' : '48px',
+                        maxHeight: 'calc(100vh - 60px)',
+                        backgroundColor: colors.bg,
+                        border: `1px solid ${colors.border}`,
+                        borderTopLeftRadius: '8px',
+                        borderTopRightRadius: '8px',
+                        zIndex: 1060 - index,
+                        boxShadow: colors.shadow,
+                        transition: 'all 0.3s ease'
+                    }}
+                >
+                    {/* Window Header */}
+                    <div
+                        onClick={() => toggleChatWindow(chat.user.id)}
+                        className="d-flex align-items-center justify-content-between px-3"
+                        style={{
+                            height: '48px',
+                            backgroundColor: colors.header,
+                            color: colors.textMain,
+                            borderBottom: chat.isExpanded ? `1px solid ${colors.border}` : 'none',
+                            flexShrink: 0,
+                            cursor: 'pointer'
+                        }}
+                    >
+                        <div className="d-flex align-items-center overflow-hidden">
+                            <div className="position-relative me-2 flex-shrink-0">
+                                <Image
+                                    src={getDisplayAvatar(chat.user.photoUrl)}
+                                    alt={chat.user.firstName}
+                                    width={32}
+                                    height={32}
+                                    className="rounded-circle"
+                                    style={{ objectFit: 'cover' }}
+                                />
+                                <div className="position-absolute bottom-0 end-0 bg-success rounded-circle" style={{ width: '10px', height: '10px', border: `2px solid ${colors.header}` }} />
+                            </div>
+                            <span className="fw-bold text-truncate" style={{ fontSize: '0.85rem' }}>
+                                {chat.user.firstName} {chat.user.lastName}
+                            </span>
+                        </div>
+                        <div className={clsx("d-flex align-items-center gap-2", iconClass)}>
+                            {chat.isExpanded ? <BsChevronDown size={18} /> : <BsChevronUp size={18} />}
+                            <div
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    closeChatWindow(chat.user.id);
+                                }}
+                                className="hover-active p-1 d-flex align-items-center"
+                            >
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    {chat.isExpanded && (
+                        <>
+                            {/* Chat Content */}
+                            <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: colors.bg }}>
+                                <SimplebarReactClient style={{ height: '100%' }}>
+                                    <div className="p-3">
+                                        {/* User Info Card */}
+                                        <div className="text-center mb-4">
+                                            <Image
+                                                src={getDisplayAvatar(chat.user.photoUrl)}
+                                                alt={chat.user.firstName}
+                                                width={80}
+                                                height={80}
+                                                className="rounded-circle mb-2"
+                                                style={{ objectFit: 'cover' }}
+                                            />
+                                            <h5 className="mb-0 fw-bold" style={{ color: colors.textMain }}>{chat.user.firstName} {chat.user.lastName}</h5>
+                                            <p className="text-muted small">{chat.user.tagline || chat.user.role || 'Yazılım Geliştirici'}</p>
+                                        </div>
+
+                                        {/* Messages */}
+                                        {chat.messages.map((msg) => (
+                                            <div key={msg.id} className="d-flex mb-3">
+                                                <Image
+                                                    src={getDisplayAvatar(msg.isMe ? currentUserPhoto : chat.user.photoUrl)}
+                                                    alt={msg.isMe ? 'Me' : chat.user.firstName}
+                                                    width={40}
+                                                    height={40}
+                                                    className="rounded-circle me-2 flex-shrink-0"
+                                                    style={{ objectFit: 'cover' }}
+                                                />
+                                                <div className="overflow-hidden">
+                                                    <div className="d-flex align-items-center mb-1">
+                                                        <span className="fw-bold me-2 text-truncate" style={{ color: colors.textMain, fontSize: '0.9rem' }}>
+                                                            {msg.isMe ? 'Siz' : chat.user.firstName}
+                                                        </span>
+                                                        <span className="text-muted flex-shrink-0" style={{ fontSize: '0.75rem' }}>• {msg.time}</span>
+                                                    </div>
+                                                    <div style={{ color: colors.textMain, fontSize: '0.9rem', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                                                        {msg.text}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </SimplebarReactClient>
+
+                                {/* Input Area */}
+                                <div className="p-3" style={{ borderTop: `1px solid ${colors.border}`, backgroundColor: isDark ? '#1d2226' : '#ffffff' }}>
+                                    <div
+                                        className="rounded p-2 mb-2"
+                                        style={{
+                                            backgroundColor: colors.searchBg,
+                                            minHeight: '100px',
+                                            display: 'flex',
+                                            flexDirection: 'column'
+                                        }}
+                                    >
+                                        <textarea
+                                            placeholder="Bir mesaj yazın..."
+                                            className="w-100 border-0 bg-transparent shadow-none"
+                                            style={{
+                                                color: colors.textMain,
+                                                fontSize: '0.9rem',
+                                                resize: 'none',
+                                                outline: 'none',
+                                                flex: 1
+                                            }}
+                                            value={chat.input}
+                                            onChange={(e) => updateChatInput(chat.user.id, e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter' && !e.shiftKey) {
+                                                    e.preventDefault();
+                                                    handleSendMessage(chat.user.id);
+                                                }
+                                            }}
+                                        />
+                                        <div className="ms-auto">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: 'rotate(180deg)', cursor: 'pointer', color: colors.textMuted }}><path d="M19 9l-7 7-7-7" /></svg>
+                                        </div>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-end">
+                                        <button
+                                            onClick={() => handleSendMessage(chat.user.id)}
+                                            className="btn btn-sm px-3 fw-bold shadow-none"
+                                            style={{
+                                                backgroundColor: chat.input?.trim() ? '#0a66c2' : 'transparent',
+                                                color: chat.input?.trim() ? '#ffffff' : colors.textMuted,
+                                                borderRadius: '16px',
+                                                pointerEvents: chat.input?.trim() ? 'auto' : 'none',
+                                                border: 'none',
+                                                cursor: 'pointer'
+                                            }}
+                                        >
+                                            Gönder
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                </div>
+            ))}
+
+            {/* LinkedIn Style New Message Search Popup */}
             {isNewMessageOpen && (
                 <div
                     className="position-absolute bottom-0 shadow-lg overflow-hidden d-flex flex-column"
@@ -408,187 +707,61 @@ const MessagingBar = () => {
                     >
                         <span className="fw-bold" style={{ fontSize: '0.9rem' }}>Yeni mesaj</span>
                         <div className={clsx("d-flex align-items-center gap-3", iconClass)}>
-                            <BsSearch size={16} className="hover-active" style={{ cursor: 'pointer' }} />
                             <div onClick={() => setIsNewMessageOpen(false)} className="hover-active d-flex align-items-center" style={{ cursor: 'pointer' }}>
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
                             </div>
                         </div>
                     </div>
 
-                    {/* Search Field / Selected User Tag */}
+                    {/* Search Field */}
                     <div className="px-3 py-2 d-flex flex-wrap align-items-center gap-2" style={{ borderBottom: `1px solid ${colors.border}`, minHeight: '52px', backgroundColor: colors.bg }}>
-                        {selectedUser ? (
-                            <div
-                                className="d-flex align-items-center bg-success bg-opacity-10 px-2 py-1 rounded"
-                                style={{ border: '1px solid rgba(var(--bs-success-rgb), 0.3)', cursor: 'default' }}
-                            >
-                                <span className="fw-bold" style={{ color: colors.textMain, fontSize: '0.85rem' }}>
-                                    {selectedUser.firstName} {selectedUser.lastName}
-                                </span>
-                                <div
-                                    onClick={() => setSelectedUser(null)}
-                                    className="ms-2 d-flex align-items-center"
-                                    style={{ cursor: 'pointer' }}
-                                >
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M18 6L6 18M6 6l12 12" /></svg>
-                                </div>
-                            </div>
-                        ) : (
-                            <input
-                                type="text"
-                                autoFocus
-                                placeholder="Bir veya birden fazla ad yazın"
-                                className="flex-grow-1 border-0 bg-transparent shadow-none"
-                                style={{ color: colors.textMain, fontSize: '0.95rem', height: '40px', outline: 'none' }}
-                                value={newMessageQuery}
-                                onChange={(e) => setNewMessageQuery(e.target.value)}
-                            />
-                        )}
-                        {selectedUser && (
-                            <div className="ms-auto">
-                                <BsSearch size={16} className="text-muted" />
-                            </div>
-                        )}
+                        <input
+                            type="text"
+                            autoFocus
+                            placeholder="Bir veya birden fazla ad yazın"
+                            className="flex-grow-1 border-0 bg-transparent shadow-none"
+                            style={{ color: colors.textMain, fontSize: '0.95rem', height: '40px', outline: 'none' }}
+                            value={newMessageQuery}
+                            onChange={(e) => setNewMessageQuery(e.target.value)}
+                        />
                     </div>
 
-                    {/* Content Area: Suggestions or Chat */}
+                    {/* Suggestions list */}
                     <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: colors.bg }}>
-                        {!selectedUser ? (
-                            <SimplebarReactClient style={{ height: '100%' }}>
-                                <div className="px-3 py-2 text-muted fw-bold" style={{ fontSize: '0.75rem', textTransform: 'uppercase' }}>
-                                    Önerilen
-                                </div>
-                                {suggestedUsers.length > 0 ? (
-                                    suggestedUsers.map((u) => (
-                                        <div
-                                            key={u.id}
-                                            onClick={() => handleSelectUser(u)}
-                                            className="d-flex align-items-center p-3 hover-bg"
-                                            style={{ cursor: 'pointer', borderBottom: `1px solid ${colors.border}` }}
-                                        >
-                                            <Image
-                                                src={getDisplayAvatar(u.photoUrl)}
-                                                alt={u.firstName}
-                                                width={48}
-                                                height={48}
-                                                className="rounded-circle me-3"
-                                                style={{ objectFit: 'cover' }}
-                                            />
-                                            <div className="flex-grow-1 overflow-hidden">
-                                                <div className="fw-bold text-truncate" style={{ color: colors.textMain }}>
-                                                    {u.firstName} {u.lastName}
-                                                </div>
-                                                <div className="text-muted text-truncate small">
-                                                    {u.tagline || u.role || 'Kullanıcı'}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div className="p-4 text-center small text-muted">Arama sonucu bulunamadı.</div>
-                                )}
-                            </SimplebarReactClient>
-                        ) : (
-                            <>
-                                <SimplebarReactClient style={{ height: '100%' }}>
-                                    <div className="p-3">
-                                        {/* User Info Card */}
-                                        <div className="text-center mb-4">
-                                            <Image
-                                                src={getDisplayAvatar(selectedUser.photoUrl)}
-                                                alt={selectedUser.firstName}
-                                                width={80}
-                                                height={80}
-                                                className="rounded-circle mb-2"
-                                                style={{ objectFit: 'cover' }}
-                                            />
-                                            <h5 className="mb-0 fw-bold" style={{ color: colors.textMain }}>{selectedUser.firstName} {selectedUser.lastName}</h5>
-                                            <p className="text-muted small">{selectedUser.tagline || selectedUser.role || 'Yazılım Geliştirici'}</p>
-                                        </div>
-
-                                        {/* Date Separator */}
-                                        <div className="d-flex align-items-center mb-4">
-                                            <div className="flex-grow-1 border-bottom" style={{ borderColor: colors.border }}></div>
-                                            <div className="px-3 text-uppercase text-muted fw-bold" style={{ fontSize: '0.7rem' }}>16 ŞUB</div>
-                                            <div className="flex-grow-1 border-bottom" style={{ borderColor: colors.border }}></div>
-                                        </div>
-
-                                        {/* Messages */}
-                                        {chatMessages.map((msg) => (
-                                            <div key={msg.id} className="d-flex mb-3">
-                                                <Image
-                                                    src={getDisplayAvatar(msg.isMe ? currentUserPhoto : selectedUser.photoUrl)}
-                                                    alt={msg.isMe ? 'Me' : selectedUser.firstName}
-                                                    width={40}
-                                                    height={40}
-                                                    className="rounded-circle me-2 flex-shrink-0"
-                                                    style={{ objectFit: 'cover' }}
-                                                />
-                                                <div>
-                                                    <div className="d-flex align-items-center mb-1">
-                                                        <span className="fw-bold me-2" style={{ color: colors.textMain, fontSize: '0.9rem' }}>
-                                                            {msg.isMe ? 'Siz' : `${selectedUser.firstName} ${selectedUser.lastName}`}
-                                                        </span>
-                                                        <span className="text-muted" style={{ fontSize: '0.75rem' }}>• {msg.time}</span>
-                                                    </div>
-                                                    <div style={{ color: colors.textMain, fontSize: '0.9rem', whiteSpace: 'pre-wrap' }}>
-                                                        {msg.text}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </SimplebarReactClient>
-
-                                {/* Input Area */}
-                                <div className="p-3" style={{ borderTop: `1px solid ${colors.border}`, backgroundColor: isDark ? '#1d2226' : '#ffffff' }}>
+                        <SimplebarReactClient style={{ height: '100%' }}>
+                            <div className="px-3 py-2 text-muted fw-bold" style={{ fontSize: '0.75rem', textTransform: 'uppercase' }}>
+                                Önerilen
+                            </div>
+                            {suggestedUsers.length > 0 ? (
+                                suggestedUsers.map((u) => (
                                     <div
-                                        className="rounded p-2 mb-2"
-                                        style={{
-                                            backgroundColor: colors.searchBg,
-                                            minHeight: '100px',
-                                            display: 'flex',
-                                            flexDirection: 'column'
-                                        }}
+                                        key={u.id}
+                                        onClick={() => handleSelectUser(u)}
+                                        className="d-flex align-items-center p-3 hover-bg"
+                                        style={{ cursor: 'pointer', borderBottom: `1px solid ${colors.border}` }}
                                     >
-                                        <textarea
-                                            placeholder="Bir mesaj yazın..."
-                                            className="w-100 border-0 bg-transparent shadow-none"
-                                            style={{
-                                                color: colors.textMain,
-                                                fontSize: '0.9rem',
-                                                resize: 'none',
-                                                outline: 'none',
-                                                flex: 1
-                                            }}
-                                            value={chatInput}
-                                            onChange={(e) => setChatInput(e.target.value)}
+                                        <Image
+                                            src={getDisplayAvatar(u.photoUrl)}
+                                            alt={u.firstName}
+                                            width={48}
+                                            height={48}
+                                            className="rounded-circle me-3"
+                                            style={{ objectFit: 'cover' }}
                                         />
-                                        <div className="ms-auto">
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: 'rotate(180deg)', cursor: 'pointer', color: colors.textMuted }}><path d="M19 9l-7 7-7-7" /></svg>
+                                        <div className="flex-grow-1 overflow-hidden">
+                                            <div className="fw-bold text-truncate" style={{ color: colors.textMain }}>
+                                                {u.firstName} {u.lastName}
+                                            </div>
+                                            <div className="text-muted text-truncate small">
+                                                {u.tagline || u.role || 'Kullanıcı'}
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="d-flex align-items-center justify-content-end">
-                                        <div className="d-flex align-items-center gap-2">
-                                            <button
-                                                onClick={handleSendMessage}
-                                                className="btn btn-sm px-3 fw-bold shadow-none"
-                                                style={{
-                                                    backgroundColor: chatInput.trim() ? '#0a66c2' : 'transparent',
-                                                    color: chatInput.trim() ? '#ffffff' : colors.textMuted,
-                                                    borderRadius: '16px',
-                                                    pointerEvents: chatInput.trim() ? 'auto' : 'none',
-                                                    border: 'none',
-                                                    cursor: 'pointer'
-                                                }}
-                                            >
-                                                Gönder
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </>
-                        )}
+                                ))
+                            ) : (
+                                <div className="p-4 text-center small text-muted">Arama sonucu bulunamadı.</div>
+                            )}
+                        </SimplebarReactClient>
                     </div>
                 </div>
             )}
