@@ -50,6 +50,8 @@ const BookDetailPage = () => {
   const [currentOriginalChunks, setCurrentOriginalChunks] = useState([]);
   const [currentTranslatedChunks, setCurrentTranslatedChunks] = useState([]);
   const [activeChunkIndex, setActiveChunkIndex] = useState(0);
+  const [isSliderSeeking, setIsSliderSeeking] = useState(false);
+  const [previewProgress, setPreviewProgress] = useState(null);
   const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
   const [isDraggingPlayer, setIsDraggingPlayer] = useState(false);
   const isReadingRef = useRef(false);
@@ -58,6 +60,8 @@ const BookDetailPage = () => {
   const playbackQueueRef = useRef([]);
   const queueIndexRef = useRef(0);
   const readingSessionIdRef = useRef(0);
+  const onQueueCompleteRef = useRef(null);
+  const currentLangCodeRef = useRef(null);
   const originalChunksContainerRef = useRef(null);
   const translatedChunksContainerRef = useRef(null);
   const playerDragRef = useRef({
@@ -153,6 +157,80 @@ const BookDetailPage = () => {
         return acc;
       }, [])
       .slice(0, 14);
+  };
+
+  const startQueuePlayback = async (segmentQueue, langCode, startIndex = 0, startOffsetRatio = 0) => {
+    if (!Array.isArray(segmentQueue) || segmentQueue.length === 0) return;
+    const token = localStorage.getItem('token');
+    const sessionId = readingSessionIdRef.current;
+
+    const playSegmentAt = async (segmentIndex, offsetRatio = 0) => {
+      if (sessionId !== readingSessionIdRef.current) return;
+      const segmentText = segmentQueue[segmentIndex];
+      if (!segmentText) return;
+
+      queueIndexRef.current = segmentIndex;
+      setActiveChunkIndex(segmentIndex);
+
+      const segmentBlob = await fetchTTSAudio(segmentText, langCode, API_BASE_URL, token);
+      const segmentUrl = URL.createObjectURL(segmentBlob);
+      const audio = new Audio(segmentUrl);
+      audio.playbackRate = playbackRate || 1.0;
+      currentAudioRef.current = audio;
+
+      audio.onplay = () => {
+        setIsReading(true);
+        isReadingRef.current = true;
+        setIsPaused(false);
+        setPlayerStatus('playing');
+      };
+      audio.ontimeupdate = () => {
+        if (!audio.duration) return;
+        const segmentPct = audio.currentTime / audio.duration;
+        const total = Math.max(1, segmentQueue.length);
+        const overallPct = ((segmentIndex + segmentPct) / total) * 100;
+        setAudioProgress(Math.min(100, overallPct));
+      };
+      audio.onerror = () => {
+        URL.revokeObjectURL(segmentUrl);
+        if (suppressAudioErrorRef.current) return;
+        setIsReading(false);
+        setIsPaused(false);
+        isReadingRef.current = false;
+        setPlayerStatus('error');
+        showNotification({ title: 'Hata', message: 'Ses oynatılamadı.', variant: 'danger' });
+      };
+      audio.onended = async () => {
+        URL.revokeObjectURL(segmentUrl);
+        if (sessionId !== readingSessionIdRef.current) return;
+
+        const nextIndex = segmentIndex + 1;
+        if (isReadingRef.current && nextIndex < segmentQueue.length) {
+          await playSegmentAt(nextIndex, 0);
+          return;
+        }
+
+        if (isReadingRef.current && typeof onQueueCompleteRef.current === 'function') {
+          onQueueCompleteRef.current();
+          return;
+        }
+
+        setIsReading(false);
+        setIsPaused(false);
+        isReadingRef.current = false;
+        setAudioProgress(0);
+        setActiveChunkIndex(0);
+        setPlayerStatus('completed');
+      };
+
+      isReadingRef.current = true;
+      await audio.play();
+      if (offsetRatio > 0 && audio.duration) {
+        audio.currentTime = Math.min(audio.duration - 0.05, audio.duration * offsetRatio);
+      }
+    };
+
+    await playSegmentAt(startIndex, startOffsetRatio);
   };
 
 
@@ -429,11 +507,6 @@ const BookDetailPage = () => {
     if (isReading && !isPaused) {
       interval = setInterval(() => {
         setElapsedTime(prev => prev + 1);
-        // Audio progress güncelle
-        if (currentAudioRef.current && currentAudioRef.current.duration) {
-          const pct = (currentAudioRef.current.currentTime / currentAudioRef.current.duration) * 100;
-          setAudioProgress(Math.min(100, pct));
-        }
       }, 500);
     }
     return () => { if (interval) clearInterval(interval); };
@@ -541,6 +614,7 @@ const BookDetailPage = () => {
       }
 
       setTargetLang(targetLanguage);
+      currentLangCodeRef.current = targetLanguage.code;
 
       const playPage = async (pageNum) => {
         if (!isReadingRef.current && pageNum !== startPage) return;
@@ -596,81 +670,27 @@ const BookDetailPage = () => {
           }
 
           // Seviye 2: metni segment segment oynat, highlight ile birebir takip et
-          const token = localStorage.getItem('token');
-          const sessionId = readingSessionIdRef.current;
           const segmentQueue = chunks.length > 0 ? chunks : [translatedText];
           playbackQueueRef.current = segmentQueue;
           queueIndexRef.current = 0;
 
           setTranslating(false);
           disposeCurrentAudio();
+          onQueueCompleteRef.current = () => {
+            if (isReadingRef.current && activePdfDoc && pageNum < activeTotalPages) {
+              playPage(pageNum + 1);
+              return;
+            }
 
-          const playSegmentAt = async (segmentIndex) => {
-            if (sessionId !== readingSessionIdRef.current) return;
-            if (!isReadingRef.current && pageNum !== startPage) return;
-
-            const segmentText = segmentQueue[segmentIndex];
-            if (!segmentText) return;
-
-            queueIndexRef.current = segmentIndex;
-            setActiveChunkIndex(Math.min(segmentIndex, Math.max(0, chunks.length - 1)));
-
-            const segmentBlob = await fetchTTSAudio(segmentText, targetLanguage.code, API_BASE_URL, token);
-            const segmentUrl = URL.createObjectURL(segmentBlob);
-            const audio = new Audio(segmentUrl);
-            audio.playbackRate = playbackRate || 1.0;
-            currentAudioRef.current = audio;
-
-            audio.onplay = () => {
-              setIsReading(true);
-              isReadingRef.current = true;
-              setIsPaused(false);
-              setPlayerStatus('playing');
-            };
-            audio.ontimeupdate = () => {
-              if (!audio.duration) return;
-              const segmentPct = audio.currentTime / audio.duration;
-              const total = Math.max(1, segmentQueue.length);
-              const overallPct = ((segmentIndex + segmentPct) / total) * 100;
-              setAudioProgress(Math.min(100, overallPct));
-            };
-            audio.onerror = () => {
-              URL.revokeObjectURL(segmentUrl);
-              if (suppressAudioErrorRef.current) return;
-              setIsReading(false);
-              setIsPaused(false);
-              isReadingRef.current = false;
-              setPlayerStatus('error');
-              showNotification({ title: 'Hata', message: 'Ses oynatılamadı.', variant: 'danger' });
-            };
-            audio.onended = async () => {
-              URL.revokeObjectURL(segmentUrl);
-              if (sessionId !== readingSessionIdRef.current) return;
-
-              const nextIndex = segmentIndex + 1;
-              if (isReadingRef.current && nextIndex < segmentQueue.length) {
-                await playSegmentAt(nextIndex);
-                return;
-              }
-
-              if (isReadingRef.current && activePdfDoc && pageNum < activeTotalPages) {
-                playPage(pageNum + 1);
-                return;
-              }
-
-              setIsReading(false);
-              setIsPaused(false);
-              isReadingRef.current = false;
-              setAudioProgress(0);
-              setActiveChunkIndex(0);
-              setPlayerStatus('completed');
-            };
-
-            isReadingRef.current = true;
-            await audio.play();
+            setIsReading(false);
+            setIsPaused(false);
+            isReadingRef.current = false;
+            setAudioProgress(0);
+            setActiveChunkIndex(0);
+            setPlayerStatus('completed');
           };
 
-          await playSegmentAt(0);
+          await startQueuePlayback(segmentQueue, targetLanguage.code, 0, 0);
 
         } catch (err) {
           console.error(`Page ${pageNum} error:`, err);
@@ -712,6 +732,8 @@ const BookDetailPage = () => {
     readingSessionIdRef.current += 1;
     playbackQueueRef.current = [];
     queueIndexRef.current = 0;
+    onQueueCompleteRef.current = null;
+    currentLangCodeRef.current = null;
     disposeCurrentAudio();
     setIsReading(false);
     setIsPaused(false);
@@ -736,9 +758,32 @@ const BookDetailPage = () => {
 
   const getProgress = () => audioProgress;
 
+  const commitSliderSeek = () => {
+    if (previewProgress === null) return;
+    seekTo(previewProgress);
+    setIsSliderSeeking(false);
+    setPreviewProgress(null);
+  };
+
   // Progress bar'a tıklayarak konuma atla
   const seekTo = (percent) => {
-    if (playbackQueueRef.current.length > 1) return;
+    if (playbackQueueRef.current.length > 1) {
+      const queue = playbackQueueRef.current;
+      const langCode = currentLangCodeRef.current;
+      if (!queue.length || !langCode) return;
+
+      const total = queue.length;
+      const normalized = Math.max(0, Math.min(100, percent)) / 100;
+      const rawPos = normalized * total;
+      const targetIndex = Math.min(total - 1, Math.floor(rawPos));
+      const offsetRatio = Math.max(0, Math.min(0.98, rawPos - targetIndex));
+
+      readingSessionIdRef.current += 1;
+      disposeCurrentAudio();
+      setActiveChunkIndex(targetIndex);
+      startQueuePlayback(queue, langCode, targetIndex, offsetRatio);
+      return;
+    }
     const audio = currentAudioRef.current;
     if (!audio || !audio.duration) return;
     audio.currentTime = (percent / 100) * audio.duration;
@@ -751,6 +796,8 @@ const BookDetailPage = () => {
       readingSessionIdRef.current += 1;
       playbackQueueRef.current = [];
       queueIndexRef.current = 0;
+      onQueueCompleteRef.current = null;
+      currentLangCodeRef.current = null;
       disposeCurrentAudio();
       isReadingRef.current = false;
     };
@@ -1441,7 +1488,7 @@ const BookDetailPage = () => {
             left: '50%',
             bottom: '0.5rem',
             width: '100%',
-            maxWidth: '900px',
+            maxWidth: '1160px',
             transform: `translate(-50%, 0) translate(${playerPosition.x}px, ${playerPosition.y}px)`,
             cursor: isDraggingPlayer ? 'grabbing' : 'grab',
             userSelect: 'none'
@@ -1554,7 +1601,7 @@ const BookDetailPage = () => {
               )}
               <Row className="align-items-center g-3">
                 {/* Book Info & Status */}
-                <Col xs={12} md={4}>
+                <Col xs={12} md={3}>
                   <div className="d-flex align-items-center gap-3">
                     <div
                       className="bg-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm"
@@ -1584,11 +1631,10 @@ const BookDetailPage = () => {
 
                 {/* Main Controls */}
                 <Col xs={12} md={4} className="d-flex flex-column align-items-center">
-                  <div className="d-flex align-items-center gap-3 mb-2">
+                  <div className="d-flex align-items-center gap-3 mb-2 player-control-cluster">
                     <Button
                       variant="link"
-                      className="p-0 opacity-75"
-                      style={{ color: '#ffffff !important', border: 'none', boxShadow: 'none' }}
+                      className="player-icon-btn"
                       disabled={currentPage <= 1 || translating}
                       onClick={() => handleTranslateAndRead(targetLang, currentPage - 1)}
                     >
@@ -1597,8 +1643,7 @@ const BookDetailPage = () => {
 
                     <Button
                       variant="light"
-                      className="rounded-circle d-flex align-items-center justify-content-center shadow"
-                      style={{ width: '50px', height: '50px', backgroundColor: '#ffffff !important', color: '#1c1f2e !important', border: 'none' }}
+                      className="rounded-circle d-flex align-items-center justify-content-center shadow player-main-btn"
                       onClick={pauseResumeTextToSpeech}
                       disabled={translating || !currentAudioRef.current}
                     >
@@ -1607,13 +1652,42 @@ const BookDetailPage = () => {
 
                     <Button
                       variant="link"
-                      className="p-0 opacity-75"
-                      style={{ color: '#ffffff !important', border: 'none', boxShadow: 'none' }}
+                      className="player-icon-btn"
                       disabled={currentPage >= totalPages || translating}
                       onClick={() => handleTranslateAndRead(targetLang, currentPage + 1)}
                     >
                       <BsSkipForward size={20} />
                     </Button>
+                  </div>
+                  <div className="player-page-chip mb-2 text-center">
+                    <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'rgba(255,255,255,0.5) !important' }}>SAYFA</div>
+                    <div className="d-flex align-items-center gap-1 justify-content-center">
+                      <div className="position-relative d-flex align-items-center">
+                        <select
+                          className="bg-transparent border-0 fw-bold p-0 pe-1 player-select"
+                          style={{
+                            outline: 'none',
+                            cursor: 'pointer',
+                            fontSize: '1.2rem',
+                            minWidth: '30px',
+                            textAlign: 'right',
+                            appearance: 'none',
+                            WebkitAppearance: 'none',
+                            color: '#007bff !important'
+                          }}
+                          value={currentPage}
+                          onChange={(e) => {
+                            const newPage = parseInt(e.target.value);
+                            handleTranslateAndRead(targetLang, newPage);
+                          }}
+                        >
+                          {[...Array(totalPages || 1)].map((_, i) => (
+                            <option key={i + 1} value={i + 1} style={{ backgroundColor: '#1c1f2e', color: '#ffffff' }}>{i + 1}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <span style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.62) !important' }}>/ {totalPages || 1}</span>
+                    </div>
                   </div>
 
                   <div className="w-100 px-3 mt-1">
@@ -1623,8 +1697,25 @@ const BookDetailPage = () => {
                       min="0"
                       max="100"
                       step="0.1"
-                      value={getProgress()}
-                      onChange={(e) => seekTo(parseFloat(e.target.value))}
+                      value={previewProgress !== null ? previewProgress : getProgress()}
+                      onMouseDown={() => {
+                        setIsSliderSeeking(true);
+                        setPreviewProgress(getProgress());
+                      }}
+                      onTouchStart={() => {
+                        setIsSliderSeeking(true);
+                        setPreviewProgress(getProgress());
+                      }}
+                      onMouseUp={commitSliderSeek}
+                      onTouchEnd={commitSliderSeek}
+                      onChange={(e) => {
+                        const nextValue = parseFloat(e.target.value);
+                        if (isSliderSeeking) {
+                          setPreviewProgress(nextValue);
+                        } else {
+                          seekTo(nextValue);
+                        }
+                      }}
                       style={{
                         cursor: 'pointer',
                         accentColor: '#007bff'
@@ -1634,121 +1725,93 @@ const BookDetailPage = () => {
                 </Col>
 
                 {/* Page Info & Speed */}
-                <Col xs={12} md={4}>
-                  <div className="d-flex align-items-center justify-content-end gap-3 px-2">
-                    <div className="text-end me-2">
-                      <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'rgba(255,255,255,0.5) !important' }}>SAYFA</div>
-                      <div className="d-flex align-items-center gap-1 justify-content-end">
-                        <div className="position-relative d-flex align-items-center">
-                          <select
-                            className="bg-transparent border-0 fw-bold p-0 pe-1 player-select"
-                            style={{
-                              outline: 'none',
-                              cursor: 'pointer',
-                              fontSize: '1.25rem',
-                              minWidth: '30px',
-                              textAlign: 'right',
-                              appearance: 'none',
-                              WebkitAppearance: 'none',
-                              color: '#007bff !important'
-                            }}
-                            value={currentPage}
-                            onChange={(e) => {
-                              const newPage = parseInt(e.target.value);
-                              handleTranslateAndRead(targetLang, newPage);
-                            }}
-                          >
-                            {[...Array(totalPages || 1)].map((_, i) => (
-                              <option key={i + 1} value={i + 1} style={{ backgroundColor: '#1c1f2e', color: '#ffffff' }}>{i + 1}</option>
-                            ))}
-                          </select>
-                        </div>
-                        <span style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.6) !important' }}>/ {totalPages || 1}</span>
-                      </div>
+                <Col xs={12} md={5}>
+                  <div className="d-flex flex-column align-items-end gap-2 px-2">
+                    <div className="d-flex align-items-center gap-2 flex-nowrap">
+                      <Dropdown drop="up" style={{ overflow: 'visible' }}>
+                        <DropdownToggle
+                          variant="outline-light"
+                          size="sm"
+                          className="rounded-pill px-3 d-flex align-items-center gap-1 player-pill-btn"
+                          style={{ fontSize: '0.8rem', color: '#ffffff !important' }}
+                        >
+                          {playbackRate}x
+                        </DropdownToggle>
+                        <DropdownMenu
+                          style={{
+                            minWidth: '120px',
+                            backgroundColor: '#1c1f2e !important',
+                            border: '1px solid rgba(255,255,255,0.2) !important',
+                            boxShadow: '0 10px 25px rgba(0,0,0,0.5) !important',
+                            borderRadius: '12px',
+                            padding: '8px 0',
+                            marginBottom: '10px',
+                            zIndex: 2000,
+                            position: 'absolute'
+                          }}
+                        >
+                          {[0.5, 0.75, 1.0, 1.25, 1.5, 2.0].map(rate => (
+                            <button
+                              key={rate}
+                              onClick={() => changePlaybackRate(rate)}
+                              className="dropdown-item w-100 border-0 text-start"
+                              style={{
+                                backgroundColor: playbackRate === rate ? '#007bff !important' : 'transparent',
+                                color: '#ffffff !important',
+                                padding: '8px 16px',
+                                fontSize: '0.85rem',
+                                transition: 'background 0.2s',
+                                cursor: 'pointer'
+                              }}
+                            >
+                              {rate === 1.0 ? 'Normal (1x)' : `${rate}x`}
+                            </button>
+                          ))}
+                        </DropdownMenu>
+                      </Dropdown>
                     </div>
 
-                    <Dropdown drop="up" style={{ overflow: 'visible' }}>
-                      <DropdownToggle
+                    <div className="d-flex align-items-center gap-2 flex-wrap justify-content-end">
+                      <Button
                         variant="outline-light"
                         size="sm"
-                        className="rounded-pill px-3 d-flex align-items-center gap-1"
-                        style={{ fontSize: '0.8rem', color: '#ffffff !important', borderColor: 'rgba(255,255,255,0.3) !important' }}
-                      >
-                        {playbackRate}x
-                      </DropdownToggle>
-                      <DropdownMenu
-                        style={{
-                          minWidth: '120px',
-                          backgroundColor: '#1c1f2e !important',
-                          border: '1px solid rgba(255,255,255,0.2) !important',
-                          boxShadow: '0 10px 25px rgba(0,0,0,0.5) !important',
-                          borderRadius: '12px',
-                          padding: '8px 0',
-                          marginBottom: '10px',
-                          zIndex: 2000,
-                          position: 'absolute'
+                        className="rounded-pill px-2 player-pill-btn"
+                        onClick={() => {
+                          if (selectedPdfUrlForTranslate || selectedPdfUrl) {
+                            setSelectedPdfUrl(selectedPdfUrlForTranslate || selectedPdfUrl);
+                            setSelectedPdfTitle(book?.translations?.[0]?.title || 'PDF');
+                            setShowPdfViewer(true);
+                          } else {
+                            showNotification({
+                              title: 'Bilgi',
+                              message: 'Bu içerik için PDF bulunamadı.',
+                              variant: 'warning'
+                            });
+                          }
                         }}
                       >
-                        {[0.5, 0.75, 1.0, 1.25, 1.5, 2.0].map(rate => (
-                          <button
-                            key={rate}
-                            onClick={() => changePlaybackRate(rate)}
-                            className="dropdown-item w-100 border-0 text-start"
-                            style={{
-                              backgroundColor: playbackRate === rate ? '#007bff !important' : 'transparent',
-                              color: '#ffffff !important',
-                              padding: '8px 16px',
-                              fontSize: '0.85rem',
-                              transition: 'background 0.2s',
-                              cursor: 'pointer'
-                            }}
-                          >
-                            {rate === 1.0 ? 'Normal (1x)' : `${rate}x`}
-                          </button>
-                        ))}
-                      </DropdownMenu>
-                    </Dropdown>
+                        PDF'i Göster
+                      </Button>
 
-                    <Button
-                      variant="outline-light"
-                      size="sm"
-                      className="rounded-pill px-2"
-                      onClick={() => {
-                        if (selectedPdfUrlForTranslate || selectedPdfUrl) {
-                          setSelectedPdfUrl(selectedPdfUrlForTranslate || selectedPdfUrl);
-                          setSelectedPdfTitle(book?.translations?.[0]?.title || 'PDF');
-                          setShowPdfViewer(true);
-                        } else {
-                          showNotification({
-                            title: 'Bilgi',
-                            message: 'Bu içerik için PDF bulunamadı.',
-                            variant: 'warning'
-                          });
-                        }
-                      }}
-                    >
-                      PDF'i Göster
-                    </Button>
+                      <Button
+                        variant="outline-light"
+                        size="sm"
+                        className="rounded-pill px-2 player-pill-btn"
+                        onClick={() => setShowReadingAssist((prev) => !prev)}
+                      >
+                        {showReadingAssist ? 'Vurguyu Gizle' : 'Vurguyu Göster'}
+                      </Button>
 
-                    <Button
-                      variant="outline-light"
-                      size="sm"
-                      className="rounded-pill px-2"
-                      onClick={() => setShowReadingAssist((prev) => !prev)}
-                    >
-                      {showReadingAssist ? 'Vurguyu Gizle' : 'Vurguyu Göster'}
-                    </Button>
-
-                    <Button
-                      variant="outline-danger"
-                      size="sm"
-                      className="rounded-circle p-1"
-                      style={{ color: '#ff4d4d', borderColor: '#ff4d4d' }}
-                      onClick={stopTextToSpeech}
-                      title="Kapat"
-                    >
-                      <BsX size={18} />
-                    </Button>
+                      <Button
+                        variant="outline-danger"
+                        size="sm"
+                        className="rounded-circle p-1 player-close-btn"
+                        onClick={stopTextToSpeech}
+                        title="Kapat"
+                      >
+                        <BsX size={18} />
+                      </Button>
+                    </div>
                   </div>
                 </Col>
               </Row>
@@ -1793,6 +1856,88 @@ const BookDetailPage = () => {
           cursor: pointer;
           border: 2px solid #ffffff;
           box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+        .player-control-cluster {
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.12);
+          border-radius: 999px;
+          padding: 8px 12px;
+          backdrop-filter: blur(8px);
+        }
+        .player-icon-btn {
+          width: 38px;
+          height: 38px;
+          border-radius: 50% !important;
+          display: inline-flex !important;
+          align-items: center;
+          justify-content: center;
+          color: rgba(255,255,255,0.95) !important;
+          border: 1px solid rgba(255,255,255,0.16) !important;
+          background: rgba(255,255,255,0.07) !important;
+          transition: all 0.2s ease;
+          text-decoration: none !important;
+        }
+        .player-icon-btn:hover {
+          transform: translateY(-1px);
+          background: rgba(255,255,255,0.14) !important;
+          border-color: rgba(255,255,255,0.3) !important;
+        }
+        .player-main-btn {
+          width: 56px !important;
+          height: 56px !important;
+          background: linear-gradient(135deg, #ffffff 0%, #e9f0ff 100%) !important;
+          color: #111b36 !important;
+          border: 1px solid rgba(255,255,255,0.85) !important;
+          box-shadow: 0 10px 20px rgba(0,0,0,0.24) !important;
+          transition: all 0.2s ease;
+        }
+        .player-main-btn:hover {
+          transform: translateY(-1px) scale(1.02);
+        }
+        .player-page-chip {
+          padding: 8px 10px;
+          border-radius: 12px;
+          border: 1px solid rgba(255,255,255,0.12);
+          background: rgba(255,255,255,0.04);
+          min-width: 84px;
+        }
+        .player-pill-btn {
+          border: 1px solid rgba(255,255,255,0.24) !important;
+          background: rgba(255,255,255,0.08) !important;
+          color: #f4f7ff !important;
+          font-weight: 500;
+          transition: all 0.2s ease;
+        }
+        .player-pill-btn:hover,
+        .player-pill-btn:focus {
+          border-color: rgba(255,255,255,0.42) !important;
+          background: rgba(255,255,255,0.16) !important;
+          color: #ffffff !important;
+          transform: translateY(-1px);
+        }
+        .player-close-btn {
+          width: 36px;
+          height: 36px;
+          border: 1px solid rgba(255,77,77,0.7) !important;
+          color: #ff5e5e !important;
+          background: rgba(255,77,77,0.08) !important;
+          transition: all 0.2s ease;
+        }
+        .player-close-btn:hover {
+          background: rgba(255,77,77,0.2) !important;
+          color: #ff9d9d !important;
+          transform: translateY(-1px);
+        }
+        @media (max-width: 991.98px) {
+          .player-page-chip {
+            min-width: 72px;
+            padding: 6px 8px;
+          }
+          .player-pill-btn {
+            padding-left: 0.55rem !important;
+            padding-right: 0.55rem !important;
+            font-size: 0.75rem !important;
+          }
         }
       `}</style>
     </Col>
