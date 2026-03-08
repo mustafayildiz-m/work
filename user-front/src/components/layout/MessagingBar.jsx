@@ -17,7 +17,7 @@ const MessagingBar = () => {
     const { conversationPanel } = useLayoutContext();
     const { locale, t } = useLanguage();
     const { status, data: session } = useSession();
-    const { conversations, selectConversation, sendMessage, socket, fetchMessages, isConnected, markMessageAsRead } = useWebSocketChatContext();
+    const { conversations, selectConversation, sendMessage, socket, fetchMessages, isConnected, markMessageAsRead, markConversationAsRead } = useWebSocketChatContext();
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [isNewMessageOpen, setIsNewMessageOpen] = useState(false);
@@ -119,6 +119,23 @@ const MessagingBar = () => {
         );
     }, [connections, newMessageQuery]);
 
+    // Keep header badge synchronized: if a chat window is open, mark that conversation as read.
+    useEffect(() => {
+        if (!Array.isArray(activeChats) || activeChats.length === 0) return;
+        if (!Array.isArray(conversations) || conversations.length === 0) return;
+
+        activeChats
+            .filter((chat) => chat?.isExpanded)
+            .forEach((chat) => {
+                const conv = conversations.find(
+                    (c) => String(c.participantId) === String(chat.user?.id)
+                );
+                if (!conv || !conv.id || String(conv.id).startsWith('temp-')) return;
+                if ((conv.unreadCount || 0) <= 0) return;
+                markConversationAsRead?.(conv.id, conv.participantId);
+            });
+    }, [activeChats, conversations, markConversationAsRead]);
+
     // Auto-open chat boxes for unread conversations on login
     useEffect(() => {
         if (status !== 'authenticated' || !Array.isArray(conversations) || conversations.length === 0) return;
@@ -204,8 +221,8 @@ const MessagingBar = () => {
                 } else {
                     // Open new tab for the sender
                     // Need to find user info from connections or conversations
-                    const senderConv = conversations.find(c => c.participantId === otherUserId);
-                    const senderConn = connections.find(c => c.id === otherUserId);
+            const senderConv = conversations.find(c => String(c.participantId) === String(otherUserId));
+            const senderConn = connections.find(c => String(c.id) === String(otherUserId));
 
                     const user = {
                         id: otherUserId,
@@ -259,8 +276,13 @@ const MessagingBar = () => {
     };
 
     const handleConversationClick = async (conv) => {
+        if (conv?.id && !String(conv.id).startsWith('temp-')) {
+            markConversationAsRead?.(conv.id, conv.participantId);
+            await selectConversation(conv);
+        }
+
         // Find user details from connection or create a simple user object
-        const user = connections.find(c => c.id === conv.participantId) || {
+        const user = connections.find(c => String(c.id) === String(conv.participantId)) || {
             id: conv.participantId,
             firstName: conv.participantName.split(' ')[0],
             lastName: conv.participantName.split(' ').slice(1).join(' '),
@@ -309,9 +331,9 @@ const MessagingBar = () => {
 
     const openChatWindow = async (user) => {
         setActiveChats(prev => {
-            if (prev.find(chat => chat.user.id === user.id)) {
+            if (prev.find(chat => String(chat.user.id) === String(user.id))) {
                 return prev.map(chat =>
-                    chat.user.id === user.id ? { ...chat, isExpanded: true, unreadCount: 0 } : chat
+                    String(chat.user.id) === String(user.id) ? { ...chat, isExpanded: true, unreadCount: 0 } : chat
                 );
             }
             return [{
@@ -326,8 +348,10 @@ const MessagingBar = () => {
         // Fetch messages for this user
         // We need to find the conversationId first or use recipientId
         try {
-            const conv = conversations.find(c => c.participantId === user.id);
+            const conv = conversations.find(c => String(c.participantId) === String(user.id));
             if (conv && conv.id && !conv.id.startsWith('temp-')) {
+                await selectConversation(conv);
+                markConversationAsRead?.(conv.id, conv.participantId);
                 const history = await fetchMessages(conv.id);
                 if (history && Array.isArray(history)) {
                     const currentUserId = userInfo?.id || session?.user?.id;
@@ -368,6 +392,8 @@ const MessagingBar = () => {
             const conv = conversations.find(c => String(c.participantId) === String(userId));
             if (!conv || !conv.id || conv.id.startsWith('temp-')) return;
 
+            await selectConversation(conv);
+            markConversationAsRead?.(conv.id, conv.participantId);
             const history = await fetchMessages(conv.id);
             if (!history || !Array.isArray(history)) return;
 
@@ -400,15 +426,32 @@ const MessagingBar = () => {
 
     const toggleChatWindow = (userId) => {
         let shouldLoadHistory = false;
+        let shouldMarkConversationRead = false;
+        const targetConversation = conversations.find(
+            (c) => String(c.participantId) === String(userId)
+        );
 
         setActiveChats(prev => prev.map(chat => {
             if (String(chat.user.id) !== String(userId)) return chat;
             const nextExpanded = !chat.isExpanded;
             if (nextExpanded) {
                 shouldLoadHistory = true;
+                shouldMarkConversationRead = true;
             }
             return { ...chat, isExpanded: nextExpanded, unreadCount: nextExpanded ? 0 : chat.unreadCount };
         }));
+
+        // Trigger immediately on click-to-open
+        if (
+            shouldMarkConversationRead &&
+            targetConversation?.id &&
+            !String(targetConversation.id).startsWith('temp-')
+        ) {
+            markConversationAsRead?.(
+                targetConversation.id,
+                targetConversation.participantId
+            );
+        }
 
         if (shouldLoadHistory) {
             loadChatHistoryForUser(userId);
@@ -709,60 +752,62 @@ const MessagingBar = () => {
                         <>
                             {/* Chat Content */}
                             <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: colors.bg }}>
-                                <SimplebarReactClient style={{ height: '100%' }}>
-                                    <div className="p-3">
-                                        {/* User Info Card */}
-                                        <div className="text-center mb-4">
-                                            <Image
-                                                src={getDisplayAvatar(chat.user.photoUrl)}
-                                                alt={chat.user.firstName}
-                                                width={80}
-                                                height={80}
-                                                className="rounded-circle mb-2"
-                                                style={{ objectFit: 'cover' }}
-                                            />
-                                            <h5 className="mb-0 fw-bold" style={{ color: colors.textMain }}>{chat.user.firstName} {chat.user.lastName}</h5>
-                                            <p className="text-muted small">{chat.user.tagline || chat.user.role || 'Yazılım Geliştirici'}</p>
-                                        </div>
-
-                                        {/* Messages */}
-                                        {chat.messages.map((msg) => (
-                                            <div key={msg.id} className={clsx("d-flex mb-3", msg.isMe ? "flex-row-reverse" : "flex-row")}>
+                                <div style={{ flex: 1, minHeight: 0 }}>
+                                    <SimplebarReactClient style={{ height: '100%' }}>
+                                        <div className="p-3">
+                                            {/* User Info Card */}
+                                            <div className="text-center mb-4">
                                                 <Image
-                                                    src={getDisplayAvatar(msg.isMe ? currentUserPhoto : chat.user.photoUrl)}
-                                                    alt={msg.isMe ? 'Me' : chat.user.firstName}
-                                                    width={32}
-                                                    height={32}
-                                                    className={clsx("rounded-circle flex-shrink-0", msg.isMe ? "ms-2" : "me-2")}
+                                                    src={getDisplayAvatar(chat.user.photoUrl)}
+                                                    alt={chat.user.firstName}
+                                                    width={80}
+                                                    height={80}
+                                                    className="rounded-circle mb-2"
                                                     style={{ objectFit: 'cover' }}
                                                 />
-                                                <div className={clsx("overflow-hidden d-flex flex-column", msg.isMe ? "align-items-end" : "align-items-start")}>
-                                                    <div className={clsx("d-flex align-items-center mb-1", msg.isMe ? "flex-row-reverse" : "flex-row")}>
-                                                        <span className={clsx("fw-bold text-truncate", msg.isMe ? "ms-2" : "me-2")} style={{ color: colors.textMain, fontSize: '0.85rem' }}>
-                                                            {msg.isMe ? 'Siz' : chat.user.firstName}
-                                                        </span>
-                                                        <span className="text-muted flex-shrink-0" style={{ fontSize: '0.7rem' }}>• {msg.time}</span>
-                                                    </div>
-                                                    <div
-                                                        style={{
-                                                            color: colors.textMain,
-                                                            fontSize: '0.9rem',
-                                                            whiteSpace: 'pre-wrap',
-                                                            wordBreak: 'break-word',
-                                                            backgroundColor: msg.isMe ? (isDark ? '#057642' : '#e7f3ed') : (isDark ? '#38434f' : '#f3f6f8'),
-                                                            padding: '8px 12px',
-                                                            borderRadius: '12px',
-                                                            borderTopRightRadius: msg.isMe ? '2px' : '12px',
-                                                            borderTopLeftRadius: msg.isMe ? '12px' : '2px'
-                                                        }}
-                                                    >
-                                                        {msg.text}
+                                                <h5 className="mb-0 fw-bold" style={{ color: colors.textMain }}>{chat.user.firstName} {chat.user.lastName}</h5>
+                                                <p className="text-muted small">{chat.user.tagline || chat.user.role || 'Yazılım Geliştirici'}</p>
+                                            </div>
+
+                                            {/* Messages */}
+                                            {chat.messages.map((msg) => (
+                                                <div key={msg.id} className={clsx("d-flex mb-3", msg.isMe ? "flex-row-reverse" : "flex-row")}>
+                                                    <Image
+                                                        src={getDisplayAvatar(msg.isMe ? currentUserPhoto : chat.user.photoUrl)}
+                                                        alt={msg.isMe ? 'Me' : chat.user.firstName}
+                                                        width={32}
+                                                        height={32}
+                                                        className={clsx("rounded-circle flex-shrink-0", msg.isMe ? "ms-2" : "me-2")}
+                                                        style={{ objectFit: 'cover' }}
+                                                    />
+                                                    <div className={clsx("overflow-hidden d-flex flex-column", msg.isMe ? "align-items-end" : "align-items-start")}>
+                                                        <div className={clsx("d-flex align-items-center mb-1", msg.isMe ? "flex-row-reverse" : "flex-row")}>
+                                                            <span className={clsx("fw-bold text-truncate", msg.isMe ? "ms-2" : "me-2")} style={{ color: colors.textMain, fontSize: '0.85rem' }}>
+                                                                {msg.isMe ? 'Siz' : chat.user.firstName}
+                                                            </span>
+                                                            <span className="text-muted flex-shrink-0" style={{ fontSize: '0.7rem' }}>• {msg.time}</span>
+                                                        </div>
+                                                        <div
+                                                            style={{
+                                                                color: colors.textMain,
+                                                                fontSize: '0.9rem',
+                                                                whiteSpace: 'pre-wrap',
+                                                                wordBreak: 'break-word',
+                                                                backgroundColor: msg.isMe ? (isDark ? '#057642' : '#e7f3ed') : (isDark ? '#38434f' : '#f3f6f8'),
+                                                                padding: '8px 12px',
+                                                                borderRadius: '12px',
+                                                                borderTopRightRadius: msg.isMe ? '2px' : '12px',
+                                                                borderTopLeftRadius: msg.isMe ? '12px' : '2px'
+                                                            }}
+                                                        >
+                                                            {msg.text}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </SimplebarReactClient>
+                                            ))}
+                                        </div>
+                                    </SimplebarReactClient>
+                                </div>
 
                                 {/* Input Area */}
                                 <div className="p-3" style={{ borderTop: `1px solid ${colors.border}`, backgroundColor: isDark ? '#1d2226' : '#ffffff' }}>
