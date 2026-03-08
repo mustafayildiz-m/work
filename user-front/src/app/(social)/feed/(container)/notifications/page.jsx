@@ -21,9 +21,7 @@ const NotificationsPage = () => {
 
   const allNotifications = useMemo(() => {
     const combined = [...realTimeNotifications, ...staticNotifications];
-
-    // Deduplicate by type and related user to prevent duplication between Socket and DB
-    const seen = new Set();
+    const dedupByTypeAndUser = new Map();
     const unique = [];
 
     // Sort combined to prioritize static (DB) notifications over real-time ones 
@@ -38,23 +36,37 @@ const NotificationsPage = () => {
 
     for (const n of sorted) {
       const relatedId = n.relatedUserId || n.related_user_id;
-      const key = `${n.type}-${relatedId}`;
+      const key = relatedId ? `${n.type}-${relatedId}` : null;
 
       // Only deduplicate certain types where duplication is likely
       const isDeduplicatable = ['follow_accept', 'follow_request'].includes(n.type);
 
-      if (isDeduplicatable && relatedId) {
-        if (!seen.has(key)) {
-          seen.add(key);
+      if (isDeduplicatable && key) {
+        if (!dedupByTypeAndUser.has(key)) {
+          dedupByTypeAndUser.set(key, n);
           unique.push(n);
+        } else {
+          const existing = dedupByTypeAndUser.get(key);
+          const isCurrentStatic = !String(n.id).startsWith('notif-');
+          const isExistingStatic = !String(existing?.id).startsWith('notif-');
+          if (isCurrentStatic && !isExistingStatic) {
+            dedupByTypeAndUser.set(key, n);
+          }
         }
       } else {
         unique.push(n);
       }
     }
 
+    const merged = unique.map((n) => {
+      const relatedId = n.relatedUserId || n.related_user_id;
+      const key = relatedId ? `${n.type}-${relatedId}` : null;
+      if (!key) return n;
+      return dedupByTypeAndUser.get(key) || n;
+    });
+
     // Final sort by time and filter out type-only follow requests
-    return unique
+    return Array.from(new Map(merged.map((n) => [String(n.id), n])).values())
       .filter(n => n.type !== 'follow_request')
       .sort((a, b) => new Date(b.time || 0) - new Date(a.time || 0));
   }, [realTimeNotifications, staticNotifications]);
@@ -177,8 +189,11 @@ const NotificationsPage = () => {
         detail: {
           user: {
             id: targetUserId,
-            firstName: '',
-            lastName: '',
+            firstName: notification.related_user?.firstName || '',
+            lastName: notification.related_user?.lastName || '',
+            username: notification.related_user?.username || '',
+            role: notification.related_user?.role || '',
+            tagline: notification.related_user?.tagline || '',
             photoUrl: notification.avatar || null
           }
         }

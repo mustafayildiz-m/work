@@ -328,6 +328,29 @@ export class ChatService {
     return this.messageRepository.findOne({ where: { id: messageId } });
   }
 
+  async getUserBasic(userId: number): Promise<{
+    id: number;
+    username: string;
+    firstName?: string;
+    lastName?: string;
+    photoUrl?: string;
+  } | null> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      select: ['id', 'username', 'firstName', 'lastName', 'photoUrl'],
+    });
+
+    if (!user) return null;
+
+    return {
+      id: user.id,
+      username: user.username,
+      firstName: user.firstName || undefined,
+      lastName: user.lastName || undefined,
+      photoUrl: user.photoUrl || undefined,
+    };
+  }
+
   async setUserOnline(userId: number, isOnline: boolean): Promise<void> {
     if (isOnline) {
       // User'ı online olarak işaretle

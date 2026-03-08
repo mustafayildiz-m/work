@@ -115,6 +115,20 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         content: data.content,
       });
 
+      const [sender, receiver] = await Promise.all([
+        this.chatService.getUserBasic(client.user.id),
+        this.chatService.getUserBasic(data.receiverId),
+      ]);
+
+      const senderFullName =
+        `${sender?.firstName || ''} ${sender?.lastName || ''}`.trim() ||
+        sender?.username ||
+        client.user.username;
+      const receiverFullName =
+        `${receiver?.firstName || ''} ${receiver?.lastName || ''}`.trim() ||
+        receiver?.username ||
+        '';
+
       // Mesaj objesini hazırla
       const messageData = {
         id: message.id,
@@ -123,7 +137,16 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         receiverId: message.receiverId,
         timestamp: message.createdAt,
         status: message.status,
-        senderName: client.user.username,
+        senderName: senderFullName,
+        senderUsername: sender?.username || client.user.username,
+        senderFirstName: sender?.firstName || null,
+        senderLastName: sender?.lastName || null,
+        senderAvatar: sender?.photoUrl || null,
+        receiverName: receiverFullName || null,
+        receiverUsername: receiver?.username || null,
+        receiverFirstName: receiver?.firstName || null,
+        receiverLastName: receiver?.lastName || null,
+        receiverAvatar: receiver?.photoUrl || null,
         conversationId: message.conversationId,
       };
 
