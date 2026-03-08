@@ -15,6 +15,7 @@ import { useNotificationContext } from '@/context/useNotificationContext';
 import { generateProfileUrl } from '@/utils/profileEncoder';
 import { useSession } from 'next-auth/react';
 import { useLanguage } from '@/context/useLanguageContext';
+import MessagingBar from '@/components/layout/MessagingBar';
 
 // Menu definitions moved or handled via keys
 
@@ -227,6 +228,7 @@ const ProfileLayout = ({
   // Normalize follow state so "pending" is never shown as "following".
   const isPendingFollow = followStatus === 'pending';
   const isAcceptedFollow = !isPendingFollow && (isFollowing || followStatus === 'accepted');
+  const canSendMessage = isAcceptedFollow;
 
   // Reusable: fetch follow statistics for current context (scholar/user)
   const fetchFollowStatsForContext = useCallback(async () => {
@@ -1265,6 +1267,39 @@ const ProfileLayout = ({
                               )}
                             </Button>
                           )}
+
+                          {canSendMessage && (
+                            <Button
+                              size="sm"
+                              className="me-2 px-4"
+                              onClick={() => {
+                                const targetUser = {
+                                  id: params?.id,
+                                  firstName: profileData?.firstName || '',
+                                  lastName: profileData?.lastName || '',
+                                  username: profileData?.username || '',
+                                  photoUrl: profileData?.photoUrl || profileData?.photo_url || null
+                                };
+
+                                window.dispatchEvent(
+                                  new CustomEvent('openMessagingWithUser', {
+                                    detail: { user: targetUser }
+                                  })
+                                );
+                              }}
+                              style={{
+                                borderRadius: '50px',
+                                fontWeight: '600',
+                                borderWidth: '2px',
+                                color: 'var(--bs-body-color)',
+                                borderColor: 'var(--bs-primary)',
+                                backgroundColor: 'rgba(var(--bs-primary-rgb), 0.12)'
+                              }}
+                            >
+                              <BsChatLeftText className="me-1" />
+                              Mesaj Gönder
+                            </Button>
+                          )}
                         </>
                       );
                     })()}
@@ -1697,6 +1732,7 @@ const ProfileLayout = ({
         </Row>
       </Container>
     </main >
+    <MessagingBar />
   </>;
 };
 

@@ -400,6 +400,22 @@ const MessagingBar = () => {
         }
     };
 
+    // Open a specific chat window from other pages/components
+    useEffect(() => {
+        const handleOpenMessagingWithUser = (event) => {
+            const user = event?.detail?.user;
+            if (!user?.id) return;
+            setIsExpanded(true);
+            setIsNewMessageOpen(false);
+            openChatWindow(user);
+        };
+
+        window.addEventListener('openMessagingWithUser', handleOpenMessagingWithUser);
+        return () => {
+            window.removeEventListener('openMessagingWithUser', handleOpenMessagingWithUser);
+        };
+    }, [openChatWindow]);
+
     const closeChatWindow = (userId) => {
         setActiveChats(prev => prev.filter(chat => chat.user.id !== userId));
     };
