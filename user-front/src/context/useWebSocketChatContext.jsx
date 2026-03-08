@@ -526,7 +526,12 @@ export const WebSocketChatProvider = ({ children }) => {
         id: conv.id || conv.conversationId,
         participantId: conv.participant?.id || conv.participantId || conv.otherUserId,
         participantName: conv.participant?.username || conv.participantName || 'Bilinmeyen Kullanıcı',
-        participantAvatar: conv.participant?.photoUrl || placeholderImg,
+        participantAvatar:
+          conv.participant?.photoUrl ||
+          conv.participantAvatar ||
+          conv.participant?.avatar ||
+          conv.avatar ||
+          null,
         lastMessage: conv.lastMessage || '',
         lastMessageTime: parseTimestamp(conv.lastMessageAt || conv.lastMessageTime),
         unreadCount: conv.unreadCount || 0,
