@@ -601,23 +601,35 @@ const MessagingBar = () => {
 
                                         {/* Messages */}
                                         {chat.messages.map((msg) => (
-                                            <div key={msg.id} className="d-flex mb-3">
+                                            <div key={msg.id} className={clsx("d-flex mb-3", msg.isMe ? "flex-row-reverse" : "flex-row")}>
                                                 <Image
                                                     src={getDisplayAvatar(msg.isMe ? currentUserPhoto : chat.user.photoUrl)}
                                                     alt={msg.isMe ? 'Me' : chat.user.firstName}
-                                                    width={40}
-                                                    height={40}
-                                                    className="rounded-circle me-2 flex-shrink-0"
+                                                    width={32}
+                                                    height={32}
+                                                    className={clsx("rounded-circle flex-shrink-0", msg.isMe ? "ms-2" : "me-2")}
                                                     style={{ objectFit: 'cover' }}
                                                 />
-                                                <div className="overflow-hidden">
-                                                    <div className="d-flex align-items-center mb-1">
-                                                        <span className="fw-bold me-2 text-truncate" style={{ color: colors.textMain, fontSize: '0.9rem' }}>
+                                                <div className={clsx("overflow-hidden d-flex flex-column", msg.isMe ? "align-items-end" : "align-items-start")}>
+                                                    <div className={clsx("d-flex align-items-center mb-1", msg.isMe ? "flex-row-reverse" : "flex-row")}>
+                                                        <span className={clsx("fw-bold text-truncate", msg.isMe ? "ms-2" : "me-2")} style={{ color: colors.textMain, fontSize: '0.85rem' }}>
                                                             {msg.isMe ? 'Siz' : chat.user.firstName}
                                                         </span>
-                                                        <span className="text-muted flex-shrink-0" style={{ fontSize: '0.75rem' }}>• {msg.time}</span>
+                                                        <span className="text-muted flex-shrink-0" style={{ fontSize: '0.7rem' }}>• {msg.time}</span>
                                                     </div>
-                                                    <div style={{ color: colors.textMain, fontSize: '0.9rem', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                                                    <div
+                                                        style={{
+                                                            color: colors.textMain,
+                                                            fontSize: '0.9rem',
+                                                            whiteSpace: 'pre-wrap',
+                                                            wordBreak: 'break-word',
+                                                            backgroundColor: msg.isMe ? (isDark ? '#057642' : '#e7f3ed') : (isDark ? '#38434f' : '#f3f6f8'),
+                                                            padding: '8px 12px',
+                                                            borderRadius: '12px',
+                                                            borderTopRightRadius: msg.isMe ? '2px' : '12px',
+                                                            borderTopLeftRadius: msg.isMe ? '12px' : '2px'
+                                                        }}
+                                                    >
                                                         {msg.text}
                                                     </div>
                                                 </div>
