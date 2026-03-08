@@ -12,7 +12,7 @@ import { useLanguages } from '@/hooks/useLanguages';
 import PdfViewer from '@/components/PdfViewer';
 import { generateArticleUrl } from '@/utils/articleEncoder';
 import { pdfjs } from 'react-pdf';
-import { getBestVoice, getLanguageCode, waitForVoices, cleanTextForTTS } from '@/utils/textToSpeech';
+import { getLanguageCode, cleanTextForTTS, fetchTTSAudio } from '@/utils/textToSpeech';
 
 // PDF.js worker'ı yapılandır
 if (typeof window !== 'undefined') {
@@ -36,11 +36,8 @@ const ArticleDetailPage = () => {
   const [isReading, setIsReading] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [readingTranslationId, setReadingTranslationId] = useState(null);
-  const [speechSynthesis, setSpeechSynthesis] = useState(null);
-  const [currentUtterance, setCurrentUtterance] = useState(null);
-  const [currentText, setCurrentText] = useState('');
-  const [currentCharIndex, setCurrentCharIndex] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [audioProgress, setAudioProgress] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1.0);
   const [showLanguageModal, setShowLanguageModal] = useState(false);
   const [selectedTranslationForTranslate, setSelectedTranslationForTranslate] = useState(null);
@@ -50,8 +47,34 @@ const ArticleDetailPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [targetLang, setTargetLang] = useState(null);
+  const [isPlayerOpen, setIsPlayerOpen] = useState(false);
+  const [playerStatus, setPlayerStatus] = useState('idle');
+  const [showReadingAssist, setShowReadingAssist] = useState(true);
+  const [currentOriginalChunks, setCurrentOriginalChunks] = useState([]);
+  const [currentTranslatedChunks, setCurrentTranslatedChunks] = useState([]);
+  const [activeChunkIndex, setActiveChunkIndex] = useState(0);
+  const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
+  const [isDraggingPlayer, setIsDraggingPlayer] = useState(false);
+  const [isSliderSeeking, setIsSliderSeeking] = useState(false);
+  const [previewProgress, setPreviewProgress] = useState(null);
   const isReadingRef = useRef(false);
+  const currentAudioRef = useRef(null);
   const [pdfDoc, setPdfDoc] = useState(null);
+  const suppressAudioErrorRef = useRef(false);
+  const playbackQueueRef = useRef([]);
+  const queueIndexRef = useRef(0);
+  const readingSessionIdRef = useRef(0);
+  const onQueueCompleteRef = useRef(null);
+  const currentLangCodeRef = useRef(null);
+  const originalChunksContainerRef = useRef(null);
+  const translatedChunksContainerRef = useRef(null);
+  const playerDragRef = useRef({
+    dragging: false,
+    startX: 0,
+    startY: 0,
+    originX: 0,
+    originY: 0,
+  });
 
   // URL'den dil bilgilerini al
   const languageId = searchParams ? searchParams.get('languageId') : null;
@@ -133,6 +156,29 @@ const ArticleDetailPage = () => {
     setShowPdfViewer(true);
   };
 
+  const handleDownloadPdf = async (pdfUrl, title) => {
+    const fullPdfUrl = getPdfUrl(pdfUrl);
+    if (!fullPdfUrl) return;
+    try {
+      const safeTitle = (title || 'article').replace(/[^\w\-]+/g, '_');
+      const filename = `${safeTitle}.pdf`;
+      const downloadUrl = `/api/download-pdf?pdfUrl=${encodeURIComponent(fullPdfUrl)}&filename=${encodeURIComponent(filename)}`;
+      const response = await fetch(downloadUrl);
+      if (!response.ok) throw new Error('PDF indirilemedi');
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      showNotification({ title: 'Hata', message: 'PDF indirilemedi.', variant: 'danger' });
+    }
+  };
+
   // PDF'den text çıkarma fonksiyonu
   const extractTextFromPdf = async (pdfUrl) => {
     try {
@@ -204,447 +250,176 @@ const ArticleDetailPage = () => {
     }
   };
 
-  // Sesli okuma fonksiyonu - PDF'den veya translation'dan
-  const handleTextToSpeech = async (translation, translationIndex, pdfUrl = null) => {
-    if (!('speechSynthesis' in window)) {
-      showNotification({
-        title: 'Uyarı',
-        message: 'Tarayıcınız sesli okuma özelliğini desteklemiyor',
-        variant: 'warning'
-      });
-      return;
+  const getLanguageFlag = (code) => {
+    const flagMap = {
+      tr: '🇹🇷', en: '🇬🇧', ar: '🇸🇦', de: '🇩🇪', fr: '🇫🇷', es: '🇪🇸',
+      it: '🇮🇹', pt: '🇵🇹', ru: '🇷🇺', ja: '🇯🇵', zh: '🇨🇳', ko: '🇰🇷',
+      nl: '🇳🇱', fa: '🇮🇷', ur: '🇵🇰', hi: '🇮🇳',
+    };
+    return flagMap[(code || '').toLowerCase()] || '🌐';
+  };
+
+  const splitTextIntoChunks = (text) => {
+    if (!text || !text.trim()) return [];
+    const sentences = text.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter(Boolean);
+    if (sentences.length > 0) return sentences.slice(0, 14);
+    return text.split(/\s+/).reduce((acc, word) => {
+      const last = acc[acc.length - 1] || '';
+      if (!last || last.length > 100) acc.push(word);
+      else acc[acc.length - 1] = `${last} ${word}`.trim();
+      return acc;
+    }, []).slice(0, 14);
+  };
+
+  const disposeCurrentAudio = (silent = true) => {
+    if (currentAudioRef.current) {
+      const audio = currentAudioRef.current;
+      if (silent) suppressAudioErrorRef.current = true;
+      audio.onplay = null;
+      audio.ontimeupdate = null;
+      audio.onended = null;
+      audio.onerror = null;
+      audio.pause();
+      audio.src = '';
+      currentAudioRef.current = null;
+      if (silent) setTimeout(() => { suppressAudioErrorRef.current = false; }, 0);
     }
+  };
 
-    // Önceki okumayı durdur
-    if (speechSynthesis) {
-      window.speechSynthesis.cancel();
-    }
+  const handlePlayerDragStart = (event) => {
+    const target = event.target;
+    if (target.closest('button, input, select, .dropdown-menu, .dropdown-item')) return;
+    playerDragRef.current = {
+      dragging: true,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: playerPosition.x,
+      originY: playerPosition.y,
+    };
+    setIsDraggingPlayer(true);
+  };
 
-    let fullText = '';
+  useEffect(() => {
+    const onMouseMove = (event) => {
+      if (!playerDragRef.current.dragging) return;
+      const dx = event.clientX - playerDragRef.current.startX;
+      const dy = event.clientY - playerDragRef.current.startY;
+      setPlayerPosition({ x: playerDragRef.current.originX + dx, y: playerDragRef.current.originY + dy });
+    };
+    const onMouseUp = () => {
+      if (!playerDragRef.current.dragging) return;
+      playerDragRef.current.dragging = false;
+      setIsDraggingPlayer(false);
+    };
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+  }, []);
 
-    // Eğer PDF URL'i varsa, PDF'den text çıkar
-    if (pdfUrl) {
-      const pdfText = await extractTextFromPdf(pdfUrl);
-      if (pdfText) {
-        fullText = pdfText;
-      } else {
-        // PDF'den text çıkarılamazsa translation içeriğini kullan
-        const textToRead = [];
-        if (translation?.summary) {
-          textToRead.push(translation.summary);
-        }
-        if (translation?.content) {
-          textToRead.push(translation.content);
-        }
-        fullText = textToRead.join('. ');
-      }
-    } else {
-      // PDF yoksa translation içeriğini kullan
-      const textToRead = [];
-      if (translation?.summary) {
-        textToRead.push(translation.summary);
-      }
-      if (translation?.content) {
-        textToRead.push(translation.content);
-      }
-      fullText = textToRead.join('. ');
-    }
+  const startQueuePlayback = async (segmentQueue, langCode, startIndex = 0, startOffsetRatio = 0) => {
+    if (!Array.isArray(segmentQueue) || segmentQueue.length === 0) return;
+    const token = localStorage.getItem('token');
+    const sessionId = readingSessionIdRef.current;
 
-    // HTML entity ve fazla boşlukları temizle
-    fullText = cleanTextForTTS(fullText);
+    const playSegmentAt = async (segmentIndex, offsetRatio = 0) => {
+      if (sessionId !== readingSessionIdRef.current) return;
+      const segmentText = segmentQueue[segmentIndex];
+      if (!segmentText) return;
 
-    if (!fullText || fullText.trim().length === 0) {
-      showNotification({
-        title: 'Uyarı',
-        message: 'Okunacak içerik bulunamadı',
-        variant: 'warning'
-      });
-      return;
-    }
+      queueIndexRef.current = segmentIndex;
+      setActiveChunkIndex(segmentIndex);
 
-    // Seslerin yüklenmesini bekle
-    await waitForVoices();
+      const segmentBlob = await fetchTTSAudio(segmentText, langCode, API_BASE_URL, token);
+      const segmentUrl = URL.createObjectURL(segmentBlob);
+      const audio = new Audio(segmentUrl);
+      audio.playbackRate = playbackRate || 1.0;
+      currentAudioRef.current = audio;
 
-    // Dil kodunu al
-    const lang = translation.language?.code || languageCode || 'tr';
-    const langCode = getLanguageCode(lang);
-
-    // Utterance oluştur
-    const utterance = new SpeechSynthesisUtterance(fullText);
-    utterance.lang = langCode;
-    utterance.rate = playbackRate;
-    utterance.pitch = 1.0;
-    utterance.volume = 1.0;
-
-    // En iyi sesi seç
-    const bestVoice = getBestVoice(langCode);
-    if (bestVoice) {
-      utterance.voice = bestVoice;
-    }
-
-    // Sesleri speak et
-    const speakWithVoice = () => {
-      const voices = window.speechSynthesis.getVoices();
-
-      // Arapça için ses seçimi (eğer henüz seçilmediyse)
-      if ((lang === 'ar' || lang?.toLowerCase().includes('arabic') || langCode.startsWith('ar')) && !utterance.voice) {
-        const arabicVoices = voices.filter(voice => voice.lang.startsWith('ar'));
-
-        if (arabicVoices.length > 0) {
-          const preferredVoices = [
-            'Google العربية',
-            'Microsoft Naayf - Arabic (Saudi Arabia)',
-            'ar-SA',
-            'ar-EG'
-          ];
-
-          let selectedVoice = null;
-          for (const preferredName of preferredVoices) {
-            selectedVoice = arabicVoices.find(voice =>
-              voice.name.includes(preferredName) || voice.lang === preferredName
-            );
-            if (selectedVoice) break;
-          }
-
-          if (!selectedVoice && arabicVoices.length > 0) {
-            selectedVoice = arabicVoices[0];
-          }
-
-          if (selectedVoice) {
-            utterance.voice = selectedVoice;
-          }
-        } else {
-          // Arapça ses bulunamadıysa uyarı göster
-          showNotification({
-            title: 'Uyarı',
-            message: 'Arapça ses desteği bulunamadı. Tarayıcınız Arapça sesli okuma özelliğini desteklemiyor olabilir.',
-            variant: 'warning'
-          });
+      audio.onplay = () => {
+        setIsReading(true);
+        isReadingRef.current = true;
+        setIsPaused(false);
+        setPlayerStatus('playing');
+      };
+      audio.ontimeupdate = () => {
+        if (!audio.duration) return;
+        const segmentPct = audio.currentTime / audio.duration;
+        const total = Math.max(1, segmentQueue.length);
+        const overallPct = ((segmentIndex + segmentPct) / total) * 100;
+        setAudioProgress(Math.min(100, overallPct));
+      };
+      audio.onerror = () => {
+        URL.revokeObjectURL(segmentUrl);
+        if (suppressAudioErrorRef.current) return;
+        setIsReading(false);
+        setIsPaused(false);
+        isReadingRef.current = false;
+        setPlayerStatus('error');
+        showNotification({ title: 'Hata', message: 'Ses oynatılamadı.', variant: 'danger' });
+      };
+      audio.onended = async () => {
+        URL.revokeObjectURL(segmentUrl);
+        if (sessionId !== readingSessionIdRef.current) return;
+        const nextIndex = segmentIndex + 1;
+        if (isReadingRef.current && nextIndex < segmentQueue.length) {
+          await playSegmentAt(nextIndex, 0);
           return;
         }
-      }
-      // İngilizce için ses seçimi (eğer henüz seçilmediyse)
-      else if ((lang === 'en' || langCode === 'en-US') && !utterance.voice) {
-        const englishVoices = voices.filter(voice =>
-          voice.lang.startsWith('en') &&
-          (voice.name.includes('Female') || voice.name.includes('Samantha') || voice.name.includes('Alex') || voice.name.includes('Karen') || voice.name.includes('Victoria'))
-        );
-
-        if (englishVoices.length > 0) {
-          const preferredVoices = [
-            'Google UK English Female',
-            'Google US English Female',
-            'Microsoft Zira - English (United States)',
-            'Samantha',
-            'Alex',
-            'Karen',
-            'Victoria'
-          ];
-
-          let selectedVoice = null;
-          for (const preferredName of preferredVoices) {
-            selectedVoice = englishVoices.find(voice => voice.name.includes(preferredName));
-            if (selectedVoice) break;
-          }
-
-          if (!selectedVoice && englishVoices.length > 0) {
-            selectedVoice = englishVoices.find(voice => voice.name.includes('Female')) || englishVoices[0];
-          }
-
-          if (selectedVoice) {
-            utterance.voice = selectedVoice;
-          }
+        if (isReadingRef.current && typeof onQueueCompleteRef.current === 'function') {
+          onQueueCompleteRef.current();
+          return;
         }
-      }
-
-      window.speechSynthesis.speak(utterance);
-    };
-
-    // Sesler yüklüyse direkt başlat, değilse bekle
-    if (window.speechSynthesis.getVoices().length > 0) {
-      speakWithVoice();
-    } else {
-      window.speechSynthesis.onvoiceschanged = () => {
-        speakWithVoice();
-        window.speechSynthesis.onvoiceschanged = null;
-      };
-    }
-
-    utterance.onstart = () => {
-      setIsReading(true);
-      isReadingRef.current = true;
-      setIsPaused(false);
-      setReadingTranslationId(translationIndex);
-      setSpeechSynthesis(window.speechSynthesis);
-      setCurrentUtterance(utterance);
-      setCurrentText(fullText);
-      setCurrentCharIndex(0);
-      setElapsedTime(0);
-    };
-
-    // İlerleme takibi için boundary event
-    utterance.onboundary = (event) => {
-      if (event.name === 'word' || event.name === 'sentence') {
-        setCurrentCharIndex(event.charIndex);
-      }
-    };
-
-    utterance.onend = () => {
-      setIsReading(false);
-      isReadingRef.current = false;
-      setIsPaused(false);
-      setReadingTranslationId(null);
-      setSpeechSynthesis(null);
-      setCurrentUtterance(null);
-      setCurrentText('');
-      setCurrentCharIndex(0);
-      setElapsedTime(0);
-      showNotification({
-        title: 'Sesli Okuma Tamamlandı',
-        message: 'Makale okunması tamamlandı',
-        variant: 'success'
-      });
-    };
-
-    utterance.onerror = (error) => {
-      console.error('Speech synthesis error:', error);
-      setIsReading(false);
-      isReadingRef.current = false;
-      setIsPaused(false);
-      setReadingTranslationId(null);
-      setSpeechSynthesis(null);
-      setCurrentUtterance(null);
-      setCurrentText('');
-      setCurrentCharIndex(0);
-      setElapsedTime(0);
-      showNotification({
-        title: 'Hata',
-        message: 'Sesli okuma sırasında bir hata oluştu',
-        variant: 'danger'
-      });
-    };
-  };
-
-  // Sesli okumayı duraklat/devam ettir
-  const pauseResumeTextToSpeech = () => {
-    if (!window.speechSynthesis) return;
-
-    if (isPaused) {
-      window.speechSynthesis.resume();
-      setIsPaused(false);
-      showNotification({
-        title: 'Devam Ediyor',
-        message: 'Sesli okuma devam ediyor...',
-        variant: 'info'
-      });
-    } else {
-      window.speechSynthesis.pause();
-      setIsPaused(true);
-      showNotification({
-        title: 'Duraklatıldı',
-        message: 'Sesli okuma duraklatıldı',
-        variant: 'info'
-      });
-    }
-  };
-
-  // Geri al (10 saniye)
-  const rewindTextToSpeech = () => {
-    if (!currentUtterance || !currentText) return;
-
-    const currentIndex = currentCharIndex;
-    const rewindChars = Math.floor((currentUtterance.rate || 1.0) * 10 * 10); // ~10 saniye geri
-    const newIndex = Math.max(0, currentIndex - rewindChars);
-
-    // Yeni utterance oluştur
-    const remainingText = currentText.substring(newIndex);
-    const newUtterance = new SpeechSynthesisUtterance(remainingText);
-
-    // Ayarları kopyala
-    newUtterance.lang = currentUtterance.lang;
-    newUtterance.rate = currentUtterance.rate;
-    newUtterance.pitch = currentUtterance.pitch;
-    newUtterance.volume = currentUtterance.volume;
-    newUtterance.voice = currentUtterance.voice;
-
-    // Mevcut okumayı durdur
-    window.speechSynthesis.cancel();
-
-    // Event listener'ları ekle
-    newUtterance.onstart = () => {
-      setIsReading(true);
-      setIsPaused(false);
-    };
-
-    newUtterance.onboundary = (event) => {
-      if (event.name === 'word' || event.name === 'sentence') {
-        setCurrentCharIndex(newIndex + event.charIndex);
-      }
-    };
-
-    newUtterance.onend = () => {
-      setIsReading(false);
-      setIsPaused(false);
-      setCurrentUtterance(null);
-    };
-
-    newUtterance.onerror = () => {
-      setIsReading(false);
-      setIsPaused(false);
-      setCurrentUtterance(null);
-    };
-
-    // Yeni utterance'ı başlat
-    window.speechSynthesis.speak(newUtterance);
-    setCurrentUtterance(newUtterance);
-    setCurrentCharIndex(newIndex);
-
-    showNotification({
-      title: 'Geri Alındı',
-      message: '10 saniye geri alındı',
-      variant: 'info'
-    });
-  };
-
-  // İleri al (10 saniye)
-  const forwardTextToSpeech = () => {
-    if (!currentUtterance || !currentText) return;
-
-    const currentIndex = currentCharIndex;
-    const forwardChars = Math.floor((currentUtterance.rate || 1.0) * 10 * 10); // ~10 saniye ileri
-    const newIndex = Math.min(currentText.length, currentIndex + forwardChars);
-
-    // Yeni utterance oluştur
-    const remainingText = currentText.substring(newIndex);
-    const newUtterance = new SpeechSynthesisUtterance(remainingText);
-
-    // Ayarları kopyala
-    newUtterance.lang = currentUtterance.lang;
-    newUtterance.rate = currentUtterance.rate;
-    newUtterance.pitch = currentUtterance.pitch;
-    newUtterance.volume = currentUtterance.volume;
-    newUtterance.voice = currentUtterance.voice;
-
-    // Mevcut okumayı durdur
-    window.speechSynthesis.cancel();
-
-    // Event listener'ları ekle
-    newUtterance.onstart = () => {
-      setIsReading(true);
-      setIsPaused(false);
-    };
-
-    newUtterance.onboundary = (event) => {
-      if (event.name === 'word' || event.name === 'sentence') {
-        setCurrentCharIndex(newIndex + event.charIndex);
-      }
-    };
-
-    newUtterance.onend = () => {
-      setIsReading(false);
-      setIsPaused(false);
-      setCurrentUtterance(null);
-    };
-
-    newUtterance.onerror = () => {
-      setIsReading(false);
-      setIsPaused(false);
-      setCurrentUtterance(null);
-    };
-
-    // Yeni utterance'ı başlat
-    window.speechSynthesis.speak(newUtterance);
-    setCurrentUtterance(newUtterance);
-    setCurrentCharIndex(newIndex);
-
-    showNotification({
-      title: 'İleri Alındı',
-      message: '10 saniye ileri alındı',
-      variant: 'info'
-    });
-  };
-
-  // İlerleme çubuğuna tıklayarak ileri/geri al
-  const seekTo = (percent) => {
-    if (!currentUtterance || !currentText) return;
-
-    const newIndex = Math.floor((percent / 100) * currentText.length);
-    const remainingText = currentText.substring(newIndex);
-
-    const newUtterance = new SpeechSynthesisUtterance(remainingText);
-    newUtterance.lang = currentUtterance.lang;
-    newUtterance.rate = playbackRate || 1.0;
-    newUtterance.voice = currentUtterance.voice;
-
-    window.speechSynthesis.cancel();
-
-    newUtterance.onstart = () => {
-      setIsReading(true);
-      isReadingRef.current = true;
-      setIsPaused(false);
-      setCurrentUtterance(newUtterance);
-    };
-
-    newUtterance.onboundary = (event) => {
-      if (event.name === 'word' || event.name === 'sentence') {
-        setCurrentCharIndex(newIndex + event.charIndex);
-      }
-    };
-
-    newUtterance.onend = () => {
-      if (isReadingRef.current && pdfDoc && currentPage < totalPages) {
-        handleTranslateAndRead(targetLang, currentPage + 1);
-      } else {
         setIsReading(false);
+        setIsPaused(false);
         isReadingRef.current = false;
+        setAudioProgress(0);
+        setActiveChunkIndex(0);
+        setPlayerStatus('completed');
+      };
+
+      isReadingRef.current = true;
+      await audio.play();
+      if (offsetRatio > 0 && audio.duration) {
+        audio.currentTime = Math.min(audio.duration - 0.05, audio.duration * offsetRatio);
       }
     };
 
-    window.speechSynthesis.speak(newUtterance);
-    setCurrentCharIndex(newIndex);
+    await playSegmentAt(startIndex, startOffsetRatio);
   };
 
-  // Hızı değiştir
+  const pauseResumeTextToSpeech = () => {
+    const audio = currentAudioRef.current;
+    if (!audio) return;
+    if (isPaused) {
+      audio.play();
+      setIsPaused(false);
+      setPlayerStatus('playing');
+    } else {
+      audio.pause();
+      setIsPaused(true);
+      setPlayerStatus('paused');
+    }
+  };
+
+  const rewindTextToSpeech = () => {
+    const audio = currentAudioRef.current;
+    if (!audio) return;
+    audio.currentTime = Math.max(0, audio.currentTime - 10);
+  };
+
+  const forwardTextToSpeech = () => {
+    const audio = currentAudioRef.current;
+    if (!audio) return;
+    audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 10);
+  };
+
   const changePlaybackRate = (newRate) => {
-    if (!currentUtterance) return;
-
-    const currentIndex = currentCharIndex;
-    const remainingText = currentText.substring(currentIndex);
-    const newUtterance = new SpeechSynthesisUtterance(remainingText);
-
-    newUtterance.lang = currentUtterance.lang;
-    newUtterance.rate = newRate;
-    newUtterance.pitch = currentUtterance.pitch;
-    newUtterance.volume = currentUtterance.volume;
-    newUtterance.voice = currentUtterance.voice;
-
-    // Event listener'ları ekle
-    newUtterance.onstart = () => {
-      setIsReading(true);
-      setIsPaused(false);
-    };
-
-    newUtterance.onboundary = (event) => {
-      if (event.name === 'word' || event.name === 'sentence') {
-        setCurrentCharIndex(currentIndex + event.charIndex);
-      }
-    };
-
-    newUtterance.onend = () => {
-      setIsReading(false);
-      setIsPaused(false);
-      setCurrentUtterance(null);
-    };
-
-    newUtterance.onerror = () => {
-      setIsReading(false);
-      setIsPaused(false);
-      setCurrentUtterance(null);
-    };
-
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(newUtterance);
-    setCurrentUtterance(newUtterance);
+    if (currentAudioRef.current) {
+      currentAudioRef.current.playbackRate = newRate;
+    }
     setPlaybackRate(newRate);
   };
 
@@ -655,10 +430,12 @@ const ArticleDetailPage = () => {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // İlerleme yüzdesi hesapla
-  const getProgress = () => {
-    if (!currentText || currentText.length === 0) return 0;
-    return Math.min(100, (currentCharIndex / currentText.length) * 100);
+  const getProgress = () => audioProgress;
+  const commitSliderSeek = () => {
+    if (previewProgress === null) return;
+    seekTo(previewProgress);
+    setIsSliderSeeking(false);
+    setPreviewProgress(null);
   };
 
   // Zaman göstergesi için effect
@@ -736,18 +513,21 @@ const ArticleDetailPage = () => {
   // Seçilen dilde çeviri yap ve sesli oku (Sayfa bazlı)
   const handleTranslateAndRead = async (targetLanguage, startPage = 1) => {
     if (!selectedTranslationForTranslate) return;
-
-    if (!('speechSynthesis' in window)) {
-      showNotification({ title: 'Uyarı', message: 'Tarayıcı desteği yok', variant: 'warning' });
-      return;
-    }
-
+    disposeCurrentAudio();
+    readingSessionIdRef.current += 1;
+    playbackQueueRef.current = [];
+    queueIndexRef.current = 0;
     setTranslating(true);
+    setIsPlayerOpen(true);
+    setPlayerStatus('loading');
+    if (selectedTranslationIndexForTranslate !== null) {
+      setReadingTranslationId(selectedTranslationIndexForTranslate);
+    }
     setShowLanguageModal(false);
+    setElapsedTime(0);
+    setAudioProgress(0);
 
     try {
-      window.speechSynthesis.cancel();
-
       let activePdfDoc = pdfDoc;
       let activeTotalPages = totalPages;
 
@@ -766,14 +546,16 @@ const ArticleDetailPage = () => {
         setTotalPages(pages.length);
       }
 
-      await waitForVoices();
       setTargetLang(targetLanguage);
+      currentLangCodeRef.current = targetLanguage.code;
 
       const playPage = async (pageNum) => {
         if (pageNum > activeTotalPages) {
           setIsReading(false);
+          setIsPaused(false);
           isReadingRef.current = false;
           setTranslating(false);
+          setPlayerStatus('completed');
           showNotification({ title: 'Tamamlandı', message: 'Okuma tamamlandı.', variant: 'success' });
           return;
         }
@@ -808,80 +590,118 @@ const ArticleDetailPage = () => {
 
           // HTML entity ve fazla boşlukları temizle
           const translatedText = cleanTextForTTS(rawTranslatedText);
+          const originalChunks = splitTextIntoChunks(textToTranslate);
+          const translatedChunks = splitTextIntoChunks(translatedText);
+          const chunks = translatedChunks;
+          setCurrentOriginalChunks(originalChunks);
+          setCurrentTranslatedChunks(translatedChunks);
+          setActiveChunkIndex(0);
 
           setTranslating(false);
-
-          const utterance = new SpeechSynthesisUtterance(translatedText);
-          const langCode = getLanguageCode(targetLanguage.code);
-          utterance.lang = langCode;
-          utterance.rate = playbackRate || 1.0;
-
-          const bestVoice = getBestVoice(langCode);
-          if (bestVoice) utterance.voice = bestVoice;
-
-          utterance.onstart = () => {
-            setIsReading(true);
-            isReadingRef.current = true;
-            setIsPaused(false);
-            setSpeechSynthesis(window.speechSynthesis);
-            setCurrentUtterance(utterance);
-            setCurrentText(translatedText);
-            setCurrentCharIndex(0);
-          };
-
-          utterance.onboundary = (event) => {
-            if (event.name === 'word' || event.name === 'sentence') {
-              setCurrentCharIndex(event.charIndex);
-            }
-          };
-
-          utterance.onend = () => {
-            if (isReadingRef.current && pageNum < activeTotalPages) {
+          disposeCurrentAudio();
+          const segmentQueue = chunks.length > 0 ? chunks : [translatedText];
+          playbackQueueRef.current = segmentQueue;
+          queueIndexRef.current = 0;
+          onQueueCompleteRef.current = () => {
+            if (isReadingRef.current && activePdfDoc && pageNum < activeTotalPages) {
               playPage(pageNum + 1);
-            } else {
-              setIsReading(false);
-              isReadingRef.current = false;
+              return;
             }
-          };
-
-          utterance.onerror = (err) => {
-            console.error('TTS Error:', err);
             setIsReading(false);
+            setIsPaused(false);
             isReadingRef.current = false;
+            setAudioProgress(0);
+            setActiveChunkIndex(0);
+            setPlayerStatus('completed');
           };
-
-          window.speechSynthesis.speak(utterance);
+          await startQueuePlayback(segmentQueue, targetLanguage.code, 0, 0);
         } catch (err) {
           console.error(`Page ${pageNum} error:`, err);
           setTranslating(false);
           setIsReading(false);
+          setIsPaused(false);
           isReadingRef.current = false;
+          setPlayerStatus('error');
         }
       };
 
+      isReadingRef.current = true;
       playPage(startPage);
 
     } catch (error) {
       console.error('Play error:', error);
       setTranslating(false);
+      setPlayerStatus('error');
       showNotification({ title: 'Hata', message: 'Bir sorun oluştu', variant: 'danger' });
     }
   };
 
   const stopTextToSpeech = () => {
-    if (window.speechSynthesis) {
-      isReadingRef.current = false;
-      window.speechSynthesis.cancel();
-      setIsReading(false);
-      setIsPaused(false);
-      setReadingTranslationId(null);
-      setSpeechSynthesis(null);
-      setCurrentUtterance(null);
-      setCurrentText('');
-      setCurrentCharIndex(0);
-      setElapsedTime(0);
-    }
+    isReadingRef.current = false;
+    readingSessionIdRef.current += 1;
+    playbackQueueRef.current = [];
+    queueIndexRef.current = 0;
+    onQueueCompleteRef.current = null;
+    currentLangCodeRef.current = null;
+    disposeCurrentAudio();
+    setIsReading(false);
+    setIsPaused(false);
+    setPlayerStatus('idle');
+    setIsPlayerOpen(false);
+    setPlayerPosition({ x: 0, y: 0 });
+    setReadingTranslationId(null);
+    setElapsedTime(0);
+    setAudioProgress(0);
+    setCurrentOriginalChunks([]);
+    setCurrentTranslatedChunks([]);
+    setActiveChunkIndex(0);
   };
+
+  const seekTo = (percent) => {
+    if (playbackQueueRef.current.length > 1) {
+      const queue = playbackQueueRef.current;
+      const langCode = currentLangCodeRef.current;
+      if (!queue.length || !langCode) return;
+      const total = queue.length;
+      const normalized = Math.max(0, Math.min(100, percent)) / 100;
+      const rawPos = normalized * total;
+      const targetIndex = Math.min(total - 1, Math.floor(rawPos));
+      const offsetRatio = Math.max(0, Math.min(0.98, rawPos - targetIndex));
+      readingSessionIdRef.current += 1;
+      disposeCurrentAudio();
+      setActiveChunkIndex(targetIndex);
+      startQueuePlayback(queue, langCode, targetIndex, offsetRatio);
+      return;
+    }
+    const audio = currentAudioRef.current;
+    if (!audio || !audio.duration) return;
+    audio.currentTime = (percent / 100) * audio.duration;
+    setAudioProgress(percent);
+  };
+
+  useEffect(() => {
+    const scrollToActive = (containerRef, selector) => {
+      const container = containerRef.current;
+      if (!container) return;
+      const el = container.querySelector(selector);
+      if (!el) return;
+      el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    };
+    scrollToActive(originalChunksContainerRef, `[data-original-chunk-index="${activeChunkIndex}"]`);
+    scrollToActive(translatedChunksContainerRef, `[data-translated-chunk-index="${activeChunkIndex}"]`);
+  }, [activeChunkIndex]);
+
+  useEffect(() => {
+    return () => {
+      readingSessionIdRef.current += 1;
+      playbackQueueRef.current = [];
+      queueIndexRef.current = 0;
+      onQueueCompleteRef.current = null;
+      currentLangCodeRef.current = null;
+      disposeCurrentAudio();
+      isReadingRef.current = false;
+    };
+  }, []);
 
   // Dil seçim modalını aç
   const openLanguageModal = (translation, translationIndex, pdfUrl = null) => {
@@ -1381,8 +1201,7 @@ const ArticleDetailPage = () => {
                                 <Button
                                   variant="primary"
                                   size="sm"
-                                  href={getPdfUrl(translation.pdfUrl)}
-                                  target="_blank"
+                                  onClick={() => handleDownloadPdf(translation.pdfUrl, translation.title)}
                                   className="d-flex align-items-center"
                                 >
                                   <BsDownload className="me-1" />
@@ -1538,116 +1357,102 @@ const ArticleDetailPage = () => {
         </CardBody>
       </Card>
 
-      {/* Floating Audio Player */}
-      {isReading && (
-        <Col
-          xs={12}
-          className="fixed-bottom p-3 d-flex justify-content-center"
-          style={{ zIndex: 1050, pointerEvents: 'none' }}
+      {/* Modern Floating Audio Player */}
+      {isPlayerOpen && (
+        <div
+          className="p-3 d-flex justify-content-center"
+          style={{
+            zIndex: 1050,
+            position: 'fixed',
+            left: '50%',
+            bottom: '0.5rem',
+            width: '100%',
+            maxWidth: '1160px',
+            transform: `translate(-50%, 0) translate(${playerPosition.x}px, ${playerPosition.y}px)`,
+            cursor: isDraggingPlayer ? 'grabbing' : 'grab',
+            userSelect: 'none'
+          }}
+          onMouseDown={handlePlayerDragStart}
+          onDoubleClick={() => setPlayerPosition({ x: 0, y: 0 })}
+          role="presentation"
         >
-          <Card
-            className="shadow-lg border-0 rounded-4 overflow-visible"
-            style={{
-              width: '100%',
-              maxWidth: '800px',
-              background: '#1c1f2e',
-              color: 'white',
-              pointerEvents: 'auto',
-              boxShadow: '0 -10px 25px rgba(0,0,0,0.3)'
-            }}
-          >
-            <CardBody className="p-3 overflow-visible">
-              <Row className="align-items-center g-3">
-                {/* Left Controls */}
-                <Col xs="auto" className="d-flex align-items-center gap-2">
-                  <Button
-                    variant="link"
-                    className="p-0 text-white opacity-75 hover-opacity-100"
-                    onClick={rewindTextToSpeech}
-                  >
-                    <BsSkipBackward size={22} />
-                  </Button>
-
-                  <Button
-                    variant="primary"
-                    className="rounded-circle d-flex align-items-center justify-content-center pulse-animation"
-                    style={{ width: '45px', height: '45px', background: '#007bff', border: 'none' }}
-                    onClick={pauseResumeTextToSpeech}
-                  >
-                    {isPaused ? <BsPlay size={24} /> : <BsPause size={24} />}
-                  </Button>
-
-                  <Button
-                    variant="link"
-                    className="p-0 text-white opacity-75 hover-opacity-100"
-                    onClick={forwardTextToSpeech}
-                  >
-                    <BsSkipForward size={22} />
-                  </Button>
-                </Col>
-
-                {/* Info & Progress */}
-                <Col>
-                  <div className="d-flex justify-content-between align-items-end mb-2 px-1">
-                    <div className="d-flex align-items-center gap-3">
-                      <div style={{ minWidth: '80px' }}>
-                        <select
-                          className="form-select form-select-sm player-select"
-                          value={currentPage}
-                          onChange={(e) => handleTranslateAndRead(targetLang, parseInt(e.target.value))}
-                          style={{
-                            background: 'rgba(255,255,255,0.05)',
-                            border: '1px solid rgba(255,255,255,0.1)',
-                            color: '#007bff',
-                            fontWeight: 'bold',
-                            padding: '2px 8px'
-                          }}
-                        >
-                          {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
-                            <option key={num} value={num}>Sayfa {num}</option>
-                          ))}
-                        </select>
+          <Card className="border-0 shadow-lg" style={{ width: '100%', backgroundColor: '#1c1f2e', color: '#fff', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <CardBody className="p-3">
+              <div className="d-flex justify-content-center mb-2">
+                <div style={{ width: '44px', height: '4px', borderRadius: '4px', background: 'rgba(255,255,255,0.28)' }} />
+              </div>
+              {showReadingAssist && (currentOriginalChunks.length > 0 || currentTranslatedChunks.length > 0) && (
+                <div className="mb-3 p-2 rounded" style={{ maxHeight: '280px', overflowY: 'hidden', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)' }}>
+                  <div className="d-flex justify-content-between align-items-center mb-2 px-1">
+                    <small style={{ color: 'rgba(255,255,255,0.75)' }}>Orijinal + Çeviri (Anlık)</small>
+                    <small style={{ color: '#8ab4ff' }}>{activeChunkIndex + 1}/{Math.max(currentOriginalChunks.length, currentTranslatedChunks.length)}</small>
+                  </div>
+                  {currentOriginalChunks.length > 0 && (
+                    <div className="mb-2 p-2 rounded" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', minHeight: '108px' }}>
+                      <small style={{ color: 'rgba(255,255,255,0.6)', display: 'block', marginBottom: '4px' }}>Orijinal Metin</small>
+                      <div ref={originalChunksContainerRef} style={{ maxHeight: '80px', overflowY: 'auto' }}>
+                        {currentOriginalChunks.map((chunk, idx) => (
+                          <span key={`o-${idx}-${chunk.slice(0, 10)}`} data-original-chunk-index={idx} style={{
+                            display: 'inline', marginRight: '6px', padding: idx === activeChunkIndex ? '1px 4px' : '0',
+                            borderRadius: '4px', background: idx === activeChunkIndex ? 'rgba(255,193,7,0.32)' : 'transparent',
+                            textDecoration: idx === activeChunkIndex ? 'underline' : 'none',
+                            color: idx <= activeChunkIndex ? '#fff' : 'rgba(255,255,255,0.65)', transition: 'all 0.2s ease'
+                          }}>{chunk}</span>
+                        ))}
                       </div>
-                      <span className="small text-white-50 text-truncate" style={{ maxWidth: '200px' }}>
-                        {article?.translations?.[readingTranslationId]?.title || 'Okunuyor...'}
-                      </span>
                     </div>
-
-                    <div className="d-flex align-items-center gap-3">
-                      <Dropdown drop="up" className="overflow-visible">
-                        <DropdownToggle
-                          variant="link"
-                          className="p-0 text-white text-decoration-none small d-flex align-items-center gap-1 opacity-75"
-                          style={{ fontSize: '0.85rem' }}
-                        >
-                          <span style={{ color: '#007bff', fontWeight: 'bold' }}>{playbackRate}x</span>
-                        </DropdownToggle>
-                        <DropdownMenu
-                          variant="dark"
-                          style={{
-                            background: '#2a2d3e',
-                            border: '1px solid rgba(255,255,255,0.1)',
-                            minWidth: '80px',
-                            zIndex: 2000
-                          }}
-                        >
-                          {[0.5, 0.75, 1, 1.25, 1.5, 2].map(rate => (
-                            <DropdownItem
-                              key={rate}
-                              onClick={() => changePlaybackRate(rate)}
-                              className={playbackRate === rate ? 'text-primary fw-bold' : 'text-white'}
-                            >
-                              {rate}x
-                            </DropdownItem>
-                          ))}
-                        </DropdownMenu>
-                      </Dropdown>
-                      <span className="small fw-mono" style={{ color: '#007bff' }}>
-                        {formatTime(elapsedTime)}
-                      </span>
+                  )}
+                  {currentTranslatedChunks.length > 0 && (
+                    <div className="p-2 rounded" style={{ background: 'rgba(0,123,255,0.08)', border: '1px solid rgba(0,123,255,0.25)', minHeight: '108px' }}>
+                      <small style={{ color: 'rgba(255,255,255,0.72)', display: 'block', marginBottom: '4px' }}>Çeviri Metni</small>
+                      <div ref={translatedChunksContainerRef} style={{ maxHeight: '80px', overflowY: 'auto' }}>
+                        {currentTranslatedChunks.map((chunk, idx) => (
+                          <span key={`t-${idx}-${chunk.slice(0, 10)}`} data-translated-chunk-index={idx} style={{
+                            display: 'inline', marginRight: '6px', padding: idx === activeChunkIndex ? '1px 4px' : '0',
+                            borderRadius: '4px', background: idx === activeChunkIndex ? 'rgba(0,123,255,0.35)' : 'transparent',
+                            textDecoration: idx === activeChunkIndex ? 'underline' : 'none',
+                            color: idx <= activeChunkIndex ? '#fff' : 'rgba(255,255,255,0.65)', transition: 'all 0.2s ease'
+                          }}>{chunk}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+              <Row className="align-items-center g-3">
+                <Col xs={12} md={3}>
+                  <div className="d-flex align-items-center gap-3">
+                    <div className="bg-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm" style={{ width: '45px', height: '45px' }}>
+                      <BsVolumeUp size={22} style={{ color: '#fff' }} />
+                    </div>
+                    <div className="overflow-hidden">
+                      <h6 className="mb-0 text-truncate" style={{ fontSize: '0.95rem' }}>{article?.translations?.[0]?.title}</h6>
+                      <div className="d-flex align-items-center gap-2">
+                        <Badge bg="primary" style={{ fontSize: '0.7rem' }}>{targetLang?.name || 'Çeviri'}</Badge>
+                        <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)' }}>
+                          {translating || playerStatus === 'loading' ? 'Hazırlanıyor...' : isPaused ? 'Duraklatıldı' : playerStatus === 'completed' ? 'Tamamlandı' : 'Okunuyor'}
+                        </span>
+                      </div>
                     </div>
                   </div>
-
+                </Col>
+                <Col xs={12} md={4} className="d-flex flex-column align-items-center">
+                  <div className="d-flex align-items-center gap-3 mb-2 player-control-cluster">
+                    <Button variant="link" className="player-icon-btn" disabled={currentPage <= 1 || translating} onClick={() => handleTranslateAndRead(targetLang, currentPage - 1)}><BsSkipBackward size={20} /></Button>
+                    <Button variant="light" className="rounded-circle d-flex align-items-center justify-content-center shadow player-main-btn" onClick={pauseResumeTextToSpeech} disabled={translating || !currentAudioRef.current}>
+                      {isPaused ? <BsPlay size={28} /> : <BsPause size={28} />}
+                    </Button>
+                    <Button variant="link" className="player-icon-btn" disabled={currentPage >= totalPages || translating} onClick={() => handleTranslateAndRead(targetLang, currentPage + 1)}><BsSkipForward size={20} /></Button>
+                  </div>
+                  <div className="player-page-chip mb-2 text-center">
+                    <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'rgba(255,255,255,0.5)' }}>SAYFA</div>
+                    <div className="d-flex align-items-center gap-1 justify-content-center">
+                      <select className="bg-transparent border-0 fw-bold p-0 pe-1 player-select" style={{ fontSize: '1.2rem', color: '#007bff' }} value={currentPage} onChange={(e) => handleTranslateAndRead(targetLang, parseInt(e.target.value))}>
+                        {[...Array(totalPages || 1)].map((_, i) => (<option key={i + 1} value={i + 1} style={{ backgroundColor: '#1c1f2e', color: '#fff' }}>{i + 1}</option>))}
+                      </select>
+                      <span style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.62)' }}>/ {totalPages || 1}</span>
+                    </div>
+                  </div>
                   <div className="w-100 px-3 mt-1">
                     <input
                       type="range"
@@ -1655,30 +1460,53 @@ const ArticleDetailPage = () => {
                       min="0"
                       max="100"
                       step="0.1"
-                      value={getProgress()}
-                      onChange={(e) => seekTo(parseFloat(e.target.value))}
-                      style={{
-                        cursor: 'pointer',
-                        accentColor: '#007bff'
+                      value={previewProgress !== null ? previewProgress : getProgress()}
+                      onMouseDown={() => { setIsSliderSeeking(true); setPreviewProgress(getProgress()); }}
+                      onTouchStart={() => { setIsSliderSeeking(true); setPreviewProgress(getProgress()); }}
+                      onMouseUp={commitSliderSeek}
+                      onTouchEnd={commitSliderSeek}
+                      onChange={(e) => {
+                        const nextValue = parseFloat(e.target.value);
+                        if (isSliderSeeking) setPreviewProgress(nextValue);
+                        else seekTo(nextValue);
                       }}
+                      style={{ cursor: 'pointer', accentColor: '#007bff' }}
                     />
                   </div>
                 </Col>
-
-                {/* Close */}
-                <Col xs="auto">
-                  <Button
-                    variant="link"
-                    className="p-0 text-white opacity-50 hover-opacity-100"
-                    onClick={stopTextToSpeech}
-                  >
-                    <BsX size={28} />
-                  </Button>
+                <Col xs={12} md={5}>
+                  <div className="d-flex flex-column align-items-end gap-2 px-2">
+                    <div className="d-flex align-items-center gap-2 flex-nowrap">
+                      <Dropdown drop="up" style={{ overflow: 'visible' }}>
+                        <DropdownToggle variant="outline-light" size="sm" className="rounded-pill px-3 d-flex align-items-center gap-1 player-pill-btn">{playbackRate}x</DropdownToggle>
+                        <DropdownMenu style={{ minWidth: '120px', backgroundColor: '#1c1f2e', border: '1px solid rgba(255,255,255,0.2)' }}>
+                          {[0.5, 0.75, 1.0, 1.25, 1.5, 2.0].map(rate => (
+                            <button key={rate} onClick={() => changePlaybackRate(rate)} className="dropdown-item w-100 border-0 text-start" style={{ backgroundColor: playbackRate === rate ? '#007bff' : 'transparent', color: '#fff' }}>
+                              {rate === 1.0 ? 'Normal (1x)' : `${rate}x`}
+                            </button>
+                          ))}
+                        </DropdownMenu>
+                      </Dropdown>
+                    </div>
+                    <div className="d-flex align-items-center gap-2 flex-wrap justify-content-end">
+                      <Button variant="outline-light" size="sm" className="rounded-pill px-2 player-pill-btn" onClick={() => {
+                        if (selectedPdfUrlForTranslate || selectedPdfUrl) {
+                          setSelectedPdfUrl(selectedPdfUrlForTranslate || selectedPdfUrl);
+                          setSelectedPdfTitle(article?.translations?.[0]?.title || 'PDF');
+                          setShowPdfViewer(true);
+                        }
+                      }}>PDF'i Göster</Button>
+                      <Button variant="outline-light" size="sm" className="rounded-pill px-2 player-pill-btn" onClick={() => setShowReadingAssist((prev) => !prev)}>
+                        {showReadingAssist ? 'Vurguyu Gizle' : 'Vurguyu Göster'}
+                      </Button>
+                      <Button variant="outline-danger" size="sm" className="rounded-circle p-1 player-close-btn" onClick={stopTextToSpeech}><BsX size={18} /></Button>
+                    </div>
+                  </div>
                 </Col>
               </Row>
             </CardBody>
           </Card>
-        </Col>
+        </div>
       )}
 
       <style jsx global>{`
@@ -1724,6 +1552,54 @@ const ArticleDetailPage = () => {
           cursor: pointer;
           border: 2px solid #ffffff;
           box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+        .player-control-cluster {
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.12);
+          border-radius: 999px;
+          padding: 8px 12px;
+          backdrop-filter: blur(8px);
+        }
+        .player-icon-btn {
+          width: 38px;
+          height: 38px;
+          border-radius: 50% !important;
+          display: inline-flex !important;
+          align-items: center;
+          justify-content: center;
+          color: rgba(255,255,255,0.95) !important;
+          border: 1px solid rgba(255,255,255,0.16) !important;
+          background: rgba(255,255,255,0.07) !important;
+          transition: all 0.2s ease;
+          text-decoration: none !important;
+        }
+        .player-main-btn {
+          width: 56px !important;
+          height: 56px !important;
+          background: linear-gradient(135deg, #ffffff 0%, #e9f0ff 100%) !important;
+          color: #111b36 !important;
+          border: 1px solid rgba(255,255,255,0.85) !important;
+          box-shadow: 0 10px 20px rgba(0,0,0,0.24) !important;
+        }
+        .player-page-chip {
+          padding: 8px 10px;
+          border-radius: 12px;
+          border: 1px solid rgba(255,255,255,0.12);
+          background: rgba(255,255,255,0.04);
+          min-width: 84px;
+        }
+        .player-pill-btn {
+          border: 1px solid rgba(255,255,255,0.24) !important;
+          background: rgba(255,255,255,0.08) !important;
+          color: #f4f7ff !important;
+          font-weight: 500;
+        }
+        .player-close-btn {
+          width: 36px;
+          height: 36px;
+          border: 1px solid rgba(255,77,77,0.7) !important;
+          color: #ff5e5e !important;
+          background: rgba(255,77,77,0.08) !important;
         }
       `}</style>
       {/* PDF Viewer Modal */}
@@ -1785,8 +1661,8 @@ const ArticleDetailPage = () => {
                       <div style={{ fontSize: '0.9rem', fontWeight: '500' }}>
                         {lang.name}
                       </div>
-                      <div style={{ fontSize: '0.75rem', opacity: 0.7 }}>
-                        {lang.code}
+                      <div style={{ fontSize: '1rem', lineHeight: 1, marginTop: '2px' }}>
+                        {getLanguageFlag(lang.code)}
                       </div>
                     </Button>
                   </Col>
@@ -1816,22 +1692,8 @@ const ArticleDetailPage = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* Component unmount cleanup */}
-      <CleanupEffect />
     </Col>
   );
-};
-
-// Separated cleanup to avoid effect misuse
-const CleanupEffect = () => {
-  useEffect(() => {
-    return () => {
-      if (typeof window !== 'undefined' && window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-      }
-    };
-  }, []);
-  return null;
 };
 
 export default ArticleDetailPage;
