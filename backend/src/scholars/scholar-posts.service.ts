@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ScholarPost } from './entities/scholar-post.entity';
 import { ScholarPostTranslation } from './entities/scholar-post-translation.entity';
+import { UserScholarFollow } from '../entities/user-scholar-follow.entity';
 import {
   CreateScholarPostDto,
   CreateTranslationDto,
@@ -16,6 +17,8 @@ import { Scholar } from './entities/scholar.entity';
 import * as fs from 'fs';
 import { join } from 'path';
 import { CacheService } from '../services/cache.service';
+import { ChatGateway } from '../chat/chat.gateway';
+import { NotificationService } from '../services/notification.service';
 
 @Injectable()
 export class ScholarPostsService {
@@ -26,7 +29,11 @@ export class ScholarPostsService {
     private translationRepository: Repository<ScholarPostTranslation>,
     @InjectRepository(Scholar)
     private scholarRepository: Repository<Scholar>,
+    @InjectRepository(UserScholarFollow)
+    private readonly userScholarFollowRepository: Repository<UserScholarFollow>,
     private readonly cacheService: CacheService,
+    private readonly chatGateway: ChatGateway,
+    private readonly notificationService: NotificationService,
   ) {}
 
   async create(
@@ -84,7 +91,62 @@ export class ScholarPostsService {
     // Timeline cache'ini temizle (bu alimi takip eden kullanıcılar için)
     await this.clearTimelineCacheForScholar(createScholarPostDto.scholarId);
 
+    // Alimi takip eden kullanıcılara anlık bildirim gönder
+    await this.notifyScholarFollowers(scholar, result);
+
     return result;
+  }
+
+  private async notifyScholarFollowers(
+    scholar: Scholar,
+    post: ScholarPost,
+  ): Promise<void> {
+    try {
+      const followers = await this.userScholarFollowRepository.find({
+        where: { scholar_id: scholar.id },
+        select: ['user_id'],
+      });
+
+      if (!followers.length) return;
+
+      const postTranslation =
+        post.translations?.find((translation) => translation.language === 'tr') ||
+        post.translations?.[0];
+      const plainContent = (postTranslation?.content || '')
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      const postExcerpt = plainContent.slice(0, 160);
+      const title = `${scholar.fullName} yeni bir gönderi paylaştı`;
+      const message = postExcerpt || 'Yeni gönderiyi görmek için dokunun.';
+
+      await Promise.all(
+        followers.map(async ({ user_id }) => {
+          const savedNotification = await this.notificationService.createNotification({
+            userId: user_id,
+            type: 'scholar_post',
+            title,
+            message,
+          });
+
+          this.chatGateway.sendToUser(user_id, 'newNotification', {
+            id: savedNotification.id,
+            type: savedNotification.type,
+            title: savedNotification.title,
+            message: savedNotification.message,
+            is_read: savedNotification.is_read,
+            created_at: savedNotification.created_at,
+            related_user: {
+              firstName: scholar.fullName,
+              lastName: '',
+              photoUrl: scholar.photoUrl,
+            },
+          });
+        }),
+      );
+    } catch (error) {
+      console.error('Scholar post notification error:', error?.message || error);
+    }
   }
 
   private async clearTimelineCacheForScholar(scholarId: number): Promise<void> {

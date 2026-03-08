@@ -64,8 +64,7 @@ const NotificationDropdown = () => {
 
   const allNotifications = useMemo(() => {
     const combined = [...realTimeNotifications, ...staticNotifications];
-
-    // Deduplicate by type and related user to prevent duplication between Socket and DB
+    const byId = new Map();
     const seen = new Set();
     const unique = [];
 
@@ -80,6 +79,14 @@ const NotificationDropdown = () => {
     });
 
     for (const n of sorted) {
+      if (n?.id && !String(n.id).startsWith('notif-')) {
+        // Prefer DB records for same id and avoid duplicate React keys
+        if (!byId.has(n.id)) {
+          byId.set(n.id, n);
+        }
+        continue;
+      }
+
       const relatedId = n.relatedUserId || n.related_user_id;
       const key = `${n.type}-${relatedId}`;
 
@@ -95,6 +102,8 @@ const NotificationDropdown = () => {
         unique.push(n);
       }
     }
+
+    unique.push(...byId.values());
 
     // Final sort by time
     return unique
