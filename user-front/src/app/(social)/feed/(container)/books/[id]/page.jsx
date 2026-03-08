@@ -11,14 +11,8 @@ import PdfViewer from '@/components/PdfViewer';
 import { generateBookUrl } from '@/utils/bookEncoder';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import { useLanguages } from '@/hooks/useLanguages';
-import { pdfjs } from 'react-pdf';
 import styles from './styles.module.css';
 import { getLanguageCode, cleanTextForTTS, fetchTTSAudio } from '@/utils/textToSpeech';
-
-// PDF.js worker'ı yapılandır
-if (typeof window !== 'undefined') {
-  pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
-}
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -50,7 +44,21 @@ const BookDetailPage = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [pdfDoc, setPdfDoc] = useState(null);
   const [targetLang, setTargetLang] = useState(null);
+  const [isPlayerOpen, setIsPlayerOpen] = useState(false);
+  const [playerStatus, setPlayerStatus] = useState('idle');
   const isReadingRef = useRef(false);
+  const pdfjsRef = useRef(null);
+
+  const getPdfjs = async () => {
+    if (typeof window === 'undefined') return null;
+    if (pdfjsRef.current) return pdfjsRef.current;
+
+    const pdfModule = await import('pdfjs-dist/legacy/build/pdf.mjs');
+    const pdfjs = pdfModule?.default || pdfModule;
+    pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
+    pdfjsRef.current = pdfjs;
+    return pdfjs;
+  };
 
   // URL'den dil bilgilerini al
   const languageId = searchParams ? searchParams.get('languageId') : null;
@@ -139,10 +147,44 @@ const BookDetailPage = () => {
     setShowPdfViewer(true);
   };
 
+  const handleDownloadPdf = async (pdfUrl, title) => {
+    const fullPdfUrl = getPdfUrl(pdfUrl);
+    if (!fullPdfUrl) return;
+
+    try {
+      const safeTitle = (title || 'book').replace(/[^\w\-]+/g, '_');
+      const filename = `${safeTitle}.pdf`;
+      const downloadUrl = `/api/download-pdf?pdfUrl=${encodeURIComponent(fullPdfUrl)}&filename=${encodeURIComponent(filename)}`;
+      const response = await fetch(downloadUrl);
+      if (!response.ok) {
+        throw new Error('PDF indirilemedi');
+      }
+
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename;
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error('PDF download error:', error);
+      showNotification({
+        title: 'Hata',
+        message: 'PDF indirilemedi. Lütfen tekrar deneyin.',
+        variant: 'danger'
+      });
+    }
+  };
+
   // PDF'den text çıkarma fonksiyonu
   const extractTextFromPdf = async (pdfUrl) => {
     try {
-      if (typeof window === 'undefined' || !pdfjs) {
+      const pdfjs = await getPdfjs();
+      if (!pdfjs) {
         return null;
       }
 
@@ -226,9 +268,11 @@ const BookDetailPage = () => {
     if (isPaused) {
       audio.play();
       setIsPaused(false);
+      setPlayerStatus('playing');
     } else {
       audio.pause();
       setIsPaused(true);
+      setPlayerStatus('paused');
     }
   };
 
@@ -337,6 +381,11 @@ const BookDetailPage = () => {
     isReadingRef.current = false;
 
     setTranslating(true);
+    setIsPlayerOpen(true);
+    setPlayerStatus('loading');
+    if (selectedTranslationIndexForTranslate !== null) {
+      setReadingTranslationId(selectedTranslationIndexForTranslate);
+    }
     setShowLanguageModal(false);
     setElapsedTime(0);
     setAudioProgress(0);
@@ -344,8 +393,9 @@ const BookDetailPage = () => {
     try {
       let activePdfDoc = pdfDoc;
       let activeTotalPages = totalPages;
+      const pdfjs = await getPdfjs();
 
-      if (selectedPdfUrlForTranslate && !activePdfDoc) {
+      if (selectedPdfUrlForTranslate && !activePdfDoc && pdfjs) {
         showNotification({ title: 'Bilgi', message: 'Kitap hazırlanıyor...', variant: 'info' });
         const loadingTask = pdfjs.getDocument({ url: selectedPdfUrlForTranslate, withCredentials: false });
         activePdfDoc = await loadingTask.promise;
@@ -361,8 +411,10 @@ const BookDetailPage = () => {
 
         if (activePdfDoc && pageNum > activeTotalPages) {
           setIsReading(false);
+          setIsPaused(false);
           isReadingRef.current = false;
           setTranslating(false);
+          setPlayerStatus('completed');
           showNotification({ title: 'Tamamlandı', message: 'Kitabın tamamı okundu.', variant: 'success' });
           return;
         }
@@ -418,7 +470,12 @@ const BookDetailPage = () => {
           audio.playbackRate = playbackRate || 1.0;
           currentAudioRef.current = audio;
 
-          audio.onplay = () => { setIsReading(true); isReadingRef.current = true; setIsPaused(false); };
+          audio.onplay = () => {
+            setIsReading(true);
+            isReadingRef.current = true;
+            setIsPaused(false);
+            setPlayerStatus('playing');
+          };
           audio.ontimeupdate = () => {
             if (audio.duration) setAudioProgress((audio.currentTime / audio.duration) * 100);
           };
@@ -428,14 +485,18 @@ const BookDetailPage = () => {
               playPage(pageNum + 1);
             } else {
               setIsReading(false);
+              setIsPaused(false);
               isReadingRef.current = false;
               setAudioProgress(0);
+              setPlayerStatus('completed');
             }
           };
           audio.onerror = () => {
             URL.revokeObjectURL(audioUrl);
             setIsReading(false);
+            setIsPaused(false);
             isReadingRef.current = false;
+            setPlayerStatus('error');
             showNotification({ title: 'Hata', message: 'Ses oynatılamadı.', variant: 'danger' });
           };
 
@@ -450,7 +511,9 @@ const BookDetailPage = () => {
           }
           setTranslating(false);
           setIsReading(false);
+          setIsPaused(false);
           isReadingRef.current = false;
+          setPlayerStatus('error');
           showNotification({ title: 'Hata', message, variant: 'danger' });
         }
       };
@@ -461,6 +524,7 @@ const BookDetailPage = () => {
     } catch (error) {
       console.error('General read error:', error);
       setTranslating(false);
+      setPlayerStatus('error');
       showNotification({ title: 'Hata', message: 'Okuma başlatılamadı.', variant: 'danger' });
     }
   };
@@ -479,6 +543,8 @@ const BookDetailPage = () => {
     disposeCurrentAudio();
     setIsReading(false);
     setIsPaused(false);
+    setPlayerStatus('idle');
+    setIsPlayerOpen(false);
     setReadingTranslationId(null);
     setElapsedTime(0);
     setAudioProgress(0);
@@ -1023,8 +1089,7 @@ const BookDetailPage = () => {
                                 <Button
                                   variant="primary"
                                   size="sm"
-                                  href={getPdfUrl(translation.pdfUrl)}
-                                  target="_blank"
+                                  onClick={() => handleDownloadPdf(translation.pdfUrl, translation.title)}
                                   className={`d-flex align-items-center ${styles.downloadButton}`}
                                 >
                                   <BsDownload className="me-1" />
@@ -1075,90 +1140,6 @@ const BookDetailPage = () => {
                           </div>
                         )}
 
-                        {/* Sesli Okuma Kontrol Paneli - Sadece bu translation için okuma yapılırken görünür */}
-                        {isReading && readingTranslationId === index && (
-                          <div className="mt-4 pt-3 border-top">
-                            <Card className="border-0 shadow-sm bg-light">
-                              <CardBody className="p-3">
-                                <Row className="align-items-center">
-                                  <Col xs={12} className="mb-2">
-                                    <div className="d-flex justify-content-between align-items-center mb-2">
-                                      <div className="d-flex align-items-center gap-2">
-                                        <BsVolumeUp size={18} className="text-primary" />
-                                        <span className="fw-bold small">Sesli Okuma</span>
-                                        {isPaused && <Badge bg="warning" className="small">Duraklatıldı</Badge>}
-                                      </div>
-                                      <div className="text-muted small">
-                                        {formatTime(elapsedTime)}
-                                      </div>
-                                    </div>
-                                    <ProgressBar
-                                      now={getProgress()}
-                                      variant="primary"
-                                      style={{ height: '6px', borderRadius: '3px' }}
-                                    />
-                                  </Col>
-                                  <Col xs={12}>
-                                    <div className="d-flex justify-content-center align-items-center gap-2 flex-wrap">
-                                      <Button
-                                        variant="outline-secondary"
-                                        size="sm"
-                                        onClick={rewindTextToSpeech}
-                                        disabled={!isReading}
-                                        title="10 saniye geri"
-                                      >
-                                        <BsSkipBackward size={14} />
-                                      </Button>
-                                      <Button
-                                        variant={isPaused ? "success" : "warning"}
-                                        size="sm"
-                                        onClick={pauseResumeTextToSpeech}
-                                        disabled={!isReading}
-                                        style={{ minWidth: '50px' }}
-                                      >
-                                        {isPaused ? <BsPlay size={16} /> : <BsPause size={16} />}
-                                      </Button>
-                                      <Button
-                                        variant="outline-secondary"
-                                        size="sm"
-                                        onClick={forwardTextToSpeech}
-                                        disabled={!isReading}
-                                        title="10 saniye ileri"
-                                      >
-                                        <BsSkipForward size={14} />
-                                      </Button>
-                                      <div className="mx-2" style={{ borderLeft: '1px solid #dee2e6', height: '25px' }}></div>
-                                      <div className="d-flex align-items-center gap-1">
-                                        <span className="small text-muted">Hız:</span>
-                                        {[0.75, 1.0, 1.25, 1.5].map(rate => (
-                                          <Button
-                                            key={rate}
-                                            variant={playbackRate === rate ? "primary" : "outline-primary"}
-                                            size="sm"
-                                            className="px-2 py-1"
-                                            onClick={() => changePlaybackRate(rate)}
-                                            style={{ fontSize: '0.75rem' }}
-                                          >
-                                            {rate}x
-                                          </Button>
-                                        ))}
-                                      </div>
-                                      <div className="mx-2" style={{ borderLeft: '1px solid #dee2e6', height: '25px' }}></div>
-                                      <Button
-                                        variant="danger"
-                                        size="sm"
-                                        onClick={stopTextToSpeech}
-                                        className="px-2"
-                                      >
-                                        <BsX size={16} />
-                                      </Button>
-                                    </div>
-                                  </Col>
-                                </Row>
-                              </CardBody>
-                            </Card>
-                          </div>
-                        )}
                       </CardBody>
                     </Card>
                   </Col>
@@ -1258,7 +1239,7 @@ const BookDetailPage = () => {
       </Modal>
 
       {/* Modern Floating Audio Player */}
-      {(isReading || translating) && (
+      {isPlayerOpen && (
         <div className="fixed-bottom p-3 d-flex justify-content-center" style={{ zIndex: 1050 }}>
           <Card
             className="border-0 shadow-lg"
@@ -1289,7 +1270,15 @@ const BookDetailPage = () => {
                       <div className="d-flex align-items-center gap-2">
                         <Badge bg="primary" style={{ fontSize: '0.7rem', color: '#ffffff !important' }}>{targetLang?.name || 'Çeviri'}</Badge>
                         <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6) !important' }}>
-                          {translating ? 'Hazırlanıyor...' : isPaused ? 'Duraklatıldı' : 'Okunuyor'}
+                          {translating || playerStatus === 'loading'
+                            ? 'Hazırlanıyor...'
+                            : playerStatus === 'error'
+                              ? 'Hata oluştu'
+                              : playerStatus === 'completed'
+                                ? 'Tamamlandı'
+                                : isPaused || playerStatus === 'paused'
+                                  ? 'Duraklatıldı'
+                                  : 'Okunuyor'}
                         </span>
                       </div>
                     </div>
@@ -1314,7 +1303,7 @@ const BookDetailPage = () => {
                       className="rounded-circle d-flex align-items-center justify-content-center shadow"
                       style={{ width: '50px', height: '50px', backgroundColor: '#ffffff !important', color: '#1c1f2e !important', border: 'none' }}
                       onClick={pauseResumeTextToSpeech}
-                      disabled={translating}
+                      disabled={translating || !currentAudioRef.current}
                     >
                       {isPaused ? <BsPlay size={28} /> : <BsPause size={28} />}
                     </Button>

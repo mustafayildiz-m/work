@@ -1,38 +1,21 @@
 'use client';
 
-import { BsChatLeftTextFill, BsPeopleFill } from 'react-icons/bs';
 import { Col, Container, Offcanvas, OffcanvasBody, OffcanvasHeader, Row } from 'react-bootstrap';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { FaSlidersH } from 'react-icons/fa';
 import ProfilePanel from '@/components/layout/ProfilePanel';
 import { profilePanelLinksData1 } from '@/assets/data/layout';
-import OnlineUsersPanel from '@/components/layout/OnlineUsersPanel';
-import ConversationPanel from '@/components/layout/ConversationPanel';
 import MessagingBar from '@/components/layout/MessagingBar';
 
 import { useLanguage } from '@/context/useLanguageContext';
-import { useSession } from 'next-auth/react';
-import { useState } from 'react';
-import GuestMessagingModal from '@/components/layout/GuestMessagingModal';
 
 const FeedLayout = ({
   children
 }) => {
   const { t } = useLanguage();
   const {
-    messagingOffcanvas,
     startOffcanvas
   } = useLayoutContext();
-  const { status } = useSession();
-  const [showGuestModal, setShowGuestModal] = useState(false);
-
-  const handleMessagingClick = () => {
-    if (status === 'unauthenticated') {
-      setShowGuestModal(true);
-    } else {
-      messagingOffcanvas.toggle();
-    }
-  };
 
   return <>
     <main>
@@ -85,16 +68,6 @@ const FeedLayout = ({
       </Container>
     </main>
     <MessagingBar />
-
-    {/* Online Users Panel */}
-    <OnlineUsersPanel />
-
-    {/* Conversation Panel */}
-    <ConversationPanel />
-
-    {/* Guest Messaging Modal */}
-    <GuestMessagingModal show={showGuestModal} onHide={() => setShowGuestModal(false)} />
-
     <style jsx global>{`
         @media (max-width: 991.98px) {
           .feed-container-row {
