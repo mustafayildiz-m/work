@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Button, Card, CardBody, Col, Row } from 'react-bootstrap';
-import { BsArrowLeft } from 'react-icons/bs';
+import { Card, CardBody, Col, Row } from 'react-bootstrap';
+import NewsletterContentWithTranslation from '../components/NewsletterContentWithTranslation';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,16 +14,6 @@ const formatDate = (dateValue) => {
     month: 'long',
     year: 'numeric'
   });
-};
-
-const resolveImageUrl = (imageUrl) => {
-  if (!imageUrl) return '';
-  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-    return imageUrl;
-  }
-
-  const publicApiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-  return `${publicApiBase.replace(/\/$/, '')}/${imageUrl.replace(/^\//, '')}`;
 };
 
 const fetchFromApi = async (path) => {
@@ -61,51 +51,7 @@ const NewsletterDetailPage = async ({ params }) => {
     <Col lg={9}>
       <Row className="g-3">
         <Col lg={8}>
-          <Card className="border-0 shadow-sm" style={themeCardStyle}>
-            <CardBody className="p-4 p-md-5">
-              <Button
-                as={Link}
-                href="/feed/newsletters"
-                variant="light"
-                className="mb-3 d-inline-flex align-items-center gap-2 border"
-                style={{
-                  backgroundColor: 'var(--bs-tertiary-bg)',
-                  color: 'var(--bs-body-color)',
-                  borderColor: 'var(--bs-border-color)'
-                }}
-              >
-                <BsArrowLeft />
-                Tum bultenlere don
-              </Button>
-
-              <h3 className="fw-bold mb-2">{data.title}</h3>
-              <small className="text-muted d-block mb-3">{formatDate(data.publishDate || data.publishedAt)}</small>
-
-              <p className="mb-4">{data.intro}</p>
-
-              {data.imageUrl && (
-                <figure className="mb-4">
-                  <img
-                    src={resolveImageUrl(data.imageUrl)}
-                    alt={data.title}
-                    className="w-100 rounded-3 border"
-                    style={{ maxHeight: 380, objectFit: 'cover' }}
-                  />
-                </figure>
-              )}
-
-              <div className="d-grid gap-4">
-                {(data.sections || []).map((section) => (
-                  <div key={section.title}>
-                    <div
-                      className="mb-0 text-muted"
-                      dangerouslySetInnerHTML={{ __html: section.content }}
-                    />
-                  </div>
-                ))}
-              </div>
-            </CardBody>
-          </Card>
+          <NewsletterContentWithTranslation data={data} themeCardStyle={themeCardStyle} />
         </Col>
 
         <Col lg={4}>

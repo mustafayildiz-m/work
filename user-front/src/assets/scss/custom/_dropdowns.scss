@@ -71,3 +71,12 @@
     min-width: 16rem;
   }
 }
+
+// Newsletter language dropdown (custom portal) - solid background, no transparency
+.newsletter-lang-dropdown-custom {
+  background-color: var(--bs-body-bg) !important;
+  background: var(--bs-body-bg) !important;
+  opacity: 1 !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
