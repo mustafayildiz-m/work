@@ -242,12 +242,15 @@ export const WebSocketChatProvider = ({ children }) => {
   const updateConversationLastMessage = useCallback((message) => {
     setConversations(prev => {
       const currentUser = currentUserRef.current;
-      const otherUserId = message.senderId === currentUser?.id ? message.receiverId : message.senderId;
-      const isFromCurrentUser = message.senderId === currentUser?.id;
+      const isFromCurrentUser =
+        String(message.senderId) === String(currentUser?.id);
+      const otherUserId = isFromCurrentUser
+        ? message.receiverId
+        : message.senderId;
 
       const existingIndex = prev.findIndex(conv =>
         conv.id === message.conversationId ||
-        conv.participantId === otherUserId
+        String(conv.participantId) === String(otherUserId)
       );
 
       if (existingIndex !== -1) {
@@ -259,8 +262,8 @@ export const WebSocketChatProvider = ({ children }) => {
           lastMessage: message.content,
           lastMessageTime: message.timestamp,
           unreadCount: isFromCurrentUser
-            ? existing.unreadCount
-            : existing.unreadCount + 1
+            ? (existing.unreadCount || 0)
+            : (existing.unreadCount || 0) + 1
         };
         return updated;
       }
@@ -755,6 +758,50 @@ export const WebSocketChatProvider = ({ children }) => {
     }
   }, [socket, isConnected]);
 
+  const markConversationAsRead = useCallback((conversationId, participantIdHint = null) => {
+    if (!conversationId) return;
+
+    // Immediately sync UI counters (header badge uses conversations.unreadCount)
+    setConversations((prev) =>
+      prev.map((conv) =>
+        conv.id === conversationId ||
+        (participantIdHint !== null &&
+          String(conv.participantId) === String(participantIdHint))
+          ? { ...conv, unreadCount: 0 }
+          : conv,
+      ),
+    );
+
+    const currentUser = currentUserRef.current;
+
+    // Mark all unread incoming messages in that conversation as read
+    const unreadMessageIds = messages
+      .filter(
+        (msg) =>
+          (msg.conversationId === conversationId ||
+            (participantIdHint !== null &&
+              (String(msg.senderId) === String(participantIdHint) ||
+                String(msg.receiverId) === String(participantIdHint)))) &&
+          (!currentUser || String(msg.receiverId) === String(currentUser.id)) &&
+          msg.status !== 'read',
+      )
+      .map((msg) => msg.id);
+
+    if (unreadMessageIds.length === 0) return;
+
+    setMessages((prev) =>
+      prev.map((msg) =>
+        unreadMessageIds.includes(msg.id) ? { ...msg, status: 'read' } : msg,
+      ),
+    );
+
+    if (socket && isConnected) {
+      unreadMessageIds.forEach((messageId) => {
+        socket.emit('markAsRead', { messageId });
+      });
+    }
+  }, [messages, socket, isConnected]);
+
   // FIXED: Delete conversation - only from current user's view
   const deleteConversation = useCallback(async (conversationId) => {
     if (!conversationId) {
@@ -892,6 +939,7 @@ export const WebSocketChatProvider = ({ children }) => {
       }
     },
     markMessageAsRead,
+    markConversationAsRead,
     selectConversation,
     createNewConversation,
     deleteConversation,
@@ -922,6 +970,7 @@ export const WebSocketChatProvider = ({ children }) => {
     notifications,
     sendMessage,
     markMessageAsRead,
+    markConversationAsRead,
     selectConversation,
     createNewConversation,
     deleteConversation,
