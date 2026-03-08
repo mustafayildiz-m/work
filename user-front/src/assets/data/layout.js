@@ -17,23 +17,24 @@ import chatAltImg from '@/assets/images/icon/chat-alt-outline-filled.svg';
 import trashImg from '@/assets/images/icon/trash-var-outline-filled.svg';
 import clipboardImg from '@/assets/images/icon/clipboard-list-outline-filled.svg';
 import microphoneImg from '@/assets/images/icon/chat-alt-outline-filled.svg'; // Geçici olarak chat-alt kullanıyoruz
+import myNetworkImg from '@/assets/images/icon/my-network-outline-filled.svg';
 
 export const profilePanelLinksData1 = [{
   image: typeof homeImg === 'string' ? homeImg : homeImg.src,
   nameKey: 'menu.feed',
   link: '/feed/home'
 }, {
-  image: typeof earthImg === 'string' ? earthImg : earthImg.src,
-  nameKey: 'menu.worldNews',
-  link: '/blogs'
-}, {
-  image: typeof bookOpenImg === 'string' ? bookOpenImg : bookOpenImg.src,
-  nameKey: 'menu.islamicScholars',
-  link: '/feed/scholars'
-}, {
-  image: typeof personImg === 'string' ? personImg : personImg.src,
+  image: typeof myNetworkImg === 'string' ? myNetworkImg : myNetworkImg.src,
   nameKey: 'menu.users',
   link: '/feed/who-to-follow'
+}, {
+  image: typeof chatAltImg === 'string' ? chatAltImg : chatAltImg.src,
+  nameKey: 'menu.messaging',
+  link: '/messaging'
+}, {
+  image: typeof notificationImg === 'string' ? notificationImg : notificationImg.src,
+  nameKey: 'menu.notifications',
+  link: '/feed/notifications'
 }, {
   image: typeof bookImg === 'string' ? bookImg : bookImg.src,
   nameKey: 'menu.books',
@@ -46,6 +47,14 @@ export const profilePanelLinksData1 = [{
   image: typeof microphoneImg === 'string' ? microphoneImg : microphoneImg.src,
   nameKey: 'menu.podcast',
   link: '/feed/podcasts'
+}, {
+  image: typeof earthImg === 'string' ? earthImg : earthImg.src,
+  nameKey: 'menu.worldNews',
+  link: '/blogs'
+}, {
+  image: typeof bookOpenImg === 'string' ? bookOpenImg : bookOpenImg.src,
+  nameKey: 'menu.islamicScholars',
+  link: '/feed/scholars'
 }];
 
 export const profilePanelLinksData2 = [{

@@ -254,11 +254,11 @@
   "menu": {
     "feed": "Akış",
     "connections": "Bağlantılar",
-    "users": "Kullanıcılar",
+    "users": "Ağım",
     "islamicScholars": "İslam Alimleri",
-    "worldNews": "İslamla Şereflenenler",
+    "worldNews": "Hikayeler",
     "books": "Kitaplar",
-    "articles": "Makaleler",
+    "articles": "Kitapçıklar",
     "podcast": "Podcast",
     "events": "Etkinlikler",
     "groups": "Gruplar",
@@ -362,7 +362,7 @@
   },
   "whoToFollow": {
     "title": "Takip Edilecek Kişiler",
-    "users": "Kullanıcılar",
+    "users": "Ağım",
     "loadingUsers": "Kullanıcılar yükleniyor...",
     "searchInDatabase": "Tüm veritabanında arama:",
     "resultsFound": "sonuç bulundu",
