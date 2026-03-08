@@ -3,6 +3,7 @@
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
+import { BsEmojiSmileFill, BsSendFill } from 'react-icons/bs';
 
 // Emoji picker'ı lazy load
 const EmojiPicker = dynamic(() => import('@emoji-mart/react'), {
@@ -37,6 +38,7 @@ const MessageInput = () => {
   const [emojiData, setEmojiData] = useState(null);
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState('');
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
   
   // Refs
   const textareaRef = useRef(null);
@@ -239,6 +241,26 @@ const MessageInput = () => {
     };
   }, [activeConversation, sendTypingStatus]);
 
+  // Track current theme for adaptive UI/emoji picker
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const updateThemeState = () => {
+      const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+      setIsDarkTheme(currentTheme === 'dark');
+    };
+
+    updateThemeState();
+
+    const observer = new MutationObserver(updateThemeState);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-bs-theme'],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   // No conversation state
   if (!activeConversation) {
     return (
@@ -266,41 +288,69 @@ const MessageInput = () => {
     <div 
       className="message-input-container p-3 position-relative" 
       style={{ 
-        backgroundColor: '#f8f9fa', 
-        borderTop: '1px solid #dee2e6',
+        background:
+          'linear-gradient(180deg, rgba(var(--bs-body-bg-rgb), 0.72) 0%, rgba(var(--bs-body-bg-rgb), 0.95) 100%)',
+        borderTop: '1px solid var(--bs-border-color)',
+        backdropFilter: 'blur(10px)',
         position: 'sticky',
         bottom: 0,
         zIndex: 10
       }}
     >
       <form onSubmit={handleSubmit}>
-        <div className="input-group">
+        <div
+          className="d-flex align-items-end gap-2 p-2 rounded-4"
+          style={{
+            background: 'var(--bs-secondary-bg)',
+            border: '1px solid var(--bs-border-color)',
+            boxShadow: isDarkTheme
+              ? '0 12px 32px rgba(0, 0, 0, 0.35)'
+              : '0 10px 28px rgba(15, 23, 42, 0.10)',
+          }}
+        >
           {/* Emoji button */}
           <button
             type="button"
-            className="btn btn-outline-secondary"
+            className="btn"
             onClick={handleEmojiToggle}
             disabled={isSending}
             aria-label="Emoji seç"
             title="Emoji seç"
+            style={{
+              width: 42,
+              height: 42,
+              borderRadius: 14,
+              border: '1px solid var(--bs-border-color)',
+              background: isDarkTheme
+                ? 'linear-gradient(145deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.07) 100%)'
+                : 'linear-gradient(145deg, #ffffff 0%, #f2f5fb 100%)',
+              color: isDarkTheme ? '#ffd166' : '#ff9f1c',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+              boxShadow:
+                isDarkTheme
+                  ? '0 8px 18px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.06)'
+                  : '0 8px 18px rgba(31, 51, 96, 0.12), inset 0 1px 0 rgba(255,255,255,0.9)',
+              transition: 'transform 0.18s ease, box-shadow 0.2s ease, border-color 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-1px)';
+              e.currentTarget.style.boxShadow =
+                isDarkTheme
+                  ? '0 12px 24px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.12)'
+                  : '0 12px 24px rgba(31, 51, 96, 0.18), inset 0 1px 0 rgba(255,255,255,1)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow =
+                isDarkTheme
+                  ? '0 8px 18px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.06)'
+                  : '0 8px 18px rgba(31, 51, 96, 0.12), inset 0 1px 0 rgba(255,255,255,0.9)';
+            }}
           >
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-              <path d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
-            </svg>
-          </button>
-
-          {/* File upload button */}
-          <button
-            type="button"
-            className="btn btn-outline-secondary"
-            disabled={isSending}
-            aria-label="Dosya ekle"
-            title="Dosya ekle"
-          >
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
-            </svg>
+            <BsEmojiSmileFill size={18} />
           </button>
 
           {/* Message textarea */}
@@ -318,7 +368,12 @@ const MessageInput = () => {
               resize: 'none',
               minHeight: `${TEXTAREA_MIN_HEIGHT}px`,
               maxHeight: `${TEXTAREA_MAX_HEIGHT}px`,
-              overflowY: 'auto'
+              overflowY: 'auto',
+              borderRadius: 14,
+              border: '1px solid var(--bs-border-color)',
+              background: 'var(--bs-body-bg)',
+              color: 'var(--bs-body-color)',
+              boxShadow: 'none',
             }}
             aria-label="Mesaj girin"
             aria-invalid={error ? 'true' : 'false'}
@@ -328,10 +383,48 @@ const MessageInput = () => {
           {/* Send button */}
           <button
             type="submit"
-            className="btn btn-primary"
+            className="btn"
             disabled={!canSend}
             aria-label="Mesaj gönder"
             title="Mesaj gönder"
+            style={{
+              width: 46,
+              height: 46,
+              borderRadius: 16,
+              border: canSend
+                ? '1px solid rgba(87, 163, 255, 0.6)'
+                : '1px solid rgba(255,255,255,0.10)',
+              background: canSend
+                ? 'linear-gradient(145deg, #2f8cff 0%, #1a73ff 60%, #1458f5 100%)'
+                : (isDarkTheme
+                  ? 'linear-gradient(145deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.06) 100%)'
+                  : 'linear-gradient(145deg, #d9deea 0%, #c7cfdf 100%)'),
+              color: canSend ? '#ffffff' : (isDarkTheme ? 'rgba(255,255,255,0.7)' : '#7c879d'),
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+              boxShadow: canSend
+                ? '0 14px 30px rgba(23, 103, 255, 0.45), inset 0 1px 0 rgba(255,255,255,0.32)'
+                : (isDarkTheme
+                  ? '0 8px 18px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.06)'
+                  : '0 8px 16px rgba(27,39,94,0.12), inset 0 1px 0 rgba(255,255,255,0.55)'),
+              transition: 'transform 0.18s ease, box-shadow 0.2s ease, filter 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              if (!canSend) return;
+              e.currentTarget.style.transform = 'translateY(-1px) scale(1.02)';
+              e.currentTarget.style.filter = 'brightness(1.05)';
+              e.currentTarget.style.boxShadow =
+                '0 18px 34px rgba(61, 132, 255, 0.52), inset 0 1px 0 rgba(255,255,255,0.48)';
+            }}
+            onMouseLeave={(e) => {
+              if (!canSend) return;
+              e.currentTarget.style.transform = 'translateY(0) scale(1)';
+              e.currentTarget.style.filter = 'brightness(1)';
+              e.currentTarget.style.boxShadow =
+                '0 14px 30px rgba(61, 132, 255, 0.42), inset 0 1px 0 rgba(255,255,255,0.38)';
+            }}
           >
             {isSending ? (
               <div 
@@ -340,9 +433,7 @@ const MessageInput = () => {
                 aria-hidden="true"
               />
             ) : (
-              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
-              </svg>
+              <BsSendFill size={16} />
             )}
           </button>
         </div>
@@ -380,7 +471,7 @@ const MessageInput = () => {
             <EmojiPicker
               data={emojiData}
               onEmojiSelect={handleEmojiSelect}
-              theme="light"
+              theme={isDarkTheme ? 'dark' : 'light'}
               locale="tr"
               previewPosition="none"
               skinTonePosition="none"
