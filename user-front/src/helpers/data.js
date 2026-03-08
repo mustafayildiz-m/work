@@ -56,16 +56,22 @@ export const getAllNotifications = async () => {
 
     const data = await response.json();
     // Normalize data: backend uses 'created_at', frontend expects 'time'
-    return data.map(n => ({
-      ...n,
-      time: n.created_at,
-      isRead: n.is_read,
-      avatar: n.related_user?.photoUrl,
-      textAvatar: n.related_user ? {
-        text: `${n.related_user.firstName?.charAt(0)}${n.related_user.lastName?.charAt(0)}`,
-        variant: 'primary'
-      } : { text: '?', variant: 'secondary' }
-    }));
+    return data.map(n => {
+      // Swapping for more personal display as requested
+      const isFollowAccept = n.type === 'follow_accept';
+      return {
+        ...n,
+        title: isFollowAccept ? (n.message || n.title) : n.title,
+        description: isFollowAccept ? n.title : (n.message || n.description),
+        time: n.created_at,
+        isRead: n.is_read,
+        avatar: n.related_user?.photoUrl,
+        textAvatar: n.related_user ? {
+          text: `${n.related_user.firstName?.charAt(0)}${n.related_user.lastName?.charAt(0)}`,
+          variant: 'primary'
+        } : { text: '?', variant: 'secondary' }
+      };
+    });
   } catch (error) {
     console.error('Error fetching notifications:', error);
     return [];

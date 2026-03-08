@@ -169,7 +169,7 @@ const NotificationsPage = () => {
                   <div className={clsx('rounded d-flex border-0 mb-1 p-3 position-relative align-items-center notification-item transition-all', {
                     'unread-bg': !notification.isRead
                   })}>
-                    <div className="avatar text-center me-3" style={{ width: '48px', height: '48px', flexShrink: 0 }}>
+                    <div className="avatar text-center me-3 position-relative" style={{ width: '48px', height: '48px', flexShrink: 0 }}>
                       {notification.avatar ? (
                         <img
                           className="avatar-img rounded-circle"
@@ -183,6 +183,20 @@ const NotificationsPage = () => {
                           <span className="text-white position-absolute top-50 start-50 translate-middle fw-bold" style={{ fontSize: '1rem' }}>
                             {notification.textAvatar?.text || '?'}
                           </span>
+                        </div>
+                      )}
+                      {notification.type === 'follow_accept' && (
+                        <div
+                          className="bg-success rounded-circle border border-white position-absolute d-flex align-items-center justify-content-center shadow-sm"
+                          style={{
+                            bottom: '-2px',
+                            right: '-2px',
+                            width: '20px',
+                            height: '20px',
+                            borderWidth: '2px !important'
+                          }}
+                        >
+                          <BsCheckLg size={12} className="text-white fw-bold" />
                         </div>
                       )}
                     </div>
