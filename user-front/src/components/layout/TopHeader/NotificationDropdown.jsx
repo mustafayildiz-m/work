@@ -223,7 +223,7 @@ const NotificationDropdown = () => {
                     <div className={clsx('rounded d-flex border-0 p-2 position-relative align-items-center notification-item transition-all', {
                       'unread-bg': !notification.isRead
                     })}>
-                      <div className="avatar text-center me-2" style={{ width: '38px', height: '38px', flexShrink: 0 }}>
+                      <div className="avatar text-center me-2 position-relative" style={{ width: '38px', height: '38px', flexShrink: 0 }}>
                         {notification.avatar ? (
                           <img
                             className="avatar-img rounded-circle"
@@ -239,9 +239,30 @@ const NotificationDropdown = () => {
                             </span>
                           </div>
                         )}
+                        {notification.type === 'follow_accept' && (
+                          <div
+                            className="bg-success rounded-circle border border-white position-absolute d-flex align-items-center justify-content-center shadow-sm"
+                            style={{
+                              bottom: '-2px',
+                              right: '-2px',
+                              width: '18px',
+                              height: '18px',
+                              borderWidth: '2px !important'
+                            }}
+                          >
+                            <BsCheckLg size={10} className="text-white fw-bold" />
+                          </div>
+                        )}
                       </div>
                       <div className="flex-grow-1 overflow-hidden">
-                        <p className={clsx('mb-0 small text-truncate', !notification.isRead ? (isDark ? 'fw-bold text-white' : 'fw-bold text-dark') : 'text-body')} style={{ maxWidth: '200px' }}>{notification.title}</p>
+                        <p className={clsx('mb-0 small text-truncate', !notification.isRead ? (isDark ? 'fw-bold text-white' : 'fw-bold text-dark') : 'text-body')} style={{ maxWidth: '200px' }}>
+                          {notification.title}
+                        </p>
+                        {(notification.description || notification.message) && (
+                          <p className="text-muted mb-0 small text-truncate" style={{ fontSize: '0.7rem', maxWidth: '200px' }}>
+                            {notification.description || notification.message}
+                          </p>
+                        )}
                         <p className="text-muted mb-0" style={{ fontSize: '0.65rem' }}>{timeSince(notification.time)}</p>
                       </div>
                       <div className="d-flex gap-1 ms-2">

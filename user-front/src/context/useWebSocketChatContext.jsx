@@ -472,8 +472,8 @@ export const WebSocketChatProvider = ({ children }) => {
           id: `notif-${Date.now()}`,
           type: 'follow_accept',
           relatedUserId: data.accepterId,
-          title: '✅ Takip İsteği Kabul Edildi',
-          description: `${data.accepter.firstName} ${data.accepter.lastName} takip isteğinizi kabul etti.`,
+          title: `${data.accepter.firstName} ${data.accepter.lastName} takip isteğinizi kabul etti.`,
+          description: 'Takip İsteği Kabul Edildi',
           time: new Date(),
           avatar: data.accepter.photoUrl,
           textAvatar: {
