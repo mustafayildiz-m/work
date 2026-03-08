@@ -14,7 +14,10 @@ import { BookTranslation } from '../books/entities/book-translation.entity';
 import { Language } from '../languages/entities/language.entity';
 import { UploadModule } from '../upload/upload.module';
 import { UserScholarFollowModule } from '../modules/user-scholar-follow.module';
+import { NotificationModule } from '../modules/notification.module';
+import { ChatModule } from '../chat/chat.module';
 import { CacheService } from '../services/cache.service';
+import { UserScholarFollow } from '../entities/user-scholar-follow.entity';
 
 @Module({
   imports: [
@@ -27,9 +30,12 @@ import { CacheService } from '../services/cache.service';
       Book,
       BookTranslation,
       Language,
+      UserScholarFollow,
     ]),
     UploadModule,
     UserScholarFollowModule,
+    NotificationModule,
+    ChatModule,
   ],
   controllers: [ScholarsController, ScholarPostsController],
   providers: [ScholarsService, ScholarPostsService, CacheService],

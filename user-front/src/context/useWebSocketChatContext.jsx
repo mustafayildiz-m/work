@@ -485,6 +485,42 @@ export const WebSocketChatProvider = ({ children }) => {
         window.dispatchEvent(new Event('followStatusChanged'));
       });
 
+      socketInstance.on('newNotification', (notification) => {
+        const formattedNotification = {
+          ...notification,
+          time: notification.time || notification.created_at || new Date(),
+          isRead:
+            typeof notification.isRead === 'boolean'
+              ? notification.isRead
+              : Boolean(notification.is_read),
+          avatar: notification.avatar || notification.related_user?.photoUrl,
+          textAvatar: notification.textAvatar || {
+            text: notification.related_user?.firstName?.charAt(0) || '?',
+            variant: 'primary',
+          },
+        };
+
+        setNotifications((prev) => {
+          if (prev.some((existing) => existing.id === formattedNotification.id)) {
+            return prev;
+          }
+          return [formattedNotification, ...prev];
+        });
+        playNotificationSound();
+
+        if (notificationContext?.showNotification) {
+          const scholarName = notification.related_user?.firstName?.trim();
+          notificationContext.showNotification({
+            title: scholarName
+              ? `🔔 ${scholarName} yeni bir gönderi paylaştı`
+              : '🔔 Yeni Bildirim',
+            message: notification.message || notification.title || 'Yeni bir bildiriminiz var.',
+            variant: 'info',
+            delay: 5000,
+          });
+        }
+      });
+
       setSocket(socketInstance);
     } catch (error) {
       console.error('Error connecting to WebSocket:', error);

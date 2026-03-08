@@ -228,7 +228,7 @@ const ProfileLayout = ({
   // Normalize follow state so "pending" is never shown as "following".
   const isPendingFollow = followStatus === 'pending';
   const isAcceptedFollow = !isPendingFollow && (isFollowing || followStatus === 'accepted');
-  const canSendMessage = isAcceptedFollow;
+  const canSendMessage = profileType === 'user' && isAcceptedFollow;
 
   // Reusable: fetch follow statistics for current context (scholar/user)
   const fetchFollowStatsForContext = useCallback(async () => {
