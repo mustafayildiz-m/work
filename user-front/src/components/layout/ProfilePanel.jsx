@@ -341,11 +341,14 @@ const ProfilePanel = ({ links, onLinkClick }) => {
   // Get theme-aware colors
   // Giriş yapmamış kullanıcılar için her zaman açık tema (ilk ziyarette tutarlı görünüm)
   const isDarkMode = status === 'unauthenticated' ? false : theme === 'dark';
-  const cardBg = isDarkMode ? '#141519' : '#ffffff';
-  const textColor = isDarkMode ? '#a1a1a8' : '#2C3E50';
-  const headingColor = isDarkMode ? '#fff' : '#000';
-  const borderColor = isDarkMode ? 'rgba(255, 255, 255, 0.07)' : 'rgba(181, 231, 160, 0.3)';
-  const hoverBg = isDarkMode ? 'rgba(129, 199, 132, 0.15)' : 'rgba(129, 199, 132, 0.08)';
+  const cardBg = isDarkMode ? '#151a22' : '#ffffff';
+  const textColor = isDarkMode ? '#b3bcc8' : '#536471';
+  const headingColor = isDarkMode ? '#f5f7fa' : '#0f1419';
+  const borderColor = isDarkMode ? 'rgba(255, 255, 255, 0.09)' : 'rgba(15, 20, 25, 0.08)';
+  const accentColor = '#66BB6A';
+  const cardShadow = isDarkMode
+    ? '0 14px 36px -20px rgba(0, 0, 0, 0.9)'
+    : '0 14px 36px -24px rgba(15, 20, 25, 0.3)';
 
   if (status === 'loading') {
     return (
@@ -370,20 +373,19 @@ const ProfilePanel = ({ links, onLinkClick }) => {
       {/* Section 1: Profile Card */}
       <div style={{
         background: cardBg,
-        borderRadius: '20px',
+        borderRadius: '16px',
         overflow: 'hidden',
-        boxShadow: isDarkMode
-          ? '0 10px 40px -10px rgba(0, 0, 0, 0.5)'
-          : '0 10px 40px -10px rgba(0, 0, 0, 0.1)',
-        border: 'none'
+        boxShadow: cardShadow,
+        border: `1px solid ${borderColor}`
       }}>
         {/* Cover Image */}
         <div style={{
-          height: '80px',
+          height: '74px',
           backgroundImage: `url(${bgBannerImg.src})`,
           backgroundPosition: 'center',
           backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat'
+          backgroundRepeat: 'no-repeat',
+          position: 'relative'
         }} />
 
         {/* Profile Content */}
@@ -413,10 +415,10 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                   href="/auth-advance/sign-in"
                   className="btn btn-success btn-sm w-100 py-2 fw-semibold mb-3"
                   style={{
-                    background: '#66BB6A',
+                    background: accentColor,
                     border: 'none',
                     borderRadius: '8px',
-                    transition: 'all 0.3s'
+                    transition: 'background-color 0.2s ease, transform 0.2s ease'
                   }}
                 >
                   {t('profile.loginAction')}
@@ -425,7 +427,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
             ) : (
               <>
                 {/* Avatar */}
-                <div className="position-relative d-inline-block" style={{ marginTop: '-50px' }}>
+                <div className="position-relative d-inline-block" style={{ marginTop: '-40px' }}>
                   <div
                     className="position-relative"
                     onClick={() => setShowAvatarMenu(!showAvatarMenu)}
@@ -476,10 +478,10 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                         height: '36px',
                         bottom: '5px',
                         right: '5px',
-                        background: '#66BB6A',
+                        background: accentColor,
                         boxShadow: '0 4px 16px rgba(102, 187, 106, 0.5)',
                         border: `3px solid ${cardBg}`,
-                        transition: 'all 0.3s'
+                        transition: 'transform 0.2s ease, box-shadow 0.2s ease'
                       }}
                     >
                       <BsCamera className="text-white" size={18} />
@@ -545,7 +547,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                 </div>
 
                 {/* User Info */}
-                <h5 className="mb-1 mt-3 fw-bold">
+                <h5 className="mb-1 mt-2 fw-bold" style={{ fontSize: '1.55rem', letterSpacing: '-0.01em' }}>
                   {user?.id && user?.id !== 'undefined' ? (
                     <Link
                       href={`/profile/user/${user.id}`}
@@ -571,11 +573,13 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                     </span>
                   )}
                 </h5>
-                <small className="text-muted">@{user?.username || user?.email || t('profile.user')}</small>
+                <small style={{ color: textColor, fontSize: '0.88rem', fontWeight: 500 }}>
+                  @{user?.username || user?.email || t('profile.user')}
+                </small>
 
                 {user?.bio && (
                   <div className="mt-2 mb-2">
-                    <p className="mb-1 text-muted" style={{ fontSize: '0.85rem', lineHeight: '1.4', whiteSpace: 'pre-wrap' }}>
+                    <p className="mb-1" style={{ color: textColor, fontSize: '0.9rem', lineHeight: '1.5', whiteSpace: 'pre-wrap' }}>
                       {bioExpanded || user.bio.length <= 100
                         ? user.bio
                         : `${user.bio.slice(0, 100)}...`}
@@ -586,7 +590,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                         className="btn btn-link p-0 text-decoration-none"
                         style={{
                           fontSize: '0.8rem',
-                          color: '#66BB6A',
+                          color: accentColor,
                           fontWeight: 500
                         }}
                       >
@@ -597,18 +601,18 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                 )}
 
                 {/* Stats - Pill Design */}
-                <div className="d-flex gap-1 justify-content-center mt-3 flex-nowrap">
+                <div className="d-flex gap-2 justify-content-center mt-3 flex-nowrap">
                   <Link
                     href="/feed/followers"
                     className="text-decoration-none"
                     onClick={() => onLinkClick && onLinkClick()}
                   >
                     <div style={{
-                      padding: '0.4rem 0.5rem',
-                      borderRadius: '50px',
-                      background: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)',
-                      border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)'}`,
-                      transition: 'all 0.3s',
+                      padding: '0.5rem 0.7rem',
+                      borderRadius: '10px',
+                      background: isDarkMode ? 'rgba(255,255,255,0.04)' : '#f8fafc',
+                      border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(15,20,25,0.08)'}`,
+                      transition: 'background-color 0.2s ease, border-color 0.2s ease',
                       cursor: 'pointer',
                       whiteSpace: 'nowrap'
                     }}>
@@ -623,11 +627,11 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                     onClick={() => onLinkClick && onLinkClick()}
                   >
                     <div style={{
-                      padding: '0.4rem 0.5rem',
-                      borderRadius: '50px',
-                      background: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)',
-                      border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)'}`,
-                      transition: 'all 0.3s',
+                      padding: '0.5rem 0.7rem',
+                      borderRadius: '10px',
+                      background: isDarkMode ? 'rgba(255,255,255,0.04)' : '#f8fafc',
+                      border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(15,20,25,0.08)'}`,
+                      transition: 'background-color 0.2s ease, border-color 0.2s ease',
                       cursor: 'pointer',
                       whiteSpace: 'nowrap'
                     }}>
@@ -648,9 +652,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
         borderRadius: '16px',
         marginTop: '12px',
         padding: '0.75rem',
-        boxShadow: isDarkMode
-          ? '0 8px 24px -12px rgba(0, 0, 0, 0.55)'
-          : '0 8px 24px -12px rgba(0, 0, 0, 0.12)',
+        boxShadow: cardShadow,
         border: `1px solid ${borderColor}`
       }}>
         <Link
@@ -660,21 +662,21 @@ const ProfilePanel = ({ links, onLinkClick }) => {
           style={{
             padding: '0.65rem 0.75rem',
             marginBottom: '0.4rem',
-            background: isDarkMode ? 'rgba(102,187,106,0.1)' : 'rgba(102,187,106,0.08)',
-            color: '#66BB6A',
+            background: isDarkMode ? 'rgba(102,187,106,0.12)' : 'rgba(102,187,106,0.09)',
+            color: accentColor,
             fontWeight: 600,
             fontSize: '0.9rem',
             borderRadius: '10px',
             border: `1px solid ${isDarkMode ? 'rgba(102,187,106,0.2)' : 'rgba(102,187,106,0.15)'}`,
-            transition: 'all 0.2s'
+            transition: 'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = '#66BB6A';
+            e.currentTarget.style.background = accentColor;
             e.currentTarget.style.color = 'white';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.background = isDarkMode ? 'rgba(102,187,106,0.1)' : 'rgba(102,187,106,0.08)';
-            e.currentTarget.style.color = '#66BB6A';
+            e.currentTarget.style.color = accentColor;
           }}
         >
           {t('profile.viewProfile')}
@@ -690,9 +692,9 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                 style={{
                   padding: '0.65rem 0.75rem',
                   borderRadius: '10px',
-                  transition: 'all 0.2s',
+                  transition: 'background-color 0.2s ease, color 0.2s ease',
                   background: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))
-                    ? '#66BB6A'
+                    ? accentColor
                     : 'transparent',
                   color: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))
                     ? 'white'
