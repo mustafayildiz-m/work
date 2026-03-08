@@ -59,6 +59,10 @@ export const useWebSocketChatContext = () => {
     messages: [],
     onlineUsers: [],
     typingUsers: {},
+    followRequests: [],
+    setFollowRequests: () => { },
+    notifications: [],
+    setNotifications: () => { },
     isConnected: false,
     loading: false,
     selectConversation: () => { },
@@ -77,8 +81,59 @@ export const WebSocketChatProvider = ({ children }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [userMap, setUserMap] = useState({});
   const [typingUsers, setTypingUsers] = useState({});
+  const [followRequests, setFollowRequests] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    const audio = new Audio('/sounds/notification.mp3');
+    audio.load();
+    audioRef.current = audio;
+
+    // Modern tarayıcılar için ses kilidini açma fonksiyonu
+    const unlockAudio = () => {
+      if (audioRef.current) {
+        audioRef.current.play()
+          .then(() => {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+          })
+          .catch(e => console.log('Audio unlock failed:', e));
+      }
+      document.removeEventListener('click', unlockAudio);
+      document.removeEventListener('keydown', unlockAudio);
+    };
+
+    document.addEventListener('click', unlockAudio);
+    document.addEventListener('keydown', unlockAudio);
+
+    return () => {
+      document.removeEventListener('click', unlockAudio);
+      document.removeEventListener('keydown', unlockAudio);
+    };
+  }, []);
+
+  const playNotificationSound = useCallback(() => {
+    try {
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play()
+          .catch(e => {
+            // Fallback: Try fresh audio object if ref fails
+            const fallbackAudio = new Audio('/sounds/notification.mp3');
+            fallbackAudio.play().catch(() => { });
+          });
+      } else {
+        const directAudio = new Audio('/sounds/notification.mp3');
+        directAudio.play().catch(() => { });
+      }
+    } catch (error) {
+      // Silently fail if audio system is not available
+    }
+  }, []);
 
   const notificationContext = useOptionalNotificationContext();
 
@@ -395,13 +450,57 @@ export const WebSocketChatProvider = ({ children }) => {
         }
       });
 
+      socketInstance.on('newFollowRequest', (request) => {
+        setFollowRequests(prev => {
+          if (prev.some(r => r.id === request.id)) return prev;
+          return [request, ...prev];
+        });
+        playNotificationSound();
+
+        if (notificationContext?.showNotification) {
+          notificationContext.showNotification({
+            title: '👤 Yeni Takip İsteği',
+            message: `${request.follower.firstName} ${request.follower.lastName} sizi takip etmek istiyor.`,
+            variant: 'success',
+            delay: 5000
+          });
+        }
+      });
+
+      socketInstance.on('followRequestAccepted', (data) => {
+        const newNotification = {
+          id: `notif-${Date.now()}`,
+          title: '✅ Takip İsteği Kabul Edildi',
+          description: `${data.accepter.firstName} ${data.accepter.lastName} takip isteğinizi kabul etti.`,
+          time: new Date(),
+          avatar: data.accepter.photoUrl,
+          textAvatar: {
+            text: `${data.accepter.firstName?.charAt(0)}${data.accepter.lastName?.charAt(0)}`,
+            variant: 'success'
+          },
+          isRead: false
+        };
+
+        setNotifications(prev => [newNotification, ...prev]);
+        playNotificationSound();
+
+        if (notificationContext?.showNotification) {
+          notificationContext.showNotification({
+            title: '✅ Takip İsteği Kabul Edildi',
+            message: `${data.accepter.firstName} ${data.accepter.lastName} artık sizi takip ediyor.`,
+            variant: 'success',
+            delay: 5000
+          });
+        }
+      });
+
       setSocket(socketInstance);
     } catch (error) {
       console.error('Error connecting to WebSocket:', error);
       setError('WebSocket bağlantı hatası');
       connectionAttemptRef.current = false;
     }
-  }, [formatMessage, updateConversationLastMessage, addOrUpdateMessage, replaceOptimisticMessage, notificationContext, activeConversation]);
+  }, [formatMessage, updateConversationLastMessage, addOrUpdateMessage, replaceOptimisticMessage, notificationContext, activeConversation, playNotificationSound]);
 
   // API functions
   const fetchConversations = useCallback(async () => {
@@ -741,6 +840,10 @@ export const WebSocketChatProvider = ({ children }) => {
     messages,
     onlineUsers,
     typingUsers,
+    followRequests,
+    setFollowRequests,
+    notifications,
+    setNotifications,
     sendMessage,
     sendTypingStatus: (conversationId, isTyping) => {
       if (socket && isConnected) {
@@ -778,6 +881,8 @@ export const WebSocketChatProvider = ({ children }) => {
     messages,
     onlineUsers,
     typingUsers,
+    followRequests,
+    notifications,
     sendMessage,
     selectConversation,
     createNewConversation,

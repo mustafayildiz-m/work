@@ -53,6 +53,8 @@ import { MailModule } from './mail/mail.module';
 import { SystemSettingsModule } from './modules/system-settings.module';
 import { SystemSetting } from './entities/system-setting.entity';
 import { Podcast } from './entities/podcast.entity';
+import { Notification } from './entities/notification.entity';
+import { NotificationModule } from './modules/notification.module';
 
 @Module({
   imports: [
@@ -87,6 +89,7 @@ import { Podcast } from './entities/podcast.entity';
       User,
       SystemSetting,
       Podcast,
+      Notification,
     ]),
     BooksModule,
     ArticlesModule,
@@ -115,6 +118,7 @@ import { Podcast } from './entities/podcast.entity';
     TtsModule,
     MailModule,
     SystemSettingsModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [
@@ -126,4 +130,4 @@ import { Podcast } from './entities/podcast.entity';
     MultiLanguageArticlesSeeder,
   ],
 })
-export class AppModule {}
+export class AppModule { }

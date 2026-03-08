@@ -8,6 +8,8 @@ import { UserScholarFollow } from '../entities/user-scholar-follow.entity';
 import { UserFollowService } from '../services/user-follow.service';
 import { UserFollowController } from '../controllers/user-follow.controller';
 import { CacheService } from '../services/cache.service';
+import { ChatModule } from '../chat/chat.module';
+import { NotificationModule } from './notification.module';
 
 @Module({
   imports: [
@@ -18,9 +20,11 @@ import { CacheService } from '../services/cache.service';
       ScholarPost,
       UserScholarFollow,
     ]),
+    ChatModule,
+    NotificationModule,
   ],
   providers: [UserFollowService, CacheService],
   controllers: [UserFollowController],
   exports: [UserFollowService],
 })
-export class UserFollowModule {}
+export class UserFollowModule { }

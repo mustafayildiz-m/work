@@ -6,17 +6,25 @@
  */
 export const getImageUrl = (imageUrl, baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000') => {
   if (!imageUrl) return null;
-  
+
+  // Handle Next.js static imports (objects)
+  if (typeof imageUrl === 'object' && imageUrl.src) {
+    return imageUrl.src;
+  }
+
+  // Ensure it's a string from here on
+  if (typeof imageUrl !== 'string') return null;
+
   // If it's already an absolute URL, return as is
   if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
     return imageUrl;
   }
-  
+
   // If it's a relative URL, prepend the base URL
   if (imageUrl.startsWith('/')) {
     return `${baseUrl}${imageUrl}`;
   }
-  
+
   // If it's just a filename, prepend the base URL and uploads path
   return `${baseUrl}/uploads/${imageUrl}`;
 };

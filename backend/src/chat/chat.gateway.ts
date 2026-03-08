@@ -32,7 +32,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   private connectedUsers = new Map<number, string>(); // userId -> socketId
 
-  constructor(private readonly chatService: ChatService) {}
+  constructor(private readonly chatService: ChatService) { }
+
+  sendToUser(userId: number, event: string, data: any) {
+    const socketId = this.connectedUsers.get(userId);
+    if (socketId && this.server) {
+      this.server.to(socketId).emit(event, data);
+    }
+  }
 
   async handleConnection(client: AuthenticatedSocket) {
     try {
