@@ -553,13 +553,7 @@ const MessagingBar = () => {
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: 'rotate(180deg)', cursor: 'pointer', color: colors.textMuted }}><path d="M19 9l-7 7-7-7" /></svg>
                                         </div>
                                     </div>
-                                    <div className="d-flex align-items-center justify-content-between">
-                                        <div className="d-flex gap-3 text-muted">
-                                            <svg style={{ cursor: 'pointer' }} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" /></svg>
-                                            <svg style={{ cursor: 'pointer' }} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" /></svg>
-                                            <div style={{ cursor: 'pointer', fontWeight: 'bold', fontSize: '11px', border: '2px solid', borderRadius: '4px', padding: '0 2px', lineHeight: '14px' }}>GIF</div>
-                                            <svg style={{ cursor: 'pointer' }} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" /></svg>
-                                        </div>
+                                    <div className="d-flex align-items-center justify-content-end">
                                         <div className="d-flex align-items-center gap-2">
                                             <button
                                                 className="btn btn-sm px-3 fw-bold shadow-none"
@@ -573,7 +567,6 @@ const MessagingBar = () => {
                                             >
                                                 Gönder
                                             </button>
-                                            <BsThreeDots size={18} className="text-muted" style={{ cursor: 'pointer' }} />
                                         </div>
                                     </div>
                                 </div>
