@@ -470,6 +470,8 @@ export const WebSocketChatProvider = ({ children }) => {
       socketInstance.on('followRequestAccepted', (data) => {
         const newNotification = {
           id: `notif-${Date.now()}`,
+          type: 'follow_accept',
+          relatedUserId: data.accepterId,
           title: '✅ Takip İsteği Kabul Edildi',
           description: `${data.accepter.firstName} ${data.accepter.lastName} takip isteğinizi kabul etti.`,
           time: new Date(),

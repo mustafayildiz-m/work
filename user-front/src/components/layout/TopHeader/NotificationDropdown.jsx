@@ -19,8 +19,40 @@ const NotificationDropdown = () => {
 
   const allNotifications = useMemo(() => {
     const combined = [...realTimeNotifications, ...staticNotifications];
-    // Sort by time (most recent first) and filter out follow requests
-    return combined
+
+    // Deduplicate by type and related user to prevent duplication between Socket and DB
+    const seen = new Set();
+    const unique = [];
+
+    // Sort combined to prioritize static (DB) notifications over real-time ones 
+    // because static ones have persistent IDs.
+    const sorted = combined.sort((a, b) => {
+      const isAStatic = !String(a.id).startsWith('notif-');
+      const isBStatic = !String(b.id).startsWith('notif-');
+      if (isAStatic && !isBStatic) return -1;
+      if (!isAStatic && isBStatic) return 1;
+      return new Date(b.time || 0) - new Date(a.time || 0);
+    });
+
+    for (const n of sorted) {
+      const relatedId = n.relatedUserId || n.related_user_id;
+      const key = `${n.type}-${relatedId}`;
+
+      // Only deduplicate certain types where duplication is likely
+      const isDeduplicatable = ['follow_accept', 'follow_request'].includes(n.type);
+
+      if (isDeduplicatable && relatedId) {
+        if (!seen.has(key)) {
+          seen.add(key);
+          unique.push(n);
+        }
+      } else {
+        unique.push(n);
+      }
+    }
+
+    // Final sort by time
+    return unique
       .filter(n => n.type !== 'follow_request')
       .sort((a, b) => new Date(b.time || 0) - new Date(a.time || 0));
   }, [realTimeNotifications, staticNotifications]);
