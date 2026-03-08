@@ -275,6 +275,23 @@ const MessagingBar = () => {
         return matchedConnection?.photoUrl || null;
     };
 
+    const resolveConversationName = (conv) => {
+        const fromConversation =
+            `${conv?.participantFirstName || ''} ${conv?.participantLastName || ''}`.trim();
+        if (fromConversation) return fromConversation;
+
+        const matchedConnection = connections.find((c) =>
+            String(c.id) === String(conv?.participantId) ||
+            (c.username && c.username === conv?.participantUsername)
+        );
+
+        const fromConnection =
+            `${matchedConnection?.firstName || ''} ${matchedConnection?.lastName || ''}`.trim();
+        if (fromConnection) return fromConnection;
+
+        return conv?.participantName || conv?.participantUsername || 'Bilinmeyen Kullanıcı';
+    };
+
     const handleConversationClick = async (conv) => {
         if (conv?.id && !String(conv.id).startsWith('temp-')) {
             markConversationAsRead?.(conv.id, conv.participantId);
@@ -284,8 +301,8 @@ const MessagingBar = () => {
         // Find user details from connection or create a simple user object
         const user = connections.find(c => String(c.id) === String(conv.participantId)) || {
             id: conv.participantId,
-            firstName: conv.participantName.split(' ')[0],
-            lastName: conv.participantName.split(' ').slice(1).join(' '),
+            firstName: (conv.participantFirstName || resolveConversationName(conv).split(' ')[0]),
+            lastName: (conv.participantLastName || resolveConversationName(conv).split(' ').slice(1).join(' ')),
             photoUrl: conv.participantAvatar
         };
         openChatWindow(user);
@@ -603,7 +620,7 @@ const MessagingBar = () => {
                                     <div className="flex-grow-1 overflow-hidden">
                                         <div className="d-flex justify-content-between align-items-baseline mb-1">
                                             <span className="text-truncate" style={{ fontSize: '1rem', color: colors.textMain, fontWeight: (conv.unreadCount || 0) > 0 ? '700' : '500' }}>
-                                                {conv.participantName}
+                                                {resolveConversationName(conv)}
                                             </span>
                                             <span style={{ fontSize: '0.75rem', color: colors.textMuted }}>
                                                 {formatDate(conv.lastMessageTime)}
