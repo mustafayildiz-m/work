@@ -109,4 +109,11 @@ export class UserFollowController {
       followersCount,
     };
   }
+
+  // Karşılıklı takipleşenleri (bağlantıları) getir
+  @Get('connections')
+  async getConnections(@Request() req?: any) {
+    const userId = req?.user?.id;
+    return this.userFollowService.getConnections(userId);
+  }
 }

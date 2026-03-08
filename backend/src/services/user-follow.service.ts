@@ -481,4 +481,38 @@ export class UserFollowService {
       return [];
     }
   }
+
+  // Karşılıklı takipleşen kullanıcıları (bağlantıları) getir
+  async getConnections(userId: number): Promise<any[]> {
+    const status = 'accepted';
+    const connections = await this.userFollowRepository
+      .createQueryBuilder('f1')
+      .innerJoin(
+        UserFollow,
+        'f2',
+        'f1.follower_id = f2.following_id AND f1.following_id = f2.follower_id',
+      )
+      .leftJoinAndSelect('f1.following', 'user')
+      .where('f1.follower_id = :userId', { userId })
+      .andWhere('f1.status = :status', { status })
+      .andWhere('f2.status = :status', { status })
+      .andWhere('user.isActive = :isActive', { isActive: true })
+      .select([
+        'f1.id',
+        'user.id',
+        'user.firstName',
+        'user.lastName',
+        'user.username',
+        'user.photoUrl',
+        'user.role'
+      ])
+      .getMany();
+
+    return connections.map((f) => ({
+      ...f.following,
+      name: `${f.following.firstName} ${f.following.lastName}`, // Frontend expectations
+      avatar: f.following.photoUrl,
+      status: 'offline', // Default status, chat might update this
+    }));
+  }
 }
