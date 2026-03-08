@@ -17,9 +17,10 @@ const MenuList = (props) => {
         gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
         gap: '0.25rem',
         padding: '0.5rem',
-        maxHeight: 'min(400px, 70vh)',
+        maxHeight: 'min(460px, 78dvh)',
         overflowY: 'auto',
-        overflowX: 'hidden'
+        overflowX: 'hidden',
+        WebkitOverflowScrolling: 'touch'
       }}
     >
       {children}
@@ -256,8 +257,8 @@ const LanguageSwitcher = ({ variant = 'dropdown' }) => {
       boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
       marginTop: '8px',
       zIndex: 9999,
-      minWidth: '320px',
-      maxWidth: '400px',
+      minWidth: 'min(320px, calc(100vw - 1rem))',
+      maxWidth: 'calc(100vw - 1rem)',
       backgroundColor: 'var(--bs-body-bg, #fff)'
     }),
     menuPortal: (base) => ({
@@ -412,9 +413,9 @@ const LanguageSwitcher = ({ variant = 'dropdown' }) => {
         isSearchable={true}
         placeholder="Select language..."
         formatOptionLabel={({ flag, name }) => (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0 }}>
             <span style={{ fontSize: '1.2rem' }}>{flag}</span>
-            <span>{name}</span>
+            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{name}</span>
           </div>
         )}
         className="language-select"

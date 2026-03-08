@@ -218,20 +218,42 @@ body>div[id*="react-select"]>div {
 
 /* Mobile responsive grid for language menu */
 @media (max-width: 767.98px) {
-  .language-menu-list-responsive {
-    grid-template-columns: 1fr !important;
-    max-height: min(350px, 60vh) !important;
+  .language-select__menu {
+    left: 0.5rem !important;
+    right: 0.5rem !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: calc(100vw - 1rem) !important;
+    margin: 0 !important;
   }
 
-  .language-select__menu {
-    min-width: 200px !important;
-    max-width: calc(100vw - 2rem) !important;
+  .language-select__menu-portal {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+  }
+
+  .language-menu-list-responsive {
+    grid-template-columns: 1fr !important;
+    max-height: calc(100dvh - 140px) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .language-select__option {
+    white-space: normal !important;
   }
 }
 
 @media (max-width: 575.98px) {
+  .language-select__menu {
+    left: 0.4rem !important;
+    right: 0.4rem !important;
+    max-width: calc(100vw - 0.8rem) !important;
+  }
+
   .language-menu-list-responsive {
-    max-height: min(300px, 50vh) !important;
+    max-height: calc(100dvh - 130px) !important;
     padding: 0.35rem !important;
   }
 
@@ -240,7 +262,7 @@ body>div[id*="react-select"]>div {
     font-size: 0.85rem !important;
   }
 
-  .language-select__menu {
-    min-width: 220px !important;
+  .language-select__option {
+    line-height: 1.25 !important;
   }
 }
