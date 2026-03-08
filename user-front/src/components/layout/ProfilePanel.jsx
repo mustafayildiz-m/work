@@ -104,39 +104,46 @@ const ProfilePanel = ({ links, onLinkClick }) => {
     }
   }, [session, status]);
 
-  useEffect(() => {
-    const fetchFollowStats = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) return;
+  const fetchFollowStats = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/following/stats`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        });
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/following/stats`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
 
-        if (response.ok) {
-          const responseText = await response.text();
-          if (responseText) {
-            try {
-              const data = JSON.parse(responseText);
-              setFollowStats({
-                followersCount: data.followersCount || 0,
-                followingCount: data.totalFollowingCount || 0
-              });
-            } catch (e) {
-              console.error('Error parsing follow stats:', e);
-            }
+      if (response.ok) {
+        const responseText = await response.text();
+        if (responseText) {
+          try {
+            const data = JSON.parse(responseText);
+            setFollowStats({
+              followersCount: data.followersCount || 0,
+              followingCount: data.totalFollowingCount || 0
+            });
+          } catch (e) {
+            console.error('Error parsing follow stats:', e);
           }
         }
-      } catch (error) {
-        // Silent fail
       }
-    };
+    } catch (error) {
+      // Silent fail
+    }
+  };
 
+  useEffect(() => {
     fetchFollowStats();
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('followStatusChanged', fetchFollowStats);
+    return () => {
+      window.removeEventListener('followStatusChanged', fetchFollowStats);
+    };
   }, []);
 
   useEffect(() => {

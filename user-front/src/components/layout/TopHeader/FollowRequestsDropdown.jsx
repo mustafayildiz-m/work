@@ -91,6 +91,8 @@ const FollowRequestsDropdown = () => {
             if (response.ok) {
                 setLocalRequests(prev => prev.filter(req => req.followerId !== followerId));
                 setFollowRequests(prev => prev.filter(req => req.followerId !== followerId));
+                // Sidebar istatistiklerini güncellemek için event fırlat
+                window.dispatchEvent(new Event('followStatusChanged'));
             }
         } catch (error) {
             console.error('Error accepting request:', error);
@@ -114,6 +116,8 @@ const FollowRequestsDropdown = () => {
             if (response.ok) {
                 setLocalRequests(prev => prev.filter(req => req.followerId !== followerId));
                 setFollowRequests(prev => prev.filter(req => req.followerId !== followerId));
+                // Sidebar istatistiklerini güncellemek için event fırlat
+                window.dispatchEvent(new Event('followStatusChanged'));
             }
         } catch (error) {
             console.error('Error rejecting request:', error);

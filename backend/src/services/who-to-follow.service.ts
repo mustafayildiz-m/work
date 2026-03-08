@@ -18,6 +18,7 @@ export interface WhoToFollowItem {
   isFollowing?: boolean;
   followStatus?: string | null;
   role?: string;
+  hasIncomingRequest?: boolean;
 }
 
 @Injectable()
@@ -79,6 +80,7 @@ export class WhoToFollowService {
         users.map(async (user) => {
           let isFollowing = false;
           let followStatus: string | null = null;
+          let hasIncomingRequest = false;
           if (userId) {
             try {
               const followRecord = await this.userFollowService.findFollow(
@@ -88,6 +90,15 @@ export class WhoToFollowService {
               if (followRecord) {
                 isFollowing = followRecord.status === 'accepted';
                 followStatus = followRecord.status;
+              }
+
+              // Gelen istek var mı kontrol et
+              const incomingFollowRecord = await this.userFollowService.findFollow(
+                user.id,
+                userId,
+              );
+              if (incomingFollowRecord && incomingFollowRecord.status === 'pending') {
+                hasIncomingRequest = true;
               }
             } catch (error) {
               isFollowing = false;
@@ -104,6 +115,7 @@ export class WhoToFollowService {
             role: user.role,
             isFollowing,
             followStatus,
+            hasIncomingRequest,
           };
         }),
       );
@@ -267,6 +279,7 @@ export class WhoToFollowService {
       users.map(async (user) => {
         let isFollowing = false;
         let followStatus: string | null = null;
+        let hasIncomingRequest = false;
         if (userId) {
           try {
             const followRecord = await this.userFollowService.findFollow(
@@ -276,6 +289,18 @@ export class WhoToFollowService {
             if (followRecord) {
               isFollowing = followRecord.status === 'accepted';
               followStatus = followRecord.status;
+            }
+
+            // Gelen istek var mı kontrol et
+            const incomingFollowRecord = await this.userFollowService.findFollow(
+              user.id,
+              userId,
+            );
+            if (
+              incomingFollowRecord &&
+              incomingFollowRecord.status === 'pending'
+            ) {
+              hasIncomingRequest = true;
             }
           } catch (error) {
             isFollowing = false;
@@ -292,6 +317,7 @@ export class WhoToFollowService {
           role: user.role,
           isFollowing,
           followStatus,
+          hasIncomingRequest,
         };
       }),
     );
@@ -398,6 +424,7 @@ export class WhoToFollowService {
       users.map(async (user) => {
         let isFollowing = false;
         let followStatus: string | null = null;
+        let hasIncomingRequest = false;
         if (userId) {
           try {
             const followRecord = await this.userFollowService.findFollow(
@@ -407,6 +434,18 @@ export class WhoToFollowService {
             if (followRecord) {
               isFollowing = followRecord.status === 'accepted';
               followStatus = followRecord.status;
+            }
+
+            // Gelen istek var mı kontrol et
+            const incomingFollowRecord = await this.userFollowService.findFollow(
+              user.id,
+              userId,
+            );
+            if (
+              incomingFollowRecord &&
+              incomingFollowRecord.status === 'pending'
+            ) {
+              hasIncomingRequest = true;
             }
           } catch (error) {
             isFollowing = false;
@@ -425,6 +464,7 @@ export class WhoToFollowService {
           role: user.role,
           isFollowing,
           followStatus,
+          hasIncomingRequest,
         };
       }),
     );
@@ -486,6 +526,7 @@ export class WhoToFollowService {
       users.map(async (user) => {
         let isFollowing = false;
         let followStatus: string | null = null;
+        let hasIncomingRequest = false;
         if (userId) {
           try {
             const followRecord = await this.userFollowService.findFollow(
@@ -495,6 +536,18 @@ export class WhoToFollowService {
             if (followRecord) {
               isFollowing = followRecord.status === 'accepted';
               followStatus = followRecord.status;
+            }
+
+            // Gelen istek var mı kontrol et
+            const incomingFollowRecord = await this.userFollowService.findFollow(
+              user.id,
+              userId,
+            );
+            if (
+              incomingFollowRecord &&
+              incomingFollowRecord.status === 'pending'
+            ) {
+              hasIncomingRequest = true;
             }
           } catch (error) {
             isFollowing = false;
@@ -513,6 +566,7 @@ export class WhoToFollowService {
           role: user.role,
           isFollowing,
           followStatus,
+          hasIncomingRequest,
         };
       }),
     );

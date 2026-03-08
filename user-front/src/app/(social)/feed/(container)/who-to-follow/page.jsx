@@ -7,9 +7,11 @@ import Link from 'next/link';
 import './who-to-follow.css';
 import { getUserIdFromToken } from '../../../../../utils/auth';
 import { useLanguage } from '@/context/useLanguageContext';
+import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 
 export default function WhoToFollowPage() {
   const { t } = useLanguage();
+  const { followRequests, setFollowRequests } = useWebSocketChatContext();
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,6 +24,55 @@ export default function WhoToFollowPage() {
   const [totalCount, setTotalCount] = useState(0);
   const itemsPerPage = 15;
 
+  const fetchData = async () => {
+    if (isSearching) return; // Don't fetch if searching
+
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/who-to-follow?page=${currentPage}&limit=${itemsPerPage}`,
+        {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+
+        // Normalize data
+        const userItems = (data.users || []).map(u => ({
+          id: u.id,
+          type: u.type || 'user',
+          name: u.name || [u.firstName, u.lastName].filter(Boolean).join(' '),
+          username: u.username,
+          firstName: u.firstName,
+          lastName: u.lastName,
+          photoUrl: u.photoUrl,
+          description: u.description || u.biography,
+          role: u.role,
+          isFollowing: u.isFollowing || false,
+          followStatus: u.followStatus || null,
+          hasIncomingRequest: u.hasIncomingRequest || false
+        }));
+
+        setUsers(userItems);
+        setFilteredUsers(userItems);
+        setTotalCount(data.totalCount || 0);
+        setTotalPages(data.totalPages || 1);
+      }
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Helper function to create unique key for each follower
   const getFollowerKey = (follower) => {
     return `${follower.type}-${follower.id}`;
@@ -29,56 +80,16 @@ export default function WhoToFollowPage() {
 
   // Fetch users with pagination
   useEffect(() => {
-    const fetchData = async () => {
-      if (isSearching) return; // Don't fetch if searching
-
-      try {
-        setLoading(true);
-        const token = localStorage.getItem('token');
-
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/who-to-follow?page=${currentPage}&limit=${itemsPerPage}`,
-          {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-
-          // Normalize data
-          const userItems = (data.users || []).map(u => ({
-            id: u.id,
-            type: u.type || 'user',
-            name: u.name || [u.firstName, u.lastName].filter(Boolean).join(' '),
-            username: u.username,
-            firstName: u.firstName,
-            lastName: u.lastName,
-            photoUrl: u.photoUrl,
-            description: u.description || u.biography,
-            role: u.role,
-            isFollowing: u.isFollowing || false,
-            followStatus: u.followStatus || null
-          }));
-
-          setUsers(userItems);
-          setFilteredUsers(userItems);
-          setTotalCount(data.totalCount || 0);
-          setTotalPages(data.totalPages || 1);
-        }
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, [currentPage, isSearching]);
+
+  // Sidebar veya başka yerden gelen takip durumu değişikliklerini dinle
+  useEffect(() => {
+    window.addEventListener('followStatusChanged', fetchData);
+    return () => {
+      window.removeEventListener('followStatusChanged', fetchData);
+    };
+  }, []);
 
   // Debounced search function
   useEffect(() => {
@@ -116,7 +127,8 @@ export default function WhoToFollowPage() {
               description: u.description || u.biography,
               role: u.role,
               isFollowing: u.isFollowing || false,
-              followStatus: u.followStatus || null
+              followStatus: u.followStatus || null,
+              hasIncomingRequest: u.hasIncomingRequest || false
             }));
 
             setFilteredUsers(userItems);
@@ -289,20 +301,16 @@ export default function WhoToFollowPage() {
 
       if (response.ok) {
         // Update the local state
-        setUsers(prev =>
-          prev.map(item =>
-            item.id === followerId && item.type === followerType
-              ? { ...item, isFollowing: followerType === 'scholar' ? true : false, followStatus: followerType === 'scholar' ? 'accepted' : 'pending' }
-              : item
-          )
-        );
-        setFilteredUsers(prev =>
-          prev.map(item =>
-            item.id === followerId && item.type === followerType
-              ? { ...item, isFollowing: followerType === 'scholar' ? true : false, followStatus: followerType === 'scholar' ? 'accepted' : 'pending' }
-              : item
-          )
-        );
+        const updateFn = item =>
+          item.id == followerId && item.type == followerType
+            ? { ...item, isFollowing: followerType === 'scholar' ? true : false, followStatus: followerType === 'scholar' ? 'accepted' : 'pending' }
+            : item;
+
+        setUsers(prev => prev.map(updateFn));
+        setFilteredUsers(prev => prev.map(updateFn));
+
+        // Sidebar istatistiklerini güncellemek için event fırlat
+        window.dispatchEvent(new Event('followStatusChanged'));
       } else {
         console.error('Follow failed');
       }
@@ -343,20 +351,16 @@ export default function WhoToFollowPage() {
 
       if (response.ok) {
         // Update the local state
-        setUsers(prev =>
-          prev.map(item =>
-            item.id === followerId && item.type === followerType
-              ? { ...item, isFollowing: false, followStatus: null }
-              : item
-          )
-        );
-        setFilteredUsers(prev =>
-          prev.map(item =>
-            item.id === followerId && item.type === followerType
-              ? { ...item, isFollowing: false, followStatus: null }
-              : item
-          )
-        );
+        const updateFn = item =>
+          item.id == followerId && item.type == followerType
+            ? { ...item, isFollowing: false, followStatus: null }
+            : item;
+
+        setUsers(prev => prev.map(updateFn));
+        setFilteredUsers(prev => prev.map(updateFn));
+
+        // Sidebar istatistiklerini güncellemek için event fırlat
+        window.dispatchEvent(new Event('followStatusChanged'));
       } else {
         console.error('Unfollow failed');
       }
@@ -366,6 +370,65 @@ export default function WhoToFollowPage() {
       setFollowLoading(prev => ({ ...prev, [followerKey]: false }));
     }
   };
+
+  const handleAcceptRequest = async (followerId) => {
+    const followerKey = `user-${followerId}`;
+    try {
+      setFollowLoading(prev => ({ ...prev, [followerKey]: true }));
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user-follow/accept-request`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ follower_id: followerId })
+      });
+      if (response.ok) {
+        const updateFn = u => u.id == followerId ? { ...u, hasIncomingRequest: false, isFollowing: true, followStatus: 'accepted' } : u;
+        setUsers(prev => prev.map(updateFn));
+        setFilteredUsers(prev => prev.map(updateFn));
+        setFollowRequests(prev => prev.filter(req => req.followerId != followerId));
+
+        // Sidebar istatistiklerini güncellemek için event fırlat
+        window.dispatchEvent(new Event('followStatusChanged'));
+      }
+    } catch (error) {
+      console.error('Error accepting request:', error);
+    } finally {
+      setFollowLoading(prev => ({ ...prev, [followerKey]: false }));
+    }
+  };
+
+  const handleRejectRequest = async (followerId) => {
+    const followerKey = `user-${followerId}`;
+    try {
+      setFollowLoading(prev => ({ ...prev, [followerKey]: true }));
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user-follow/reject-request`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ follower_id: followerId })
+      });
+      if (response.ok) {
+        const updateFn = u => u.id == followerId ? { ...u, hasIncomingRequest: false } : u;
+        setUsers(prev => prev.map(updateFn));
+        setFilteredUsers(prev => prev.map(updateFn));
+        setFollowRequests(prev => prev.filter(req => req.followerId != followerId));
+
+        // Sidebar istatistiklerini güncellemek için event fırlat
+        window.dispatchEvent(new Event('followStatusChanged'));
+      }
+    } catch (error) {
+      console.error('Error rejecting request:', error);
+    } finally {
+      setFollowLoading(prev => ({ ...prev, [followerKey]: false }));
+    }
+  };
+
 
   if (loading) {
     return (
@@ -472,7 +535,34 @@ export default function WhoToFollowPage() {
                       </h6>
 
                       <div className="mt-auto pt-2">
-                        {user.isFollowing || user.followStatus === 'accepted' ? (
+                        {user.hasIncomingRequest || followRequests.some(req => (req.followerId == user.id || req.follower?.id == user.id)) ? (
+                          <div className="d-flex gap-2">
+                            <button
+                              className="btn btn-primary btn-sm flex-fill fw-bold"
+                              onClick={() => handleAcceptRequest(user.id)}
+                              disabled={followLoading[`user-${user.id}`]}
+                              style={{ borderRadius: '8px', padding: '0.4rem' }}
+                            >
+                              {followLoading[`user-${user.id}`] ? (
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                              ) : (
+                                'Kabul Et'
+                              )}
+                            </button>
+                            <button
+                              className="btn btn-danger-soft btn-sm flex-fill fw-bold"
+                              onClick={() => handleRejectRequest(user.id)}
+                              disabled={followLoading[`user-${user.id}`]}
+                              style={{ borderRadius: '8px', padding: '0.4rem' }}
+                            >
+                              {followLoading[`user-${user.id}`] ? (
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                              ) : (
+                                'Sil'
+                              )}
+                            </button>
+                          </div>
+                        ) : user.isFollowing || user.followStatus === 'accepted' ? (
                           <button
                             className="unfollow-btn-custom"
                             onClick={() => handleUnfollow(user.id, user.type)}
