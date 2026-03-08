@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Button, Card, CardBody, CardFooter, Modal, ModalHeader, ModalBody, ModalFooter, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'react-bootstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'react-bootstrap';
 import avatar7 from '@/assets/images/avatar/07.jpg';
 import bgBannerImg from '@/assets/images/bg/01.jpg';
 import { useEffect, useState } from 'react';
@@ -11,8 +11,6 @@ import { useLanguage } from '@/context/useLanguageContext';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { BsCamera, BsCheckCircleFill, BsEye, BsImage, BsShieldLock } from 'react-icons/bs';
-
-import clsx from 'clsx';
 
 
 const ProfilePanel = ({ links, onLinkClick }) => {
@@ -369,6 +367,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
 
   return (
     <>
+      {/* Section 1: Profile Card */}
       <div style={{
         background: cardBg,
         borderRadius: '20px',
@@ -640,91 +639,97 @@ const ProfilePanel = ({ links, onLinkClick }) => {
               </>
             )}
           </div>
-
-
-          <hr style={{ margin: '0.75rem 0', opacity: 0.1 }} />
-
-          {/* Navigation - Clean & Minimal */}
-          <ul className="nav flex-column" style={{ gap: '2px', padding: 0, margin: 0, listStyle: 'none' }}>
-            {links.map((item, idx) => (
-              <li key={item.nameKey + idx}>
-                <Link
-                  className="d-flex align-items-center text-decoration-none"
-                  href={item.link}
-                  onClick={(e) => handleLinkClick(e, item.link)}
-                  style={{
-                    padding: '0.65rem 0.75rem',
-                    borderRadius: '10px',
-                    transition: 'all 0.2s',
-                    background: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))
-                      ? '#66BB6A'
-                      : 'transparent',
-                    color: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))
-                      ? 'white'
-                      : textColor,
-                    fontWeight: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link))) ? 600 : 500,
-                    fontSize: '0.9rem'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!(pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))) {
-                      e.currentTarget.style.background = isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!(pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))) {
-                      e.currentTarget.style.background = 'transparent';
-                    }
-                  }}
-                >
-                  <img
-                    src={item.image}
-                    alt="icon"
-                    height={18}
-                    width={18}
-                    style={{
-                      marginRight: '12px',
-                      opacity: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link))) ? 1 : 0.7,
-                      filter: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))
-                        ? 'brightness(0) invert(1)'
-                        : 'none'
-                    }}
-                  />
-                  <span>{t(item.nameKey)}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          <hr style={{ margin: '0.75rem 0', opacity: 0.1 }} />
-
-          {/* View Profile - Elegant CTA */}
-          <Link
-            href={user?.id && user?.id !== 'undefined' ? `/profile/user/${user.id}/feed` : '/profile/feed'}
-            className="d-block text-center text-decoration-none"
-            onClick={(e) => handleLinkClick(e, '/profile/feed')}
-            style={{
-              padding: '0.75rem',
-              background: isDarkMode ? 'rgba(102,187,106,0.1)' : 'rgba(102,187,106,0.08)',
-              color: '#66BB6A',
-              fontWeight: 600,
-              fontSize: '0.9rem',
-              borderRadius: '10px',
-              border: `1px solid ${isDarkMode ? 'rgba(102,187,106,0.2)' : 'rgba(102,187,106,0.15)'}`,
-              transition: 'all 0.2s'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#66BB6A';
-              e.currentTarget.style.color = 'white';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = isDarkMode ? 'rgba(102,187,106,0.1)' : 'rgba(102,187,106,0.08)';
-              e.currentTarget.style.color = '#66BB6A';
-            }}
-          >
-            {t('profile.viewProfile')}
-          </Link>
         </div>
       </div >
+
+      {/* Section 2: Navigation Card */}
+      <div style={{
+        background: cardBg,
+        borderRadius: '16px',
+        marginTop: '12px',
+        padding: '0.75rem',
+        boxShadow: isDarkMode
+          ? '0 8px 24px -12px rgba(0, 0, 0, 0.55)'
+          : '0 8px 24px -12px rgba(0, 0, 0, 0.12)',
+        border: `1px solid ${borderColor}`
+      }}>
+        <Link
+          href={user?.id && user?.id !== 'undefined' ? `/profile/user/${user.id}/feed` : '/profile/feed'}
+          className="d-block text-center text-decoration-none"
+          onClick={(e) => handleLinkClick(e, '/profile/feed')}
+          style={{
+            padding: '0.65rem 0.75rem',
+            marginBottom: '0.4rem',
+            background: isDarkMode ? 'rgba(102,187,106,0.1)' : 'rgba(102,187,106,0.08)',
+            color: '#66BB6A',
+            fontWeight: 600,
+            fontSize: '0.9rem',
+            borderRadius: '10px',
+            border: `1px solid ${isDarkMode ? 'rgba(102,187,106,0.2)' : 'rgba(102,187,106,0.15)'}`,
+            transition: 'all 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#66BB6A';
+            e.currentTarget.style.color = 'white';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = isDarkMode ? 'rgba(102,187,106,0.1)' : 'rgba(102,187,106,0.08)';
+            e.currentTarget.style.color = '#66BB6A';
+          }}
+        >
+          {t('profile.viewProfile')}
+        </Link>
+
+        <ul className="nav flex-column" style={{ gap: '2px', padding: 0, margin: 0, listStyle: 'none' }}>
+          {links.map((item, idx) => (
+            <li key={item.nameKey + idx}>
+              <Link
+                className="d-flex align-items-center text-decoration-none"
+                href={item.link}
+                onClick={(e) => handleLinkClick(e, item.link)}
+                style={{
+                  padding: '0.65rem 0.75rem',
+                  borderRadius: '10px',
+                  transition: 'all 0.2s',
+                  background: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))
+                    ? '#66BB6A'
+                    : 'transparent',
+                  color: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))
+                    ? 'white'
+                    : textColor,
+                  fontWeight: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link))) ? 600 : 500,
+                  fontSize: '0.9rem'
+                }}
+                onMouseEnter={(e) => {
+                  if (!(pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))) {
+                    e.currentTarget.style.background = isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!(pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))) {
+                    e.currentTarget.style.background = 'transparent';
+                  }
+                }}
+              >
+                <img
+                  src={item.image}
+                  alt="icon"
+                  height={18}
+                  width={18}
+                  style={{
+                    marginRight: '12px',
+                    opacity: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link))) ? 1 : 0.7,
+                    filter: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))
+                      ? 'brightness(0) invert(1)'
+                      : 'none'
+                  }}
+                />
+                <span>{t(item.nameKey)}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       {/* Profil Resmini Görüntüleme Modalı */}
       < Modal
