@@ -560,7 +560,7 @@ export const WebSocketChatProvider = ({ children }) => {
   const fetchMessages = useCallback(async (conversationId) => {
     if (!conversationId || conversationId.startsWith('temp-')) {
       setMessages([]);
-      return;
+      return [];
     }
 
     try {
@@ -571,10 +571,12 @@ export const WebSocketChatProvider = ({ children }) => {
       const formattedMessages = data.map(formatMessage);
 
       setMessages(formattedMessages);
+      return formattedMessages;
     } catch (error) {
       console.error('Error fetching messages:', error);
       setError('Mesajlar yüklenirken hata oluştu');
       setMessages([]);
+      return [];
     } finally {
       setLoading(false);
     }

@@ -121,7 +121,7 @@ const MessagingBar = () => {
         const handleNewMessage = (message) => {
             // Find if this message belongs to any of our active chats
             const senderId = message.senderId;
-            const isMe = senderId === (userInfo?.id || session?.user?.id);
+            const isMe = String(senderId) === String(userInfo?.id || session?.user?.id);
             const otherUserId = isMe ? message.receiverId : senderId;
 
             // Update existing tab or open new one
@@ -132,7 +132,7 @@ const MessagingBar = () => {
                     id: message.id || Date.now() + Math.random(),
                     senderId: senderId,
                     text: message.content,
-                    time: new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    time: new Date(message.timestamp || message.createdAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                     isMe: isMe
                 };
 
@@ -268,8 +268,8 @@ const MessagingBar = () => {
                                     id: m.id,
                                     senderId: m.senderId,
                                     text: m.content,
-                                    time: new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                                    isMe: m.senderId === (userInfo?.id || session?.user?.id)
+                                    time: new Date(m.timestamp || m.createdAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                                    isMe: String(m.senderId) === String(userInfo?.id || session?.user?.id)
                                 }))
                             }
                             : chat

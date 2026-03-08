@@ -299,8 +299,8 @@ const MessageList = ({ onBackToConversations }) => {
       // Fallback: participantId match for temp conversations
       if (currentUserId) {
         const participantId = activeConversation.participantId;
-        return (message.senderId === currentUserId && String(message.receiverId) === String(participantId)) ||
-               (String(message.senderId) === String(participantId) && message.receiverId === currentUserId);
+        return (String(message.senderId) === String(currentUserId) && String(message.receiverId) === String(participantId)) ||
+               (String(message.senderId) === String(participantId) && String(message.receiverId) === String(currentUserId));
       }
       
       return false;
@@ -321,7 +321,7 @@ const MessageList = ({ onBackToConversations }) => {
         ...message,
         messageDate,
         showDate,
-        isOwnMessage: message.senderId === currentUserId
+        isOwnMessage: String(message.senderId) === String(currentUserId)
       };
     });
   }, [filteredMessages, currentUserId]);
