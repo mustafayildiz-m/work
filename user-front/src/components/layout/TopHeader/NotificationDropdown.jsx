@@ -65,10 +65,10 @@ const NotificationDropdown = () => {
   const allNotifications = useMemo(() => {
     const combined = [...realTimeNotifications, ...staticNotifications];
     const byId = new Map();
-    const seen = new Set();
+    const dedupByTypeAndUser = new Map();
     const unique = [];
 
-    // Sort combined to prioritize static (DB) notifications over real-time ones 
+    // Sort combined to prioritize static (DB) notifications over real-time ones
     // because static ones have persistent IDs.
     const sorted = combined.sort((a, b) => {
       const isAStatic = !String(a.id).startsWith('notif-');
@@ -79,23 +79,25 @@ const NotificationDropdown = () => {
     });
 
     for (const n of sorted) {
+      const relatedId = n.relatedUserId || n.related_user_id;
+      const typeUserKey = relatedId ? `${n.type}-${relatedId}` : null;
+
       if (n?.id && !String(n.id).startsWith('notif-')) {
         // Prefer DB records for same id and avoid duplicate React keys
         if (!byId.has(n.id)) {
           byId.set(n.id, n);
         }
+        // When DB record exists, it should replace equivalent temporary socket notification.
+        if (typeUserKey && ['follow_accept', 'follow_request'].includes(n.type)) {
+          dedupByTypeAndUser.set(typeUserKey, n);
+        }
         continue;
       }
 
-      const relatedId = n.relatedUserId || n.related_user_id;
-      const key = `${n.type}-${relatedId}`;
-
       // Only deduplicate certain types where duplication is likely
-      const isDeduplicatable = ['follow_accept', 'follow_request'].includes(n.type);
-
-      if (isDeduplicatable && relatedId) {
-        if (!seen.has(key)) {
-          seen.add(key);
+      if (typeUserKey && ['follow_accept', 'follow_request'].includes(n.type)) {
+        if (!dedupByTypeAndUser.has(typeUserKey)) {
+          dedupByTypeAndUser.set(typeUserKey, n);
           unique.push(n);
         }
       } else {
@@ -103,10 +105,18 @@ const NotificationDropdown = () => {
       }
     }
 
-    unique.push(...byId.values());
+    // Ensure DB notification overrides temporary socket notification for same type/user.
+    const merged = unique.map((n) => {
+      const relatedId = n.relatedUserId || n.related_user_id;
+      const typeUserKey = relatedId ? `${n.type}-${relatedId}` : null;
+      if (!typeUserKey) return n;
+      return dedupByTypeAndUser.get(typeUserKey) || n;
+    });
+
+    merged.push(...byId.values());
 
     // Final sort by time
-    return unique
+    return Array.from(new Map(merged.map((n) => [String(n.id), n])).values())
       .filter(n => n.type !== 'follow_request')
       .sort((a, b) => new Date(b.time || 0) - new Date(a.time || 0));
   }, [realTimeNotifications, staticNotifications]);
@@ -229,8 +239,11 @@ const NotificationDropdown = () => {
         detail: {
           user: {
             id: targetUserId,
-            firstName: '',
-            lastName: '',
+            firstName: notification.related_user?.firstName || '',
+            lastName: notification.related_user?.lastName || '',
+            username: notification.related_user?.username || '',
+            role: notification.related_user?.role || '',
+            tagline: notification.related_user?.tagline || '',
             photoUrl: notification.avatar || null
           }
         }

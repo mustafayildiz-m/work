@@ -231,12 +231,35 @@ const MessagingBar = () => {
                     // Need to find user info from connections or conversations
             const senderConv = conversations.find(c => String(c.participantId) === String(otherUserId));
             const senderConn = connections.find(c => String(c.id) === String(otherUserId));
+            const senderFullNameFromMessage = `${message.senderFirstName || ''} ${message.senderLastName || ''}`.trim();
 
                     const user = {
                         id: otherUserId,
-                        firstName: senderConv?.participantName?.split(' ')[0] || senderConn?.firstName || getLocalized('messaging.userFallback', 'Kullanıcı', 'User'),
-                        lastName: senderConv?.participantName?.split(' ').slice(1).join(' ') || senderConn?.lastName || '',
-                        photoUrl: senderConv?.participantAvatar || senderConn?.photoUrl
+                        firstName:
+                            message.senderFirstName ||
+                            senderConv?.participantFirstName ||
+                            senderConv?.participantName?.split(' ')[0] ||
+                            senderConn?.firstName ||
+                            getLocalized('messaging.userFallback', 'Kullanıcı', 'User'),
+                        lastName:
+                            message.senderLastName ||
+                            senderConv?.participantLastName ||
+                            senderConv?.participantName?.split(' ').slice(1).join(' ') ||
+                            senderConn?.lastName ||
+                            '',
+                        photoUrl:
+                            message.senderAvatar ||
+                            senderConv?.participantAvatar ||
+                            senderConn?.photoUrl ||
+                            null,
+                        username: message.senderUsername || senderConn?.username || null,
+                        role: senderConn?.role || null,
+                        tagline: senderConn?.tagline || null,
+                        participantName:
+                            senderConv?.participantName ||
+                            senderFullNameFromMessage ||
+                            message.senderName ||
+                            null
                     };
 
                     return [{
@@ -357,14 +380,38 @@ const MessagingBar = () => {
     };
 
     const openChatWindow = async (user) => {
+        const matchedConnection = connections.find((c) => String(c.id) === String(user.id));
+        const matchedConversation = conversations.find((c) => String(c.participantId) === String(user.id));
+        const fallbackName =
+            matchedConversation?.participantName ||
+            [matchedConnection?.firstName, matchedConnection?.lastName].filter(Boolean).join(' ') ||
+            matchedConnection?.username ||
+            getLocalized('messaging.userFallback', 'Kullanıcı', 'User');
+
+        const normalizedUser = {
+            ...user,
+            firstName:
+                user?.firstName ||
+                matchedConnection?.firstName ||
+                fallbackName.split(' ')[0] ||
+                getLocalized('messaging.userFallback', 'Kullanıcı', 'User'),
+            lastName:
+                user?.lastName ||
+                matchedConnection?.lastName ||
+                fallbackName.split(' ').slice(1).join(' '),
+            role: user?.role || matchedConnection?.role || null,
+            tagline: user?.tagline || matchedConnection?.tagline || null,
+            photoUrl: user?.photoUrl || matchedConnection?.photoUrl || matchedConversation?.participantAvatar || null
+        };
+
         setActiveChats(prev => {
-            if (prev.find(chat => String(chat.user.id) === String(user.id))) {
+            if (prev.find(chat => String(chat.user.id) === String(normalizedUser.id))) {
                 return prev.map(chat =>
-                    String(chat.user.id) === String(user.id) ? { ...chat, isExpanded: true, unreadCount: 0 } : chat
+                    String(chat.user.id) === String(normalizedUser.id) ? { ...chat, user: { ...chat.user, ...normalizedUser }, isExpanded: true, unreadCount: 0 } : chat
                 );
             }
             return [{
-                user,
+                user: normalizedUser,
                 messages: [],
                 input: '',
                 isExpanded: true,
@@ -375,7 +422,7 @@ const MessagingBar = () => {
         // Fetch messages for this user
         // We need to find the conversationId first or use recipientId
         try {
-            const conv = conversations.find(c => String(c.participantId) === String(user.id));
+            const conv = conversations.find(c => String(c.participantId) === String(normalizedUser.id));
             if (conv && conv.id && !conv.id.startsWith('temp-')) {
                 await selectConversation(conv);
                 markConversationAsRead?.(conv.id, conv.participantId);
@@ -390,7 +437,7 @@ const MessagingBar = () => {
                         .forEach((m) => markMessageAsRead?.(m.id, conv.id));
 
                     setActiveChats(prev => prev.map(chat =>
-                        chat.user.id === user.id
+                        chat.user.id === normalizedUser.id
                             ? {
                                 ...chat,
                                 messages: history.map(m => ({
@@ -809,7 +856,9 @@ const MessagingBar = () => {
                                                     style={{ objectFit: 'cover' }}
                                                 />
                                                 <h5 className="mb-0 fw-bold" style={{ color: colors.textMain }}>{chat.user.firstName} {chat.user.lastName}</h5>
-                                                <p className="text-muted small">{chat.user.tagline || chat.user.role || getLocalized('messaging.defaultRole', 'Yazılım Geliştirici', 'Software Developer')}</p>
+                                                {(chat.user.tagline || chat.user.role) && (
+                                                    <p className="text-muted small">{chat.user.tagline || chat.user.role}</p>
+                                                )}
                                             </div>
 
                                             {/* Messages */}
