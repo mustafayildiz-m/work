@@ -114,6 +114,52 @@ const MessagingBar = () => {
         );
     }, [connections, newMessageQuery]);
 
+    // Auto-open chat boxes for unread conversations on login
+    useEffect(() => {
+        if (status !== 'authenticated' || !Array.isArray(conversations) || conversations.length === 0) return;
+
+        const unreadConversations = conversations
+            .filter((conv) => (conv.unreadCount || 0) > 0)
+            .sort((a, b) => {
+                const unreadDiff = (b.unreadCount || 0) - (a.unreadCount || 0);
+                if (unreadDiff !== 0) return unreadDiff;
+                return new Date(b.lastMessageTime || 0) - new Date(a.lastMessageTime || 0);
+            });
+
+        if (unreadConversations.length === 0) return;
+
+        setActiveChats((prev) => {
+            const next = [...prev];
+
+            unreadConversations.forEach((conv) => {
+                const exists = next.some((chat) => String(chat.user.id) === String(conv.participantId));
+                if (exists) return;
+
+                const matchedConnection = connections.find((c) =>
+                    String(c.id) === String(conv.participantId) ||
+                    (c.username && c.username === conv.participantName)
+                );
+
+                const user = matchedConnection || {
+                    id: conv.participantId,
+                    firstName: conv.participantName?.split(' ')[0] || 'Kullanıcı',
+                    lastName: conv.participantName?.split(' ').slice(1).join(' ') || '',
+                    photoUrl: conv.participantAvatar
+                };
+
+                next.push({
+                    user,
+                    messages: [],
+                    input: '',
+                    isExpanded: false,
+                    unreadCount: conv.unreadCount || 0
+                });
+            });
+
+            return next.sort((a, b) => (b.unreadCount || 0) - (a.unreadCount || 0));
+        });
+    }, [status, conversations, connections]);
+
     // WebSocket Listener for incoming messages to open/update tabs
     useEffect(() => {
         if (!socket || !isConnected) return;
