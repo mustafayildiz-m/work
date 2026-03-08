@@ -487,7 +487,7 @@ const MessageList = ({ onBackToConversations }) => {
       />
 
       {/* Messages */}
-      <Card.Body className="flex-grow-1 p-0" style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}>
+      <Card.Body className="flex-grow-1 p-0 message-list-body" style={{ overflowY: 'auto' }}>
         <div className="messages-container p-3 d-flex flex-column justify-content-end" style={{ minHeight: '100%' }}>
           {processedMessages.length === 0 ? (
             <div className="text-center text-muted py-5">
@@ -522,6 +522,17 @@ const MessageList = ({ onBackToConversations }) => {
           )}
         </div>
       </Card.Body>
+      <style jsx>{`
+        .message-list-body {
+          min-height: 0;
+        }
+
+        @media (max-width: 991.98px) {
+          .messages-container {
+            padding: 0.85rem !important;
+          }
+        }
+      `}</style>
     </Card>
   );
 };

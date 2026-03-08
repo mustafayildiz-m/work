@@ -294,12 +294,13 @@ const MessageInput = () => {
         backdropFilter: 'blur(10px)',
         position: 'sticky',
         bottom: 0,
-        zIndex: 10
+        zIndex: 10,
+        paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))'
       }}
     >
       <form onSubmit={handleSubmit}>
         <div
-          className="d-flex align-items-end gap-2 p-2 rounded-4"
+          className="d-flex align-items-end gap-2 p-2 rounded-4 message-composer-shell"
           style={{
             background: 'var(--bs-secondary-bg)',
             border: '1px solid var(--bs-border-color)',
@@ -311,7 +312,7 @@ const MessageInput = () => {
           {/* Emoji button */}
           <button
             type="button"
-            className="btn"
+            className="btn emoji-btn"
             onClick={handleEmojiToggle}
             disabled={isSending}
             aria-label="Emoji seç"
@@ -383,7 +384,7 @@ const MessageInput = () => {
           {/* Send button */}
           <button
             type="submit"
-            className="btn"
+            className="btn send-btn"
             disabled={!canSend}
             aria-label="Mesaj gönder"
             title="Mesaj gönder"
@@ -491,6 +492,31 @@ const MessageInput = () => {
           </div>
         </div>
       )}
+      <style jsx>{`
+        @media (max-width: 575.98px) {
+          .message-input-container {
+            padding: 0.6rem !important;
+          }
+
+          .message-composer-shell {
+            gap: 0.45rem !important;
+            padding: 0.45rem !important;
+            border-radius: 12px !important;
+          }
+
+          .emoji-btn {
+            width: 38px !important;
+            height: 38px !important;
+            border-radius: 12px !important;
+          }
+
+          .send-btn {
+            width: 40px !important;
+            height: 40px !important;
+            border-radius: 12px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

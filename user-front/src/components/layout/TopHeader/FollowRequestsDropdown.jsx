@@ -144,12 +144,12 @@ const FollowRequestsDropdown = () => {
 
             <div
                 role="menu"
-                className="p-0 shadow-lg border-0 bg-white rounded"
+                className="p-0 shadow-lg border-0 bg-white rounded follow-requests-dropdown-menu"
                 style={{
                     position: 'absolute',
                     top: 'calc(100% + 10px)',
                     right: 0,
-                    width: '360px',
+                    width: 'min(360px, calc(100vw - 1rem))',
                     zIndex: 1050,
                     display: isOpen ? 'block' : 'none'
                 }}
@@ -160,7 +160,7 @@ const FollowRequestsDropdown = () => {
                     </CardHeader>
                     <CardBody className="p-0">
                         {pendingRequests.length > 0 ? (
-                            <ul className="list-group list-group-flush list-unstyled p-2 mb-0" style={{ maxHeight: '350px', overflowY: 'auto' }}>
+                            <ul className="list-group list-group-flush list-unstyled p-2 mb-0 follow-requests-list-scroll" style={{ maxHeight: '350px', overflowY: 'auto' }}>
                                 {pendingRequests.map((request, idx) => {
                                     const requestUser = request.follower;
                                     if (!requestUser) return null;
@@ -213,6 +213,37 @@ const FollowRequestsDropdown = () => {
                     </CardBody>
                 </Card>
             </div>
+            <style jsx>{`
+                .follow-requests-list-scroll {
+                    max-height: 350px;
+                    overflow-y: auto;
+                }
+                @media (max-width: 991.98px) {
+                    .follow-requests-dropdown-menu {
+                        position: fixed !important;
+                        top: 70px !important;
+                        left: 0.5rem !important;
+                        right: 0.5rem !important;
+                        width: auto !important;
+                        max-width: none !important;
+                        border-radius: 14px !important;
+                    }
+                    .follow-requests-list-scroll {
+                        max-height: calc(100dvh - 170px) !important;
+                    }
+                }
+                @media (max-width: 575.98px) {
+                    .follow-requests-dropdown-menu {
+                        top: 66px !important;
+                        left: 0.4rem !important;
+                        right: 0.4rem !important;
+                        border-radius: 12px !important;
+                    }
+                    .follow-requests-list-scroll {
+                        max-height: calc(100dvh - 160px) !important;
+                    }
+                }
+            `}</style>
         </li>
     );
 };

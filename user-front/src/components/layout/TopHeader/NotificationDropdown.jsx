@@ -273,7 +273,7 @@ const NotificationDropdown = () => {
           position: 'absolute',
           top: 'calc(100% + 10px)',
           right: 0,
-          width: '460px',
+          width: 'min(460px, calc(100vw - 1rem))',
           zIndex: 1050,
           display: isOpen ? 'block' : 'none'
         }}
@@ -294,7 +294,7 @@ const NotificationDropdown = () => {
           </CardHeader>
           <CardBody className="p-0">
             {allNotifications.length > 0 ? (
-              <ul className="list-group list-group-flush list-unstyled p-2 mb-0" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+              <ul className="list-group list-group-flush list-unstyled p-2 mb-0 notification-list-scroll" style={{ maxHeight: '400px', overflowY: 'auto' }}>
                 {allNotifications.slice(0, 9).map((notification, idx) => (
                   <li key={notification.id || idx} className="mb-1">
                     <div
@@ -336,11 +336,11 @@ const NotificationDropdown = () => {
                         )}
                       </div>
                       <div className="flex-grow-1 overflow-hidden">
-                        <p className={clsx('mb-0 small text-truncate', !notification.isRead ? (isDark ? 'fw-bold text-white' : 'fw-bold text-dark') : 'text-body')} style={{ maxWidth: '260px' }}>
+                        <p className={clsx('mb-0 small text-truncate', !notification.isRead ? (isDark ? 'fw-bold text-white' : 'fw-bold text-dark') : 'text-body')} style={{ maxWidth: '100%' }}>
                           {notification.title}
                         </p>
                         {(notification.description || notification.message) && (
-                          <p className="text-muted mb-0 small text-truncate" style={{ fontSize: '0.7rem', maxWidth: '260px' }}>
+                          <p className="text-muted mb-0 small text-truncate" style={{ fontSize: '0.7rem', maxWidth: '100%' }}>
                             {notification.description || notification.message}
                           </p>
                         )}
@@ -422,6 +422,35 @@ const NotificationDropdown = () => {
                 }
                 .notification-dropdown-menu {
                     animation: fadeIn 0.2s ease-out;
+                }
+                .notification-list-scroll {
+                    max-height: 400px;
+                    overflow-y: auto;
+                }
+                @media (max-width: 991.98px) {
+                    .notification-dropdown-menu {
+                        position: fixed !important;
+                        top: 70px !important;
+                        left: 0.5rem !important;
+                        right: 0.5rem !important;
+                        width: auto !important;
+                        max-width: none !important;
+                        border-radius: 14px !important;
+                    }
+                    .notification-list-scroll {
+                        max-height: calc(100dvh - 190px) !important;
+                    }
+                }
+                @media (max-width: 575.98px) {
+                    .notification-dropdown-menu {
+                        top: 66px !important;
+                        left: 0.4rem !important;
+                        right: 0.4rem !important;
+                        border-radius: 12px !important;
+                    }
+                    .notification-list-scroll {
+                        max-height: calc(100dvh - 180px) !important;
+                    }
                 }
                 @keyframes fadeIn {
                     from { opacity: 0; transform: translateY(-10px); }
