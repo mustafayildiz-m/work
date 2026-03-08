@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 
 const LanguageContext = createContext(undefined);
@@ -36,6 +36,7 @@ export const LanguageProvider = ({ children }) => {
   const [messages, setMessages] = useState({});
   const [fallbackMessages, setFallbackMessages] = useState({});
   const [loading, setLoading] = useState(true);
+  const hasSyncedBackendLanguageRef = useRef(false);
 
   const normalizeLocale = useCallback((value) => {
     if (!value || typeof value !== 'string') return null;
@@ -125,16 +126,35 @@ export const LanguageProvider = ({ children }) => {
     }
   }, [loadMessages]);
 
-  // If user has a backend language preference, keep frontend in sync after login
+  // Sync backend language only once per authenticated session.
+  // This prevents manual UI selections from being immediately overwritten.
   useEffect(() => {
-    if (status !== 'authenticated') return;
+    if (status !== 'authenticated') {
+      hasSyncedBackendLanguageRef.current = false;
+      return;
+    }
+
+    if (hasSyncedBackendLanguageRef.current) return;
 
     const backendLanguage = normalizeLocale(session?.user?.language);
-    if (!backendLanguage) return;
-    if (!SUPPORTED_LOCALES.includes(backendLanguage)) return;
-    if (backendLanguage === locale) return;
+    if (!backendLanguage || !SUPPORTED_LOCALES.includes(backendLanguage)) {
+      hasSyncedBackendLanguageRef.current = true;
+      return;
+    }
 
-    changeLocale(backendLanguage);
+    if (typeof window !== 'undefined') {
+      const savedLocale = normalizeLocale(localStorage.getItem('locale'));
+      if (savedLocale && SUPPORTED_LOCALES.includes(savedLocale)) {
+        hasSyncedBackendLanguageRef.current = true;
+        return;
+      }
+    }
+
+    if (backendLanguage !== locale) {
+      changeLocale(backendLanguage);
+    }
+
+    hasSyncedBackendLanguageRef.current = true;
   }, [status, session?.user?.language, locale, changeLocale, normalizeLocale]);
 
   // Translation function with nested key support
