@@ -16,8 +16,6 @@ const publicPages = [
   '/feed/books',
   '/feed/articles',
   '/feed/podcasts',
-  '/feed/newsletters',
-  '/feed/papers',
   '/profile/scholar'
 ];
 
@@ -33,7 +31,7 @@ const protectedPages = [
 ];
 
 const NEXTAUTH_SECRET =
-  process.env.NEXTAUTH_SECRET || 'kvwLrfri/MBznUCofIoRH9+NvGu6GqvVdqO3mor1GuA=';
+  process.env.NEXTAUTH_SECRET || 'islamic_windows_jwt_test';
 
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
