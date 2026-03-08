@@ -17,7 +17,7 @@ const MessagingBar = () => {
     const { conversationPanel } = useLayoutContext();
     const { locale, t } = useLanguage();
     const { status, data: session } = useSession();
-    const { conversations, selectConversation, sendMessage, socket, fetchMessages, isConnected } = useWebSocketChatContext();
+    const { conversations, selectConversation, sendMessage, socket, fetchMessages, isConnected, markMessageAsRead } = useWebSocketChatContext();
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [isNewMessageOpen, setIsNewMessageOpen] = useState(false);
@@ -185,6 +185,7 @@ const MessagingBar = () => {
                 if (existingChatIndex !== -1) {
                     const updated = [...prev];
                     const chat = updated[existingChatIndex];
+                    const shouldMarkReadNow = !isMe && chat.isExpanded;
                     // Avoid duplicates
                     if (!chat.messages.some(m => m.id === formattedMsg.id)) {
                         updated[existingChatIndex] = {
@@ -192,6 +193,9 @@ const MessagingBar = () => {
                             messages: [...chat.messages, formattedMsg],
                             unreadCount: !isMe && !chat.isExpanded ? (chat.unreadCount || 0) + 1 : (chat.unreadCount || 0)
                         };
+                    }
+                    if (shouldMarkReadNow && message.id) {
+                        markMessageAsRead?.(message.id);
                     }
                     return updated;
                 } else {
@@ -319,6 +323,14 @@ const MessagingBar = () => {
             if (conv && conv.id && !conv.id.startsWith('temp-')) {
                 const history = await fetchMessages(conv.id);
                 if (history && Array.isArray(history)) {
+                    const currentUserId = userInfo?.id || session?.user?.id;
+                    history
+                        .filter((m) =>
+                            String(m.receiverId) === String(currentUserId) &&
+                            m.status !== 'read'
+                        )
+                        .forEach((m) => markMessageAsRead?.(m.id));
+
                     setActiveChats(prev => prev.map(chat =>
                         chat.user.id === user.id
                             ? {
@@ -351,6 +363,14 @@ const MessagingBar = () => {
 
             const history = await fetchMessages(conv.id);
             if (!history || !Array.isArray(history)) return;
+
+            const currentUserId = userInfo?.id || session?.user?.id;
+            history
+                .filter((m) =>
+                    String(m.receiverId) === String(currentUserId) &&
+                    m.status !== 'read'
+                )
+                .forEach((m) => markMessageAsRead?.(m.id));
 
             setActiveChats(prev => prev.map(chat =>
                 String(chat.user.id) === String(userId)
