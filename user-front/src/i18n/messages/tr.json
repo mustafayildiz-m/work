@@ -850,5 +850,22 @@
     "languagesLoading": "Diller yükleniyor...",
     "languagesError": "Dil listesi yüklenemedi. Lütfen sayfayı yenileyin.",
     "cancel": "İptal"
+  },
+  "messaging": {
+    "title": "Mesajlaşma",
+    "newMessage": "Yeni Mesaj",
+    "searchPlaceholder": "Mesajlarda ara",
+    "noMessage": "Mesaj bulunmuyor",
+    "noSearchResults": "Arama sonucu bulunamadı.",
+    "noConversations": "Henüz bir konuşma bulunmuyor.",
+    "defaultRole": "Yazılım Geliştirici",
+    "me": "Ben",
+    "you": "Siz",
+    "writeMessage": "Bir mesaj yazın...",
+    "send": "Gönder",
+    "newMessageSearchPlaceholder": "Bir veya birden fazla ad yazın",
+    "suggested": "Önerilen",
+    "userFallback": "Kullanıcı",
+    "unknownUser": "Bilinmeyen Kullanıcı"
   }
 }

@@ -87,6 +87,14 @@ const MessagingBar = () => {
 
     if (status === 'unauthenticated') return null;
 
+    const getLocalized = (key, trValue, enValue) => {
+        const value = t(key);
+        if (value === key) {
+            return locale === 'tr' ? trValue : enValue;
+        }
+        return value;
+    };
+
     const getDisplayAvatar = (photoUrl) => {
         const defaultPlaceholder = typeof placeholderImg === 'string' ? placeholderImg : (placeholderImg?.src || '/images/avatar/placeholder.jpg');
 
@@ -164,7 +172,7 @@ const MessagingBar = () => {
 
                 const user = matchedConnection || {
                     id: conv.participantId,
-                    firstName: conv.participantName?.split(' ')[0] || 'Kullanıcı',
+                    firstName: conv.participantName?.split(' ')[0] || getLocalized('messaging.userFallback', 'Kullanıcı', 'User'),
                     lastName: conv.participantName?.split(' ').slice(1).join(' ') || '',
                     photoUrl: conv.participantAvatar
                 };
@@ -226,7 +234,7 @@ const MessagingBar = () => {
 
                     const user = {
                         id: otherUserId,
-                        firstName: senderConv?.participantName?.split(' ')[0] || senderConn?.firstName || 'Kullanıcı',
+                        firstName: senderConv?.participantName?.split(' ')[0] || senderConn?.firstName || getLocalized('messaging.userFallback', 'Kullanıcı', 'User'),
                         lastName: senderConv?.participantName?.split(' ').slice(1).join(' ') || senderConn?.lastName || '',
                         photoUrl: senderConv?.participantAvatar || senderConn?.photoUrl
                     };
@@ -289,7 +297,7 @@ const MessagingBar = () => {
             `${matchedConnection?.firstName || ''} ${matchedConnection?.lastName || ''}`.trim();
         if (fromConnection) return fromConnection;
 
-        return conv?.participantName || conv?.participantUsername || 'Bilinmeyen Kullanıcı';
+        return conv?.participantName || conv?.participantUsername || getLocalized('messaging.unknownUser', 'Bilinmeyen Kullanıcı', 'Unknown User');
     };
 
     const handleConversationClick = async (conv) => {
@@ -332,7 +340,9 @@ const MessagingBar = () => {
     };
 
     const iconClass = isDark ? "text-white-50" : "text-black-50";
-    const messagingTitle = t('messaging.title') === 'messaging.title' ? (locale === 'tr' ? 'Mesajlaşma' : 'Messaging') : t('messaging.title');
+    const messagingTitle = t('menu.messaging') === 'menu.messaging'
+        ? getLocalized('messaging.title', 'Mesajlaşma', 'Messaging')
+        : t('menu.messaging');
     const currentUserPhoto = userProfile?.photoUrl || userInfo?.photoUrl || session?.user?.image;
 
     const handleNewMessageClick = (e) => {
@@ -577,7 +587,7 @@ const MessagingBar = () => {
                         <span className="fw-bold ms-1" style={{ fontSize: '0.85rem' }}>{messagingTitle}</span>
                     </div>
                     <div className={clsx("d-flex align-items-center gap-3", iconClass)}>
-                        <BsPencilSquare size={16} className="hover-active" onClick={handleNewMessageClick} title="Yeni Mesaj" />
+                        <BsPencilSquare size={16} className="hover-active" onClick={handleNewMessageClick} title={getLocalized('messaging.newMessage', 'Yeni Mesaj', 'New Message')} />
                         <BsChevronDown size={18} className="hover-active" />
                     </div>
                 </div>
@@ -589,7 +599,7 @@ const MessagingBar = () => {
                         <input
                             type="text"
                             className="form-control form-control-sm ps-5 pe-4 shadow-none"
-                            placeholder={t('messaging.searchPlaceholder') === 'messaging.searchPlaceholder' ? (locale === 'tr' ? 'Mesajlarda ara' : 'Search messages') : t('messaging.searchPlaceholder')}
+                            placeholder={getLocalized('messaging.searchPlaceholder', 'Mesajlarda ara', 'Search messages')}
                             style={{
                                 backgroundColor: colors.searchBg,
                                 border: 'none',
@@ -643,14 +653,14 @@ const MessagingBar = () => {
                                             </span>
                                         </div>
                                         <div className="text-truncate" style={{ fontSize: '0.85rem', lineHeight: '1.4', color: (conv.unreadCount || 0) > 0 ? colors.textMain : colors.textMuted, fontWeight: (conv.unreadCount || 0) > 0 ? '700' : '400' }}>
-                                            {conv.lastMessage || 'Mesaj bulunmuyor'}
+                                            {conv.lastMessage || getLocalized('messaging.noMessage', 'Mesaj bulunmuyor', 'No messages yet')}
                                         </div>
                                     </div>
                                 </div>
                             ))
                         ) : (
                             <div className="p-4 text-center small" style={{ color: colors.textMuted }}>
-                                {searchQuery ? 'Arama sonucu bulunamadı.' : (t('messaging.noConversations') === 'messaging.noConversations' ? 'Henüz bir konuşma bulunmuyor.' : t('messaging.noConversations'))}
+                                {searchQuery ? getLocalized('messaging.noSearchResults', 'Arama sonucu bulunamadı.', 'No search results found.') : getLocalized('messaging.noConversations', 'Henüz bir konuşma bulunmuyor.', 'No conversations yet.')}
                             </div>
                         )}
                     </SimplebarReactClient>
@@ -708,7 +718,7 @@ const MessagingBar = () => {
                     </div>
 
                     <div className={clsx("d-flex align-items-center gap-3", iconClass)}>
-                        <BsPencilSquare size={16} className="hover-active" title="Yeni Mesaj" onClick={handleNewMessageClick} />
+                        <BsPencilSquare size={16} className="hover-active" title={getLocalized('messaging.newMessage', 'Yeni Mesaj', 'New Message')} onClick={handleNewMessageClick} />
                         <BsChevronUp size={18} className="hover-active" />
                     </div>
                 </div>
@@ -799,7 +809,7 @@ const MessagingBar = () => {
                                                     style={{ objectFit: 'cover' }}
                                                 />
                                                 <h5 className="mb-0 fw-bold" style={{ color: colors.textMain }}>{chat.user.firstName} {chat.user.lastName}</h5>
-                                                <p className="text-muted small">{chat.user.tagline || chat.user.role || 'Yazılım Geliştirici'}</p>
+                                                <p className="text-muted small">{chat.user.tagline || chat.user.role || getLocalized('messaging.defaultRole', 'Yazılım Geliştirici', 'Software Developer')}</p>
                                             </div>
 
                                             {/* Messages */}
@@ -807,7 +817,7 @@ const MessagingBar = () => {
                                                 <div key={msg.id} className={clsx("d-flex mb-3", msg.isMe ? "flex-row-reverse" : "flex-row")}>
                                                     <Image
                                                         src={getDisplayAvatar(msg.isMe ? currentUserPhoto : chat.user.photoUrl)}
-                                                        alt={msg.isMe ? 'Me' : chat.user.firstName}
+                                                        alt={msg.isMe ? getLocalized('messaging.me', 'Ben', 'Me') : chat.user.firstName}
                                                         width={32}
                                                         height={32}
                                                         className={clsx("rounded-circle flex-shrink-0", msg.isMe ? "ms-2" : "me-2")}
@@ -816,7 +826,7 @@ const MessagingBar = () => {
                                                     <div className={clsx("overflow-hidden d-flex flex-column", msg.isMe ? "align-items-end" : "align-items-start")}>
                                                         <div className={clsx("d-flex align-items-center mb-1", msg.isMe ? "flex-row-reverse" : "flex-row")}>
                                                             <span className={clsx("fw-bold text-truncate", msg.isMe ? "ms-2" : "me-2")} style={{ color: colors.textMain, fontSize: '0.85rem' }}>
-                                                                {msg.isMe ? 'Siz' : chat.user.firstName}
+                                                                {msg.isMe ? getLocalized('messaging.you', 'Siz', 'You') : chat.user.firstName}
                                                             </span>
                                                             <span className="text-muted flex-shrink-0" style={{ fontSize: '0.7rem' }}>• {msg.time}</span>
                                                         </div>
@@ -854,7 +864,7 @@ const MessagingBar = () => {
                                         }}
                                     >
                                         <textarea
-                                            placeholder="Bir mesaj yazın..."
+                                            placeholder={getLocalized('messaging.writeMessage', 'Bir mesaj yazın...', 'Write a message...')}
                                             className="w-100 border-0 bg-transparent shadow-none"
                                             style={{
                                                 color: colors.textMain,
@@ -889,7 +899,7 @@ const MessagingBar = () => {
                                                 cursor: 'pointer'
                                             }}
                                         >
-                                            Gönder
+                                            {getLocalized('messaging.send', 'Gönder', 'Send')}
                                         </button>
                                     </div>
                                 </div>
@@ -928,7 +938,7 @@ const MessagingBar = () => {
                             flexShrink: 0
                         }}
                     >
-                        <span className="fw-bold" style={{ fontSize: '0.9rem' }}>Yeni mesaj</span>
+                        <span className="fw-bold" style={{ fontSize: '0.9rem' }}>{getLocalized('messaging.newMessage', 'Yeni Mesaj', 'New Message')}</span>
                         <div className={clsx("d-flex align-items-center gap-3", iconClass)}>
                             <div onClick={() => setIsNewMessageOpen(false)} className="hover-active d-flex align-items-center" style={{ cursor: 'pointer' }}>
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
@@ -941,7 +951,7 @@ const MessagingBar = () => {
                         <input
                             type="text"
                             autoFocus
-                            placeholder="Bir veya birden fazla ad yazın"
+                            placeholder={getLocalized('messaging.newMessageSearchPlaceholder', 'Bir veya birden fazla ad yazın', 'Type one or more names')}
                             className="flex-grow-1 border-0 bg-transparent shadow-none"
                             style={{ color: colors.textMain, fontSize: '0.95rem', height: '40px', outline: 'none' }}
                             value={newMessageQuery}
@@ -953,7 +963,7 @@ const MessagingBar = () => {
                     <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: colors.bg }}>
                         <SimplebarReactClient style={{ height: '100%' }}>
                             <div className="px-3 py-2 text-muted fw-bold" style={{ fontSize: '0.75rem', textTransform: 'uppercase' }}>
-                                Önerilen
+                                {getLocalized('messaging.suggested', 'Önerilen', 'Suggested')}
                             </div>
                             {suggestedUsers.length > 0 ? (
                                 suggestedUsers.map((u) => (
@@ -976,13 +986,13 @@ const MessagingBar = () => {
                                                 {u.firstName} {u.lastName}
                                             </div>
                                             <div className="text-muted text-truncate small">
-                                                {u.tagline || u.role || 'Kullanıcı'}
+                                                {u.tagline || u.role || getLocalized('messaging.userFallback', 'Kullanıcı', 'User')}
                                             </div>
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                <div className="p-4 text-center small text-muted">Arama sonucu bulunamadı.</div>
+                                <div className="p-4 text-center small text-muted">{getLocalized('messaging.noSearchResults', 'Arama sonucu bulunamadı.', 'No search results found.')}</div>
                             )}
                         </SimplebarReactClient>
                     </div>

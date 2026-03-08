@@ -841,5 +841,22 @@
     "messagingDesc": "You need to log in to meet people and chat.",
     "login": "Log In",
     "continue": "Continue Browsing"
+  },
+  "messaging": {
+    "title": "Messaging",
+    "newMessage": "New Message",
+    "searchPlaceholder": "Search messages",
+    "noMessage": "No messages yet",
+    "noSearchResults": "No search results found.",
+    "noConversations": "No conversations yet.",
+    "defaultRole": "Software Developer",
+    "me": "Me",
+    "you": "You",
+    "writeMessage": "Write a message...",
+    "send": "Send",
+    "newMessageSearchPlaceholder": "Type one or more names",
+    "suggested": "Suggested",
+    "userFallback": "User",
+    "unknownUser": "Unknown User"
   }
 }
