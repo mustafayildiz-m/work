@@ -224,6 +224,10 @@ const ProfileLayout = ({
     followingCount: 0
   });
 
+  // Normalize follow state so "pending" is never shown as "following".
+  const isPendingFollow = followStatus === 'pending';
+  const isAcceptedFollow = !isPendingFollow && (isFollowing || followStatus === 'accepted');
+
   // Reusable: fetch follow statistics for current context (scholar/user)
   const fetchFollowStatsForContext = useCallback(async () => {
     try {
@@ -1189,7 +1193,32 @@ const ProfileLayout = ({
                       // Show follow button for other users
                       return (
                         <>
-                          {isFollowing || followStatus === 'accepted' ? (
+                          {isPendingFollow ? (
+                            <Button
+                              variant="outline-secondary"
+                              size="sm"
+                              className="me-2 px-4"
+                              onClick={handleUnfollow}
+                              disabled={followLoading}
+                              style={{
+                                borderRadius: '50px',
+                                fontWeight: 'bold',
+                                borderWidth: '2px',
+                                color: 'var(--bs-body-color)',
+                                borderColor: 'var(--bs-secondary)',
+                                backgroundColor: 'rgba(var(--bs-secondary-rgb), 0.18)'
+                              }}
+                            >
+                              {followLoading ? (
+                                <>
+                                  <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                  {t('profileActions.following')}
+                                </>
+                              ) : (
+                                'İstek Gönderildi'
+                              )}
+                            </Button>
+                          ) : isAcceptedFollow ? (
                             <Button
                               variant="outline-danger"
                               size="sm"
@@ -1209,28 +1238,6 @@ const ProfileLayout = ({
                                 </>
                               ) : (
                                 t('profileActions.unfollow')
-                              )}
-                            </Button>
-                          ) : followStatus === 'pending' ? (
-                            <Button
-                              variant="outline-secondary"
-                              size="sm"
-                              className="me-2 px-4"
-                              onClick={handleUnfollow}
-                              disabled={followLoading}
-                              style={{
-                                borderRadius: '50px',
-                                fontWeight: 'bold',
-                                borderWidth: '2px'
-                              }}
-                            >
-                              {followLoading ? (
-                                <>
-                                  <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                                  {t('profileActions.following')}
-                                </>
-                              ) : (
-                                'İstek Gönderildi'
                               )}
                             </Button>
                           ) : (
