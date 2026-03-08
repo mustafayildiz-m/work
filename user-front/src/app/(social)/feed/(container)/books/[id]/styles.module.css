@@ -4,6 +4,52 @@
   flex-wrap: wrap;
 }
 
+.pageHeaderCard {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.detailCard {
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.coverImage {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.coverImage:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+}
+
+.shareToggleButton {
+  border-radius: 999px !important;
+  border: 1px solid rgba(13, 110, 253, 0.28) !important;
+  background: rgba(13, 110, 253, 0.07) !important;
+  color: #0d6efd !important;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.shareToggleButton:hover,
+.shareToggleButton:focus,
+.shareToggleButton:active {
+  background: rgba(13, 110, 253, 0.14) !important;
+  border-color: rgba(13, 110, 253, 0.5) !important;
+  color: #0b5ed7 !important;
+  box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.14) !important;
+}
+
+.shareToggleButton::after,
+.shareToggleButton::before {
+  display: none !important;
+  content: none !important;
+  border: 0 !important;
+  background-image: none !important;
+}
+
 .readButton {
   position: relative;
   overflow: hidden;
@@ -36,6 +82,7 @@
 
 .bookCard {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 14px;
 }
 
 .bookCard:hover {
@@ -49,6 +96,31 @@
 
 .languageBadge:hover {
   transform: scale(1.05);
+}
+
+:global([data-bs-theme='dark']) .detailCard {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: #1d2231;
+}
+
+:global([data-bs-theme='dark']) .bookCard {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: #23293a;
+}
+
+:global([data-bs-theme='dark']) .shareToggleButton {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  color: #f2f4ff !important;
+}
+
+:global([data-bs-theme='dark']) .shareToggleButton:hover,
+:global([data-bs-theme='dark']) .shareToggleButton:focus,
+:global([data-bs-theme='dark']) .shareToggleButton:active {
+  background: rgba(255, 255, 255, 0.16) !important;
+  border-color: rgba(255, 255, 255, 0.38) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 0.15rem rgba(255, 255, 255, 0.1) !important;
 }
 
 @media (max-width: 576px) {

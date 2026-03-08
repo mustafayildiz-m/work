@@ -83,6 +83,29 @@ const BookDetailPage = () => {
     }
   };
 
+  const getLanguageFlag = (code) => {
+    const flagMap = {
+      tr: '🇹🇷',
+      en: '🇬🇧',
+      ar: '🇸🇦',
+      de: '🇩🇪',
+      fr: '🇫🇷',
+      es: '🇪🇸',
+      it: '🇮🇹',
+      pt: '🇵🇹',
+      ru: '🇷🇺',
+      ja: '🇯🇵',
+      zh: '🇨🇳',
+      ko: '🇰🇷',
+      nl: '🇳🇱',
+      fa: '🇮🇷',
+      ur: '🇵🇰',
+      hi: '🇮🇳',
+    };
+
+    return flagMap[(code || '').toLowerCase()] || '🌐';
+  };
+
 
 
   useEffect(() => {
@@ -852,7 +875,7 @@ const BookDetailPage = () => {
   return (
     <Col lg={9}>
       {/* Header */}
-      <Card className="mb-4 border-0 shadow-sm">
+      <Card className={`mb-4 border-0 shadow-sm ${styles.pageHeaderCard}`}>
         <CardHeader className="bg-gradient text-white border-0" style={{
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
         }}>
@@ -881,7 +904,7 @@ const BookDetailPage = () => {
       </Card>
 
       {/* Kitap Detayları */}
-      <Card className="border-0 shadow-sm" style={{ position: 'relative' }}>
+      <Card className={`border-0 shadow-sm ${styles.detailCard}`} style={{ position: 'relative' }}>
         {/* Dropdown Button - Sağ Üst Köşe */}
         <div style={{
           position: 'absolute',
@@ -894,7 +917,7 @@ const BookDetailPage = () => {
             <DropdownToggle
               variant="outline-secondary"
               size="sm"
-              className="d-flex align-items-center book-translation-share-toggle"
+              className={`d-flex align-items-center book-translation-share-toggle ${styles.shareToggleButton}`}
             >
               <BsShare className="me-1" />
               {t('books.share') || 'Paylaş'}
@@ -1018,7 +1041,7 @@ const BookDetailPage = () => {
             <img
               src={getBookImage(book)}
               alt={bookTitle}
-              className="img-fluid rounded shadow"
+              className={`img-fluid rounded shadow ${styles.coverImage}`}
               style={{ maxWidth: '200px', maxHeight: '280px', objectFit: 'cover' }}
               onError={(e) => {
                 e.target.src = '/images/book-placeholder.jpg';
@@ -1208,8 +1231,8 @@ const BookDetailPage = () => {
                       <div style={{ fontSize: '0.9rem', fontWeight: '500' }}>
                         {lang.name}
                       </div>
-                      <div style={{ fontSize: '0.75rem', opacity: 0.7 }}>
-                        {lang.code}
+                      <div style={{ fontSize: '1rem', lineHeight: 1, marginTop: '2px' }}>
+                        {getLanguageFlag(lang.code)}
                       </div>
                     </Button>
                   </Col>
