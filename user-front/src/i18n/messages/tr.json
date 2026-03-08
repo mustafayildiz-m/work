@@ -282,7 +282,10 @@
     "logout": "Çıkış Yap",
     "profileMenu": "Profil menüsü",
     "user": "Kullanıcı",
-    "viewProfile": "Profili Görüntüle"
+    "viewProfile": "Profili Görüntüle",
+    "notificationSounds": "Bildirim Sesleri",
+    "on": "Açık",
+    "off": "Kapalı"
   },
   "theme": {
     "themeSelection": "Tema Seçimi",

@@ -1,4 +1,4 @@
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsBoolean } from 'class-validator';
 
 export class UpdateUserDto {
   @IsString()
@@ -32,4 +32,8 @@ export class UpdateUserDto {
   @IsString()
   @IsOptional()
   birthDate?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  notificationSoundEnabled?: boolean;
 }

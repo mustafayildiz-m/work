@@ -71,6 +71,7 @@ const ProfileDropdown = () => {
   const [imageError, setImageError] = useState(false);
   const [imageKey, setImageKey] = useState(Date.now());
   const [imageLoading, setImageLoading] = useState(true);
+  const [notificationSoundEnabled, setNotificationSoundEnabled] = useState(true);
 
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
@@ -195,10 +196,14 @@ const ProfileDropdown = () => {
                 const freshData = JSON.parse(responseText);
                 setImageLoading(true); // Reset loading for initial load
                 setImageKey(Date.now());
-                setUser({
+                const mergedUser = {
                   ...userData,
                   ...freshData
-                });
+                };
+                setUser(mergedUser);
+                setNotificationSoundEnabled(
+                  mergedUser.notificationSoundEnabled !== false,
+                );
               } catch (parseError) {
                 console.error('Error parsing fresh user data JSON:', parseError, 'Response text:', responseText);
               }
@@ -254,6 +259,9 @@ const ProfileDropdown = () => {
               ...prev,
               ...freshUserData
             }));
+            setNotificationSoundEnabled(
+              freshUserData.notificationSoundEnabled !== false,
+            );
 
             // LocalStorage'daki user verisini de güncelle
             if (typeof window !== 'undefined') {
@@ -347,6 +355,44 @@ const ProfileDropdown = () => {
   // Toggle dropdown
   const toggleDropdown = useCallback(() => {
     setIsOpen(prev => !prev);
+  }, []);
+
+  const handleNotificationSoundToggle = useCallback(() => {
+    setNotificationSoundEnabled((prev) => {
+      const next = !prev;
+      const currentStoredUser = localStorage.getItem('user');
+      if (currentStoredUser) {
+        try {
+          const parsedUser = JSON.parse(currentStoredUser);
+          localStorage.setItem(
+            'user',
+            JSON.stringify({
+              ...parsedUser,
+              notificationSoundEnabled: next,
+            }),
+          );
+        } catch (error) {
+          console.error('Failed to update local user cache:', error);
+        }
+      }
+      const token = localStorage.getItem('token');
+      if (token) {
+        fetch(
+          `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/users/me/profile`,
+          {
+            method: 'PATCH',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ notificationSoundEnabled: next }),
+          },
+        ).catch((error) => {
+          console.error('Notification sound update error:', error);
+        });
+      }
+      return next;
+    });
   }, []);
 
   // Loading state
@@ -639,6 +685,36 @@ const ProfileDropdown = () => {
                 </button>
               ))}
             </div>
+            <button
+              onClick={handleNotificationSoundToggle}
+              className={`btn w-100 d-flex align-items-center border-0 mt-2 ${isRTL ? 'text-end' : 'text-start'}`}
+              style={{
+                fontSize: '12px',
+                padding: '6px 10px',
+                transition: 'all 0.2s ease',
+                borderRadius: '8px',
+                background: notificationSoundEnabled ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'rgba(118, 75, 162, 0.05)',
+                color: notificationSoundEnabled ? '#ffffff' : (isDark ? '#dee2e6' : '#495057'),
+                boxShadow: notificationSoundEnabled ? '0 4px 12px rgba(118, 75, 162, 0.2)' : 'none'
+              }}
+            >
+              <span className="d-flex align-items-center justify-content-center" style={{
+                minWidth: '16px',
+                width: '16px',
+                height: '16px',
+                color: notificationSoundEnabled ? '#ffffff' : '#764ba2'
+              }}>
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1a4 4 0 0 0-4 4v2.586l-.707.707A1 1 0 0 0 4 10h8a1 1 0 0 0 .707-1.707L12 7.586V5a4 4 0 0 0-4-4z" />
+                </svg>
+              </span>
+              <span className="flex-grow-1 ms-2 fw-medium" style={{ fontSize: '12px' }}>
+                {t('menu.notificationSounds')}
+              </span>
+              <span style={{ fontSize: '11px', opacity: 0.9 }}>
+                {notificationSoundEnabled ? t('menu.on') : t('menu.off')}
+              </span>
+            </button>
           </div>
 
           {/* Logout */}
