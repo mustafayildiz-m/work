@@ -134,6 +134,8 @@ export class ScholarPostsService {
             type: savedNotification.type,
             title: savedNotification.title,
             message: savedNotification.message,
+            scholarId: scholar.id,
+            postId: post.id,
             is_read: savedNotification.is_read,
             created_at: savedNotification.created_at,
             related_user: {
