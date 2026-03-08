@@ -1,7 +1,7 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { Suspense, useEffect } from 'react';
 import { hasValidToken } from '@/utils/auth';
 import FallbackLoading from '../FallbackLoading';
@@ -9,7 +9,6 @@ import FallbackLoading from '../FallbackLoading';
 const AuthProtectionWrapper = ({
   children
 }) => {
-  const router = useRouter();
   const pathname = usePathname();
 
   const publicPages = [
@@ -25,22 +24,47 @@ const AuthProtectionWrapper = ({
 
   const isPublicPage = publicPages.some(page => pathname === page || pathname.startsWith(page + '/'));
 
-  const {
-    status,
-    data: session
-  } = useSession();
+  const { status } = useSession();
 
-  // Session durumunu kontrol et
-  useEffect(() => {
-    // ÖNEMLİ: NextAuth bazen session'ı geç yükleyebilir veya unauthenticated diyebilir
-    // Bu yüzden localStorage'daki token'ı da kontrol eden agresif bir yaklaşım izliyoruz
+  const redirectToLogin = () => {
+    const loginUrl = `${window.location.origin}/auth-advance/sign-in?redirectTo=${encodeURIComponent(pathname)}`;
+    window.location.href = loginUrl;
+  };
+
+  const ensureAuthenticated = () => {
+    if (isPublicPage) return true;
     const hasToken = hasValidToken();
-
-    // Sadece public olmayan sayfalarda ve GERÇEKTEN kimlik doğrulanmamışsa (token da yoksa) yönlendir
-    if (status === 'unauthenticated' && !isPublicPage && !hasToken) {
-      const loginUrl = `${window.location.origin}/auth-advance/sign-in?redirectTo=${encodeURIComponent(pathname)}`;
-      window.location.href = loginUrl;
+    if (!hasToken) {
+      redirectToLogin();
+      return false;
     }
+    return true;
+  };
+
+  // Session + token durumunu kontrol et
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      ensureAuthenticated();
+      return;
+    }
+    ensureAuthenticated();
+
+    const handleVisibilityOrFocus = () => {
+      ensureAuthenticated();
+    };
+
+    window.addEventListener('focus', handleVisibilityOrFocus);
+    document.addEventListener('visibilitychange', handleVisibilityOrFocus);
+
+    const intervalId = window.setInterval(() => {
+      ensureAuthenticated();
+    }, 30000);
+
+    return () => {
+      window.removeEventListener('focus', handleVisibilityOrFocus);
+      document.removeEventListener('visibilitychange', handleVisibilityOrFocus);
+      window.clearInterval(intervalId);
+    };
   }, [status, pathname, isPublicPage]);
 
   // Loading durumunda fallback göster
@@ -59,7 +83,7 @@ const AuthProtectionWrapper = ({
 
   // Unauthenticated durumunda eğer sayfa public değilse ve token da yoksa fallback göster
   if (status === 'unauthenticated' && !isPublicPage) {
-    if (hasValidToken()) {
+    if (ensureAuthenticated()) {
       // Token var ama status unauthenticated? 
       // Bu genellikle NextAuth'ın token'ı henüz işlemediği/jitter durumudur.
       // İçeriği göstermeye devam et.
