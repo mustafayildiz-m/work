@@ -165,6 +165,15 @@ const LANGUAGES = [
   { code: 'ja', name: '日本語', flag: '🇯🇵' },
 ];
 
+const requestTimelineRefresh = () => {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(
+    new CustomEvent('timelineRefreshRequested', {
+      detail: { source: 'post-share' },
+    }),
+  );
+};
+
 const PostCard = ({
   createdAt,
   timeAgo,
@@ -301,6 +310,7 @@ const PostCard = ({
       if (response.ok) {
         setIsShared(true);
         setShareCount(prev => prev + 1);
+        requestTimelineRefresh();
 
         // Reload share data to get accurate count
         try {
@@ -365,6 +375,7 @@ const PostCard = ({
 
         setIsShared(false);
         setShareCount(prev => Math.max(0, prev - 1));
+        requestTimelineRefresh();
 
         // Reload share data to get accurate count
         try {

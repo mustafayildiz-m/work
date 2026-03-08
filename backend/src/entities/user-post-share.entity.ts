@@ -11,7 +11,7 @@ import { User } from '../users/entities/user.entity';
 import { UserPost } from './user-post.entity';
 
 @Entity('user_post_shares')
-@Unique(['user_id', 'post_id']) // Bir kullanıcı aynı gönderiyi sadece bir kez paylaşabilir
+@Unique(['user_id', 'post_id', 'post_type']) // Bir kullanıcı aynı gönderiyi aynı tipte sadece bir kez paylaşabilir
 export class UserPostShare {
   @PrimaryGeneratedColumn()
   id: number;

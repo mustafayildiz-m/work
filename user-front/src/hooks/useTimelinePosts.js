@@ -73,6 +73,36 @@ export const useTimelinePosts = (userId) => {
     };
   }, [userId, locale]);
 
+  // Listen for share/unshare changes and refresh timeline instantly
+  useEffect(() => {
+    const handleTimelineRefreshRequested = async () => {
+      if (!userId) return;
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await getTimelinePosts(userId, locale);
+        setPosts(data);
+      } catch (err) {
+        console.error('Error refreshing timeline after share change:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    window.addEventListener(
+      'timelineRefreshRequested',
+      handleTimelineRefreshRequested,
+    );
+
+    return () => {
+      window.removeEventListener(
+        'timelineRefreshRequested',
+        handleTimelineRefreshRequested,
+      );
+    };
+  }, [userId, locale]);
+
   const refetch = async () => {
     if (userId) {
       setLoading(true);
