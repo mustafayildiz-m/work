@@ -1,7 +1,8 @@
 'use client';
 
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
-import { useEffect, useRef, useMemo, useCallback, memo } from 'react';
+import { useAuthContext } from '@/context/useAuthContext';
+import { useEffect, useRef, useMemo, useCallback, memo, useState } from 'react';
 import { Card, Spinner } from 'react-bootstrap';
 import { FaCheck, FaCheckDouble } from 'react-icons/fa';
 import Image from 'next/image';
@@ -128,7 +129,8 @@ const MessageItem = memo(({
   isOwnMessage, 
   showDate, 
   messageDate,
-  currentUserId 
+  currentUserId,
+  ownAvatar
 }) => {
   return (
     <div>
@@ -154,7 +156,7 @@ const MessageItem = memo(({
           {!isOwnMessage && (
             <div className="flex-shrink-0 me-2">
               <Avatar 
-                src={message.sender?.photoUrl} 
+                src={message.partnerAvatar || message.sender?.photoUrl || message.senderAvatar} 
                 alt="Avatar" 
                 size={32}
               />
@@ -193,7 +195,7 @@ const MessageItem = memo(({
           {isOwnMessage && (
             <div className="flex-shrink-0 ms-2">
               <Avatar 
-                src={message.receiver?.photoUrl} 
+                src={ownAvatar} 
                 alt="Avatar" 
                 size={32}
               />
@@ -206,12 +208,12 @@ const MessageItem = memo(({
 });
 
 // Memoized Typing Indicator Component
-const TypingIndicator = memo(({ activeConversation }) => {
+const TypingIndicator = memo(({ participantAvatar }) => {
   return (
     <div className="typing-indicator mb-3">
       <div className="d-flex align-items-center">
         <Avatar 
-          src={activeConversation.participantAvatar} 
+          src={participantAvatar} 
           alt="Avatar" 
           size={32}
           className="me-2"
@@ -229,7 +231,7 @@ const TypingIndicator = memo(({ activeConversation }) => {
 });
 
 // Memoized Header Component
-const MessageHeader = memo(({ activeConversation, onBackToConversations, isOnline }) => {
+const MessageHeader = memo(({ activeConversation, onBackToConversations, isOnline, participantAvatar }) => {
   return (
     <Card.Header className="border-0 bg-body-tertiary">
       <div className="d-flex align-items-center">
@@ -246,7 +248,7 @@ const MessageHeader = memo(({ activeConversation, onBackToConversations, isOnlin
         </button>
         
         <Avatar 
-          src={activeConversation.participantAvatar} 
+          src={participantAvatar} 
           alt="Avatar" 
           size={40}
           className="me-3"
@@ -264,6 +266,7 @@ const MessageHeader = memo(({ activeConversation, onBackToConversations, isOnlin
 
 // Main Component
 const MessageList = ({ onBackToConversations }) => {
+  const { userInfo } = useAuthContext();
   const {
     messages,
     activeConversation,
@@ -275,6 +278,7 @@ const MessageList = ({ onBackToConversations }) => {
   } = useWebSocketChatContext();
 
   const messagesEndRef = useRef(null);
+  const [ownAvatarFromProfile, setOwnAvatarFromProfile] = useState(null);
   
   // Memoized current user ID
   const currentUserId = useMemo(() => {
@@ -289,6 +293,33 @@ const MessageList = ({ onBackToConversations }) => {
     }
     return null;
   }, []);
+
+  useEffect(() => {
+    if (!currentUserId) return;
+    const token = getToken();
+    if (!token) return;
+
+    let isMounted = true;
+    const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
+
+    fetch(`${apiUrl}/users/${currentUserId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!isMounted) return;
+        setOwnAvatarFromProfile(data?.photoUrl || null);
+      })
+      .catch(() => {
+        if (isMounted) setOwnAvatarFromProfile(null);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [currentUserId]);
 
   // Memoized filtered messages - PERFORMANCE IMPROVEMENT
   const filteredMessages = useMemo(() => {
@@ -392,6 +423,22 @@ const MessageList = ({ onBackToConversations }) => {
     });
   }, [activeConversation, onlineUsers]);
 
+  const resolvedParticipantAvatar = useMemo(() => {
+    if (activeConversation?.participantAvatar) {
+      return activeConversation.participantAvatar;
+    }
+    const participantId = String(activeConversation?.participantId || '');
+    const fromOnline = (onlineUsers || []).find((onlineUser) => {
+      if (!onlineUser || typeof onlineUser !== 'object') return false;
+      return String(onlineUser.id || onlineUser.userId || '') === participantId;
+    });
+    return fromOnline?.photoUrl || null;
+  }, [activeConversation, onlineUsers]);
+
+  const currentUserAvatar = useMemo(() => {
+    return ownAvatarFromProfile || userInfo?.photoUrl || null;
+  }, [ownAvatarFromProfile, userInfo?.photoUrl]);
+
   // Handle back to conversations (mobile only)
   const handleBackToConversations = useCallback(() => {
     if (selectConversation) {
@@ -436,11 +483,12 @@ const MessageList = ({ onBackToConversations }) => {
         activeConversation={activeConversation} 
         onBackToConversations={handleBackToConversations}
         isOnline={isConversationOnline}
+        participantAvatar={resolvedParticipantAvatar}
       />
 
       {/* Messages */}
       <Card.Body className="flex-grow-1 p-0" style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}>
-        <div className="messages-container p-3">
+        <div className="messages-container p-3 d-flex flex-column justify-content-end" style={{ minHeight: '100%' }}>
           {processedMessages.length === 0 ? (
             <div className="text-center text-muted py-5">
               <div className="mb-3">
@@ -454,17 +502,18 @@ const MessageList = ({ onBackToConversations }) => {
               {processedMessages.map((message) => (
                 <MessageItem
                   key={message.id}
-                  message={message}
+                  message={{ ...message, partnerAvatar: resolvedParticipantAvatar }}
                   isOwnMessage={message.isOwnMessage}
                   showDate={message.showDate}
                   messageDate={message.messageDate}
                   currentUserId={currentUserId}
+                  ownAvatar={currentUserAvatar}
                 />
               ))}
 
               {/* Typing indicator */}
               {isTyping && (
-                <TypingIndicator activeConversation={activeConversation} />
+                <TypingIndicator participantAvatar={resolvedParticipantAvatar} />
               )}
 
               {/* Scroll reference */}
