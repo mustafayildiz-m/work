@@ -172,6 +172,21 @@ const MessagingBar = () => {
         setChatMessages([]);
     };
 
+    const handleSendMessage = () => {
+        if (!chatInput.trim() || !selectedUser) return;
+
+        const newMessage = {
+            id: Date.now(),
+            senderId: userInfo?.id || session?.user?.id,
+            text: chatInput,
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            isMe: true
+        };
+
+        setChatMessages(prev => [...prev, newMessage]);
+        setChatInput('');
+    };
+
     return (
         <div
             className="d-none d-lg-block position-fixed end-0 bottom-0"
@@ -502,8 +517,8 @@ const MessagingBar = () => {
                                         {chatMessages.map((msg) => (
                                             <div key={msg.id} className="d-flex mb-3">
                                                 <Image
-                                                    src={getDisplayAvatar(selectedUser.photoUrl)}
-                                                    alt={selectedUser.firstName}
+                                                    src={getDisplayAvatar(msg.isMe ? currentUserPhoto : selectedUser.photoUrl)}
+                                                    alt={msg.isMe ? 'Me' : selectedUser.firstName}
                                                     width={40}
                                                     height={40}
                                                     className="rounded-circle me-2 flex-shrink-0"
@@ -512,7 +527,7 @@ const MessagingBar = () => {
                                                 <div>
                                                     <div className="d-flex align-items-center mb-1">
                                                         <span className="fw-bold me-2" style={{ color: colors.textMain, fontSize: '0.9rem' }}>
-                                                            {selectedUser.firstName} {selectedUser.lastName}
+                                                            {msg.isMe ? 'Siz' : `${selectedUser.firstName} ${selectedUser.lastName}`}
                                                         </span>
                                                         <span className="text-muted" style={{ fontSize: '0.75rem' }}>• {msg.time}</span>
                                                     </div>
@@ -556,13 +571,15 @@ const MessagingBar = () => {
                                     <div className="d-flex align-items-center justify-content-end">
                                         <div className="d-flex align-items-center gap-2">
                                             <button
+                                                onClick={handleSendMessage}
                                                 className="btn btn-sm px-3 fw-bold shadow-none"
                                                 style={{
                                                     backgroundColor: chatInput.trim() ? '#0a66c2' : 'transparent',
                                                     color: chatInput.trim() ? '#ffffff' : colors.textMuted,
                                                     borderRadius: '16px',
                                                     pointerEvents: chatInput.trim() ? 'auto' : 'none',
-                                                    border: chatInput.trim() ? 'none' : 'none'
+                                                    border: 'none',
+                                                    cursor: 'pointer'
                                                 }}
                                             >
                                                 Gönder
