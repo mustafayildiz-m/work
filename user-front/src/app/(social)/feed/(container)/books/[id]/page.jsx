@@ -46,8 +46,18 @@ const BookDetailPage = () => {
   const [targetLang, setTargetLang] = useState(null);
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
   const [playerStatus, setPlayerStatus] = useState('idle');
+  const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
+  const [isDraggingPlayer, setIsDraggingPlayer] = useState(false);
   const isReadingRef = useRef(false);
   const pdfjsRef = useRef(null);
+  const suppressAudioErrorRef = useRef(false);
+  const playerDragRef = useRef({
+    dragging: false,
+    startX: 0,
+    startY: 0,
+    originX: 0,
+    originY: 0,
+  });
 
   const getPdfjs = async () => {
     if (typeof window === 'undefined') return null;
@@ -284,13 +294,66 @@ const BookDetailPage = () => {
   };
 
   // Mevcut audio objesini temizle
-  const disposeCurrentAudio = () => {
+  const disposeCurrentAudio = (silent = true) => {
     if (currentAudioRef.current) {
-      currentAudioRef.current.pause();
-      currentAudioRef.current.src = '';
+      const audio = currentAudioRef.current;
+      if (silent) suppressAudioErrorRef.current = true;
+
+      // Eski audio event'lerini temizleyip sonraki sayfaya geçerken sahte "hata" bildirimi engelle
+      audio.onplay = null;
+      audio.ontimeupdate = null;
+      audio.onended = null;
+      audio.onerror = null;
+      audio.pause();
+      audio.src = '';
       currentAudioRef.current = null;
+
+      if (silent) {
+        setTimeout(() => {
+          suppressAudioErrorRef.current = false;
+        }, 0);
+      }
     }
   };
+
+  const handlePlayerDragStart = (event) => {
+    const target = event.target;
+    if (target.closest('button, input, select, .dropdown-menu, .dropdown-item')) return;
+
+    playerDragRef.current = {
+      dragging: true,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: playerPosition.x,
+      originY: playerPosition.y,
+    };
+    setIsDraggingPlayer(true);
+  };
+
+  useEffect(() => {
+    const onMouseMove = (event) => {
+      if (!playerDragRef.current.dragging) return;
+      const dx = event.clientX - playerDragRef.current.startX;
+      const dy = event.clientY - playerDragRef.current.startY;
+      setPlayerPosition({
+        x: playerDragRef.current.originX + dx,
+        y: playerDragRef.current.originY + dy,
+      });
+    };
+
+    const onMouseUp = () => {
+      if (!playerDragRef.current.dragging) return;
+      playerDragRef.current.dragging = false;
+      setIsDraggingPlayer(false);
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+  }, []);
 
   // Sesli okumayı duraklat/devam ettir
   const pauseResumeTextToSpeech = () => {
@@ -532,6 +595,7 @@ const BookDetailPage = () => {
           };
           audio.onerror = () => {
             URL.revokeObjectURL(audioUrl);
+            if (suppressAudioErrorRef.current) return;
             setIsReading(false);
             setIsPaused(false);
             isReadingRef.current = false;
@@ -584,6 +648,7 @@ const BookDetailPage = () => {
     setIsPaused(false);
     setPlayerStatus('idle');
     setIsPlayerOpen(false);
+    setPlayerPosition({ x: 0, y: 0 });
     setReadingTranslationId(null);
     setElapsedTime(0);
     setAudioProgress(0);
@@ -1279,7 +1344,22 @@ const BookDetailPage = () => {
 
       {/* Modern Floating Audio Player */}
       {isPlayerOpen && (
-        <div className="fixed-bottom p-3 d-flex justify-content-center" style={{ zIndex: 1050 }}>
+        <div
+          className="p-3 d-flex justify-content-center"
+          style={{
+            zIndex: 1050,
+            position: 'fixed',
+            left: '50%',
+            bottom: '0.5rem',
+            width: '100%',
+            maxWidth: '900px',
+            transform: `translate(-50%, 0) translate(${playerPosition.x}px, ${playerPosition.y}px)`,
+            cursor: isDraggingPlayer ? 'grabbing' : 'grab',
+            userSelect: 'none'
+          }}
+          onMouseDown={handlePlayerDragStart}
+          onDoubleClick={() => setPlayerPosition({ x: 0, y: 0 })}
+        >
           <Card
             className="border-0 shadow-lg"
             style={{
@@ -1294,6 +1374,9 @@ const BookDetailPage = () => {
             }}
           >
             <CardBody className="p-3" style={{ overflow: 'visible' }}>
+              <div className="d-flex justify-content-center mb-2">
+                <div style={{ width: '44px', height: '4px', borderRadius: '4px', background: 'rgba(255,255,255,0.28)' }} />
+              </div>
               <Row className="align-items-center g-3">
                 {/* Book Info & Status */}
                 <Col xs={12} md={4}>
