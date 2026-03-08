@@ -144,7 +144,7 @@ const MessagingBar = () => {
                         updated[existingChatIndex] = {
                             ...chat,
                             messages: [...chat.messages, formattedMsg],
-                            isExpanded: true // Pop up on new message
+                            unreadCount: !isMe && !chat.isExpanded ? (chat.unreadCount || 0) + 1 : (chat.unreadCount || 0)
                         };
                     }
                     return updated;
@@ -165,7 +165,8 @@ const MessagingBar = () => {
                         user,
                         messages: [formattedMsg],
                         input: '',
-                        isExpanded: true
+                        isExpanded: false,
+                        unreadCount: isMe ? 0 : 1
                     }, ...prev];
                 }
             });
@@ -240,14 +241,15 @@ const MessagingBar = () => {
         setActiveChats(prev => {
             if (prev.find(chat => chat.user.id === user.id)) {
                 return prev.map(chat =>
-                    chat.user.id === user.id ? { ...chat, isExpanded: true } : chat
+                    chat.user.id === user.id ? { ...chat, isExpanded: true, unreadCount: 0 } : chat
                 );
             }
             return [{
                 user,
                 messages: [],
                 input: '',
-                isExpanded: true
+                isExpanded: true,
+                unreadCount: 0
             }, ...prev];
         });
 
@@ -285,7 +287,7 @@ const MessagingBar = () => {
 
     const toggleChatWindow = (userId) => {
         setActiveChats(prev => prev.map(chat =>
-            chat.user.id === userId ? { ...chat, isExpanded: !chat.isExpanded } : chat
+            chat.user.id === userId ? { ...chat, isExpanded: !chat.isExpanded, unreadCount: !chat.isExpanded ? 0 : chat.unreadCount } : chat
         ));
     };
 
@@ -557,6 +559,11 @@ const MessagingBar = () => {
                             <span className="fw-bold text-truncate" style={{ fontSize: '0.85rem' }}>
                                 {chat.user.firstName} {chat.user.lastName}
                             </span>
+                            {(chat.unreadCount || 0) > 0 && (
+                                <span className="ms-2 badge rounded-pill bg-danger" style={{ fontSize: '0.65rem', padding: '0.3em 0.6em' }}>
+                                    {chat.unreadCount}
+                                </span>
+                            )}
                         </div>
                         <div className={clsx("d-flex align-items-center gap-2", iconClass)}>
                             {chat.isExpanded ? <BsChevronDown size={18} /> : <BsChevronUp size={18} />}
