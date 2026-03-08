@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { BsThreeDots, BsPencilSquare, BsChevronUp, BsChevronDown, BsSearch, BsSliders } from 'react-icons/bs';
 import placeholderImg from '@/assets/images/avatar/placeholder.jpg';
 import { useSession } from 'next-auth/react';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import clsx from 'clsx';
 import SimplebarReactClient from '@/components/wrappers/SimplebarReactClient';
 
@@ -21,19 +21,58 @@ const MessagingBar = () => {
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [userProfile, setUserProfile] = useState(null);
+
+    // Fetch fresh user data to ensure photoUrl is present
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const userId = userInfo?.id || session?.user?.id || session?.user?.sub;
+            if (!userId) return;
+
+            try {
+                const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+                const apiBaseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
+
+                const response = await fetch(`${apiBaseUrl}/users/${userId}`, {
+                    headers: {
+                        'Authorization': token ? `Bearer ${token}` : '',
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setUserProfile(data);
+                }
+            } catch (error) {
+                console.error('Error fetching user profile in MessagingBar:', error);
+            }
+        };
+
+        if (status === 'authenticated') {
+            fetchUserData();
+        }
+    }, [userInfo?.id, session?.user?.id, status]);
 
     if (status === 'unauthenticated') return null;
 
     const getDisplayAvatar = (photoUrl) => {
         const defaultPlaceholder = typeof placeholderImg === 'string' ? placeholderImg : (placeholderImg?.src || '/images/avatar/placeholder.jpg');
-        if (!photoUrl) return defaultPlaceholder;
+
+        if (!photoUrl || photoUrl === 'null' || photoUrl === 'undefined') return defaultPlaceholder;
+
         if (typeof photoUrl === 'object') return photoUrl.src || defaultPlaceholder;
 
         const apiBaseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
 
         if (photoUrl.startsWith('http')) return photoUrl;
 
-        return photoUrl.startsWith('/uploads/') ? `${apiBaseUrl}${photoUrl}` : `${apiBaseUrl}/uploads/${photoUrl}`;
+        if (photoUrl.startsWith('/uploads/')) {
+            return `${apiBaseUrl}${photoUrl}`;
+        }
+
+        // Handle cases where it might be just the filename
+        return `${apiBaseUrl}/uploads/${photoUrl}`;
     };
 
     const filteredConversations = useMemo(() => {
@@ -71,6 +110,9 @@ const MessagingBar = () => {
     };
 
     const messagingTitle = t('messaging.title') === 'messaging.title' ? (locale === 'tr' ? 'Mesajlaşma' : 'Messaging') : t('messaging.title');
+
+    // Determine which photo to use
+    const currentUserPhoto = userProfile?.photoUrl || userInfo?.photoUrl || session?.user?.image;
 
     return (
         <div
@@ -111,12 +153,13 @@ const MessagingBar = () => {
                     <div className="d-flex align-items-center">
                         <div className="position-relative me-2 d-flex align-items-center">
                             <Image
-                                src={getDisplayAvatar(userInfo?.photoUrl || session?.user?.image)}
+                                src={getDisplayAvatar(currentUserPhoto)}
                                 alt="User"
                                 width={32}
                                 height={32}
                                 className="rounded-circle"
                                 style={{ border: '1px solid rgba(255,255,255,0.2)', objectFit: 'cover' }}
+                                key={currentUserPhoto || 'default'}
                             />
                             <div className="position-absolute bottom-0 end-0 bg-success rounded-circle" style={{ width: '10px', height: '10px', border: '2px solid #1d2226' }} />
                         </div>
@@ -230,12 +273,13 @@ const MessagingBar = () => {
                     <div className="d-flex align-items-center">
                         <div className="position-relative me-2 d-flex align-items-center">
                             <Image
-                                src={getDisplayAvatar(userInfo?.photoUrl || session?.user?.image)}
+                                src={getDisplayAvatar(currentUserPhoto)}
                                 alt="User"
                                 width={32}
                                 height={32}
                                 className="rounded-circle"
                                 style={{ border: '1px solid rgba(255,255,255,0.2)', objectFit: 'cover' }}
+                                key={currentUserPhoto || 'default'}
                             />
                             <div
                                 className="position-absolute bottom-0 end-0 bg-success rounded-circle"
