@@ -30,6 +30,11 @@ export class NotificationController {
         return this.notificationService.markAllAsRead(req.user.id);
     }
 
+    @Delete(':id')
+    async deleteNotification(@Param('id') id: string, @Req() req) {
+        return this.notificationService.deleteNotification(id, req.user.id);
+    }
+
     @Delete()
     async deleteAll(@Req() req) {
         return this.notificationService.deleteAll(req.user.id);

@@ -57,6 +57,14 @@ export class NotificationService {
         return { success: true };
     }
 
+    async deleteNotification(notificationId: string, userId: number) {
+        const result = await this.notificationRepository.delete({ id: notificationId, user_id: userId });
+        if (result.affected === 0) {
+            throw new NotFoundException('Notification not found');
+        }
+        return { success: true };
+    }
+
     async deleteAll(userId: number) {
         await this.notificationRepository.delete({ user_id: userId });
         return { success: true };

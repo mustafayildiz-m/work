@@ -3,12 +3,15 @@ import { timeSince } from '@/utils/date';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { Card, CardBody, CardFooter, CardHeader, Button } from 'react-bootstrap';
-import { BsBellFill } from 'react-icons/bs';
+import { BsBellFill, BsCheckLg, BsTrash } from 'react-icons/bs';
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
+import { useLayoutContext } from '@/context/useLayoutContext';
 import { getImageUrl } from '@/utils/image';
 
 const NotificationDropdown = () => {
+  const { theme } = useLayoutContext();
+  const isDark = theme === 'dark';
   const { notifications: realTimeNotifications, setNotifications } = useWebSocketChatContext();
   const [staticNotifications, setStaticNotifications] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -29,8 +32,88 @@ const NotificationDropdown = () => {
         setStaticNotifications(notifs || []);
       } catch (e) { }
     };
-    fetchNotifs();
-  }, []);
+    if (isOpen) {
+      fetchNotifs();
+    }
+  }, [isOpen]);
+
+  const handleMarkAsRead = async (e, id) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/${id}/read`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        setStaticNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
+        setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
+      }
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
+  };
+
+  const handleMarkAllAsRead = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/read-all`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        setStaticNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+        setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+      }
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+    }
+  };
+
+  const handleDeleteNotification = async (e, id) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        setStaticNotifications(prev => prev.filter(n => n.id !== id));
+        setNotifications(prev => prev.filter(n => n.id !== id));
+      }
+    } catch (error) {
+      console.error('Error deleting notification:', error);
+    }
+  };
+
+  const handleClearAll = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        setStaticNotifications([]);
+        setNotifications([]);
+      }
+    } catch (error) {
+      console.error('Error clearing notifications:', error);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -76,54 +159,77 @@ const NotificationDropdown = () => {
 
       <div
         role="menu"
-        className="p-0 shadow-lg border-0 bg-white rounded"
+        className={clsx('p-0 shadow-lg border-0 rounded notification-dropdown-menu', isDark ? 'bg-dark' : 'bg-white')}
         style={{
           position: 'absolute',
           top: 'calc(100% + 10px)',
           right: 0,
-          width: '360px',
+          width: '380px',
           zIndex: 1050,
           display: isOpen ? 'block' : 'none'
         }}
       >
         <Card>
-          <CardHeader className="d-flex justify-content-between align-items-center">
-            <h6 className="m-0">Bildirimler {unreadCount > 0 && <span className="badge bg-danger ms-1">{unreadCount}</span>}</h6>
-            <Link className="small" href="" onClick={(e) => { e.preventDefault(); setNotifications([]); setStaticNotifications([]); }}>
-              Hepsini Temizle
-            </Link>
+          <CardHeader className="d-flex justify-content-between align-items-center py-2">
+            <h6 className="m-0 small fw-bold">Bildirimler {unreadCount > 0 && <span className="badge bg-danger ms-1">{unreadCount}</span>}</h6>
+            <div className="d-flex gap-2">
+              {unreadCount > 0 && (
+                <Link className="small text-primary text-decoration-none fw-bold" href="" onClick={handleMarkAllAsRead} style={{ fontSize: '0.7rem' }}>
+                  Hepsini Oku
+                </Link>
+              )}
+              <Link className="small text-danger text-decoration-none fw-bold" href="" onClick={handleClearAll} style={{ fontSize: '0.7rem' }}>
+                Hepsini Temizle
+              </Link>
+            </div>
           </CardHeader>
           <CardBody className="p-0">
             {allNotifications.length > 0 ? (
-              <ul className="list-group list-group-flush list-unstyled p-2 mb-0" style={{ maxHeight: '350px', overflowY: 'auto' }}>
-                {allNotifications.slice(0, 10).map((notification, idx) => (
-                  <li key={idx}>
-                    <div className={clsx('rounded d-sm-flex border-0 mb-1 p-2 position-relative align-items-center hover-bg-light transition-all', {
-                      'bg-light': !notification.isRead
+              <ul className="list-group list-group-flush list-unstyled p-2 mb-0" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                {allNotifications.slice(0, 9).map((notification, idx) => (
+                  <li key={notification.id || idx} className="mb-1">
+                    <div className={clsx('rounded d-flex border-0 p-2 position-relative align-items-center notification-item transition-all', {
+                      'unread-bg': !notification.isRead
                     })}>
-                      <div className="avatar text-center me-2" style={{ width: '40px', height: '40px' }}>
+                      <div className="avatar text-center me-2" style={{ width: '38px', height: '38px', flexShrink: 0 }}>
                         {notification.avatar ? (
                           <img
                             className="avatar-img rounded-circle"
                             src={getImageUrl(notification.avatar)}
                             alt=""
-                            style={{ width: '40px', height: '40px', objectFit: 'cover' }}
+                            style={{ width: '38px', height: '38px', objectFit: 'cover' }}
                             onError={(e) => { e.target.src = '/profile/profile.png'; }}
                           />
                         ) : (
-                          <div className={`avatar-img rounded-circle bg-${notification.textAvatar?.variant || 'primary'}`} style={{ width: '40px', height: '40px', position: 'relative' }}>
-                            <span className="text-white position-absolute top-50 start-50 translate-middle fw-bold" style={{ fontSize: '0.8rem' }}>
+                          <div className={`avatar-img rounded-circle bg-${notification.textAvatar?.variant || 'primary'}`} style={{ width: '38px', height: '38px', position: 'relative' }}>
+                            <span className="text-white position-absolute top-50 start-50 translate-middle fw-bold" style={{ fontSize: '0.75rem' }}>
                               {notification.textAvatar?.text || '?'}
                             </span>
                           </div>
                         )}
                       </div>
-                      <div className="mx-sm-2 flex-grow-1">
-                        <p className={clsx('mb-0 small', !notification.isRead ? 'fw-bold' : '')}>{notification.title}</p>
-                        {notification.description && <p className="text-muted mb-0 small text-truncate" style={{ fontSize: '0.75rem', maxWidth: '220px' }}>{notification.description}</p>}
-                        <p className="text-muted mb-0" style={{ fontSize: '0.70rem' }}>{timeSince(notification.time)}</p>
+                      <div className="flex-grow-1 overflow-hidden">
+                        <p className={clsx('mb-0 small text-truncate', !notification.isRead ? (isDark ? 'fw-bold text-white' : 'fw-bold text-dark') : 'text-body')} style={{ maxWidth: '200px' }}>{notification.title}</p>
+                        <p className="text-muted mb-0" style={{ fontSize: '0.65rem' }}>{timeSince(notification.time)}</p>
                       </div>
-                      {!notification.isRead && <span className="p-1 bg-primary rounded-circle ms-2" style={{ width: '6px', height: '6px' }}></span>}
+                      <div className="d-flex gap-1 ms-2">
+                        {!notification.isRead && (
+                          <button
+                            className="btn btn-xs btn-link text-primary p-1"
+                            onClick={(e) => handleMarkAsRead(e, notification.id)}
+                            title="Okundu işaretle"
+                          >
+                            <BsCheckLg size={14} />
+                          </button>
+                        )}
+                        <button
+                          className="btn btn-xs btn-link text-danger p-1"
+                          onClick={(e) => handleDeleteNotification(e, notification.id)}
+                          title="Sil"
+                        >
+                          <BsTrash size={14} />
+                        </button>
+                      </div>
                     </div>
                   </li>
                 ))}
@@ -142,6 +248,34 @@ const NotificationDropdown = () => {
           </CardFooter>
         </Card>
       </div>
+      <style jsx>{`
+        .notification-dropdown-menu {
+          background-color: ${isDark ? '#212529' : '#ffffff'} !important;
+          border: 1px solid ${isDark ? '#495057' : '#e9ecef'} !important;
+        }
+        .notification-item {
+          transition: all 0.2s ease;
+        }
+        .notification-item:hover {
+          background-color: ${isDark ? '#2c3034' : '#f8f9fa'} !important;
+        }
+        .unread-bg {
+          background-color: ${isDark ? '#2c3034' : '#f0f2f5'} !important;
+        }
+        [data-bs-theme="dark"] .card {
+          background-color: #212529;
+          border-color: #495057;
+        }
+        [data-bs-theme="dark"] .card-header, 
+        [data-bs-theme="dark"] .card-footer {
+          background-color: #2a2e33;
+          border-color: #495057;
+        }
+        [data-bs-theme="dark"] .list-group-item {
+          background-color: transparent;
+          border-color: #495057;
+        }
+      `}</style>
     </li>
   );
 };
