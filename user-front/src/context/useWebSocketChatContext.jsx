@@ -345,23 +345,6 @@ export const WebSocketChatProvider = ({ children }) => {
 
         updateConversationLastMessage(formattedMessage);
         addOrUpdateMessage(formattedMessage);
-
-        const currentUser = currentUserRef.current;
-        const isFromCurrentUser = message.senderId === currentUser?.id;
-
-        if (!isFromCurrentUser && notificationContext?.showNotification) {
-          const senderName = message.senderName || 'Bilinmeyen Kullanıcı';
-          const messagePreview = message.content.length > 50
-            ? message.content.substring(0, 50) + '...'
-            : message.content;
-
-          notificationContext.showNotification({
-            title: `💬 ${senderName}`,
-            message: messagePreview,
-            variant: 'info',
-            delay: 5000
-          });
-        }
       });
 
       socketInstance.on('messageSent', (message) => {
@@ -528,6 +511,9 @@ export const WebSocketChatProvider = ({ children }) => {
       const formatted = data.map(conv => ({
         id: conv.id || conv.conversationId,
         participantId: conv.participant?.id || conv.participantId || conv.otherUserId,
+        participantFirstName: conv.participant?.firstName || conv.participantFirstName || null,
+        participantLastName: conv.participant?.lastName || conv.participantLastName || null,
+        participantUsername: conv.participant?.username || conv.participantUsername || null,
         participantName:
           conv.participantName ||
           `${conv.participant?.firstName || ''} ${conv.participant?.lastName || ''}`.trim() ||
