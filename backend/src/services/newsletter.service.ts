@@ -6,12 +6,16 @@ import * as path from 'path';
 import { Newsletter } from '../entities/newsletter.entity';
 import { CreateNewsletterDto } from '../dto/newsletter/create-newsletter.dto';
 import { UpdateNewsletterDto } from '../dto/newsletter/update-newsletter.dto';
+import { CacheService } from './cache.service';
+
+const CACHE_TTL = 300; // 5 dakika
 
 @Injectable()
 export class NewsletterService {
   constructor(
     @InjectRepository(Newsletter)
     private readonly newsletterRepository: Repository<Newsletter>,
+    private readonly cacheService: CacheService,
   ) {}
 
   private extractContent(dto: { content?: string; sections?: any }): string {
@@ -91,6 +95,7 @@ export class NewsletterService {
     const newsletter = this.newsletterRepository.create(createPayload);
 
     const saved = await this.newsletterRepository.save(newsletter);
+    await this.invalidateNewsletterCache();
     return this.toClientModel(saved);
   }
 
@@ -99,6 +104,12 @@ export class NewsletterService {
     limit = 20,
     search?: string,
   ): Promise<Record<string, any>> {
+    const cacheKey = `newsletter:list:${page}:${limit}:${search || 'all'}`;
+    const cached = await this.cacheService.get<Record<string, any>>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
     const query = this.newsletterRepository
       .createQueryBuilder('newsletter')
       .orderBy('newsletter.publishDate', 'DESC')
@@ -116,23 +127,33 @@ export class NewsletterService {
       .take(limit)
       .getManyAndCount();
 
-    return {
+    const result = {
       data: items.map((item) => this.toClientModel(item)),
       total,
       page,
       limit,
       totalPages: Math.ceil(total / limit),
     };
+    await this.cacheService.set(cacheKey, result, CACHE_TTL);
+    return result;
   }
 
   async findOne(id: number): Promise<Record<string, any>> {
+    const cacheKey = `newsletter:${id}`;
+    const cached = await this.cacheService.get<Record<string, any>>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
     const item = await this.newsletterRepository.findOne({ where: { id } });
 
     if (!item) {
       throw new NotFoundException(`Newsletter bulunamadi (ID: ${id})`);
     }
 
-    return this.toClientModel(item);
+    const result = this.toClientModel(item);
+    await this.cacheService.set(cacheKey, result, CACHE_TTL);
+    return result;
   }
 
   async update(
@@ -164,6 +185,8 @@ export class NewsletterService {
     }
 
     const updated = await this.newsletterRepository.save(item);
+    await this.cacheService.del(`newsletter:${id}`);
+    await this.invalidateNewsletterCache();
     return this.toClientModel(updated);
   }
 
@@ -179,5 +202,15 @@ export class NewsletterService {
     }
 
     await this.newsletterRepository.remove(item);
+    await this.cacheService.del(`newsletter:${id}`);
+    await this.invalidateNewsletterCache();
+  }
+
+  private async invalidateNewsletterCache(): Promise<void> {
+    try {
+      await this.cacheService.delPattern('newsletter:*');
+    } catch (error) {
+      console.error('Newsletter cache invalidation error:', error);
+    }
   }
 }
