@@ -378,7 +378,11 @@ const NotificationDropdown = () => {
             )}
           </CardBody>
           <CardFooter className="py-2 text-center border-0">
-            <Link className="small fw-bold text-primary text-decoration-none" href="/feed/notifications">
+            <Link
+              className="small fw-bold text-primary text-decoration-none"
+              href="/feed/notifications"
+              onClick={() => setIsOpen(false)}
+            >
               Tüm Bildirimleri Gör
             </Link>
           </CardFooter>

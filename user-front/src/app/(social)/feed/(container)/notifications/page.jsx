@@ -3,9 +3,10 @@
 import { getAllNotifications } from '@/helpers/data';
 import { timeSince } from '@/utils/date';
 import clsx from 'clsx';
+import Link from 'next/link';
 import { useEffect, useState, useMemo } from 'react';
 import { Button, Card, CardBody, CardFooter, CardHeader, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Row } from 'react-bootstrap';
-import { BsBellFill, BsCheckLg, BsThreeDots, BsTrash } from 'react-icons/bs';
+import { BsBellFill, BsCheckLg, BsThreeDots, BsTrash, BsChatLeftText, BsBoxArrowUpRight } from 'react-icons/bs';
 import LoadMoreButton from './components/LoadMoreButton';
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 import { getImageUrl } from '@/utils/image';
@@ -164,6 +165,27 @@ const NotificationsPage = () => {
 
   const unreadCount = allNotifications.filter(n => !n.isRead).length;
 
+  const handleOpenMessageFromNotification = (e, notification) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const targetUserId = notification.relatedUserId || notification.related_user_id;
+    if (!targetUserId) return;
+
+    window.dispatchEvent(
+      new CustomEvent('openMessagingWithUser', {
+        detail: {
+          user: {
+            id: targetUserId,
+            firstName: '',
+            lastName: '',
+            photoUrl: notification.avatar || null
+          }
+        }
+      })
+    );
+  };
+
   return (
     <Col lg={8} className="mx-auto mt-4">
       <Card className={clsx('border-0 shadow-sm', isDark ? 'bg-dark text-white' : 'bg-white')}>
@@ -238,6 +260,32 @@ const NotificationsPage = () => {
                       <p className="text-muted mb-0" style={{ fontSize: '0.70rem' }}>
                         {timeSince(notification.time)}
                       </p>
+                      {notification.type === 'follow_accept' && (notification.relatedUserId || notification.related_user_id) && (
+                        <div className="d-flex gap-2 mt-2">
+                          <Button
+                            as={Link}
+                            href={`/profile/user/${notification.relatedUserId || notification.related_user_id}`}
+                            size="sm"
+                            variant="outline-primary"
+                            className="py-0 px-2 d-flex align-items-center"
+                            style={{ fontSize: '0.72rem', borderRadius: '6px' }}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <BsBoxArrowUpRight className="me-1" size={11} />
+                            Profile Git
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline-success"
+                            className="py-0 px-2 d-flex align-items-center"
+                            style={{ fontSize: '0.72rem', borderRadius: '6px' }}
+                            onClick={(e) => handleOpenMessageFromNotification(e, notification)}
+                          >
+                            <BsChatLeftText className="me-1" size={11} />
+                            Mesaj Gonder
+                          </Button>
+                        </div>
+                      )}
                     </div>
                     <div className="d-flex gap-2 ms-3">
                       {!notification.isRead && (
