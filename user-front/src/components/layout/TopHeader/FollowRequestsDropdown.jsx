@@ -3,13 +3,31 @@
 import Link from 'next/link';
 import { Card, CardBody, CardHeader, Button } from 'react-bootstrap';
 import { BsPersonPlusFill } from 'react-icons/bs';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { getImageUrl } from '@/utils/image';
+import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 
 const FollowRequestsDropdown = () => {
-    const [pendingRequests, setPendingRequests] = useState([]);
+    const { followRequests, setFollowRequests } = useWebSocketChatContext();
+    const [localRequests, setLocalRequests] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef(null);
+
+    // Combine local (fetched) and real-time (socket) requests
+    const pendingRequests = useMemo(() => {
+        const combined = [...followRequests, ...localRequests];
+        // Remove duplicates by ID (backend uses 'id', local might use idx or id)
+        const unique = combined.filter((req, index, self) =>
+            req && req.id && index === self.findIndex((r) => r && r.id === req.id)
+        );
+
+        // Robust sort by date
+        return unique.sort((a, b) => {
+            const dateA = new Date(a.createdAt || a.created_at || 0).getTime();
+            const dateB = new Date(b.createdAt || b.created_at || 0).getTime();
+            return dateB - dateA;
+        });
+    }, [followRequests, localRequests]);
 
     useEffect(() => {
         const fetchPendingRequests = async () => {
@@ -25,7 +43,7 @@ const FollowRequestsDropdown = () => {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    setPendingRequests(data || []);
+                    setLocalRequests(data || []);
                 }
             } catch (error) {
                 console.error('Error fetching pending requests:', error);
@@ -71,7 +89,8 @@ const FollowRequestsDropdown = () => {
                 body: JSON.stringify(requestBody)
             });
             if (response.ok) {
-                setPendingRequests(prev => prev.filter(req => req.followerId !== followerId));
+                setLocalRequests(prev => prev.filter(req => req.followerId !== followerId));
+                setFollowRequests(prev => prev.filter(req => req.followerId !== followerId));
             }
         } catch (error) {
             console.error('Error accepting request:', error);
@@ -93,7 +112,8 @@ const FollowRequestsDropdown = () => {
                 body: JSON.stringify(requestBody)
             });
             if (response.ok) {
-                setPendingRequests(prev => prev.filter(req => req.followerId !== followerId));
+                setLocalRequests(prev => prev.filter(req => req.followerId !== followerId));
+                setFollowRequests(prev => prev.filter(req => req.followerId !== followerId));
             }
         } catch (error) {
             console.error('Error rejecting request:', error);

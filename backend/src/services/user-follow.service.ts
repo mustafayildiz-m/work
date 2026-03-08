@@ -7,6 +7,8 @@ import { UserPost } from '../entities/user-post.entity';
 import { UserScholarFollow } from '../entities/user-scholar-follow.entity';
 import { ScholarPost } from '../scholars/entities/scholar-post.entity';
 import { CacheService } from './cache.service';
+import { ChatGateway } from '../chat/chat.gateway';
+import { NotificationService } from './notification.service';
 
 @Injectable()
 export class UserFollowService {
@@ -22,6 +24,8 @@ export class UserFollowService {
     @InjectRepository(UserScholarFollow)
     private userScholarFollowRepository: Repository<UserScholarFollow>,
     private readonly cacheService: CacheService,
+    private readonly chatGateway: ChatGateway,
+    private readonly notificationService: NotificationService,
   ) { }
 
   // Cache'i temizle (follow/unfollow işlemlerinde)
@@ -65,6 +69,26 @@ export class UserFollowService {
     } else {
       // Sadece frontend state'inin güncellenmesi için istek atanın cache'ini siliyoruz
       await this.invalidateFollowingCache(follower_id);
+
+      // Webhook/Websocket üzerinden bildirim gönder
+      try {
+        const follower = await this.userRepository.findOne({
+          where: { id: follower_id },
+          select: ['id', 'username', 'firstName', 'lastName', 'photoUrl'],
+        });
+
+        if (this.chatGateway) {
+          this.chatGateway.sendToUser(following_id, 'newFollowRequest', {
+            id: savedFollow.id,
+            followerId: follower_id,
+            follower: follower,
+            createdAt: new Date(),
+          });
+        }
+
+      } catch (wsError) {
+        console.error('WS Notification error:', wsError.message);
+      }
     }
 
     return savedFollow;
@@ -104,6 +128,35 @@ export class UserFollowService {
     // Cache'leri temizle (Artık listelerde görünecekler)
     await this.invalidateFollowingCache(follower_id);
     await this.invalidateFollowingCache(following_id);
+
+    // Webhook/Websocket üzerinden bildirim gönder (İsteği gönderene haber ver)
+    try {
+      const accepter = await this.userRepository.findOne({
+        where: { id: following_id },
+        select: ['id', 'username', 'firstName', 'lastName', 'photoUrl'],
+      });
+
+      if (this.chatGateway) {
+        this.chatGateway.sendToUser(follower_id, 'followRequestAccepted', {
+          accepterId: following_id,
+          accepter: accepter,
+          createdAt: new Date(),
+        });
+      }
+
+      // Veritabanına bildirimi kaydet
+      await this.notificationService.createNotification({
+        userId: follower_id,
+        type: 'follow_accept',
+        title: 'Takip İsteği Kabul Edildi',
+        message: accepter
+          ? `${accepter.firstName} ${accepter.lastName} takip isteğinizi kabul etti.`
+          : 'Takip isteğiniz kabul edildi.',
+        relatedUserId: following_id,
+      });
+    } catch (wsError) {
+      console.error('WS Notification error (accept):', wsError.message);
+    }
 
     return { accepted: true };
   }

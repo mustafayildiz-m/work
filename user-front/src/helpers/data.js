@@ -41,8 +41,35 @@ export const getWhoToFollow = async (type = 'all', limit = 200) => {
   }
 };
 export const getAllNotifications = async () => {
-  await sleep();
-  return notificationData;
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) return [];
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) return [];
+
+    const data = await response.json();
+    // Normalize data: backend uses 'created_at', frontend expects 'time'
+    return data.map(n => ({
+      ...n,
+      time: n.created_at,
+      isRead: n.is_read,
+      avatar: n.related_user?.photoUrl,
+      textAvatar: n.related_user ? {
+        text: `${n.related_user.firstName?.charAt(0)}${n.related_user.lastName?.charAt(0)}`,
+        variant: 'primary'
+      } : { text: '?', variant: 'secondary' }
+    }));
+  } catch (error) {
+    console.error('Error fetching notifications:', error);
+    return [];
+  }
 };
 export const getAllEvents = async () => {
   await sleep();
