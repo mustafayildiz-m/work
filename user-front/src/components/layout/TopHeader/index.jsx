@@ -123,12 +123,15 @@ const TopHeader = () => {
           .mobile-language-switcher :global(.language-select__menu) {
             min-width: 280px !important;
             max-width: calc(100vw - 1.5rem) !important;
+            max-height: calc(100dvh - 80px) !important;
             font-size: 0.85rem !important;
           }
           
           .mobile-language-switcher :global(.language-menu-list-responsive) {
             grid-template-columns: 1fr !important;
-            max-height: min(350px, 60vh) !important;
+            max-height: calc(100dvh - 140px) !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch !important;
           }
         }
         
@@ -150,11 +153,14 @@ const TopHeader = () => {
           .mobile-language-switcher :global(.language-select__menu) {
             min-width: 250px !important;
             max-width: calc(100vw - 1rem) !important;
+            max-height: calc(100dvh - 72px) !important;
           }
           
           .mobile-language-switcher :global(.language-menu-list-responsive) {
-            max-height: min(300px, 55vh) !important;
+            max-height: calc(100dvh - 130px) !important;
             padding: 0.35rem !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch !important;
           }
         }
         
@@ -176,11 +182,14 @@ const TopHeader = () => {
           .mobile-language-switcher :global(.language-select__menu) {
             min-width: 220px !important;
             max-width: calc(100vw - 0.75rem) !important;
+            max-height: calc(100dvh - 68px) !important;
           }
           
           .mobile-language-switcher :global(.language-menu-list-responsive) {
-            max-height: min(280px, 50vh) !important;
+            max-height: calc(100dvh - 125px) !important;
             padding: 0.3rem !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch !important;
           }
           
           .mobile-language-switcher :global(.language-select__option) {
