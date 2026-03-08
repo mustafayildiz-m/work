@@ -30,9 +30,30 @@ const PdfViewer = ({ show, onHide, pdfUrl, title }) => {
     setIsFullscreen(!isFullscreen);
   };
 
-  const downloadPdf = () => {
-    if (pdfUrl) {
-      window.open(pdfUrl, '_blank');
+  const downloadPdf = async () => {
+    if (!pdfUrl) return;
+
+    try {
+      const safeTitle = (title || 'document').replace(/[^\w\-]+/g, '_');
+      const filename = `${safeTitle}.pdf`;
+      const downloadUrl = `/api/download-pdf?pdfUrl=${encodeURIComponent(pdfUrl)}&filename=${encodeURIComponent(filename)}`;
+      const response = await fetch(downloadUrl);
+      if (!response.ok) {
+        throw new Error('PDF indirilemedi');
+      }
+
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename;
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error('PDF download error:', error);
     }
   };
 
