@@ -528,7 +528,11 @@ export const WebSocketChatProvider = ({ children }) => {
       const formatted = data.map(conv => ({
         id: conv.id || conv.conversationId,
         participantId: conv.participant?.id || conv.participantId || conv.otherUserId,
-        participantName: conv.participant?.username || conv.participantName || 'Bilinmeyen Kullanıcı',
+        participantName:
+          conv.participantName ||
+          `${conv.participant?.firstName || ''} ${conv.participant?.lastName || ''}`.trim() ||
+          conv.participant?.username ||
+          'Bilinmeyen Kullanıcı',
         participantAvatar:
           conv.participant?.photoUrl ||
           conv.participantAvatar ||
