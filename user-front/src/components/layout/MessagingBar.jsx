@@ -98,16 +98,31 @@ const MessagingBar = () => {
         }
     };
 
-    // Dark mode color palette
-    const colors = {
+    const { theme } = useLayoutContext();
+    const isDark = theme === 'dark';
+
+    // Theme-based code color palette
+    const colors = isDark ? {
         bg: '#1d2226',
         header: '#1d2226',
         itemHover: '#293138',
         textMain: '#ffffff',
         textMuted: '#9aa0a6',
         searchBg: '#38434f',
-        border: 'rgba(255,255,255,0.1)'
+        border: 'rgba(255,255,255,0.1)',
+        shadow: '0 8px 30px rgba(0,0,0,0.5)'
+    } : {
+        bg: '#ffffff',
+        header: '#ffffff',
+        itemHover: '#f3f6f8',
+        textMain: '#000000',
+        textMuted: '#666666',
+        searchBg: '#eef3f8',
+        border: 'rgba(0,0,0,0.08)',
+        shadow: '0 8px 30px rgba(0,0,0,0.12)'
     };
+
+    const iconClass = isDark ? "text-white-50" : "text-black-50";
 
     const messagingTitle = t('messaging.title') === 'messaging.title' ? (locale === 'tr' ? 'Mesajlaşma' : 'Messaging') : t('messaging.title');
 
@@ -119,22 +134,23 @@ const MessagingBar = () => {
             className="d-none d-lg-block position-fixed end-0 bottom-0"
             style={{
                 zIndex: 1050,
-                width: '380px',
+                width: '420px',
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
             }}
         >
             {/* Expanded Content */}
             <div
-                className={clsx("shadow-lg overflow-hidden", isExpanded ? "d-block" : "d-none")}
+                className={clsx("overflow-hidden", isExpanded ? "d-block" : "d-none")}
                 style={{
                     borderTopLeftRadius: '8px',
                     borderTopRightRadius: '8px',
-                    height: '680px', // More vertical space
+                    height: '750px',
                     backgroundColor: colors.bg,
                     display: 'flex',
                     flexDirection: 'column',
                     border: `1px solid ${colors.border}`,
-                    borderBottom: 'none'
+                    borderBottom: 'none',
+                    boxShadow: colors.shadow
                 }}
             >
                 {/* Header (Duplicate of the bar for clicking to close) */}
@@ -165,10 +181,10 @@ const MessagingBar = () => {
                         </div>
                         <span className="fw-bold ms-1" style={{ fontSize: '0.85rem' }}>{messagingTitle}</span>
                     </div>
-                    <div className="d-flex align-items-center gap-3 text-white-50">
-                        <BsThreeDots size={18} className="hover-white" onClick={(e) => e.stopPropagation()} title="Seçenekler" />
-                        <BsPencilSquare size={16} className="hover-white" onClick={(e) => e.stopPropagation()} title="Yeni Mesaj" />
-                        <BsChevronDown size={18} className="hover-white" />
+                    <div className={clsx("d-flex align-items-center gap-3", iconClass)}>
+                        <BsThreeDots size={18} className="hover-active" onClick={(e) => e.stopPropagation()} title="Seçenekler" />
+                        <BsPencilSquare size={16} className="hover-active" onClick={(e) => e.stopPropagation()} title="Yeni Mesaj" />
+                        <BsChevronDown size={18} className="hover-active" />
                     </div>
                 </div>
 
@@ -252,7 +268,7 @@ const MessagingBar = () => {
             {!isExpanded && (
                 <div
                     onClick={() => setIsExpanded(true)}
-                    className="d-flex align-items-center justify-content-between text-white px-3 shadow-lg"
+                    className="d-flex align-items-center justify-content-between px-3"
                     style={{
                         height: '48px',
                         borderTopLeftRadius: '8px',
@@ -260,8 +276,10 @@ const MessagingBar = () => {
                         cursor: 'pointer',
                         transition: 'all 0.2s ease',
                         backgroundColor: colors.header,
+                        color: colors.textMain,
                         border: `1px solid ${colors.border}`,
-                        borderBottom: 'none'
+                        borderBottom: 'none',
+                        boxShadow: colors.shadow
                     }}
                     onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = colors.itemHover;
@@ -295,20 +313,20 @@ const MessagingBar = () => {
                         </span>
                     </div>
 
-                    <div className="d-flex align-items-center gap-3 text-white-50">
-                        <BsThreeDots size={18} className="hover-white" title="Seçenekler" onClick={(e) => e.stopPropagation()} />
-                        <BsPencilSquare size={16} className="hover-white" title="Yeni Mesaj" onClick={(e) => e.stopPropagation()} />
-                        <BsChevronUp size={18} className="hover-white" />
+                    <div className={clsx("d-flex align-items-center gap-3", iconClass)}>
+                        <BsThreeDots size={18} className="hover-active" title="Seçenekler" onClick={(e) => e.stopPropagation()} />
+                        <BsPencilSquare size={16} className="hover-active" title="Yeni Mesaj" onClick={(e) => e.stopPropagation()} />
+                        <BsChevronUp size={18} className="hover-active" />
                     </div>
                 </div>
             )}
 
             <style jsx>{`
-        .hover-white {
+        .hover-active {
             transition: color 0.1s ease;
         }
-        .hover-white:hover {
-          color: white !important;
+        .hover-active:hover {
+          color: ${colors.textMain} !important;
         }
         .hover-bg:hover {
             background-color: ${colors.itemHover} !important;
