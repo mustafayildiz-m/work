@@ -19,7 +19,7 @@ const TopHeader = () => {
   const isGuest = status === 'unauthenticated';
 
   return <StyledHeader>
-    <div className="container position-relative d-flex align-items-center justify-content-between" style={{
+    <div className="container position-relative d-flex align-items-center justify-content-between flex-nowrap" style={{
       height: '64px',
       minHeight: '64px',
       maxHeight: '64px',
@@ -63,7 +63,7 @@ const TopHeader = () => {
 
       {/* Mobile navigation - compact layout for small screens */}
       <div className="d-flex align-items-center d-lg-none" style={{
-        gap: '0.35rem',
+        gap: '0.25rem',
         flex: '1 1 auto',
         justifyContent: 'flex-end',
         minWidth: 0
@@ -88,8 +88,8 @@ const TopHeader = () => {
     <style jsx>{`
         @media (max-width: 991.98px) {
           .container {
-            padding-left: 0.75rem !important;
-            padding-right: 0.75rem !important;
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
           }
           
           .mobile-language-switcher {
@@ -164,14 +164,14 @@ const TopHeader = () => {
           }
         }
         
-        @media (max-width: 374.98px) {
+        @media (max-width: 399.98px) {
           .mobile-language-switcher {
             max-width: 80px;
           }
           
           .mobile-language-switcher :global(.language-switcher-select2) {
-            min-width: 75px !important;
-            max-width: 80px !important;
+            min-width: 70px !important;
+            max-width: 75px !important;
           }
           
           .mobile-language-switcher :global(.language-select__control) {
