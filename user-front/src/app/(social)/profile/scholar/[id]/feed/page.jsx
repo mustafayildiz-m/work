@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { Card, CardBody, Col, Container, Row } from 'react-bootstrap';
 import Image from 'next/image';
 import avatar7 from '@/assets/images/avatar/07.jpg';
@@ -52,6 +52,7 @@ async function loadScholarData(scholarId) {
 
 const ScholarFeedPage = () => {
   const params = useParams();
+  const searchParams = useSearchParams();
   const { locale } = useLanguage();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -59,6 +60,7 @@ const ScholarFeedPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [localeForLangs, setLocaleForLangs] = useState(locale);
   const [selectedLanguages, setSelectedLanguages] = useState({});
+  const [highlightedPostId, setHighlightedPostId] = useState(null);
 
   if (localeForLangs !== locale) {
     setLocaleForLangs(locale);
@@ -75,6 +77,24 @@ const ScholarFeedPage = () => {
       .catch(err => console.error('Error fetching data:', err))
       .finally(() => setLoading(false));
   }, [params.id, locale]);
+
+  useEffect(() => {
+    const targetPostId = searchParams.get('postId');
+    if (!targetPostId || !posts.length) return;
+
+    const escapedPostId =
+      typeof CSS !== 'undefined' && typeof CSS.escape === 'function'
+        ? CSS.escape(targetPostId)
+        : targetPostId;
+    const targetElement = document.querySelector(`[data-post-id="${escapedPostId}"]`);
+    if (!targetElement) return;
+
+    targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setHighlightedPostId(targetPostId);
+
+    const timeout = setTimeout(() => setHighlightedPostId(null), 2200);
+    return () => clearTimeout(timeout);
+  }, [searchParams, posts]);
 
 
   // Helper function to get proper image URL
@@ -127,18 +147,30 @@ const ScholarFeedPage = () => {
               }
 
               return (
-                <PostCard
+                <div
                   key={post.id || index}
-                  postId={post.id}
-                  createdAt={post.createdAt}
-                  caption={currentTranslation.content}
-                  socialUser={scholar} // Use scholar from state, not post.scholar
-                  isUserPost={false} // This is a scholar post
-                  fileUrls={currentTranslation.fileUrls || []}
-                  photos={currentTranslation.mediaUrls || []}
-                  translations={post.translations}
-                  onLanguageChange={(lang) => setSelectedLanguages(prev => ({ ...prev, [post.id]: lang }))}
-                />
+                  data-post-id={post.id}
+                  style={{
+                    borderRadius: '12px',
+                    transition: 'box-shadow 250ms ease',
+                    boxShadow:
+                      highlightedPostId === post.id
+                        ? '0 0 0 3px rgba(13, 110, 253, 0.45)'
+                        : 'none',
+                  }}
+                >
+                  <PostCard
+                    postId={post.id}
+                    createdAt={post.createdAt}
+                    caption={currentTranslation.content}
+                    socialUser={scholar} // Use scholar from state, not post.scholar
+                    isUserPost={false} // This is a scholar post
+                    fileUrls={currentTranslation.fileUrls || []}
+                    photos={currentTranslation.mediaUrls || []}
+                    translations={post.translations}
+                    onLanguageChange={(lang) => setSelectedLanguages(prev => ({ ...prev, [post.id]: lang }))}
+                  />
+                </div>
               );
             })
           ) : (

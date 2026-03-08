@@ -238,6 +238,17 @@ const NotificationDropdown = () => {
     );
   };
 
+  const handleNotificationClick = (notification) => {
+    if (notification.type !== 'scholar_post') return;
+
+    const scholarId = notification.scholarId || notification.scholar_id;
+    const postId = notification.postId || notification.post_id;
+    if (!scholarId || !postId) return;
+
+    setIsOpen(false);
+    window.location.href = `/profile/scholar/${scholarId}/feed?postId=${encodeURIComponent(postId)}`;
+  };
+
   return (
     <li className="nav-item dropdown ms-2" ref={containerRef} style={{ position: 'relative' }}>
       <button
@@ -286,9 +297,13 @@ const NotificationDropdown = () => {
               <ul className="list-group list-group-flush list-unstyled p-2 mb-0" style={{ maxHeight: '400px', overflowY: 'auto' }}>
                 {allNotifications.slice(0, 9).map((notification, idx) => (
                   <li key={notification.id || idx} className="mb-1">
-                    <div className={clsx('rounded d-flex border-0 p-2 position-relative align-items-center notification-item transition-all', {
-                      'unread-bg': !notification.isRead
-                    })}>
+                    <div
+                      className={clsx('rounded d-flex border-0 p-2 position-relative align-items-center notification-item transition-all', {
+                        'unread-bg': !notification.isRead,
+                        'cursor-pointer': notification.type === 'scholar_post',
+                      })}
+                      onClick={() => handleNotificationClick(notification)}
+                    >
                       <div className="avatar text-center me-2 position-relative" style={{ width: '38px', height: '38px', flexShrink: 0 }}>
                         {notification.avatar ? (
                           <img
