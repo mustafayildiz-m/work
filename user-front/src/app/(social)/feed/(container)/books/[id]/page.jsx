@@ -3,10 +3,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardBody, CardHeader, CardTitle, Row, Col, Button, Badge, Spinner, Alert, Modal, ProgressBar } from 'react-bootstrap';
-import { BsDownload, BsCalendar, BsPerson, BsBook, BsArrowLeft, BsEyeFill, BsShare, BsWhatsapp, BsNewspaper, BsThreeDotsVertical, BsGrid3X3, BsX, BsVolumeUp, BsTranslate, BsPause, BsPlay, BsSkipBackward, BsSkipForward } from 'react-icons/bs';
+import { BsDownload, BsCalendar, BsPerson, BsBook, BsArrowLeft, BsEyeFill, BsShare, BsWhatsapp, BsNewspaper, BsThreeDotsVertical, BsGrid3X3, BsX, BsVolumeUp, BsTranslate, BsPause, BsPlay, BsSkipBackward, BsSkipForward, BsArrowsMove } from 'react-icons/bs';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'react-bootstrap';
 import Link from 'next/link';
 import { useLanguage } from '@/context/useLanguageContext';
+import { useLayoutContext } from '@/context/useLayoutContext';
 import PdfViewer from '@/components/PdfViewer';
 import { generateBookUrl } from '@/utils/bookEncoder';
 import { useNotificationContext } from '@/context/useNotificationContext';
@@ -18,6 +19,8 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 const BookDetailPage = () => {
   const { t, loading: langLoading, locale } = useLanguage();
+  const { theme } = useLayoutContext();
+  const isDarkMode = theme === 'dark';
   const { showNotification } = useNotificationContext();
   const params = useParams();
   const router = useRouter();
@@ -1497,34 +1500,43 @@ const BookDetailPage = () => {
           onDoubleClick={() => setPlayerPosition({ x: 0, y: 0 })}
         >
           <Card
-            className="border-0 shadow-lg"
+            className={`border-0 shadow-lg ${isDarkMode ? '' : 'border'}`}
             style={{
               width: '100%',
-              maxWidth: '800px',
-              backgroundColor: '#1c1f2e !important',
-              color: '#ffffff !important',
+              maxWidth: '1000px',
+              backgroundColor: isDarkMode ? '#1c1f2e' : '#ffffff',
+              color: isDarkMode ? '#ffffff' : '#111b36',
               backdropFilter: 'blur(10px)',
               borderRadius: '20px',
-              border: '1px solid rgba(255,255,255,0.1)',
-              overflow: 'visible' // Kutunun kesilmesini engeller
+              border: isDarkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)',
+              overflow: 'visible'
             }}
           >
             <CardBody className="p-3" style={{ overflow: 'visible' }}>
-              <div className="d-flex justify-content-center mb-2">
-                <div style={{ width: '44px', height: '4px', borderRadius: '4px', background: 'rgba(255,255,255,0.28)' }} />
+              <div className="d-flex flex-column align-items-center mb-3">
+                <div style={{ width: '44px', height: '4px', borderRadius: '4px', background: isDarkMode ? 'rgba(255,255,255,0.28)' : 'rgba(0,0,0,0.12)' }} />
+                <div className="d-flex align-items-center gap-2 mt-2 drag-hint-animation" style={{
+                  fontSize: '0.9rem',
+                  color: '#dc3545',
+                  fontWeight: 'bold',
+                  letterSpacing: '0.6px'
+                }}>
+                  <BsArrowsMove size={16} />
+                  <span>TAŞIMAK İÇİN SÜRÜKLEYİN</span>
+                </div>
               </div>
               {showReadingAssist && (currentOriginalChunks.length > 0 || currentTranslatedChunks.length > 0) && (
                 <div
                   className="mb-3 p-2 rounded"
                   style={{
-                    maxHeight: '280px',
+                    maxHeight: '500px',
                     overflowY: 'hidden',
-                    background: 'rgba(255,255,255,0.06)',
-                    border: '1px solid rgba(255,255,255,0.12)'
+                    background: isDarkMode ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.03)',
+                    border: isDarkMode ? '1px solid rgba(255,255,255,0.12)' : '1px solid rgba(0,0,0,0.08)'
                   }}
                 >
                   <div className="d-flex justify-content-between align-items-center mb-2 px-1">
-                    <small style={{ color: 'rgba(255,255,255,0.75)' }}>Orijinal + Çeviri (Anlık)</small>
+                    <small style={{ color: isDarkMode ? 'rgba(255,255,255,0.75)' : 'rgba(0,0,0,0.55)' }}>Orijinal + Çeviri (Anlık)</small>
                     <small style={{ color: '#8ab4ff' }}>
                       {activeChunkIndex + 1}/{Math.max(currentOriginalChunks.length, currentTranslatedChunks.length)}
                     </small>
@@ -1533,15 +1545,15 @@ const BookDetailPage = () => {
                     <div
                       className="mb-2 p-2 rounded"
                       style={{
-                        background: 'rgba(255,255,255,0.04)',
-                        border: '1px solid rgba(255,255,255,0.1)',
+                        background: isDarkMode ? 'rgba(255,255,255,0.04)' : '#f8f9fa',
+                        border: isDarkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.06)',
                         minHeight: '108px'
                       }}
                     >
-                      <small style={{ color: 'rgba(255,255,255,0.6)', display: 'block', marginBottom: '4px' }}>
+                      <small style={{ color: isDarkMode ? 'rgba(255,255,255,0.6)' : '#6c757d', display: 'block', marginBottom: '4px', fontWeight: '500' }}>
                         Orijinal Metin
                       </small>
-                      <div ref={originalChunksContainerRef} style={{ maxHeight: '80px', overflowY: 'auto' }}>
+                      <div ref={originalChunksContainerRef} style={{ maxHeight: '180px', overflowY: 'auto' }}>
                         {currentOriginalChunks.map((chunk, idx) => (
                           <span
                             key={`o-${idx}-${chunk.slice(0, 10)}`}
@@ -1551,10 +1563,11 @@ const BookDetailPage = () => {
                               marginRight: '6px',
                               padding: idx === activeChunkIndex ? '1px 4px' : '0',
                               borderRadius: '4px',
-                              background: idx === activeChunkIndex ? 'rgba(255,193,7,0.32)' : 'transparent',
+                              background: idx === activeChunkIndex ? 'rgba(255,193,7,0.35)' : 'transparent',
                               textDecoration: idx === activeChunkIndex ? 'underline' : 'none',
-                              color: idx <= activeChunkIndex ? '#ffffff' : 'rgba(255,255,255,0.65)',
-                              transition: 'all 0.2s ease'
+                              color: idx === activeChunkIndex ? (isDarkMode ? '#ffffff' : '#000000') : (idx < activeChunkIndex ? (isDarkMode ? '#ffffff' : '#000000') : (isDarkMode ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,0.5)')),
+                              transition: 'all 0.2s ease',
+                              fontWeight: idx === activeChunkIndex ? '600' : 'normal'
                             }}
                           >
                             {chunk}
@@ -1567,15 +1580,15 @@ const BookDetailPage = () => {
                     <div
                       className="p-2 rounded"
                       style={{
-                        background: 'rgba(0,123,255,0.08)',
-                        border: '1px solid rgba(0,123,255,0.25)',
+                        background: isDarkMode ? 'rgba(0,123,255,0.08)' : 'rgba(0,123,255,0.04)',
+                        border: isDarkMode ? '1px solid rgba(0,123,255,0.25)' : '1px solid rgba(0,123,255,0.15)',
                         minHeight: '108px'
                       }}
                     >
-                      <small style={{ color: 'rgba(255,255,255,0.72)', display: 'block', marginBottom: '4px' }}>
+                      <small style={{ color: isDarkMode ? 'rgba(255,255,255,0.72)' : '#0d6efd', display: 'block', marginBottom: '4px', fontWeight: '500' }}>
                         Çeviri Metni
                       </small>
-                      <div ref={translatedChunksContainerRef} style={{ maxHeight: '80px', overflowY: 'auto' }}>
+                      <div ref={translatedChunksContainerRef} style={{ maxHeight: '180px', overflowY: 'auto' }}>
                         {currentTranslatedChunks.map((chunk, idx) => (
                           <span
                             key={`t-${idx}-${chunk.slice(0, 10)}`}
@@ -1585,10 +1598,11 @@ const BookDetailPage = () => {
                               marginRight: '6px',
                               padding: idx === activeChunkIndex ? '1px 4px' : '0',
                               borderRadius: '4px',
-                              background: idx === activeChunkIndex ? 'rgba(0,123,255,0.35)' : 'transparent',
+                              background: idx === activeChunkIndex ? 'rgba(0,123,255,0.25)' : 'transparent',
                               textDecoration: idx === activeChunkIndex ? 'underline' : 'none',
-                              color: idx <= activeChunkIndex ? '#ffffff' : 'rgba(255,255,255,0.65)',
-                              transition: 'all 0.2s ease'
+                              color: idx === activeChunkIndex ? (isDarkMode ? '#ffffff' : '#000000') : (idx < activeChunkIndex ? (isDarkMode ? '#ffffff' : '#000000') : (isDarkMode ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,0.5)')),
+                              transition: 'all 0.2s ease',
+                              fontWeight: idx === activeChunkIndex ? '600' : 'normal'
                             }}
                           >
                             {chunk}
@@ -1610,10 +1624,10 @@ const BookDetailPage = () => {
                       <BsVolumeUp size={22} style={{ color: '#ffffff' }} />
                     </div>
                     <div className="overflow-hidden">
-                      <h6 className="mb-0 text-truncate" style={{ fontSize: '0.95rem', color: '#ffffff !important' }}>{book?.translations?.[0]?.title}</h6>
+                      <h6 className="mb-0 text-truncate" style={{ fontSize: '0.95rem', color: isDarkMode ? '#ffffff' : '#111b36' }}>{book?.translations?.[0]?.title}</h6>
                       <div className="d-flex align-items-center gap-2">
                         <Badge bg="primary" style={{ fontSize: '0.7rem', color: '#ffffff !important' }}>{targetLang?.name || 'Çeviri'}</Badge>
-                        <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6) !important' }}>
+                        <span style={{ fontSize: '0.75rem', color: isDarkMode ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.5)' }}>
                           {translating || playerStatus === 'loading'
                             ? 'Hazırlanıyor...'
                             : playerStatus === 'error'
@@ -1642,7 +1656,7 @@ const BookDetailPage = () => {
                     </Button>
 
                     <Button
-                      variant="light"
+                      variant={isDarkMode ? "light" : "primary"}
                       className="rounded-circle d-flex align-items-center justify-content-center shadow player-main-btn"
                       onClick={pauseResumeTextToSpeech}
                       disabled={translating || !currentAudioRef.current}
@@ -1659,8 +1673,8 @@ const BookDetailPage = () => {
                       <BsSkipForward size={20} />
                     </Button>
                   </div>
-                  <div className="player-page-chip mb-2 text-center">
-                    <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'rgba(255,255,255,0.5) !important' }}>SAYFA</div>
+                  <div className={`player-page-chip mb-2 text-center ${isDarkMode ? '' : 'bg-light'}`}>
+                    <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '1px', color: isDarkMode ? 'rgba(255,255,255,0.5)' : '#6c757d' }}>SAYFA</div>
                     <div className="d-flex align-items-center gap-1 justify-content-center">
                       <div className="position-relative d-flex align-items-center">
                         <select
@@ -1673,7 +1687,7 @@ const BookDetailPage = () => {
                             textAlign: 'right',
                             appearance: 'none',
                             WebkitAppearance: 'none',
-                            color: '#007bff !important'
+                            color: isDarkMode ? '#007bff' : '#0d6efd'
                           }}
                           value={currentPage}
                           onChange={(e) => {
@@ -1682,11 +1696,11 @@ const BookDetailPage = () => {
                           }}
                         >
                           {[...Array(totalPages || 1)].map((_, i) => (
-                            <option key={i + 1} value={i + 1} style={{ backgroundColor: '#1c1f2e', color: '#ffffff' }}>{i + 1}</option>
+                            <option key={i + 1} value={i + 1} style={{ backgroundColor: isDarkMode ? '#1c1f2e' : '#ffffff', color: isDarkMode ? '#ffffff' : '#000000' }}>{i + 1}</option>
                           ))}
                         </select>
                       </div>
-                      <span style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.62) !important' }}>/ {totalPages || 1}</span>
+                      <span style={{ fontSize: '1rem', color: isDarkMode ? 'rgba(255,255,255,0.62)' : 'rgba(0,0,0,0.5)' }}>/ {totalPages || 1}</span>
                     </div>
                   </div>
 
@@ -1730,19 +1744,19 @@ const BookDetailPage = () => {
                     <div className="d-flex align-items-center gap-2 flex-nowrap">
                       <Dropdown drop="up" style={{ overflow: 'visible' }}>
                         <DropdownToggle
-                          variant="outline-light"
+                          variant={isDarkMode ? "outline-light" : "outline-primary"}
                           size="sm"
                           className="rounded-pill px-3 d-flex align-items-center gap-1 player-pill-btn"
-                          style={{ fontSize: '0.8rem', color: '#ffffff !important' }}
+                          style={{ fontSize: '0.8rem', color: isDarkMode ? '#ffffff' : '#0d6efd' }}
                         >
                           {playbackRate}x
                         </DropdownToggle>
                         <DropdownMenu
                           style={{
                             minWidth: '120px',
-                            backgroundColor: '#1c1f2e !important',
-                            border: '1px solid rgba(255,255,255,0.2) !important',
-                            boxShadow: '0 10px 25px rgba(0,0,0,0.5) !important',
+                            backgroundColor: isDarkMode ? '#1c1f2e' : '#ffffff',
+                            border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'}`,
+                            boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
                             borderRadius: '12px',
                             padding: '8px 0',
                             marginBottom: '10px',
@@ -1756,8 +1770,8 @@ const BookDetailPage = () => {
                               onClick={() => changePlaybackRate(rate)}
                               className="dropdown-item w-100 border-0 text-start"
                               style={{
-                                backgroundColor: playbackRate === rate ? '#007bff !important' : 'transparent',
-                                color: '#ffffff !important',
+                                backgroundColor: playbackRate === rate ? (isDarkMode ? '#007bff' : '#0d6efd') : 'transparent',
+                                color: playbackRate === rate ? '#ffffff' : (isDarkMode ? '#ffffff' : '#000000'),
                                 padding: '8px 16px',
                                 fontSize: '0.85rem',
                                 transition: 'background 0.2s',
@@ -1773,7 +1787,7 @@ const BookDetailPage = () => {
 
                     <div className="d-flex align-items-center gap-2 flex-wrap justify-content-end">
                       <Button
-                        variant="outline-light"
+                        variant={isDarkMode ? "outline-light" : "outline-primary"}
                         size="sm"
                         className="rounded-pill px-2 player-pill-btn"
                         onClick={() => {
@@ -1794,7 +1808,7 @@ const BookDetailPage = () => {
                       </Button>
 
                       <Button
-                        variant="outline-light"
+                        variant={isDarkMode ? "outline-light" : "outline-primary"}
                         size="sm"
                         className="rounded-pill px-2 player-pill-btn"
                         onClick={() => setShowReadingAssist((prev) => !prev)}
@@ -1826,15 +1840,22 @@ const BookDetailPage = () => {
           70% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); }
           100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
         }
+        @keyframes dragBlink {
+          0% { opacity: 0.5; transform: scale(0.98); }
+          100% { opacity: 1; transform: scale(1.02); }
+        }
+        .drag-hint-animation {
+          animation: dragBlink 1s ease-in-out infinite alternate;
+        }
         .player-select option {
-          background-color: #1c1f2e !important;
-          color: white !important;
+          background-color: ${isDarkMode ? '#1c1f2e' : '#ffffff'} !important;
+          color: ${isDarkMode ? 'white' : 'black'} !important;
         }
         .player-slider {
           -webkit-appearance: none;
           height: 4px;
           border-radius: 5px;
-          background: rgba(255,255,255,0.1);
+          background: ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'};
           outline: none;
         }
         .player-slider::-webkit-slider-thumb {
@@ -1858,8 +1879,8 @@ const BookDetailPage = () => {
           box-shadow: 0 0 5px rgba(0,0,0,0.3);
         }
         .player-control-cluster {
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.12);
+          background: ${isDarkMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.02)'};
+          border: 1px solid ${isDarkMode ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.12)'};
           border-radius: 999px;
           padding: 8px 12px;
           backdrop-filter: blur(8px);
@@ -1871,16 +1892,16 @@ const BookDetailPage = () => {
           display: inline-flex !important;
           align-items: center;
           justify-content: center;
-          color: rgba(255,255,255,0.95) !important;
-          border: 1px solid rgba(255,255,255,0.16) !important;
-          background: rgba(255,255,255,0.07) !important;
+          color: ${isDarkMode ? 'rgba(255,255,255,0.95)' : '#0d6efd'} !important;
+          border: 1px solid ${isDarkMode ? 'rgba(255,255,255,0.16)' : 'rgba(13,110,253,0.2)'} !important;
+          background: ${isDarkMode ? 'rgba(255,255,255,0.07)' : 'rgba(13,110,253,0.05)'} !important;
           transition: all 0.2s ease;
           text-decoration: none !important;
         }
         .player-icon-btn:hover {
           transform: translateY(-1px);
-          background: rgba(255,255,255,0.14) !important;
-          border-color: rgba(255,255,255,0.3) !important;
+          background: ${isDarkMode ? 'rgba(255,255,255,0.14)' : 'rgba(13,110,253,0.1)'} !important;
+          border-color: ${isDarkMode ? 'rgba(255,255,255,0.3)' : 'rgba(13,110,253,0.3)'} !important;
         }
         .player-main-btn {
           width: 56px !important;
@@ -1897,22 +1918,22 @@ const BookDetailPage = () => {
         .player-page-chip {
           padding: 8px 10px;
           border-radius: 12px;
-          border: 1px solid rgba(255,255,255,0.12);
-          background: rgba(255,255,255,0.04);
+          border: 1px solid ${isDarkMode ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.1)'};
+          background: ${isDarkMode ? 'rgba(255,255,255,0.04)' : '#f8f9fa'};
           min-width: 84px;
         }
         .player-pill-btn {
-          border: 1px solid rgba(255,255,255,0.24) !important;
-          background: rgba(255,255,255,0.08) !important;
-          color: #f4f7ff !important;
+          border: 1px solid ${isDarkMode ? 'rgba(255,255,255,0.24)' : 'rgba(13,110,253,0.24)'} !important;
+          background: ${isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(13,110,253,0.05)'} !important;
+          color: ${isDarkMode ? '#f4f7ff' : '#0d6efd'} !important;
           font-weight: 500;
           transition: all 0.2s ease;
         }
         .player-pill-btn:hover,
         .player-pill-btn:focus {
-          border-color: rgba(255,255,255,0.42) !important;
-          background: rgba(255,255,255,0.16) !important;
-          color: #ffffff !important;
+          border-color: ${isDarkMode ? 'rgba(255,255,255,0.42)' : 'rgba(13,110,253,0.42)'} !important;
+          background: ${isDarkMode ? 'rgba(255,255,255,0.16)' : 'rgba(13,110,253,0.1)'} !important;
+          color: ${isDarkMode ? '#ffffff' : '#0d6efd'} !important;
           transform: translateY(-1px);
         }
         .player-close-btn {
