@@ -5,7 +5,7 @@ import { useLayoutContext } from '@/context/useLayoutContext';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 import Image from 'next/image';
-import { BsThreeDots, BsPencilSquare, BsChevronUp, BsChevronDown, BsSearch, BsSliders } from 'react-icons/bs';
+import { BsPencilSquare, BsChevronUp, BsChevronDown, BsSearch, BsThreeDots } from 'react-icons/bs';
 import placeholderImg from '@/assets/images/avatar/placeholder.jpg';
 import { useSession } from 'next-auth/react';
 import { useState, useMemo, useEffect } from 'react';
@@ -20,8 +20,14 @@ const MessagingBar = () => {
     const { conversations, selectConversation } = useWebSocketChatContext();
 
     const [isExpanded, setIsExpanded] = useState(false);
+    const [isNewMessageOpen, setIsNewMessageOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [newMessageQuery, setNewMessageQuery] = useState('');
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [chatInput, setChatInput] = useState('');
+    const [chatMessages, setChatMessages] = useState([]);
     const [userProfile, setUserProfile] = useState(null);
+    const [connections, setConnections] = useState([]);
 
     // Fetch fresh user data to ensure photoUrl is present
     useEffect(() => {
@@ -54,6 +60,27 @@ const MessagingBar = () => {
         }
     }, [userInfo?.id, session?.user?.id, status]);
 
+    // Fetch connections for New Message suggestions
+    useEffect(() => {
+        const fetchConnections = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+            const apiBaseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
+            try {
+                const response = await fetch(`${apiBaseUrl}/user-follow/connections`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setConnections(data);
+                }
+            } catch (error) {
+                console.error('Error fetching connections:', error);
+            }
+        };
+        if (status === 'authenticated') fetchConnections();
+    }, [status]);
+
     if (status === 'unauthenticated') return null;
 
     const getDisplayAvatar = (photoUrl) => {
@@ -71,7 +98,6 @@ const MessagingBar = () => {
             return `${apiBaseUrl}${photoUrl}`;
         }
 
-        // Handle cases where it might be just the filename
         return `${apiBaseUrl}/uploads/${photoUrl}`;
     };
 
@@ -80,6 +106,14 @@ const MessagingBar = () => {
             conv.participantName.toLowerCase().includes(searchQuery.toLowerCase())
         ).sort((a, b) => new Date(b.lastMessageTime) - new Date(a.lastMessageTime));
     }, [conversations, searchQuery]);
+
+    const suggestedUsers = useMemo(() => {
+        if (!newMessageQuery) return connections.slice(0, 10);
+        return connections.filter(u =>
+            `${u.firstName} ${u.lastName}`.toLowerCase().includes(newMessageQuery.toLowerCase()) ||
+            u.username?.toLowerCase().includes(newMessageQuery.toLowerCase())
+        );
+    }, [connections, newMessageQuery]);
 
     const formatDate = (date) => {
         if (!date) return '';
@@ -101,7 +135,6 @@ const MessagingBar = () => {
     const { theme } = useLayoutContext();
     const isDark = theme === 'dark';
 
-    // Theme-based code color palette
     const colors = isDark ? {
         bg: '#1d2226',
         header: '#1d2226',
@@ -123,11 +156,21 @@ const MessagingBar = () => {
     };
 
     const iconClass = isDark ? "text-white-50" : "text-black-50";
-
     const messagingTitle = t('messaging.title') === 'messaging.title' ? (locale === 'tr' ? 'Mesajlaşma' : 'Messaging') : t('messaging.title');
-
-    // Determine which photo to use
     const currentUserPhoto = userProfile?.photoUrl || userInfo?.photoUrl || session?.user?.image;
+
+    const handleNewMessageClick = (e) => {
+        e.stopPropagation();
+        setSelectedUser(null);
+        setNewMessageQuery('');
+        setIsNewMessageOpen(true);
+    };
+
+    const handleSelectUser = (user) => {
+        setSelectedUser(user);
+        setNewMessageQuery('');
+        setChatMessages([]);
+    };
 
     return (
         <div
@@ -145,6 +188,7 @@ const MessagingBar = () => {
                     borderTopLeftRadius: '8px',
                     borderTopRightRadius: '8px',
                     height: '750px',
+                    maxHeight: 'calc(100vh - 60px)',
                     backgroundColor: colors.bg,
                     display: 'flex',
                     flexDirection: 'column',
@@ -153,7 +197,7 @@ const MessagingBar = () => {
                     boxShadow: colors.shadow
                 }}
             >
-                {/* Header (Duplicate of the bar for clicking to close) */}
+                {/* Header */}
                 <div
                     onClick={() => setIsExpanded(false)}
                     className="d-flex align-items-center justify-content-between px-3"
@@ -182,8 +226,7 @@ const MessagingBar = () => {
                         <span className="fw-bold ms-1" style={{ fontSize: '0.85rem' }}>{messagingTitle}</span>
                     </div>
                     <div className={clsx("d-flex align-items-center gap-3", iconClass)}>
-                        <BsThreeDots size={18} className="hover-active" onClick={(e) => e.stopPropagation()} title="Seçenekler" />
-                        <BsPencilSquare size={16} className="hover-active" onClick={(e) => e.stopPropagation()} title="Yeni Mesaj" />
+                        <BsPencilSquare size={16} className="hover-active" onClick={handleNewMessageClick} title="Yeni Mesaj" />
                         <BsChevronDown size={18} className="hover-active" />
                     </div>
                 </div>
@@ -207,7 +250,6 @@ const MessagingBar = () => {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
-                        <BsSliders className="position-absolute top-50 end-0 translate-middle-y me-2" size={14} style={{ cursor: 'pointer', color: colors.textMuted }} />
                     </div>
                 </div>
 
@@ -314,33 +356,250 @@ const MessagingBar = () => {
                     </div>
 
                     <div className={clsx("d-flex align-items-center gap-3", iconClass)}>
-                        <BsThreeDots size={18} className="hover-active" title="Seçenekler" onClick={(e) => e.stopPropagation()} />
-                        <BsPencilSquare size={16} className="hover-active" title="Yeni Mesaj" onClick={(e) => e.stopPropagation()} />
+                        <BsPencilSquare size={16} className="hover-active" title="Yeni Mesaj" onClick={handleNewMessageClick} />
                         <BsChevronUp size={18} className="hover-active" />
                     </div>
                 </div>
             )}
 
+            {/* LinkedIn Style New Message Popup */}
+            {isNewMessageOpen && (
+                <div
+                    className="position-absolute bottom-0 shadow-lg overflow-hidden d-flex flex-column"
+                    style={{
+                        right: '100%',
+                        marginRight: '12px',
+                        width: '420px',
+                        height: '750px',
+                        maxHeight: 'calc(100vh - 60px)',
+                        backgroundColor: colors.bg,
+                        border: `1px solid ${colors.border}`,
+                        borderTopLeftRadius: '8px',
+                        borderTopRightRadius: '8px',
+                        zIndex: 1060,
+                        boxShadow: colors.shadow
+                    }}
+                >
+                    {/* Popup Header */}
+                    <div
+                        className="d-flex align-items-center justify-content-between px-3"
+                        style={{
+                            height: '48px',
+                            backgroundColor: colors.header,
+                            color: colors.textMain,
+                            borderBottom: `1px solid ${colors.border}`,
+                            flexShrink: 0
+                        }}
+                    >
+                        <span className="fw-bold" style={{ fontSize: '0.9rem' }}>Yeni mesaj</span>
+                        <div className={clsx("d-flex align-items-center gap-3", iconClass)}>
+                            <BsSearch size={16} className="hover-active" style={{ cursor: 'pointer' }} />
+                            <div onClick={() => setIsNewMessageOpen(false)} className="hover-active d-flex align-items-center" style={{ cursor: 'pointer' }}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Search Field / Selected User Tag */}
+                    <div className="px-3 py-2 d-flex flex-wrap align-items-center gap-2" style={{ borderBottom: `1px solid ${colors.border}`, minHeight: '52px' }}>
+                        {selectedUser ? (
+                            <div
+                                className="d-flex align-items-center bg-success bg-opacity-10 px-2 py-1 rounded"
+                                style={{ border: '1px solid rgba(var(--bs-success-rgb), 0.3)', cursor: 'default' }}
+                            >
+                                <span className="fw-bold" style={{ color: colors.textMain, fontSize: '0.85rem' }}>
+                                    {selectedUser.firstName} {selectedUser.lastName}
+                                </span>
+                                <div
+                                    onClick={() => setSelectedUser(null)}
+                                    className="ms-2 d-flex align-items-center"
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                                </div>
+                            </div>
+                        ) : (
+                            <input
+                                type="text"
+                                autoFocus
+                                placeholder="Bir veya birden fazla ad yazın"
+                                className="flex-grow-1 border-0 bg-transparent shadow-none"
+                                style={{ color: colors.textMain, fontSize: '0.95rem', height: '40px', outline: 'none' }}
+                                value={newMessageQuery}
+                                onChange={(e) => setNewMessageQuery(e.target.value)}
+                            />
+                        )}
+                        {selectedUser && (
+                            <div className="ms-auto">
+                                <BsSearch size={16} className="text-muted" />
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Content Area: Suggestions or Chat */}
+                    <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                        {!selectedUser ? (
+                            <SimplebarReactClient style={{ height: '100%' }}>
+                                <div className="px-3 py-2 text-muted fw-bold" style={{ fontSize: '0.75rem', textTransform: 'uppercase' }}>
+                                    Önerilen
+                                </div>
+                                {suggestedUsers.length > 0 ? (
+                                    suggestedUsers.map((u) => (
+                                        <div
+                                            key={u.id}
+                                            onClick={() => handleSelectUser(u)}
+                                            className="d-flex align-items-center p-3 hover-bg"
+                                            style={{ cursor: 'pointer', borderBottom: `1px solid ${colors.border}` }}
+                                        >
+                                            <Image
+                                                src={getDisplayAvatar(u.photoUrl)}
+                                                alt={u.firstName}
+                                                width={48}
+                                                height={48}
+                                                className="rounded-circle me-3"
+                                                style={{ objectFit: 'cover' }}
+                                            />
+                                            <div className="flex-grow-1 overflow-hidden">
+                                                <div className="fw-bold text-truncate" style={{ color: colors.textMain }}>
+                                                    {u.firstName} {u.lastName}
+                                                </div>
+                                                <div className="text-muted text-truncate small">
+                                                    {u.tagline || u.role || 'Kullanıcı'}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="p-4 text-center small text-muted">Arama sonucu bulunamadı.</div>
+                                )}
+                            </SimplebarReactClient>
+                        ) : (
+                            <>
+                                <SimplebarReactClient style={{ height: '100%' }}>
+                                    <div className="p-3">
+                                        {/* User Info Card */}
+                                        <div className="text-center mb-4">
+                                            <Image
+                                                src={getDisplayAvatar(selectedUser.photoUrl)}
+                                                alt={selectedUser.firstName}
+                                                width={80}
+                                                height={80}
+                                                className="rounded-circle mb-2"
+                                                style={{ objectFit: 'cover' }}
+                                            />
+                                            <h5 className="mb-0 fw-bold" style={{ color: colors.textMain }}>{selectedUser.firstName} {selectedUser.lastName}</h5>
+                                            <p className="text-muted small">{selectedUser.tagline || selectedUser.role || 'Yazılım Geliştirici'}</p>
+                                        </div>
+
+                                        {/* Date Separator */}
+                                        <div className="d-flex align-items-center mb-4">
+                                            <div className="flex-grow-1 border-bottom" style={{ borderColor: colors.border }}></div>
+                                            <div className="px-3 text-uppercase text-muted fw-bold" style={{ fontSize: '0.7rem' }}>16 ŞUB</div>
+                                            <div className="flex-grow-1 border-bottom" style={{ borderColor: colors.border }}></div>
+                                        </div>
+
+                                        {/* Messages */}
+                                        {chatMessages.map((msg) => (
+                                            <div key={msg.id} className="d-flex mb-3">
+                                                <Image
+                                                    src={getDisplayAvatar(selectedUser.photoUrl)}
+                                                    alt={selectedUser.firstName}
+                                                    width={40}
+                                                    height={40}
+                                                    className="rounded-circle me-2 flex-shrink-0"
+                                                    style={{ objectFit: 'cover' }}
+                                                />
+                                                <div>
+                                                    <div className="d-flex align-items-center mb-1">
+                                                        <span className="fw-bold me-2" style={{ color: colors.textMain, fontSize: '0.9rem' }}>
+                                                            {selectedUser.firstName} {selectedUser.lastName}
+                                                        </span>
+                                                        <span className="text-muted" style={{ fontSize: '0.75rem' }}>• {msg.time}</span>
+                                                    </div>
+                                                    <div style={{ color: colors.textMain, fontSize: '0.9rem', whiteSpace: 'pre-wrap' }}>
+                                                        {msg.text}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </SimplebarReactClient>
+
+                                {/* Input Area */}
+                                <div className="p-3" style={{ borderTop: `1px solid ${colors.border}`, backgroundColor: isDark ? '#1d2226' : '#ffffff' }}>
+                                    <div
+                                        className="rounded p-2 mb-2"
+                                        style={{
+                                            backgroundColor: colors.searchBg,
+                                            minHeight: '100px',
+                                            display: 'flex',
+                                            flexDirection: 'column'
+                                        }}
+                                    >
+                                        <textarea
+                                            placeholder="Bir mesaj yazın..."
+                                            className="w-100 border-0 bg-transparent shadow-none"
+                                            style={{
+                                                color: colors.textMain,
+                                                fontSize: '0.9rem',
+                                                resize: 'none',
+                                                outline: 'none',
+                                                flex: 1
+                                            }}
+                                            value={chatInput}
+                                            onChange={(e) => setChatInput(e.target.value)}
+                                        />
+                                        <div className="ms-auto">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: 'rotate(180deg)', cursor: 'pointer', color: colors.textMuted }}><path d="M19 9l-7 7-7-7" /></svg>
+                                        </div>
+                                    </div>
+                                    <div className="d-flex align-items-center justify-content-between">
+                                        <div className="d-flex gap-3 text-muted">
+                                            <svg style={{ cursor: 'pointer' }} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" /></svg>
+                                            <svg style={{ cursor: 'pointer' }} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" /></svg>
+                                            <div style={{ cursor: 'pointer', fontWeight: 'bold', fontSize: '11px', border: '2px solid', borderRadius: '4px', padding: '0 2px', lineHeight: '14px' }}>GIF</div>
+                                            <svg style={{ cursor: 'pointer' }} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" /></svg>
+                                        </div>
+                                        <div className="d-flex align-items-center gap-2">
+                                            <button
+                                                className="btn btn-sm px-3 fw-bold shadow-none"
+                                                style={{
+                                                    backgroundColor: chatInput.trim() ? '#0a66c2' : 'transparent',
+                                                    color: chatInput.trim() ? '#ffffff' : colors.textMuted,
+                                                    borderRadius: '16px',
+                                                    pointerEvents: chatInput.trim() ? 'auto' : 'none',
+                                                    border: chatInput.trim() ? 'none' : 'none'
+                                                }}
+                                            >
+                                                Gönder
+                                            </button>
+                                            <BsThreeDots size={18} className="text-muted" style={{ cursor: 'pointer' }} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+            )}
+
             <style jsx>{`
-        .hover-active {
-            transition: color 0.1s ease;
-        }
-        .hover-active:hover {
-          color: ${colors.textMain} !important;
-        }
-        .hover-bg:hover {
-            background-color: ${colors.itemHover} !important;
-        }
-        :global(.simplebar-content-wrapper) {
-            background-color: ${colors.bg} !important;
-        }
-        .btn:focus {
-            box-shadow: none !important;
-        }
-        input::placeholder {
-            color: ${colors.textMuted} !important;
-        }
-      `}</style>
+                .hover-active {
+                    transition: color 0.1s ease;
+                }
+                .hover-active:hover {
+                    color: ${colors.textMain} !important;
+                }
+                .hover-bg:hover {
+                    background-color: ${colors.itemHover} !important;
+                }
+                :global(.simplebar-content-wrapper) {
+                    background-color: ${colors.bg} !important;
+                }
+                input::placeholder {
+                    color: ${colors.textMuted} !important;
+                }
+            `}</style>
         </div>
     );
 };
