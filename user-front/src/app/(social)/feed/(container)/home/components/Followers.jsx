@@ -102,6 +102,10 @@ const Followers = () => {
               : item
           )
         );
+        // Dispatch event to update other components (like ProfilePanel counts)
+        window.dispatchEvent(new CustomEvent('followStatusChanged', {
+          detail: { userId: followerId, type: followerType, status: 'following' }
+        }));
       } else {
         console.error('Follow failed');
       }
@@ -161,6 +165,10 @@ const Followers = () => {
               : item
           )
         );
+        // Dispatch event to update other components (like ProfilePanel counts)
+        window.dispatchEvent(new CustomEvent('followStatusChanged', {
+          detail: { userId: followerId, type: followerType, status: 'unfollowed' }
+        }));
       } else {
         console.error('Unfollow failed');
       }
