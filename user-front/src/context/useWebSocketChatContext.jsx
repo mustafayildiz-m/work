@@ -51,6 +51,18 @@ const getWebSocketUrl = () => {
 
 const WebSocketChatContext = createContext(undefined);
 
+const isNotificationSoundEnabled = () => {
+  if (typeof window === 'undefined') return true;
+  try {
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) return true;
+    const parsedUser = JSON.parse(storedUser);
+    return parsedUser?.notificationSoundEnabled !== false;
+  } catch (error) {
+    return true;
+  }
+};
+
 export const useWebSocketChatContext = () => {
   const context = useContext(WebSocketChatContext);
   // Return a safe object with defaults if no context (for unauthenticated pages)
@@ -95,6 +107,11 @@ export const WebSocketChatProvider = ({ children }) => {
 
     // Modern tarayıcılar için ses kilidini açma fonksiyonu
     const unlockAudio = () => {
+      if (!isNotificationSoundEnabled()) {
+        document.removeEventListener('click', unlockAudio);
+        document.removeEventListener('keydown', unlockAudio);
+        return;
+      }
       if (audioRef.current) {
         audioRef.current.play()
           .then(() => {
@@ -118,6 +135,7 @@ export const WebSocketChatProvider = ({ children }) => {
 
   const playNotificationSound = useCallback(() => {
     try {
+      if (!isNotificationSoundEnabled()) return;
       if (audioRef.current) {
         audioRef.current.currentTime = 0;
         audioRef.current.play()

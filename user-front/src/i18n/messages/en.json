@@ -278,7 +278,10 @@
     "logout": "Logout",
     "profileMenu": "Profile menu",
     "user": "User",
-    "viewProfile": "View Profile"
+    "viewProfile": "View Profile",
+    "notificationSounds": "Notification Sounds",
+    "on": "On",
+    "off": "Off"
   },
   "theme": {
     "themeSelection": "Theme Selection",

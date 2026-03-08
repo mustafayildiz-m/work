@@ -48,6 +48,9 @@ export class User {
   language: string;
 
   @Column({ default: true })
+  notificationSoundEnabled: boolean;
+
+  @Column({ default: true })
   isActive: boolean;
 
   @Column({ default: false })
