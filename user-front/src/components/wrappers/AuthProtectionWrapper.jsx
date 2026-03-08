@@ -19,6 +19,8 @@ const AuthProtectionWrapper = ({
     '/feed/books',
     '/feed/articles',
     '/feed/podcasts',
+    '/feed/newsletters',
+    '/feed/papers',
     '/profile/scholar'
   ];
 
