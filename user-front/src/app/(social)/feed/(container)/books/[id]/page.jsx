@@ -46,11 +46,20 @@ const BookDetailPage = () => {
   const [targetLang, setTargetLang] = useState(null);
   const [isPlayerOpen, setIsPlayerOpen] = useState(false);
   const [playerStatus, setPlayerStatus] = useState('idle');
+  const [showReadingAssist, setShowReadingAssist] = useState(true);
+  const [currentOriginalChunks, setCurrentOriginalChunks] = useState([]);
+  const [currentTranslatedChunks, setCurrentTranslatedChunks] = useState([]);
+  const [activeChunkIndex, setActiveChunkIndex] = useState(0);
   const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
   const [isDraggingPlayer, setIsDraggingPlayer] = useState(false);
   const isReadingRef = useRef(false);
   const pdfjsRef = useRef(null);
   const suppressAudioErrorRef = useRef(false);
+  const playbackQueueRef = useRef([]);
+  const queueIndexRef = useRef(0);
+  const readingSessionIdRef = useRef(0);
+  const originalChunksContainerRef = useRef(null);
+  const translatedChunksContainerRef = useRef(null);
   const playerDragRef = useRef({
     dragging: false,
     startX: 0,
@@ -122,6 +131,28 @@ const BookDetailPage = () => {
     };
 
     return flagMap[(code || '').toLowerCase()] || '🌐';
+  };
+
+  const splitTextIntoChunks = (text) => {
+    if (!text || !text.trim()) return [];
+    const sentences = text
+      .split(/(?<=[.!?])\s+/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (sentences.length > 0) return sentences.slice(0, 14);
+
+    return text
+      .split(/\s+/)
+      .reduce((acc, word) => {
+        const last = acc[acc.length - 1] || '';
+        if (!last || last.length > 100) {
+          acc.push(word);
+        } else {
+          acc[acc.length - 1] = `${last} ${word}`.trim();
+        }
+        return acc;
+      }, [])
+      .slice(0, 14);
   };
 
 
@@ -472,6 +503,9 @@ const BookDetailPage = () => {
 
     // Önceki audio'yu durdur
     disposeCurrentAudio();
+    readingSessionIdRef.current += 1;
+    playbackQueueRef.current = [];
+    queueIndexRef.current = 0;
     isReadingRef.current = false;
 
     setTranslating(true);
@@ -548,6 +582,12 @@ const BookDetailPage = () => {
             activePdfDoc ? pageNum : 1, params.id
           );
           const translatedText = cleanTextForTTS(rawTranslated);
+          const originalChunks = splitTextIntoChunks(textToTranslate);
+          const translatedChunks = splitTextIntoChunks(translatedText);
+          const chunks = translatedChunks;
+          setCurrentOriginalChunks(originalChunks);
+          setCurrentTranslatedChunks(translatedChunks);
+          setActiveChunkIndex(0);
 
           if (!translatedText.trim()) {
             if (activePdfDoc && pageNum < activeTotalPages) return playPage(pageNum + 1);
@@ -555,56 +595,82 @@ const BookDetailPage = () => {
             return;
           }
 
-          // Backend Google TTS'den MP3 al
+          // Seviye 2: metni segment segment oynat, highlight ile birebir takip et
           const token = localStorage.getItem('token');
-          const audioBlob = await fetchTTSAudio(translatedText, targetLanguage.code, API_BASE_URL, token);
-          const audioUrl = URL.createObjectURL(audioBlob);
+          const sessionId = readingSessionIdRef.current;
+          const segmentQueue = chunks.length > 0 ? chunks : [translatedText];
+          playbackQueueRef.current = segmentQueue;
+          queueIndexRef.current = 0;
 
           setTranslating(false);
           disposeCurrentAudio();
 
-          if (!isReadingRef.current && pageNum !== startPage) {
-            URL.revokeObjectURL(audioUrl);
-            return;
-          }
+          const playSegmentAt = async (segmentIndex) => {
+            if (sessionId !== readingSessionIdRef.current) return;
+            if (!isReadingRef.current && pageNum !== startPage) return;
 
-          const audio = new Audio(audioUrl);
-          audio.playbackRate = playbackRate || 1.0;
-          currentAudioRef.current = audio;
+            const segmentText = segmentQueue[segmentIndex];
+            if (!segmentText) return;
 
-          audio.onplay = () => {
-            setIsReading(true);
-            isReadingRef.current = true;
-            setIsPaused(false);
-            setPlayerStatus('playing');
-          };
-          audio.ontimeupdate = () => {
-            if (audio.duration) setAudioProgress((audio.currentTime / audio.duration) * 100);
-          };
-          audio.onended = () => {
-            URL.revokeObjectURL(audioUrl);
-            if (isReadingRef.current && activePdfDoc && pageNum < activeTotalPages) {
-              playPage(pageNum + 1);
-            } else {
+            queueIndexRef.current = segmentIndex;
+            setActiveChunkIndex(Math.min(segmentIndex, Math.max(0, chunks.length - 1)));
+
+            const segmentBlob = await fetchTTSAudio(segmentText, targetLanguage.code, API_BASE_URL, token);
+            const segmentUrl = URL.createObjectURL(segmentBlob);
+            const audio = new Audio(segmentUrl);
+            audio.playbackRate = playbackRate || 1.0;
+            currentAudioRef.current = audio;
+
+            audio.onplay = () => {
+              setIsReading(true);
+              isReadingRef.current = true;
+              setIsPaused(false);
+              setPlayerStatus('playing');
+            };
+            audio.ontimeupdate = () => {
+              if (!audio.duration) return;
+              const segmentPct = audio.currentTime / audio.duration;
+              const total = Math.max(1, segmentQueue.length);
+              const overallPct = ((segmentIndex + segmentPct) / total) * 100;
+              setAudioProgress(Math.min(100, overallPct));
+            };
+            audio.onerror = () => {
+              URL.revokeObjectURL(segmentUrl);
+              if (suppressAudioErrorRef.current) return;
+              setIsReading(false);
+              setIsPaused(false);
+              isReadingRef.current = false;
+              setPlayerStatus('error');
+              showNotification({ title: 'Hata', message: 'Ses oynatılamadı.', variant: 'danger' });
+            };
+            audio.onended = async () => {
+              URL.revokeObjectURL(segmentUrl);
+              if (sessionId !== readingSessionIdRef.current) return;
+
+              const nextIndex = segmentIndex + 1;
+              if (isReadingRef.current && nextIndex < segmentQueue.length) {
+                await playSegmentAt(nextIndex);
+                return;
+              }
+
+              if (isReadingRef.current && activePdfDoc && pageNum < activeTotalPages) {
+                playPage(pageNum + 1);
+                return;
+              }
+
               setIsReading(false);
               setIsPaused(false);
               isReadingRef.current = false;
               setAudioProgress(0);
+              setActiveChunkIndex(0);
               setPlayerStatus('completed');
-            }
-          };
-          audio.onerror = () => {
-            URL.revokeObjectURL(audioUrl);
-            if (suppressAudioErrorRef.current) return;
-            setIsReading(false);
-            setIsPaused(false);
-            isReadingRef.current = false;
-            setPlayerStatus('error');
-            showNotification({ title: 'Hata', message: 'Ses oynatılamadı.', variant: 'danger' });
+            };
+
+            isReadingRef.current = true;
+            await audio.play();
           };
 
-          isReadingRef.current = true;
-          await audio.play();
+          await playSegmentAt(0);
 
         } catch (err) {
           console.error(`Page ${pageNum} error:`, err);
@@ -643,6 +709,9 @@ const BookDetailPage = () => {
   // Sesli okumayı durdur
   const stopTextToSpeech = () => {
     isReadingRef.current = false;
+    readingSessionIdRef.current += 1;
+    playbackQueueRef.current = [];
+    queueIndexRef.current = 0;
     disposeCurrentAudio();
     setIsReading(false);
     setIsPaused(false);
@@ -652,6 +721,9 @@ const BookDetailPage = () => {
     setReadingTranslationId(null);
     setElapsedTime(0);
     setAudioProgress(0);
+    setCurrentOriginalChunks([]);
+    setCurrentTranslatedChunks([]);
+    setActiveChunkIndex(0);
     showNotification({ title: 'Sesli Okuma Durduruldu', message: 'Kitap okunması durduruldu', variant: 'info' });
   };
 
@@ -666,6 +738,7 @@ const BookDetailPage = () => {
 
   // Progress bar'a tıklayarak konuma atla
   const seekTo = (percent) => {
+    if (playbackQueueRef.current.length > 1) return;
     const audio = currentAudioRef.current;
     if (!audio || !audio.duration) return;
     audio.currentTime = (percent / 100) * audio.duration;
@@ -675,10 +748,26 @@ const BookDetailPage = () => {
   // Component unmount olduğunda audio'yu temizle
   useEffect(() => {
     return () => {
+      readingSessionIdRef.current += 1;
+      playbackQueueRef.current = [];
+      queueIndexRef.current = 0;
       disposeCurrentAudio();
       isReadingRef.current = false;
     };
   }, []);
+
+  useEffect(() => {
+    const scrollToActive = (containerRef, selector) => {
+      const container = containerRef.current;
+      if (!container) return;
+      const el = container.querySelector(selector);
+      if (!el) return;
+      el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    };
+
+    scrollToActive(originalChunksContainerRef, `[data-original-chunk-index="${activeChunkIndex}"]`);
+    scrollToActive(translatedChunksContainerRef, `[data-translated-chunk-index="${activeChunkIndex}"]`);
+  }, [activeChunkIndex]);
 
   // Geri dönüş URL'ini oluştur (dil bilgisi varsa dahil et)
   const getBackUrl = () => {
@@ -1377,6 +1466,92 @@ const BookDetailPage = () => {
               <div className="d-flex justify-content-center mb-2">
                 <div style={{ width: '44px', height: '4px', borderRadius: '4px', background: 'rgba(255,255,255,0.28)' }} />
               </div>
+              {showReadingAssist && (currentOriginalChunks.length > 0 || currentTranslatedChunks.length > 0) && (
+                <div
+                  className="mb-3 p-2 rounded"
+                  style={{
+                    maxHeight: '280px',
+                    overflowY: 'hidden',
+                    background: 'rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.12)'
+                  }}
+                >
+                  <div className="d-flex justify-content-between align-items-center mb-2 px-1">
+                    <small style={{ color: 'rgba(255,255,255,0.75)' }}>Orijinal + Çeviri (Anlık)</small>
+                    <small style={{ color: '#8ab4ff' }}>
+                      {activeChunkIndex + 1}/{Math.max(currentOriginalChunks.length, currentTranslatedChunks.length)}
+                    </small>
+                  </div>
+                  {currentOriginalChunks.length > 0 && (
+                    <div
+                      className="mb-2 p-2 rounded"
+                      style={{
+                        background: 'rgba(255,255,255,0.04)',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        minHeight: '108px'
+                      }}
+                    >
+                      <small style={{ color: 'rgba(255,255,255,0.6)', display: 'block', marginBottom: '4px' }}>
+                        Orijinal Metin
+                      </small>
+                      <div ref={originalChunksContainerRef} style={{ maxHeight: '80px', overflowY: 'auto' }}>
+                        {currentOriginalChunks.map((chunk, idx) => (
+                          <span
+                            key={`o-${idx}-${chunk.slice(0, 10)}`}
+                            data-original-chunk-index={idx}
+                            style={{
+                              display: 'inline',
+                              marginRight: '6px',
+                              padding: idx === activeChunkIndex ? '1px 4px' : '0',
+                              borderRadius: '4px',
+                              background: idx === activeChunkIndex ? 'rgba(255,193,7,0.32)' : 'transparent',
+                              textDecoration: idx === activeChunkIndex ? 'underline' : 'none',
+                              color: idx <= activeChunkIndex ? '#ffffff' : 'rgba(255,255,255,0.65)',
+                              transition: 'all 0.2s ease'
+                            }}
+                          >
+                            {chunk}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {currentTranslatedChunks.length > 0 && (
+                    <div
+                      className="p-2 rounded"
+                      style={{
+                        background: 'rgba(0,123,255,0.08)',
+                        border: '1px solid rgba(0,123,255,0.25)',
+                        minHeight: '108px'
+                      }}
+                    >
+                      <small style={{ color: 'rgba(255,255,255,0.72)', display: 'block', marginBottom: '4px' }}>
+                        Çeviri Metni
+                      </small>
+                      <div ref={translatedChunksContainerRef} style={{ maxHeight: '80px', overflowY: 'auto' }}>
+                        {currentTranslatedChunks.map((chunk, idx) => (
+                          <span
+                            key={`t-${idx}-${chunk.slice(0, 10)}`}
+                            data-translated-chunk-index={idx}
+                            style={{
+                              display: 'inline',
+                              marginRight: '6px',
+                              padding: idx === activeChunkIndex ? '1px 4px' : '0',
+                              borderRadius: '4px',
+                              background: idx === activeChunkIndex ? 'rgba(0,123,255,0.35)' : 'transparent',
+                              textDecoration: idx === activeChunkIndex ? 'underline' : 'none',
+                              color: idx <= activeChunkIndex ? '#ffffff' : 'rgba(255,255,255,0.65)',
+                              transition: 'all 0.2s ease'
+                            }}
+                          >
+                            {chunk}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
               <Row className="align-items-center g-3">
                 {/* Book Info & Status */}
                 <Col xs={12} md={4}>
@@ -1533,6 +1708,36 @@ const BookDetailPage = () => {
                         ))}
                       </DropdownMenu>
                     </Dropdown>
+
+                    <Button
+                      variant="outline-light"
+                      size="sm"
+                      className="rounded-pill px-2"
+                      onClick={() => {
+                        if (selectedPdfUrlForTranslate || selectedPdfUrl) {
+                          setSelectedPdfUrl(selectedPdfUrlForTranslate || selectedPdfUrl);
+                          setSelectedPdfTitle(book?.translations?.[0]?.title || 'PDF');
+                          setShowPdfViewer(true);
+                        } else {
+                          showNotification({
+                            title: 'Bilgi',
+                            message: 'Bu içerik için PDF bulunamadı.',
+                            variant: 'warning'
+                          });
+                        }
+                      }}
+                    >
+                      PDF'i Göster
+                    </Button>
+
+                    <Button
+                      variant="outline-light"
+                      size="sm"
+                      className="rounded-pill px-2"
+                      onClick={() => setShowReadingAssist((prev) => !prev)}
+                    >
+                      {showReadingAssist ? 'Vurguyu Gizle' : 'Vurguyu Göster'}
+                    </Button>
 
                     <Button
                       variant="outline-danger"
