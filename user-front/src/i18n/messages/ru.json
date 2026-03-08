@@ -842,20 +842,20 @@
     "continue": "Continue Browsing"
   },
   "messaging": {
-    "title": "Messaging",
-    "newMessage": "New Message",
-    "searchPlaceholder": "Search messages",
-    "noMessage": "No messages yet",
-    "noSearchResults": "No search results found.",
-    "noConversations": "No conversations yet.",
-    "defaultRole": "Software Developer",
-    "me": "Me",
-    "you": "You",
-    "writeMessage": "Write a message...",
-    "send": "Send",
-    "newMessageSearchPlaceholder": "Type one or more names",
-    "suggested": "Suggested",
-    "userFallback": "User",
-    "unknownUser": "Unknown User"
+    "title": "Сообщения",
+    "newMessage": "Новое сообщение",
+    "searchPlaceholder": "Поиск в сообщениях",
+    "noMessage": "Пока нет сообщений",
+    "noSearchResults": "Результаты не найдены.",
+    "noConversations": "Пока нет диалогов.",
+    "defaultRole": "Разработчик ПО",
+    "me": "Я",
+    "you": "Вы",
+    "writeMessage": "Напишите сообщение...",
+    "send": "Отправить",
+    "newMessageSearchPlaceholder": "Введите одно или несколько имен",
+    "suggested": "Рекомендуемые",
+    "userFallback": "Пользователь",
+    "unknownUser": "Неизвестный пользователь"
   }
 }

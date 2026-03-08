@@ -841,20 +841,20 @@
     "continue": "Continue Browsing"
   },
   "messaging": {
-    "title": "Messaging",
-    "newMessage": "New Message",
-    "searchPlaceholder": "Search messages",
-    "noMessage": "No messages yet",
-    "noSearchResults": "No search results found.",
-    "noConversations": "No conversations yet.",
-    "defaultRole": "Software Developer",
-    "me": "Me",
-    "you": "You",
-    "writeMessage": "Write a message...",
-    "send": "Send",
-    "newMessageSearchPlaceholder": "Type one or more names",
-    "suggested": "Suggested",
-    "userFallback": "User",
-    "unknownUser": "Unknown User"
+    "title": "メッセージ",
+    "newMessage": "新しいメッセージ",
+    "searchPlaceholder": "メッセージを検索",
+    "noMessage": "まだメッセージはありません",
+    "noSearchResults": "検索結果が見つかりません。",
+    "noConversations": "まだ会話がありません。",
+    "defaultRole": "ソフトウェア開発者",
+    "me": "私",
+    "you": "あなた",
+    "writeMessage": "メッセージを入力...",
+    "send": "送信",
+    "newMessageSearchPlaceholder": "1人以上の名前を入力",
+    "suggested": "おすすめ",
+    "userFallback": "ユーザー",
+    "unknownUser": "不明なユーザー"
   }
 }

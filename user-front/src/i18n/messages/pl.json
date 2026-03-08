@@ -830,20 +830,20 @@
     "continue": "Continue Browsing"
   },
   "messaging": {
-    "title": "Messaging",
-    "newMessage": "New Message",
-    "searchPlaceholder": "Search messages",
-    "noMessage": "No messages yet",
-    "noSearchResults": "No search results found.",
-    "noConversations": "No conversations yet.",
-    "defaultRole": "Software Developer",
-    "me": "Me",
-    "you": "You",
-    "writeMessage": "Write a message...",
-    "send": "Send",
-    "newMessageSearchPlaceholder": "Type one or more names",
-    "suggested": "Suggested",
-    "userFallback": "User",
-    "unknownUser": "Unknown User"
+    "title": "Wiadomości",
+    "newMessage": "Nowa wiadomość",
+    "searchPlaceholder": "Szukaj w wiadomościach",
+    "noMessage": "Brak wiadomości",
+    "noSearchResults": "Nie znaleziono wyników.",
+    "noConversations": "Brak rozmów.",
+    "defaultRole": "Programista",
+    "me": "Ja",
+    "you": "Ty",
+    "writeMessage": "Napisz wiadomość...",
+    "send": "Wyślij",
+    "newMessageSearchPlaceholder": "Wpisz jedno lub więcej imion",
+    "suggested": "Sugerowane",
+    "userFallback": "Użytkownik",
+    "unknownUser": "Nieznany użytkownik"
   }
 }

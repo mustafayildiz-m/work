@@ -842,20 +842,20 @@
     "continue": "Continue Browsing"
   },
   "messaging": {
-    "title": "Messaging",
-    "newMessage": "New Message",
-    "searchPlaceholder": "Search messages",
-    "noMessage": "No messages yet",
-    "noSearchResults": "No search results found.",
-    "noConversations": "No conversations yet.",
-    "defaultRole": "Software Developer",
-    "me": "Me",
-    "you": "You",
-    "writeMessage": "Write a message...",
-    "send": "Send",
-    "newMessageSearchPlaceholder": "Type one or more names",
-    "suggested": "Suggested",
-    "userFallback": "User",
-    "unknownUser": "Unknown User"
+    "title": "Mensagens",
+    "newMessage": "Nova mensagem",
+    "searchPlaceholder": "Pesquisar mensagens",
+    "noMessage": "Ainda não há mensagens",
+    "noSearchResults": "Nenhum resultado encontrado.",
+    "noConversations": "Ainda não há conversas.",
+    "defaultRole": "Desenvolvedor de software",
+    "me": "Eu",
+    "you": "Você",
+    "writeMessage": "Escreva uma mensagem...",
+    "send": "Enviar",
+    "newMessageSearchPlaceholder": "Digite um ou mais nomes",
+    "suggested": "Sugeridos",
+    "userFallback": "Usuário",
+    "unknownUser": "Usuário desconhecido"
   }
 }
