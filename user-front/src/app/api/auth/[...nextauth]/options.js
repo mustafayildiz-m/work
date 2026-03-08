@@ -93,7 +93,7 @@ export const options = {
       }
     })
   ],
-  secret: process.env.NEXTAUTH_SECRET || 'kvwLrfri/MBznUCofIoRH9+NvGu6GqvVdqO3mor1GuA=',
+  secret: process.env.NEXTAUTH_SECRET || 'islamic_windows_jwt_test',
   pages: {
     signIn: '/auth-advance/sign-in'
   },
