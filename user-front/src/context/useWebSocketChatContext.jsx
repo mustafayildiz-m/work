@@ -220,6 +220,9 @@ export const WebSocketChatProvider = ({ children }) => {
       timestamp: parseTimestamp(message.timestamp),
       status: message.status || 'sent',
       senderName: message.senderName || 'Bilinmeyen Kullanıcı',
+      receiverName: message.receiverName || message.receiver?.username || null,
+      senderAvatar: message.senderAvatar || message.sender?.photoUrl || null,
+      receiverAvatar: message.receiverAvatar || message.receiver?.photoUrl || null,
       conversationId: message.conversationId
     };
   }, []);
@@ -304,21 +307,48 @@ export const WebSocketChatProvider = ({ children }) => {
         return updated;
       }
 
+      const activeConversationMatch =
+        activeConversation &&
+        String(activeConversation.participantId) === String(otherUserId)
+          ? activeConversation
+          : null;
+
+      const isOtherUserOnline = (onlineUsers || []).some((onlineUser) => {
+        if (onlineUser && typeof onlineUser === 'object') {
+          return String(onlineUser.id || onlineUser.userId || '') === String(otherUserId);
+        }
+        return String(onlineUser) === String(otherUserId);
+      });
+
+      const participantName = isFromCurrentUser
+        ? activeConversationMatch?.participantName ||
+          activeConversationMatch?.participantUsername ||
+          message.receiverName ||
+          'Bilinmeyen Kullanıcı'
+        : message.senderName || 'Bilinmeyen Kullanıcı';
+
+      const participantAvatar = isFromCurrentUser
+        ? activeConversationMatch?.participantAvatar || message.receiverAvatar || placeholderImg
+        : message.senderAvatar || placeholderImg;
+
       const newConversation = {
         id: message.conversationId || `temp-${Date.now()}-${otherUserId}`,
         participantId: otherUserId,
-        participantName: message.senderName || 'Bilinmeyen Kullanıcı',
-        participantAvatar: placeholderImg,
+        participantName,
+        participantUsername: isFromCurrentUser
+          ? activeConversationMatch?.participantUsername || message.receiverName || null
+          : message.senderName || null,
+        participantAvatar,
         lastMessage: message.content,
         lastMessageTime: message.timestamp,
         unreadCount: isFromCurrentUser ? 0 : 1,
-        isOnline: false,
+        isOnline: isOtherUserOnline,
         createdAt: new Date().toISOString()
       };
 
       return [...prev, newConversation];
     });
-  }, []);
+  }, [activeConversation, onlineUsers]);
 
   // Socket connection with stable reference
   const connectSocket = useCallback(() => {
@@ -381,6 +411,8 @@ export const WebSocketChatProvider = ({ children }) => {
 
         updateConversationLastMessage(formattedMessage);
         addOrUpdateMessage(formattedMessage);
+        // Refresh conversation metadata (name/avatar) for newly created chats
+        fetchConversations().catch(() => {});
       });
 
       socketInstance.on('messageSent', (message) => {
@@ -388,6 +420,8 @@ export const WebSocketChatProvider = ({ children }) => {
 
         updateConversationLastMessage(formattedMessage);
         replaceOptimisticMessage(formattedMessage);
+        // Ensure sidebar immediately shows correct participant info
+        fetchConversations().catch(() => {});
       });
 
       // User status events
@@ -797,7 +831,8 @@ export const WebSocketChatProvider = ({ children }) => {
       isOnline: Boolean(participantData?.isOnline),
     };
 
-    setConversations(prev => [...prev, tempConversation]);
+    // Do not persist unsent temp conversations in sidebar list.
+    // A real conversation will be created by backend on first sent message.
     await selectConversation(tempConversation);
 
     return tempConversation;
