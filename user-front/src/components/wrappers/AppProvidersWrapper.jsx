@@ -70,8 +70,8 @@ const AppProvidersWrapper = ({
   }, []);
 
   return (
-    <LanguageProvider>
-      <SessionProvider>
+    <SessionProvider>
+      <LanguageProvider>
         <AuthProvider>
           <SearchProvider>
             <NotificationProvider>
@@ -112,8 +112,8 @@ const AppProvidersWrapper = ({
             </NotificationProvider>
           </SearchProvider>
         </AuthProvider>
-      </SessionProvider>
-    </LanguageProvider>
+      </LanguageProvider>
+    </SessionProvider>
   );
 };
 

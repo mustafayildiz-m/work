@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { useSession } from 'next-auth/react';
 
 const LanguageContext = createContext(undefined);
 // En çok konuşulan diller ve önemli diller
@@ -11,6 +12,7 @@ const SUPPORTED_LOCALES = [
   'mr', 'te', 'gu', 'ml', 'kn', 'or'  // Hindistan dilleri
 ];
 const DEFAULT_LOCALE = 'en';
+const RTL_LANGUAGES = ['ar', 'he', 'ur', 'fa', 'yi'];
 
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
@@ -29,10 +31,41 @@ export const useLanguage = () => {
 };
 
 export const LanguageProvider = ({ children }) => {
+  const { data: session, status } = useSession();
   const [locale, setLocaleState] = useState(DEFAULT_LOCALE);
   const [messages, setMessages] = useState({});
   const [fallbackMessages, setFallbackMessages] = useState({});
   const [loading, setLoading] = useState(true);
+
+  const normalizeLocale = useCallback((value) => {
+    if (!value || typeof value !== 'string') return null;
+    return value.toLowerCase().split('-')[0].split('_')[0];
+  }, []);
+
+  const resolveInitialLocale = useCallback(() => {
+    if (typeof window === 'undefined') return DEFAULT_LOCALE;
+
+    const savedLocale = localStorage.getItem('locale');
+    const normalizedSavedLocale = normalizeLocale(savedLocale);
+    if (normalizedSavedLocale && SUPPORTED_LOCALES.includes(normalizedSavedLocale)) {
+      return normalizedSavedLocale;
+    }
+
+    const browserLocales = [
+      ...(Array.isArray(navigator.languages) ? navigator.languages : []),
+      navigator.language,
+      navigator.userLanguage
+    ].filter(Boolean);
+
+    for (const localeCandidate of browserLocales) {
+      const normalizedLocale = normalizeLocale(localeCandidate);
+      if (normalizedLocale && SUPPORTED_LOCALES.includes(normalizedLocale)) {
+        return normalizedLocale;
+      }
+    }
+
+    return DEFAULT_LOCALE;
+  }, [normalizeLocale]);
 
   // Load translations
   const loadMessages = useCallback(async (newLocale) => {
@@ -61,22 +94,16 @@ export const LanguageProvider = ({ children }) => {
     }
   }, []);
 
-  // Initialize locale from localStorage or default to English
+  // Initialize locale from saved preference or browser/system language
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const savedLocale = localStorage.getItem('locale');
-      
-      let initialLocale = DEFAULT_LOCALE; // Default to English
-      
-      // Only use saved locale if it exists and is supported
-      if (savedLocale && SUPPORTED_LOCALES.includes(savedLocale)) {
-        initialLocale = savedLocale;
-      }
-      
+      const initialLocale = resolveInitialLocale();
       setLocaleState(initialLocale);
       loadMessages(initialLocale);
+      document.documentElement.dir = RTL_LANGUAGES.includes(initialLocale) ? 'rtl' : 'ltr';
+      document.documentElement.lang = initialLocale;
     }
-  }, [loadMessages]);
+  }, [loadMessages, resolveInitialLocale]);
 
   // Change locale
   const changeLocale = useCallback((newLocale) => {
@@ -92,12 +119,23 @@ export const LanguageProvider = ({ children }) => {
     loadMessages(newLocale);
     
     // Update document direction for RTL languages (Arabic, Hebrew, Urdu, Farsi, etc.)
-    const rtlLanguages = ['ar', 'he', 'ur', 'fa', 'yi'];
     if (typeof window !== 'undefined') {
-      document.documentElement.dir = rtlLanguages.includes(newLocale) ? 'rtl' : 'ltr';
+      document.documentElement.dir = RTL_LANGUAGES.includes(newLocale) ? 'rtl' : 'ltr';
       document.documentElement.lang = newLocale;
     }
   }, [loadMessages]);
+
+  // If user has a backend language preference, keep frontend in sync after login
+  useEffect(() => {
+    if (status !== 'authenticated') return;
+
+    const backendLanguage = normalizeLocale(session?.user?.language);
+    if (!backendLanguage) return;
+    if (!SUPPORTED_LOCALES.includes(backendLanguage)) return;
+    if (backendLanguage === locale) return;
+
+    changeLocale(backendLanguage);
+  }, [status, session?.user?.language, locale, changeLocale, normalizeLocale]);
 
   // Translation function with nested key support
   const t = useCallback((key, params = {}) => {
@@ -134,7 +172,7 @@ export const LanguageProvider = ({ children }) => {
     t,
     loading,
     supportedLocales: SUPPORTED_LOCALES,
-    isRTL: ['ar', 'he', 'ur', 'fa', 'yi'].includes(locale)
+    isRTL: RTL_LANGUAGES.includes(locale)
   };
 
   return (
