@@ -70,7 +70,9 @@ export class UsersController {
   async findOne(
     @Param('id', ParseIntPipe) id: number,
     @Request() req: any,
-  ): Promise<User | (User & { isFollowing: boolean }) | null> {
+  ): Promise<
+    User | (User & { isFollowing: boolean; followStatus: string | null }) | null
+  > {
     const requesterId = req?.user?.id as number | undefined;
     const user = await this.usersService.findOne(id);
     if (!user) return null;
@@ -80,12 +82,15 @@ export class UsersController {
           requesterId,
           id,
         );
-        (user as any).isFollowing = !!followRecord;
+        (user as any).followStatus = followRecord?.status || null;
+        (user as any).isFollowing = followRecord?.status === 'accepted';
       } catch (error) {
         (user as any).isFollowing = false;
+        (user as any).followStatus = null;
       }
     } else {
       (user as any).isFollowing = false;
+      (user as any).followStatus = null;
     }
     return user as any;
   }

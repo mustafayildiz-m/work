@@ -562,6 +562,26 @@ export default function WhoToFollowPage() {
                               )}
                             </button>
                           </div>
+                        ) : user.followStatus === 'pending' ? (
+                          <button
+                            className="btn btn-outline-secondary w-100 fw-bold"
+                            onClick={() => handleUnfollow(user.id, user.type)}
+                            disabled={followLoading[`${user.type}-${user.id}`]}
+                            style={{
+                              borderRadius: '8px',
+                              padding: '0.4rem 0.8rem',
+                              fontSize: '0.9rem',
+                              color: 'var(--bs-body-color)',
+                              borderColor: 'var(--bs-secondary)',
+                              backgroundColor: 'rgba(var(--bs-secondary-rgb), 0.18)'
+                            }}
+                          >
+                            {followLoading[`${user.type}-${user.id}`] ? (
+                              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            ) : (
+                              'İstek Gönderildi'
+                            )}
+                          </button>
                         ) : user.isFollowing || user.followStatus === 'accepted' ? (
                           <button
                             className="unfollow-btn-custom"
@@ -572,19 +592,6 @@ export default function WhoToFollowPage() {
                               <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             ) : (
                               t('whoToFollow.unfollow')
-                            )}
-                          </button>
-                        ) : user.followStatus === 'pending' ? (
-                          <button
-                            className="btn btn-outline-secondary w-100 fw-bold"
-                            onClick={() => handleUnfollow(user.id, user.type)}
-                            disabled={followLoading[`${user.type}-${user.id}`]}
-                            style={{ borderRadius: '8px', padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}
-                          >
-                            {followLoading[`${user.type}-${user.id}`] ? (
-                              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            ) : (
-                              'İstek Gönderildi'
                             )}
                           </button>
                         ) : (
