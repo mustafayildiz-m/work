@@ -25,6 +25,9 @@ import EditArticle from '@/pages/makaleler/duzenle/[id]';
 import PodcastList from '@/pages/podcast/liste';
 import AddPodcast from '@/pages/podcast/ekle';
 import EditPodcast from '@/pages/podcast/duzenle/[id]';
+import NewsletterList from '../pages/haber-bultenleri/liste/index.jsx';
+import AddNewsletter from '../pages/haber-bultenleri/ekle/index.jsx';
+import EditNewsletter from '../pages/haber-bultenleri/duzenle/[id].jsx';
 import YoneticilerPage from '@/pages/kullanicilar/yoneticiler';
 import EditorlerPage from '@/pages/kullanicilar/editorler';
 import BireyselKullanicilarPage from '@/pages/kullanicilar/bireysel';
@@ -89,6 +92,9 @@ export function AppRoutingSetup() {
           <Route path="/podcast/liste" element={<PodcastList />} />
           <Route path="/podcast/ekle" element={<AddPodcast />} />
           <Route path="/podcast/duzenle/:id" element={<EditPodcast />} />
+          <Route path="/haber-bultenleri/liste" element={<NewsletterList />} />
+          <Route path="/haber-bultenleri/ekle" element={<AddNewsletter />} />
+          <Route path="/haber-bultenleri/duzenle/:id" element={<EditNewsletter />} />
           <Route path="/kullanicilar/yoneticiler" element={<YoneticilerPage />} />
           <Route path="/kullanicilar/editorler" element={<EditorlerPage />} />
           <Route path="/kullanicilar/bireysel" element={<BireyselKullanicilarPage />} />
