@@ -27,8 +27,27 @@ const ConversationList = () => {
   // Online status check
   const isUserOnline = useCallback((userId) => {
     if (!onlineUsers || !userId) return false;
-    const userIdStr = String(userId);
-    return onlineUsers.some(onlineUser => String(onlineUser) === userIdStr);
+    const participantId = String(userId?.participantId || '');
+    const participantUsername = String(userId?.participantUsername || '').toLowerCase();
+    const participantName = String(userId?.participantName || '').toLowerCase();
+    return onlineUsers.some((onlineUser) => {
+      if (onlineUser && typeof onlineUser === 'object') {
+        const onlineId = String(onlineUser.id || onlineUser.userId || '');
+        const onlineUsername = String(onlineUser.username || '').toLowerCase();
+        return (
+          (participantId && onlineId === participantId) ||
+          (participantUsername && onlineUsername === participantUsername) ||
+          (participantName && onlineUsername === participantName)
+        );
+      }
+
+      const value = String(onlineUser).toLowerCase();
+      return (
+        (participantId && value === participantId) ||
+        (participantUsername && value === participantUsername) ||
+        (participantName && value === participantName)
+      );
+    });
   }, [onlineUsers]);
 
   // Search function
@@ -100,6 +119,10 @@ const ConversationList = () => {
 
     if (avatar.startsWith('/uploads/')) {
       return `${apiUrl}${avatar}`;
+    }
+
+    if (avatar.startsWith('uploads/')) {
+      return `${apiUrl}/${avatar}`;
     }
 
     if (!avatar.startsWith('/') && !avatar.includes('uploads/')) {
@@ -210,7 +233,7 @@ const ConversationList = () => {
 
       {/* Search Results */}
       {searchQuery && (
-        <div className="p-3 border-bottom bg-light">
+        <div className="p-3 border-bottom search-results-container">
           <h6 className="mb-2 fw-semibold">Arama Sonuçları</h6>
           {isSearching ? (
             <div className="text-center py-2">
@@ -224,18 +247,19 @@ const ConversationList = () => {
               {searchResults.slice(0, 3).map((result, index) => (
                 <div
                   key={`search-${index}-${result.id || index}`}
-                  className="mb-2 p-2 bg-white rounded"
+                  className="mb-2 p-2 rounded"
                   style={{
                     transition: 'all 0.2s ease',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    backgroundColor: 'var(--bs-body-bg)'
                   }}
                   onMouseEnter={(e) => {
-                    e.target.style.backgroundColor = '#f8f9fa';
-                    e.target.style.transform = 'translateX(4px)';
+                    e.currentTarget.style.backgroundColor = 'var(--bs-tertiary-bg)';
+                    e.currentTarget.style.transform = 'translateX(4px)';
                   }}
                   onMouseLeave={(e) => {
-                    e.target.style.backgroundColor = 'white';
-                    e.target.style.transform = 'translateX(0)';
+                    e.currentTarget.style.backgroundColor = 'var(--bs-body-bg)';
+                    e.currentTarget.style.transform = 'translateX(0)';
                   }}
                   onClick={() => {
                     const conv = sortedConversations.find(c =>
@@ -282,7 +306,7 @@ const ConversationList = () => {
           ) : (
             sortedConversations.map((conversation) => {
               const isActive = activeConversation?.id === conversation.id;
-              const isOnline = isUserOnline(conversation.participantId);
+              const isOnline = isUserOnline(conversation);
               const hasUnread = conversation.unreadCount > 0;
 
               return (
@@ -314,7 +338,7 @@ const ConversationList = () => {
                           width: '52px',
                           height: '52px',
                           borderRadius: '50%',
-                          border: isActive ? '2px solid #0d6efd' : '2px solid #e9ecef'
+                          border: isActive ? '2px solid #0d6efd' : '2px solid var(--bs-border-color)'
                         }}
                       >
                         <Image
@@ -356,7 +380,7 @@ const ConversationList = () => {
                       </div>
 
                       <div className="d-flex justify-content-between align-items-center">
-                        <p className={`mb-0 small text-truncate me-2 ${hasUnread ? 'text-dark fw-medium' : 'text-muted'
+                        <p className={`mb-0 small text-truncate me-2 ${hasUnread ? 'text-body-emphasis fw-medium' : 'text-muted'
                           }`}>
                           {conversation.lastMessage || 'Henüz mesaj yok'}
                         </p>
@@ -474,21 +498,29 @@ const ConversationList = () => {
 
       {/* Custom CSS */}
       <style jsx>{`
+        .search-results-container {
+          background-color: var(--bs-tertiary-bg);
+        }
+
+        .conversation-item:hover {
+          background-color: var(--bs-tertiary-bg) !important;
+        }
+
         .conversations-list::-webkit-scrollbar {
           width: 6px;
         }
 
         .conversations-list::-webkit-scrollbar-track {
-          background: #f1f1f1;
+          background: var(--bs-secondary-bg);
         }
 
         .conversations-list::-webkit-scrollbar-thumb {
-          background: #c1c1c1;
+          background: var(--bs-border-color);
           border-radius: 3px;
         }
 
         .conversations-list::-webkit-scrollbar-thumb:hover {
-          background: #a8a8a8;
+          background: var(--bs-secondary-color);
         }
 
         .min-width-0 {

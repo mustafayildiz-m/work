@@ -35,6 +35,10 @@ const getDisplayAvatar = (photoUrl, apiBaseUrl) => {
     return `${cleanApiUrl}${photoUrl}`;
   }
 
+  if (photoUrl.startsWith('uploads/')) {
+    return `${cleanApiUrl}/${photoUrl}`;
+  }
+
   if (!photoUrl.startsWith('/') && !photoUrl.includes('uploads/')) {
     return `${cleanApiUrl}/uploads/${photoUrl}`;
   }
@@ -57,6 +61,14 @@ const findUserConversation = (conversations, user) => {
     String(conv.participantName) === String(user.username) ||
     String(conv.participantId) === String(user.id)
   );
+};
+
+const getDisplayName = (user) => {
+  if (!user) return 'Bilinmeyen Kullanıcı';
+  const firstName = (user.firstName || '').trim();
+  const lastName = (user.lastName || '').trim();
+  const fullName = `${firstName} ${lastName}`.trim();
+  return fullName || user.username || 'Bilinmeyen Kullanıcı';
 };
 
 // Custom hook for API calls
@@ -167,10 +179,14 @@ const OnlineUsers = () => {
 
     return allUsers.map((user) => {
       const userConversation = findUserConversation(conversations, user);
+      const displayName = getDisplayName(user);
 
       return {
         id: user.id,
-        name: user.username,
+        name: displayName,
+        username: user.username,
+        firstName: user.firstName || null,
+        lastName: user.lastName || null,
         avatar: getDisplayAvatar(user.photoUrl, apiBaseUrl),
         conversationId: userConversation?.id || null,
         isCurrentUser: isCurrentUser(user, userInfo),
@@ -210,7 +226,13 @@ const OnlineUsers = () => {
       if (conversation) {
         await selectConversation(conversation);
       } else {
-        await createNewConversation(user.id, user.name);
+        await createNewConversation(user.id, user.name, {
+          avatar: user.avatar,
+          username: user.username,
+          firstName: user.firstName || null,
+          lastName: user.lastName || null,
+          isOnline: user.isOnline,
+        });
       }
 
       conversationPanel.toggle();
@@ -291,7 +313,7 @@ const OnlineUsers = () => {
             combinedUserDetails.map((user) => (
               <div
                 key={user.id}
-                className={`online-user-item p-3 border-bottom ${user.isCurrentUser ? 'bg-light' : ''
+                className={`online-user-item p-3 border-bottom ${user.isCurrentUser ? 'bg-body-tertiary' : ''
                   }`}
                 onClick={() => handleUserClick(user)}
                 style={{
@@ -301,12 +323,12 @@ const OnlineUsers = () => {
                 title={user.isCurrentUser ? 'Bu sizsiniz' : `${user.name} ile sohbet et`}
                 onMouseEnter={(e) => {
                   if (!user.isCurrentUser) {
-                    e.target.style.backgroundColor = '#f8f9fa';
+                    e.currentTarget.style.backgroundColor = 'var(--bs-tertiary-bg)';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!user.isCurrentUser) {
-                    e.target.style.backgroundColor = '';
+                    e.currentTarget.style.backgroundColor = '';
                   }
                 }}
               >
@@ -327,7 +349,7 @@ const OnlineUsers = () => {
                         style={{
                           width: '10px',
                           height: '10px',
-                          border: '2px solid white'
+                          border: '2px solid var(--bs-body-bg)'
                         }}
                       />
                     )}
