@@ -225,7 +225,7 @@ const ProfileLayout = ({
   });
 
   // Reusable: fetch follow statistics for current context (scholar/user)
-  const fetchFollowStatsForContext = async () => {
+  const fetchFollowStatsForContext = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) return;
@@ -271,157 +271,166 @@ const ProfileLayout = ({
     } catch (error) {
       // console.error('Error fetching follow stats:', error);
     }
-  };
+  }, [profileType, params?.id]);
+
+  const fetchScholarData = useCallback(async () => {
+    try {
+      const scholarId = params.id;
+      if (scholarId) {
+        const token = localStorage.getItem('token');
+        const userId = getUserIdFromToken();
+
+        // Add userId as query parameter to get follow status
+        const url = userId
+          ? `${process.env.NEXT_PUBLIC_API_URL}/scholars/${scholarId}?userId=${userId}`
+          : `${process.env.NEXT_PUBLIC_API_URL}/scholars/${scholarId}`;
+
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setProfileData(data);
+
+          if (data.isFollowing !== undefined) {
+            setIsFollowing(data.isFollowing);
+          }
+          if (data.followStatus !== undefined) {
+            setFollowStatus(data.followStatus);
+          }
+        } else if (response.status === 404) {
+          // Scholar not found - will be handled by child page
+          setProfileData(null);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching scholar data:', error);
+    }
+  }, [params.id]);
+
+  const fetchUserData = useCallback(async () => {
+    try {
+      const userId = params.id;
+
+      if (userId) {
+        const token = localStorage.getItem('token');
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setProfileData(data);
+
+          if (data.isFollowing !== undefined) {
+            setIsFollowing(data.isFollowing);
+          }
+          if (data.followStatus !== undefined) {
+            setFollowStatus(data.followStatus);
+          }
+        } else {
+          // console.error('User not found');
+        }
+      }
+    } catch (error) {
+      // console.error('Error fetching user data:', error);
+    }
+  }, [params.id]);
+
+  const fetchCurrentUserData = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        // console.error('No token found');
+        return;
+      }
+
+      // Get current user ID from token
+      const payload = token.split('.')[1];
+      const decodedPayload = JSON.parse(atob(payload));
+      const userId = decodedPayload.sub;
+
+      if (userId) {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setProfileData(data);
+          // Current user can't follow themselves
+          setIsFollowing(false);
+        } else {
+          // console.error('Current user not found');
+        }
+      }
+    } catch (error) {
+      // console.error('Error fetching current user data:', error);
+    }
+  }, []);
+
+  const fetchProfileData = useCallback(async () => {
+    try {
+      setLoading(true);
+
+      // Determine profile type from URL
+      const isScholarProfile = pathName.includes('/profile/scholar/');
+      const isUserProfile = pathName.includes('/profile/user/');
+      const isGeneralProfile = pathName === '/profile/feed' || pathName === '/profile/about';
+
+      if (isScholarProfile) {
+        setProfileType('scholar');
+        await fetchScholarData();
+      } else if (isUserProfile) {
+        setProfileType('user');
+        await fetchUserData();
+      } else if (isGeneralProfile) {
+        // For general profile routes, treat as current user profile
+        setProfileType('user');
+        await fetchCurrentUserData();
+      } else {
+        // Default to current user profile if no specific pattern matches
+        setProfileType('user');
+        await fetchCurrentUserData();
+      }
+    } catch (error) {
+      console.error('Error fetching profile data:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [pathName, fetchScholarData, fetchUserData, fetchCurrentUserData]);
 
   useEffect(() => {
-    const fetchProfileData = async () => {
-      try {
-        setLoading(true);
-
-        // Determine profile type from URL
-        const isScholarProfile = pathName.includes('/profile/scholar/');
-        const isUserProfile = pathName.includes('/profile/user/');
-        const isGeneralProfile = pathName === '/profile/feed' || pathName === '/profile/about';
-
-        if (isScholarProfile) {
-          setProfileType('scholar');
-          await fetchScholarData();
-        } else if (isUserProfile) {
-          setProfileType('user');
-          await fetchUserData();
-        } else if (isGeneralProfile) {
-          // For general profile routes, treat as current user profile
-          setProfileType('user');
-          await fetchCurrentUserData();
-        } else {
-          // Default to current user profile if no specific pattern matches
-          setProfileType('user');
-          await fetchCurrentUserData();
-        }
-      } catch (error) {
-        console.error('Error fetching profile data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const fetchScholarData = async () => {
-      try {
-        const scholarId = params.id;
-        if (scholarId) {
-          const token = localStorage.getItem('token');
-          const userId = getUserIdFromToken();
-
-          // Add userId as query parameter to get follow status
-          const url = userId
-            ? `${process.env.NEXT_PUBLIC_API_URL}/scholars/${scholarId}?userId=${userId}`
-            : `${process.env.NEXT_PUBLIC_API_URL}/scholars/${scholarId}`;
-
-          const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            setProfileData(data);
-
-            if (data.isFollowing !== undefined) {
-              setIsFollowing(data.isFollowing);
-            }
-            if (data.followStatus !== undefined) {
-              setFollowStatus(data.followStatus);
-            }
-          } else if (response.status === 404) {
-            // Scholar not found - will be handled by child page
-            setProfileData(null);
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching scholar data:', error);
-      }
-    };
-
-    const fetchUserData = async () => {
-      try {
-        const userId = params.id;
-
-        if (userId) {
-          const token = localStorage.getItem('token');
-
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            setProfileData(data);
-
-            if (data.isFollowing !== undefined) {
-              setIsFollowing(data.isFollowing);
-            }
-            if (data.followStatus !== undefined) {
-              setFollowStatus(data.followStatus);
-            }
-          } else {
-            // console.error('User not found');
-          }
-        }
-      } catch (error) {
-        // console.error('Error fetching user data:', error);
-      }
-    };
-
-    const fetchCurrentUserData = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          // console.error('No token found');
-          return;
-        }
-
-        // Get current user ID from token
-        const payload = token.split('.')[1];
-        const decodedPayload = JSON.parse(atob(payload));
-        const userId = decodedPayload.sub;
-
-        if (userId) {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            setProfileData(data);
-            // Current user can't follow themselves
-            setIsFollowing(false);
-          } else {
-            // console.error('Current user not found');
-          }
-        }
-      } catch (error) {
-        // console.error('Error fetching current user data:', error);
-      }
-    };
-
     fetchProfileData();
-  }, [params.id, pathName]);
+
+    // Listen for follow status changes (real-time updates)
+    const handleStatusChange = () => {
+      fetchProfileData();
+      fetchFollowStatsForContext();
+    };
+
+    window.addEventListener('followStatusChanged', handleStatusChange);
+    return () => window.removeEventListener('followStatusChanged', handleStatusChange);
+  }, [fetchProfileData, fetchFollowStatsForContext]);
 
   // Fetch follow statistics (context aware)
   useEffect(() => {
     fetchFollowStatsForContext();
-  }, [profileType, params?.id]);
+  }, [fetchFollowStatsForContext]);
 
   // Friends component functions
   useEffect(() => {
