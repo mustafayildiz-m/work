@@ -22,7 +22,7 @@ export class UserFollowService {
     @InjectRepository(UserScholarFollow)
     private userScholarFollowRepository: Repository<UserScholarFollow>,
     private readonly cacheService: CacheService,
-  ) {}
+  ) { }
 
   // Cache'i temizle (follow/unfollow işlemlerinde)
   private async invalidateFollowingCache(userId: number): Promise<void> {
@@ -37,22 +37,126 @@ export class UserFollowService {
   async follow(follower_id: number, following_id: number) {
     if (follower_id === following_id)
       throw new NotFoundException('Kendini takip edemezsin.');
+
+    const targetUser = await this.userRepository.findOneBy({ id: following_id });
+    if (!targetUser) throw new NotFoundException('Kullanıcı bulunamadı.');
+
     const existing = await this.userFollowRepository.findOneBy({
       follower_id,
       following_id,
     });
     if (existing) return existing;
+
+    // Eğer takip edilen kişi "scholar" (alim) ise doğrudan takip edilir.
+    // Değilse (normal user) onay mekanizması ('pending') devreye girer.
+    const status = targetUser.role === 'scholar' ? 'accepted' : 'pending';
+
     const follow = this.userFollowRepository.create({
       follower_id,
       following_id,
+      status,
     });
     const savedFollow = await this.userFollowRepository.save(follow);
 
-    // Cache'i temizle
+    if (status === 'accepted') {
+      // Doğrudan takip edildiyse cache'leri temizleyebiliriz
+      await this.invalidateFollowingCache(follower_id);
+      await this.invalidateFollowingCache(following_id);
+    } else {
+      // Sadece frontend state'inin güncellenmesi için istek atanın cache'ini siliyoruz
+      await this.invalidateFollowingCache(follower_id);
+    }
+
+    return savedFollow;
+  }
+
+  async acceptFollowRequest(follower_id: number, following_id: number) {
+    const follow = await this.userFollowRepository.findOneBy({
+      follower_id,
+      following_id,
+      status: 'pending', // Sadece pending olanları kabul edebiliriz
+    });
+
+    if (!follow) throw new NotFoundException('Takip isteği bulunamadı.');
+
+    // İsteği accepted yapıyoruz
+    follow.status = 'accepted';
+    await this.userFollowRepository.save(follow);
+
+    // Mutually connect - Karşı tarafı da otomatik takip etmesi için (LinkedIn mantığı)
+    const existingReverse = await this.userFollowRepository.findOneBy({
+      follower_id: following_id,
+      following_id: follower_id,
+    });
+
+    if (!existingReverse) {
+      const reverseFollow = this.userFollowRepository.create({
+        follower_id: following_id,
+        following_id: follower_id,
+        status: 'accepted',
+      });
+      await this.userFollowRepository.save(reverseFollow);
+    } else if (existingReverse.status === 'pending') {
+      existingReverse.status = 'accepted';
+      await this.userFollowRepository.save(existingReverse);
+    }
+
+    // Cache'leri temizle (Artık listelerde görünecekler)
     await this.invalidateFollowingCache(follower_id);
     await this.invalidateFollowingCache(following_id);
 
-    return savedFollow;
+    return { accepted: true };
+  }
+
+  async rejectFollowRequest(follower_id: number, following_id: number) {
+    const follow = await this.userFollowRepository.findOneBy({
+      follower_id,
+      following_id,
+      status: 'pending',
+    });
+
+    if (!follow) throw new NotFoundException('Takip isteği bulunamadı.');
+
+    await this.userFollowRepository.remove(follow);
+
+    return { rejected: true };
+  }
+
+  async getPendingRequests(userId: number) {
+    const requests = await this.userFollowRepository
+      .createQueryBuilder('follow')
+      .leftJoinAndSelect('follow.follower', 'user')
+      .select([
+        'follow.id',
+        'follow.follower_id',
+        'follow.following_id',
+        'follow.status',
+        'user.id',
+        'user.firstName',
+        'user.lastName',
+        'user.username',
+        'user.photoUrl',
+        'user.role',
+      ])
+      .where('follow.following_id = :userId', { userId })
+      .andWhere('follow.status = :status', { status: 'pending' })
+      .orderBy('follow.id', 'DESC')
+      .getMany();
+
+    return requests.map(req => ({
+      id: req.id,
+      followerId: req.follower_id,
+      followingId: req.following_id,
+      status: req.status,
+      follower: {
+        id: req.follower.id,
+        firstName: req.follower.firstName,
+        lastName: req.follower.lastName,
+        username: req.follower.username,
+        photoUrl: req.follower.photoUrl,
+        role: req.follower.role
+      }
+    }));
   }
 
   async unfollow(follower_id: number, following_id: number) {
@@ -94,6 +198,7 @@ export class UserFollowService {
         'user.isActive',
       ])
       .where('follow.follower_id = :userId', { userId })
+      .andWhere('follow.status = :status', { status: 'accepted' })
       .andWhere('user.isActive = :isActive', { isActive: true })
       .orderBy('follow.id', 'DESC')
       .limit(limit)
@@ -138,6 +243,7 @@ export class UserFollowService {
         'user.isActive',
       ])
       .where('follow.following_id = :userId', { userId })
+      .andWhere('follow.status = :status', { status: 'accepted' })
       .andWhere('user.isActive = :isActive', { isActive: true })
       .orderBy('follow.id', 'DESC')
       .limit(limit)
@@ -164,14 +270,14 @@ export class UserFollowService {
   // Takip edilen kullanıcı sayısını getir
   async getFollowingCount(userId: number): Promise<number> {
     return this.userFollowRepository.count({
-      where: { follower_id: userId },
+      where: { follower_id: userId, status: 'accepted' },
     });
   }
 
   // Takipçi sayısını getir
   async getFollowersCount(userId: number): Promise<number> {
     return this.userFollowRepository.count({
-      where: { following_id: userId },
+      where: { following_id: userId, status: 'accepted' },
     });
   }
 
@@ -187,6 +293,7 @@ export class UserFollowService {
         .createQueryBuilder('follow')
         .select('follow.following_id')
         .where('follow.follower_id = :userId', { userId })
+        .andWhere('follow.status = :status', { status: 'accepted' })
         .getMany();
 
       const followingUserIds = followingUsers.map((f) => f.following_id);

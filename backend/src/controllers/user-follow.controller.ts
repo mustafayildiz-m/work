@@ -14,7 +14,7 @@ import { AuthGuard } from '@nestjs/passport';
 @UseGuards(AuthGuard('jwt'))
 @Controller('user-follow')
 export class UserFollowController {
-  constructor(private readonly userFollowService: UserFollowService) {}
+  constructor(private readonly userFollowService: UserFollowService) { }
 
   @Post('follow')
   follow(@Body() body: { follower_id: number; following_id: number }) {
@@ -24,6 +24,24 @@ export class UserFollowController {
   @Delete('unfollow')
   unfollow(@Body() body: { follower_id: number; following_id: number }) {
     return this.userFollowService.unfollow(body.follower_id, body.following_id);
+  }
+
+  @Post('accept-request')
+  acceptRequest(@Body() body: { follower_id: number; following_id?: number }, @Request() req?: any) {
+    const followingId = body.following_id || req?.user?.id;
+    return this.userFollowService.acceptFollowRequest(body.follower_id, followingId);
+  }
+
+  @Post('reject-request')
+  rejectRequest(@Body() body: { follower_id: number; following_id?: number }, @Request() req?: any) {
+    const followingId = body.following_id || req?.user?.id;
+    return this.userFollowService.rejectFollowRequest(body.follower_id, followingId);
+  }
+
+  @Get('requests')
+  async getRequests(@Request() req?: any) {
+    const userId = req?.user?.id;
+    return this.userFollowService.getPendingRequests(userId);
   }
 
   // Takip edilen kullanıcıları getir

@@ -16,6 +16,7 @@ export interface WhoToFollowItem {
   username?: string;
   fullName?: string;
   isFollowing?: boolean;
+  followStatus?: string | null;
   role?: string;
 }
 
@@ -29,7 +30,7 @@ export class WhoToFollowService {
     private readonly userFollowService: UserFollowService,
     private readonly userScholarFollowService: UserScholarFollowService,
     private readonly cacheService: CacheService,
-  ) {}
+  ) { }
 
   async getWhoToFollow(
     limit: number = 10,
@@ -77,13 +78,17 @@ export class WhoToFollowService {
       const userItems: WhoToFollowItem[] = await Promise.all(
         users.map(async (user) => {
           let isFollowing = false;
+          let followStatus: string | null = null;
           if (userId) {
             try {
               const followRecord = await this.userFollowService.findFollow(
                 userId,
                 user.id,
               );
-              isFollowing = !!followRecord;
+              if (followRecord) {
+                isFollowing = followRecord.status === 'accepted';
+                followStatus = followRecord.status;
+              }
             } catch (error) {
               isFollowing = false;
             }
@@ -98,6 +103,7 @@ export class WhoToFollowService {
             username: user.username,
             role: user.role,
             isFollowing,
+            followStatus,
           };
         }),
       );
@@ -124,6 +130,7 @@ export class WhoToFollowService {
       const scholarItems: WhoToFollowItem[] = await Promise.all(
         scholars.map(async (scholar) => {
           let isFollowing = false;
+          let followStatus: string | null = null;
           if (userId) {
             try {
               const followRecord =
@@ -131,7 +138,10 @@ export class WhoToFollowService {
                   userId,
                   scholar.id,
                 );
-              isFollowing = !!followRecord;
+              if (followRecord) {
+                isFollowing = true; // Scholar follows are always accepted
+                followStatus = 'accepted';
+              }
             } catch (error) {
               isFollowing = false;
             }
@@ -145,6 +155,7 @@ export class WhoToFollowService {
             type: 'scholar',
             fullName: scholar.fullName,
             isFollowing,
+            followStatus,
           };
         }),
       );
@@ -255,13 +266,17 @@ export class WhoToFollowService {
     return Promise.all(
       users.map(async (user) => {
         let isFollowing = false;
+        let followStatus: string | null = null;
         if (userId) {
           try {
             const followRecord = await this.userFollowService.findFollow(
               userId,
               user.id,
             );
-            isFollowing = !!followRecord;
+            if (followRecord) {
+              isFollowing = followRecord.status === 'accepted';
+              followStatus = followRecord.status;
+            }
           } catch (error) {
             isFollowing = false;
           }
@@ -276,6 +291,7 @@ export class WhoToFollowService {
           username: user.username,
           role: user.role,
           isFollowing,
+          followStatus,
         };
       }),
     );
@@ -307,13 +323,17 @@ export class WhoToFollowService {
     return Promise.all(
       scholars.map(async (scholar) => {
         let isFollowing = false;
+        let followStatus: string | null = null;
         if (userId) {
           try {
             const followRecord = await this.userScholarFollowService.findFollow(
               userId,
               scholar.id,
             );
-            isFollowing = !!followRecord;
+            if (followRecord) {
+              isFollowing = true;
+              followStatus = 'accepted';
+            }
           } catch (error) {
             isFollowing = false;
           }
@@ -327,6 +347,7 @@ export class WhoToFollowService {
           type: 'scholar',
           fullName: scholar.fullName,
           isFollowing,
+          followStatus,
         };
       }),
     );
@@ -376,13 +397,17 @@ export class WhoToFollowService {
     const userItems: WhoToFollowItem[] = await Promise.all(
       users.map(async (user) => {
         let isFollowing = false;
+        let followStatus: string | null = null;
         if (userId) {
           try {
             const followRecord = await this.userFollowService.findFollow(
               userId,
               user.id,
             );
-            isFollowing = !!followRecord;
+            if (followRecord) {
+              isFollowing = followRecord.status === 'accepted';
+              followStatus = followRecord.status;
+            }
           } catch (error) {
             isFollowing = false;
           }
@@ -399,6 +424,7 @@ export class WhoToFollowService {
           username: user.username,
           role: user.role,
           isFollowing,
+          followStatus,
         };
       }),
     );
@@ -459,13 +485,17 @@ export class WhoToFollowService {
     const userItems: WhoToFollowItem[] = await Promise.all(
       users.map(async (user) => {
         let isFollowing = false;
+        let followStatus: string | null = null;
         if (userId) {
           try {
             const followRecord = await this.userFollowService.findFollow(
               userId,
               user.id,
             );
-            isFollowing = !!followRecord;
+            if (followRecord) {
+              isFollowing = followRecord.status === 'accepted';
+              followStatus = followRecord.status;
+            }
           } catch (error) {
             isFollowing = false;
           }
@@ -482,6 +512,7 @@ export class WhoToFollowService {
           username: user.username,
           role: user.role,
           isFollowing,
+          followStatus,
         };
       }),
     );
