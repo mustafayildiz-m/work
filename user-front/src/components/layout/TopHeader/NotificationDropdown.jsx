@@ -242,9 +242,14 @@ const NotificationDropdown = () => {
             )}
           </CardBody>
           <CardFooter className="text-center p-2">
-            <Button variant="primary-soft" size="sm" className="w-100 fw-bold" style={{ fontSize: '0.8rem' }}>
+            <Link
+              href="/feed/notifications"
+              className="btn btn-primary-soft btn-sm w-100 fw-bold"
+              style={{ fontSize: '0.8rem' }}
+              onClick={() => setIsOpen(false)}
+            >
               Tüm Bildirimleri Gör
-            </Button>
+            </Link>
           </CardFooter>
         </Card>
       </div>
