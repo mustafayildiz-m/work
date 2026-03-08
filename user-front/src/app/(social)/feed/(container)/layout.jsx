@@ -8,6 +8,7 @@ import ProfilePanel from '@/components/layout/ProfilePanel';
 import { profilePanelLinksData1 } from '@/assets/data/layout';
 import OnlineUsersPanel from '@/components/layout/OnlineUsersPanel';
 import ConversationPanel from '@/components/layout/ConversationPanel';
+import MessagingBar from '@/components/layout/MessagingBar';
 
 import { useLanguage } from '@/context/useLanguageContext';
 import { useSession } from 'next-auth/react';
@@ -83,57 +84,7 @@ const FeedLayout = ({
         </Row>
       </Container>
     </main>
-    <div className="d-none d-lg-block">
-      <a
-        onClick={handleMessagingClick}
-        className="position-fixed end-0 bottom-0 me-5 mb-5 d-flex align-items-center justify-content-center"
-        role="button"
-        aria-controls="offcanvasChat"
-        style={{
-          width: '60px',
-          height: '60px',
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          boxShadow: '0 10px 25px rgba(102, 126, 234, 0.4)',
-          cursor: 'pointer',
-          transition: 'all 0.3s ease',
-          border: 'none',
-          position: 'relative',
-          zIndex: 1000
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)';
-          e.currentTarget.style.boxShadow = '0 15px 35px rgba(102, 126, 234, 0.6)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)';
-          e.currentTarget.style.boxShadow = '0 10px 25px rgba(102, 126, 234, 0.4)';
-        }}
-      >
-        <BsPeopleFill size={24} color="white" />
-        <span
-          className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"
-          style={{
-            fontSize: '0.7rem',
-            minWidth: '20px',
-            height: '20px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            border: '2px solid white',
-            animation: 'pulse 2s infinite'
-          }}
-        >
-          <span className="online-dot" style={{
-            width: '8px',
-            height: '8px',
-            borderRadius: '50%',
-            backgroundColor: 'white',
-            display: 'inline-block'
-          }}></span>
-        </span>
-      </a>
-    </div>
+    <MessagingBar />
 
     {/* Online Users Panel */}
     <OnlineUsersPanel />

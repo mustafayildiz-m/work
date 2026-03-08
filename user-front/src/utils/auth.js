@@ -52,7 +52,10 @@ export const getUserInfoFromToken = () => {
         id: decodedPayload.sub,
         email: decodedPayload.email,
         username: decodedPayload.username,
-        role: decodedPayload.role
+        role: decodedPayload.role,
+        photoUrl: decodedPayload.photoUrl,
+        firstName: decodedPayload.firstName,
+        lastName: decodedPayload.lastName
       };
     } catch (e) {
       console.error('Error parsing user info from token:', e);
