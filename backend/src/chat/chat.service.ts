@@ -291,13 +291,18 @@ export class ChatService {
     return conversationsWithMeta.map(({ conv, lastVisibleMessage, unreadCount }) => {
       const otherParticipant =
         conv.participant1Id === userId ? conv.participant2 : conv.participant1;
+      const fullName = `${otherParticipant.firstName || ''} ${otherParticipant.lastName || ''}`.trim();
+
       return {
         id: conv.id,
         participant: {
           id: otherParticipant.id,
+          firstName: otherParticipant.firstName,
+          lastName: otherParticipant.lastName,
           username: otherParticipant.username,
           photoUrl: otherParticipant.photoUrl || undefined,
         },
+        participantName: fullName || otherParticipant.username,
         lastMessage: lastVisibleMessage?.content || '',
         lastMessageAt: conv.lastMessageAt,
         unreadCount,
