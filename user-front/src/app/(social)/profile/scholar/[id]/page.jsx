@@ -2,14 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { Card, CardBody, Col, Container, Row, Button, Modal, Spinner, Alert, ProgressBar } from 'react-bootstrap';
+import { Card, CardBody, Col, Container, Row, Button, Modal, Spinner, Alert, Dropdown, DropdownToggle, DropdownMenu } from 'react-bootstrap';
 import Image from 'next/image';
 import avatar7 from '@/assets/images/avatar/07.jpg';
 import dynamic from 'next/dynamic';
 import { BsTranslate, BsVolumeUp, BsX, BsPause, BsPlay, BsSkipBackward, BsSkipForward } from 'react-icons/bs';
 import { useLanguages } from '@/hooks/useLanguages';
 import { useNotificationContext } from '@/context/useNotificationContext';
-import { getBestVoice, getLanguageCode, waitForVoices } from '@/utils/textToSpeech';
+import { cleanTextForTTS, fetchTTSAudio } from '@/utils/textToSpeech';
 import { useLanguage } from '@/context/useLanguageContext';
 
 // MapComponent'i dynamic import ile yükle (SSR hatası önlemek için)
@@ -42,12 +42,34 @@ const ScholarProfilePage = () => {
   const [translating, setTranslating] = useState(false);
   const [isReading, setIsReading] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [speechSynthesis, setSpeechSynthesis] = useState(null);
-  const [currentUtterance, setCurrentUtterance] = useState(null);
-  const [currentText, setCurrentText] = useState('');
-  const [currentCharIndex, setCurrentCharIndex] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [audioProgress, setAudioProgress] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1.0);
+  const [isPlayerOpen, setIsPlayerOpen] = useState(false);
+  const [playerStatus, setPlayerStatus] = useState('idle');
+  const [showReadingAssist, setShowReadingAssist] = useState(true);
+  const [currentOriginalChunks, setCurrentOriginalChunks] = useState([]);
+  const [currentTranslatedChunks, setCurrentTranslatedChunks] = useState([]);
+  const [activeChunkIndex, setActiveChunkIndex] = useState(0);
+  const [isSliderSeeking, setIsSliderSeeking] = useState(false);
+  const [previewProgress, setPreviewProgress] = useState(null);
+  const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
+  const [isDraggingPlayer, setIsDraggingPlayer] = useState(false);
+  const currentAudioRef = useRef(null);
+  const suppressAudioErrorRef = useRef(false);
+  const playbackQueueRef = useRef([]);
+  const queueIndexRef = useRef(0);
+  const readingSessionIdRef = useRef(0);
+  const currentLangCodeRef = useRef(null);
+  const originalChunksContainerRef = useRef(null);
+  const translatedChunksContainerRef = useRef(null);
+  const playerDragRef = useRef({
+    dragging: false,
+    startX: 0,
+    startY: 0,
+    originX: 0,
+    originY: 0,
+  });
 
   useEffect(() => {
     const fetchScholarData = async () => {
@@ -124,6 +146,83 @@ const ScholarProfilePage = () => {
     return tmp.textContent || tmp.innerText || '';
   };
 
+  const getLanguageFlag = (code) => {
+    const flagMap = {
+      tr: '🇹🇷', en: '🇬🇧', ar: '🇸🇦', de: '🇩🇪', fr: '🇫🇷', es: '🇪🇸',
+      it: '🇮🇹', pt: '🇵🇹', ru: '🇷🇺', ja: '🇯🇵', zh: '🇨🇳', ko: '🇰🇷',
+      nl: '🇳🇱', fa: '🇮🇷', ur: '🇵🇰', hi: '🇮🇳',
+    };
+    return flagMap[(code || '').toLowerCase()] || '🌐';
+  };
+
+  const splitTextIntoChunks = (text) => {
+    if (!text || !text.trim()) return [];
+    const sentences = text.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter(Boolean);
+    if (sentences.length > 0) return sentences.slice(0, 14);
+    return text.split(/\s+/).reduce((acc, word) => {
+      const last = acc[acc.length - 1] || '';
+      if (!last || last.length > 100) acc.push(word);
+      else acc[acc.length - 1] = `${last} ${word}`.trim();
+      return acc;
+    }, []).slice(0, 14);
+  };
+
+  const disposeCurrentAudio = (silent = true) => {
+    if (currentAudioRef.current) {
+      const audio = currentAudioRef.current;
+      if (silent) suppressAudioErrorRef.current = true;
+      audio.onplay = null;
+      audio.ontimeupdate = null;
+      audio.onended = null;
+      audio.onerror = null;
+      audio.pause();
+      audio.src = '';
+      currentAudioRef.current = null;
+      if (silent) setTimeout(() => { suppressAudioErrorRef.current = false; }, 0);
+    }
+  };
+
+  const releaseQueueAudioUrls = () => {
+    playbackQueueRef.current.forEach((item) => {
+      if (item?.audioUrl?.startsWith('blob:')) {
+        URL.revokeObjectURL(item.audioUrl);
+      }
+    });
+  };
+
+  const handlePlayerDragStart = (event) => {
+    const target = event.target;
+    if (target.closest('button, input, select, .dropdown-menu, .dropdown-item')) return;
+    playerDragRef.current = {
+      dragging: true,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: playerPosition.x,
+      originY: playerPosition.y,
+    };
+    setIsDraggingPlayer(true);
+  };
+
+  useEffect(() => {
+    const onMouseMove = (event) => {
+      if (!playerDragRef.current.dragging) return;
+      const dx = event.clientX - playerDragRef.current.startX;
+      const dy = event.clientY - playerDragRef.current.startY;
+      setPlayerPosition({ x: playerDragRef.current.originX + dx, y: playerDragRef.current.originY + dy });
+    };
+    const onMouseUp = () => {
+      if (!playerDragRef.current.dragging) return;
+      playerDragRef.current.dragging = false;
+      setIsDraggingPlayer(false);
+    };
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+  }, [playerPosition.x, playerPosition.y]);
+
   // Çeviri fonksiyonu
   const translateText = async (text, targetLangCode, sourceLangCode = null) => {
     try {
@@ -173,329 +272,244 @@ const ScholarProfilePage = () => {
     setShowLanguageModal(true);
   };
 
-  // Çeviri yap ve sesli oku
-  const handleTranslateAndRead = async (targetLanguage) => {
-    if (!scholar?.biography) {
+  const startQueuePlayback = (queueIndex, offsetSeconds = 0) => {
+    const currentSession = readingSessionIdRef.current;
+    const queue = playbackQueueRef.current;
+    if (!queue.length || queueIndex >= queue.length) {
+      setIsReading(false);
+      setIsPaused(false);
+      setPlayerStatus('ended');
+      disposeCurrentAudio(false);
       return;
     }
 
-    if (!('speechSynthesis' in window)) {
+    queueIndexRef.current = queueIndex;
+    const queueItem = queue[queueIndex];
+    const audio = new Audio(queueItem.audioUrl);
+    currentAudioRef.current = audio;
+    audio.playbackRate = playbackRate;
+    audio.currentTime = Math.max(0, offsetSeconds);
+
+    audio.onplay = () => {
+      if (readingSessionIdRef.current !== currentSession) return;
+      setPlayerStatus('playing');
+      setActiveChunkIndex(queueItem.chunkIndex);
+      setIsPaused(false);
+    };
+
+    audio.ontimeupdate = () => {
+      if (readingSessionIdRef.current !== currentSession || isSliderSeeking) return;
+      const previousDuration = queue.slice(0, queueIndex).reduce((sum, item) => sum + (item.duration || 0), 0);
+      const totalDuration = queue.reduce((sum, item) => sum + (item.duration || 0), 0) || 1;
+      const nowElapsed = previousDuration + (audio.currentTime || 0);
+      setElapsedTime(Math.floor(nowElapsed));
+      setAudioProgress(Math.min(100, (nowElapsed / totalDuration) * 100));
+    };
+
+    audio.onended = () => {
+      if (readingSessionIdRef.current !== currentSession) return;
+      startQueuePlayback(queueIndex + 1, 0);
+    };
+
+    audio.onerror = () => {
+      if (suppressAudioErrorRef.current || readingSessionIdRef.current !== currentSession) return;
+      setIsReading(false);
+      setIsPaused(false);
+      setPlayerStatus('error');
       showNotification({
-        title: 'Uyarı',
-        message: 'Tarayıcınız sesli okuma özelliğini desteklemiyor',
-        variant: 'warning'
+        title: 'Hata',
+        message: 'Sesli okuma sırasında bir hata oluştu',
+        variant: 'danger',
       });
-      return;
-    }
+    };
 
+    audio.play().catch(() => {
+      if (readingSessionIdRef.current !== currentSession) return;
+      setIsReading(false);
+      setIsPaused(false);
+      setPlayerStatus('error');
+    });
+  };
+
+  const handleTranslateAndRead = async (targetLanguage) => {
+    if (!scholar?.biography) return;
     setTranslating(true);
     setShowLanguageModal(false);
 
     try {
-      // HTML'den text'e çevir
       const textToRead = stripHtmlTags(scholar.biography);
-
       if (!textToRead || textToRead.trim().length === 0) {
-        showNotification({
-          title: 'Uyarı',
-          message: 'Okunacak içerik bulunamadı',
-          variant: 'warning'
-        });
+        showNotification({ title: 'Uyarı', message: 'Okunacak içerik bulunamadı', variant: 'warning' });
         setTranslating(false);
         return;
       }
 
-      showNotification({
-        title: 'Bilgi',
-        message: `Biyografi ${targetLanguage.name} diline çevriliyor...`,
-        variant: 'info'
-      });
-
-      // Metni çevir
       const translatedText = await translateText(textToRead, targetLanguage.code);
-
       if (!translatedText || translatedText.trim().length === 0) {
-        showNotification({
-          title: 'Hata',
-          message: 'Çeviri başarısız oldu',
-          variant: 'danger'
-        });
+        showNotification({ title: 'Hata', message: 'Çeviri başarısız oldu', variant: 'danger' });
         setTranslating(false);
         return;
       }
 
-      // State'i kaydet
-      setCurrentText(translatedText);
-      setCurrentCharIndex(0);
+      const originalChunks = splitTextIntoChunks(textToRead);
+      const translatedChunks = splitTextIntoChunks(translatedText);
+      const readableChunks = translatedChunks.length ? translatedChunks : splitTextIntoChunks(cleanTextForTTS(translatedText));
+      if (!readableChunks.length) throw new Error('Okunabilir içerik bulunamadı');
+
+      const queue = await Promise.all(
+        readableChunks.map(async (chunkText, chunkIndex) => {
+          const token = localStorage.getItem('token');
+          const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
+          const cleanedChunk = cleanTextForTTS(chunkText);
+          if (!cleanedChunk) return null;
+          const audioBlob = await fetchTTSAudio(cleanedChunk, targetLanguage.code, apiBaseUrl, token);
+          if (!audioBlob) return null;
+          const audioUrl = URL.createObjectURL(audioBlob);
+          const estimatedDuration = Math.max(2, Math.min(30, chunkText.length / 11));
+          return { audioUrl, text: chunkText, duration: estimatedDuration, chunkIndex };
+        })
+      );
+
+      const filteredQueue = queue.filter(Boolean);
+      if (!filteredQueue.length) throw new Error('Ses oluşturulamadı');
+
+      readingSessionIdRef.current += 1;
+      releaseQueueAudioUrls();
+      playbackQueueRef.current = filteredQueue;
+      queueIndexRef.current = 0;
+      currentLangCodeRef.current = targetLanguage.code;
+      setCurrentOriginalChunks(originalChunks);
+      setCurrentTranslatedChunks(readableChunks);
+      setActiveChunkIndex(0);
       setElapsedTime(0);
+      setAudioProgress(0);
+      setPreviewProgress(null);
+      setIsPlayerOpen(true);
+      setPlayerStatus('playing');
+      setIsReading(true);
+      setIsPaused(false);
+      setTranslating(false);
 
-      // Seslerin yüklenmesini bekle
-      await waitForVoices();
-
-      // Dil kodunu al
-      const langCode = getLanguageCode(targetLanguage.code);
-
-      // Çevrilen metni sesli oku
-      const utterance = new SpeechSynthesisUtterance(translatedText);
-      utterance.lang = langCode;
-      utterance.rate = playbackRate;
-      utterance.pitch = 1.0; // Doğal ton
-      utterance.volume = 1.0;
-
-      // En iyi sesi seç
-      const bestVoice = getBestVoice(langCode);
-      if (bestVoice) {
-        utterance.voice = bestVoice;
-      }
-
-      // İlerleme takibi için boundary event
-      utterance.onboundary = (event) => {
-        if (event.charIndex !== undefined) {
-          setCurrentCharIndex(event.charIndex);
-        }
-      };
-
-      utterance.onstart = () => {
-        setIsReading(true);
-        setTranslating(false);
-        setIsPaused(false);
-        showNotification({
-          title: 'Başarılı',
-          message: `Biyografi ${targetLanguage.name} dilinde okunuyor`,
-          variant: 'success'
-        });
-      };
-
-      utterance.onend = () => {
-        setIsReading(false);
-        setIsPaused(false);
-        setSpeechSynthesis(null);
-        setCurrentUtterance(null);
-        setCurrentText('');
-        setCurrentCharIndex(0);
-        setElapsedTime(0);
-        showNotification({
-          title: 'Tamamlandı',
-          message: 'Biyografi okuma tamamlandı',
-          variant: 'success'
-        });
-      };
-
-      utterance.onerror = (error) => {
-        console.error('Speech synthesis error:', error);
-        setIsReading(false);
-        setIsPaused(false);
-        setTranslating(false);
-        setSpeechSynthesis(null);
-        setCurrentUtterance(null);
-        showNotification({
-          title: 'Hata',
-          message: 'Sesli okuma sırasında bir hata oluştu',
-          variant: 'danger'
-        });
-      };
-
-      setCurrentUtterance(utterance);
-      setSpeechSynthesis(window.speechSynthesis);
-      window.speechSynthesis.speak(utterance);
-
+      startQueuePlayback(0, 0);
     } catch (error) {
       console.error('Error in handleTranslateAndRead:', error);
       setTranslating(false);
       setIsReading(false);
+      setPlayerStatus('error');
       showNotification({
         title: 'Hata',
         message: error.message || 'Çeviri veya sesli okuma sırasında bir hata oluştu',
-        variant: 'danger'
+        variant: 'danger',
       });
     }
   };
 
-  // Sesli okumayı durdur
   const stopTextToSpeech = () => {
-    if (window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-      setIsReading(false);
-      setIsPaused(false);
-      setSpeechSynthesis(null);
-      setCurrentUtterance(null);
-      setCurrentText('');
-      setCurrentCharIndex(0);
-      setElapsedTime(0);
-      showNotification({
-        title: 'Sesli Okuma Durduruldu',
-        message: 'Biyografi okunması durduruldu',
-        variant: 'info'
-      });
-    }
+    readingSessionIdRef.current += 1;
+    disposeCurrentAudio(true);
+    releaseQueueAudioUrls();
+    playbackQueueRef.current = [];
+    queueIndexRef.current = 0;
+    setIsReading(false);
+    setIsPaused(false);
+    setElapsedTime(0);
+    setAudioProgress(0);
+    setPreviewProgress(null);
+    setActiveChunkIndex(0);
+    setPlayerStatus('idle');
+    showNotification({
+      title: 'Sesli Okuma Durduruldu',
+      message: 'Biyografi okunması durduruldu',
+      variant: 'info',
+    });
   };
 
-  // Sesli okumayı duraklat/devam ettir
   const togglePauseResume = () => {
-    if (speechSynthesis) {
-      if (isPaused) {
-        speechSynthesis.resume();
-        setIsPaused(false);
-      } else {
-        speechSynthesis.pause();
-        setIsPaused(true);
-      }
+    const audio = currentAudioRef.current;
+    if (!audio) return;
+    if (isPaused) {
+      audio.play().catch(() => {});
+      setIsPaused(false);
+      setPlayerStatus('playing');
+    } else {
+      audio.pause();
+      setIsPaused(true);
+      setPlayerStatus('paused');
     }
   };
 
-  // Hızı değiştir
   const changePlaybackRate = (newRate) => {
     setPlaybackRate(newRate);
-
-    if (isReading && currentText && speechSynthesis) {
-      // Mevcut pozisyonu kaydet
-      const savedCharIndex = currentCharIndex;
-      const savedElapsedTime = elapsedTime;
-
-      // Okumayı durdur
-      speechSynthesis.cancel();
-
-      // Yeni hızla devam et
-      const remainingText = currentText.substring(savedCharIndex);
-      const newUtterance = new SpeechSynthesisUtterance(remainingText);
-      newUtterance.rate = newRate;
-      newUtterance.pitch = 1.0;
-      newUtterance.volume = 1.0;
-
-      // Dil kodunu ve sesi koru (önceki utterance'dan)
-      if (currentUtterance) {
-        newUtterance.lang = currentUtterance.lang;
-        // En iyi sesi tekrar seç (consistency için)
-        const bestVoice = getBestVoice(currentUtterance.lang);
-        if (bestVoice) {
-          newUtterance.voice = bestVoice;
-        } else {
-          newUtterance.voice = currentUtterance.voice; // Fallback
-        }
-      }
-
-      newUtterance.onboundary = (event) => {
-        if (event.charIndex !== undefined) {
-          setCurrentCharIndex(savedCharIndex + event.charIndex);
-        }
-      };
-
-      newUtterance.onend = () => {
-        setIsReading(false);
-        setIsPaused(false);
-        setSpeechSynthesis(null);
-        setCurrentUtterance(null);
-        setCurrentText('');
-        setCurrentCharIndex(0);
-        setElapsedTime(0);
-        showNotification({
-          title: 'Tamamlandı',
-          message: 'Biyografi okuma tamamlandı',
-          variant: 'success'
-        });
-      };
-
-      newUtterance.onerror = (error) => {
-        console.error('Speech synthesis error:', error);
-        setIsReading(false);
-        setIsPaused(false);
-        setSpeechSynthesis(null);
-        setCurrentUtterance(null);
-      };
-
-      setCurrentUtterance(newUtterance);
-      setElapsedTime(savedElapsedTime);
-      speechSynthesis.speak(newUtterance);
-      setIsPaused(false);
-    }
+    if (currentAudioRef.current) currentAudioRef.current.playbackRate = newRate;
   };
 
-  // İleri/geri atla (10 saniye)
+  const seekTo = (progressPercent) => {
+    const queue = playbackQueueRef.current;
+    if (!queue.length) return;
+    const totalDuration = queue.reduce((sum, item) => sum + (item.duration || 0), 0) || 1;
+    const targetSeconds = Math.max(0, Math.min(totalDuration, (progressPercent / 100) * totalDuration));
+
+    let cumulative = 0;
+    let nextIndex = 0;
+    let offset = 0;
+    for (let i = 0; i < queue.length; i += 1) {
+      const duration = queue[i].duration || 0;
+      if (targetSeconds <= cumulative + duration) {
+        nextIndex = i;
+        offset = Math.max(0, targetSeconds - cumulative);
+        break;
+      }
+      cumulative += duration;
+    }
+
+    disposeCurrentAudio(true);
+    setElapsedTime(Math.floor(targetSeconds));
+    setAudioProgress(Math.min(100, (targetSeconds / totalDuration) * 100));
+    startQueuePlayback(nextIndex, offset);
+  };
+
   const skipTime = (seconds) => {
-    if (isReading && currentText) {
-      // Yaklaşık olarak karakter pozisyonunu hesapla
-      const avgCharsPerSecond = currentText.length / (elapsedTime || 1);
-      const charOffset = Math.floor(avgCharsPerSecond * seconds);
-      const newCharIndex = Math.max(0, Math.min(currentText.length, currentCharIndex + charOffset));
-
-      // Okumayı durdur ve yeni pozisyondan başlat
-      if (speechSynthesis) {
-        speechSynthesis.cancel();
-
-        const remainingText = currentText.substring(newCharIndex);
-        const newUtterance = new SpeechSynthesisUtterance(remainingText);
-        newUtterance.rate = playbackRate;
-        newUtterance.pitch = 1.0;
-        newUtterance.volume = 1.0;
-
-        if (currentUtterance) {
-          newUtterance.lang = currentUtterance.lang;
-          // En iyi sesi tekrar seç (consistency için)
-          const bestVoice = getBestVoice(currentUtterance.lang);
-          if (bestVoice) {
-            newUtterance.voice = bestVoice;
-          } else {
-            newUtterance.voice = currentUtterance.voice; // Fallback
-          }
-        }
-
-        newUtterance.onboundary = (event) => {
-          if (event.charIndex !== undefined) {
-            setCurrentCharIndex(newCharIndex + event.charIndex);
-          }
-        };
-
-        newUtterance.onend = () => {
-          setIsReading(false);
-          setIsPaused(false);
-          setSpeechSynthesis(null);
-          setCurrentUtterance(null);
-          setCurrentText('');
-          setCurrentCharIndex(0);
-          setElapsedTime(0);
-        };
-
-        setCurrentUtterance(newUtterance);
-        setCurrentCharIndex(newCharIndex);
-        setElapsedTime(Math.max(0, elapsedTime + seconds));
-        speechSynthesis.speak(newUtterance);
-        setIsPaused(false);
-      }
-    }
+    const queue = playbackQueueRef.current;
+    if (!queue.length) return;
+    const totalDuration = queue.reduce((sum, item) => sum + (item.duration || 0), 0) || 1;
+    const targetSeconds = Math.max(0, Math.min(totalDuration, elapsedTime + seconds));
+    seekTo((targetSeconds / totalDuration) * 100);
   };
 
-  // Component unmount olduğunda sesli okumayı durdur
-  useEffect(() => {
-    return () => {
-      if (window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-      }
-    };
-  }, []);
+  const commitSliderSeek = () => {
+    if (previewProgress === null) return;
+    seekTo(previewProgress);
+    setIsSliderSeeking(false);
+    setPreviewProgress(null);
+  };
 
-  // Zamanlayıcı - sesli okuma sırasında geçen süreyi takip et
-  useEffect(() => {
-    let interval;
-    if (isReading && !isPaused) {
-      interval = setInterval(() => {
-        setElapsedTime(prev => prev + 1);
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [isReading, isPaused]);
-
-  // Zamanı formatla (saniye -> mm:ss)
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
+    const secs = Math.max(0, Math.floor(seconds % 60));
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // İlerleme yüzdesi hesapla
-  const getProgress = () => {
-    if (!currentText || currentText.length === 0) return 0;
-    return Math.min(100, (currentCharIndex / currentText.length) * 100);
-  };
+  const getProgress = () => (previewProgress !== null ? previewProgress : audioProgress);
+
+  const totalQueueDuration = playbackQueueRef.current.reduce((sum, item) => sum + (item.duration || 0), 0);
+
+  useEffect(() => {
+    if (!showReadingAssist) return;
+    const originContainer = originalChunksContainerRef.current;
+    const translatedContainer = translatedChunksContainerRef.current;
+    const activeOriginal = originContainer?.querySelector(`[data-chunk-index="${activeChunkIndex}"]`);
+    const activeTranslated = translatedContainer?.querySelector(`[data-chunk-index="${activeChunkIndex}"]`);
+    activeOriginal?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    activeTranslated?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, [activeChunkIndex, showReadingAssist]);
+
+  useEffect(() => {
+    return () => {
+      readingSessionIdRef.current += 1;
+      disposeCurrentAudio(true);
+      releaseQueueAudioUrls();
+    };
+  }, []);
 
 
 
@@ -613,111 +627,6 @@ const ScholarProfilePage = () => {
                   </div>
                 </div>
 
-                {/* Sesli Okuma Kontrolleri */}
-                {isReading && (
-                  <Card className="mb-4 border-0" style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)', borderRadius: '16px', boxShadow: '0 2px 12px rgba(0, 0, 0, 0.06)' }}>
-                    <Card.Body className="p-4">
-                      {/* İlerleme çubuğu */}
-                      <div className="mb-3">
-                        <div className="d-flex justify-content-between align-items-center mb-2">
-                          <small className="text-muted">
-                            <BsVolumeUp className="me-1" />
-                            {t('scholarProfile.reading')}
-                          </small>
-                          <small className="text-muted">
-                            {formatTime(elapsedTime)}
-                          </small>
-                        </div>
-                        <ProgressBar
-                          now={getProgress()}
-                          variant="primary"
-                          style={{ height: '8px' }}
-                          animated={!isPaused}
-                        />
-                        <div className="d-flex justify-content-between mt-1">
-                          <small className="text-muted" style={{ fontSize: '0.75rem' }}>
-                            {Math.round(getProgress())}% {t('scholarProfile.completed')}
-                          </small>
-                          <small className="text-muted" style={{ fontSize: '0.75rem' }}>
-                            {currentCharIndex} / {currentText.length} {t('scholarProfile.characters')}
-                          </small>
-                        </div>
-                      </div>
-
-                      {/* Oynatma Kontrolleri */}
-                      <Row className="g-2 align-items-center">
-                        {/* İleri/Geri Atla */}
-                        <Col xs="auto">
-                          <Button
-                            variant="outline-secondary"
-                            size="sm"
-                            onClick={() => skipTime(-10)}
-                            title="10 saniye geri"
-                          >
-                            <BsSkipBackward />
-                          </Button>
-                        </Col>
-
-                        {/* Oynat/Duraklat */}
-                        <Col xs="auto">
-                          <Button
-                            variant={isPaused ? 'primary' : 'warning'}
-                            size="sm"
-                            onClick={togglePauseResume}
-                          >
-                            {isPaused ? <BsPlay /> : <BsPause />}
-                          </Button>
-                        </Col>
-
-                        {/* İleri Atla */}
-                        <Col xs="auto">
-                          <Button
-                            variant="outline-secondary"
-                            size="sm"
-                            onClick={() => skipTime(10)}
-                            title="10 saniye ileri"
-                          >
-                            <BsSkipForward />
-                          </Button>
-                        </Col>
-
-                        {/* Hız Kontrolü */}
-                        <Col>
-                          <div className="d-flex align-items-center gap-2">
-                            <small className="text-muted text-nowrap" style={{ fontSize: '0.85rem' }}>
-                              Hız: {playbackRate}x
-                            </small>
-                            <input
-                              type="range"
-                              className="form-range"
-                              min="0.5"
-                              max="2.0"
-                              step="0.1"
-                              value={playbackRate}
-                              onChange={(e) => changePlaybackRate(parseFloat(e.target.value))}
-                              style={{ maxWidth: '150px' }}
-                            />
-                          </div>
-                        </Col>
-
-                        {/* Hız Preset Butonları */}
-                        <Col xs={12} className="d-flex gap-1 flex-wrap">
-                          {[0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0].map(rate => (
-                            <Button
-                              key={rate}
-                              variant={playbackRate === rate ? 'primary' : 'outline-primary'}
-                              size="sm"
-                              onClick={() => changePlaybackRate(rate)}
-                              style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
-                            >
-                              {rate}x
-                            </Button>
-                          ))}
-                        </Col>
-                      </Row>
-                    </Card.Body>
-                  </Card>
-                )}
                 <div
                   className="mx-auto"
                   style={{ maxWidth: 820 }}
@@ -874,12 +783,8 @@ const ScholarProfilePage = () => {
                         flexDirection: 'column'
                       }}
                     >
-                      <div style={{ fontSize: '0.9rem', fontWeight: '500' }}>
-                        {lang.name}
-                      </div>
-                      <div style={{ fontSize: '0.75rem', opacity: 0.7 }}>
-                        {lang.code}
-                      </div>
+                      <div style={{ fontSize: '1.2rem', lineHeight: 1 }}>{getLanguageFlag(lang.code)}</div>
+                      <div style={{ fontSize: '0.9rem', fontWeight: '500' }}>{lang.name}</div>
                     </Button>
                   </Col>
                 ))}
@@ -904,6 +809,108 @@ const ScholarProfilePage = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      {isPlayerOpen && (
+        <div
+          className="scholar-player"
+          style={{ transform: `translate(${playerPosition.x}px, ${playerPosition.y}px)`, cursor: isDraggingPlayer ? 'grabbing' : 'grab' }}
+          onMouseDown={handlePlayerDragStart}
+          role="presentation"
+        >
+          <div className="d-flex align-items-center justify-content-between mb-3">
+            <div className="d-flex align-items-center gap-2">
+              <BsVolumeUp />
+              <strong>Sesli Okuma</strong>
+              <span className="player-page-chip">{playerStatus}</span>
+            </div>
+            <div className="d-flex align-items-center gap-2">
+              <Dropdown>
+                <DropdownToggle className="player-pill-btn">Hız {playbackRate.toFixed(2)}x</DropdownToggle>
+                <DropdownMenu>
+                  {[0.75, 1, 1.25, 1.5, 1.75].map((rate) => (
+                    <button key={rate} type="button" className="dropdown-item" onClick={() => changePlaybackRate(rate)}>
+                      {rate}x
+                    </button>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
+              <button type="button" className="player-close-btn" onClick={() => { stopTextToSpeech(); setIsPlayerOpen(false); }}>
+                <BsX />
+              </button>
+            </div>
+          </div>
+
+          <div className="mb-2">
+            <input
+              type="range"
+              className="w-100 player-slider"
+              min="0"
+              max="100"
+              step="0.1"
+              value={getProgress()}
+              onMouseDown={() => { setIsSliderSeeking(true); setPreviewProgress(getProgress()); }}
+              onTouchStart={() => { setIsSliderSeeking(true); setPreviewProgress(getProgress()); }}
+              onMouseUp={commitSliderSeek}
+              onTouchEnd={commitSliderSeek}
+              onChange={(e) => {
+                const nextValue = parseFloat(e.target.value);
+                if (isSliderSeeking) setPreviewProgress(nextValue);
+                else seekTo(nextValue);
+              }}
+            />
+            <div className="d-flex justify-content-between small opacity-75">
+              <span>{formatTime(elapsedTime)}</span>
+              <span>{formatTime(totalQueueDuration)}</span>
+            </div>
+          </div>
+
+          <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
+            <button type="button" className="player-icon-btn" onClick={() => skipTime(-8)}><BsSkipBackward /></button>
+            <button type="button" className="player-main-btn" onClick={togglePauseResume}>{isPaused ? <BsPlay /> : <BsPause />}</button>
+            <button type="button" className="player-icon-btn" onClick={() => skipTime(8)}><BsSkipForward /></button>
+          </div>
+
+          <div className="d-flex align-items-center justify-content-between mb-2">
+            <strong>Anlik Takip</strong>
+            <button type="button" className="player-pill-btn" onClick={() => setShowReadingAssist((v) => !v)}>
+              {showReadingAssist ? 'Gizle' : 'Goster'}
+            </button>
+          </div>
+
+          {showReadingAssist && (
+            <Row className="g-3">
+              <Col md={6}>
+                <div className="reading-box" ref={originalChunksContainerRef}>
+                  {currentOriginalChunks.map((chunk, idx) => (
+                    <p key={`o-${idx}-${chunk.slice(0, 24)}`} data-chunk-index={idx} className={`chunk-line ${idx === activeChunkIndex ? 'active' : ''}`}>{chunk}</p>
+                  ))}
+                </div>
+              </Col>
+              <Col md={6}>
+                <div className="reading-box" ref={translatedChunksContainerRef}>
+                  {currentTranslatedChunks.map((chunk, idx) => (
+                    <p key={`t-${idx}-${chunk.slice(0, 24)}`} data-chunk-index={idx} className={`chunk-line ${idx === activeChunkIndex ? 'active' : ''}`}>{chunk}</p>
+                  ))}
+                </div>
+              </Col>
+            </Row>
+          )}
+        </div>
+      )}
+
+      <style>{`
+        .scholar-player { position: fixed; right: 20px; bottom: 20px; width: min(920px, calc(100vw - 24px)); max-height: 78vh; overflow: auto; z-index: 1080; border-radius: 22px; padding: 16px; background: linear-gradient(150deg, rgba(18,18,32,.95), rgba(8,8,20,.9)); border: 1px solid rgba(255,255,255,.16); color: #fff; box-shadow: 0 24px 70px rgba(0,0,0,.35); backdrop-filter: blur(10px); }
+        .player-slider { accent-color: #7c8cff; cursor: pointer; }
+        .player-page-chip { font-size: .7rem; border-radius: 999px; padding: 3px 10px; background: rgba(124,140,255,.22); border: 1px solid rgba(124,140,255,.45); text-transform: uppercase; }
+        .player-icon-btn, .player-main-btn, .player-pill-btn, .player-close-btn { border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.06); color: #fff; border-radius: 999px; }
+        .player-icon-btn { width: 40px; height: 40px; }
+        .player-main-btn { width: 56px; height: 56px; background: linear-gradient(135deg, #7c8cff, #5e72ff); border: none; box-shadow: 0 10px 24px rgba(92,112,255,.45); }
+        .player-pill-btn { padding: 6px 14px; }
+        .player-close-btn { width: 36px; height: 36px; }
+        .reading-box { max-height: 220px; overflow: auto; border-radius: 14px; padding: 10px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); }
+        .chunk-line { margin: 0 0 8px; padding: 6px 8px; border-radius: 8px; opacity: .85; }
+        .chunk-line.active { background: rgba(124,140,255,.22); outline: 1px solid rgba(124,140,255,.45); opacity: 1; }
+      `}</style>
     </Container>
   );
 };
