@@ -726,6 +726,35 @@ export const WebSocketChatProvider = ({ children }) => {
     return tempConversation;
   }, [selectConversation, userMap, apiCall]);
 
+  const markMessageAsRead = useCallback((messageId, conversationIdHint = null) => {
+    if (!messageId) return;
+
+    let resolvedConversationId = conversationIdHint;
+    setMessages((prev) =>
+      prev.map((msg) => {
+        if (msg.id !== messageId) return msg;
+        if (!resolvedConversationId && msg.conversationId) {
+          resolvedConversationId = msg.conversationId;
+        }
+        return { ...msg, status: 'read' };
+      }),
+    );
+
+    if (resolvedConversationId) {
+      setConversations((prev) =>
+        prev.map((conv) =>
+          conv.id === resolvedConversationId
+            ? { ...conv, unreadCount: Math.max(0, (conv.unreadCount || 0) - 1) }
+            : conv,
+        ),
+      );
+    }
+
+    if (socket && isConnected) {
+      socket.emit('markAsRead', { messageId });
+    }
+  }, [socket, isConnected]);
+
   // FIXED: Delete conversation - only from current user's view
   const deleteConversation = useCallback(async (conversationId) => {
     if (!conversationId) {
@@ -862,11 +891,7 @@ export const WebSocketChatProvider = ({ children }) => {
         socket.emit('typing', { conversationId, isTyping });
       }
     },
-    markMessageAsRead: (messageId) => {
-      if (socket && isConnected) {
-        socket.emit('markAsRead', { messageId });
-      }
-    },
+    markMessageAsRead,
     selectConversation,
     createNewConversation,
     deleteConversation,
@@ -896,6 +921,7 @@ export const WebSocketChatProvider = ({ children }) => {
     followRequests,
     notifications,
     sendMessage,
+    markMessageAsRead,
     selectConversation,
     createNewConversation,
     deleteConversation,

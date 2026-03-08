@@ -27,6 +27,11 @@ const MessagingBar = () => {
     const [connections, setConnections] = useState([]);
     const [activeChats, setActiveChats] = useState([]); // List of { user, messages, input, isExpanded }
     const chatInputRef = useRef(null);
+    const activeChatsRef = useRef([]);
+
+    useEffect(() => {
+        activeChatsRef.current = activeChats;
+    }, [activeChats]);
 
     // Fetch fresh user data to ensure photoUrl is present
     useEffect(() => {
@@ -169,6 +174,8 @@ const MessagingBar = () => {
             const senderId = message.senderId;
             const isMe = String(senderId) === String(userInfo?.id || session?.user?.id);
             const otherUserId = isMe ? message.receiverId : senderId;
+            const existingChat = activeChatsRef.current.find(c => String(c.user.id) === String(otherUserId));
+            const shouldMarkReadNow = !isMe && !!existingChat?.isExpanded;
 
             // Update existing tab or open new one
             setActiveChats(prev => {
@@ -185,7 +192,6 @@ const MessagingBar = () => {
                 if (existingChatIndex !== -1) {
                     const updated = [...prev];
                     const chat = updated[existingChatIndex];
-                    const shouldMarkReadNow = !isMe && chat.isExpanded;
                     // Avoid duplicates
                     if (!chat.messages.some(m => m.id === formattedMsg.id)) {
                         updated[existingChatIndex] = {
@@ -193,9 +199,6 @@ const MessagingBar = () => {
                             messages: [...chat.messages, formattedMsg],
                             unreadCount: !isMe && !chat.isExpanded ? (chat.unreadCount || 0) + 1 : (chat.unreadCount || 0)
                         };
-                    }
-                    if (shouldMarkReadNow && message.id) {
-                        markMessageAsRead?.(message.id);
                     }
                     return updated;
                 } else {
@@ -220,13 +223,17 @@ const MessagingBar = () => {
                     }, ...prev];
                 }
             });
+
+            if (shouldMarkReadNow && message.id) {
+                markMessageAsRead?.(message.id, message.conversationId);
+            }
         };
 
         socket.on('newMessage', handleNewMessage);
         return () => {
             socket.off('newMessage', handleNewMessage);
         };
-    }, [socket, isConnected, conversations, connections, userInfo?.id, session?.user?.id]);
+    }, [socket, isConnected, conversations, connections, userInfo?.id, session?.user?.id, markMessageAsRead]);
 
     const formatDate = (date) => {
         if (!date) return '';
@@ -329,7 +336,7 @@ const MessagingBar = () => {
                             String(m.receiverId) === String(currentUserId) &&
                             m.status !== 'read'
                         )
-                        .forEach((m) => markMessageAsRead?.(m.id));
+                        .forEach((m) => markMessageAsRead?.(m.id, conv.id));
 
                     setActiveChats(prev => prev.map(chat =>
                         chat.user.id === user.id
@@ -370,7 +377,7 @@ const MessagingBar = () => {
                     String(m.receiverId) === String(currentUserId) &&
                     m.status !== 'read'
                 )
-                .forEach((m) => markMessageAsRead?.(m.id));
+                .forEach((m) => markMessageAsRead?.(m.id, conv.id));
 
             setActiveChats(prev => prev.map(chat =>
                 String(chat.user.id) === String(userId)
@@ -397,7 +404,7 @@ const MessagingBar = () => {
         setActiveChats(prev => prev.map(chat => {
             if (String(chat.user.id) !== String(userId)) return chat;
             const nextExpanded = !chat.isExpanded;
-            if (nextExpanded && (!chat.messages || chat.messages.length === 0)) {
+            if (nextExpanded) {
                 shouldLoadHistory = true;
             }
             return { ...chat, isExpanded: nextExpanded, unreadCount: nextExpanded ? 0 : chat.unreadCount };
@@ -459,8 +466,9 @@ const MessagingBar = () => {
                     backgroundColor: colors.bg,
                     display: 'flex',
                     flexDirection: 'column',
-                    border: `1px solid ${colors.border}`,
-                    borderBottom: 'none',
+                    borderStyle: 'solid',
+                    borderColor: colors.border,
+                    borderWidth: '1px 1px 0 1px',
                     boxShadow: colors.shadow
                 }}
             >
@@ -586,8 +594,9 @@ const MessagingBar = () => {
                         transition: 'all 0.2s ease',
                         backgroundColor: colors.header,
                         color: colors.textMain,
-                        border: `1px solid ${colors.border}`,
-                        borderBottom: 'none',
+                        borderStyle: 'solid',
+                        borderColor: colors.border,
+                        borderWidth: '1px 1px 0 1px',
                         boxShadow: colors.shadow
                     }}
                     onMouseEnter={(e) => {
