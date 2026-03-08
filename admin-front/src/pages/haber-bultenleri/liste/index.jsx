@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/newsletters';
+const PUBLIC_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 function NewsletterList() {
   const navigate = useNavigate();
@@ -34,6 +35,29 @@ function NewsletterList() {
   useEffect(() => {
     fetchItems();
   }, []);
+
+  const formatDate = (value) => {
+    if (!value) return '-';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '-';
+    return date.toLocaleDateString('tr-TR');
+  };
+
+  const resolveImageUrl = (imageUrl) => {
+    if (!imageUrl) return '';
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl;
+    return `${PUBLIC_API_URL.replace(/\/$/, '')}/${imageUrl.replace(/^\//, '')}`;
+  };
+
+  const stripHtml = (html) => {
+    if (!html) return '';
+    return String(html).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  };
+
+  const truncate = (text, max = 110) => {
+    if (!text) return '-';
+    return text.length > max ? `${text.slice(0, max)}...` : text;
+  };
 
   const handleDelete = async (item) => {
     if (!window.confirm(`"${item.title}" bultenini silmek istediginize emin misiniz?`)) return;
@@ -73,31 +97,57 @@ function NewsletterList() {
           </Link>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-x-auto">
           {loading ? (
             <div className="p-10 text-center text-gray-500 dark:text-gray-400">Yukleniyor...</div>
           ) : (
-            <table className="w-full">
+            <table className="w-full min-w-[980px]">
               <thead className="bg-gray-50 dark:bg-gray-700">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">Baslik</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">Kapak</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">Baslik & Intro</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">Icerik Ozeti</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">Yayin Tarihi</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">Olusturma / Guncelleme</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">Islemler</th>
                 </tr>
               </thead>
               <tbody>
                 {items.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="px-4 py-12 text-center text-gray-500 dark:text-gray-400">
+                    <td colSpan={6} className="px-4 py-12 text-center text-gray-500 dark:text-gray-400">
                       Kayitli bulten bulunamadi.
                     </td>
                   </tr>
                 ) : (
                   items.map((item) => (
                     <tr key={item.id} className="border-t border-gray-100 dark:border-gray-700">
-                      <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{item.title || '-'}</td>
+                      <td className="px-4 py-3">
+                        {item.imageUrl ? (
+                          <img
+                            src={resolveImageUrl(item.imageUrl)}
+                            alt={item.title || 'Kapak'}
+                            className="w-16 h-16 object-cover rounded-lg border border-gray-200 dark:border-gray-700"
+                          />
+                        ) : (
+                          <div className="w-16 h-16 rounded-lg border border-dashed border-gray-300 dark:border-gray-600 text-xs text-gray-400 dark:text-gray-500 flex items-center justify-center">
+                            Yok
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-900 dark:text-gray-100 align-top">
+                        <div className="font-semibold mb-1">{item.title || '-'}</div>
+                        <div className="text-gray-600 dark:text-gray-400">{truncate(item.intro, 120)}</div>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 align-top max-w-sm">
+                        {truncate(stripHtml(item.content || item.sections?.[0]?.content), 140)}
+                      </td>
                       <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">
-                        {item.publishDate ? new Date(item.publishDate).toLocaleDateString('tr-TR') : '-'}
+                        {formatDate(item.publishDate)}
+                      </td>
+                      <td className="px-4 py-3 text-xs text-gray-600 dark:text-gray-400">
+                        <div>Olusturma: {formatDate(item.createdAt)}</div>
+                        <div className="mt-1">Guncelleme: {formatDate(item.updatedAt)}</div>
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex gap-2">
