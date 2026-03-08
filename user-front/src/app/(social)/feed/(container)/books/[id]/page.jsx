@@ -53,11 +53,19 @@ const BookDetailPage = () => {
     if (typeof window === 'undefined') return null;
     if (pdfjsRef.current) return pdfjsRef.current;
 
-    const pdfModule = await import('pdfjs-dist/legacy/build/pdf.mjs');
-    const pdfjs = pdfModule?.default || pdfModule;
-    pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
-    pdfjsRef.current = pdfjs;
-    return pdfjs;
+    try {
+      const reactPdfModule = await import('react-pdf');
+      const pdfjs = reactPdfModule?.pdfjs;
+      if (!pdfjs) {
+        return null;
+      }
+
+      pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
+      pdfjsRef.current = pdfjs;
+      return pdfjs;
+    } catch {
+      return null;
+    }
   };
 
   // URL'den dil bilgilerini al
@@ -418,13 +426,21 @@ const BookDetailPage = () => {
       let activeTotalPages = totalPages;
       const pdfjs = await getPdfjs();
 
-      if (selectedPdfUrlForTranslate && !activePdfDoc && pdfjs) {
-        showNotification({ title: 'Bilgi', message: 'Kitap hazırlanıyor...', variant: 'info' });
-        const loadingTask = pdfjs.getDocument({ url: selectedPdfUrlForTranslate, withCredentials: false });
-        activePdfDoc = await loadingTask.promise;
-        setPdfDoc(activePdfDoc);
-        setTotalPages(activePdfDoc.numPages);
-        activeTotalPages = activePdfDoc.numPages;
+      if (selectedPdfUrlForTranslate && !activePdfDoc) {
+        if (pdfjs) {
+          showNotification({ title: 'Bilgi', message: 'Kitap hazırlanıyor...', variant: 'info' });
+          const loadingTask = pdfjs.getDocument({ url: selectedPdfUrlForTranslate, withCredentials: false });
+          activePdfDoc = await loadingTask.promise;
+          setPdfDoc(activePdfDoc);
+          setTotalPages(activePdfDoc.numPages);
+          activeTotalPages = activePdfDoc.numPages;
+        } else {
+          showNotification({
+            title: 'Bilgi',
+            message: 'PDF sayfaları yüklenemedi, özet/açıklama metni üzerinden okuma başlatılıyor.',
+            variant: 'warning'
+          });
+        }
       }
 
       setTargetLang(targetLanguage);
