@@ -188,6 +188,19 @@ const MessagingBar = () => {
         return d.toLocaleDateString([], { day: 'numeric', month: 'short' });
     };
 
+    const resolveConversationAvatar = (conv) => {
+        if (conv?.participantAvatar && conv.participantAvatar !== 'null' && conv.participantAvatar !== 'undefined') {
+            return conv.participantAvatar;
+        }
+
+        const matchedConnection = connections.find((c) =>
+            String(c.id) === String(conv?.participantId) ||
+            (c.username && c.username === conv?.participantName)
+        );
+
+        return matchedConnection?.photoUrl || null;
+    };
+
     const handleConversationClick = async (conv) => {
         // Find user details from connection or create a simple user object
         const user = connections.find(c => c.id === conv.participantId) || {
@@ -421,7 +434,7 @@ const MessagingBar = () => {
                                 >
                                     <div className="position-relative me-3 flex-shrink-0">
                                         <Image
-                                            src={getDisplayAvatar(conv.participantAvatar)}
+                                            src={getDisplayAvatar(resolveConversationAvatar(conv))}
                                             alt={conv.participantName}
                                             width={48}
                                             height={48}
