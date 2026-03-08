@@ -492,6 +492,9 @@ export const WebSocketChatProvider = ({ children }) => {
             delay: 5000
           });
         }
+
+        // Takip durumu değiştiği için bileşenleri haberdar et
+        window.dispatchEvent(new Event('followStatusChanged'));
       });
 
       setSocket(socketInstance);
