@@ -10,6 +10,8 @@ import StyledHeader from './StyledHeader';
 import MessageIconWithBadge from './MessageIconWithBadge';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import ThemeSwitcher from './ThemeSwitcher';
+import NotificationDropdown from './NotificationDropdown';
+import FollowRequestsDropdown from './FollowRequestsDropdown';
 
 const TopHeader = () => {
   return <StyledHeader>
@@ -36,6 +38,9 @@ const TopHeader = () => {
           <MessageIconWithBadge />
         </li>
 
+        <FollowRequestsDropdown />
+        <NotificationDropdown />
+
         <li className="nav-item">
           <LanguageSwitcher />
         </li>
@@ -57,6 +62,10 @@ const TopHeader = () => {
         minWidth: 0
       }}>
         <MessageIconWithBadge />
+        <ul className="nav flex-nowrap align-items-center list-unstyled mb-0 m-0 p-0">
+          <FollowRequestsDropdown />
+          <NotificationDropdown />
+        </ul>
         <div className="mobile-language-switcher">
           <LanguageSwitcher />
         </div>

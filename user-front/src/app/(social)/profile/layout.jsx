@@ -117,6 +117,7 @@ const ProfileLayout = ({
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [followStatus, setFollowStatus] = useState(null);
 
   // Friends component state
   const [allScholars, setAllScholars] = useState([]);
@@ -331,6 +332,9 @@ const ProfileLayout = ({
             if (data.isFollowing !== undefined) {
               setIsFollowing(data.isFollowing);
             }
+            if (data.followStatus !== undefined) {
+              setFollowStatus(data.followStatus);
+            }
           } else if (response.status === 404) {
             // Scholar not found - will be handled by child page
             setProfileData(null);
@@ -362,6 +366,9 @@ const ProfileLayout = ({
 
             if (data.isFollowing !== undefined) {
               setIsFollowing(data.isFollowing);
+            }
+            if (data.followStatus !== undefined) {
+              setFollowStatus(data.followStatus);
             }
           } else {
             // console.error('User not found');
@@ -801,9 +808,15 @@ const ProfileLayout = ({
       // });
 
       if (response.ok) {
-        setIsFollowing(true);
-        // Keep profile data in sync to avoid stale UI
-        setProfileData(prev => prev ? { ...prev, isFollowing: true } : prev);
+        if (profileType === 'scholar') {
+          setIsFollowing(true);
+          setFollowStatus('accepted');
+          setProfileData(prev => prev ? { ...prev, isFollowing: true, followStatus: 'accepted' } : prev);
+        } else {
+          setIsFollowing(false);
+          setFollowStatus('pending');
+          setProfileData(prev => prev ? { ...prev, isFollowing: false, followStatus: 'pending' } : prev);
+        }
         // Refresh follow stats immediately
         fetchFollowStatsForContext();
       } else {
@@ -870,8 +883,9 @@ const ProfileLayout = ({
 
       if (response.ok) {
         setIsFollowing(false);
+        setFollowStatus(null);
         // Keep profile data in sync to avoid stale UI
-        setProfileData(prev => prev ? { ...prev, isFollowing: false } : prev);
+        setProfileData(prev => prev ? { ...prev, isFollowing: false, followStatus: null } : prev);
         // Refresh follow stats immediately
         fetchFollowStatsForContext();
       } else {
@@ -1166,7 +1180,7 @@ const ProfileLayout = ({
                       // Show follow button for other users
                       return (
                         <>
-                          {isFollowing ? (
+                          {isFollowing || followStatus === 'accepted' ? (
                             <Button
                               variant="outline-danger"
                               size="sm"
@@ -1186,6 +1200,28 @@ const ProfileLayout = ({
                                 </>
                               ) : (
                                 t('profileActions.unfollow')
+                              )}
+                            </Button>
+                          ) : followStatus === 'pending' ? (
+                            <Button
+                              variant="outline-secondary"
+                              size="sm"
+                              className="me-2 px-4"
+                              onClick={handleUnfollow}
+                              disabled={followLoading}
+                              style={{
+                                borderRadius: '50px',
+                                fontWeight: 'bold',
+                                borderWidth: '2px'
+                              }}
+                            >
+                              {followLoading ? (
+                                <>
+                                  <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                  {t('profileActions.following')}
+                                </>
+                              ) : (
+                                'İstek Gönderildi'
                               )}
                             </Button>
                           ) : (

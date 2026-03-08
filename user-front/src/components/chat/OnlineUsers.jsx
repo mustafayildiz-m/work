@@ -60,19 +60,20 @@ const findUserConversation = (conversations, user) => {
 };
 
 // Custom hook for API calls
-const useOnlineUsersAPI = () => {
-  const [apiUsers, setApiUsers] = useState([]);
+const useUsersAPI = () => {
+  const [allUsers, setAllUsers] = useState([]);
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const abortControllerRef = useRef(null);
   const intervalRef = useRef(null);
 
-  const fetchOnlineUsers = useCallback(async () => {
+  const fetchUsers = useCallback(async () => {
     const token = getToken();
     if (!token) {
-      // User not authenticated, skip fetching
-      setApiUsers([]);
+      setAllUsers([]);
+      setOnlineUsers([]);
       setLoading(false);
       return;
     }
@@ -88,29 +89,32 @@ const useOnlineUsersAPI = () => {
       abortControllerRef.current = new AbortController();
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
-      const response = await fetch(`${apiUrl}/chat/online-users`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        signal: abortControllerRef.current.signal
-      });
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      };
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      // Fetch both all users and online users in parallel
+      const [allUsersRes, onlineUsersRes] = await Promise.all([
+        fetch(`${apiUrl}/users`, { headers, signal: abortControllerRef.current.signal }),
+        fetch(`${apiUrl}/chat/online-users`, { headers, signal: abortControllerRef.current.signal })
+      ]);
+
+      if (!allUsersRes.ok || !onlineUsersRes.ok) {
+        throw new Error(`HTTP Error fetching users`);
       }
 
-      const data = await response.json();
-      setApiUsers(Array.isArray(data) ? data : []);
+      const allUsersData = await allUsersRes.json();
+      const onlineUsersData = await onlineUsersRes.json();
+
+      setAllUsers(Array.isArray(allUsersData) ? allUsersData : []);
+      setOnlineUsers(Array.isArray(onlineUsersData) ? onlineUsersData : []);
 
     } catch (error) {
-      if (error.name === 'AbortError') {
-        return;
-      }
+      if (error.name === 'AbortError') return;
 
-      // Silently ignore 401 errors (expected when not authenticated)
       if (!error.message.includes('401')) {
-        console.error('Error fetching online users:', error);
+        console.error('Error fetching users:', error);
         setError(error.message);
       }
     } finally {
@@ -120,30 +124,23 @@ const useOnlineUsersAPI = () => {
 
   useEffect(() => {
     const token = getToken();
-    if (!token) {
-      // Don't fetch or set interval if not authenticated
-      return;
-    }
+    if (!token) return;
 
-    fetchOnlineUsers();
-
-    intervalRef.current = setInterval(fetchOnlineUsers, 30000);
+    fetchUsers();
+    intervalRef.current = setInterval(fetchUsers, 30000);
 
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (abortControllerRef.current) abortControllerRef.current.abort();
     };
-  }, [fetchOnlineUsers]);
+  }, [fetchUsers]);
 
   return {
-    apiUsers,
+    allUsers,
+    onlineUsersList: onlineUsers,
     loading,
     error,
-    refetch: fetchOnlineUsers
+    refetch: fetchUsers
   };
 };
 
@@ -157,16 +154,18 @@ const OnlineUsers = () => {
   const { userInfo } = useAuthContext();
   const { conversationPanel, messagingOffcanvas } = useLayoutContext();
 
-  const { apiUsers, loading, error, refetch } = useOnlineUsersAPI();
+  const { allUsers, onlineUsersList, loading, error, refetch } = useUsersAPI();
 
   const apiBaseUrl = useMemo(() => {
     return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
   }, []);
 
-  const onlineUserDetails = useMemo(() => {
-    if (!apiUsers || apiUsers.length === 0) return [];
+  const combinedUserDetails = useMemo(() => {
+    if (!allUsers || allUsers.length === 0) return [];
 
-    return apiUsers.map((user) => {
+    const onlineIds = new Set(onlineUsersList.map(u => String(u.id)));
+
+    return allUsers.map((user) => {
       const userConversation = findUserConversation(conversations, user);
 
       return {
@@ -174,14 +173,18 @@ const OnlineUsers = () => {
         name: user.username,
         avatar: getDisplayAvatar(user.photoUrl, apiBaseUrl),
         conversationId: userConversation?.id || null,
-        isCurrentUser: isCurrentUser(user, userInfo)
+        isCurrentUser: isCurrentUser(user, userInfo),
+        isOnline: onlineIds.has(String(user.id))
       };
     }).sort((a, b) => {
       if (a.isCurrentUser && !b.isCurrentUser) return -1;
       if (!a.isCurrentUser && b.isCurrentUser) return 1;
+      // Online users first
+      if (a.isOnline && !b.isOnline) return -1;
+      if (!a.isOnline && b.isOnline) return 1;
       return a.name.localeCompare(b.name);
     });
-  }, [apiUsers, conversations, userInfo, apiBaseUrl]);
+  }, [allUsers, onlineUsersList, conversations, userInfo, apiBaseUrl]);
 
   const handleUserClick = useCallback(async (user) => {
     if (user.isCurrentUser) {
@@ -226,9 +229,9 @@ const OnlineUsers = () => {
       <div className="card-header border-0 pb-0">
         <div className="d-flex justify-content-between align-items-center">
           <h6 className="mb-0">
-            Çevrimiçi Kullanıcılar
+            Kişiler
             <span className="badge bg-success ms-2">
-              {onlineUserDetails.length}
+              {combinedUserDetails.filter(u => u.isOnline).length} Çevrimiçi
             </span>
           </h6>
           <button
@@ -257,7 +260,7 @@ const OnlineUsers = () => {
             overflowY: 'auto'
           }}
         >
-          {loading && apiUsers.length === 0 ? (
+          {loading && allUsers.length === 0 ? (
             <div className="p-3 text-center">
               <div className="spinner-border spinner-border-sm text-primary" role="status" />
               <div className="mt-2 text-muted small">Kullanıcılar yükleniyor...</div>
@@ -280,12 +283,12 @@ const OnlineUsers = () => {
                 </button>
               </div>
             </div>
-          ) : onlineUserDetails.length === 0 ? (
+          ) : combinedUserDetails.length === 0 ? (
             <div className="p-3 text-center text-muted">
-              <p className="mb-0">Şu anda çevrimiçi kullanıcı yok</p>
+              <p className="mb-0">Sistemde kullanıcı bulunamadı</p>
             </div>
           ) : (
-            onlineUserDetails.map((user) => (
+            combinedUserDetails.map((user) => (
               <div
                 key={user.id}
                 className={`online-user-item p-3 border-bottom ${user.isCurrentUser ? 'bg-light' : ''
@@ -318,14 +321,16 @@ const OnlineUsers = () => {
                       onError={handleImageError}
                       priority={false}
                     />
-                    <div
-                      className="position-absolute bottom-0 end-0 bg-success rounded-circle"
-                      style={{
-                        width: '10px',
-                        height: '10px',
-                        border: '2px solid white'
-                      }}
-                    />
+                    {user.isOnline && (
+                      <div
+                        className="position-absolute bottom-0 end-0 bg-success rounded-circle"
+                        style={{
+                          width: '10px',
+                          height: '10px',
+                          border: '2px solid white'
+                        }}
+                      />
+                    )}
                   </div>
 
                   <div className="flex-grow-1">
@@ -335,7 +340,11 @@ const OnlineUsers = () => {
                         <span className="text-muted ms-2 small">(sen)</span>
                       )}
                     </h6>
-                    <small className="text-success">Çevrimiçi</small>
+                    {user.isOnline ? (
+                      <small className="text-success">Çevrimiçi</small>
+                    ) : (
+                      <small className="text-muted">Çevrimdışı</small>
+                    )}
                   </div>
                 </div>
               </div>

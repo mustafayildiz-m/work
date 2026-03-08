@@ -61,7 +61,8 @@ export default function WhoToFollowPage() {
             photoUrl: u.photoUrl,
             description: u.description || u.biography,
             role: u.role,
-            isFollowing: u.isFollowing || false
+            isFollowing: u.isFollowing || false,
+            followStatus: u.followStatus || null
           }));
 
           setUsers(userItems);
@@ -114,7 +115,8 @@ export default function WhoToFollowPage() {
               photoUrl: u.photoUrl,
               description: u.description || u.biography,
               role: u.role,
-              isFollowing: u.isFollowing || false
+              isFollowing: u.isFollowing || false,
+              followStatus: u.followStatus || null
             }));
 
             setFilteredUsers(userItems);
@@ -290,14 +292,14 @@ export default function WhoToFollowPage() {
         setUsers(prev =>
           prev.map(item =>
             item.id === followerId && item.type === followerType
-              ? { ...item, isFollowing: true }
+              ? { ...item, isFollowing: followerType === 'scholar' ? true : false, followStatus: followerType === 'scholar' ? 'accepted' : 'pending' }
               : item
           )
         );
         setFilteredUsers(prev =>
           prev.map(item =>
             item.id === followerId && item.type === followerType
-              ? { ...item, isFollowing: true }
+              ? { ...item, isFollowing: followerType === 'scholar' ? true : false, followStatus: followerType === 'scholar' ? 'accepted' : 'pending' }
               : item
           )
         );
@@ -344,14 +346,14 @@ export default function WhoToFollowPage() {
         setUsers(prev =>
           prev.map(item =>
             item.id === followerId && item.type === followerType
-              ? { ...item, isFollowing: false }
+              ? { ...item, isFollowing: false, followStatus: null }
               : item
           )
         );
         setFilteredUsers(prev =>
           prev.map(item =>
             item.id === followerId && item.type === followerType
-              ? { ...item, isFollowing: false }
+              ? { ...item, isFollowing: false, followStatus: null }
               : item
           )
         );
@@ -470,7 +472,7 @@ export default function WhoToFollowPage() {
                       </h6>
 
                       <div className="mt-auto pt-2">
-                        {user.isFollowing ? (
+                        {user.isFollowing || user.followStatus === 'accepted' ? (
                           <button
                             className="unfollow-btn-custom"
                             onClick={() => handleUnfollow(user.id, user.type)}
@@ -480,6 +482,19 @@ export default function WhoToFollowPage() {
                               <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             ) : (
                               t('whoToFollow.unfollow')
+                            )}
+                          </button>
+                        ) : user.followStatus === 'pending' ? (
+                          <button
+                            className="btn btn-outline-secondary w-100 fw-bold"
+                            onClick={() => handleUnfollow(user.id, user.type)}
+                            disabled={followLoading[`${user.type}-${user.id}`]}
+                            style={{ borderRadius: '8px', padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}
+                          >
+                            {followLoading[`${user.type}-${user.id}`] ? (
+                              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            ) : (
+                              'İstek Gönderildi'
                             )}
                           </button>
                         ) : (

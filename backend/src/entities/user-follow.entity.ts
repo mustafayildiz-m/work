@@ -25,4 +25,7 @@ export class UserFollow {
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'following_id' })
   following: User;
+
+  @Column({ type: 'enum', enum: ['pending', 'accepted'], default: 'pending' })
+  status: 'pending' | 'accepted';
 }
