@@ -684,7 +684,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
 
         <ul className="nav flex-column" style={{ gap: '2px', padding: 0, margin: 0, listStyle: 'none' }}>
           {links.map((item, idx) => (
-            <li key={item.nameKey + idx}>
+            <li key={(item.nameKey || item.name || item.link) + idx}>
               <Link
                 className="d-flex align-items-center text-decoration-none"
                 href={item.link}
@@ -726,7 +726,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                       : 'none'
                   }}
                 />
-                <span>{t(item.nameKey)}</span>
+                <span>{item.name || t(item.nameKey)}</span>
               </Link>
             </li>
           ))}

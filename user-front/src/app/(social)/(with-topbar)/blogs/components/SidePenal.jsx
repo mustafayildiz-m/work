@@ -101,7 +101,7 @@ const RecentPost = () => {
                   >
                     <Image 
                       src={post.author.photoUrl.startsWith('http') ? post.author.photoUrl : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}${post.author.photoUrl}`}
-                      alt={post.author.fullName}
+                      alt={post.author?.fullName || post.author?.name || post.author?.username || t('recentPosts.unknown_user')}
                       width={24}
                       height={24}
                       className="rounded-circle"
