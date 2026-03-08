@@ -1,6 +1,10 @@
 import { Injectable, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { createHash } from 'crypto';
 import axios from 'axios';
+import { TranslationCache } from '../entities/translation-cache.entity';
 
 // DeepL'in resmi olarak desteklediği hedef dil kodları
 const DEEPL_SUPPORTED_LANGS = new Set([
@@ -44,7 +48,22 @@ const DEEPL_SUPPORTED_LANGS = new Set([
 export class TranslationService {
   private readonly logger = new Logger(TranslationService.name);
 
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    @InjectRepository(TranslationCache)
+    private translationCacheRepo: Repository<TranslationCache>,
+  ) {}
+
+  private getCacheLookup(
+    text: string,
+    targetLangCode: string,
+    sourceLangCode?: string,
+  ): { sourceTextHash: string; targetLangCode: string; sourceLangCode: string } {
+    const sourceTextHash = createHash('md5').update(text).digest('hex');
+    const target = this.mapLanguageCode(targetLangCode);
+    const source = sourceLangCode ? this.mapLanguageCode(sourceLangCode) : 'auto';
+    return { sourceTextHash, targetLangCode: target, sourceLangCode: source };
+  }
 
   // DeepL API endpoint - ücretsiz plan
   private get DEEPL_API_URL(): string {
@@ -214,6 +233,16 @@ export class TranslationService {
       );
     }
 
+    // Veritabanından önbellek kontrolü - kalıcı çeviri deposu
+    const lookup = this.getCacheLookup(text, targetLangCode, sourceLangCode);
+    const cached = await this.translationCacheRepo.findOne({
+      where: lookup,
+    });
+    if (cached) {
+      this.logger.debug('Translation cache hit (database)');
+      return cached.translatedText;
+    }
+
     const targetLang = this.mapLanguageCode(targetLangCode);
 
     // DeepL bu dili desteklemiyorsa MyMemory'e yönlendir
@@ -221,7 +250,12 @@ export class TranslationService {
       this.logger.warn(
         `DeepL "${targetLang}" dilini desteklemiyor. MyMemory API kullanılıyor...`,
       );
-      return this.translateWithMyMemory(text, targetLangCode, sourceLangCode);
+      const result = await this.translateWithMyMemory(text, targetLangCode, sourceLangCode);
+      await this.translationCacheRepo.save({
+        ...lookup,
+        translatedText: result,
+      });
+      return result;
     }
 
     // DeepL API key kontrolü
@@ -272,7 +306,12 @@ export class TranslationService {
           response.data.translations.length > 0 &&
           response.data.translations[0].text
         ) {
-          return response.data.translations[0].text;
+          const translatedText = response.data.translations[0].text;
+          await this.translationCacheRepo.save({
+            ...lookup,
+            translatedText,
+          });
+          return translatedText;
         } else {
           throw new Error('Çeviri başarısız oldu');
         }
