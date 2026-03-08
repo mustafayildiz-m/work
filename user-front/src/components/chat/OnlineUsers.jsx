@@ -278,7 +278,7 @@ const OnlineUsers = () => {
         <div
           className="online-users-list"
           style={{
-            maxHeight: 'calc(100vh - 200px)',
+            height: '100%',
             overflowY: 'auto'
           }}
         >

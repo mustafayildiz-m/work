@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 const Messaging = () => {
   const { activeConversation } = useWebSocketChatContext();
   const [showConversationList, setShowConversationList] = useState(true);
+  const [mobileListView, setMobileListView] = useState('conversations');
 
   // Mobil cihazlarda conversation seçildiğinde listeyi gizle
   useEffect(() => {
@@ -25,8 +26,8 @@ const Messaging = () => {
   };
 
   return (
-    <main style={{ height: '100vh', overflow: 'hidden' }}>
-      <Container fluid className="h-100">
+    <main className="messaging-main">
+      <Container fluid className="h-100 px-0 px-md-2">
         <Row className="gx-0 h-100">
           {/* Sol Sidebar - Conversation Listesi */}
           <Col 
@@ -34,8 +35,32 @@ const Messaging = () => {
             xl={3} 
             className={`h-100 ${showConversationList ? 'd-block' : 'd-none d-lg-block'}`}
           >
-            <div className="h-100 d-flex flex-column">
-              <ConversationList />
+            <div className="h-100 d-flex flex-column messaging-pane">
+              <div className="d-lg-none p-2 border-bottom bg-body-tertiary">
+                <div className="btn-group w-100" role="group" aria-label="Mesajlaşma liste görünümü">
+                  <button
+                    type="button"
+                    className={`btn btn-sm ${mobileListView === 'conversations' ? 'btn-primary' : 'btn-outline-primary'}`}
+                    onClick={() => setMobileListView('conversations')}
+                  >
+                    Konuşmalar
+                  </button>
+                  <button
+                    type="button"
+                    className={`btn btn-sm ${mobileListView === 'users' ? 'btn-primary' : 'btn-outline-primary'}`}
+                    onClick={() => setMobileListView('users')}
+                  >
+                    Kişiler
+                  </button>
+                </div>
+              </div>
+              {mobileListView === 'users' ? (
+                <div className="d-lg-none h-100" style={{ minHeight: 0 }}>
+                  <OnlineUsers />
+                </div>
+              ) : (
+                <ConversationList />
+              )}
             </div>
           </Col>
 
@@ -45,11 +70,11 @@ const Messaging = () => {
             xl={showConversationList ? 6 : 9} 
             className={`h-100 ${!showConversationList ? 'd-block' : 'd-none d-lg-block'}`}
           >
-            <div className="h-100 d-flex flex-column">
+            <div className="h-100 d-flex flex-column messaging-pane">
               <div className="flex-grow-1" style={{ minHeight: 0 }}>
                 <MessageList onBackToConversations={handleBackToConversations} />
               </div>
-              <div style={{ height: '120px', flexShrink: 0 }}>
+              <div className="message-input-wrapper">
                 <MessageInput />
               </div>
             </div>
@@ -57,12 +82,34 @@ const Messaging = () => {
 
           {/* Sağ Sidebar - Online Kullanıcılar */}
           <Col lg={3} xl={3} className="h-100 d-none d-lg-block">
-            <div className="h-100">
+            <div className="h-100 messaging-pane">
               <OnlineUsers />
             </div>
           </Col>
         </Row>
       </Container>
+      <style jsx>{`
+        .messaging-main {
+          height: calc(100dvh - 64px);
+          min-height: calc(100dvh - 64px);
+          overflow: hidden;
+        }
+
+        .messaging-pane {
+          min-height: 0;
+        }
+
+        .message-input-wrapper {
+          flex-shrink: 0;
+        }
+
+        @media (max-width: 991.98px) {
+          .messaging-main {
+            height: calc(100dvh - 60px);
+            min-height: calc(100dvh - 60px);
+          }
+        }
+      `}</style>
     </main>
   );
 };

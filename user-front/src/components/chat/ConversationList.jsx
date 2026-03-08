@@ -293,7 +293,7 @@ const ConversationList = () => {
         <div
           className="conversations-list"
           style={{
-            maxHeight: 'calc(100vh - 250px)',
+            height: '100%',
             overflowY: 'auto'
           }}
         >
@@ -525,6 +525,16 @@ const ConversationList = () => {
 
         .min-width-0 {
           min-width: 0;
+        }
+
+        .card-body.p-0 {
+          min-height: 0;
+        }
+
+        @media (max-width: 991.98px) {
+          .conversation-item {
+            padding: 0.85rem !important;
+          }
         }
       `}</style>
     </div>
