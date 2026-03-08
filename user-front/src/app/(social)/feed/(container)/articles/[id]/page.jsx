@@ -3,10 +3,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardBody, CardHeader, CardTitle, Row, Col, Button, Badge, Spinner, Alert, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Modal, ProgressBar } from 'react-bootstrap';
-import { BsDownload, BsCalendar, BsPerson, BsFileText, BsArrowLeft, BsEyeFill, BsBook, BsGrid3X3, BsShare, BsWhatsapp, BsNewspaper, BsX, BsVolumeUp, BsTranslate, BsPause, BsPlay, BsSkipBackward, BsSkipForward } from 'react-icons/bs';
+import { BsDownload, BsCalendar, BsPerson, BsFileText, BsArrowLeft, BsEyeFill, BsBook, BsGrid3X3, BsShare, BsWhatsapp, BsNewspaper, BsX, BsVolumeUp, BsTranslate, BsPause, BsPlay, BsSkipBackward, BsSkipForward, BsArrowsMove } from 'react-icons/bs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLanguage } from '@/context/useLanguageContext';
+import { useLayoutContext } from '@/context/useLayoutContext';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import { useLanguages } from '@/hooks/useLanguages';
 import PdfViewer from '@/components/PdfViewer';
@@ -23,6 +24,8 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 const ArticleDetailPage = () => {
   const { t, loading: langLoading, locale } = useLanguage();
+  const { theme } = useLayoutContext();
+  const isDarkMode = theme === 'dark';
   const { showNotification } = useNotificationContext();
   const params = useParams();
   const router = useRouter();
@@ -1374,45 +1377,115 @@ const ArticleDetailPage = () => {
           }}
           onMouseDown={handlePlayerDragStart}
           onDoubleClick={() => setPlayerPosition({ x: 0, y: 0 })}
-          role="presentation"
         >
-          <Card className="border-0 shadow-lg" style={{ width: '100%', backgroundColor: '#1c1f2e', color: '#fff', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <CardBody className="p-3">
-              <div className="d-flex justify-content-center mb-2">
-                <div style={{ width: '44px', height: '4px', borderRadius: '4px', background: 'rgba(255,255,255,0.28)' }} />
+          <Card
+            className={`border-0 shadow-lg ${isDarkMode ? '' : 'border'}`}
+            style={{
+              width: '100%',
+              maxWidth: '1000px',
+              backgroundColor: isDarkMode ? '#1c1f2e' : '#ffffff',
+              color: isDarkMode ? '#ffffff' : '#111b36',
+              backdropFilter: 'blur(10px)',
+              borderRadius: '20px',
+              border: isDarkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)',
+              overflow: 'visible'
+            }}
+          >
+            <CardBody className="p-3" style={{ overflow: 'visible' }}>
+              <div className="d-flex flex-column align-items-center mb-3">
+                <div style={{ width: '44px', height: '4px', borderRadius: '4px', background: isDarkMode ? 'rgba(255,255,255,0.28)' : 'rgba(0,0,0,0.12)' }} />
+                <div className="d-flex align-items-center gap-2 mt-2 drag-hint-animation" style={{
+                  fontSize: '0.9rem',
+                  color: '#dc3545',
+                  fontWeight: 'bold',
+                  letterSpacing: '0.6px'
+                }}>
+                  <BsArrowsMove size={16} />
+                  <span>TAŞIMAK İÇİN SÜRÜKLEYİN</span>
+                </div>
               </div>
               {showReadingAssist && (currentOriginalChunks.length > 0 || currentTranslatedChunks.length > 0) && (
-                <div className="mb-3 p-2 rounded" style={{ maxHeight: '280px', overflowY: 'hidden', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)' }}>
+                <div
+                  className="mb-3 p-2 rounded"
+                  style={{
+                    maxHeight: '500px',
+                    overflowY: 'hidden',
+                    background: isDarkMode ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.03)',
+                    border: isDarkMode ? '1px solid rgba(255,255,255,0.12)' : '1px solid rgba(0,0,0,0.08)'
+                  }}
+                >
                   <div className="d-flex justify-content-between align-items-center mb-2 px-1">
-                    <small style={{ color: 'rgba(255,255,255,0.75)' }}>Orijinal + Çeviri (Anlık)</small>
-                    <small style={{ color: '#8ab4ff' }}>{activeChunkIndex + 1}/{Math.max(currentOriginalChunks.length, currentTranslatedChunks.length)}</small>
+                    <small style={{ color: isDarkMode ? 'rgba(255,255,255,0.75)' : 'rgba(0,0,0,0.55)' }}>Orijinal + Çeviri (Anlık)</small>
+                    <small style={{ color: '#8ab4ff' }}>
+                      {activeChunkIndex + 1}/{Math.max(currentOriginalChunks.length, currentTranslatedChunks.length)}
+                    </small>
                   </div>
                   {currentOriginalChunks.length > 0 && (
-                    <div className="mb-2 p-2 rounded" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', minHeight: '108px' }}>
-                      <small style={{ color: 'rgba(255,255,255,0.6)', display: 'block', marginBottom: '4px' }}>Orijinal Metin</small>
-                      <div ref={originalChunksContainerRef} style={{ maxHeight: '80px', overflowY: 'auto' }}>
+                    <div
+                      className="mb-2 p-2 rounded"
+                      style={{
+                        background: isDarkMode ? 'rgba(255,255,255,0.04)' : '#f8f9fa',
+                        border: isDarkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.06)',
+                        minHeight: '108px'
+                      }}
+                    >
+                      <small style={{ color: isDarkMode ? 'rgba(255,255,255,0.6)' : '#6c757d', display: 'block', marginBottom: '4px', fontWeight: '500' }}>
+                        Orijinal Metin
+                      </small>
+                      <div ref={originalChunksContainerRef} style={{ maxHeight: '180px', overflowY: 'auto' }}>
                         {currentOriginalChunks.map((chunk, idx) => (
-                          <span key={`o-${idx}-${chunk.slice(0, 10)}`} data-original-chunk-index={idx} style={{
-                            display: 'inline', marginRight: '6px', padding: idx === activeChunkIndex ? '1px 4px' : '0',
-                            borderRadius: '4px', background: idx === activeChunkIndex ? 'rgba(255,193,7,0.32)' : 'transparent',
-                            textDecoration: idx === activeChunkIndex ? 'underline' : 'none',
-                            color: idx <= activeChunkIndex ? '#fff' : 'rgba(255,255,255,0.65)', transition: 'all 0.2s ease'
-                          }}>{chunk}</span>
+                          <span
+                            key={`o-${idx}-${chunk.slice(0, 10)}`}
+                            data-original-chunk-index={idx}
+                            style={{
+                              display: 'inline',
+                              marginRight: '6px',
+                              padding: idx === activeChunkIndex ? '1px 4px' : '0',
+                              borderRadius: '4px',
+                              background: idx === activeChunkIndex ? 'rgba(255,193,7,0.35)' : 'transparent',
+                              textDecoration: idx === activeChunkIndex ? 'underline' : 'none',
+                              color: idx === activeChunkIndex ? (isDarkMode ? '#ffffff' : '#000000') : (idx < activeChunkIndex ? (isDarkMode ? '#ffffff' : '#000000') : (isDarkMode ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,0.5)')),
+                              transition: 'all 0.2s ease',
+                              fontWeight: idx === activeChunkIndex ? '600' : 'normal'
+                            }}
+                          >
+                            {chunk}
+                          </span>
                         ))}
                       </div>
                     </div>
                   )}
                   {currentTranslatedChunks.length > 0 && (
-                    <div className="p-2 rounded" style={{ background: 'rgba(0,123,255,0.08)', border: '1px solid rgba(0,123,255,0.25)', minHeight: '108px' }}>
-                      <small style={{ color: 'rgba(255,255,255,0.72)', display: 'block', marginBottom: '4px' }}>Çeviri Metni</small>
-                      <div ref={translatedChunksContainerRef} style={{ maxHeight: '80px', overflowY: 'auto' }}>
+                    <div
+                      className="p-2 rounded"
+                      style={{
+                        background: isDarkMode ? 'rgba(0,123,255,0.08)' : 'rgba(0,123,255,0.04)',
+                        border: isDarkMode ? '1px solid rgba(0,123,255,0.25)' : '1px solid rgba(0,123,255,0.15)',
+                        minHeight: '108px'
+                      }}
+                    >
+                      <small style={{ color: isDarkMode ? 'rgba(255,255,255,0.72)' : '#0d6efd', display: 'block', marginBottom: '4px', fontWeight: '500' }}>
+                        Çeviri Metni
+                      </small>
+                      <div ref={translatedChunksContainerRef} style={{ maxHeight: '180px', overflowY: 'auto' }}>
                         {currentTranslatedChunks.map((chunk, idx) => (
-                          <span key={`t-${idx}-${chunk.slice(0, 10)}`} data-translated-chunk-index={idx} style={{
-                            display: 'inline', marginRight: '6px', padding: idx === activeChunkIndex ? '1px 4px' : '0',
-                            borderRadius: '4px', background: idx === activeChunkIndex ? 'rgba(0,123,255,0.35)' : 'transparent',
-                            textDecoration: idx === activeChunkIndex ? 'underline' : 'none',
-                            color: idx <= activeChunkIndex ? '#fff' : 'rgba(255,255,255,0.65)', transition: 'all 0.2s ease'
-                          }}>{chunk}</span>
+                          <span
+                            key={`t-${idx}-${chunk.slice(0, 10)}`}
+                            data-translated-chunk-index={idx}
+                            style={{
+                              display: 'inline',
+                              marginRight: '6px',
+                              padding: idx === activeChunkIndex ? '1px 4px' : '0',
+                              borderRadius: '4px',
+                              background: idx === activeChunkIndex ? 'rgba(0,123,255,0.25)' : 'transparent',
+                              textDecoration: idx === activeChunkIndex ? 'underline' : 'none',
+                              color: idx === activeChunkIndex ? (isDarkMode ? '#ffffff' : '#000000') : (idx < activeChunkIndex ? (isDarkMode ? '#ffffff' : '#000000') : (isDarkMode ? 'rgba(255,255,255,0.65)' : 'rgba(0,0,0,0.5)')),
+                              transition: 'all 0.2s ease',
+                              fontWeight: idx === activeChunkIndex ? '600' : 'normal'
+                            }}
+                          >
+                            {chunk}
+                          </span>
                         ))}
                       </div>
                     </div>
@@ -1422,14 +1495,17 @@ const ArticleDetailPage = () => {
               <Row className="align-items-center g-3">
                 <Col xs={12} md={3}>
                   <div className="d-flex align-items-center gap-3">
-                    <div className="bg-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm" style={{ width: '45px', height: '45px' }}>
+                    <div
+                      className="bg-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm"
+                      style={{ width: '45px', height: '45px', animation: isReading && !isPaused ? 'pulse 2s infinite' : 'none' }}
+                    >
                       <BsVolumeUp size={22} style={{ color: '#fff' }} />
                     </div>
                     <div className="overflow-hidden">
-                      <h6 className="mb-0 text-truncate" style={{ fontSize: '0.95rem' }}>{article?.translations?.[0]?.title}</h6>
+                      <h6 className="mb-0 text-truncate" style={{ fontSize: '0.95rem', color: isDarkMode ? '#ffffff' : '#111b36' }}>{article?.translations?.[0]?.title}</h6>
                       <div className="d-flex align-items-center gap-2">
                         <Badge bg="primary" style={{ fontSize: '0.7rem' }}>{targetLang?.name || 'Çeviri'}</Badge>
-                        <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)' }}>
+                        <span style={{ fontSize: '0.75rem', color: isDarkMode ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.5)' }}>
                           {translating || playerStatus === 'loading' ? 'Hazırlanıyor...' : isPaused ? 'Duraklatıldı' : playerStatus === 'completed' ? 'Tamamlandı' : 'Okunuyor'}
                         </span>
                       </div>
@@ -1439,18 +1515,18 @@ const ArticleDetailPage = () => {
                 <Col xs={12} md={4} className="d-flex flex-column align-items-center">
                   <div className="d-flex align-items-center gap-3 mb-2 player-control-cluster">
                     <Button variant="link" className="player-icon-btn" disabled={currentPage <= 1 || translating} onClick={() => handleTranslateAndRead(targetLang, currentPage - 1)}><BsSkipBackward size={20} /></Button>
-                    <Button variant="light" className="rounded-circle d-flex align-items-center justify-content-center shadow player-main-btn" onClick={pauseResumeTextToSpeech} disabled={translating || !currentAudioRef.current}>
+                    <Button variant={isDarkMode ? "light" : "primary"} className="rounded-circle d-flex align-items-center justify-content-center shadow player-main-btn" onClick={pauseResumeTextToSpeech} disabled={translating || !currentAudioRef.current}>
                       {isPaused ? <BsPlay size={28} /> : <BsPause size={28} />}
                     </Button>
                     <Button variant="link" className="player-icon-btn" disabled={currentPage >= totalPages || translating} onClick={() => handleTranslateAndRead(targetLang, currentPage + 1)}><BsSkipForward size={20} /></Button>
                   </div>
-                  <div className="player-page-chip mb-2 text-center">
-                    <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'rgba(255,255,255,0.5)' }}>SAYFA</div>
+                  <div className={`player-page-chip mb-2 text-center ${isDarkMode ? '' : 'bg-light'}`}>
+                    <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '1px', color: isDarkMode ? 'rgba(255,255,255,0.5)' : '#6c757d' }}>SAYFA</div>
                     <div className="d-flex align-items-center gap-1 justify-content-center">
-                      <select className="bg-transparent border-0 fw-bold p-0 pe-1 player-select" style={{ fontSize: '1.2rem', color: '#007bff' }} value={currentPage} onChange={(e) => handleTranslateAndRead(targetLang, parseInt(e.target.value))}>
-                        {[...Array(totalPages || 1)].map((_, i) => (<option key={i + 1} value={i + 1} style={{ backgroundColor: '#1c1f2e', color: '#fff' }}>{i + 1}</option>))}
+                      <select className="bg-transparent border-0 fw-bold p-0 pe-1 player-select" style={{ fontSize: '1.2rem', color: isDarkMode ? '#007bff' : '#0d6efd' }} value={currentPage} onChange={(e) => handleTranslateAndRead(targetLang, parseInt(e.target.value))}>
+                        {[...Array(totalPages || 1)].map((_, i) => (<option key={i + 1} value={i + 1} style={{ backgroundColor: isDarkMode ? '#1c1f2e' : '#ffffff', color: isDarkMode ? '#ffffff' : '#000000' }}>{i + 1}</option>))}
                       </select>
-                      <span style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.62)' }}>/ {totalPages || 1}</span>
+                      <span style={{ fontSize: '1rem', color: isDarkMode ? 'rgba(255,255,255,0.62)' : 'rgba(0,0,0,0.5)' }}>/ {totalPages || 1}</span>
                     </div>
                   </div>
                   <div className="w-100 px-3 mt-1">
@@ -1478,10 +1554,10 @@ const ArticleDetailPage = () => {
                   <div className="d-flex flex-column align-items-end gap-2 px-2">
                     <div className="d-flex align-items-center gap-2 flex-nowrap">
                       <Dropdown drop="up" style={{ overflow: 'visible' }}>
-                        <DropdownToggle variant="outline-light" size="sm" className="rounded-pill px-3 d-flex align-items-center gap-1 player-pill-btn">{playbackRate}x</DropdownToggle>
-                        <DropdownMenu style={{ minWidth: '120px', backgroundColor: '#1c1f2e', border: '1px solid rgba(255,255,255,0.2)' }}>
+                        <DropdownToggle variant={isDarkMode ? "outline-light" : "outline-primary"} size="sm" className="rounded-pill px-3 d-flex align-items-center gap-1 player-pill-btn" style={{ color: isDarkMode ? '#ffffff' : '#0d6efd' }}>{playbackRate}x</DropdownToggle>
+                        <DropdownMenu style={{ minWidth: '120px', backgroundColor: isDarkMode ? '#1c1f2e' : '#ffffff', border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'}` }}>
                           {[0.5, 0.75, 1.0, 1.25, 1.5, 2.0].map(rate => (
-                            <button key={rate} onClick={() => changePlaybackRate(rate)} className="dropdown-item w-100 border-0 text-start" style={{ backgroundColor: playbackRate === rate ? '#007bff' : 'transparent', color: '#fff' }}>
+                            <button key={rate} onClick={() => changePlaybackRate(rate)} className="dropdown-item w-100 border-0 text-start" style={{ backgroundColor: playbackRate === rate ? (isDarkMode ? '#007bff' : '#0d6efd') : 'transparent', color: playbackRate === rate ? '#ffffff' : (isDarkMode ? '#ffffff' : '#000000') }}>
                               {rate === 1.0 ? 'Normal (1x)' : `${rate}x`}
                             </button>
                           ))}
@@ -1489,14 +1565,14 @@ const ArticleDetailPage = () => {
                       </Dropdown>
                     </div>
                     <div className="d-flex align-items-center gap-2 flex-wrap justify-content-end">
-                      <Button variant="outline-light" size="sm" className="rounded-pill px-2 player-pill-btn" onClick={() => {
+                      <Button variant={isDarkMode ? "outline-light" : "outline-primary"} size="sm" className="rounded-pill px-2 player-pill-btn" onClick={() => {
                         if (selectedPdfUrlForTranslate || selectedPdfUrl) {
                           setSelectedPdfUrl(selectedPdfUrlForTranslate || selectedPdfUrl);
                           setSelectedPdfTitle(article?.translations?.[0]?.title || 'PDF');
                           setShowPdfViewer(true);
                         }
                       }}>PDF'i Göster</Button>
-                      <Button variant="outline-light" size="sm" className="rounded-pill px-2 player-pill-btn" onClick={() => setShowReadingAssist((prev) => !prev)}>
+                      <Button variant={isDarkMode ? "outline-light" : "outline-primary"} size="sm" className="rounded-pill px-2 player-pill-btn" onClick={() => setShowReadingAssist((prev) => !prev)}>
                         {showReadingAssist ? 'Vurguyu Gizle' : 'Vurguyu Göster'}
                       </Button>
                       <Button variant="outline-danger" size="sm" className="rounded-circle p-1 player-close-btn" onClick={stopTextToSpeech}><BsX size={18} /></Button>
@@ -1519,18 +1595,25 @@ const ArticleDetailPage = () => {
           70% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); }
           100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
         }
+        @keyframes dragBlink {
+          0% { opacity: 0.5; transform: scale(0.98); }
+          100% { opacity: 1; transform: scale(1.02); }
+        }
+        .drag-hint-animation {
+          animation: dragBlink 1s ease-in-out infinite alternate;
+        }
         .hover-opacity-100:hover {
           opacity: 1 !important;
         }
         .player-select option {
-          background-color: #1c1f2e !important;
-          color: white !important;
+          background-color: ${isDarkMode ? '#1c1f2e' : '#ffffff'} !important;
+          color: ${isDarkMode ? 'white' : 'black'} !important;
         }
         .player-slider {
           -webkit-appearance: none;
           height: 4px;
           border-radius: 5px;
-          background: rgba(255,255,255,0.1);
+          background: ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'};
           outline: none;
         }
         .player-slider::-webkit-slider-thumb {
@@ -1554,8 +1637,8 @@ const ArticleDetailPage = () => {
           box-shadow: 0 0 5px rgba(0,0,0,0.3);
         }
         .player-control-cluster {
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.12);
+          background: ${isDarkMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.02)'};
+          border: 1px solid ${isDarkMode ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.12)'};
           border-radius: 999px;
           padding: 8px 12px;
           backdrop-filter: blur(8px);
@@ -1567,9 +1650,9 @@ const ArticleDetailPage = () => {
           display: inline-flex !important;
           align-items: center;
           justify-content: center;
-          color: rgba(255,255,255,0.95) !important;
-          border: 1px solid rgba(255,255,255,0.16) !important;
-          background: rgba(255,255,255,0.07) !important;
+          color: ${isDarkMode ? 'rgba(255,255,255,0.95)' : '#0d6efd'} !important;
+          border: 1px solid ${isDarkMode ? 'rgba(255,255,255,0.16)' : 'rgba(13,110,253,0.2)'} !important;
+          background: ${isDarkMode ? 'rgba(255,255,255,0.07)' : 'rgba(13,110,253,0.05)'} !important;
           transition: all 0.2s ease;
           text-decoration: none !important;
         }
@@ -1584,14 +1667,14 @@ const ArticleDetailPage = () => {
         .player-page-chip {
           padding: 8px 10px;
           border-radius: 12px;
-          border: 1px solid rgba(255,255,255,0.12);
-          background: rgba(255,255,255,0.04);
+          border: 1px solid ${isDarkMode ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.1)'};
+          background: ${isDarkMode ? 'rgba(255,255,255,0.04)' : '#f8f9fa'};
           min-width: 84px;
         }
         .player-pill-btn {
-          border: 1px solid rgba(255,255,255,0.24) !important;
-          background: rgba(255,255,255,0.08) !important;
-          color: #f4f7ff !important;
+          border: 1px solid ${isDarkMode ? 'rgba(255,255,255,0.24)' : 'rgba(13,110,253,0.24)'} !important;
+          background: ${isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(13,110,253,0.05)'} !important;
+          color: ${isDarkMode ? '#f4f7ff' : '#0d6efd'} !important;
           font-weight: 500;
         }
         .player-close-btn {
