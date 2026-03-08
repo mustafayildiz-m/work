@@ -3,7 +3,7 @@ import { timeSince } from '@/utils/date';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { Card, CardBody, CardFooter, CardHeader, Button } from 'react-bootstrap';
-import { BsBellFill, BsCheckLg, BsTrash } from 'react-icons/bs';
+import { BsBellFill, BsCheckLg, BsTrash, BsChatLeftText, BsBoxArrowUpRight } from 'react-icons/bs';
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
@@ -208,6 +208,27 @@ const NotificationDropdown = () => {
 
   const unreadCount = allNotifications.filter(n => !n.isRead).length;
 
+  const handleOpenMessageFromNotification = (e, notification) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const targetUserId = notification.relatedUserId || notification.related_user_id;
+    if (!targetUserId) return;
+
+    window.dispatchEvent(
+      new CustomEvent('openMessagingWithUser', {
+        detail: {
+          user: {
+            id: targetUserId,
+            firstName: '',
+            lastName: '',
+            photoUrl: notification.avatar || null
+          }
+        }
+      })
+    );
+  };
+
   return (
     <li className="nav-item dropdown ms-2" ref={containerRef} style={{ position: 'relative' }}>
       <button
@@ -232,7 +253,7 @@ const NotificationDropdown = () => {
           position: 'absolute',
           top: 'calc(100% + 10px)',
           right: 0,
-          width: '380px',
+          width: '460px',
           zIndex: 1050,
           display: isOpen ? 'block' : 'none'
         }}
@@ -291,15 +312,41 @@ const NotificationDropdown = () => {
                         )}
                       </div>
                       <div className="flex-grow-1 overflow-hidden">
-                        <p className={clsx('mb-0 small text-truncate', !notification.isRead ? (isDark ? 'fw-bold text-white' : 'fw-bold text-dark') : 'text-body')} style={{ maxWidth: '200px' }}>
+                        <p className={clsx('mb-0 small text-truncate', !notification.isRead ? (isDark ? 'fw-bold text-white' : 'fw-bold text-dark') : 'text-body')} style={{ maxWidth: '260px' }}>
                           {notification.title}
                         </p>
                         {(notification.description || notification.message) && (
-                          <p className="text-muted mb-0 small text-truncate" style={{ fontSize: '0.7rem', maxWidth: '200px' }}>
+                          <p className="text-muted mb-0 small text-truncate" style={{ fontSize: '0.7rem', maxWidth: '260px' }}>
                             {notification.description || notification.message}
                           </p>
                         )}
                         <p className="text-muted mb-0" style={{ fontSize: '0.65rem' }}>{timeSince(notification.time)}</p>
+                        {notification.type === 'follow_accept' && (notification.relatedUserId || notification.related_user_id) && (
+                          <div className="d-flex gap-2 mt-1">
+                            <Button
+                              as={Link}
+                              href={`/profile/user/${notification.relatedUserId || notification.related_user_id}`}
+                              size="sm"
+                              variant="outline-primary"
+                              className="py-0 px-2 d-flex align-items-center"
+                              style={{ fontSize: '0.68rem', borderRadius: '6px' }}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <BsBoxArrowUpRight className="me-1" size={11} />
+                              Profile Git
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline-success"
+                              className="py-0 px-2 d-flex align-items-center"
+                              style={{ fontSize: '0.68rem', borderRadius: '6px' }}
+                              onClick={(e) => handleOpenMessageFromNotification(e, notification)}
+                            >
+                              <BsChatLeftText className="me-1" size={11} />
+                              Mesaj Gonder
+                            </Button>
+                          </div>
+                        )}
                       </div>
                       <div className="d-flex gap-1 ms-2">
                         {!notification.isRead && (
