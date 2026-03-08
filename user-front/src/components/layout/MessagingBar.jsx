@@ -344,10 +344,48 @@ const MessagingBar = () => {
         setActiveChats(prev => prev.filter(chat => chat.user.id !== userId));
     };
 
+    const loadChatHistoryForUser = async (userId) => {
+        try {
+            const conv = conversations.find(c => String(c.participantId) === String(userId));
+            if (!conv || !conv.id || conv.id.startsWith('temp-')) return;
+
+            const history = await fetchMessages(conv.id);
+            if (!history || !Array.isArray(history)) return;
+
+            setActiveChats(prev => prev.map(chat =>
+                String(chat.user.id) === String(userId)
+                    ? {
+                        ...chat,
+                        messages: history.map(m => ({
+                            id: m.id,
+                            senderId: m.senderId,
+                            text: m.content,
+                            time: new Date(m.timestamp || m.createdAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                            isMe: String(m.senderId) === String(userInfo?.id || session?.user?.id)
+                        }))
+                    }
+                    : chat
+            ));
+        } catch (error) {
+            console.error('Error loading chat history on toggle:', error);
+        }
+    };
+
     const toggleChatWindow = (userId) => {
-        setActiveChats(prev => prev.map(chat =>
-            chat.user.id === userId ? { ...chat, isExpanded: !chat.isExpanded, unreadCount: !chat.isExpanded ? 0 : chat.unreadCount } : chat
-        ));
+        let shouldLoadHistory = false;
+
+        setActiveChats(prev => prev.map(chat => {
+            if (String(chat.user.id) !== String(userId)) return chat;
+            const nextExpanded = !chat.isExpanded;
+            if (nextExpanded && (!chat.messages || chat.messages.length === 0)) {
+                shouldLoadHistory = true;
+            }
+            return { ...chat, isExpanded: nextExpanded, unreadCount: nextExpanded ? 0 : chat.unreadCount };
+        }));
+
+        if (shouldLoadHistory) {
+            loadChatHistoryForUser(userId);
+        }
     };
 
     const updateChatInput = (userId, value) => {
