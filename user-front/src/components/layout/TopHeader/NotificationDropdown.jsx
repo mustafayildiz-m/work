@@ -17,6 +17,51 @@ const NotificationDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
 
+  const fetchNotifs = async () => {
+    try {
+      const notifs = await getAllNotifications();
+      setStaticNotifications(notifs || []);
+    } catch (e) { }
+  };
+
+  useEffect(() => {
+    fetchNotifs();
+
+    // Sync state locally when notifications are updated elsewhere
+    const handleRead = (e) => {
+      const { id } = e.detail;
+      setStaticNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true, is_read: true } : n));
+    };
+    const handleDelete = (e) => {
+      const { id } = e.detail;
+      setStaticNotifications(prev => prev.filter(n => n.id !== id));
+    };
+    const handleAllRead = () => {
+      setStaticNotifications(prev => prev.map(n => ({ ...n, isRead: true, is_read: true })));
+    };
+    const handleAllCleared = () => {
+      setStaticNotifications([]);
+    };
+
+    window.addEventListener('notificationMarkedRead', handleRead);
+    window.addEventListener('notificationDeleted', handleDelete);
+    window.addEventListener('notificationAllRead', handleAllRead);
+    window.addEventListener('notificationAllCleared', handleAllCleared);
+
+    return () => {
+      window.removeEventListener('notificationMarkedRead', handleRead);
+      window.removeEventListener('notificationDeleted', handleDelete);
+      window.removeEventListener('notificationAllRead', handleAllRead);
+      window.removeEventListener('notificationAllCleared', handleAllCleared);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchNotifs();
+    }
+  }, [isOpen]);
+
   const allNotifications = useMemo(() => {
     const combined = [...realTimeNotifications, ...staticNotifications];
 
@@ -57,109 +102,6 @@ const NotificationDropdown = () => {
       .sort((a, b) => new Date(b.time || 0) - new Date(a.time || 0));
   }, [realTimeNotifications, staticNotifications]);
 
-  const fetchNotifs = async () => {
-    try {
-      const notifs = await getAllNotifications();
-      setStaticNotifications(notifs || []);
-    } catch (e) { }
-  };
-
-  useEffect(() => {
-    fetchNotifs();
-
-    // Listen for notification changes from other components (like the notifications page)
-    window.addEventListener('notificationsChanged', fetchNotifs);
-    return () => window.removeEventListener('notificationsChanged', fetchNotifs);
-  }, []);
-
-  useEffect(() => {
-    if (isOpen) {
-      fetchNotifs();
-    }
-  }, [isOpen]);
-
-  const handleMarkAsRead = async (e, id) => {
-    e.preventDefault();
-    e.stopPropagation();
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/${id}/read`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (response.ok) {
-        setStaticNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
-        setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
-        window.dispatchEvent(new Event('notificationsChanged'));
-      }
-    } catch (error) {
-      console.error('Error marking notification as read:', error);
-    }
-  };
-
-  const handleMarkAllAsRead = async (e) => {
-    e.preventDefault();
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/read-all`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (response.ok) {
-        setStaticNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
-        setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
-        window.dispatchEvent(new Event('notificationsChanged'));
-      }
-    } catch (error) {
-      console.error('Error marking all notifications as read:', error);
-    }
-  };
-
-  const handleDeleteNotification = async (e, id) => {
-    e.preventDefault();
-    e.stopPropagation();
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (response.ok) {
-        setStaticNotifications(prev => prev.filter(n => n.id !== id));
-        setNotifications(prev => prev.filter(n => n.id !== id));
-        window.dispatchEvent(new Event('notificationsChanged'));
-      }
-    } catch (error) {
-      console.error('Error deleting notification:', error);
-    }
-  };
-
-  const handleClearAll = async (e) => {
-    e.preventDefault();
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (response.ok) {
-        setStaticNotifications([]);
-        setNotifications([]);
-        window.dispatchEvent(new Event('notificationsChanged'));
-      }
-    } catch (error) {
-      console.error('Error clearing notifications:', error);
-    }
-  };
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (containerRef.current && !containerRef.current.contains(event.target)) {
@@ -182,17 +124,98 @@ const NotificationDropdown = () => {
     };
   }, []);
 
+  const handleMarkAsRead = async (e, id) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/${id}/read`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        setStaticNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
+        setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
+        window.dispatchEvent(new CustomEvent('notificationMarkedRead', { detail: { id } }));
+      }
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
+  };
+
+  const handleMarkAllAsRead = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/read-all`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        setStaticNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+        setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+        window.dispatchEvent(new CustomEvent('notificationAllRead'));
+      }
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+    }
+  };
+
+  const handleDeleteNotification = async (e, id) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        setStaticNotifications(prev => prev.filter(n => n.id !== id));
+        setNotifications(prev => prev.filter(n => n.id !== id));
+        window.dispatchEvent(new CustomEvent('notificationDeleted', { detail: { id } }));
+      }
+    } catch (error) {
+      console.error('Error deleting notification:', error);
+    }
+  };
+
+  const handleClearAll = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        setStaticNotifications([]);
+        setNotifications([]);
+        window.dispatchEvent(new CustomEvent('notificationAllCleared'));
+      }
+    } catch (error) {
+      console.error('Error clearing notifications:', error);
+    }
+  };
+
   const unreadCount = allNotifications.filter(n => !n.isRead).length;
 
   return (
-    <li className="nav-item ms-2" ref={containerRef} style={{ position: 'relative' }}>
+    <li className="nav-item dropdown ms-2" ref={containerRef} style={{ position: 'relative' }}>
       <button
         type="button"
         className="nav-link bg-light icon-md btn btn-light p-0 position-relative"
         onClick={() => setIsOpen((prev) => !prev)}
         aria-haspopup="menu"
         aria-expanded={isOpen}
-        aria-label="Bildirimler"
       >
         {unreadCount > 0 && (
           <span className="badge badge-center rounded-pill bg-danger position-absolute top-0 start-100 translate-middle" style={{ width: '18px', height: '18px', fontSize: '0.65rem' }}>
@@ -281,19 +304,19 @@ const NotificationDropdown = () => {
                       <div className="d-flex gap-1 ms-2">
                         {!notification.isRead && (
                           <button
-                            className="btn btn-xs btn-link text-primary p-1"
+                            className="btn btn-sm btn-link text-primary p-0 border-0 bg-transparent"
                             onClick={(e) => handleMarkAsRead(e, notification.id)}
                             title="Okundu işaretle"
                           >
-                            <BsCheckLg size={14} />
+                            <BsCheckLg size={16} />
                           </button>
                         )}
                         <button
-                          className="btn btn-xs btn-link text-danger p-1"
+                          className="btn btn-sm btn-link text-danger p-0 border-0 bg-transparent"
                           onClick={(e) => handleDeleteNotification(e, notification.id)}
                           title="Sil"
                         >
-                          <BsTrash size={14} />
+                          <BsTrash size={16} />
                         </button>
                       </div>
                     </div>
@@ -307,46 +330,29 @@ const NotificationDropdown = () => {
               </div>
             )}
           </CardBody>
-          <CardFooter className="text-center p-2">
-            <Link
-              href="/feed/notifications"
-              className="btn btn-primary-soft btn-sm w-100 fw-bold"
-              style={{ fontSize: '0.8rem' }}
-              onClick={() => setIsOpen(false)}
-            >
+          <CardFooter className="py-2 text-center border-0">
+            <Link className="small fw-bold text-primary text-decoration-none" href="/feed/notifications">
               Tüm Bildirimleri Gör
             </Link>
           </CardFooter>
         </Card>
       </div>
+
       <style jsx>{`
-        .notification-dropdown-menu {
-          background-color: ${isDark ? '#212529' : '#ffffff'} !important;
-          border: 1px solid ${isDark ? '#495057' : '#e9ecef'} !important;
-        }
-        .notification-item {
-          transition: all 0.2s ease;
-        }
-        .notification-item:hover {
-          background-color: ${isDark ? '#2c3034' : '#f8f9fa'} !important;
-        }
-        .unread-bg {
-          background-color: ${isDark ? '#2c3034' : '#f0f2f5'} !important;
-        }
-        [data-bs-theme="dark"] .card {
-          background-color: #212529;
-          border-color: #495057;
-        }
-        [data-bs-theme="dark"] .card-header, 
-        [data-bs-theme="dark"] .card-footer {
-          background-color: #2a2e33;
-          border-color: #495057;
-        }
-        [data-bs-theme="dark"] .list-group-item {
-          background-color: transparent;
-          border-color: #495057;
-        }
-      `}</style>
+                .notification-item:hover {
+                    background-color: ${isDark ? '#2c3034' : '#f8f9fa'} !important;
+                }
+                .unread-bg {
+                    background-color: ${isDark ? '#2c3034' : '#f0f2f5'} !important;
+                }
+                .notification-dropdown-menu {
+                    animation: fadeIn 0.2s ease-out;
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(-10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `}</style>
     </li>
   );
 };

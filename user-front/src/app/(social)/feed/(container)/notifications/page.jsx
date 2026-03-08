@@ -74,8 +74,8 @@ const NotificationsPage = () => {
     fetchNotifs();
 
     // Listen for notification changes from other components (like the notification dropdown)
-    window.addEventListener('notificationsChanged', fetchNotifs);
-    return () => window.removeEventListener('notificationsChanged', fetchNotifs);
+    // window.addEventListener('notificationsChanged', fetchNotifs);
+    // return () => window.removeEventListener('notificationsChanged', fetchNotifs);
   }, []);
 
   const handleMarkAsRead = async (e, id) => {
@@ -88,7 +88,7 @@ const NotificationsPage = () => {
       if (String(id).startsWith('notif-')) {
         setStaticNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true, is_read: true } : n));
         setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true, is_read: true } : n));
-        window.dispatchEvent(new Event('notificationsChanged'));
+        window.dispatchEvent(new CustomEvent('notificationMarkedRead', { detail: { id } }));
         return;
       }
 
@@ -100,7 +100,7 @@ const NotificationsPage = () => {
       if (response.ok) {
         setStaticNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true, is_read: true } : n));
         setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true, is_read: true } : n));
-        window.dispatchEvent(new Event('notificationsChanged'));
+        window.dispatchEvent(new CustomEvent('notificationMarkedRead', { detail: { id } }));
       }
     } catch (error) {
       console.error('Error marking notification as read:', error);
@@ -117,7 +117,7 @@ const NotificationsPage = () => {
       if (response.ok) {
         setStaticNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
         setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
-        window.dispatchEvent(new Event('notificationsChanged'));
+        window.dispatchEvent(new CustomEvent('notificationAllRead'));
       }
     } catch (error) {
       console.error('Error marking all notifications as read:', error);
@@ -138,7 +138,7 @@ const NotificationsPage = () => {
       if (response.ok) {
         setStaticNotifications(prev => prev.filter(n => n.id !== id));
         setNotifications(prev => prev.filter(n => n.id !== id));
-        window.dispatchEvent(new Event('notificationsChanged'));
+        window.dispatchEvent(new CustomEvent('notificationDeleted', { detail: { id } }));
       }
     } catch (error) {
       console.error('Error deleting notification:', error);
@@ -155,7 +155,7 @@ const NotificationsPage = () => {
       if (response.ok) {
         setStaticNotifications([]);
         setNotifications([]);
-        window.dispatchEvent(new Event('notificationsChanged'));
+        window.dispatchEvent(new CustomEvent('notificationAllCleared'));
       }
     } catch (error) {
       console.error('Error clearing notifications:', error);
