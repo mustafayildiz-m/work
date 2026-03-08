@@ -842,20 +842,20 @@
     "continue": "Continue Browsing"
   },
   "messaging": {
-    "title": "Messaging",
-    "newMessage": "New Message",
-    "searchPlaceholder": "Search messages",
-    "noMessage": "No messages yet",
-    "noSearchResults": "No search results found.",
-    "noConversations": "No conversations yet.",
-    "defaultRole": "Software Developer",
-    "me": "Me",
-    "you": "You",
-    "writeMessage": "Write a message...",
-    "send": "Send",
-    "newMessageSearchPlaceholder": "Type one or more names",
-    "suggested": "Suggested",
-    "userFallback": "User",
-    "unknownUser": "Unknown User"
+    "title": "메시지",
+    "newMessage": "새 메시지",
+    "searchPlaceholder": "메시지 검색",
+    "noMessage": "아직 메시지가 없습니다",
+    "noSearchResults": "검색 결과가 없습니다.",
+    "noConversations": "아직 대화가 없습니다.",
+    "defaultRole": "소프트웨어 개발자",
+    "me": "나",
+    "you": "당신",
+    "writeMessage": "메시지를 입력하세요...",
+    "send": "보내기",
+    "newMessageSearchPlaceholder": "하나 이상의 이름을 입력하세요",
+    "suggested": "추천",
+    "userFallback": "사용자",
+    "unknownUser": "알 수 없는 사용자"
   }
 }

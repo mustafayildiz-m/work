@@ -830,20 +830,20 @@
     "continue": "Continue Browsing"
   },
   "messaging": {
-    "title": "Messaging",
-    "newMessage": "New Message",
-    "searchPlaceholder": "Search messages",
-    "noMessage": "No messages yet",
-    "noSearchResults": "No search results found.",
-    "noConversations": "No conversations yet.",
-    "defaultRole": "Software Developer",
-    "me": "Me",
-    "you": "You",
-    "writeMessage": "Write a message...",
-    "send": "Send",
-    "newMessageSearchPlaceholder": "Type one or more names",
-    "suggested": "Suggested",
-    "userFallback": "User",
-    "unknownUser": "Unknown User"
+    "title": "Üzenetek",
+    "newMessage": "Új üzenet",
+    "searchPlaceholder": "Keresés az üzenetek között",
+    "noMessage": "Még nincsenek üzenetek",
+    "noSearchResults": "Nincs találat.",
+    "noConversations": "Még nincsenek beszélgetések.",
+    "defaultRole": "Szoftverfejlesztő",
+    "me": "Én",
+    "you": "Te",
+    "writeMessage": "Írj üzenetet...",
+    "send": "Küldés",
+    "newMessageSearchPlaceholder": "Írj be egy vagy több nevet",
+    "suggested": "Javasolt",
+    "userFallback": "Felhasználó",
+    "unknownUser": "Ismeretlen felhasználó"
   }
 }

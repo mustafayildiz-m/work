@@ -21,7 +21,7 @@ const ScholarsPage = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [isSearching, setIsSearching] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
-  const itemsPerPage = 10;
+  const itemsPerPage = 12;
 
   useEffect(() => {
     const fetchScholars = async () => {
@@ -253,27 +253,27 @@ const ScholarsPage = () => {
   };
 
   const renderScholarCard = (scholar) => (
-    <Col lg={4} md={6} sm={6} xs={12} className="mb-4" key={scholar.id}>
+    <Col lg={3} md={4} sm={6} xs={12} className="mb-3" key={scholar.id}>
       <Card className="h-100 border-0 scholar-card" style={{
-        borderRadius: '24px',
+        borderRadius: '18px',
         overflow: 'hidden',
-        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.05)',
+        boxShadow: '0 6px 18px rgba(0, 0, 0, 0.05)',
         transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
         backgroundColor: '#fff',
         position: 'relative'
       }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-10px)';
-          e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.12)';
+          e.currentTarget.style.transform = 'translateY(-6px)';
+          e.currentTarget.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.10)';
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.05)';
+          e.currentTarget.style.boxShadow = '0 6px 18px rgba(0, 0, 0, 0.05)';
         }}
       >
         {/* Modern Header Gradient */}
         <div style={{
-          height: '110px',
+          height: '80px',
           background: 'linear-gradient(135deg, #66BB6A 0%, #2E7D32 100%)',
           position: 'relative',
           overflow: 'hidden'
@@ -293,10 +293,10 @@ const ScholarsPage = () => {
           <div className="position-absolute" style={{
             top: '15px',
             right: '15px',
-            width: '42px',
-            height: '42px',
+            width: '34px',
+            height: '34px',
             background: '#ffffff',
-            borderRadius: '12px',
+            borderRadius: '10px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -304,27 +304,27 @@ const ScholarsPage = () => {
             zIndex: 2,
             transition: 'transform 0.3s ease'
           }}>
-            <BsMortarboard size={20} style={{ color: '#2E7D32' }} />
+            <BsMortarboard size={16} style={{ color: '#2E7D32' }} />
           </div>
         </div>
 
-        <div className="d-flex flex-column flex-grow-1 px-4 pb-4 pt-0 text-center position-relative">
+        <div className="d-flex flex-column flex-grow-1 px-3 pb-3 pt-0 text-center position-relative">
           {/* Avatar Container - Header'ın üzerine taşacak */}
-          <div className="mx-auto" style={{ marginTop: '-55px', marginBottom: '1rem' }}>
+          <div className="mx-auto" style={{ marginTop: '-40px', marginBottom: '0.75rem' }}>
             <div style={{
-              width: '110px',
-              height: '110px',
+              width: '78px',
+              height: '78px',
               borderRadius: '50%',
-              padding: '5px',
+              padding: '3px',
               background: '#fff',
-              boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
+              boxShadow: '0 6px 14px rgba(0,0,0,0.1)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
             }}>
               <div style={{
-                width: '100px',
-                height: '100px',
+                width: '72px',
+                height: '72px',
                 borderRadius: '50%',
                 overflow: 'hidden',
                 position: 'relative'
@@ -332,8 +332,8 @@ const ScholarsPage = () => {
                 <Image
                   src={getImageUrl(scholar.photoUrl)}
                   alt={scholar.fullName}
-                  width={100}
-                  height={100}
+                  width={72}
+                  height={72}
                   style={{
                     width: '100%',
                     height: '100%',
@@ -349,34 +349,34 @@ const ScholarsPage = () => {
             </div>
           </div>
 
-          <CardTitle className="h5 mb-2 fw-bold" style={{ color: '#2c3e50', fontSize: '1.2rem' }}>
+          <CardTitle className="mb-1 fw-bold" style={{ color: '#2c3e50', fontSize: '0.95rem' }}>
             {scholar.fullName || 'İsimsiz Alim'}
           </CardTitle>
 
           {scholar.biography && (
-            <p className="text-muted mb-4 flex-grow-1" style={{
+            <p className="text-muted mb-3 flex-grow-1" style={{
               display: '-webkit-box',
-              WebkitLineClamp: 3,
+              WebkitLineClamp: 2,
               WebkitBoxOrient: 'vertical',
               overflow: 'hidden',
-              fontSize: '0.9rem',
-              lineHeight: '1.6',
+              fontSize: '0.8rem',
+              lineHeight: '1.4',
               color: '#6c757d'
             }}>
               {scholar.biography}
             </p>
           )}
 
-          <div className="mt-auto pt-2">
+          <div className="mt-auto pt-1">
             {scholar.id ? (
               <Link
                 href={`/profile/scholar/${scholar.id}`}
                 className="btn btn-outline-success w-100 rounded-pill fw-bold shadow-sm"
                 style={{
-                  padding: '0.7rem 1.5rem',
-                  borderWidth: '2px',
+                  padding: '0.42rem 0.9rem',
+                  borderWidth: '1px',
                   transition: 'all 0.3s ease',
-                  fontSize: '0.95rem'
+                  fontSize: '0.8rem'
                 }}
               >
                 {t('scholars.viewProfile')}

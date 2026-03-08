@@ -830,20 +830,20 @@
     "continue": "Continue Browsing"
   },
   "messaging": {
-    "title": "Messaging",
-    "newMessage": "New Message",
-    "searchPlaceholder": "Search messages",
-    "noMessage": "No messages yet",
-    "noSearchResults": "No search results found.",
-    "noConversations": "No conversations yet.",
-    "defaultRole": "Software Developer",
-    "me": "Me",
-    "you": "You",
-    "writeMessage": "Write a message...",
-    "send": "Send",
-    "newMessageSearchPlaceholder": "Type one or more names",
-    "suggested": "Suggested",
-    "userFallback": "User",
-    "unknownUser": "Unknown User"
+    "title": "Mesagerie",
+    "newMessage": "Mesaj nou",
+    "searchPlaceholder": "Caută în mesaje",
+    "noMessage": "Nu există mesaje încă",
+    "noSearchResults": "Nu s-au găsit rezultate.",
+    "noConversations": "Nu există conversații încă.",
+    "defaultRole": "Dezvoltator software",
+    "me": "Eu",
+    "you": "Tu",
+    "writeMessage": "Scrie un mesaj...",
+    "send": "Trimite",
+    "newMessageSearchPlaceholder": "Scrie unul sau mai multe nume",
+    "suggested": "Sugerați",
+    "userFallback": "Utilizator",
+    "unknownUser": "Utilizator necunoscut"
   }
 }

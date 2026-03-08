@@ -830,20 +830,20 @@
     "continue": "Continue Browsing"
   },
   "messaging": {
-    "title": "Messaging",
-    "newMessage": "New Message",
-    "searchPlaceholder": "Search messages",
-    "noMessage": "No messages yet",
-    "noSearchResults": "No search results found.",
-    "noConversations": "No conversations yet.",
-    "defaultRole": "Software Developer",
-    "me": "Me",
-    "you": "You",
-    "writeMessage": "Write a message...",
-    "send": "Send",
-    "newMessageSearchPlaceholder": "Type one or more names",
-    "suggested": "Suggested",
-    "userFallback": "User",
-    "unknownUser": "Unknown User"
+    "title": "Správy",
+    "newMessage": "Nová správa",
+    "searchPlaceholder": "Hľadať v správach",
+    "noMessage": "Zatiaľ žiadne správy",
+    "noSearchResults": "Nenašli sa žiadne výsledky.",
+    "noConversations": "Zatiaľ žiadne konverzácie.",
+    "defaultRole": "Softvérový vývojár",
+    "me": "Ja",
+    "you": "Ty",
+    "writeMessage": "Napíšte správu...",
+    "send": "Odoslať",
+    "newMessageSearchPlaceholder": "Zadajte jedno alebo viac mien",
+    "suggested": "Odporúčané",
+    "userFallback": "Používateľ",
+    "unknownUser": "Neznámy používateľ"
   }
 }

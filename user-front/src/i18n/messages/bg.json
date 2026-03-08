@@ -830,20 +830,20 @@
     "continue": "Continue Browsing"
   },
   "messaging": {
-    "title": "Messaging",
-    "newMessage": "New Message",
-    "searchPlaceholder": "Search messages",
-    "noMessage": "No messages yet",
-    "noSearchResults": "No search results found.",
-    "noConversations": "No conversations yet.",
-    "defaultRole": "Software Developer",
-    "me": "Me",
-    "you": "You",
-    "writeMessage": "Write a message...",
-    "send": "Send",
-    "newMessageSearchPlaceholder": "Type one or more names",
-    "suggested": "Suggested",
-    "userFallback": "User",
-    "unknownUser": "Unknown User"
+    "title": "Съобщения",
+    "newMessage": "Ново съобщение",
+    "searchPlaceholder": "Търси в съобщенията",
+    "noMessage": "Все още няма съобщения",
+    "noSearchResults": "Няма намерени резултати.",
+    "noConversations": "Все още няма разговори.",
+    "defaultRole": "Софтуерен разработчик",
+    "me": "Аз",
+    "you": "Ти",
+    "writeMessage": "Напиши съобщение...",
+    "send": "Изпрати",
+    "newMessageSearchPlaceholder": "Въведете едно или повече имена",
+    "suggested": "Предложени",
+    "userFallback": "Потребител",
+    "unknownUser": "Неизвестен потребител"
   }
 }

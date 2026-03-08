@@ -830,20 +830,20 @@
     "continue": "Continue Browsing"
   },
   "messaging": {
-    "title": "Messaging",
-    "newMessage": "New Message",
-    "searchPlaceholder": "Search messages",
-    "noMessage": "No messages yet",
-    "noSearchResults": "No search results found.",
-    "noConversations": "No conversations yet.",
-    "defaultRole": "Software Developer",
-    "me": "Me",
-    "you": "You",
-    "writeMessage": "Write a message...",
-    "send": "Send",
-    "newMessageSearchPlaceholder": "Type one or more names",
-    "suggested": "Suggested",
-    "userFallback": "User",
-    "unknownUser": "Unknown User"
+    "title": "Повідомлення",
+    "newMessage": "Нове повідомлення",
+    "searchPlaceholder": "Пошук у повідомленнях",
+    "noMessage": "Поки немає повідомлень",
+    "noSearchResults": "Нічого не знайдено.",
+    "noConversations": "Поки немає розмов.",
+    "defaultRole": "Розробник програмного забезпечення",
+    "me": "Я",
+    "you": "Ви",
+    "writeMessage": "Напишіть повідомлення...",
+    "send": "Надіслати",
+    "newMessageSearchPlaceholder": "Введіть одне або кілька імен",
+    "suggested": "Рекомендовані",
+    "userFallback": "Користувач",
+    "unknownUser": "Невідомий користувач"
   }
 }

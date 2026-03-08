@@ -841,20 +841,20 @@
     "continue": "Continue Browsing"
   },
   "messaging": {
-    "title": "Messaging",
-    "newMessage": "New Message",
-    "searchPlaceholder": "Search messages",
-    "noMessage": "No messages yet",
-    "noSearchResults": "No search results found.",
-    "noConversations": "No conversations yet.",
-    "defaultRole": "Software Developer",
-    "me": "Me",
-    "you": "You",
-    "writeMessage": "Write a message...",
-    "send": "Send",
-    "newMessageSearchPlaceholder": "Type one or more names",
-    "suggested": "Suggested",
-    "userFallback": "User",
-    "unknownUser": "Unknown User"
+    "title": "Nachrichten",
+    "newMessage": "Neue Nachricht",
+    "searchPlaceholder": "Nachrichten durchsuchen",
+    "noMessage": "Noch keine Nachrichten",
+    "noSearchResults": "Keine Suchergebnisse gefunden.",
+    "noConversations": "Noch keine Unterhaltungen.",
+    "defaultRole": "Softwareentwickler",
+    "me": "Ich",
+    "you": "Du",
+    "writeMessage": "Nachricht schreiben...",
+    "send": "Senden",
+    "newMessageSearchPlaceholder": "Einen oder mehrere Namen eingeben",
+    "suggested": "Vorgeschlagen",
+    "userFallback": "Benutzer",
+    "unknownUser": "Unbekannter Benutzer"
   }
 }
