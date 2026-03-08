@@ -7,6 +7,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/newsletters';
+const PUBLIC_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 function EditNewsletter() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -24,6 +25,12 @@ function EditNewsletter() {
   });
 
   const updateField = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
+  const resolveImageUrl = (imageUrl) => {
+    if (!imageUrl) return '';
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl;
+    return `${PUBLIC_API_URL.replace(/\/$/, '')}/${imageUrl.replace(/^\//, '')}`;
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -120,7 +127,7 @@ function EditNewsletter() {
                   className="input-style text-left cursor-pointer"
                   onClick={() => fileInputRef.current?.click()}
                 >
-                  {imageFile?.name || form.imageUrl || 'Kapak resmi secmek icin tiklayin'}
+                  {imageFile?.name || (form.imageUrl ? 'Mevcut kapak resmi secili' : 'Kapak resmi secmek icin tiklayin')}
                 </button>
                 <input
                   ref={fileInputRef}
@@ -132,7 +139,7 @@ function EditNewsletter() {
               </div>
               {(imagePreview || form.imageUrl) && (
                 <img
-                  src={imagePreview || form.imageUrl}
+                  src={imagePreview || resolveImageUrl(form.imageUrl)}
                   alt="Mevcut gorsel"
                   className="w-full max-w-md rounded-lg border border-gray-200 dark:border-gray-700"
                 />

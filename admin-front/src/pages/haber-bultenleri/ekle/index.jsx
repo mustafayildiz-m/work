@@ -7,6 +7,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/newsletters';
+const getTodayDate = () => new Date().toISOString().split('T')[0];
 
 function AddNewsletter() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ function AddNewsletter() {
   const [imagePreview, setImagePreview] = useState('');
   const [form, setForm] = useState({
     title: '',
-    publishDate: '',
+    publishDate: getTodayDate(),
     intro: '',
     content: ''
   });
