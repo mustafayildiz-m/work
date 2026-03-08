@@ -21,7 +21,9 @@ export interface MessageResponse {
   content: string;
   senderId: number;
   receiverId: number;
+  conversationId: string;
   status: MessageStatus;
+  timestamp: Date;
   createdAt: Date;
   sender: {
     id: number;
@@ -219,7 +221,9 @@ export class ChatService {
       content: message.content,
       senderId: message.senderId,
       receiverId: message.receiverId,
+      conversationId: message.conversationId,
       status: message.status,
+      timestamp: message.createdAt,
       createdAt: message.createdAt,
       sender: {
         id: message.sender.id,
@@ -377,7 +381,9 @@ export class ChatService {
       content: message.content,
       senderId: message.senderId,
       receiverId: message.receiverId,
+      conversationId: message.conversationId,
       status: message.status,
+      timestamp: message.createdAt,
       createdAt: message.createdAt,
       sender: {
         id: message.sender.id,
