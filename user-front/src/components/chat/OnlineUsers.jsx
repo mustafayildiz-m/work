@@ -94,9 +94,9 @@ const useUsersAPI = () => {
         'Content-Type': 'application/json'
       };
 
-      // Fetch both all users and online users in parallel
+      // Fetch both mutual connections and online users in parallel
       const [allUsersRes, onlineUsersRes] = await Promise.all([
-        fetch(`${apiUrl}/users`, { headers, signal: abortControllerRef.current.signal }),
+        fetch(`${apiUrl}/user-follow/connections`, { headers, signal: abortControllerRef.current.signal }),
         fetch(`${apiUrl}/chat/online-users`, { headers, signal: abortControllerRef.current.signal })
       ]);
 

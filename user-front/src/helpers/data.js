@@ -8,6 +8,37 @@ export const getAllUsers = async () => {
   return users;
 };
 
+export const getChatUsers = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) return [];
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user-follow/connections`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const text = await response.text();
+    if (!text) return [];
+    try {
+      const data = JSON.parse(text);
+      return data;
+    } catch (e) {
+      console.error('Error parsing connections JSON:', e);
+      return [];
+    }
+  } catch (error) {
+    console.error('Error fetching chat users:', error);
+    return [];
+  }
+};
+
 export const getWhoToFollow = async (type = 'all', limit = 200) => {
   try {
     const token = localStorage.getItem('token');
@@ -32,8 +63,15 @@ export const getWhoToFollow = async (type = 'all', limit = 200) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json();
-    return data;
+    const text = await response.text();
+    if (!text) return users.slice(0, limit);
+    try {
+      const data = JSON.parse(text);
+      return data;
+    } catch (e) {
+      console.error('Error parsing who-to-follow JSON:', e);
+      return users.slice(0, limit);
+    }
   } catch (error) {
     console.error('Error fetching who to follow data:', error);
     // Fallback to static data if API fails
@@ -54,8 +92,15 @@ export const getAllNotifications = async () => {
 
     if (!response.ok) return [];
 
-    const data = await response.json();
-    // Normalize data: backend uses 'created_at', frontend expects 'time'
+    const text = await response.text();
+    if (!text) return [];
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      console.error('Error parsing notifications JSON:', e);
+      return [];
+    }
     return data.map(n => {
       // Swapping for more personal display as requested
       const isFollowAccept = n.type === 'follow_accept';
@@ -166,9 +211,42 @@ export const getAllPostVideos = async () => {
   return data;
 };
 export const getUserById = async id => {
-  const data = users.find(user => user.id === id);
-  await sleep();
-  return data;
+  try {
+    const token = localStorage.getItem('token');
+    // First, check mock data for backward compatibility or when no token
+    const mockUser = users.find(user => user.id === id);
+    if (mockUser && !token) return mockUser;
+
+    if (token) {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok && response.status !== 204) {
+        const text = await response.text();
+        if (text) {
+          try {
+            const data = JSON.parse(text);
+            return {
+              ...data,
+              name: `${data.firstName} ${data.lastName}`,
+              avatar: data.photoUrl || (mockUser?.avatar || null),
+            };
+          } catch (jsonError) {
+            console.error('Error parsing user JSON:', jsonError);
+          }
+        }
+      }
+    }
+
+    return mockUser;
+  } catch (error) {
+    console.error('Error fetching user by id:', error);
+    return users.find(user => user.id === id);
+  }
 };
 export const getBlogById = async id => {
   const data = blogsData.find(blog => blog.id === id);
@@ -248,8 +326,21 @@ export const getTimelinePosts = async (userId, language = 'tr') => {
       }
     }
 
-    const data = await response.json();
-    return data;
+    const text = await response.text();
+    if (!text) return {
+      posts: [],
+      total: 0
+    };
+    try {
+      const data = JSON.parse(text);
+      return data;
+    } catch (e) {
+      console.error('Error parsing timeline JSON:', e);
+      return {
+        posts: [],
+        total: 0
+      };
+    }
   } catch (error) {
     console.error('Error fetching timeline posts:', error);
     // Don't fallback to static data, throw the error instead

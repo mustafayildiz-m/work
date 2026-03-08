@@ -43,7 +43,7 @@ export const ChatProvider = ({
     toggle: toggleMessageToast
   };
   useEffect(() => {
-    changeActiveChat('102');
+    // changeActiveChat('102'); // Removed hardcoded default chat
   }, []);
   return <ChatContext.Provider value={{
     activeChat,
@@ -51,6 +51,6 @@ export const ChatProvider = ({
     chatList,
     chatToast
   }}>
-      {children}
-    </ChatContext.Provider>;
+    {children}
+  </ChatContext.Provider>;
 };
