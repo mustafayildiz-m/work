@@ -12,8 +12,12 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import ThemeSwitcher from './ThemeSwitcher';
 import NotificationDropdown from './NotificationDropdown';
 import FollowRequestsDropdown from './FollowRequestsDropdown';
+import { useSession } from 'next-auth/react';
 
 const TopHeader = () => {
+  const { status } = useSession();
+  const isGuest = status === 'unauthenticated';
+
   return <StyledHeader>
     <div className="container position-relative d-flex align-items-center justify-content-between" style={{
       height: '64px',
@@ -34,12 +38,15 @@ const TopHeader = () => {
       </div>
 
       <ul className="nav flex-nowrap align-items-center d-none d-lg-flex list-unstyled mb-0" style={{ gap: '0.5rem', overflow: 'visible' }}>
-        <li className="nav-item">
-          <MessageIconWithBadge />
-        </li>
-
-        <FollowRequestsDropdown />
-        <NotificationDropdown />
+        {!isGuest && (
+          <>
+            <li className="nav-item">
+              <MessageIconWithBadge />
+            </li>
+            <FollowRequestsDropdown />
+            <NotificationDropdown />
+          </>
+        )}
 
         <li className="nav-item">
           <LanguageSwitcher />
@@ -61,11 +68,15 @@ const TopHeader = () => {
         justifyContent: 'flex-end',
         minWidth: 0
       }}>
-        <MessageIconWithBadge />
-        <ul className="nav flex-nowrap align-items-center list-unstyled mb-0 m-0 p-0">
-          <FollowRequestsDropdown />
-          <NotificationDropdown />
-        </ul>
+        {!isGuest && (
+          <>
+            <MessageIconWithBadge />
+            <ul className="nav flex-nowrap align-items-center list-unstyled mb-0 m-0 p-0">
+              <FollowRequestsDropdown />
+              <NotificationDropdown />
+            </ul>
+          </>
+        )}
         <div className="mobile-language-switcher">
           <LanguageSwitcher />
         </div>
