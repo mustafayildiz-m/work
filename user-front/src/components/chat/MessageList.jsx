@@ -32,6 +32,10 @@ const getDisplayAvatar = (photoUrl) => {
   if (photoUrl.startsWith('/uploads/')) {
     return `${apiUrl}${photoUrl}`;
   }
+
+  if (photoUrl.startsWith('uploads/')) {
+    return `${apiUrl}/${photoUrl}`;
+  }
   
   if (!photoUrl.startsWith('/') && !photoUrl.includes('uploads/')) {
     return `${apiUrl}/uploads/${photoUrl}`;
@@ -131,7 +135,7 @@ const MessageItem = memo(({
       {/* Date separator */}
       {showDate && messageDate && (
         <div className="text-center my-3">
-          <span className="badge bg-light text-muted">
+          <span className="badge text-body-secondary border" style={{ backgroundColor: 'var(--bs-tertiary-bg)' }}>
             {formatDateHeader(messageDate)}
           </span>
         </div>
@@ -162,11 +166,10 @@ const MessageItem = memo(({
             <div 
               className={clsx('message-bubble p-3 rounded', {
                 'bg-primary text-white': isOwnMessage,
-                'bg-secondary text-white': !isOwnMessage
+                'bg-body-tertiary text-body': !isOwnMessage
               })}
               style={!isOwnMessage ? {
-                backgroundColor: '#495057',
-                border: '1px solid #6c757d'
+                border: '1px solid var(--bs-border-color)'
               } : {}}
             >
               <div className="message-text mb-1">
@@ -213,7 +216,7 @@ const TypingIndicator = memo(({ activeConversation }) => {
           size={32}
           className="me-2"
         />
-        <div className="bg-light p-2 rounded">
+        <div className="bg-body-tertiary p-2 rounded">
           <div className="typing-dots">
             <span></span>
             <span></span>
@@ -226,9 +229,9 @@ const TypingIndicator = memo(({ activeConversation }) => {
 });
 
 // Memoized Header Component
-const MessageHeader = memo(({ activeConversation, onBackToConversations }) => {
+const MessageHeader = memo(({ activeConversation, onBackToConversations, isOnline }) => {
   return (
-    <Card.Header className="border-0 bg-light">
+    <Card.Header className="border-0 bg-body-tertiary">
       <div className="d-flex align-items-center">
         {/* Mobile back button - only visible on mobile */}
         <button
@@ -251,7 +254,7 @@ const MessageHeader = memo(({ activeConversation, onBackToConversations }) => {
         <div className="flex-grow-1">
           <h6 className="mb-0">{activeConversation.participantName}</h6>
           <small className="text-muted">
-            {activeConversation.isOnline ? 'Çevrimiçi' : 'Çevrimdışı'}
+            {isOnline ? 'Çevrimiçi' : 'Çevrimdışı'}
           </small>
         </div>
       </div>
@@ -267,7 +270,8 @@ const MessageList = ({ onBackToConversations }) => {
     loading,
     markMessageAsRead,
     typingUsers,
-    selectConversation
+    selectConversation,
+    onlineUsers
   } = useWebSocketChatContext();
 
   const messagesEndRef = useRef(null);
@@ -362,6 +366,32 @@ const MessageList = ({ onBackToConversations }) => {
     return activeConversation?.id && typingUsers[activeConversation.id];
   }, [activeConversation, typingUsers]);
 
+  const isConversationOnline = useMemo(() => {
+    if (!activeConversation || !onlineUsers) return false;
+    const participantId = String(activeConversation.participantId || '');
+    const participantUsername = String(activeConversation.participantUsername || '').toLowerCase();
+    const participantName = String(activeConversation.participantName || '').toLowerCase();
+
+    return onlineUsers.some((onlineUser) => {
+      if (onlineUser && typeof onlineUser === 'object') {
+        const onlineId = String(onlineUser.id || onlineUser.userId || '');
+        const onlineUsername = String(onlineUser.username || '').toLowerCase();
+        return (
+          (participantId && onlineId === participantId) ||
+          (participantUsername && onlineUsername === participantUsername) ||
+          (participantName && onlineUsername === participantName)
+        );
+      }
+
+      const value = String(onlineUser).toLowerCase();
+      return (
+        (participantId && value === participantId) ||
+        (participantUsername && value === participantUsername) ||
+        (participantName && value === participantName)
+      );
+    });
+  }, [activeConversation, onlineUsers]);
+
   // Handle back to conversations (mobile only)
   const handleBackToConversations = useCallback(() => {
     if (selectConversation) {
@@ -405,6 +435,7 @@ const MessageList = ({ onBackToConversations }) => {
       <MessageHeader 
         activeConversation={activeConversation} 
         onBackToConversations={handleBackToConversations}
+        isOnline={isConversationOnline}
       />
 
       {/* Messages */}

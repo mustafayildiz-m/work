@@ -49,6 +49,24 @@ const getWebSocketUrl = () => {
   return apiUrl.replace(/\/api\/?$/, '').replace('https://', 'wss://').replace('http://', 'ws://') + '/chat';
 };
 
+const normalizeOnlineUser = (userData) => {
+  if (!userData) return null;
+  if (typeof userData === 'object') {
+    return {
+      id: userData.id ?? userData.userId ?? null,
+      userId: userData.userId ?? userData.id ?? null,
+      username: userData.username || null,
+      photoUrl: userData.photoUrl || null,
+    };
+  }
+  return {
+    id: null,
+    userId: null,
+    username: String(userData),
+    photoUrl: null,
+  };
+};
+
 const WebSocketChatContext = createContext(undefined);
 
 const isNotificationSoundEnabled = () => {
@@ -374,24 +392,32 @@ export const WebSocketChatProvider = ({ children }) => {
 
       // User status events
       socketInstance.on('userOnline', (userData) => {
-        const username = typeof userData === 'object' ? userData.username : userData;
-        const userId = typeof userData === 'object' ? userData.userId : null;
+        const normalized = normalizeOnlineUser(userData);
+        if (!normalized?.username && !normalized?.id) return;
 
-        setOnlineUsers(prev => {
-          if (!prev.includes(username)) {
-            return [...prev, username];
-          }
-          return prev;
+        setOnlineUsers((prev) => {
+          const exists = prev.some((u) =>
+            (normalized.id && String(u.id) === String(normalized.id)) ||
+            (normalized.username && String(u.username) === String(normalized.username))
+          );
+          if (exists) return prev;
+          return [...prev, normalized];
         });
 
-        if (userId && username) {
-          setUserMap(prev => ({ ...prev, [username]: userId }));
+        if (normalized.userId && normalized.username) {
+          setUserMap(prev => ({ ...prev, [normalized.username]: normalized.userId }));
         }
       });
 
       socketInstance.on('userOffline', (userData) => {
-        const username = typeof userData === 'object' ? userData.username : userData;
-        setOnlineUsers(prev => prev.filter(u => u !== username));
+        const normalized = normalizeOnlineUser(userData);
+        setOnlineUsers((prev) =>
+          prev.filter((u) => {
+            if (normalized.id && String(u.id) === String(normalized.id)) return false;
+            if (normalized.username && String(u.username) === String(normalized.username)) return false;
+            return true;
+          })
+        );
       });
 
       socketInstance.on('typing', ({ userId, conversationId, isTyping }) => {
@@ -646,8 +672,8 @@ export const WebSocketChatProvider = ({ children }) => {
       const data = await apiCall('/chat/online-users');
 
       if (Array.isArray(data) && data.length > 0 && typeof data[0] === 'object') {
-        const usernames = data.map(user => user.username);
-        setOnlineUsers(usernames);
+        const normalizedUsers = data.map(normalizeOnlineUser).filter(Boolean);
+        setOnlineUsers(normalizedUsers);
 
         const mapping = {};
         data.forEach(user => {
@@ -657,7 +683,7 @@ export const WebSocketChatProvider = ({ children }) => {
         });
         setUserMap(mapping);
       } else {
-        setOnlineUsers(data || []);
+        setOnlineUsers((data || []).map(normalizeOnlineUser).filter(Boolean));
       }
     } catch (error) {
       // Silently ignore 401 errors (expected when not authenticated)
@@ -739,7 +765,7 @@ export const WebSocketChatProvider = ({ children }) => {
     }
   }, [activeConversation, fetchMessages]);
 
-  const createNewConversation = useCallback(async (participantId, participantName = null) => {
+  const createNewConversation = useCallback(async (participantId, participantName = null, participantData = null) => {
     let actualParticipantId = participantId;
     let actualParticipantName = participantName || participantId;
 
@@ -760,11 +786,15 @@ export const WebSocketChatProvider = ({ children }) => {
       id: `temp-${Date.now()}`,
       participantId: actualParticipantId,
       participantName: actualParticipantName,
-      participantAvatar: placeholderImg,
+      participantAvatar: participantData?.avatar || participantData?.photoUrl || placeholderImg,
+      participantUsername: participantData?.username || null,
+      participantFirstName: participantData?.firstName || null,
+      participantLastName: participantData?.lastName || null,
       lastMessage: null,
       lastMessageTime: null,
       unreadCount: 0,
-      isTemporary: true
+      isTemporary: true,
+      isOnline: Boolean(participantData?.isOnline),
     };
 
     setConversations(prev => [...prev, tempConversation]);
