@@ -254,7 +254,41 @@ export class ChatService {
       order: { lastMessageAt: 'DESC' },
     });
 
-    return conversations.map((conv) => {
+    const conversationsWithMeta = await Promise.all(
+      conversations.map(async (conv) => {
+        const lastVisibleMessage = await this.messageRepository
+          .createQueryBuilder('message')
+          .where('message.conversationId = :conversationId', {
+            conversationId: conv.id,
+          })
+          .andWhere(
+            '(message.senderId = :userId AND message.deletedBySender = false) OR (message.receiverId = :userId AND message.deletedByReceiver = false)',
+            { userId },
+          )
+          .orderBy('message.createdAt', 'DESC')
+          .getOne();
+
+        const unreadCount = await this.messageRepository
+          .createQueryBuilder('message')
+          .where('message.conversationId = :conversationId', {
+            conversationId: conv.id,
+          })
+          .andWhere('message.receiverId = :userId', { userId })
+          .andWhere('message.deletedByReceiver = false')
+          .andWhere('message.status != :readStatus', {
+            readStatus: MessageStatus.READ,
+          })
+          .getCount();
+
+        return {
+          conv,
+          lastVisibleMessage,
+          unreadCount,
+        };
+      }),
+    );
+
+    return conversationsWithMeta.map(({ conv, lastVisibleMessage, unreadCount }) => {
       const otherParticipant =
         conv.participant1Id === userId ? conv.participant2 : conv.participant1;
       return {
@@ -264,7 +298,9 @@ export class ChatService {
           username: otherParticipant.username,
           photoUrl: otherParticipant.photoUrl || undefined,
         },
+        lastMessage: lastVisibleMessage?.content || '',
         lastMessageAt: conv.lastMessageAt,
+        unreadCount,
         createdAt: conv.createdAt,
       };
     });
