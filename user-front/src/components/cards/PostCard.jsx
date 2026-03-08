@@ -607,8 +607,8 @@ const PostCard = ({
       {/* Shared Post Indicator - Facebook Style */}
       {isSharedPost && originalUser && (
         <div className="px-3 py-3" style={{
-          background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
-          borderBottom: '1px solid #dee2e6',
+          background: 'linear-gradient(135deg, var(--bs-tertiary-bg) 0%, var(--bs-secondary-bg) 100%)',
+          borderBottom: '1px solid var(--bs-border-color)',
           borderTopLeftRadius: '12px',
           borderTopRightRadius: '12px'
         }}>
@@ -627,7 +627,7 @@ const PostCard = ({
             </div>
             <div>
               <div className="d-flex align-items-center">
-                <span className="fw-bold text-dark" style={{ fontSize: '14px' }}>
+                <span className="fw-bold" style={{ fontSize: '14px', color: 'var(--bs-heading-color)' }}>
                   {originalUser.firstName} {originalUser.lastName}
                 </span>
                 <span className="text-muted ms-2" style={{ fontSize: '13px' }}>
