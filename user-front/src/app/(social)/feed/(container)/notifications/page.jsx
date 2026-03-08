@@ -58,30 +58,49 @@ const NotificationsPage = () => {
       .sort((a, b) => new Date(b.time || 0) - new Date(a.time || 0));
   }, [realTimeNotifications, staticNotifications]);
 
+  const fetchNotifs = async () => {
+    try {
+      setLoading(true);
+      const notifs = await getAllNotifications();
+      setStaticNotifications(notifs || []);
+    } catch (e) {
+      console.error("Error fetching notifications:", e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchNotifs = async () => {
-      try {
-        const notifs = await getAllNotifications();
-        setStaticNotifications(notifs || []);
-      } catch (e) {
-        console.error("Error fetching notifications:", e);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchNotifs();
+
+    // Listen for notification changes from other components (like the notification dropdown)
+    window.addEventListener('notificationsChanged', fetchNotifs);
+    return () => window.removeEventListener('notificationsChanged', fetchNotifs);
   }, []);
 
-  const handleMarkAsRead = async (id) => {
+  const handleMarkAsRead = async (e, id) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     try {
+      // If it's a real-time notification (not yet in DB), just mark it locally
+      if (String(id).startsWith('notif-')) {
+        setStaticNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true, is_read: true } : n));
+        setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true, is_read: true } : n));
+        window.dispatchEvent(new Event('notificationsChanged'));
+        return;
+      }
+
       const token = localStorage.getItem('token');
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/${id}/read`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
-        setStaticNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
-        setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
+        setStaticNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true, is_read: true } : n));
+        setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true, is_read: true } : n));
+        window.dispatchEvent(new Event('notificationsChanged'));
       }
     } catch (error) {
       console.error('Error marking notification as read:', error);
@@ -98,13 +117,18 @@ const NotificationsPage = () => {
       if (response.ok) {
         setStaticNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
         setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+        window.dispatchEvent(new Event('notificationsChanged'));
       }
     } catch (error) {
       console.error('Error marking all notifications as read:', error);
     }
   };
 
-  const handleDeleteNotification = async (id) => {
+  const handleDeleteNotification = async (e, id) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/${id}`, {
@@ -114,6 +138,7 @@ const NotificationsPage = () => {
       if (response.ok) {
         setStaticNotifications(prev => prev.filter(n => n.id !== id));
         setNotifications(prev => prev.filter(n => n.id !== id));
+        window.dispatchEvent(new Event('notificationsChanged'));
       }
     } catch (error) {
       console.error('Error deleting notification:', error);
@@ -130,6 +155,7 @@ const NotificationsPage = () => {
       if (response.ok) {
         setStaticNotifications([]);
         setNotifications([]);
+        window.dispatchEvent(new Event('notificationsChanged'));
       }
     } catch (error) {
       console.error('Error clearing notifications:', error);
@@ -217,7 +243,7 @@ const NotificationsPage = () => {
                       {!notification.isRead && (
                         <button
                           className="btn btn-sm btn-link text-primary p-1"
-                          onClick={() => handleMarkAsRead(notification.id)}
+                          onClick={(e) => handleMarkAsRead(e, notification.id)}
                           title="Okundu işaretle"
                         >
                           <BsCheckLg size={18} />
@@ -225,7 +251,7 @@ const NotificationsPage = () => {
                       )}
                       <button
                         className="btn btn-sm btn-link text-danger p-1"
-                        onClick={() => handleDeleteNotification(notification.id)}
+                        onClick={(e) => handleDeleteNotification(e, notification.id)}
                         title="Sil"
                       >
                         <BsTrash size={18} />

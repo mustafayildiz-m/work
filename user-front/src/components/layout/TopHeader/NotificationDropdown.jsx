@@ -57,13 +57,22 @@ const NotificationDropdown = () => {
       .sort((a, b) => new Date(b.time || 0) - new Date(a.time || 0));
   }, [realTimeNotifications, staticNotifications]);
 
+  const fetchNotifs = async () => {
+    try {
+      const notifs = await getAllNotifications();
+      setStaticNotifications(notifs || []);
+    } catch (e) { }
+  };
+
   useEffect(() => {
-    const fetchNotifs = async () => {
-      try {
-        const notifs = await getAllNotifications();
-        setStaticNotifications(notifs || []);
-      } catch (e) { }
-    };
+    fetchNotifs();
+
+    // Listen for notification changes from other components (like the notifications page)
+    window.addEventListener('notificationsChanged', fetchNotifs);
+    return () => window.removeEventListener('notificationsChanged', fetchNotifs);
+  }, []);
+
+  useEffect(() => {
     if (isOpen) {
       fetchNotifs();
     }
@@ -83,6 +92,7 @@ const NotificationDropdown = () => {
       if (response.ok) {
         setStaticNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
         setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
+        window.dispatchEvent(new Event('notificationsChanged'));
       }
     } catch (error) {
       console.error('Error marking notification as read:', error);
@@ -102,6 +112,7 @@ const NotificationDropdown = () => {
       if (response.ok) {
         setStaticNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
         setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+        window.dispatchEvent(new Event('notificationsChanged'));
       }
     } catch (error) {
       console.error('Error marking all notifications as read:', error);
@@ -122,6 +133,7 @@ const NotificationDropdown = () => {
       if (response.ok) {
         setStaticNotifications(prev => prev.filter(n => n.id !== id));
         setNotifications(prev => prev.filter(n => n.id !== id));
+        window.dispatchEvent(new Event('notificationsChanged'));
       }
     } catch (error) {
       console.error('Error deleting notification:', error);
@@ -141,6 +153,7 @@ const NotificationDropdown = () => {
       if (response.ok) {
         setStaticNotifications([]);
         setNotifications([]);
+        window.dispatchEvent(new Event('notificationsChanged'));
       }
     } catch (error) {
       console.error('Error clearing notifications:', error);
