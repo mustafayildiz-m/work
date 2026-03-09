@@ -213,7 +213,23 @@
     "user": "User",
     "loginRequired": "Login Required",
     "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
-    "loginAction": "Sign In / Sign Up"
+    "loginAction": "Sign In / Join Now",
+    "viewProfilePicture": "View profile picture",
+    "selectProfilePicture": "Select profile picture",
+    "showLess": "Show Less",
+    "showMore": "Show More",
+    "profilePicture": "Profile Picture",
+    "updateProfilePicture": "Update Profile Picture",
+    "fileSizeError": "File size cannot be larger than 10MB",
+    "profilePictureUpdated": "Your profile picture has been updated",
+    "profilePictureUpdateFailed": "Failed to update profile picture",
+    "profilePictureUploadError": "An error occurred while uploading profile picture",
+    "newProfilePicture": "Select new profile picture",
+    "selectPhoto": "Select Photo",
+    "maxFileSize": "Maximum file size: 10MB",
+    "supportedFormats": "Supported formats: JPG, PNG, GIF, WebP",
+    "error": "Error",
+    "success": "Success"
   },
   "feed": {
     "sortBy": "Sort by",
@@ -260,6 +276,21 @@
     "newslettersTranslating": "Translating...",
     "newslettersTranslationFailed": "Translation failed",
     "newslettersTranslationError": "Error occurred during translation"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllAsRead": "Mark all as read",
+    "clearAll": "Clear all",
+    "goToProfile": "Go to profile",
+    "sendMessage": "Send message",
+    "markAsRead": "Mark as read",
+    "delete": "Delete",
+    "noNotifications": "You have no notifications yet.",
+    "loading": "Loading...",
+    "loadMore": "Load more notifications",
+    "markAllAsReadShort": "Mark all read",
+    "clearAllShort": "Clear all",
+    "viewAllNotifications": "View all notifications"
   },
   "menu": {
     "feed": "Feed",

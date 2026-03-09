@@ -205,7 +205,23 @@
     "user": "Користувач",
     "loginRequired": "Login Required",
     "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
-    "loginAction": "Sign In / Sign Up"
+    "loginAction": "Sign In / Sign Up",
+    "viewProfilePicture": "Дивіться фото профілю",
+    "selectProfilePicture": "Виберіть зображення профілю",
+    "showLess": "Показати менше",
+    "showMore": "Показати більше",
+    "profilePicture": "Зображення профілю",
+    "updateProfilePicture": "Оновити зображення профілю",
+    "fileSizeError": "Розмір файлу не може перевищувати 10 МБ",
+    "profilePictureUpdated": "Зображення вашого профілю було оновлено",
+    "profilePictureUpdateFailed": "Не вдалося оновити зображення профілю",
+    "profilePictureUploadError": "Виникла помилка при завантаженні зображення профілю",
+    "newProfilePicture": "Виберіть нове зображення профілю",
+    "selectPhoto": "Виберіть фото",
+    "maxFileSize": "Максимальний розмір файлу: 10MB",
+    "supportedFormats": "Підтримувані формати: JPG, PNG, GIF, WebP",
+    "error": "Помилка.",
+    "success": "Успішно"
   },
   "feed": {
     "sortBy": "Сортувати за",
@@ -893,5 +909,20 @@
     "enterMessage": "Введіть повідомлення",
     "sendMessage": "Надіслати повідомлення",
     "backToConversations": "Повертаємося до діалогу"
+  },
+  "notifications": {
+    "title": "Сповіщення",
+    "markAllAsRead": "Позначити все прочитане",
+    "clearAll": "Зачистити все.",
+    "goToProfile": "Перейти до профілю",
+    "sendMessage": "Надіслати повідомлення",
+    "markAsRead": "Марк прочитав",
+    "delete": "Сил",
+    "noNotifications": "Ви ще не отримали повідомлення.",
+    "loading": "Завантаження...",
+    "loadMore": "Встановіть більше сповіщень",
+    "markAllAsReadShort": "Прочитати все",
+    "clearAllShort": "Очистити все.",
+    "viewAllNotifications": "Переглянути всі сповіщення"
   }
 }

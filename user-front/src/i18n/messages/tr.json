@@ -216,7 +216,23 @@
     "user": "Kullanıcı",
     "loginRequired": "Giriş Yapmanız Gerekiyor",
     "loginDescription": "Profil özelliklerini kullanmak ve diğer kullanıcılarla etkileşime geçmek için lütfen giriş yapın veya üye olun.",
-    "loginAction": "Giriş Yap / Üye Ol"
+    "loginAction": "Giriş Yap / Üye Ol",
+    "viewProfilePicture": "Profil resmini gör",
+    "selectProfilePicture": "Profil resmi seç",
+    "showLess": "Daha Az Göster",
+    "showMore": "Daha Fazla Göster",
+    "profilePicture": "Profil Resmi",
+    "updateProfilePicture": "Profil Resmini Güncelle",
+    "fileSizeError": "Dosya boyutu 10MB'dan büyük olamaz",
+    "profilePictureUpdated": "Profil resminiz güncellendi",
+    "profilePictureUpdateFailed": "Profil resmi güncellenemedi",
+    "profilePictureUploadError": "Profil resmi yüklenirken bir hata oluştu",
+    "newProfilePicture": "Yeni profil resmi seç",
+    "selectPhoto": "Fotoğraf Seç",
+    "maxFileSize": "Maksimum dosya boyutu: 10MB",
+    "supportedFormats": "Desteklenen formatlar: JPG, PNG, GIF, WebP",
+    "error": "Hata",
+    "success": "Başarılı"
   },
   "feed": {
     "sortBy": "Sırala",
@@ -264,6 +280,21 @@
     "newslettersTranslating": "Çevriliyor...",
     "newslettersTranslationFailed": "Çeviri başarısız",
     "newslettersTranslationError": "Çeviri yapılırken hata oluştu"
+  },
+  "notifications": {
+    "title": "Bildirimler",
+    "markAllAsRead": "Hepsini okundu işaretle",
+    "clearAll": "Tümünü temizle",
+    "goToProfile": "Profile git",
+    "sendMessage": "Mesaj gönder",
+    "markAsRead": "Okundu işaretle",
+    "delete": "Sil",
+    "noNotifications": "Henüz bildiriminiz bulunmuyor.",
+    "loading": "Yükleniyor...",
+    "loadMore": "Daha fazla bildirim görüntüle",
+    "markAllAsReadShort": "Hepsini Oku",
+    "clearAllShort": "Hepsini Temizle",
+    "viewAllNotifications": "Tüm Bildirimleri Gör"
   },
   "menu": {
     "feed": "Akış",

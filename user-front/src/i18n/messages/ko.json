@@ -205,7 +205,23 @@
     "user": "사용자",
     "loginRequired": "Login Required",
     "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
-    "loginAction": "Sign In / Sign Up"
+    "loginAction": "Sign In / Sign Up",
+    "viewProfilePicture": "프로필 사진 보기",
+    "selectProfilePicture": "프로필 사진 선택",
+    "showLess": "덜 보기",
+    "showMore": "자세히 보기",
+    "profilePicture": "프로필 사진",
+    "updateProfilePicture": "프로필 사진 업데이트",
+    "fileSizeError": "파일 크기는 10MB보다 클 수 없습니다.",
+    "profilePictureUpdated": "프로필 사진이 업데이트되었습니다.",
+    "profilePictureUpdateFailed": "프로필 사진을 업데이트하지 못했습니다.",
+    "profilePictureUploadError": "프로필 사진을 로드하는 동안 오류가 발생했습니다.",
+    "newProfilePicture": "새 프로필 사진 선택",
+    "selectPhoto": "사진 선택",
+    "maxFileSize": "최대 파일 크기: 10MB",
+    "supportedFormats": "지원되는 형식: JPG, PNG, GIF, WebP",
+    "error": "오류",
+    "success": "성공"
   },
   "feed": {
     "sortBy": "정렬 기준",
@@ -905,5 +921,20 @@
     "enterMessage": "메시지 입력",
     "sendMessage": "메시지 보내기",
     "backToConversations": "대화로 돌아가기"
+  },
+  "notifications": {
+    "title": "알림",
+    "markAllAsRead": "모두 읽음 표시",
+    "clearAll": "모두 지우기",
+    "goToProfile": "프로필로 이동",
+    "sendMessage": "메시지 보내기",
+    "markAsRead": "마크 읽기",
+    "delete": "Sil",
+    "noNotifications": "아직 알림이 없습니다.",
+    "loading": "로드 중...",
+    "loadMore": "더 많은 알림 설치",
+    "markAllAsReadShort": "모두 읽기",
+    "clearAllShort": "모두 지우기",
+    "viewAllNotifications": "모든 알림 보기"
   }
 }

@@ -205,7 +205,23 @@
     "user": "Uporabnik",
     "loginRequired": "Login Required",
     "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
-    "loginAction": "Sign In / Sign Up"
+    "loginAction": "Sign In / Sign Up",
+    "viewProfilePicture": "Oglejte si sliko profila",
+    "selectProfilePicture": "Izberite sliko profila",
+    "showLess": "Pokaži manj",
+    "showMore": "Pokaži več",
+    "profilePicture": "Profilna slika",
+    "updateProfilePicture": "Posodobitev profilne slike",
+    "fileSizeError": "Velikost datoteke ne sme biti večja od 10 MB",
+    "profilePictureUpdated": "Slika vašega profila je bila posodobljena",
+    "profilePictureUpdateFailed": "Ni uspelo posodobiti slike profila",
+    "profilePictureUploadError": "Pri nalaganju slike profila je prišlo do napake",
+    "newProfilePicture": "Izberite novo sliko profila",
+    "selectPhoto": "Izberite fotografijo",
+    "maxFileSize": "Največja velikost datoteke: 10 MB. NAJVEČJA DOVOLJENA VELIKOST DATOTEKE: 10 MB.",
+    "supportedFormats": "Podprti formati: JPG, PNG, GIF, WebP",
+    "error": "Napaka",
+    "success": "Uspešno"
   },
   "feed": {
     "sortBy": "Razvrsti po",
@@ -893,5 +909,20 @@
     "enterMessage": "Vnesite sporočilo",
     "sendMessage": "Pošlji sporočilo",
     "backToConversations": "Nazaj na dialog"
+  },
+  "notifications": {
+    "title": "Obvestila",
+    "markAllAsRead": "Označite vse prebrane",
+    "clearAll": "Počisti vse",
+    "goToProfile": "Pojdi na profil",
+    "sendMessage": "Pošlji sporočilo",
+    "markAsRead": "Mark preberi",
+    "delete": "Sil",
+    "noNotifications": "Nimate še nobenega obvestila.",
+    "loading": "Nalaganje...",
+    "loadMore": "Namestitev več obvestil",
+    "markAllAsReadShort": "Preberite vse",
+    "clearAllShort": "Počisti vse",
+    "viewAllNotifications": "Oglejte si vsa obvestila"
   }
 }

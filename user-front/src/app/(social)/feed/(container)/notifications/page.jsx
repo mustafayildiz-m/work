@@ -11,9 +11,11 @@ import LoadMoreButton from './components/LoadMoreButton';
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 import { getImageUrl } from '@/utils/image';
 import { useLayoutContext } from '@/context/useLayoutContext';
+import { useLanguage } from '@/context/useLanguageContext';
 
 const NotificationsPage = () => {
   const { theme } = useLayoutContext();
+  const { t } = useLanguage();
   const isDark = theme === 'dark';
   const { notifications: realTimeNotifications, setNotifications } = useWebSocketChatContext();
   const [staticNotifications, setStaticNotifications] = useState([]);
@@ -205,7 +207,7 @@ const NotificationsPage = () => {
     <Col lg={8} className="mx-auto mt-4">
       <Card className={clsx('border-0 shadow-sm', isDark ? 'bg-dark text-white' : 'bg-white')}>
         <CardHeader className={clsx('py-3 border-0 d-flex align-items-center justify-content-between', isDark ? 'bg-dark border-bottom border-secondary' : 'bg-white border-bottom')}>
-          <h1 className="h5 mb-0">Bildirimler {unreadCount > 0 && <span className="badge bg-danger ms-2">{unreadCount}</span>}</h1>
+          <h1 className="h5 mb-0">{t('notifications.title')} {unreadCount > 0 && <span className="badge bg-danger ms-2">{unreadCount}</span>}</h1>
           <Dropdown>
             <DropdownToggle as="a" className="text-secondary content-none btn btn-secondary-soft-hover py-1 px-2" id="cardNotiAction">
               <BsThreeDots />
@@ -213,12 +215,12 @@ const NotificationsPage = () => {
             <DropdownMenu className="dropdown-menu-end shadow border-0" aria-labelledby="cardNotiAction">
               <li>
                 <DropdownItem onClick={handleMarkAllAsRead}>
-                  <BsCheckLg className="me-2 text-primary" /> Hepsini Okundu İşaretle
+                  <BsCheckLg className="me-2 text-primary" /> {t('notifications.markAllAsRead')}
                 </DropdownItem>
               </li>
               <li>
                 <DropdownItem onClick={handleClearAll} className="text-danger">
-                  <BsTrash className="me-2" /> Tümünü Temizle
+                  <BsTrash className="me-2" /> {t('notifications.clearAll')}
                 </DropdownItem>
               </li>
             </DropdownMenu>
@@ -287,7 +289,7 @@ const NotificationsPage = () => {
                             onClick={(e) => e.stopPropagation()}
                           >
                             <BsBoxArrowUpRight className="me-1" size={11} />
-                            Profile Git
+                            {t('notifications.goToProfile')}
                           </Button>
                           <Button
                             size="sm"
@@ -297,7 +299,7 @@ const NotificationsPage = () => {
                             onClick={(e) => handleOpenMessageFromNotification(e, notification)}
                           >
                             <BsChatLeftText className="me-1" size={11} />
-                            Mesaj Gonder
+                            {t('notifications.sendMessage')}
                           </Button>
                         </div>
                       )}
@@ -307,7 +309,7 @@ const NotificationsPage = () => {
                         <button
                           className="btn btn-sm btn-link text-primary p-1"
                           onClick={(e) => handleMarkAsRead(e, notification.id)}
-                          title="Okundu işaretle"
+                          title={t('notifications.markAsRead')}
                         >
                           <BsCheckLg size={18} />
                         </button>
@@ -315,7 +317,7 @@ const NotificationsPage = () => {
                       <button
                         className="btn btn-sm btn-link text-danger p-1"
                         onClick={(e) => handleDeleteNotification(e, notification.id)}
-                        title="Sil"
+                        title={t('notifications.delete')}
                       >
                         <BsTrash size={18} />
                       </button>
@@ -328,12 +330,12 @@ const NotificationsPage = () => {
             <div className="p-5 text-center text-muted">
               {loading ? (
                 <div className="spinner-border spinner-border-sm text-primary" role="status">
-                  <span className="visually-hidden">Yükleniyor...</span>
+                  <span className="visually-hidden">{t('notifications.loading')}</span>
                 </div>
               ) : (
                 <>
                   <BsBellFill size={48} className="mb-3 opacity-25" />
-                  <p className="mb-0">Henüz bildiriminiz bulunmuyor.</p>
+                  <p className="mb-0">{t('notifications.noNotifications')}</p>
                 </>
               )}
             </div>

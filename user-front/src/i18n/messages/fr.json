@@ -203,7 +203,23 @@
     "user": "Utilisateur",
     "loginRequired": "Login Required",
     "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
-    "loginAction": "Sign In / Sign Up"
+    "loginAction": "Sign In / Sign Up",
+    "viewProfilePicture": "Voir l'image de profil",
+    "selectProfilePicture": "Sélectionner une image de profil",
+    "showLess": "Montrer moins",
+    "showMore": "Afficher plus",
+    "profilePicture": "Profil de l'image",
+    "updateProfilePicture": "Mise à jour de l'image du profil",
+    "fileSizeError": "La taille du fichier ne doit pas dépasser 10 Mo",
+    "profilePictureUpdated": "Votre photo de profil a été mise à jour",
+    "profilePictureUpdateFailed": "Échec de la mise à jour de la photo de profil",
+    "profilePictureUploadError": "Une erreur s'est produite lors du chargement de l'image de profil",
+    "newProfilePicture": "Sélectionner une nouvelle image de profil",
+    "selectPhoto": "Sélectionner une photo",
+    "maxFileSize": "Taille maximale du fichier : 10MB",
+    "supportedFormats": "Formats pris en charge : JPG, PNG, GIF, WebP",
+    "error": "Erreur",
+    "success": "Réussite"
   },
   "feed": {
     "sortBy": "Trier par",
@@ -904,5 +920,20 @@
     "enterMessage": "Saisir le message",
     "sendMessage": "Envoyer un message",
     "backToConversations": "Retour au dialogue"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllAsRead": "Marquer toutes les lectures",
+    "clearAll": "Tout effacer",
+    "goToProfile": "Aller au profil",
+    "sendMessage": "Envoyer un message",
+    "markAsRead": "Lire Mark",
+    "delete": "Sil",
+    "noNotifications": "Vous n'avez pas encore de notification.",
+    "loading": "Chargement...",
+    "loadMore": "Voir plus de notifications",
+    "markAllAsReadShort": "Tout lire",
+    "clearAllShort": "Tout effacer",
+    "viewAllNotifications": "Voir toutes les notifications"
   }
 }
