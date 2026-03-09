@@ -21,6 +21,12 @@
     "required": "필수",
     "or": "또는"
   },
+  "tabTitle": {
+    "oneNewMessage": "새 메시지 1개",
+    "newMessages": "새 메시지 {count}개",
+    "oneNewNotification": "새 알림 1개",
+    "newNotifications": "새 알림 {count}개"
+  },
   "auth": {
     "signIn": "로그인",
     "signUp": "가입하기",

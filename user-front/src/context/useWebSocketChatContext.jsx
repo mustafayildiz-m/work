@@ -551,7 +551,16 @@ export const WebSocketChatProvider = ({ children }) => {
           isRead: false
         };
 
-        setNotifications(prev => [newNotification, ...prev]);
+        setNotifications((prev) => {
+          const next = [newNotification, ...prev];
+          if (typeof window !== 'undefined' && document.visibilityState === 'hidden') {
+            const unreadCount = next.filter((n) => !(n.isRead === true || n.is_read === true)).length;
+            window.dispatchEvent(
+              new CustomEvent('tabTitleNotification', { detail: { type: 'notification', unreadCount } })
+            );
+          }
+          return next;
+        });
         playNotificationSound();
 
         if (notificationContext?.showNotification) {
@@ -586,7 +595,15 @@ export const WebSocketChatProvider = ({ children }) => {
           if (prev.some((existing) => existing.id === formattedNotification.id)) {
             return prev;
           }
-          return [formattedNotification, ...prev];
+          const next = [formattedNotification, ...prev];
+          // Sekme başlığı için hemen event - React render beklemeden (Firefox uyumluluğu)
+          if (typeof window !== 'undefined' && document.visibilityState === 'hidden') {
+            const unreadCount = next.filter((n) => !(n.isRead === true || n.is_read === true)).length;
+            window.dispatchEvent(
+              new CustomEvent('tabTitleNotification', { detail: { type: 'notification', unreadCount } })
+            );
+          }
+          return next;
         });
         playNotificationSound();
 

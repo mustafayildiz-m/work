@@ -21,6 +21,12 @@
     "required": "Richiesto",
     "or": "o"
   },
+  "tabTitle": {
+    "oneNewMessage": "1 nuovo messaggio",
+    "newMessages": "{count} nuovi messaggi",
+    "oneNewNotification": "1 nuova notifica",
+    "newNotifications": "{count} nuove notifiche"
+  },
   "auth": {
     "signIn": "Accedi",
     "signUp": "Iscriviti",

@@ -22,6 +22,12 @@
     "required": "Zorunlu",
     "or": "veya"
   },
+  "tabTitle": {
+    "oneNewMessage": "1 yeni mesaj",
+    "newMessages": "{count} yeni mesaj",
+    "oneNewNotification": "1 yeni bildirim",
+    "newNotifications": "{count} yeni bildirim"
+  },
   "guest": {
     "messagingTitle": "Sohbete Katıl",
     "messagingDesc": "Diğer kullanıcılarla mesajlaşmak için giriş yapmalısınız.",

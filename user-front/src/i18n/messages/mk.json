@@ -21,6 +21,12 @@
     "required": "Изисква се",
     "or": "или"
   },
+  "tabTitle": {
+    "oneNewMessage": "1 нова порака",
+    "newMessages": "{count} нови пораки",
+    "oneNewNotification": "1 ново известување",
+    "newNotifications": "{count} нови известувања"
+  },
   "auth": {
     "signIn": "Влезте в системата",
     "signUp": "Регистрирайте се",

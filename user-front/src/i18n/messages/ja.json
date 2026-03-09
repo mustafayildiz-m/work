@@ -21,6 +21,12 @@
     "required": "必須",
     "or": "または"
   },
+  "tabTitle": {
+    "oneNewMessage": "1件の新しいメッセージ",
+    "newMessages": "{count}件の新しいメッセージ",
+    "oneNewNotification": "1件の新しい通知",
+    "newNotifications": "{count}件の新しい通知"
+  },
   "auth": {
     "signIn": "ログイン",
     "signUp": "登録",

@@ -21,6 +21,12 @@
     "required": "مطلوب",
     "or": "أو"
   },
+  "tabTitle": {
+    "oneNewMessage": "رسالة جديدة واحدة",
+    "newMessages": "{count} رسائل جديدة",
+    "oneNewNotification": "إشعار جديد واحد",
+    "newNotifications": "{count} إشعارات جديدة"
+  },
   "auth": {
     "signIn": "تسجيل الدخول",
     "signUp": "إنشاء حساب",

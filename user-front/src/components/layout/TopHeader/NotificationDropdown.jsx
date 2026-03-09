@@ -23,6 +23,30 @@ const NotificationDropdown = () => {
     try {
       const notifs = await getAllNotifications();
       setStaticNotifications(notifs || []);
+      // API bildirimlerini context'e senkronize et - TabTitleUpdater sekme başlığı için görebilsin
+      setNotifications((prev) => {
+        const byId = new Map(prev.map((n) => [String(n.id), n]));
+        (notifs || []).forEach((n) => {
+          const id = String(n.id);
+          if (!byId.has(id)) {
+            byId.set(id, {
+              ...n,
+              isRead: n.isRead ?? n.is_read,
+              is_read: n.is_read ?? n.isRead,
+            });
+          }
+        });
+        const merged = Array.from(byId.values()).sort(
+          (a, b) => new Date(b.time || b.created_at || 0) - new Date(a.time || a.created_at || 0)
+        );
+        const unreadCount = merged.filter((n) => !(n.isRead === true || n.is_read === true)).length;
+        if (unreadCount > 0 && typeof window !== 'undefined' && document.visibilityState === 'hidden') {
+          window.dispatchEvent(
+            new CustomEvent('tabTitleNotification', { detail: { type: 'notification', unreadCount } })
+          );
+        }
+        return merged;
+      });
     } catch (e) { }
   };
 
