@@ -1,14 +1,14 @@
 'use client';
 
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import { useState, useCallback, useEffect } from 'react';
 import { Button, Card, CardBody, Spinner } from 'react-bootstrap';
-import { BsArrowLeft, BsTranslate } from 'react-icons/bs';
+import { BsArrowLeft } from 'react-icons/bs';
 import Link from 'next/link';
-import { useLanguages } from '@/hooks/useLanguages';
+import { useLanguage } from '@/context/useLanguageContext';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 const MAX_TEXT_LENGTH = 9000;
+const SOURCE_LOCALE = 'tr'; // Bulten icerigi varsayilan olarak Turkce
 
 const formatDate = (dateValue) => {
   if (!dateValue) return '-';
@@ -25,15 +25,6 @@ const resolveImageUrl = (imageUrl) => {
   if (!imageUrl) return '';
   if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl;
   return `${API_BASE_URL.replace(/\/$/, '')}/${imageUrl.replace(/^\//, '')}`;
-};
-
-const getLanguageFlag = (code) => {
-  const flagMap = {
-    tr: '🇹🇷', en: '🇬🇧', ar: '🇸🇦', de: '🇩🇪', fr: '🇫🇷', es: '🇪🇸',
-    it: '🇮🇹', ru: '🇷🇺', zh: '🇨🇳', ja: '🇯🇵', ko: '🇰🇷', fa: '🇮🇷',
-    ur: '🇵🇰', hi: '🇮🇳', id: '🇮🇩', ms: '🇲🇾', nl: '🇳🇱', pt: '🇵🇹'
-  };
-  return flagMap[(code || '').toLowerCase()] || '🌐';
 };
 
 function translateWithPlaceholders(html, translateFn) {
@@ -94,58 +85,13 @@ async function translateChunked(text, translateFn) {
 }
 
 export default function NewsletterContentWithTranslation({ data, themeCardStyle }) {
-  const { languages, loading: languagesLoading } = useLanguages();
-  const [selectedLang, setSelectedLang] = useState(null);
+  const { locale, t } = useLanguage();
   const [translated, setTranslated] = useState({ title: '', intro: '', sections: [] });
   const [translating, setTranslating] = useState(false);
   const [error, setError] = useState(null);
-  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
-  const [langDropdownPos, setLangDropdownPos] = useState({ top: 0, left: 0 });
-  const langToggleRef = useRef(null);
-  const langMenuRef = useRef(null);
-
-  useEffect(() => {
-    if (!langDropdownOpen || !langToggleRef.current) return;
-    const updatePos = () => {
-      if (langToggleRef.current && typeof window !== 'undefined') {
-        const rect = langToggleRef.current.getBoundingClientRect();
-        const w = 220;
-        let left = rect.right - w;
-        if (left < 8) left = 8;
-        if (left + w > window.innerWidth - 8) left = window.innerWidth - w - 8;
-        setLangDropdownPos({
-          top: rect.bottom + 4,
-          left,
-          width: w
-        });
-      }
-    };
-    updatePos();
-    window.addEventListener('scroll', updatePos, true);
-    window.addEventListener('resize', updatePos);
-    return () => {
-      window.removeEventListener('scroll', updatePos, true);
-      window.removeEventListener('resize', updatePos);
-    };
-  }, [langDropdownOpen]);
-
-  useEffect(() => {
-    if (!langDropdownOpen) return;
-    const handleClickOutside = (e) => {
-      if (
-        langToggleRef.current && !langToggleRef.current.contains(e.target) &&
-        langMenuRef.current && !langMenuRef.current.contains(e.target)
-      ) {
-        setLangDropdownOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [langDropdownOpen]);
 
   const translateApi = useCallback(async (text, targetCode) => {
-    const code = targetCode || selectedLang?.code;
-    if (!code) return text || '';
+    if (!targetCode) return text || '';
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     const res = await fetch(`${API_BASE_URL}/translation/translate`, {
       method: 'POST',
@@ -155,7 +101,7 @@ export default function NewsletterContentWithTranslation({ data, themeCardStyle 
       },
       body: JSON.stringify({
         text: text || '',
-        targetLangCode: code,
+        targetLangCode: targetCode,
         sourceLangCode: undefined
       })
     });
@@ -165,9 +111,8 @@ export default function NewsletterContentWithTranslation({ data, themeCardStyle 
     }
     const json = await res.json();
     return json.translatedText || '';
-  }, [selectedLang]);
+  }, []);
 
-  // Normalize content source: backend may return content and/or sections
   const contentSections = useCallback(() => {
     const secs = (data?.sections || []).filter((s) => s && typeof s.content === 'string');
     if (secs.length > 0) return secs;
@@ -178,44 +123,53 @@ export default function NewsletterContentWithTranslation({ data, themeCardStyle 
     return [];
   }, [data]);
 
-  const handleLanguageSelect = useCallback(async (lang) => {
-    if (!lang || !data) return;
-    setSelectedLang(lang);
+  useEffect(() => {
+    if (!data || locale === SOURCE_LOCALE) {
+      setTranslated({ title: '', intro: '', sections: [] });
+      setTranslating(false);
+      return;
+    }
+    let cancelled = false;
     setTranslating(true);
     setError(null);
-    try {
-      const api = (text) => translateApi(text, lang.code);
-      const sections = contentSections();
+    const api = (text) => translateApi(text, locale);
+    const sections = contentSections();
+    (async () => {
+      try {
+        const [titleRes, introRes, ...sectionRes] = await Promise.all([
+          translatePlain(data.title, api),
+          translatePlain(data.intro || '', api),
+          ...sections.map((s) =>
+            s.content
+              ? translateWithPlaceholders(s.content, (html) => translateChunked(html, api))
+              : Promise.resolve('')
+          )
+        ]);
+        if (!cancelled) {
+          setTranslated({
+            title: titleRes,
+            intro: introRes,
+            sections: sections.map((s, i) => ({
+              ...s,
+              content: sectionRes[i] ?? s.content
+            }))
+          });
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err.message || 'Ceviri yapilirken hata olustu');
+          setTranslated({ title: '', intro: '', sections: [] });
+        }
+      } finally {
+        if (!cancelled) setTranslating(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [data, locale, translateApi, contentSections]);
 
-      const [titleRes, introRes, ...sectionRes] = await Promise.all([
-        translatePlain(data.title, api),
-        translatePlain(data.intro || '', api),
-        ...sections.map((s) =>
-          s.content
-            ? translateWithPlaceholders(s.content, (html) => translateChunked(html, api))
-            : Promise.resolve('')
-        )
-      ]);
-
-      setTranslated({
-        title: titleRes,
-        intro: introRes,
-        sections: sections.map((s, i) => ({
-          ...s,
-          content: sectionRes[i] ?? s.content
-        }))
-      });
-    } catch (err) {
-      setError(err.message || 'Ceviri yapilirken hata olustu');
-      setTranslated({ title: '', intro: '', sections: [] });
-    } finally {
-      setTranslating(false);
-    }
-  }, [data, translateApi, contentSections]);
-
-  const displayTitle = selectedLang && translated.title ? translated.title : data?.title;
-  const displayIntro = selectedLang && translated.intro ? translated.intro : data?.intro;
-  const displaySections = selectedLang && translated.sections?.length
+  const displayTitle = locale !== SOURCE_LOCALE && translated.title ? translated.title : data?.title;
+  const displayIntro = locale !== SOURCE_LOCALE && translated.intro ? translated.intro : data?.intro;
+  const displaySections = locale !== SOURCE_LOCALE && translated.sections?.length
     ? translated.sections
     : contentSections();
 
@@ -234,93 +188,10 @@ export default function NewsletterContentWithTranslation({ data, themeCardStyle 
           }}
         >
           <BsArrowLeft />
-          Tum bultenlere don
+          {t('feed.newslettersBackToAll')}
         </Button>
 
-        <div className="d-flex flex-wrap align-items-center gap-2 mb-3">
-          <h3 className="fw-bold mb-0 me-auto">{displayTitle}</h3>
-          <div className="d-flex align-items-center gap-2">
-            {selectedLang && !translating && (
-              <Button
-                variant="outline-secondary"
-                size="sm"
-                onClick={() => {
-                  setSelectedLang(null);
-                  setTranslated({ title: '', intro: '', sections: [] });
-                  setError(null);
-                }}
-              >
-                Orijinale don
-              </Button>
-            )}
-            <div className="position-relative" ref={langToggleRef}>
-              <Button
-                variant="outline-primary"
-                size="sm"
-                className="d-flex align-items-center gap-2"
-                disabled={languagesLoading || translating}
-                onClick={() => setLangDropdownOpen((o) => !o)}
-              >
-                <BsTranslate />
-                {translating ? 'Cevriliyor...' : selectedLang ? `${getLanguageFlag(selectedLang.code)} ${selectedLang.name}` : 'Dil sec ve cevir'}
-              </Button>
-              {langDropdownOpen &&
-                typeof document !== 'undefined' &&
-                createPortal(
-                  <div
-                    ref={langMenuRef}
-                    role="menu"
-                    className="newsletter-lang-dropdown-custom"
-                    style={{
-                      position: 'fixed',
-                      top: langDropdownPos.top,
-                      left: langDropdownPos.left,
-                      width: langDropdownPos.width,
-                      maxHeight: 320,
-                      overflowY: 'auto',
-                      zIndex: 99999,
-                      backgroundColor: 'var(--bs-body-bg)',
-                      color: 'var(--bs-body-color)',
-                      border: '1px solid var(--bs-border-color)',
-                      borderRadius: 8,
-                      boxShadow: '0 0.5rem 1rem rgba(0,0,0,0.25)',
-                      padding: '0.25rem 0'
-                    }}
-                  >
-                    {languages
-                      .filter((l) => l.isActive !== false)
-                      .map((lang) => (
-                        <button
-                          key={lang.id}
-                          type="button"
-                          role="menuitem"
-                          className="d-block w-100 text-start border-0 px-3 py-2"
-                          style={{
-                            background: selectedLang?.id === lang.id ? 'var(--bs-primary-bg-subtle)' : 'transparent',
-                            color: 'var(--bs-body-color)',
-                            fontSize: '0.9rem',
-                            cursor: 'pointer'
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = 'var(--bs-tertiary-bg)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = selectedLang?.id === lang.id ? 'var(--bs-primary-bg-subtle)' : 'transparent';
-                          }}
-                          onClick={() => {
-                            handleLanguageSelect(lang);
-                            setLangDropdownOpen(false);
-                          }}
-                        >
-                          {getLanguageFlag(lang.code)} {lang.name}
-                        </button>
-                      ))}
-                  </div>,
-                  document.body
-                )}
-            </div>
-          </div>
-        </div>
+        <h3 className="fw-bold mb-3">{displayTitle}</h3>
 
         <small className="text-muted d-block mb-3">{formatDate(data?.publishDate || data?.publishedAt)}</small>
 
@@ -333,7 +204,7 @@ export default function NewsletterContentWithTranslation({ data, themeCardStyle 
         {translating && (
           <div className="d-flex align-items-center gap-2 mb-3 text-muted">
             <Spinner animation="border" size="sm" />
-            <span>Metin secilen dile cevriliyor...</span>
+            <span>{t('feed.newslettersTranslating')}</span>
           </div>
         )}
 
