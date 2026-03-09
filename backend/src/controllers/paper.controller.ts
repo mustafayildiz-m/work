@@ -33,13 +33,17 @@ export class PaperController {
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
     @Query('search') search?: string,
+    @Query('lang') lang?: string,
   ) {
-    return this.paperService.findAll(page, limit, search);
+    return this.paperService.findAll(page, limit, search, lang);
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.paperService.findOne(id);
+  findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('lang') lang?: string,
+  ) {
+    return this.paperService.findOne(id, lang);
   }
 
   @Post()

@@ -289,6 +289,7 @@
     "papersPublishInfoDesc": "This section contains current academic paper content.",
     "papersOtherEditions": "Other papers",
     "papersNoOtherEditions": "No other papers found.",
+    "papersLoading": "Loading...",
     "papersTranslating": "Translating...",
     "papersTranslationFailed": "Translation failed",
     "papersTranslationError": "Error occurred during translation"
