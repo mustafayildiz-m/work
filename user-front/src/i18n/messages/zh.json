@@ -479,8 +479,8 @@
   "profileMenu": {
     "feed": "喂食",
     "books": "书籍",
-    "about": "About",
-    "activity": "Lineage"
+    "about": "关于",
+    "activity": "家谱/世系"
   },
   "profileActions": {
     "editProfile": "编辑简介",
@@ -862,7 +862,26 @@
     "selectLanguageDesc": "In which language would you like to read the biography? It will be translated and read aloud in your chosen language.",
     "languagesLoading": "Loading languages...",
     "languagesError": "Language list could not be loaded. Please refresh the page.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "loading": "正在加载...",
+    "warning": "警告",
+    "noBiographyFound": "未找到传记资料",
+    "error": "错误",
+    "ttsError": "朗读时出现错误",
+    "noContentToRead": "未找到要阅读的内容",
+    "translationFailed": "翻译失败",
+    "translateOrTtsError": "翻译或朗读过程中出现错误",
+    "ttsStopped": "朗读停止",
+    "biographyReadStopped": "传记阅读停止",
+    "audioReading": "朗读",
+    "liveTracking": "即时跟踪",
+    "hide": "隐藏",
+    "show": "显示",
+    "statusIdle": "待机",
+    "statusPlaying": "游戏",
+    "statusPaused": "暂停",
+    "statusEnded": "已完成",
+    "statusError": "错误"
   },
   "guest": {
     "messagingTitle": "加入聊天",
@@ -936,5 +955,12 @@
     "markAllAsReadShort": "阅读全部",
     "clearAllShort": "全部清除",
     "viewAllNotifications": "查看所有通知"
+  },
+  "followRequests": {
+    "title": "后续要求",
+    "emptyState": "您没有待处理的后续请求。",
+    "wantsToConnect": "他想联系你",
+    "accept": "接受",
+    "reject": "拒绝"
   }
 }

@@ -467,8 +467,8 @@
   "profileMenu": {
     "feed": "Feed",
     "books": "Книги",
-    "about": "About",
-    "activity": "Lineage"
+    "about": "За",
+    "activity": "Генеалогия / Родословие"
   },
   "profileActions": {
     "editProfile": "Редактиране на профила",
@@ -848,9 +848,28 @@
     "mapTitle": "Location Map",
     "selectLanguageTitle": "Select Reading Language",
     "selectLanguageDesc": "In which language would you like to read the biography? It will be translated and read aloud in your chosen language.",
-    "languagesLoading": "Loading languages...",
-    "languagesError": "Language list could not be loaded. Please refresh the page.",
-    "cancel": "Cancel"
+    "languagesLoading": "Зареждане на езиците...",
+    "languagesError": "Списъкът с езици не може да се зареди. Моля, опреснете страницата.",
+    "cancel": "Отказ",
+    "loading": "Зареждане...",
+    "warning": "Предупреждение",
+    "noBiographyFound": "Не е намерена биографична информация",
+    "error": "Грешка",
+    "ttsError": "По време на четенето на глас е възникнала грешка",
+    "noContentToRead": "Не е намерено съдържание за четене",
+    "translationFailed": "Преводът е неуспешен",
+    "translateOrTtsError": "По време на превода или четенето на глас е възникнала грешка",
+    "ttsStopped": "Четене на глас спряно",
+    "biographyReadStopped": "Четенето на биографията спира",
+    "audioReading": "Четене на глас",
+    "liveTracking": "Незабавно проследяване",
+    "hide": "Скрий",
+    "show": "Покажи",
+    "statusIdle": "В режим на готовност",
+    "statusPlaying": "Играе",
+    "statusPaused": "Пауза",
+    "statusEnded": "Завършен",
+    "statusError": "Грешка"
   },
   "guest": {
     "messagingTitle": "Присъединете се към чата",
@@ -924,5 +943,12 @@
     "markAllAsReadShort": "Прочетете всичко",
     "clearAllShort": "Изчистване на всички",
     "viewAllNotifications": "Вижте всички известия"
+  },
+  "followRequests": {
+    "title": "Искания за последващи действия",
+    "emptyState": "Нямате висящи заявки за последващи действия.",
+    "wantsToConnect": "Той иска да се свърже с вас",
+    "accept": "Приемане на",
+    "reject": "Отхвърляне на"
   }
 }

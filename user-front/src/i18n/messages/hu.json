@@ -467,8 +467,8 @@
   "profileMenu": {
     "feed": "Táplálék",
     "books": "Könyvek",
-    "about": "About",
-    "activity": "Lineage"
+    "about": "A  oldalról",
+    "activity": "Genealógia / származás"
   },
   "profileActions": {
     "editProfile": "Profil szerkesztése",
@@ -850,7 +850,26 @@
     "selectLanguageDesc": "In which language would you like to read the biography? It will be translated and read aloud in your chosen language.",
     "languagesLoading": "Loading languages...",
     "languagesError": "Language list could not be loaded. Please refresh the page.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "loading": "Betöltés...",
+    "warning": "Figyelmeztetés",
+    "noBiographyFound": "Nem találtak életrajzi információt",
+    "error": "Hiba",
+    "ttsError": "Hiba történt a felolvasás során",
+    "noContentToRead": "Nem találtak olvasható tartalmat",
+    "translationFailed": "Fordítás sikertelen",
+    "translateOrTtsError": "Hiba történt a fordítás vagy a felolvasás során",
+    "ttsStopped": "Hangos olvasás megállt",
+    "biographyReadStopped": "Életrajz olvasás megállt",
+    "audioReading": "Hangos olvasás",
+    "liveTracking": "Azonnali nyomon követés",
+    "hide": "Rejtsd el",
+    "show": "Mutasd meg a",
+    "statusIdle": "Készenléti állapotban",
+    "statusPlaying": "Játék",
+    "statusPaused": "Paused",
+    "statusEnded": "Befejezett",
+    "statusError": "Hiba"
   },
   "guest": {
     "messagingTitle": "Csatlakozz a csevegéshez",
@@ -924,5 +943,12 @@
     "markAllAsReadShort": "Mindent elolvasni",
     "clearAllShort": "Mindent törölni",
     "viewAllNotifications": "Minden értesítés megtekintése"
+  },
+  "followRequests": {
+    "title": "Utánkövetési kérelmek",
+    "emptyState": "Nincsenek függőben lévő nyomonkövetési kérései.",
+    "wantsToConnect": "Kapcsolatba akar lépni veled",
+    "accept": "Elfogadom",
+    "reject": "Visszautasítani"
   }
 }

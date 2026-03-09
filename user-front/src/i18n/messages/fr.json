@@ -861,7 +861,26 @@
     "selectLanguageDesc": "Dans quelle langue souhaitez-vous lire la biographie ? Elle sera traduite et lue à haute voix dans la langue de votre choix.",
     "languagesLoading": "Chargement des langues...",
     "languagesError": "La liste des langues n'a pas pu être chargée. Veuillez actualiser la page.",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "loading": "Chargement...",
+    "warning": "Avertissement",
+    "noBiographyFound": "Aucune information biographique n'a été trouvée",
+    "error": "Erreur",
+    "ttsError": "Une erreur s'est produite pendant la lecture à haute voix",
+    "noContentToRead": "Aucun contenu à lire",
+    "translationFailed": "Échec de la traduction",
+    "translateOrTtsError": "Une erreur s'est produite lors de la traduction ou de la lecture à haute voix",
+    "ttsStopped": "Arrêt de la lecture à haute voix",
+    "biographyReadStopped": "La lecture de la biographie s'est arrêtée",
+    "audioReading": "Lire à haute voix",
+    "liveTracking": "Suivi instantané",
+    "hide": "Cacher",
+    "show": "Afficher",
+    "statusIdle": "En veille",
+    "statusPlaying": "Jouer",
+    "statusPaused": "En pause",
+    "statusEnded": "Terminé",
+    "statusError": "Erreur"
   },
   "guest": {
     "messagingTitle": "Rejoindre le chat",
@@ -935,5 +954,12 @@
     "markAllAsReadShort": "Tout lire",
     "clearAllShort": "Tout effacer",
     "viewAllNotifications": "Voir toutes les notifications"
+  },
+  "followRequests": {
+    "title": "Demandes de suivi",
+    "emptyState": "Vous n'avez pas de demande de suivi en attente.",
+    "wantsToConnect": "Il veut vous contacter",
+    "accept": "Accepter",
+    "reject": "Rejeter"
   }
 }

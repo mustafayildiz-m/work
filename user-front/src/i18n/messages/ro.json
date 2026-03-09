@@ -467,8 +467,8 @@
   "profileMenu": {
     "feed": "Alimente",
     "books": "Cărți",
-    "about": "About",
-    "activity": "Lineage"
+    "about": "Despre",
+    "activity": "Genealogie / Linie genealogică"
   },
   "profileActions": {
     "editProfile": "Editare profil",
@@ -848,9 +848,28 @@
     "mapTitle": "Location Map",
     "selectLanguageTitle": "Select Reading Language",
     "selectLanguageDesc": "In which language would you like to read the biography? It will be translated and read aloud in your chosen language.",
-    "languagesLoading": "Loading languages...",
-    "languagesError": "Language list could not be loaded. Please refresh the page.",
-    "cancel": "Cancel"
+    "languagesLoading": "Se încarcă limbile...",
+    "languagesError": "Lista de limbi nu a putut fi încărcată. Actualizați pagina.",
+    "cancel": "Anulare",
+    "loading": "Încărcare...",
+    "warning": "Avertisment",
+    "noBiographyFound": "Nu s-au găsit informații biografice",
+    "error": "Eroare",
+    "ttsError": "A apărut o eroare în timpul citirii cu voce tare",
+    "noContentToRead": "Nu s-a găsit conținut de citit",
+    "translationFailed": "Traducere eșuată",
+    "translateOrTtsError": "A apărut o eroare în timpul traducerii sau al citirii cu voce tare",
+    "ttsStopped": "Citirea cu voce tare s-a oprit",
+    "biographyReadStopped": "Citirea biografiei s-a oprit",
+    "audioReading": "Citiți cu voce tare",
+    "liveTracking": "Urmărire instantanee",
+    "hide": "Ascunde",
+    "show": "Spectacol",
+    "statusIdle": "În așteptare",
+    "statusPlaying": "Joc",
+    "statusPaused": "Pauză",
+    "statusEnded": "Completat",
+    "statusError": "Eroare"
   },
   "guest": {
     "messagingTitle": "Alăturați-vă chat-ului",
@@ -924,5 +943,12 @@
     "markAllAsReadShort": "Citește tot",
     "clearAllShort": "Ștergeți tot",
     "viewAllNotifications": "Vezi toate notificările"
+  },
+  "followRequests": {
+    "title": "Cereri de urmărire",
+    "emptyState": "Nu aveți cereri de urmărire în așteptare.",
+    "wantsToConnect": "Vrea să vă contacteze",
+    "accept": "Acceptați",
+    "reject": "Respingeți"
   }
 }

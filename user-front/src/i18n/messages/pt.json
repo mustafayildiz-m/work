@@ -479,8 +479,8 @@
   "profileMenu": {
     "feed": "Alimentação",
     "books": "Livros",
-    "about": "About",
-    "activity": "Lineage"
+    "about": "Sobre",
+    "activity": "Genealogia / Linhagem"
   },
   "profileActions": {
     "editProfile": "Editar perfil",
@@ -860,9 +860,28 @@
     "mapTitle": "Location Map",
     "selectLanguageTitle": "Select Reading Language",
     "selectLanguageDesc": "In which language would you like to read the biography? It will be translated and read aloud in your chosen language.",
-    "languagesLoading": "Loading languages...",
-    "languagesError": "Language list could not be loaded. Please refresh the page.",
-    "cancel": "Cancel"
+    "languagesLoading": "A carregar idiomas...",
+    "languagesError": "Não foi possível carregar a lista de idiomas. Atualize a página.",
+    "cancel": "Cancelar",
+    "loading": "Carregando...",
+    "warning": "Aviso",
+    "noBiographyFound": "Não foram encontradas informações biográficas",
+    "error": "Erro",
+    "ttsError": "Ocorreu um erro durante a leitura em voz alta",
+    "noContentToRead": "Não foram encontrados conteúdos para ler",
+    "translationFailed": "A tradução falhou",
+    "translateOrTtsError": "Ocorreu um erro durante a tradução ou a leitura em voz alta",
+    "ttsStopped": "Leitura em voz alta interrompida",
+    "biographyReadStopped": "Paragem da leitura da biografia",
+    "audioReading": "Ler em voz alta",
+    "liveTracking": "Rastreio instantâneo",
+    "hide": "Esconder",
+    "show": "Mostrar",
+    "statusIdle": "Em espera",
+    "statusPlaying": "Jogar",
+    "statusPaused": "Em pausa",
+    "statusEnded": "Concluído",
+    "statusError": "Erro"
   },
   "guest": {
     "messagingTitle": "Participar no chat",
@@ -936,5 +955,12 @@
     "markAllAsReadShort": "Ler tudo",
     "clearAllShort": "Limpar tudo",
     "viewAllNotifications": "Ver todas as notificações"
+  },
+  "followRequests": {
+    "title": "Pedidos de seguimento",
+    "emptyState": "Não tem pedidos de seguimento pendentes.",
+    "wantsToConnect": "Ele quer contactá-lo",
+    "accept": "Aceitar",
+    "reject": "Rejeitar"
   }
 }

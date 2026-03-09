@@ -467,8 +467,8 @@
   "profileMenu": {
     "feed": "Krmivo",
     "books": "Knihy",
-    "about": "About",
-    "activity": "Lineage"
+    "about": "O stránke",
+    "activity": "Genealógia / rodokmeň"
   },
   "profileActions": {
     "editProfile": "Upraviť profil",
@@ -850,7 +850,26 @@
     "selectLanguageDesc": "In which language would you like to read the biography? It will be translated and read aloud in your chosen language.",
     "languagesLoading": "Loading languages...",
     "languagesError": "Language list could not be loaded. Please refresh the page.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "loading": "Načítanie...",
+    "warning": "Upozornenie",
+    "noBiographyFound": "Nenašli sa žiadne životopisné informácie",
+    "error": "Chyba",
+    "ttsError": "Počas hlasného čítania došlo k chybe",
+    "noContentToRead": "Nenašiel sa žiadny obsah na čítanie",
+    "translationFailed": "Preklad zlyhal",
+    "translateOrTtsError": "Pri preklade alebo hlasnom čítaní došlo k chybe",
+    "ttsStopped": "Hlasné čítanie zastavené",
+    "biographyReadStopped": "Čítanie životopisu sa zastavilo",
+    "audioReading": "Čítanie nahlas",
+    "liveTracking": "Okamžité sledovanie",
+    "hide": "Skryť",
+    "show": "Zobraziť",
+    "statusIdle": "V pohotovostnom režime",
+    "statusPlaying": "Hranie na",
+    "statusPaused": "Pozastavenie",
+    "statusEnded": "Dokončené",
+    "statusError": "Chyba"
   },
   "guest": {
     "messagingTitle": "Pripojte sa k chatu",
@@ -924,5 +943,12 @@
     "markAllAsReadShort": "Prečítajte si všetko",
     "clearAllShort": "Vymazať všetko",
     "viewAllNotifications": "Zobraziť všetky oznámenia"
+  },
+  "followRequests": {
+    "title": "Následné žiadosti",
+    "emptyState": "Nemáte žiadne nevybavené žiadosti o následné kroky.",
+    "wantsToConnect": "Chce vás kontaktovať",
+    "accept": "Prijať",
+    "reject": "Odmietnuť"
   }
 }

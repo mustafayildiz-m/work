@@ -863,7 +863,26 @@
     "selectLanguageDesc": "بأي لغة تود قراءة السيرة الذاتية؟ سيتم ترجمتها وقراءتها بصوت عالٍ باللغة التي اخترتها.",
     "languagesLoading": "جارٍ تحميل اللغات...",
     "languagesError": "تعذر تحميل قائمة اللغات. يرجى تحديث الصفحة.",
-    "cancel": "إلغاء"
+    "cancel": "إلغاء",
+    "loading": "جاري التحميل...",
+    "warning": "تحذير",
+    "noBiographyFound": "لم يتم العثور على معلومات عن السيرة الذاتية",
+    "error": "خطأ",
+    "ttsError": "حدث خطأ أثناء القراءة بصوت عالٍ",
+    "noContentToRead": "لم يتم العثور على محتوى للقراءة",
+    "translationFailed": "فشلت الترجمة",
+    "translateOrTtsError": "حدث خطأ أثناء الترجمة أو القراءة بصوت عالٍ",
+    "ttsStopped": "توقف القراءة بصوت عالٍ",
+    "biographyReadStopped": "توقفت قراءة السيرة الذاتية",
+    "audioReading": "القراءة بصوت عالٍ",
+    "liveTracking": "التتبع الفوري",
+    "hide": "إخفاء",
+    "show": "عرض",
+    "statusIdle": "على أهبة الاستعداد",
+    "statusPlaying": "اللعب",
+    "statusPaused": "متوقف مؤقتاً",
+    "statusEnded": "مكتمل",
+    "statusError": "خطأ"
   },
   "guest": {
     "messagingTitle": "انضم إلى الدردشة",
@@ -937,5 +956,12 @@
     "markAllAsReadShort": "قراءة الكل",
     "clearAllShort": "مسح الكل",
     "viewAllNotifications": "عرض جميع الإشعارات"
+  },
+  "followRequests": {
+    "title": "طلبات المتابعة",
+    "emptyState": "ليس لديك طلبات متابعة معلقة.",
+    "wantsToConnect": "يريد الاتصال بك",
+    "accept": "قبول",
+    "reject": "سيل"
   }
 }

@@ -479,8 +479,8 @@
   "profileMenu": {
     "feed": "피드",
     "books": "도서",
-    "about": "About",
-    "activity": "Lineage"
+    "about": "정보",
+    "activity": "계보 / 계보"
   },
   "profileActions": {
     "editProfile": "프로필 수정",
@@ -860,9 +860,28 @@
     "mapTitle": "Location Map",
     "selectLanguageTitle": "Select Reading Language",
     "selectLanguageDesc": "In which language would you like to read the biography? It will be translated and read aloud in your chosen language.",
-    "languagesLoading": "Loading languages...",
-    "languagesError": "Language list could not be loaded. Please refresh the page.",
-    "cancel": "Cancel"
+    "languagesLoading": "언어 로딩 중...",
+    "languagesError": "언어 목록을 불러올 수 없습니다. 페이지를 새로고침해 주세요.",
+    "cancel": "취소",
+    "loading": "로드 중...",
+    "warning": "경고",
+    "noBiographyFound": "신상 정보를 찾을 수 없습니다.",
+    "error": "오류",
+    "ttsError": "소리 내어 읽는 동안 오류가 발생했습니다.",
+    "noContentToRead": "읽을 콘텐츠가 없습니다.",
+    "translationFailed": "번역 실패",
+    "translateOrTtsError": "번역 또는 소리 내어 읽는 동안 오류가 발생했습니다.",
+    "ttsStopped": "소리내어 읽기 중지",
+    "biographyReadStopped": "전기 읽기 중지",
+    "audioReading": "소리 내어 읽기",
+    "liveTracking": "즉시 추적",
+    "hide": "숨기기",
+    "show": "표시",
+    "statusIdle": "대기 중",
+    "statusPlaying": "재생",
+    "statusPaused": "일시 중지됨",
+    "statusEnded": "완료",
+    "statusError": "오류"
   },
   "guest": {
     "messagingTitle": "채팅 참여하기",
@@ -936,5 +955,12 @@
     "markAllAsReadShort": "모두 읽기",
     "clearAllShort": "모두 지우기",
     "viewAllNotifications": "모든 알림 보기"
+  },
+  "followRequests": {
+    "title": "후속 요청",
+    "emptyState": "보류 중인 후속 요청이 없습니다.",
+    "wantsToConnect": "연락을 원합니다.",
+    "accept": "수락",
+    "reject": "거부"
   }
 }

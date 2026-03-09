@@ -467,8 +467,8 @@
   "profileMenu": {
     "feed": "Krma",
     "books": "Knjige",
-    "about": "About",
-    "activity": "Lineage"
+    "about": "O",
+    "activity": "Rodoslovje / rodoslovje"
   },
   "profileActions": {
     "editProfile": "Urejanje profila",
@@ -850,7 +850,26 @@
     "selectLanguageDesc": "In which language would you like to read the biography? It will be translated and read aloud in your chosen language.",
     "languagesLoading": "Loading languages...",
     "languagesError": "Language list could not be loaded. Please refresh the page.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "loading": "Nalaganje...",
+    "warning": "Opozorilo",
+    "noBiographyFound": "Ni bilo najdenih nobenih biografskih podatkov",
+    "error": "Napaka",
+    "ttsError": "Med glasnim branjem je prišlo do napake",
+    "noContentToRead": "Ni bilo najdene vsebine za branje",
+    "translationFailed": "Prevod ni uspel",
+    "translateOrTtsError": "Med prevajanjem ali glasnim branjem je prišlo do napake",
+    "ttsStopped": "Glasno branje ustavljeno",
+    "biographyReadStopped": "Branje biografije se je ustavilo",
+    "audioReading": "Glasno branje",
+    "liveTracking": "Takojšnje sledenje",
+    "hide": "Skrij",
+    "show": "Prikaži",
+    "statusIdle": "V stanju pripravljenosti",
+    "statusPlaying": "Igranje",
+    "statusPaused": "Prekinjeno",
+    "statusEnded": "Zaključeno",
+    "statusError": "Napaka"
   },
   "guest": {
     "messagingTitle": "Pridružite se klepetu",
@@ -924,5 +943,12 @@
     "markAllAsReadShort": "Preberite vse",
     "clearAllShort": "Počisti vse",
     "viewAllNotifications": "Oglejte si vsa obvestila"
+  },
+  "followRequests": {
+    "title": "Zahteve za nadaljnje ukrepanje",
+    "emptyState": "Nimate nerešenih zahtevkov za nadaljnje ukrepanje.",
+    "wantsToConnect": "Želi stopiti v stik z vami",
+    "accept": "Sprejmite",
+    "reject": "Zavrnite"
   }
 }

@@ -467,8 +467,8 @@
   "profileMenu": {
     "feed": "Feed",
     "books": "Книги",
-    "about": "About",
-    "activity": "Lineage"
+    "about": "За",
+    "activity": "Потомство / Семејни врски"
   },
   "profileActions": {
     "editProfile": "Редактиране на профила",
@@ -850,7 +850,26 @@
     "selectLanguageDesc": "In which language would you like to read the biography? It will be translated and read aloud in your chosen language.",
     "languagesLoading": "Loading languages...",
     "languagesError": "Language list could not be loaded. Please refresh the page.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "loading": "Yükleniyor...",
+    "warning": "Uyarı",
+    "noBiographyFound": "Biyografi bilgisi bulunamadı",
+    "error": "Hata",
+    "ttsError": "Sesli okuma sırasında bir hata oluştu",
+    "noContentToRead": "Okunacak içerik bulunamadı",
+    "translationFailed": "Çeviri başarısız oldu",
+    "translateOrTtsError": "Çeviri veya sesli okuma sırasında bir hata oluştu",
+    "ttsStopped": "Sesli Okuma Durduruldu",
+    "biographyReadStopped": "Biyografi okunması durduruldu",
+    "audioReading": "Sesli Okuma",
+    "liveTracking": "Anlık Takip",
+    "hide": "Gizle",
+    "show": "Göster",
+    "statusIdle": "Beklemede",
+    "statusPlaying": "Oynatılıyor",
+    "statusPaused": "Duraklatıldı",
+    "statusEnded": "Tamamlandı",
+    "statusError": "Hata"
   },
   "guest": {
     "messagingTitle": "Sohbete Katıl",
@@ -924,5 +943,12 @@
     "markAllAsReadShort": "Hepsini Oku",
     "clearAllShort": "Hepsini Temizle",
     "viewAllNotifications": "Tüm Bildirimleri Gör"
+  },
+  "followRequests": {
+    "title": "Takip İstekleri",
+    "emptyState": "Bekleyen takip isteğiniz bulunmuyor.",
+    "wantsToConnect": "Sizinle bağlantı kurmak istiyor",
+    "accept": "Kabul Et",
+    "reject": "Reddet"
   }
 }

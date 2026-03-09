@@ -467,8 +467,8 @@
   "profileMenu": {
     "feed": "Krmivo",
     "books": "Knihy",
-    "about": "About",
-    "activity": "Lineage"
+    "about": "O stránkách",
+    "activity": "Genealogie / rodokmen"
   },
   "profileActions": {
     "editProfile": "Upravit profil",
@@ -848,9 +848,28 @@
     "mapTitle": "Location Map",
     "selectLanguageTitle": "Select Reading Language",
     "selectLanguageDesc": "In which language would you like to read the biography? It will be translated and read aloud in your chosen language.",
-    "languagesLoading": "Loading languages...",
-    "languagesError": "Language list could not be loaded. Please refresh the page.",
-    "cancel": "Cancel"
+    "languagesLoading": "Načítání jazyků...",
+    "languagesError": "Seznam jazyků se nepodařilo načíst. Obnovte stránku.",
+    "cancel": "Zrušit",
+    "loading": "Načítání...",
+    "warning": "Varování",
+    "noBiographyFound": "Nebyly nalezeny žádné životopisné údaje",
+    "error": "Chyba",
+    "ttsError": "Během hlasitého čtení došlo k chybě",
+    "noContentToRead": "Nebyl nalezen žádný obsah ke čtení",
+    "translationFailed": "Překlad se nezdařil",
+    "translateOrTtsError": "Při překladu nebo hlasitém čtení došlo k chybě",
+    "ttsStopped": "Hlasité čtení zastaveno",
+    "biographyReadStopped": "Čtení životopisu se zastavilo",
+    "audioReading": "Hlasité čtení",
+    "liveTracking": "Okamžité sledování",
+    "hide": "Skrýt",
+    "show": "Zobrazit",
+    "statusIdle": "V pohotovostním režimu",
+    "statusPlaying": "Přehrávání",
+    "statusPaused": "Pauza",
+    "statusEnded": "Dokončeno",
+    "statusError": "Chyba"
   },
   "guest": {
     "messagingTitle": "Připojte se k chatu",
@@ -924,5 +943,12 @@
     "markAllAsReadShort": "Přečtěte si vše",
     "clearAllShort": "Vymazat vše",
     "viewAllNotifications": "Zobrazit všechna oznámení"
+  },
+  "followRequests": {
+    "title": "Následné žádosti",
+    "emptyState": "Nemáte žádné nevyřízené žádosti o následná opatření.",
+    "wantsToConnect": "Chce vás kontaktovat",
+    "accept": "Přijmout",
+    "reject": "Odmítnout"
   }
 }

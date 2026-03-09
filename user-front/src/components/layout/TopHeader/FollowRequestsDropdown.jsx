@@ -6,8 +6,10 @@ import { BsPersonPlusFill } from 'react-icons/bs';
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { getImageUrl } from '@/utils/image';
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
+import { useLanguage } from '@/context/useLanguageContext';
 
 const FollowRequestsDropdown = () => {
+    const { t } = useLanguage();
     const { followRequests, setFollowRequests } = useWebSocketChatContext();
     const [localRequests, setLocalRequests] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
@@ -132,7 +134,7 @@ const FollowRequestsDropdown = () => {
                 onClick={() => setIsOpen((prev) => !prev)}
                 aria-haspopup="menu"
                 aria-expanded={isOpen}
-                aria-label="Takip istekleri"
+                aria-label={t('followRequests.title')}
             >
                 {pendingRequests.length > 0 && (
                     <span className="badge badge-center rounded-pill bg-danger position-absolute top-0 start-100 translate-middle" style={{ width: '18px', height: '18px', fontSize: '0.65rem' }}>
@@ -156,7 +158,7 @@ const FollowRequestsDropdown = () => {
             >
                 <Card>
                     <CardHeader className="d-flex justify-content-between align-items-center">
-                        <h6 className="m-0">Takip İstekleri {pendingRequests.length > 0 && <span className="badge bg-danger ms-1">{pendingRequests.length}</span>}</h6>
+                        <h6 className="m-0">{t('followRequests.title')} {pendingRequests.length > 0 && <span className="badge bg-danger ms-1">{pendingRequests.length}</span>}</h6>
                     </CardHeader>
                     <CardBody className="p-0">
                         {pendingRequests.length > 0 ? (
@@ -189,13 +191,13 @@ const FollowRequestsDropdown = () => {
                                                     <Link href={`/profile/user/${requestUser.id}`} className="text-decoration-none text-body">
                                                         <p className="mb-0 fw-bold small text-truncate" style={{ maxWidth: '140px' }}>{requestUser.firstName} {requestUser.lastName}</p>
                                                     </Link>
-                                                    <p className="text-muted mb-0" style={{ fontSize: '0.70rem' }}>Sizinle bağlantı kurmak istiyor</p>
+                                                    <p className="text-muted mb-0" style={{ fontSize: '0.70rem' }}>{t('followRequests.wantsToConnect')}</p>
                                                     <div className="d-flex mt-2 gap-2">
                                                         <Button variant="primary" size="sm" onClick={(e) => handleAcceptRequest(e, request.followerId)} className="py-1 px-3 flex-fill fw-bold" style={{ fontSize: '0.80rem', borderRadius: '6px' }}>
-                                                            Kabul Et
+                                                            {t('followRequests.accept')}
                                                         </Button>
                                                         <Button variant="danger-soft" size="sm" onClick={(e) => handleRejectRequest(e, request.followerId)} className="py-1 px-3 flex-fill fw-bold" style={{ fontSize: '0.80rem', borderRadius: '6px' }}>
-                                                            Sil
+                                                            {t('followRequests.reject')}
                                                         </Button>
                                                     </div>
                                                 </div>
@@ -207,7 +209,7 @@ const FollowRequestsDropdown = () => {
                         ) : (
                             <div className="p-4 text-center text-muted">
                                 <BsPersonPlusFill size={24} className="mb-2 opacity-50" />
-                                <p className="mb-0 small">Bekleyen takip isteğiniz bulunmuyor.</p>
+                                <p className="mb-0 small">{t('followRequests.emptyState')}</p>
                             </div>
                         )}
                     </CardBody>
