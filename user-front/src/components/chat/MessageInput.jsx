@@ -3,8 +3,9 @@
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
-import { BsEmojiSmileFill, BsSendFill } from 'react-icons/bs';
+import { BsEmojiSmileFill, BsSendFill, BsPersonPlus } from 'react-icons/bs';
 import { useLanguage } from '@/context/useLanguageContext';
+import { useOptionalNotificationContext } from '@/context/useNotificationContext';
 
 // Emoji picker'ı lazy load
 const EmojiPicker = dynamic(() => import('@emoji-mart/react'), {
@@ -30,6 +31,7 @@ let emojiDataCache = null;
 
 const MessageInput = () => {
   const { t, language } = useLanguage();
+  const notificationContext = useOptionalNotificationContext();
   const {
     activeConversation,
     sendMessage,
@@ -43,6 +45,7 @@ const MessageInput = () => {
   const [emojiData, setEmojiData] = useState(null);
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState('');
+  const [errorType, setErrorType] = useState(''); // 'FOLLOW_REQUIRED' | ''
   const [isDarkTheme, setIsDarkTheme] = useState(false);
 
   // Refs
@@ -120,6 +123,7 @@ const MessageInput = () => {
     const value = e.target.value;
     setMessage(value);
     setError('');
+    setErrorType('');
 
     // Update typing status
     const isTyping = value.trim().length > 0;
@@ -164,9 +168,22 @@ const MessageInput = () => {
         textareaRef.current.focus();
       }
 
-    } catch (error) {
-      console.error('Error sending message:', error);
-      setError(t('messaging.sendError'));
+    } catch (err) {
+      console.error('Error sending message:', err);
+      if (err?.message === 'FOLLOW_REQUIRED') {
+        const msg = t('messaging.followRequired');
+        setError(msg);
+        setErrorType('FOLLOW_REQUIRED');
+        notificationContext?.showNotification?.({
+          title: t('common.warning'),
+          message: msg,
+          variant: 'warning',
+          delay: 6000
+        });
+      } else {
+        setError(t('messaging.sendError'));
+        setErrorType('');
+      }
     } finally {
       setIsSending(false);
     }
@@ -229,6 +246,7 @@ const MessageInput = () => {
   useEffect(() => {
     setMessage('');
     setError('');
+    setErrorType('');
     setShowEmojiPicker(false);
     updateTypingStatus(false);
     setTimeout(adjustTextareaHeight, 0);
@@ -453,10 +471,21 @@ const MessageInput = () => {
           </div>
         )}
 
-        {/* Error message */}
+        {/* Error message - şık uyarı followRequired için */}
         {error && (
-          <div id="message-error" className="text-danger small mt-1" role="alert">
-            {error}
+          <div
+            id="message-error"
+            role="alert"
+            className={`mt-2 p-2 rounded-3 small d-flex align-items-start gap-2 ${
+              errorType === 'FOLLOW_REQUIRED'
+                ? 'bg-warning bg-opacity-15 border border-warning border-opacity-50 text-warning-emphasis'
+                : 'text-danger'
+            }`}
+          >
+            {errorType === 'FOLLOW_REQUIRED' && (
+              <BsPersonPlus size={16} className="flex-shrink-0 mt-0.5" />
+            )}
+            <span>{error}</span>
           </div>
         )}
       </form>

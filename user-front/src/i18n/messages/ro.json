@@ -923,6 +923,7 @@
     "emptyMessageError": "Mesajul nu poate fi gol",
     "maxLengthError": "Mesajul poate avea până la {număr} caractere",
     "sendError": "Mesajul nu a putut fi trimis. Vă rugăm să încercați din nou.",
+    "followRequired": "Pentru a trimite mesaje, trebuie să urmăriți această persoană și să aveți o conexiune reciprocă.",
     "selectConversationPrompt": "Selectați o conversație pentru a trimite un mesaj",
     "disconnectedError": "Deconectat. Încerc să mă reconectez...",
     "selectEmoji": "Selectați Emoji",

@@ -934,6 +934,7 @@
     "emptyMessageError": "Die Nachricht kann nicht leer sein",
     "maxLengthError": "Die Nachricht kann bis zu {count} Zeichen umfassen",
     "sendError": "Die Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+    "followRequired": "Um Nachrichten zu senden, müssen Sie dieser Person folgen und eine gegenseitige Verbindung haben.",
     "selectConversationPrompt": "Wählen Sie eine Unterhaltung aus, um eine Nachricht zu senden",
     "disconnectedError": "Die Verbindung wurde unterbrochen. Ich versuche, die Verbindung wiederherzustellen...",
     "selectEmoji": "Emoji auswählen",

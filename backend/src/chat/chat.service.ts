@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -9,6 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Message, MessageStatus } from '../entities/message.entity';
 import { Conversation } from '../entities/conversation.entity';
 import { User } from '../users/entities/user.entity';
+import { UserFollow } from '../entities/user-follow.entity';
 
 export interface CreateMessageDto {
   senderId: number;
@@ -49,6 +51,8 @@ export class ChatService {
     private conversationRepository: Repository<Conversation>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(UserFollow)
+    private userFollowRepository: Repository<UserFollow>,
     private jwtService: JwtService,
   ) {}
 
@@ -87,6 +91,28 @@ export class ChatService {
 
     if (!sender || !receiver) {
       throw new NotFoundException('Sender or receiver not found');
+    }
+
+    // Mesajlaşmak için karşılıklı kabul edilmiş takip ilişkisi gerekli
+    const [senderFollowsReceiver, receiverFollowsSender] = await Promise.all([
+      this.userFollowRepository.findOne({
+        where: {
+          follower_id: senderId,
+          following_id: receiverId,
+          status: 'accepted',
+        },
+      }),
+      this.userFollowRepository.findOne({
+        where: {
+          follower_id: receiverId,
+          following_id: senderId,
+          status: 'accepted',
+        },
+      }),
+    ]);
+
+    if (!senderFollowsReceiver || !receiverFollowsSender) {
+      throw new ForbiddenException('FOLLOW_REQUIRED');
     }
 
     // Conversation'ı bul veya oluştur

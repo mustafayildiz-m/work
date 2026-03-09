@@ -923,6 +923,7 @@
     "emptyMessageError": "Az üzenet nem lehet üres",
     "maxLengthError": "Az üzenet legfeljebb {szám} karakter lehet.",
     "sendError": "Az üzenetet nem lehetett elküldeni. Kérjük, próbálja meg újra.",
+    "followRequired": "Üzenetek küldéséhez kövesse ezt a személyt, és legyen kölcsönös kapcsolat.",
     "selectConversationPrompt": "Válasszon ki egy beszélgetést az üzenet küldéséhez",
     "disconnectedError": "Kikapcsolva. Próbálom újracsatlakoztatni...",
     "selectEmoji": "Emoji kiválasztása",

@@ -935,6 +935,7 @@
     "emptyMessageError": "메시지는 비어 있을 수 없습니다.",
     "maxLengthError": "메시지는 {개수}자까지 입력할 수 있습니다.",
     "sendError": "메시지를 보내지 못했습니다. 다시 시도하세요.",
+    "followRequired": "메시지를 보내려면 이 사람을 팔로우하고 상호 연결이 필요합니다.",
     "selectConversationPrompt": "대화를 선택하여 메시지 보내기",
     "disconnectedError": "연결이 끊어졌습니다. 재연결 시도 중...",
     "selectEmoji": "이모티콘 선택",

@@ -923,6 +923,7 @@
     "emptyMessageError": "Správa nemôže byť prázdna",
     "maxLengthError": "Správa môže mať maximálne {count} znakov",
     "sendError": "Správa nemohla byť odoslaná. Skúste to prosím znova.",
+    "followRequired": "Na odosielanie správ musíte sledovať túto osobu a mať vzájomné prepojenie.",
     "selectConversationPrompt": "Výber konverzácie na odoslanie správy",
     "disconnectedError": "Odpojené. Pokus o opätovné pripojenie...",
     "selectEmoji": "Vyberte Emoji",

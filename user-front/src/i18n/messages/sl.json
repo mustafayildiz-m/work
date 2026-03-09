@@ -923,6 +923,7 @@
     "emptyMessageError": "Sporočilo ne more biti prazno",
     "maxLengthError": "Sporočilo je lahko dolgo do {count} znakov",
     "sendError": "Sporočila ni bilo mogoče poslati. Poskusite znova.",
+    "followRequired": "Za pošiljanje sporočil morate slediti tej osebi in imeti medsebojno povezavo.",
     "selectConversationPrompt": "Izberite pogovor za pošiljanje sporočila",
     "disconnectedError": "Odklopljeno. Poskušam ponovno vzpostaviti povezavo...",
     "selectEmoji": "Izberite Emoji",

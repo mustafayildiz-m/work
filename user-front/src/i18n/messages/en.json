@@ -1045,6 +1045,7 @@
     "emptyMessageError": "Message cannot be empty",
     "maxLengthError": "Message can be at most {count} characters",
     "sendError": "Message could not be sent. Please try again.",
+    "followRequired": "To send messages, you need to follow this person and have a mutual connection.",
     "selectConversationPrompt": "Select a conversation to send a message",
     "disconnectedError": "Disconnected. Retrying to reconnect...",
     "selectEmoji": "Select emoji",

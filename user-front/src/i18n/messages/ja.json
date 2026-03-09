@@ -934,6 +934,7 @@
     "emptyMessageError": "メッセージを空にすることはできません。",
     "maxLengthError": "メッセージは最大{count}文字です。",
     "sendError": "メッセージを送信できませんでした。もう一度お試しください。",
+    "followRequired": "メッセージを送信するには、この人をフォローし、相互接続が必要です。",
     "selectConversationPrompt": "メッセージを送信する会話を選択する",
     "disconnectedError": "切断されました。再接続を試みています...",
     "selectEmoji": "絵文字を選択",

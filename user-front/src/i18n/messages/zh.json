@@ -935,6 +935,7 @@
     "emptyMessageError": "信息不能为空",
     "maxLengthError": "信息最多可包含 {count} 个字符",
     "sendError": "信息无法发送。请重试。",
+    "followRequired": "要发送消息，您需要关注此人并建立互相关注关系。",
     "selectConversationPrompt": "选择对话以发送信息",
     "disconnectedError": "断开连接。尝试重新连接...",
     "selectEmoji": "选择表情符号",

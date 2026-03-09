@@ -934,6 +934,7 @@
     "emptyMessageError": "Le message ne peut pas être vide",
     "maxLengthError": "Le message peut contenir jusqu'à {count} caractères.",
     "sendError": "Le message n'a pas pu être envoyé. Veuillez réessayer.",
+    "followRequired": "Pour envoyer des messages, vous devez suivre cette personne et avoir une connexion mutuelle.",
     "selectConversationPrompt": "Sélectionner une conversation pour envoyer un message",
     "disconnectedError": "Déconnecté. Tentative de reconnexion...",
     "selectEmoji": "Sélectionner un Emoji",

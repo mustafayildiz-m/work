@@ -168,6 +168,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       return { success: true, messageId: message.id };
     } catch (error) {
       console.error('Message sending error:', error);
+      const isFollowRequired =
+        error?.response === 'FOLLOW_REQUIRED' ||
+        error?.message === 'FOLLOW_REQUIRED' ||
+        error?.response?.message === 'FOLLOW_REQUIRED';
+      if (isFollowRequired) {
+        return { error: 'Follow required to send messages', code: 'FOLLOW_REQUIRED' };
+      }
       return { error: 'Failed to send message' };
     }
   }
