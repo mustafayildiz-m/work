@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Form, Spinner } from 'react-bootstrap';
 import { BsSearch, BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import Link from 'next/link';
@@ -26,16 +26,48 @@ const formatDate = (dateValue, locale = 'tr-TR') => {
   });
 };
 
-export default function PapersList({ items = [], search = '', loading = false }) {
+export default function PapersList({ items = [], search = '', loading = false, lang = 'tr' }) {
   const { t, locale } = useLanguage();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imageLoading, setImageLoading] = useState(true);
+  const [showOriginal, setShowOriginal] = useState(false);
+  const [originalPaper, setOriginalPaper] = useState(null);
+  const [originalLoading, setOriginalLoading] = useState(false);
   const papers = items?.length ? items : [];
   const current = papers[currentIndex];
+  const sourceLang = current?.sourceLanguage || 'tr';
+  const isTranslated = sourceLang !== lang;
+  const displayItem = showOriginal && originalPaper ? originalPaper : current;
+
+  const getLangName = useCallback(
+    (code) => t(`feed.papersLang_${code}`) || code,
+    [t]
+  );
 
   useEffect(() => {
     setImageLoading(true);
-  }, [currentIndex, current?.imageUrl]);
+    setShowOriginal(false);
+    setOriginalPaper(null);
+  }, [currentIndex, current?.id]);
+
+  useEffect(() => {
+    if (!showOriginal || !isTranslated || !current?.id) {
+      setOriginalPaper(null);
+      return;
+    }
+    let cancelled = false;
+    setOriginalLoading(true);
+    fetch(`${API_BASE_URL}/papers/${current.id}?lang=${sourceLang}`, { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!cancelled && data) setOriginalPaper(data);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setOriginalLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, [showOriginal, isTranslated, current?.id, sourceLang]);
 
   const goPrev = () => setCurrentIndex((i) => (i <= 0 ? papers.length - 1 : i - 1));
   const goNext = () => setCurrentIndex((i) => (i >= papers.length - 1 ? 0 : i + 1));
@@ -117,8 +149,29 @@ export default function PapersList({ items = [], search = '', loading = false })
                   ))}
                 </div>
               )}
+              <div className="d-flex flex-wrap align-items-center gap-2 mb-2">
+                <span className="badge bg-secondary bg-opacity-25 text-body small">
+                  {t('feed.papersPublishedIn', { language: getLangName(sourceLang) })}
+                </span>
+                {isTranslated && (
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary btn-sm"
+                    onClick={() => setShowOriginal((v) => !v)}
+                    disabled={originalLoading}
+                  >
+                    {originalLoading ? (
+                      <><Spinner animation="border" size="sm" className="me-1" />...</>
+                    ) : showOriginal ? (
+                      t('feed.papersShowTranslation')
+                    ) : (
+                      t('feed.papersShowOriginal')
+                    )}
+                  </button>
+                )}
+              </div>
               <Link href={`/feed/papers/${current?.id}`} className="text-decoration-none">
-                <h3 className="papers-hero-title">{current?.title}</h3>
+                <h3 className="papers-hero-title">{displayItem?.title ?? current?.title}</h3>
               </Link>
               {(current?.author || current?.publishDate) && (
                 <div className="papers-meta">
@@ -127,7 +180,7 @@ export default function PapersList({ items = [], search = '', loading = false })
                   {current?.publishDate && <span>{formatDate(current.publishDate, locale)}</span>}
                 </div>
               )}
-              <p className="papers-description">{current?.intro}</p>
+              <p className="papers-description">{displayItem?.intro ?? current?.intro}</p>
             </div>
             <div className="d-flex justify-content-end align-items-center">
               <div className="papers-nav-buttons">

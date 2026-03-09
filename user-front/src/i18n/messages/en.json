@@ -292,7 +292,21 @@
     "papersLoading": "Loading...",
     "papersTranslating": "Translating...",
     "papersTranslationFailed": "Translation failed",
-    "papersTranslationError": "Error occurred during translation"
+    "papersTranslationError": "Error occurred during translation",
+    "papersShowOriginal": "Show original",
+    "papersShowTranslation": "Show translation",
+    "papersPublishedIn": "Published in {language}",
+    "papersLang_tr": "Turkish",
+    "papersLang_en": "English",
+    "papersLang_ar": "Arabic",
+    "papersLang_de": "German",
+    "papersLang_fr": "French",
+    "papersLang_es": "Spanish",
+    "papersLang_it": "Italian",
+    "papersLang_ru": "Russian",
+    "papersLang_zh": "Chinese",
+    "papersLang_ja": "Japanese",
+    "papersLang_ko": "Korean"
   },
   "notifications": {
     "title": "Notifications",

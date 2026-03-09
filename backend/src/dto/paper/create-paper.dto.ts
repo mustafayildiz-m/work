@@ -25,4 +25,8 @@ export class CreatePaperDto {
   @IsString()
   @IsOptional()
   content?: string;
+
+  @IsString()
+  @IsOptional()
+  sourceLanguage?: string;
 }

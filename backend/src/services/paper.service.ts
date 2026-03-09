@@ -11,7 +11,6 @@ import { CacheService } from './cache.service';
 import { TranslationService } from './translation.service';
 
 const CACHE_TTL = 300; // 5 dakika
-const SOURCE_LANG = 'tr';
 
 @Injectable()
 export class PaperService {
@@ -77,6 +76,7 @@ export class PaperService {
       sections: content
         ? [{ title: 'Detay', content }]
         : [],
+      sourceLanguage: item.sourceLanguage || 'tr',
       createdAt: item.createdAt,
       updatedAt: item.updatedAt,
     };
@@ -84,13 +84,16 @@ export class PaperService {
 
   private async getOrCreateTranslation(
     paper: Paper,
-    langCode: string,
+    targetLangCode: string,
   ): Promise<PaperTranslation | null> {
-    const normalized = langCode?.toLowerCase().split('-')[0];
-    if (!normalized || normalized === SOURCE_LANG) return null;
+    const targetNorm = targetLangCode?.toLowerCase().split('-')[0];
+    const sourceNorm = (paper.sourceLanguage || 'tr')
+      ?.toLowerCase()
+      .split('-')[0];
+    if (!targetNorm || !sourceNorm || targetNorm === sourceNorm) return null;
 
     let trans = await this.paperTranslationRepo.findOne({
-      where: { paperId: paper.id, languageCode: normalized },
+      where: { paperId: paper.id, languageCode: targetNorm },
     });
     if (trans) return trans;
 
@@ -98,28 +101,28 @@ export class PaperService {
       const [title, intro, content] = await Promise.all([
         this.translationService.translateText(
           paper.title || '',
-          normalized,
-          SOURCE_LANG,
+          targetNorm,
+          sourceNorm,
         ),
         paper.intro
           ? this.translationService.translateText(
               paper.intro,
-              normalized,
-              SOURCE_LANG,
+              targetNorm,
+              sourceNorm,
             )
           : Promise.resolve(''),
         paper.content
           ? this.translationService.translateLongText(
               paper.content,
-              normalized,
-              SOURCE_LANG,
+              targetNorm,
+              sourceNorm,
             )
           : Promise.resolve(''),
       ]);
 
       trans = this.paperTranslationRepo.create({
         paperId: paper.id,
-        languageCode: normalized,
+        languageCode: targetNorm,
         title,
         intro: intro || null,
         content: content || null,
@@ -171,6 +174,8 @@ export class PaperService {
       content: this.extractContent(dto),
       imageUrl: imageUrl || null,
       tags: this.parseTags(dto.tags),
+      sourceLanguage:
+        dto.sourceLanguage?.toLowerCase().split('-')[0] || 'tr',
     };
     const paper = this.paperRepository.create(createPayload);
 
@@ -211,7 +216,10 @@ export class PaperService {
 
     const data = await Promise.all(
       items.map(async (item) => {
-        if (langNorm && langNorm !== SOURCE_LANG) {
+        const sourceNorm = (item.sourceLanguage || 'tr')
+          ?.toLowerCase()
+          .split('-')[0];
+        if (langNorm && langNorm !== sourceNorm) {
           const trans = await this.getOrCreateTranslation(item, langNorm);
           if (trans) {
             return this.toClientModel(item, {
@@ -250,8 +258,11 @@ export class PaperService {
       throw new NotFoundException(`Paper bulunamadi (ID: ${id})`);
     }
 
+    const sourceNorm = (item.sourceLanguage || 'tr')
+      ?.toLowerCase()
+      .split('-')[0];
     let result: Record<string, any>;
-    if (langNorm && langNorm !== SOURCE_LANG) {
+    if (langNorm && langNorm !== sourceNorm) {
       const trans = await this.getOrCreateTranslation(item, langNorm);
       if (trans) {
         result = this.toClientModel(item, {
@@ -291,6 +302,15 @@ export class PaperService {
 
     if (dto.content !== undefined || dto.sections !== undefined) {
       item.content = this.extractContent(dto);
+    }
+
+    if (dto.sourceLanguage !== undefined) {
+      const newSource =
+        dto.sourceLanguage?.toLowerCase().split('-')[0] || 'tr';
+      if (newSource !== (item.sourceLanguage || 'tr')) {
+        await this.paperTranslationRepo.delete({ paperId: item.id });
+      }
+      item.sourceLanguage = newSource;
     }
 
     if (imageUrl) {

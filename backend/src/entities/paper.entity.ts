@@ -32,6 +32,9 @@ export class Paper {
   @Column({ type: 'json', nullable: true })
   tags: string[] | null;
 
+  @Column({ type: 'varchar', length: 10, default: 'tr' })
+  sourceLanguage: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

@@ -258,12 +258,21 @@ export class TranslationService {
       return result;
     }
 
-    // DeepL API key kontrolü
+    // DeepL API key yoksa doğrudan MyMemory kullan
     if (!this.DEEPL_API_KEY) {
-      throw new HttpException(
-        "DeepL API key yapılandırılmamış. Lütfen DEEPL_API_KEY environment variable'ını ayarlayın.",
-        HttpStatus.INTERNAL_SERVER_ERROR,
+      this.logger.warn(
+        'DEEPL_API_KEY yok, MyMemory API kullanılıyor...',
       );
+      const result = await this.translateWithMyMemory(
+        text,
+        targetLangCode,
+        sourceLangCode,
+      );
+      await this.translationCacheRepo.save({
+        ...lookup,
+        translatedText: result,
+      });
+      return result;
     }
     const sourceLang = sourceLangCode
       ? this.mapLanguageCode(sourceLangCode)
@@ -344,6 +353,23 @@ export class TranslationService {
             continue;
           }
 
+          // Son deneme: DeepL başarısız, MyMemory ile dene
+          this.logger.warn('DeepL başarısız, MyMemory fallback deneniyor...');
+          try {
+            const result = await this.translateWithMyMemory(
+              text,
+              targetLangCode,
+              sourceLangCode,
+            );
+            await this.translationCacheRepo.save({
+              ...lookup,
+              translatedText: result,
+            });
+            return result;
+          } catch (mmError) {
+            this.logger.error('MyMemory fallback da başarısız', mmError);
+          }
+
           // Son deneme başarısız oldu
           if (error.response) {
             const errorMsg =
@@ -360,8 +386,23 @@ export class TranslationService {
           }
         }
 
-        // Son deneme ve hata yakalanamadı
+        // Son deneme ve hata yakalanamadı - MyMemory dene
         if (attempt === retries - 1) {
+          this.logger.warn('DeepL başarısız, MyMemory fallback deneniyor...');
+          try {
+            const result = await this.translateWithMyMemory(
+              text,
+              targetLangCode,
+              sourceLangCode,
+            );
+            await this.translationCacheRepo.save({
+              ...lookup,
+              translatedText: result,
+            });
+            return result;
+          } catch (mmError) {
+            this.logger.error('MyMemory fallback da başarısız', mmError);
+          }
           throw new HttpException(
             'Çeviri sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyin.',
             HttpStatus.INTERNAL_SERVER_ERROR,
