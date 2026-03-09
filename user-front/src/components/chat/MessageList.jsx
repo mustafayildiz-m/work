@@ -6,6 +6,7 @@ import { useEffect, useRef, useMemo, useCallback, memo, useState } from 'react';
 import { Card, Spinner } from 'react-bootstrap';
 import { FaCheck, FaCheckDouble } from 'react-icons/fa';
 import Image from 'next/image';
+import Link from 'next/link';
 import clsx from 'clsx';
 import { getToken } from '@/utils/auth';
 import placeholderImg from '@/assets/images/avatar/placeholder.jpg';
@@ -106,21 +107,40 @@ const getMessageStatusIcon = (status) => {
   }
 };
 
-// Memoized Avatar Component
-const Avatar = memo(({ src, alt, size = 32, className = '' }) => {
+// Memoized Avatar Component - supports optional profile link
+const Avatar = memo(({ src, alt, size = 32, className = '', profileHref }) => {
   const handleError = useCallback((e) => {
     e.target.src = placeholderImg;
   }, []);
 
-  return (
+  const image = (
     <Image
       src={getDisplayAvatar(src)}
       alt={alt}
       width={size}
       height={size}
-      className={`rounded-circle ${className}`}
+      className="rounded-circle"
       onError={handleError}
+      style={{ objectFit: 'cover', width: size, height: size, flexShrink: 0 }}
     />
+  );
+
+  if (profileHref) {
+    return (
+      <Link
+        href={profileHref}
+        className={`flex-shrink-0 ${className}`.trim()}
+        style={{ width: size, height: size, display: 'block' }}
+      >
+        {image}
+      </Link>
+    );
+  }
+
+  return (
+    <div className={`flex-shrink-0 ${className}`.trim()} style={{ width: size, height: size }}>
+      {image}
+    </div>
   );
 });
 
@@ -130,7 +150,9 @@ const MessageItem = memo(({
   isOwnMessage,
   showDate,
   messageDate,
-  ownAvatar
+  ownAvatar,
+  participantProfileHref,
+  currentUserProfileHref
 }) => {
   return (
     <div>
@@ -148,7 +170,7 @@ const MessageItem = memo(({
         'text-end': isOwnMessage,
         'text-start': !isOwnMessage
       })}>
-        <div className={clsx('d-flex', {
+        <div className={clsx('d-flex align-items-start', {
           'justify-content-end': isOwnMessage,
           'justify-content-start': !isOwnMessage
         })}>
@@ -159,6 +181,7 @@ const MessageItem = memo(({
                 src={message.partnerAvatar || message.sender?.photoUrl || message.senderAvatar}
                 alt="Avatar"
                 size={32}
+                profileHref={participantProfileHref}
               />
             </div>
           )}
@@ -198,6 +221,7 @@ const MessageItem = memo(({
                 src={ownAvatar}
                 alt="Avatar"
                 size={32}
+                profileHref={currentUserProfileHref}
               />
             </div>
           )}
@@ -231,7 +255,7 @@ const TypingIndicator = memo(({ participantAvatar }) => {
 });
 
 // Memoized Header Component
-const MessageHeader = memo(({ activeConversation, onBackToConversations, isOnline, participantAvatar, t }) => {
+const MessageHeader = memo(({ activeConversation, onBackToConversations, isOnline, participantAvatar, participantProfileHref, t }) => {
   return (
     <Card.Header className="border-0 bg-body-tertiary">
       <div className="d-flex align-items-center">
@@ -252,6 +276,7 @@ const MessageHeader = memo(({ activeConversation, onBackToConversations, isOnlin
           alt="Avatar"
           size={40}
           className="me-3"
+          profileHref={participantProfileHref}
         />
         <div className="flex-grow-1">
           <h6 className="mb-0">{activeConversation.participantName}</h6>
@@ -487,6 +512,7 @@ const MessageList = ({ onBackToConversations }) => {
         onBackToConversations={handleBackToConversations}
         isOnline={isConversationOnline}
         participantAvatar={resolvedParticipantAvatar}
+        participantProfileHref={activeConversation?.participantId ? `/profile/user/${activeConversation.participantId}` : undefined}
         t={t}
       />
 
@@ -511,6 +537,8 @@ const MessageList = ({ onBackToConversations }) => {
                   showDate={message.showDate}
                   messageDate={message.messageDate}
                   ownAvatar={currentUserAvatar}
+                  participantProfileHref={activeConversation?.participantId ? `/profile/user/${activeConversation.participantId}` : undefined}
+                  currentUserProfileHref={currentUserId ? `/profile/user/${currentUserId}` : undefined}
                 />
               ))}
 
