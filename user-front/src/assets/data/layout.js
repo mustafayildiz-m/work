@@ -20,6 +20,7 @@ import microphoneImg from '@/assets/images/icon/chat-alt-outline-filled.svg'; //
 import myNetworkImg from '@/assets/images/icon/my-network-outline-filled.svg';
 import newspaperSmallImg from '@/assets/images/icon/newspaper-small.svg';
 import islamicScholarsImg from '@/assets/images/icon/islamic-scholars.svg';
+import bulbImg from '@/assets/images/icon/bulb-outline-filled.svg';
 
 export const profilePanelLinksData1 = [{
   image: typeof homeImg === 'string' ? homeImg : homeImg.src,
@@ -65,6 +66,11 @@ export const profilePanelLinksData1 = [{
   image: typeof clipboardImg === 'string' ? clipboardImg : clipboardImg.src,
   nameKey: 'menu.papers',
   link: '/feed/papers'
+}, {
+  image: typeof bulbImg === 'string' ? bulbImg : bulbImg.src,
+  nameKey: 'menu.askAboutIslam',
+  link: 'https://www.google.com',
+  external: true
 }];
 
 export const profilePanelLinksData2 = [{

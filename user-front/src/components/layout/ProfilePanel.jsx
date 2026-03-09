@@ -683,36 +683,22 @@ const ProfilePanel = ({ links, onLinkClick }) => {
         </Link>
 
         <ul className="nav flex-column" style={{ gap: '2px', padding: 0, margin: 0, listStyle: 'none' }}>
-          {links.map((item, idx) => (
-            <li key={(item.nameKey || item.name || item.link) + idx}>
-              <Link
-                className="d-flex align-items-center text-decoration-none"
-                href={item.link}
-                onClick={(e) => handleLinkClick(e, item.link)}
-                style={{
-                  padding: '0.65rem 0.75rem',
-                  borderRadius: '10px',
-                  transition: 'background-color 0.2s ease, color 0.2s ease',
-                  background: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))
-                    ? accentColor
-                    : 'transparent',
-                  color: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))
-                    ? 'white'
-                    : textColor,
-                  fontWeight: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link))) ? 600 : 500,
-                  fontSize: '0.9rem'
-                }}
-                onMouseEnter={(e) => {
-                  if (!(pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))) {
-                    e.currentTarget.style.background = isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!(pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))) {
-                    e.currentTarget.style.background = 'transparent';
-                  }
-                }}
-              >
+          {links.map((item, idx) => {
+            const linkStyle = {
+              padding: '0.65rem 0.75rem',
+              borderRadius: '10px',
+              transition: 'background-color 0.2s ease, color 0.2s ease',
+              background: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))
+                ? accentColor
+                : 'transparent',
+              color: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))
+                ? 'white'
+                : textColor,
+              fontWeight: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link))) ? 600 : 500,
+              fontSize: '0.9rem'
+            };
+            const content = (
+              <>
                 <img
                   src={item.image}
                   alt="icon"
@@ -727,9 +713,50 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                   }}
                 />
                 <span>{item.name || t(item.nameKey)}</span>
-              </Link>
-            </li>
-          ))}
+              </>
+            );
+            return (
+              <li key={(item.nameKey || item.name || item.link) + idx}>
+                {item.external ? (
+                  <a
+                    className="d-flex align-items-center text-decoration-none"
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => handleLinkClick(e, item.link)}
+                    style={linkStyle}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                    }}
+                  >
+                    {content}
+                  </a>
+                ) : (
+                  <Link
+                    className="d-flex align-items-center text-decoration-none"
+                    href={item.link}
+                    onClick={(e) => handleLinkClick(e, item.link)}
+                    style={linkStyle}
+                    onMouseEnter={(e) => {
+                      if (!(pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))) {
+                        e.currentTarget.style.background = isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!(pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))) {
+                        e.currentTarget.style.background = 'transparent';
+                      }
+                    }}
+                  >
+                    {content}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </div>
 

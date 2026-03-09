@@ -1,4 +1,4 @@
-import { BsBell, BsBellFill, BsBookmarkHeartFill, BsCalendarEventFill, BsCameraReels, BsCardChecklist, BsChatLeft, BsChatLeftText, BsCollectionFill, BsFileText, BsFolder, BsGearWideConnected, BsHouse, BsImages, BsNewspaper, BsPeople, BsUiRadiosGrid, BsMicFill } from 'react-icons/bs';
+import { BsBell, BsBellFill, BsBookmarkHeartFill, BsCalendarEventFill, BsCameraReels, BsCardChecklist, BsChatLeft, BsChatLeftText, BsCollectionFill, BsFileText, BsFolder, BsGearWideConnected, BsHouse, BsImages, BsNewspaper, BsPeople, BsQuestionCircle, BsUiRadiosGrid, BsMicFill } from 'react-icons/bs';
 
 export const menuData = [{
   label: 'Ana Sayfa',
@@ -75,4 +75,9 @@ export const leftSidebarData = [{
   icon: BsChatLeftText,
   label: 'Mesajlaşma',
   url: '/messaging'
+}, {
+  icon: BsQuestionCircle,
+  label: 'İslam Hakkında Sor',
+  url: 'https://www.google.com',
+  external: true
 }];
