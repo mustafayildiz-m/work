@@ -20,7 +20,7 @@ export const useLanguage = () => {
     // Return safe defaults instead of throwing error
     return {
       locale: DEFAULT_LOCALE,
-      changeLocale: () => {},
+      changeLocale: () => { },
       t: (key) => key,
       loading: true,
       supportedLocales: SUPPORTED_LOCALES,
@@ -85,11 +85,32 @@ export const LanguageProvider = ({ children }) => {
       setLoading(false);
     } catch (error) {
       console.error('Error loading translation file:', error);
+
+      // PRODUCTION FIX: Handle ChunkLoadError (usually after new deployment)
+      if (error?.name === 'ChunkLoadError' || error?.message?.includes('Loading chunk') || error?.message?.includes('ChunkLoadError')) {
+        console.warn('ChunkLoadError detected during translation loading. Reloading page...');
+        if (typeof window !== 'undefined') {
+          // Prevent infinite reload loop by adding a flag to sessionStorage
+          const reloadFlagKey = `reload_count_${newLocale}`;
+          const reloadCount = parseInt(sessionStorage.getItem(reloadFlagKey) || '0');
+
+          if (reloadCount < 1) {
+            sessionStorage.setItem(reloadFlagKey, (reloadCount + 1).toString());
+            window.location.reload();
+            return;
+          }
+        }
+      }
+
       // Fallback to default locale
       if (newLocale !== DEFAULT_LOCALE) {
-        const fallback = await import(`../i18n/messages/${DEFAULT_LOCALE}.json`);
-        setMessages(fallback.default || fallback);
-        setFallbackMessages(fallback.default || fallback);
+        try {
+          const fallback = await import(`../i18n/messages/${DEFAULT_LOCALE}.json`);
+          setMessages(fallback.default || fallback);
+          setFallbackMessages(fallback.default || fallback);
+        } catch (fbError) {
+          console.error('Even fallback translation loading failed:', fbError);
+        }
       }
       setLoading(false);
     }
@@ -118,7 +139,7 @@ export const LanguageProvider = ({ children }) => {
       localStorage.setItem('locale', newLocale);
     }
     loadMessages(newLocale);
-    
+
     // Update document direction for RTL languages (Arabic, Hebrew, Urdu, Farsi, etc.)
     if (typeof window !== 'undefined') {
       document.documentElement.dir = RTL_LANGUAGES.includes(newLocale) ? 'rtl' : 'ltr';
@@ -176,13 +197,13 @@ export const LanguageProvider = ({ children }) => {
 
     const template = getNested(messages) ?? getNested(fallbackMessages);
     if (!template) return key; // Keep legacy behavior (show key)
-    
+
     // Replace parameters like {name}
     let result = template;
     Object.keys(params).forEach(param => {
       result = result.replace(`{${param}}`, params[param]);
     });
-    
+
     return result;
   }, [messages, fallbackMessages]);
 

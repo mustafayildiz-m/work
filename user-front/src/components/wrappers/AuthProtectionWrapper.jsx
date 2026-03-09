@@ -24,15 +24,26 @@ const AuthProtectionWrapper = ({
 
   const isPublicPage = publicPages.some(page => pathname === page || pathname.startsWith(page + '/'));
 
-  const { status } = useSession();
+  const { status, data: session } = useSession();
 
   const redirectToLogin = () => {
-    const loginUrl = `${window.location.origin}/auth-advance/sign-in?redirectTo=${encodeURIComponent(pathname)}`;
-    window.location.href = loginUrl;
+    // Sadece bir kez redirect yapıldığından emin ol
+    if (typeof window !== 'undefined') {
+      const loginUrl = `${window.location.origin}/auth-advance/sign-in?redirectTo=${encodeURIComponent(pathname)}`;
+      window.location.replace(loginUrl);
+    }
   };
 
   const ensureAuthenticated = () => {
     if (isPublicPage) return true;
+
+    // Eğer NextAuth authenticated ise, localStorage token'ı henüz gelmemiş olabilir.
+    // useAuth component'i bunu sync edecektir. Bu yüzden redirect yapma.
+    if (status === 'authenticated') return true;
+
+    // Eğer session yükleniyorsa, henüz karar vermek için erken.
+    if (status === 'loading') return true;
+
     const hasToken = hasValidToken();
     if (!hasToken) {
       redirectToLogin();
@@ -43,21 +54,28 @@ const AuthProtectionWrapper = ({
 
   // Session + token durumunu kontrol et
   useEffect(() => {
+    // Sadece session durumu netleştiğinde kontrol yap
+    if (status === 'loading') return;
+
     if (status === 'unauthenticated') {
       ensureAuthenticated();
-      return;
     }
-    ensureAuthenticated();
 
     const handleVisibilityOrFocus = () => {
-      ensureAuthenticated();
+      // Sadece session unauthenticated ise veya tab değiştiğinde token kontrolü yap
+      if (status === 'unauthenticated') {
+        ensureAuthenticated();
+      }
     };
 
     window.addEventListener('focus', handleVisibilityOrFocus);
     document.addEventListener('visibilitychange', handleVisibilityOrFocus);
 
     const intervalId = window.setInterval(() => {
-      ensureAuthenticated();
+      // Periyodik kontrolü sadece session unauthenticated ise yap
+      if (status === 'unauthenticated') {
+        ensureAuthenticated();
+      }
     }, 30000);
 
     return () => {

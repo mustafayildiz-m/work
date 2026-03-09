@@ -70,7 +70,7 @@ const AppProvidersWrapper = ({
   }, []);
 
   return (
-    <SessionProvider>
+    <SessionProvider refetchOnWindowFocus={false}>
       <LanguageProvider>
         <AuthProvider>
           <SearchProvider>
