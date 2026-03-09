@@ -46,9 +46,9 @@ export class EventDetailsService {
   }
 
   async getTimeline(userId: number) {
-    // Takip edilen kullanıcılar
+    // Takip edilen kullanıcılar - sadece kabul edilmiş takipler
     const following = await this.userFollowRepository.find({
-      where: { follower_id: userId },
+      where: { follower_id: userId, status: 'accepted' },
       select: ['following_id'],
     });
     const followingIds = following.map((f) => f.following_id);
