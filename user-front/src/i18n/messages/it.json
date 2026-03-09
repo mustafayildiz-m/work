@@ -479,8 +479,8 @@
   "profileMenu": {
     "feed": "Alimentazione",
     "books": "Libri",
-    "about": "About",
-    "activity": "Lineage"
+    "about": "Circa",
+    "activity": "Genealogia / Stirpe"
   },
   "profileActions": {
     "editProfile": "Modifica profilo",
@@ -860,9 +860,28 @@
     "mapTitle": "Location Map",
     "selectLanguageTitle": "Select Reading Language",
     "selectLanguageDesc": "In which language would you like to read the biography? It will be translated and read aloud in your chosen language.",
-    "languagesLoading": "Loading languages...",
-    "languagesError": "Language list could not be loaded. Please refresh the page.",
-    "cancel": "Cancel"
+    "languagesLoading": "Caricamento lingue...",
+    "languagesError": "Impossibile caricare l'elenco delle lingue. Aggiorna la pagina.",
+    "cancel": "Annulla",
+    "loading": "Caricamento...",
+    "warning": "Avvertenze",
+    "noBiographyFound": "Non sono state trovate informazioni biografiche",
+    "error": "Errore",
+    "ttsError": "Si è verificato un errore durante la lettura ad alta voce",
+    "noContentToRead": "Nessun contenuto trovato da leggere",
+    "translationFailed": "Traduzione fallita",
+    "translateOrTtsError": "Si è verificato un errore durante la traduzione o la lettura ad alta voce",
+    "ttsStopped": "Lettura ad alta voce interrotta",
+    "biographyReadStopped": "La lettura della biografia si è interrotta",
+    "audioReading": "Lettura ad alta voce",
+    "liveTracking": "Tracciamento istantaneo",
+    "hide": "Nascondere",
+    "show": "Mostra",
+    "statusIdle": "In standby",
+    "statusPlaying": "Giocare",
+    "statusPaused": "In pausa",
+    "statusEnded": "Completato",
+    "statusError": "Errore"
   },
   "guest": {
     "messagingTitle": "Partecipa alla chat",
@@ -936,5 +955,12 @@
     "markAllAsReadShort": "Leggi tutto",
     "clearAllShort": "Cancella tutto",
     "viewAllNotifications": "Vedi tutte le notifiche"
+  },
+  "followRequests": {
+    "title": "Richieste di follow-up",
+    "emptyState": "Non ci sono richieste di follow-up in sospeso.",
+    "wantsToConnect": "Vuole contattarvi",
+    "accept": "Accettare",
+    "reject": "Rifiuto"
   }
 }

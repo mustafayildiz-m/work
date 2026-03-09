@@ -12,17 +12,23 @@ import { useNotificationContext } from '@/context/useNotificationContext';
 import { cleanTextForTTS, fetchTTSAudio } from '@/utils/textToSpeech';
 import { useLanguage } from '@/context/useLanguageContext';
 
+// Map loading placeholder - uses hook so must be a component
+const MapLoadingPlaceholder = () => {
+  const { t } = useLanguage();
+  return (
+    <div className="text-center py-4">
+      <div className="spinner-border text-primary" role="status">
+        <span className="visually-hidden">{t('scholarProfile.loading')}</span>
+      </div>
+      <p className="mt-2 text-muted">{t('scholarProfile.loading')}</p>
+    </div>
+  );
+};
+
 // MapComponent'i dynamic import ile yükle (SSR hatası önlemek için)
 const MapComponent = dynamic(() => import('@/components/MapComponent'), {
   ssr: false,
-  loading: () => (
-    <div className="text-center py-4">
-      <div className="spinner-border text-primary" role="status">
-        <span className="visually-hidden">Yükleniyor...</span>
-      </div>
-      <p className="mt-2 text-muted">Yükleniyor...</p>
-    </div>
-  )
+  loading: () => <MapLoadingPlaceholder />
 });
 
 const ScholarProfilePage = () => {
@@ -248,7 +254,7 @@ const ScholarProfilePage = () => {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || 'Çeviri başarısız oldu');
+        throw new Error(errorData.message || t('scholarProfile.translationFailed'));
       }
 
       const data = await response.json();
@@ -263,8 +269,8 @@ const ScholarProfilePage = () => {
   const openLanguageModal = () => {
     if (!scholar?.biography) {
       showNotification({
-        title: 'Uyarı',
-        message: 'Biyografi bilgisi bulunamadı',
+        title: t('scholarProfile.warning'),
+        message: t('scholarProfile.noBiographyFound'),
         variant: 'warning'
       });
       return;
@@ -317,8 +323,8 @@ const ScholarProfilePage = () => {
       setIsPaused(false);
       setPlayerStatus('error');
       showNotification({
-        title: 'Hata',
-        message: 'Sesli okuma sırasında bir hata oluştu',
+        title: t('scholarProfile.error'),
+        message: t('scholarProfile.ttsError'),
         variant: 'danger',
       });
     };
@@ -339,14 +345,14 @@ const ScholarProfilePage = () => {
     try {
       const textToRead = stripHtmlTags(scholar.biography);
       if (!textToRead || textToRead.trim().length === 0) {
-        showNotification({ title: 'Uyarı', message: 'Okunacak içerik bulunamadı', variant: 'warning' });
+        showNotification({ title: t('scholarProfile.warning'), message: t('scholarProfile.noContentToRead'), variant: 'warning' });
         setTranslating(false);
         return;
       }
 
       const translatedText = await translateText(textToRead, targetLanguage.code);
       if (!translatedText || translatedText.trim().length === 0) {
-        showNotification({ title: 'Hata', message: 'Çeviri başarısız oldu', variant: 'danger' });
+        showNotification({ title: t('scholarProfile.error'), message: t('scholarProfile.translationFailed'), variant: 'danger' });
         setTranslating(false);
         return;
       }
@@ -397,8 +403,8 @@ const ScholarProfilePage = () => {
       setIsReading(false);
       setPlayerStatus('error');
       showNotification({
-        title: 'Hata',
-        message: error.message || 'Çeviri veya sesli okuma sırasında bir hata oluştu',
+        title: t('scholarProfile.error'),
+        message: error.message || t('scholarProfile.translateOrTtsError'),
         variant: 'danger',
       });
     }
@@ -418,8 +424,8 @@ const ScholarProfilePage = () => {
     setActiveChunkIndex(0);
     setPlayerStatus('idle');
     showNotification({
-      title: 'Sesli Okuma Durduruldu',
-      message: 'Biyografi okunması durduruldu',
+      title: t('scholarProfile.ttsStopped'),
+      message: t('scholarProfile.biographyReadStopped'),
       variant: 'info',
     });
   };
@@ -820,12 +826,12 @@ const ScholarProfilePage = () => {
           <div className="d-flex align-items-center justify-content-between mb-3">
             <div className="d-flex align-items-center gap-2">
               <BsVolumeUp />
-              <strong>Sesli Okuma</strong>
-              <span className="player-page-chip">{playerStatus}</span>
+              <strong>{t('scholarProfile.audioReading')}</strong>
+              <span className="player-page-chip">{t(`scholarProfile.status${playerStatus.charAt(0).toUpperCase() + playerStatus.slice(1)}`)}</span>
             </div>
             <div className="d-flex align-items-center gap-2">
               <Dropdown>
-                <DropdownToggle className="player-pill-btn">Hız {playbackRate.toFixed(2)}x</DropdownToggle>
+                <DropdownToggle className="player-pill-btn">{t('scholarProfile.speed')} {playbackRate.toFixed(2)}x</DropdownToggle>
                 <DropdownMenu>
                   {[0.75, 1, 1.25, 1.5, 1.75].map((rate) => (
                     <button key={rate} type="button" className="dropdown-item" onClick={() => changePlaybackRate(rate)}>
@@ -871,9 +877,9 @@ const ScholarProfilePage = () => {
           </div>
 
           <div className="d-flex align-items-center justify-content-between mb-2">
-            <strong>Anlik Takip</strong>
+            <strong>{t('scholarProfile.liveTracking')}</strong>
             <button type="button" className="player-pill-btn" onClick={() => setShowReadingAssist((v) => !v)}>
-              {showReadingAssist ? 'Gizle' : 'Goster'}
+              {showReadingAssist ? t('scholarProfile.hide') : t('scholarProfile.show')}
             </button>
           </div>
 

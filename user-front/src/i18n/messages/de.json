@@ -861,7 +861,26 @@
     "selectLanguageDesc": "In welcher Sprache möchten Sie die Biografie lesen? Sie wird in der von Ihnen gewählten Sprache übersetzt und vorgelesen.",
     "languagesLoading": "Sprachen werden geladen...",
     "languagesError": "Sprachliste konnte nicht geladen werden. Bitte aktualisieren Sie die Seite.",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "loading": "Laden...",
+    "warning": "Warnung",
+    "noBiographyFound": "Keine biographischen Informationen gefunden",
+    "error": "Fehler",
+    "ttsError": "Beim Vorlesen ist ein Fehler aufgetreten",
+    "noContentToRead": "Kein Inhalt zum Lesen gefunden",
+    "translationFailed": "Übersetzung fehlgeschlagen",
+    "translateOrTtsError": "Beim Übersetzen oder Vorlesen ist ein Fehler aufgetreten",
+    "ttsStopped": "Vorlesen gestoppt",
+    "biographyReadStopped": "Biografie-Lesung gestoppt",
+    "audioReading": "Lautes Lesen",
+    "liveTracking": "Sofortige Verfolgung",
+    "hide": "Ausblenden",
+    "show": "anzeigen",
+    "statusIdle": "In Bereitschaft",
+    "statusPlaying": "Spielen",
+    "statusPaused": "Pausiert",
+    "statusEnded": "Abgeschlossen",
+    "statusError": "Fehler"
   },
   "guest": {
     "messagingTitle": "Dem Chat beitreten",
@@ -935,5 +954,12 @@
     "markAllAsReadShort": "Alles lesen",
     "clearAllShort": "Alle löschen",
     "viewAllNotifications": "Alle Benachrichtigungen anzeigen"
+  },
+  "followRequests": {
+    "title": "Follow-up-Anfragen",
+    "emptyState": "Sie haben keine ausstehenden Folgeanfragen.",
+    "wantsToConnect": "Er möchte Sie kontaktieren",
+    "accept": "Akzeptieren",
+    "reject": "Ablehnen"
   }
 }

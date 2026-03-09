@@ -296,6 +296,13 @@
     "clearAllShort": "Hepsini Temizle",
     "viewAllNotifications": "Tüm Bildirimleri Gör"
   },
+  "followRequests": {
+    "title": "Takip İstekleri",
+    "emptyState": "Bekleyen takip isteğiniz bulunmuyor.",
+    "wantsToConnect": "Sizinle bağlantı kurmak istiyor",
+    "accept": "Kabul Et",
+    "reject": "Reddet"
+  },
   "menu": {
     "feed": "Akış",
     "connections": "Bağlantılar",
@@ -896,7 +903,26 @@
     "selectLanguageDesc": "Biyografiyi hangi dilde okumak istersiniz? Seçtiğiniz dilde çeviri yapılıp sesli okunacaktır.",
     "languagesLoading": "Diller yükleniyor...",
     "languagesError": "Dil listesi yüklenemedi. Lütfen sayfayı yenileyin.",
-    "cancel": "İptal"
+    "cancel": "İptal",
+    "loading": "Yükleniyor...",
+    "warning": "Uyarı",
+    "noBiographyFound": "Biyografi bilgisi bulunamadı",
+    "error": "Hata",
+    "ttsError": "Sesli okuma sırasında bir hata oluştu",
+    "noContentToRead": "Okunacak içerik bulunamadı",
+    "translationFailed": "Çeviri başarısız oldu",
+    "translateOrTtsError": "Çeviri veya sesli okuma sırasında bir hata oluştu",
+    "ttsStopped": "Sesli Okuma Durduruldu",
+    "biographyReadStopped": "Biyografi okunması durduruldu",
+    "audioReading": "Sesli Okuma",
+    "liveTracking": "Anlık Takip",
+    "hide": "Gizle",
+    "show": "Göster",
+    "statusIdle": "Beklemede",
+    "statusPlaying": "Oynatılıyor",
+    "statusPaused": "Duraklatıldı",
+    "statusEnded": "Tamamlandı",
+    "statusError": "Hata"
   },
   "messaging": {
     "title": "Mesajlaşma",

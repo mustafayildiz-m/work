@@ -862,7 +862,26 @@
     "selectLanguageDesc": "На каком языке вы хотите прочитать биографию? Она будет переведена и прочитана вслух на выбранном языке.",
     "languagesLoading": "Загрузка языков...",
     "languagesError": "Не удалось загрузить список языков. Пожалуйста, обновите страницу.",
-    "cancel": "Отмена"
+    "cancel": "Отмена",
+    "loading": "Загрузка...",
+    "warning": "Внимание",
+    "noBiographyFound": "Биографическая информация не найдена",
+    "error": "Ошибка",
+    "ttsError": "Во время чтения вслух произошла ошибка",
+    "noContentToRead": "Не найдено содержимого для чтения",
+    "translationFailed": "Перевод не удался",
+    "translateOrTtsError": "Во время перевода или чтения вслух произошла ошибка",
+    "ttsStopped": "Чтение вслух остановлено",
+    "biographyReadStopped": "Чтение биографии прекращено",
+    "audioReading": "Читать вслух",
+    "liveTracking": "Мгновенное отслеживание",
+    "hide": "Скрыть",
+    "show": "Показать",
+    "statusIdle": "В режиме ожидания",
+    "statusPlaying": "Игра",
+    "statusPaused": "Пауза",
+    "statusEnded": "Завершено",
+    "statusError": "Ошибка"
   },
   "guest": {
     "messagingTitle": "Присоединяйтесь к чату",
@@ -936,5 +955,12 @@
     "markAllAsReadShort": "Читать полностью",
     "clearAllShort": "Очистить все",
     "viewAllNotifications": "Посмотреть все уведомления"
+  },
+  "followRequests": {
+    "title": "Последующие запросы",
+    "emptyState": "У вас нет невыполненных запросов на продолжение.",
+    "wantsToConnect": "Он хочет связаться с вами",
+    "accept": "Принять",
+    "reject": "Отклонить"
   }
 }

@@ -467,8 +467,8 @@
   "profileMenu": {
     "feed": "Pasza",
     "books": "Książki",
-    "about": "About",
-    "activity": "Lineage"
+    "about": "O",
+    "activity": "Genealogia / Rodowód"
   },
   "profileActions": {
     "editProfile": "Edytuj profil",
@@ -850,7 +850,26 @@
     "selectLanguageDesc": "In which language would you like to read the biography? It will be translated and read aloud in your chosen language.",
     "languagesLoading": "Loading languages...",
     "languagesError": "Language list could not be loaded. Please refresh the page.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "loading": "Ładowanie...",
+    "warning": "Ostrzeżenie",
+    "noBiographyFound": "Nie znaleziono żadnych informacji biograficznych",
+    "error": "Błąd",
+    "ttsError": "Wystąpił błąd podczas odczytu na głos",
+    "noContentToRead": "Nie znaleziono treści do odczytania",
+    "translationFailed": "Tłumaczenie nie powiodło się",
+    "translateOrTtsError": "Wystąpił błąd podczas tłumaczenia lub czytania na głos",
+    "ttsStopped": "Czytanie na głos zatrzymane",
+    "biographyReadStopped": "Czytanie biografii zatrzymane",
+    "audioReading": "Czytaj na głos",
+    "liveTracking": "Natychmiastowe śledzenie",
+    "hide": "Ukryj",
+    "show": "Pokaż",
+    "statusIdle": "W trybie gotowości",
+    "statusPlaying": "Granie",
+    "statusPaused": "Wstrzymane",
+    "statusEnded": "Zakończono",
+    "statusError": "Błąd"
   },
   "guest": {
     "messagingTitle": "Dołącz do czatu",
@@ -924,5 +943,12 @@
     "markAllAsReadShort": "Czytaj całość",
     "clearAllShort": "Wyczyść wszystko",
     "viewAllNotifications": "Zobacz wszystkie powiadomienia"
+  },
+  "followRequests": {
+    "title": "Wnioski uzupełniające",
+    "emptyState": "Nie masz żadnych oczekujących wniosków o kontynuację.",
+    "wantsToConnect": "Chce się z tobą skontaktować",
+    "accept": "Akceptuj",
+    "reject": "Odrzucić"
   }
 }

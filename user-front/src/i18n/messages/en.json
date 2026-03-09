@@ -292,6 +292,13 @@
     "clearAllShort": "Clear all",
     "viewAllNotifications": "View all notifications"
   },
+  "followRequests": {
+    "title": "Follow Requests",
+    "emptyState": "You have no pending follow requests.",
+    "wantsToConnect": "wants to connect with you",
+    "accept": "Accept",
+    "reject": "Decline"
+  },
   "menu": {
     "feed": "Feed",
     "connections": "Connections",
@@ -510,7 +517,7 @@
     "feed": "Feed",
     "books": "Books",
     "about": "About",
-    "activity": "Lineage"
+    "activity": "Genealogy / Lineage"
   },
   "profileActions": {
     "editProfile": "Edit Profile",
@@ -892,7 +899,26 @@
     "selectLanguageDesc": "In which language would you like to read the biography? It will be translated and read aloud in your chosen language.",
     "languagesLoading": "Loading languages...",
     "languagesError": "Language list could not be loaded. Please refresh the page.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "warning": "Warning",
+    "noBiographyFound": "No biography information found",
+    "error": "Error",
+    "ttsError": "An error occurred during read aloud",
+    "noContentToRead": "No content found to read",
+    "translationFailed": "Translation failed",
+    "translateOrTtsError": "An error occurred during translation or read aloud",
+    "ttsStopped": "Read Aloud Suspended",
+    "biographyReadStopped": "Biography reading stopped",
+    "audioReading": "Read Aloud",
+    "liveTracking": "Instant Tracking",
+    "hide": "Hide",
+    "show": "Show",
+    "statusIdle": "On hold",
+    "statusPlaying": "Playing",
+    "statusPaused": "Paused",
+    "statusEnded": "Completed",
+    "statusError": "Error"
   },
   "messaging": {
     "title": "Messaging",

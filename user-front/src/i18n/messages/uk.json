@@ -467,8 +467,8 @@
   "profileMenu": {
     "feed": "Годувати",
     "books": "Книги",
-    "about": "About",
-    "activity": "Lineage"
+    "about": "Про",
+    "activity": "Генеалогія / Родовід"
   },
   "profileActions": {
     "editProfile": "Редагувати профіль",
@@ -850,7 +850,26 @@
     "selectLanguageDesc": "In which language would you like to read the biography? It will be translated and read aloud in your chosen language.",
     "languagesLoading": "Loading languages...",
     "languagesError": "Language list could not be loaded. Please refresh the page.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "loading": "Завантаження...",
+    "warning": "Попередження",
+    "noBiographyFound": "Біографічна інформація не знайдена",
+    "error": "Помилка.",
+    "ttsError": "Виникла помилка під час читання вголос",
+    "noContentToRead": "Не знайдено матеріалів для читання",
+    "translationFailed": "Переклад не вдалося",
+    "translateOrTtsError": "Виникла помилка під час перекладу або читання вголос",
+    "ttsStopped": "Читання вголос зупинено",
+    "biographyReadStopped": "Читання біографії припинено",
+    "audioReading": "Читати вголос",
+    "liveTracking": "Миттєве відстеження",
+    "hide": "Приховати",
+    "show": "Показати",
+    "statusIdle": "У режимі очікування",
+    "statusPlaying": "Грає",
+    "statusPaused": "Призупинився.",
+    "statusEnded": "Завершено",
+    "statusError": "Помилка."
   },
   "guest": {
     "messagingTitle": "Приєднуйтесь до чату",
@@ -924,5 +943,12 @@
     "markAllAsReadShort": "Прочитати все",
     "clearAllShort": "Очистити все.",
     "viewAllNotifications": "Переглянути всі сповіщення"
+  },
+  "followRequests": {
+    "title": "Подальші запити",
+    "emptyState": "Ви не маєте запитів на подальші дії.",
+    "wantsToConnect": "Він хоче зв'язатися з вами",
+    "accept": "Прийняти",
+    "reject": "Сил"
   }
 }

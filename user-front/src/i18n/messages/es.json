@@ -862,7 +862,26 @@
     "selectLanguageDesc": "¿En qué idioma le gustaría leer la biografía? Se traducirá y leerá en voz alta en el idioma seleccionado.",
     "languagesLoading": "Cargando idiomas...",
     "languagesError": "No se pudo cargar la lista de idiomas. Por favor, actualice la página.",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "loading": "Cargando...",
+    "warning": "Advertencia",
+    "noBiographyFound": "No se ha encontrado información biográfica",
+    "error": "Error",
+    "ttsError": "Se ha producido un error durante la lectura en voz alta",
+    "noContentToRead": "No se ha encontrado contenido para leer",
+    "translationFailed": "Traducción fallida",
+    "translateOrTtsError": "Se ha producido un error durante la traducción o la lectura en voz alta",
+    "ttsStopped": "Lectura en voz alta detenida",
+    "biographyReadStopped": "Se detuvo la lectura de la biografía",
+    "audioReading": "Leer en voz alta",
+    "liveTracking": "Seguimiento instantáneo",
+    "hide": "Ocultar",
+    "show": "Mostrar",
+    "statusIdle": "En espera",
+    "statusPlaying": "Jugando a",
+    "statusPaused": "En pausa",
+    "statusEnded": "Completado",
+    "statusError": "Error"
   },
   "guest": {
     "messagingTitle": "Únete al chat",
@@ -936,5 +955,12 @@
     "markAllAsReadShort": "Leer todo",
     "clearAllShort": "Borrar todo",
     "viewAllNotifications": "Ver todas las notificaciones"
+  },
+  "followRequests": {
+    "title": "Solicitudes de seguimiento",
+    "emptyState": "No tiene solicitudes de seguimiento pendientes.",
+    "wantsToConnect": "Quiere ponerse en contacto contigo",
+    "accept": "Acepte",
+    "reject": "Rechazar"
   }
 }
