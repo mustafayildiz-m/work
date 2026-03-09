@@ -6,15 +6,22 @@ const LeftSidebar = () => {
         {leftSidebarData.map(({
         icon: Icon,
         label,
-        url
+        url,
+        external
       }, idx) => <li className="nav-item" key={idx}>
-            <Link className="nav-link" href={url ?? ''}>
+            {external ? <a className="nav-link" href={url ?? ''} target="_blank" rel="noopener noreferrer">
               <span className="nav-icon">
                 {' '}
                 <Icon />
               </span>{' '}
               <span className="nav-text">{label} </span>
-            </Link>
+            </a> : <Link className="nav-link" href={url ?? ''}>
+              <span className="nav-icon">
+                {' '}
+                <Icon />
+              </span>{' '}
+              <span className="nav-text">{label} </span>
+            </Link>}
           </li>)}
       </ul>
     </div>;
