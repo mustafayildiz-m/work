@@ -18,4 +18,8 @@ export class CreateNewsletterDto {
   @IsString()
   @IsOptional()
   content?: string;
+
+  @IsString()
+  @IsOptional()
+  sourceLanguage?: string;
 }

@@ -26,6 +26,9 @@ export class Newsletter {
   @Column({ type: 'text', nullable: true })
   imageUrl: string | null;
 
+  @Column({ type: 'varchar', length: 10, default: 'tr' })
+  sourceLanguage: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
