@@ -33,13 +33,17 @@ export class NewsletterController {
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
     @Query('search') search?: string,
+    @Query('lang') lang?: string,
   ) {
-    return this.newsletterService.findAll(page, limit, search);
+    return this.newsletterService.findAll(page, limit, search, lang);
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.newsletterService.findOne(id);
+  findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('lang') lang?: string,
+  ) {
+    return this.newsletterService.findOne(id, lang);
   }
 
   @Post()

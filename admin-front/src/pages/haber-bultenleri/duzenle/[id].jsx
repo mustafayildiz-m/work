@@ -21,8 +21,11 @@ function EditNewsletter() {
     publishDate: '',
     intro: '',
     imageUrl: '',
-    content: ''
+    content: '',
+    sourceLanguage: 'tr'
   });
+  const [languages, setLanguages] = useState([]);
+  const [languagesLoading, setLanguagesLoading] = useState(true);
 
   const updateField = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
   const resolveImageUrl = (imageUrl) => {
@@ -39,6 +42,17 @@ function EditNewsletter() {
   };
 
   useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    fetch(`${API_URL.replace('/newsletters', '')}/languages`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+      .then((r) => r.json())
+      .then((data) => setLanguages(Array.isArray(data) ? data : []))
+      .catch(() => setLanguages([]))
+      .finally(() => setLanguagesLoading(false));
+  }, []);
+
+  useEffect(() => {
     const fetchItem = async () => {
       try {
         const token = localStorage.getItem('access_token');
@@ -51,7 +65,8 @@ function EditNewsletter() {
           publishDate: item.publishDate ? item.publishDate.split('T')[0] : '',
           intro: item.intro || '',
           imageUrl: item.imageUrl || '',
-          content: item.sections?.[0]?.content || ''
+          content: item.sections?.[0]?.content || '',
+          sourceLanguage: item.sourceLanguage || 'tr'
         });
       } catch (error) {
         toast.error(error.message || 'Bulten yuklenemedi');
@@ -71,6 +86,7 @@ function EditNewsletter() {
       formData.append('title', form.title);
       formData.append('publishDate', form.publishDate);
       formData.append('intro', form.intro);
+      formData.append('sourceLanguage', form.sourceLanguage || 'tr');
       if (imageFile) formData.append('imageFile', imageFile);
       formData.append('sections', JSON.stringify([{ title: 'Detay', content: form.content }]));
 
@@ -117,6 +133,37 @@ function EditNewsletter() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <input className="input-style" placeholder="Baslik *" value={form.title} onChange={(e) => updateField('title', e.target.value)} required />
               <input type="date" className="input-style" value={form.publishDate} onChange={(e) => updateField('publishDate', e.target.value)} required />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Kaynak dil (icerigin yazildigi dil)</label>
+              <select
+                className="input-style"
+                value={form.sourceLanguage}
+                onChange={(e) => updateField('sourceLanguage', e.target.value)}
+                disabled={languagesLoading}
+              >
+                {languagesLoading ? (
+                  <option value="tr">Diller yukleniyor...</option>
+                ) : languages.length === 0 ? (
+                  <option value="tr">Dil bulunamadi</option>
+                ) : (
+                  (() => {
+                    const activeLangs = languages.filter((l) => l.isActive !== false).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+                    const hasCurrent = activeLangs.some((l) => l.code === form.sourceLanguage);
+                    return (
+                      <>
+                        {!hasCurrent && form.sourceLanguage && (
+                          <option value={form.sourceLanguage}>Kaynak: {form.sourceLanguage}</option>
+                        )}
+                        {activeLangs.map((l) => (
+                          <option key={l.id} value={l.code}>{l.name}</option>
+                        ))}
+                      </>
+                    );
+                  })()
+                )}
+              </select>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Kullanici farkli dil kullaniyorsa icerik bu dile cevrilir.</p>
             </div>
             <textarea className="input-style mb-4 min-h-24" placeholder="Intro *" value={form.intro} onChange={(e) => updateField('intro', e.target.value)} required />
             <div className="grid grid-cols-1 gap-4">

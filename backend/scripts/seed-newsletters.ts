@@ -4,7 +4,7 @@ import { NewslettersSeeder } from '../src/seeders/newsletters-seeder';
 
 async function runSeeder() {
   console.log('🌱 Starting newsletters seeder...');
-  console.log('📰 This will add 10 realistic Islamic newsletters.');
+  console.log('📰 This will add 8-9 realistic Islamic newsletters with source language support.');
 
   const app = await NestFactory.createApplicationContext(AppModule);
   const seeder = app.get(NewslettersSeeder);
