@@ -53,7 +53,7 @@ async function loadScholarData(scholarId) {
 const ScholarFeedPage = () => {
   const params = useParams();
   const searchParams = useSearchParams();
-  const { locale } = useLanguage();
+  const { locale, t } = useLanguage();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [scholar, setScholar] = useState(null);
@@ -118,9 +118,9 @@ const ScholarFeedPage = () => {
             <Card>
               <CardBody className="text-center py-5">
                 <div className="spinner-border text-primary" role="status">
-                  <span className="visually-hidden">Loading...</span>
+                  <span className="visually-hidden">{t('scholarFeed.loading')}</span>
                 </div>
-                <p className="mt-3">Gönderiler yükleniyor...</p>
+                <p className="mt-3">{t('scholarFeed.loading')}</p>
               </CardBody>
             </Card>
           </Col>
@@ -176,8 +176,8 @@ const ScholarFeedPage = () => {
           ) : (
             <Card>
               <CardBody className="text-center py-5">
-                <h5>Henüz Gönderi Yok</h5>
-                <p className="text-muted">Bu alim henüz gönderi paylaşmamış.</p>
+                <h5>{t('scholarFeed.noPosts')}</h5>
+                <p className="text-muted">{t('scholarFeed.noPostsDesc')}</p>
               </CardBody>
             </Card>
           )}
@@ -205,7 +205,7 @@ const ScholarFeedPage = () => {
             </button>
             <Image
               src={selectedImage}
-              alt="Önizleme"
+              alt={t('scholarFeed.preview')}
               width={800}
               height={600}
               className="img-fluid"

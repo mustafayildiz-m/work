@@ -962,5 +962,50 @@
     "wantsToConnect": "Он хочет связаться с вами",
     "accept": "Принять",
     "reject": "Отклонить"
+  },
+  "scholarFeed": {
+    "loading": "Сообщения загружаются...",
+    "noPosts": "Пока не отправлено",
+    "noPostsDesc": "Этот ученый еще не опубликовал ни одного сообщения.",
+    "preview": "Предварительный просмотр"
+  },
+  "scholarActivity": {
+    "loading": "Загрузка генеалогической информации...",
+    "scholarNotFound": "Ученый не найден",
+    "scholarNotFoundDesc": "Возможно, искомый ученый не найден или удален.",
+    "lineageInfo": "Генеалогическая информация",
+    "fullName": "Полное имя",
+    "birthDate": "Дата рождения",
+    "deathDate": "Дата смерти",
+    "birthPlace": "Место рождения",
+    "detailedLineage": "Подробная генеалогия",
+    "notSpecified": "Неопределенный"
+  },
+  "scholarConnections": {
+    "loading": "Книги загружаются...",
+    "mapLoading": "Загрузить карту...",
+    "scholarNotFound": "Ученый не найден",
+    "scholarNotFoundDesc": "Возможно, искомый ученый не найден или удален.",
+    "books": "Книги",
+    "all": "Все",
+    "ownBooks": "Собственные книги",
+    "relatedBooks": "Похожие книги",
+    "ownBook": "Собственная книга",
+    "relatedBook": "Связанная книга",
+    "noBooksInCategory": "В этой категории не найдено ни одной книги",
+    "noBooksInCategoryDesc": "Для выбранной категории пока нет книг.",
+    "bookImage": "Книжная иллюстрация",
+    "noDescription": "Объяснение отсутствует",
+    "languages": "Языки",
+    "noBooksYet": "Пока нет книг в наличии",
+    "noBooksYetDesc": "Этот ученый еще не добавил книги, или же нет ни одной связанной с ним книги.",
+    "languageSelection": "Выбор языка",
+    "whichLanguageDownload": "Какой язык вы хотите загрузить?",
+    "download": "Скачать",
+    "noPdf": "Нет PDF",
+    "cancel": "Отмена",
+    "noDownloadOption": "Для этой книги нет возможности скачивания.",
+    "downloadError": "Во время загрузки произошла ошибка. Пожалуйста, попробуйте еще раз.",
+    "downloadFileNotFound": "Загрузочный файл не найден."
   }
 }

@@ -962,5 +962,50 @@
     "wantsToConnect": "他想联系你",
     "accept": "接受",
     "reject": "拒绝"
+  },
+  "scholarFeed": {
+    "loading": "帖子正在加载中...",
+    "noPosts": "尚未发货",
+    "noPostsDesc": "该学者尚未发表文章。",
+    "preview": "预览"
+  },
+  "scholarActivity": {
+    "loading": "加载家谱信息...",
+    "scholarNotFound": "未找到学者",
+    "scholarNotFoundDesc": "您要查找的学者可能找不到或已被删除。",
+    "lineageInfo": "家谱信息",
+    "fullName": "全名",
+    "birthDate": "出生日期",
+    "deathDate": "死亡日期",
+    "birthPlace": "出生地",
+    "detailedLineage": "详细家谱",
+    "notSpecified": "未说明"
+  },
+  "scholarConnections": {
+    "loading": "书籍正在装载...",
+    "mapLoading": "正在加载地图...",
+    "scholarNotFound": "未找到学者",
+    "scholarNotFoundDesc": "您要查找的学者可能找不到或已被删除。",
+    "books": "书籍",
+    "all": "全部",
+    "ownBooks": "自己的书籍",
+    "relatedBooks": "相关书籍",
+    "ownBook": "自己的书",
+    "relatedBook": "相关书籍",
+    "noBooksInCategory": "此类别中没有书籍",
+    "noBooksInCategoryDesc": "所选类别暂无书籍。",
+    "bookImage": "书籍插图",
+    "noDescription": "没有解释",
+    "languages": "语言",
+    "noBooksYet": "暂无书籍",
+    "noBooksYetDesc": "该学者尚未添加书籍或没有相关书籍。",
+    "languageSelection": "语言选择",
+    "whichLanguageDownload": "您想下载哪种语言？",
+    "download": "下载",
+    "noPdf": "无 PDF",
+    "cancel": "取消预订",
+    "noDownloadOption": "本书没有下载选项。",
+    "downloadError": "下载过程中出现错误。请重试。",
+    "downloadFileNotFound": "未找到下载文件。"
   }
 }

@@ -950,5 +950,50 @@
     "wantsToConnect": "Chce vás kontaktovať",
     "accept": "Prijať",
     "reject": "Odmietnuť"
+  },
+  "scholarFeed": {
+    "loading": "Príspevky sa načítavajú...",
+    "noPosts": "Zatiaľ žiadna zásielka",
+    "noPostsDesc": "Tento učenec ešte nebol zverejnený.",
+    "preview": "Náhľad"
+  },
+  "scholarActivity": {
+    "loading": "Načítanie genealogických informácií...",
+    "scholarNotFound": "Učenec nebol nájdený",
+    "scholarNotFoundDesc": "Hľadaný učenec sa nemusí nachádzať alebo mohol byť vymazaný.",
+    "lineageInfo": "Genealogické informácie",
+    "fullName": "Celé meno",
+    "birthDate": "Dátum narodenia",
+    "deathDate": "Dátum úmrtia",
+    "birthPlace": "Miesto narodenia",
+    "detailedLineage": "Podrobná genealógia",
+    "notSpecified": "Nešpecifikované"
+  },
+  "scholarConnections": {
+    "loading": "Knihy sa načítavajú...",
+    "mapLoading": "Načítanie mapy...",
+    "scholarNotFound": "Učenec nebol nájdený",
+    "scholarNotFoundDesc": "Hľadaný učenec sa nemusí nachádzať alebo mohol byť vymazaný.",
+    "books": "Knihy",
+    "all": "Všetky",
+    "ownBooks": "Vlastné knihy",
+    "relatedBooks": "Súvisiace knihy",
+    "ownBook": "Vlastná kniha",
+    "relatedBook": "Súvisiaca kniha",
+    "noBooksInCategory": "V tejto kategórii neboli nájdené žiadne knihy",
+    "noBooksInCategoryDesc": "Vo vybranej kategórii zatiaľ nie sú žiadne knihy.",
+    "bookImage": "Ilustrácia knihy",
+    "noDescription": "Vysvetlenie nie je k dispozícii",
+    "languages": "Jazyky",
+    "noBooksYet": "Zatiaľ nie sú k dispozícii žiadne knihy",
+    "noBooksYetDesc": "Tento vedec zatiaľ nepridal žiadne knihy alebo nemá žiadne súvisiace knihy.",
+    "languageSelection": "Výber jazyka",
+    "whichLanguageDownload": "Ktorý jazyk chcete prevziať?",
+    "download": "Stiahnite si",
+    "noPdf": "Žiadne PDF",
+    "cancel": "Zrušenie",
+    "noDownloadOption": "Pre túto knihu neexistuje možnosť stiahnutia.",
+    "downloadError": "Počas sťahovania došlo k chybe. Skúste to prosím znova.",
+    "downloadFileNotFound": "Súbor na stiahnutie nebol nájdený."
   }
 }

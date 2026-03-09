@@ -950,5 +950,50 @@
     "wantsToConnect": "Він хоче зв'язатися з вами",
     "accept": "Прийняти",
     "reject": "Сил"
+  },
+  "scholarFeed": {
+    "loading": "Пости завантажуються...",
+    "noPosts": "Відправлення ще не відбулося",
+    "noPostsDesc": "Цей науковець ще не опублікував жодної статті.",
+    "preview": "Попередній перегляд"
+  },
+  "scholarActivity": {
+    "loading": "Завантаження генеалогічної інформації...",
+    "scholarNotFound": "Вченого не знайдено",
+    "scholarNotFoundDesc": "Можливо, вченого, якого ви шукаєте, не знайдено або видалено.",
+    "lineageInfo": "Генеалогічна інформація",
+    "fullName": "Повне ім'я",
+    "birthDate": "Дата народження",
+    "deathDate": "Дата смерті",
+    "birthPlace": "Місце народження",
+    "detailedLineage": "Детальний родовід",
+    "notSpecified": "Не визначено"
+  },
+  "scholarConnections": {
+    "loading": "Книги завантажуються...",
+    "mapLoading": "Завантаження карти...",
+    "scholarNotFound": "Вченого не знайдено",
+    "scholarNotFoundDesc": "Можливо, вченого, якого ви шукаєте, не знайдено або видалено.",
+    "books": "Книги",
+    "all": "Усе.",
+    "ownBooks": "Власні книги",
+    "relatedBooks": "Схожі книги",
+    "ownBook": "Власна книга",
+    "relatedBook": "Пов'язана книга",
+    "noBooksInCategory": "У цій категорії не знайдено жодної книги",
+    "noBooksInCategoryDesc": "Для обраної категорії ще немає книг.",
+    "bookImage": "Книжкова ілюстрація",
+    "noDescription": "Пояснення відсутнє",
+    "languages": "Мови",
+    "noBooksYet": "Поки що немає книг",
+    "noBooksYetDesc": "Цей науковець ще не додав книг або не має пов'язаних книг.",
+    "languageSelection": "Вибір мови",
+    "whichLanguageDownload": "Яку мову ви хочете завантажити?",
+    "download": "Завантажити",
+    "noPdf": "Немає PDF",
+    "cancel": "Скасування",
+    "noDownloadOption": "Для цієї книги немає можливості завантажити її.",
+    "downloadError": "Під час завантаження сталася помилка. Будь ласка, спробуйте ще раз.",
+    "downloadFileNotFound": "Файл для завантаження не знайдено."
   }
 }

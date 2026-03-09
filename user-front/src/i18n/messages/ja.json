@@ -961,5 +961,50 @@
     "wantsToConnect": "彼はあなたと連絡を取りたがっている",
     "accept": "受け入れる",
     "reject": "シル"
+  },
+  "scholarFeed": {
+    "loading": "投稿が読み込まれています...",
+    "noPosts": "まだ出荷されていない",
+    "noPostsDesc": "この学者はまだ投稿していない。",
+    "preview": "プレビュー"
+  },
+  "scholarActivity": {
+    "loading": "系図情報を読み込む...",
+    "scholarNotFound": "奨学生が見つからない",
+    "scholarNotFoundDesc": "お探しの学者が見つからないか、削除されている可能性があります。",
+    "lineageInfo": "系図情報",
+    "fullName": "氏名",
+    "birthDate": "生年月日",
+    "deathDate": "死亡年月日",
+    "birthPlace": "出生地",
+    "detailedLineage": "詳細な系図",
+    "notSpecified": "特定せず"
+  },
+  "scholarConnections": {
+    "loading": "本が積み込まれる...",
+    "mapLoading": "地図を読み込む...",
+    "scholarNotFound": "奨学生が見つからない",
+    "scholarNotFoundDesc": "お探しの学者が見つからないか、削除されている可能性があります。",
+    "books": "書籍",
+    "all": "すべて",
+    "ownBooks": "自分の本",
+    "relatedBooks": "関連書籍",
+    "ownBook": "自著",
+    "relatedBook": "関連書籍",
+    "noBooksInCategory": "このカテゴリーに該当する書籍はありません",
+    "noBooksInCategoryDesc": "選択したカテゴリの書籍はまだありません。",
+    "bookImage": "本のイラスト",
+    "noDescription": "説明なし",
+    "languages": "言語",
+    "noBooksYet": "まだ入手可能な書籍はありません",
+    "noBooksYetDesc": "この学者はまだ本を追加していないか、関連する本がない。",
+    "languageSelection": "言語選択",
+    "whichLanguageDownload": "どの言語をダウンロードしますか？",
+    "download": "ダウンロード",
+    "noPdf": "PDFなし",
+    "cancel": "キャンセル",
+    "noDownloadOption": "この本にはダウンロードのオプションはない。",
+    "downloadError": "ダウンロード中にエラーが発生しました。もう一度お試しください。",
+    "downloadFileNotFound": "ダウンロードファイルが見つかりません。"
   }
 }
