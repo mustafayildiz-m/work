@@ -245,7 +245,19 @@
     "user": "User",
     "noSuggestionsYet": "No suggestions yet",
     "noPostsFound": "No posts found",
-    "noPostsDescription": "People you follow haven't shared posts yet or you haven't followed anyone yet."
+    "noPostsDescription": "People you follow haven't shared posts yet or you haven't followed anyone yet.",
+    "newslettersTitle": "Newsletters",
+    "newslettersSubtitle": "Weekly summaries, editor picks and community highlights.",
+    "newslettersSearchPlaceholder": "Search newsletters...",
+    "newslettersFilter": "Filter",
+    "newslettersNoItems": "No newsletters to display.",
+    "newslettersRead": "Read",
+    "newslettersBackToAll": "Back to all newsletters",
+    "newslettersPublishInfo": "Publication info",
+    "newslettersPublishInfoDesc": "This section contains current newsletter content.",
+    "newslettersOtherEditions": "Other editions",
+    "newslettersNoOtherEditions": "No other newsletters found.",
+    "newslettersTranslating": "Translating..."
   },
   "menu": {
     "feed": "Feed",

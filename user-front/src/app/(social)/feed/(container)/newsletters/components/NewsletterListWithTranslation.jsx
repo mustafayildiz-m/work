@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import { useState, useCallback, useEffect } from 'react';
 import { Button, Card, CardBody, Form, Spinner } from 'react-bootstrap';
-import { BsArrowRight, BsSearch, BsTranslate } from 'react-icons/bs';
+import { BsArrowRight, BsSearch } from 'react-icons/bs';
 import Link from 'next/link';
-import { useLanguages } from '@/hooks/useLanguages';
+import { useLanguage } from '@/context/useLanguageContext';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const SOURCE_LOCALE = 'tr'; // Bulten icerigi varsayilan olarak Turkce
 
 const formatDate = (dateValue) => {
   if (!dateValue) return '-';
@@ -26,69 +26,16 @@ const resolveImageUrl = (imageUrl) => {
   return `${API_BASE_URL.replace(/\/$/, '')}/${imageUrl.replace(/^\//, '')}`;
 };
 
-const getLanguageFlag = (code) => {
-  const flagMap = {
-    tr: '🇹🇷', en: '🇬🇧', ar: '🇸🇦', de: '🇩🇪', fr: '🇫🇷', es: '🇪🇸',
-    it: '🇮🇹', ru: '🇷🇺', zh: '🇨🇳', ja: '🇯🇵', ko: '🇰🇷', fa: '🇮🇷',
-    ur: '🇵🇰', hi: '🇮🇳', id: '🇮🇩', ms: '🇲🇾', nl: '🇳🇱', pt: '🇵🇹'
-  };
-  return flagMap[(code || '').toLowerCase()] || '🌐';
-};
-
 function translatePlain(text, translateFn) {
   if (!text || !text.trim()) return Promise.resolve(text);
   return translateFn(text);
 }
 
 export default function NewsletterListWithTranslation({ items, search, themeCardStyle }) {
-  const { languages, loading: languagesLoading } = useLanguages();
-  const [selectedLang, setSelectedLang] = useState(null);
+  const { locale, t } = useLanguage();
   const [translatedItems, setTranslatedItems] = useState({});
   const [translating, setTranslating] = useState(false);
   const [error, setError] = useState(null);
-  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
-  const [langDropdownPos, setLangDropdownPos] = useState({ top: 0, left: 0 });
-  const langToggleRef = useRef(null);
-  const langMenuRef = useRef(null);
-
-  useEffect(() => {
-    if (!langDropdownOpen || !langToggleRef.current) return;
-    const updatePos = () => {
-      if (langToggleRef.current && typeof window !== 'undefined') {
-        const rect = langToggleRef.current.getBoundingClientRect();
-        const w = 220;
-        let left = rect.right - w;
-        if (left < 8) left = 8;
-        if (left + w > window.innerWidth - 8) left = window.innerWidth - w - 8;
-        setLangDropdownPos({
-          top: rect.bottom + 4,
-          left,
-          width: w
-        });
-      }
-    };
-    updatePos();
-    window.addEventListener('scroll', updatePos, true);
-    window.addEventListener('resize', updatePos);
-    return () => {
-      window.removeEventListener('scroll', updatePos, true);
-      window.removeEventListener('resize', updatePos);
-    };
-  }, [langDropdownOpen]);
-
-  useEffect(() => {
-    if (!langDropdownOpen) return;
-    const handleClickOutside = (e) => {
-      if (
-        langToggleRef.current && !langToggleRef.current.contains(e.target) &&
-        langMenuRef.current && !langMenuRef.current.contains(e.target)
-      ) {
-        setLangDropdownOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [langDropdownOpen]);
 
   const translateApi = useCallback(async (text, targetCode) => {
     if (!targetCode) return text || '';
@@ -113,32 +60,44 @@ export default function NewsletterListWithTranslation({ items, search, themeCard
     return json.translatedText || '';
   }, []);
 
-  const handleLanguageSelect = useCallback(async (lang) => {
-    if (!lang || !items?.length) return;
-    setSelectedLang(lang);
+  useEffect(() => {
+    if (!items?.length || locale === SOURCE_LOCALE) {
+      setTranslatedItems({});
+      setTranslating(false);
+      return;
+    }
+    let cancelled = false;
     setTranslating(true);
     setError(null);
-    try {
-      const api = (text) => translateApi(text, lang.code);
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i];
-        const [titleRes, introRes] = await Promise.all([
-          translatePlain(item.title, api),
-          translatePlain(item.intro || '', api)
-        ]);
-        setTranslatedItems((prev) => ({ ...prev, [item.id]: { title: titleRes, intro: introRes } }));
-        if (i < items.length - 1) await new Promise((r) => setTimeout(r, 300));
+    const api = (text) => translateApi(text, locale);
+    (async () => {
+      try {
+        const next = {};
+        for (let i = 0; i < items.length; i++) {
+          if (cancelled) return;
+          const item = items[i];
+          const [titleRes, introRes] = await Promise.all([
+            translatePlain(item.title, api),
+            translatePlain(item.intro || '', api)
+          ]);
+          next[item.id] = { title: titleRes, intro: introRes };
+          setTranslatedItems((prev) => ({ ...prev, ...next }));
+          if (i < items.length - 1) await new Promise((r) => setTimeout(r, 200));
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err.message || 'Ceviri yapilirken hata olustu');
+          setTranslatedItems({});
+        }
+      } finally {
+        if (!cancelled) setTranslating(false);
       }
-    } catch (err) {
-      setError(err.message || 'Ceviri yapilirken hata olustu');
-      setTranslatedItems({});
-    } finally {
-      setTranslating(false);
-    }
-  }, [items, translateApi]);
+    })();
+    return () => { cancelled = true; };
+  }, [items, locale, translateApi]);
 
   const getDisplayItem = (item) => {
-    if (!selectedLang || !translatedItems[item.id]) return item;
+    if (locale === SOURCE_LOCALE || !translatedItems[item.id]) return item;
     const t = translatedItems[item.id];
     return {
       ...item,
@@ -156,94 +115,10 @@ export default function NewsletterListWithTranslation({ items, search, themeCard
           borderColor: 'var(--bs-border-color)'
         }}
       >
-        <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-2">
-          <div>
-            <h4 className="mb-1 fw-bold">Haber Bultenleri</h4>
-            <p className="mb-0 text-muted">Haftalik ozetler, editor seckileri ve topluluk one cikanlari.</p>
-          </div>
-          <div className="d-flex align-items-center gap-2">
-            {selectedLang && !translating && (
-              <Button
-                variant="outline-secondary"
-                size="sm"
-                onClick={() => {
-                  setSelectedLang(null);
-                  setTranslatedItems({});
-                  setError(null);
-                }}
-              >
-                Orijinale don
-              </Button>
-            )}
-            <div className="position-relative" ref={langToggleRef}>
-              <Button
-                variant="outline-primary"
-                size="sm"
-                className="d-flex align-items-center gap-2"
-                disabled={languagesLoading || translating}
-                onClick={() => setLangDropdownOpen((o) => !o)}
-              >
-                <BsTranslate />
-                {translating ? 'Cevriliyor...' : selectedLang ? `${getLanguageFlag(selectedLang.code)} ${selectedLang.name}` : 'Dil sec ve cevir'}
-              </Button>
-              {langDropdownOpen &&
-                typeof document !== 'undefined' &&
-                createPortal(
-                  <div
-                    ref={langMenuRef}
-                    role="menu"
-                    className="newsletter-lang-dropdown-custom"
-                    style={{
-                      position: 'fixed',
-                      top: langDropdownPos.top,
-                      left: langDropdownPos.left,
-                      width: langDropdownPos.width,
-                      maxHeight: 320,
-                      overflowY: 'auto',
-                      zIndex: 99999,
-                      backgroundColor: 'var(--bs-body-bg)',
-                      color: 'var(--bs-body-color)',
-                      border: '1px solid var(--bs-border-color)',
-                      borderRadius: 8,
-                      boxShadow: '0 0.5rem 1rem rgba(0,0,0,0.25)',
-                      padding: '0.25rem 0'
-                    }}
-                  >
-                    {languages
-                      .filter((l) => l.isActive !== false)
-                      .map((lang) => (
-                        <button
-                          key={lang.id}
-                          type="button"
-                          role="menuitem"
-                          className="d-block w-100 text-start border-0 px-3 py-2"
-                          style={{
-                            background: selectedLang?.id === lang.id ? 'var(--bs-primary-bg-subtle)' : 'transparent',
-                            color: 'var(--bs-body-color)',
-                            fontSize: '0.9rem',
-                            cursor: 'pointer'
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = 'var(--bs-tertiary-bg)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = selectedLang?.id === lang.id ? 'var(--bs-primary-bg-subtle)' : 'transparent';
-                          }}
-                          onClick={() => {
-                            handleLanguageSelect(lang);
-                            setLangDropdownOpen(false);
-                          }}
-                        >
-                          {getLanguageFlag(lang.code)} {lang.name}
-                        </button>
-                      ))}
-                  </div>,
-                  document.body
-                )}
-            </div>
-          </div>
+        <div className="mb-2">
+          <h4 className="mb-1 fw-bold">{t('feed.newslettersTitle')}</h4>
+          <p className="mb-0 text-muted">{t('feed.newslettersSubtitle')}</p>
         </div>
-        <small className="text-muted">Guncel ozetler ve editor seckileri</small>
       </div>
 
       <CardBody>
@@ -255,7 +130,7 @@ export default function NewsletterListWithTranslation({ items, search, themeCard
             />
             <Form.Control
               name="search"
-              placeholder="Bulten ara..."
+              placeholder={t('feed.newslettersSearchPlaceholder')}
               defaultValue={search}
               style={{
                 paddingLeft: 36,
@@ -266,7 +141,7 @@ export default function NewsletterListWithTranslation({ items, search, themeCard
             />
           </div>
           <Button variant="outline-secondary" type="submit">
-            Filtrele
+            {t('feed.newslettersFilter')}
           </Button>
         </Form>
 
@@ -279,7 +154,7 @@ export default function NewsletterListWithTranslation({ items, search, themeCard
         {translating && (
           <div className="d-flex align-items-center gap-2 mb-3 text-muted">
             <Spinner animation="border" size="sm" />
-            <span>Liste secilen dile cevriliyor...</span>
+            <span>{t('feed.newslettersTranslating')}</span>
           </div>
         )}
 
@@ -310,7 +185,7 @@ export default function NewsletterListWithTranslation({ items, search, themeCard
                       size="sm"
                       className="d-flex align-items-center gap-1 mt-1"
                     >
-                      Oku <BsArrowRight />
+                      {t('feed.newslettersRead')} <BsArrowRight />
                     </Button>
                   </div>
                 </CardBody>
@@ -318,7 +193,7 @@ export default function NewsletterListWithTranslation({ items, search, themeCard
             );
           })}
           {items.length === 0 && (
-            <p className="text-muted mb-0">Gosterilecek bulten bulunamadi.</p>
+            <p className="text-muted mb-0">{t('feed.newslettersNoItems')}</p>
           )}
         </div>
       </CardBody>

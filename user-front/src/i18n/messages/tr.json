@@ -249,7 +249,19 @@
     "user": "Kullanıcı",
     "noSuggestionsYet": "Henüz öneri yok",
     "noPostsFound": "Henüz gönderi bulunmuyor",
-    "noPostsDescription": "Takip ettiğiniz kişiler henüz gönderi paylaşmamış veya henüz kimseyi takip etmiyorsunuz."
+    "noPostsDescription": "Takip ettiğiniz kişiler henüz gönderi paylaşmamış veya henüz kimseyi takip etmiyorsunuz.",
+    "newslettersTitle": "Haber Bültenleri",
+    "newslettersSubtitle": "Haftalık özetler, editör seçkileri ve topluluk öne çıkanları.",
+    "newslettersSearchPlaceholder": "Bülten ara...",
+    "newslettersFilter": "Filtrele",
+    "newslettersNoItems": "Gösterilecek bülten bulunamadı.",
+    "newslettersRead": "Oku",
+    "newslettersBackToAll": "Tüm bültenlere dön",
+    "newslettersPublishInfo": "Yayın bilgisi",
+    "newslettersPublishInfoDesc": "Bu alanda güncel bülten içerikleri yer alır.",
+    "newslettersOtherEditions": "Diğer sayılar",
+    "newslettersNoOtherEditions": "Diğer bülten bulunamadı.",
+    "newslettersTranslating": "Çevriliyor..."
   },
   "menu": {
     "feed": "Akış",
