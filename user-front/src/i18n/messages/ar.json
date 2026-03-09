@@ -963,5 +963,50 @@
     "wantsToConnect": "يريد الاتصال بك",
     "accept": "قبول",
     "reject": "سيل"
+  },
+  "scholarFeed": {
+    "loading": "يتم تحميل المنشورات...",
+    "noPosts": "لم يتم الشحن بعد",
+    "noPostsDesc": "لم يتم نشر هذا الباحث بعد.",
+    "preview": "معاينة"
+  },
+  "scholarActivity": {
+    "loading": "تحميل معلومات الأنساب...",
+    "scholarNotFound": "الباحث غير موجود",
+    "scholarNotFoundDesc": "قد لا يكون الباحث الذي تبحث عنه غير موجود أو ربما تم حذفه.",
+    "lineageInfo": "معلومات الأنساب",
+    "fullName": "الاسم الكامل",
+    "birthDate": "تاريخ الميلاد",
+    "deathDate": "تاريخ الوفاة",
+    "birthPlace": "مكان الميلاد",
+    "detailedLineage": "الأنساب التفصيلية",
+    "notSpecified": "غير محدد"
+  },
+  "scholarConnections": {
+    "loading": "يتم تحميل الكتب...",
+    "mapLoading": "تحميل الخريطة...",
+    "scholarNotFound": "الباحث غير موجود",
+    "scholarNotFoundDesc": "قد لا يكون الباحث الذي تبحث عنه غير موجود أو ربما تم حذفه.",
+    "books": "الكتب",
+    "all": "الكل",
+    "ownBooks": "الكتب الخاصة",
+    "relatedBooks": "كتب ذات صلة",
+    "ownBook": "كتاب خاص",
+    "relatedBook": "كتاب ذو صلة",
+    "noBooksInCategory": "لم يتم العثور على كتب في هذه الفئة",
+    "noBooksInCategoryDesc": "لا توجد كتب للفئة المحددة حتى الآن.",
+    "bookImage": "كتاب توضيحي",
+    "noDescription": "لا يوجد تفسير متاح",
+    "languages": "اللغات",
+    "noBooksYet": "لا توجد كتب متاحة حتى الآن",
+    "noBooksYetDesc": "لم يقم هذا الباحث بإضافة كتب بعد أو لا توجد كتب ذات صلة.",
+    "languageSelection": "اختيار اللغة",
+    "whichLanguageDownload": "ما هي اللغة التي تريد تنزيلها؟",
+    "download": "تنزيل",
+    "noPdf": "لا يوجد ملف PDF",
+    "cancel": "الإلغاء",
+    "noDownloadOption": "لا يوجد خيار تنزيل لهذا الكتاب.",
+    "downloadError": "حدث خطأ أثناء التنزيل. يرجى المحاولة مرة أخرى.",
+    "downloadFileNotFound": "ملف التنزيل غير موجود."
   }
 }

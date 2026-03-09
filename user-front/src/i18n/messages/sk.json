@@ -269,11 +269,11 @@
   "menu": {
     "feed": "Krmivo",
     "connections": "Pripojenia",
-    "users": "My Network",
+    "users": "Moja sieť",
     "islamicScholars": "Islamskí učenci",
-    "worldNews": "Stories",
+    "worldNews": "Príbehy",
     "books": "Knihy",
-    "articles": "Booklets",
+    "articles": "Brožúry",
     "podcast": "Podcast",
     "events": "Podujatia",
     "groups": "Skupiny",
@@ -298,7 +298,8 @@
     "profileMenu": "Menu profilu",
     "user": "Používateľ",
     "viewProfile": "Zobraziť profil",
-    "newsletters": "Novinky"
+    "newsletters": "Novinky",
+    "papers": "Akademické publikácie"
   },
   "theme": {
     "themeSelection": "Výber témy",

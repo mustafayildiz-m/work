@@ -269,11 +269,11 @@
   "menu": {
     "feed": "Krmivo",
     "connections": "Připojení",
-    "users": "My Network",
+    "users": "Moje síť",
     "islamicScholars": "Islámští učenci",
-    "worldNews": "Stories",
+    "worldNews": "Příběhy",
     "books": "Knihy",
-    "articles": "Booklets",
+    "articles": "Brožury",
     "podcast": "Podcast",
     "events": "Události",
     "groups": "Skupiny",
@@ -298,7 +298,8 @@
     "profileMenu": "Nabídka profilu",
     "user": "Uživatel",
     "viewProfile": "Zobrazit profil",
-    "newsletters": "Zpravodaje"
+    "newsletters": "Zpravodaje",
+    "papers": "Akademické publikace"
   },
   "theme": {
     "themeSelection": "Výběr tématu",
@@ -950,5 +951,50 @@
     "wantsToConnect": "Chce vás kontaktovat",
     "accept": "Přijmout",
     "reject": "Odmítnout"
+  },
+  "scholarFeed": {
+    "loading": "Příspěvky se načítají...",
+    "noPosts": "Zatím žádná zásilka",
+    "noPostsDesc": "Tento učenec zatím nebyl vyslán.",
+    "preview": "Náhled"
+  },
+  "scholarActivity": {
+    "loading": "Načítání genealogických informací...",
+    "scholarNotFound": "Učenec nenalezen",
+    "scholarNotFoundDesc": "Hledaný učenec nemusí být nalezen nebo mohl být smazán.",
+    "lineageInfo": "Genealogické informace",
+    "fullName": "Celé jméno",
+    "birthDate": "Datum narození",
+    "deathDate": "Datum úmrtí",
+    "birthPlace": "Místo narození",
+    "detailedLineage": "Podrobná genealogie",
+    "notSpecified": "Nespecifikováno"
+  },
+  "scholarConnections": {
+    "loading": "Knihy se načítají...",
+    "mapLoading": "Načítání mapy...",
+    "scholarNotFound": "Učenec nenalezen",
+    "scholarNotFoundDesc": "Hledaný učenec nemusí být nalezen nebo mohl být smazán.",
+    "books": "Knihy",
+    "all": "Všechny",
+    "ownBooks": "Vlastní knihy",
+    "relatedBooks": "Související knihy",
+    "ownBook": "Vlastní kniha",
+    "relatedBook": "Související kniha",
+    "noBooksInCategory": "V této kategorii nebyly nalezeny žádné knihy",
+    "noBooksInCategoryDesc": "Ve vybrané kategorii zatím nejsou žádné knihy.",
+    "bookImage": "Ilustrace knih",
+    "noDescription": "Vysvětlení není k dispozici",
+    "languages": "Jazyky",
+    "noBooksYet": "Zatím nejsou k dispozici žádné knihy",
+    "noBooksYetDesc": "Tento učenec zatím nepřidal žádné knihy nebo nemá žádné související knihy.",
+    "languageSelection": "Výběr jazyka",
+    "whichLanguageDownload": "Který jazyk chcete stáhnout?",
+    "download": "Stáhnout",
+    "noPdf": "Ne PDF",
+    "cancel": "Zrušení",
+    "noDownloadOption": "U této knihy není možnost stažení.",
+    "downloadError": "Při stahování došlo k chybě. Zkuste to prosím znovu.",
+    "downloadFileNotFound": "Soubor ke stažení nebyl nalezen."
   }
 }

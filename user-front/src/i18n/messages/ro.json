@@ -269,11 +269,11 @@
   "menu": {
     "feed": "Alimente",
     "connections": "Conexiuni",
-    "users": "My Network",
+    "users": "Rețeaua mea",
     "islamicScholars": "Cercetători islamici",
-    "worldNews": "Stories",
+    "worldNews": "Povestiri",
     "books": "Cărți",
-    "articles": "Booklets",
+    "articles": "Broșuri",
     "podcast": "Podcast",
     "events": "Evenimente",
     "groups": "Grupuri",
@@ -298,7 +298,8 @@
     "profileMenu": "Meniu profil",
     "user": "Utilizator",
     "viewProfile": "Vezi profilul",
-    "newsletters": "Buletine informative"
+    "newsletters": "Buletine informative",
+    "papers": "Publicații academice"
   },
   "theme": {
     "themeSelection": "Selectarea temei",
