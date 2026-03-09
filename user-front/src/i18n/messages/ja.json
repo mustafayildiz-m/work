@@ -304,7 +304,8 @@
     "user": "ユーザー",
     "viewProfile": "プロフィールを表示",
     "newsletters": "ニュースレター",
-    "papers": "学術出版物"
+    "papers": "学術出版物",
+    "askAboutIslam": "イスラムについて質問する"
   },
   "theme": {
     "themeSelection": "テーマ選択",
