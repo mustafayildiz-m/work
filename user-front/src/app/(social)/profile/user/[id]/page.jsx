@@ -8,6 +8,7 @@ import {
   BsTelephone, BsCake, BsShieldCheck, BsInfoCircle, BsPersonX
 } from 'react-icons/bs';
 import { useLanguage } from '../../../../../context/useLanguageContext';
+import { useAuthContext } from '../../../../../context/useAuthContext';
 
 const InfoItem = ({ icon: Icon, label, value, color = "primary" }) => {
   const { t } = useLanguage();
@@ -43,8 +44,13 @@ async function fetchUserById(userId) {
 const UserProfilePage = () => {
   const params = useParams();
   const { t, locale } = useLanguage();
+  const { userInfo } = useAuthContext();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const isOwnProfile = userInfo?.id && params.id && (String(userInfo.id) === String(params.id));
+  const isAdmin = userInfo?.role === 'admin';
+  const canSeeSensitiveInfo = isOwnProfile || isAdmin;
 
   useEffect(() => {
     if (!params.id) return;
@@ -147,55 +153,57 @@ const UserProfilePage = () => {
       </Card>
 
       <Row className="g-4">
-        {/* 2. Sol Kolon - Kişisel & İletişim */}
-        <Col lg={6}>
-          <Card className="border-0 shadow-sm h-100">
-            <CardBody className="p-4">
-              <h5 className="card-title mb-4 d-flex align-items-center text-primary">
-                <BsPerson className="me-2" size={22} />
-                {t('userProfile.personalInfo', 'Kişisel Bilgiler')}
-              </h5>
+        {/* 2. Sol Kolon - Kişisel & İletişim (sadece kendi profili veya admin için) */}
+        {canSeeSensitiveInfo && (
+          <Col lg={6}>
+            <Card className="border-0 shadow-sm h-100">
+              <CardBody className="p-4">
+                <h5 className="card-title mb-4 d-flex align-items-center text-primary">
+                  <BsPerson className="me-2" size={22} />
+                  {t('userProfile.personalInfo', 'Kişisel Bilgiler')}
+                </h5>
 
-              <InfoItem
-                icon={BsPerson}
-                label={t('userProfile.fullName', 'Ad Soyad')}
-                value={user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.username}
-                color="primary"
-              />
+                <InfoItem
+                  icon={BsPerson}
+                  label={t('userProfile.fullName', 'Ad Soyad')}
+                  value={user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.username}
+                  color="primary"
+                />
 
-              <InfoItem
-                icon={BsCake}
-                label={t('userProfile.birthDate', 'Doğum Tarihi')}
-                value={formatDate(user.birthDate)}
-                color="info"
-              />
+                <InfoItem
+                  icon={BsCake}
+                  label={t('userProfile.birthDate', 'Doğum Tarihi')}
+                  value={formatDate(user.birthDate)}
+                  color="info"
+                />
 
-              <InfoItem
-                icon={BsTelephone}
-                label={t('userProfile.phone', 'Telefon')}
-                value={user.phoneNo}
-                color="success"
-              />
+                <InfoItem
+                  icon={BsTelephone}
+                  label={t('userProfile.phone', 'Telefon')}
+                  value={user.phoneNo}
+                  color="success"
+                />
 
-              <InfoItem
-                icon={BsEnvelope}
-                label={t('userProfile.email', 'E-posta')}
-                value={user.email}
-                color="warning"
-              />
+                <InfoItem
+                  icon={BsEnvelope}
+                  label={t('userProfile.email', 'E-posta')}
+                  value={user.email}
+                  color="warning"
+                />
 
-              <InfoItem
-                icon={BsGeoAlt}
-                label={t('userProfile.location', 'Konum')}
-                value={user.location || user.locationName}
-                color="danger"
-              />
-            </CardBody>
-          </Card>
-        </Col>
+                <InfoItem
+                  icon={BsGeoAlt}
+                  label={t('userProfile.location', 'Konum')}
+                  value={user.location || user.locationName}
+                  color="danger"
+                />
+              </CardBody>
+            </Card>
+          </Col>
+        )}
 
         {/* 3. Sağ Kolon - Hesap Detayları */}
-        <Col lg={6}>
+        <Col lg={canSeeSensitiveInfo ? 6 : 12}>
           <Card className="border-0 shadow-sm h-100">
             <CardBody className="p-4">
               <h5 className="card-title mb-4 d-flex align-items-center text-primary">
@@ -242,11 +250,13 @@ const UserProfilePage = () => {
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-top">
-                <small className="text-muted d-block text-center">
-                  User ID: <span className="font-monospace">{user.id}</span>
-                </small>
-              </div>
+              {canSeeSensitiveInfo && (
+                <div className="mt-4 pt-3 border-top">
+                  <small className="text-muted d-block text-center">
+                    User ID: <span className="font-monospace">{user.id}</span>
+                  </small>
+                </div>
+              )}
 
             </CardBody>
           </Card>
