@@ -6,6 +6,7 @@ import { useLanguage } from '@/context/useLanguageContext';
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 import { useOptionalNotificationContext } from '@/context/useNotificationContext';
 import Image from 'next/image';
+import Link from 'next/link';
 import { BsPencilSquare, BsChevronUp, BsChevronDown, BsSearch, BsThreeDots } from 'react-icons/bs';
 import placeholderImg from '@/assets/images/avatar/placeholder.jpg';
 import { useSession } from 'next-auth/react';
@@ -814,7 +815,12 @@ const MessagingBar = () => {
                         }}
                     >
                         <div className="d-flex align-items-center overflow-hidden">
-                            <div className="position-relative me-2 flex-shrink-0">
+                            <Link
+                                href={`/profile/user/${chat.user.id}`}
+                                onClick={(e) => e.stopPropagation()}
+                                className="position-relative me-2 flex-shrink-0"
+                                style={{ width: 32, height: 32, display: 'block' }}
+                            >
                                 <Image
                                     src={getDisplayAvatar(chat.user.photoUrl)}
                                     alt={chat.user.firstName}
@@ -824,7 +830,7 @@ const MessagingBar = () => {
                                     style={{ objectFit: 'cover' }}
                                 />
                                 <div className="position-absolute bottom-0 end-0 bg-success rounded-circle" style={{ width: '10px', height: '10px', border: `2px solid ${colors.header}` }} />
-                            </div>
+                            </Link>
                             <span className="fw-bold text-truncate" style={{ fontSize: '0.85rem' }}>
                                 {chat.user.firstName} {chat.user.lastName}
                             </span>
@@ -857,31 +863,41 @@ const MessagingBar = () => {
                                         <div className="p-3">
                                             {/* User Info Card */}
                                             <div className="text-center mb-4">
-                                                <Image
-                                                    src={getDisplayAvatar(chat.user.photoUrl)}
-                                                    alt={chat.user.firstName}
-                                                    width={80}
-                                                    height={80}
-                                                    className="rounded-circle mb-2"
-                                                    style={{ objectFit: 'cover' }}
-                                                />
-                                                <h5 className="mb-0 fw-bold" style={{ color: colors.textMain }}>{chat.user.firstName} {chat.user.lastName}</h5>
+                                                <Link href={`/profile/user/${chat.user.id}`} className="d-inline-block mb-2">
+                                                    <Image
+                                                        src={getDisplayAvatar(chat.user.photoUrl)}
+                                                        alt={chat.user.firstName}
+                                                        width={80}
+                                                        height={80}
+                                                        className="rounded-circle"
+                                                        style={{ objectFit: 'cover' }}
+                                                    />
+                                                </Link>
+                                                <Link href={`/profile/user/${chat.user.id}`} className="text-decoration-none">
+                                                    <h5 className="mb-0 fw-bold" style={{ color: colors.textMain }}>{chat.user.firstName} {chat.user.lastName}</h5>
+                                                </Link>
                                                 {(chat.user.tagline || chat.user.role) && (
-                                                    <p className="text-muted small">{chat.user.tagline || chat.user.role}</p>
+                                                    <p className="text-muted small mb-0">{chat.user.tagline || chat.user.role}</p>
                                                 )}
                                             </div>
 
                                             {/* Messages */}
                                             {chat.messages.map((msg) => (
-                                                <div key={msg.id} className={clsx("d-flex mb-3", msg.isMe ? "flex-row-reverse" : "flex-row")}>
-                                                    <Image
-                                                        src={getDisplayAvatar(msg.isMe ? currentUserPhoto : chat.user.photoUrl)}
-                                                        alt={msg.isMe ? getLocalized('messaging.me', 'Ben', 'Me') : chat.user.firstName}
-                                                        width={32}
-                                                        height={32}
-                                                        className={clsx("rounded-circle flex-shrink-0", msg.isMe ? "ms-2" : "me-2")}
-                                                        style={{ objectFit: 'cover' }}
-                                                    />
+                                                <div key={msg.id} className={clsx("d-flex align-items-start mb-3", msg.isMe ? "flex-row-reverse" : "flex-row")}>
+                                                    <Link
+                                                        href={`/profile/user/${msg.isMe ? (userInfo?.id || session?.user?.id) : chat.user.id}`}
+                                                        className={clsx("flex-shrink-0", msg.isMe ? "ms-2" : "me-2")}
+                                                        style={{ width: 32, height: 32, display: 'block' }}
+                                                    >
+                                                        <Image
+                                                            src={getDisplayAvatar(msg.isMe ? currentUserPhoto : chat.user.photoUrl)}
+                                                            alt={msg.isMe ? getLocalized('messaging.me', 'Ben', 'Me') : chat.user.firstName}
+                                                            width={32}
+                                                            height={32}
+                                                            className="rounded-circle"
+                                                            style={{ objectFit: 'cover', width: 32, height: 32 }}
+                                                        />
+                                                    </Link>
                                                     <div className={clsx("overflow-hidden d-flex flex-column", msg.isMe ? "align-items-end" : "align-items-start")}>
                                                         <div className={clsx("d-flex align-items-center mb-1", msg.isMe ? "flex-row-reverse" : "flex-row")}>
                                                             <span className={clsx("fw-bold text-truncate", msg.isMe ? "ms-2" : "me-2")} style={{ color: colors.textMain, fontSize: '0.85rem' }}>
