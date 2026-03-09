@@ -26,7 +26,7 @@ const formatDate = (dateValue, locale = 'tr-TR') => {
   });
 };
 
-export default function PapersList({ items = [], search = '' }) {
+export default function PapersList({ items = [], search = '', loading = false }) {
   const { t, locale } = useLanguage();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imageLoading, setImageLoading] = useState(true);
@@ -72,7 +72,12 @@ export default function PapersList({ items = [], search = '' }) {
         </Form>
       </div>
 
-      {papers.length === 0 ? (
+      {loading ? (
+        <div className="px-4 pb-2 d-flex align-items-center gap-2 text-muted">
+          <Spinner animation="border" size="sm" />
+          <span>{t('feed.papersLoading')}</span>
+        </div>
+      ) : papers.length === 0 ? (
         <div className="papers-empty">{t('feed.papersNoItems')}</div>
       ) : (
         <div className="papers-hero-card">

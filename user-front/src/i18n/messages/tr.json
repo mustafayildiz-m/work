@@ -293,6 +293,7 @@
     "papersPublishInfoDesc": "Bu alanda güncel akademik yayın içerikleri yer alır.",
     "papersOtherEditions": "Diğer yayınlar",
     "papersNoOtherEditions": "Diğer yayın bulunamadı.",
+    "papersLoading": "Yükleniyor...",
     "papersTranslating": "Çevriliyor...",
     "papersTranslationFailed": "Çeviri başarısız",
     "papersTranslationError": "Çeviri yapılırken hata oluştu"

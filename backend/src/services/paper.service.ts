@@ -4,18 +4,24 @@ import { DeepPartial, Repository } from 'typeorm';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Paper } from '../entities/paper.entity';
+import { PaperTranslation } from '../entities/paper-translation.entity';
 import { CreatePaperDto } from '../dto/paper/create-paper.dto';
 import { UpdatePaperDto } from '../dto/paper/update-paper.dto';
 import { CacheService } from './cache.service';
+import { TranslationService } from './translation.service';
 
 const CACHE_TTL = 300; // 5 dakika
+const SOURCE_LANG = 'tr';
 
 @Injectable()
 export class PaperService {
   constructor(
     @InjectRepository(Paper)
     private readonly paperRepository: Repository<Paper>,
+    @InjectRepository(PaperTranslation)
+    private readonly paperTranslationRepo: Repository<PaperTranslation>,
     private readonly cacheService: CacheService,
+    private readonly translationService: TranslationService,
   ) {}
 
   private parseTags(tags: any): string[] | null {
@@ -51,23 +57,79 @@ export class PaperService {
     return sectionsValue[0]?.content || '';
   }
 
-  private toClientModel(item: Paper) {
+  private toClientModel(
+    item: Paper,
+    overrides?: { title?: string; intro?: string; content?: string },
+  ) {
+    const title = overrides?.title ?? item.title;
+    const intro = overrides?.intro ?? item.intro;
+    const content = overrides?.content ?? item.content;
     return {
       id: item.id,
-      title: item.title,
+      title,
       author: item.author,
       publishDate: item.publishDate,
       publishedAt: item.publishDate,
-      intro: item.intro,
+      intro,
       imageUrl: item.imageUrl,
       tags: item.tags || [],
-      content: item.content,
-      sections: item.content
-        ? [{ title: 'Detay', content: item.content }]
+      content,
+      sections: content
+        ? [{ title: 'Detay', content }]
         : [],
       createdAt: item.createdAt,
       updatedAt: item.updatedAt,
     };
+  }
+
+  private async getOrCreateTranslation(
+    paper: Paper,
+    langCode: string,
+  ): Promise<PaperTranslation | null> {
+    const normalized = langCode?.toLowerCase().split('-')[0];
+    if (!normalized || normalized === SOURCE_LANG) return null;
+
+    let trans = await this.paperTranslationRepo.findOne({
+      where: { paperId: paper.id, languageCode: normalized },
+    });
+    if (trans) return trans;
+
+    try {
+      const [title, intro, content] = await Promise.all([
+        this.translationService.translateText(
+          paper.title || '',
+          normalized,
+          SOURCE_LANG,
+        ),
+        paper.intro
+          ? this.translationService.translateText(
+              paper.intro,
+              normalized,
+              SOURCE_LANG,
+            )
+          : Promise.resolve(''),
+        paper.content
+          ? this.translationService.translateLongText(
+              paper.content,
+              normalized,
+              SOURCE_LANG,
+            )
+          : Promise.resolve(''),
+      ]);
+
+      trans = this.paperTranslationRepo.create({
+        paperId: paper.id,
+        languageCode: normalized,
+        title,
+        intro: intro || null,
+        content: content || null,
+      });
+      await this.paperTranslationRepo.save(trans);
+      return trans;
+    } catch (err) {
+      console.error('Paper translation error:', err);
+      return null;
+    }
   }
 
   private removeImageFiles(imageUrl?: string | null): void {
@@ -121,8 +183,10 @@ export class PaperService {
     page = 1,
     limit = 20,
     search?: string,
+    lang?: string,
   ): Promise<Record<string, any>> {
-    const cacheKey = `paper:list:${page}:${limit}:${search || 'all'}`;
+    const langNorm = lang?.toLowerCase().split('-')[0];
+    const cacheKey = `paper:list:${page}:${limit}:${search || 'all'}:${langNorm || 'tr'}`;
     const cached = await this.cacheService.get<Record<string, any>>(cacheKey);
     if (cached) {
       return cached;
@@ -145,8 +209,24 @@ export class PaperService {
       .take(limit)
       .getManyAndCount();
 
+    const data = await Promise.all(
+      items.map(async (item) => {
+        if (langNorm && langNorm !== SOURCE_LANG) {
+          const trans = await this.getOrCreateTranslation(item, langNorm);
+          if (trans) {
+            return this.toClientModel(item, {
+              title: trans.title,
+              intro: trans.intro ?? undefined,
+              content: trans.content ?? undefined,
+            });
+          }
+        }
+        return this.toClientModel(item);
+      }),
+    );
+
     const result = {
-      data: items.map((item) => this.toClientModel(item)),
+      data,
       total,
       page,
       limit,
@@ -156,8 +236,9 @@ export class PaperService {
     return result;
   }
 
-  async findOne(id: number): Promise<Record<string, any>> {
-    const cacheKey = `paper:${id}`;
+  async findOne(id: number, lang?: string): Promise<Record<string, any>> {
+    const langNorm = lang?.toLowerCase().split('-')[0];
+    const cacheKey = `paper:${id}:${langNorm || 'tr'}`;
     const cached = await this.cacheService.get<Record<string, any>>(cacheKey);
     if (cached) {
       return cached;
@@ -169,7 +250,22 @@ export class PaperService {
       throw new NotFoundException(`Paper bulunamadi (ID: ${id})`);
     }
 
-    const result = this.toClientModel(item);
+    let result: Record<string, any>;
+    if (langNorm && langNorm !== SOURCE_LANG) {
+      const trans = await this.getOrCreateTranslation(item, langNorm);
+      if (trans) {
+        result = this.toClientModel(item, {
+          title: trans.title,
+          intro: trans.intro ?? undefined,
+          content: trans.content ?? undefined,
+        });
+      } else {
+        result = this.toClientModel(item);
+      }
+    } else {
+      result = this.toClientModel(item);
+    }
+
     await this.cacheService.set(cacheKey, result, CACHE_TTL);
     return result;
   }
