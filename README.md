@@ -82,6 +82,24 @@ docker-compose up -d --build
 - Admin Panel: React, Vite, Tailwind CSS
 - User Frontend: Next.js, React
 
+## Canlı Sunucuda Deploy
+
+```bash
+cd ~/IW_Developments
+
+# Sunucudaki yerel değişiklikleri atla, remote ile eşitle
+git fetch origin
+git reset --hard origin/main
+
+# Gerekirse migration
+docker compose -f docker-compose.prod.yml exec backend npm run migration:run
+
+# Servisleri güncelle
+docker compose -f docker-compose.prod.yml up -d --build backend user-front admin-front
+```
+
+**Not:** `git reset --hard` sunucudaki yerel değişiklikleri siler. certbot/conf, nginx *.bak dosyaları .gitignore'da olduğu için etkilenmez.
+
 ## Detaylı Dokümantasyon
 
 Detaylı kurulum ve yapılandırma bilgileri için `DOCKER_README.md` dosyasına bakın.
