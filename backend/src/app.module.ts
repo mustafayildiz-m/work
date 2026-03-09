@@ -45,6 +45,7 @@ import { ReligiousBooksSeeder } from './seeders/religious-books-seeder';
 import { MultiLanguageBooksSeeder } from './seeders/multilanguage-books-seeder';
 import { MultiLanguageArticlesSeeder } from './seeders/multilanguage-articles-seeder';
 import { NewslettersSeeder } from './seeders/newsletters-seeder';
+import { PapersSeeder } from './seeders/papers-seeder';
 import { PublicProfileModule } from './modules/public-profile.module';
 import { PodcastModule } from './modules/podcast.module';
 import { AdminUsersModule } from './modules/admin-users.module';
@@ -58,6 +59,8 @@ import { Notification } from './entities/notification.entity';
 import { NotificationModule } from './modules/notification.module';
 import { Newsletter } from './entities/newsletter.entity';
 import { NewsletterModule } from './modules/newsletter.module';
+import { Paper } from './entities/paper.entity';
+import { PaperModule } from './modules/paper.module';
 
 @Module({
   imports: [
@@ -94,6 +97,7 @@ import { NewsletterModule } from './modules/newsletter.module';
       Podcast,
       Notification,
       Newsletter,
+      Paper,
     ]),
     BooksModule,
     ArticlesModule,
@@ -124,6 +128,7 @@ import { NewsletterModule } from './modules/newsletter.module';
     SystemSettingsModule,
     NotificationModule,
     NewsletterModule,
+    PaperModule,
   ],
   controllers: [AppController],
   providers: [
@@ -134,6 +139,7 @@ import { NewsletterModule } from './modules/newsletter.module';
     MultiLanguageBooksSeeder,
     MultiLanguageArticlesSeeder,
     NewslettersSeeder,
+    PapersSeeder,
   ],
 })
 export class AppModule { }

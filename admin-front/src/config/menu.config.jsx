@@ -128,6 +128,21 @@ export const MENU_SIDEBAR = [
         ]
       },
       {
+        title: 'Akademik Yayınlar',
+        children: [
+          {
+            title: 'Yayın Ekle',
+            path: '/akademik-yayinlar/ekle',
+            status: 'done'
+          },
+          {
+            title: 'Tüm Yayınlar',
+            path: '/akademik-yayinlar/liste',
+            status: 'done'
+          }
+        ]
+      },
+      {
         title: 'Podcast',
         children: [
           {
