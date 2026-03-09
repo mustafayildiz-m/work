@@ -269,11 +269,11 @@
   "menu": {
     "feed": "Alimentação",
     "connections": "Ligações",
-    "users": "My Network",
+    "users": "A minha rede",
     "islamicScholars": "Académicos islâmicos",
-    "worldNews": "Stories",
+    "worldNews": "Histórias",
     "books": "Livros",
-    "articles": "Booklets",
+    "articles": "Brochuras",
     "podcast": "Podcast",
     "events": "Eventos",
     "groups": "Grupos",
@@ -298,7 +298,8 @@
     "profileMenu": "Menu Perfil",
     "user": "Utilizador",
     "viewProfile": "Ver perfil",
-    "newsletters": "Boletins informativos"
+    "newsletters": "Boletins informativos",
+    "papers": "Publicações académicas"
   },
   "theme": {
     "themeSelection": "Seleção do tema",

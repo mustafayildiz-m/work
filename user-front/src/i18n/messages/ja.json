@@ -268,11 +268,11 @@
   "menu": {
     "feed": "フィード",
     "connections": "つながり",
-    "users": "My Network",
+    "users": "マイネットワーク",
     "islamicScholars": "イスラム学者",
-    "worldNews": "Stories",
+    "worldNews": "ストーリー",
     "books": "書籍",
-    "articles": "Booklets",
+    "articles": "小冊子",
     "podcast": "ポッドキャスト",
     "events": "イベント",
     "groups": "グループ",
@@ -297,7 +297,8 @@
     "profileMenu": "プロフィールメニュー",
     "user": "ユーザー",
     "viewProfile": "プロフィールを表示",
-    "newsletters": "ニュースレター"
+    "newsletters": "ニュースレター",
+    "papers": "学術出版物"
   },
   "theme": {
     "themeSelection": "テーマ選択",

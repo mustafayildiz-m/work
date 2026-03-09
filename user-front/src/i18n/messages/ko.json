@@ -269,11 +269,11 @@
   "menu": {
     "feed": "피드",
     "connections": "연결",
-    "users": "My Network",
+    "users": "내 네트워크",
     "islamicScholars": "이슬람 학자",
-    "worldNews": "Stories",
+    "worldNews": "스토리",
     "books": "도서",
-    "articles": "Booklets",
+    "articles": "소책자",
     "podcast": "팟캐스트",
     "events": "이벤트",
     "groups": "그룹",
@@ -298,7 +298,8 @@
     "profileMenu": "프로필 메뉴",
     "user": "사용자",
     "viewProfile": "프로필 보기",
-    "newsletters": "뉴스레터"
+    "newsletters": "뉴스레터",
+    "papers": "학술 간행물"
   },
   "theme": {
     "themeSelection": "테마 선택",
@@ -962,5 +963,50 @@
     "wantsToConnect": "연락을 원합니다.",
     "accept": "수락",
     "reject": "거부"
+  },
+  "scholarFeed": {
+    "loading": "게시물이 로드 중입니다...",
+    "noPosts": "아직 배송되지 않음",
+    "noPostsDesc": "이 학자는 아직 게시물이 없습니다.",
+    "preview": "미리 보기"
+  },
+  "scholarActivity": {
+    "loading": "계보 정보 로드 중...",
+    "scholarNotFound": "장학생을 찾을 수 없음",
+    "scholarNotFoundDesc": "찾고 계신 학자를 찾을 수 없거나 삭제되었을 수 있습니다.",
+    "lineageInfo": "계보 정보",
+    "fullName": "전체 이름",
+    "birthDate": "생년월일",
+    "deathDate": "사망 날짜",
+    "birthPlace": "출생지",
+    "detailedLineage": "자세한 계보",
+    "notSpecified": "지정되지 않음"
+  },
+  "scholarConnections": {
+    "loading": "책이 로드 중입니다...",
+    "mapLoading": "지도 로드 중...",
+    "scholarNotFound": "장학생을 찾을 수 없음",
+    "scholarNotFoundDesc": "찾고 계신 학자를 찾을 수 없거나 삭제되었을 수 있습니다.",
+    "books": "도서",
+    "all": "모두",
+    "ownBooks": "나만의 책",
+    "relatedBooks": "관련 도서",
+    "ownBook": "나만의 책",
+    "relatedBook": "관련 도서",
+    "noBooksInCategory": "이 카테고리에서 찾은 도서가 없습니다.",
+    "noBooksInCategoryDesc": "선택한 카테고리에 대한 도서가 아직 없습니다.",
+    "bookImage": "북 일러스트레이션",
+    "noDescription": "설명이 없습니다.",
+    "languages": "언어",
+    "noBooksYet": "아직 사용 가능한 도서 없음",
+    "noBooksYetDesc": "이 학자는 아직 책을 추가하지 않았거나 관련 도서가 없습니다.",
+    "languageSelection": "언어 선택",
+    "whichLanguageDownload": "어떤 언어를 다운로드하시겠습니까?",
+    "download": "다운로드",
+    "noPdf": "PDF 없음",
+    "cancel": "취소",
+    "noDownloadOption": "이 책에는 다운로드 옵션이 없습니다.",
+    "downloadError": "다운로드하는 동안 오류가 발생했습니다. 다시 시도해 주세요.",
+    "downloadFileNotFound": "다운로드 파일을 찾을 수 없습니다."
   }
 }

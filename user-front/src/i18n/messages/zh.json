@@ -269,11 +269,11 @@
   "menu": {
     "feed": "饲料",
     "connections": "连接",
-    "users": "My Network",
+    "users": "我的网络",
     "islamicScholars": "伊斯兰学者",
-    "worldNews": "Stories",
+    "worldNews": "故事",
     "books": "书籍",
-    "articles": "Booklets",
+    "articles": "小册子",
     "podcast": "播客",
     "events": "活动",
     "groups": "组别",
@@ -298,7 +298,8 @@
     "profileMenu": "简介菜单",
     "user": "用户",
     "viewProfile": "查看简介",
-    "newsletters": "新闻简报"
+    "newsletters": "新闻简报",
+    "papers": "学术出版物"
   },
   "theme": {
     "themeSelection": "主题选择",

@@ -269,11 +269,11 @@
   "menu": {
     "feed": "Feed",
     "connections": "Връзки",
-    "users": "My Network",
+    "users": "Моята мрежа",
     "islamicScholars": "Ислямски учени",
-    "worldNews": "Stories",
+    "worldNews": "Истории",
     "books": "Книги",
-    "articles": "Booklets",
+    "articles": "Брошури",
     "podcast": "Подкаст",
     "events": "Събития",
     "groups": "Групи",
@@ -298,7 +298,8 @@
     "profileMenu": "Меню на профила",
     "user": "Потребител",
     "viewProfile": "Преглед на профила",
-    "newsletters": "Информационни бюлетини"
+    "newsletters": "Информационни бюлетини",
+    "papers": "Академични публикации"
   },
   "theme": {
     "themeSelection": "Избор на тема",

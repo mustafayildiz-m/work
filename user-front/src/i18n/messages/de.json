@@ -268,11 +268,11 @@
   "menu": {
     "feed": "Feed",
     "connections": "Verbindungen",
-    "users": "My Network",
+    "users": "Mein Netz",
     "islamicScholars": "Islamische Gelehrte",
-    "worldNews": "Stories",
+    "worldNews": "Geschichten",
     "books": "Bücher",
-    "articles": "Booklets",
+    "articles": "Broschüren",
     "podcast": "Podcast",
     "events": "Veranstaltungen",
     "groups": "Gruppen",
@@ -297,7 +297,8 @@
     "profileMenu": "Profilmenü",
     "user": "Benutzer",
     "viewProfile": "Profil anzeigen",
-    "newsletters": "Newsletters"
+    "newsletters": "Newsletters",
+    "papers": "Akademische Veröffentlichungen"
   },
   "theme": {
     "themeSelection": "Themenauswahl",

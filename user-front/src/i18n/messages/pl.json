@@ -269,11 +269,11 @@
   "menu": {
     "feed": "Pasza",
     "connections": "Połączenia",
-    "users": "My Network",
+    "users": "Moja sieć",
     "islamicScholars": "Uczeni islamscy",
-    "worldNews": "Stories",
+    "worldNews": "Historie",
     "books": "Książki",
-    "articles": "Booklets",
+    "articles": "Broszury",
     "podcast": "Podcast",
     "events": "Wydarzenia",
     "groups": "Grupy",
@@ -298,7 +298,8 @@
     "profileMenu": "Menu profilu",
     "user": "Użytkownik",
     "viewProfile": "Wyświetl profil",
-    "newsletters": "Biuletyny informacyjne"
+    "newsletters": "Biuletyny informacyjne",
+    "papers": "Publikacje akademickie"
   },
   "theme": {
     "themeSelection": "Wybór tematu",

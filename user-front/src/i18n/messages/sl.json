@@ -269,11 +269,11 @@
   "menu": {
     "feed": "Krma",
     "connections": "Povezave",
-    "users": "My Network",
+    "users": "Moja mreža",
     "islamicScholars": "Islamski učenjaki",
-    "worldNews": "Stories",
+    "worldNews": "Zgodbe",
     "books": "Knjige",
-    "articles": "Booklets",
+    "articles": "Knjižice",
     "podcast": "Podcast",
     "events": "Dogodki",
     "groups": "Skupine",
@@ -298,7 +298,8 @@
     "profileMenu": "Meni profila",
     "user": "Uporabnik",
     "viewProfile": "Oglejte si profil",
-    "newsletters": "Novičke"
+    "newsletters": "Novičke",
+    "papers": "Akademske publikacije"
   },
   "theme": {
     "themeSelection": "Izbor teme",

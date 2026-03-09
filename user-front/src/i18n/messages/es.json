@@ -269,11 +269,11 @@
   "menu": {
     "feed": "Alimentar",
     "connections": "Conexiones",
-    "users": "My Network",
+    "users": "Mi red",
     "islamicScholars": "Eruditos islámicos",
-    "worldNews": "Stories",
+    "worldNews": "Historias",
     "books": "Libros",
-    "articles": "Booklets",
+    "articles": "Folletos",
     "podcast": "Podcast",
     "events": "Eventos",
     "groups": "Grupos",
@@ -298,7 +298,8 @@
     "profileMenu": "Menú Perfil",
     "user": "Usuario",
     "viewProfile": "Ver perfil",
-    "newsletters": "Boletines"
+    "newsletters": "Boletines",
+    "papers": "Publicaciones académicas"
   },
   "theme": {
     "themeSelection": "Selección de temas",
@@ -962,5 +963,50 @@
     "wantsToConnect": "Quiere ponerse en contacto contigo",
     "accept": "Acepte",
     "reject": "Rechazar"
+  },
+  "scholarFeed": {
+    "loading": "Los mensajes se están cargando...",
+    "noPosts": "Aún no hay envío",
+    "noPostsDesc": "Este becario aún no ha publicado.",
+    "preview": "Vista previa"
+  },
+  "scholarActivity": {
+    "loading": "Cargando información genealógica...",
+    "scholarNotFound": "Becario no encontrado",
+    "scholarNotFoundDesc": "Es posible que el becario que busca no se encuentre o haya sido eliminado.",
+    "lineageInfo": "Información genealógica",
+    "fullName": "Nombre y apellidos",
+    "birthDate": "Fecha de nacimiento",
+    "deathDate": "Fecha de defunción",
+    "birthPlace": "Lugar de nacimiento",
+    "detailedLineage": "Genealogía detallada",
+    "notSpecified": "Sin especificar"
+  },
+  "scholarConnections": {
+    "loading": "Los libros se están cargando...",
+    "mapLoading": "Cargando mapa...",
+    "scholarNotFound": "Becario no encontrado",
+    "scholarNotFoundDesc": "Es posible que el becario que busca no se encuentre o haya sido eliminado.",
+    "books": "Libros",
+    "all": "Todos",
+    "ownBooks": "Libros propios",
+    "relatedBooks": "Libros relacionados",
+    "ownBook": "Libro propio",
+    "relatedBook": "Libro relacionado",
+    "noBooksInCategory": "No se han encontrado libros en esta categoría",
+    "noBooksInCategoryDesc": "Aún no hay libros para la categoría seleccionada.",
+    "bookImage": "Ilustración de libros",
+    "noDescription": "No hay explicación disponible",
+    "languages": "Idiomas",
+    "noBooksYet": "Aún no hay libros disponibles",
+    "noBooksYetDesc": "Este académico aún no ha añadido libros o no hay libros relacionados.",
+    "languageSelection": "Selección de idioma",
+    "whichLanguageDownload": "¿Qué idioma desea descargar?",
+    "download": "Descargar",
+    "noPdf": "No PDF",
+    "cancel": "Anulación",
+    "noDownloadOption": "No hay opción de descarga para este libro.",
+    "downloadError": "Se ha producido un error durante la descarga. Por favor, inténtelo de nuevo.",
+    "downloadFileNotFound": "No se ha encontrado el archivo de descarga."
   }
 }

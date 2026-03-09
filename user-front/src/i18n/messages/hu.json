@@ -269,11 +269,11 @@
   "menu": {
     "feed": "Táplálék",
     "connections": "Kapcsolatok",
-    "users": "My Network",
+    "users": "Az én hálóm",
     "islamicScholars": "Iszlám tudósok",
-    "worldNews": "Stories",
+    "worldNews": "Történetek",
     "books": "Könyvek",
-    "articles": "Booklets",
+    "articles": "Füzetecskék",
     "podcast": "Podcast",
     "events": "Események",
     "groups": "Csoportok",
@@ -298,7 +298,8 @@
     "profileMenu": "Profil menü",
     "user": "Felhasználó",
     "viewProfile": "Profil megtekintése",
-    "newsletters": "Hírlevelek"
+    "newsletters": "Hírlevelek",
+    "papers": "Akadémiai kiadványok"
   },
   "theme": {
     "themeSelection": "Téma kiválasztása",
