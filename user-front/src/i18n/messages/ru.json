@@ -205,7 +205,23 @@
     "user": "Пользователь",
     "loginRequired": "Login Required",
     "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
-    "loginAction": "Sign In / Sign Up"
+    "loginAction": "Sign In / Sign Up",
+    "viewProfilePicture": "Посмотреть фотографию профиля",
+    "selectProfilePicture": "Выберите изображение профиля",
+    "showLess": "Показать меньше",
+    "showMore": "Показать еще",
+    "profilePicture": "Изображение профиля",
+    "updateProfilePicture": "Обновить картинку профиля",
+    "fileSizeError": "Размер файла не может превышать 10 МБ",
+    "profilePictureUpdated": "Картинка вашего профиля была обновлена",
+    "profilePictureUpdateFailed": "Не удалось обновить фотографию профиля",
+    "profilePictureUploadError": "Возникла ошибка при загрузке изображения профиля",
+    "newProfilePicture": "Выберите новую фотографию профиля",
+    "selectPhoto": "Выберите фотографию",
+    "maxFileSize": "Максимальный размер файла: 10 МБ",
+    "supportedFormats": "Поддерживаемые форматы: JPG, PNG, GIF, WebP",
+    "error": "Ошибка",
+    "success": "Успешный"
   },
   "feed": {
     "sortBy": "Сортировать по",
@@ -905,5 +921,20 @@
     "enterMessage": "Введите сообщение",
     "sendMessage": "Отправить сообщение",
     "backToConversations": "Назад к диалогу"
+  },
+  "notifications": {
+    "title": "Уведомления",
+    "markAllAsRead": "Отметить все прочитанное",
+    "clearAll": "Очистить все",
+    "goToProfile": "Перейти в профиль",
+    "sendMessage": "Отправить сообщение",
+    "markAsRead": "Марк читал",
+    "delete": "Sil",
+    "noNotifications": "У вас еще нет уведомлений.",
+    "loading": "Загрузка...",
+    "loadMore": "Установите больше уведомлений",
+    "markAllAsReadShort": "Читать полностью",
+    "clearAllShort": "Очистить все",
+    "viewAllNotifications": "Посмотреть все уведомления"
   }
 }

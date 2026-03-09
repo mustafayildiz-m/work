@@ -271,8 +271,8 @@ const ProfilePanel = ({ links, onLinkClick }) => {
     if (file) {
       if (file.size > 10 * 1024 * 1024) {
         showNotification({
-          title: 'Hata',
-          message: 'Dosya boyutu 10MB\'dan büyük olamaz',
+          title: t('profile.error'),
+          message: t('profile.fileSizeError'),
           variant: 'danger'
         });
         return;
@@ -313,8 +313,8 @@ const ProfilePanel = ({ links, onLinkClick }) => {
         }));
 
         showNotification({
-          title: 'Başarılı',
-          message: 'Profil resminiz güncellendi',
+          title: t('profile.success'),
+          message: t('profile.profilePictureUpdated'),
           variant: 'success'
         });
 
@@ -324,13 +324,13 @@ const ProfilePanel = ({ links, onLinkClick }) => {
 
         window.dispatchEvent(new Event('profilePhotoUpdated'));
       } else {
-        throw new Error('Profil resmi güncellenemedi');
+        throw new Error(t('profile.profilePictureUpdateFailed'));
       }
     } catch (error) {
       console.error('Error uploading photo:', error);
       showNotification({
-        title: 'Hata',
-        message: 'Profil resmi yüklenirken bir hata oluştu',
+        title: t('profile.error'),
+        message: t('profile.profilePictureUploadError'),
         variant: 'danger'
       });
     } finally {
@@ -360,9 +360,9 @@ const ProfilePanel = ({ links, onLinkClick }) => {
       }}>
         <div className="text-center">
           <div className="spinner-border text-success" role="status">
-            <span className="visually-hidden">Yükleniyor...</span>
+            <span className="visually-hidden">{t('common.loading')}</span>
           </div>
-          <p className="text-muted mt-3 mb-0">Yükleniyor...</p>
+          <p className="text-muted mt-3 mb-0">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -445,7 +445,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                         }}
                       >
                         <div className="spinner-border spinner-border-sm text-success" role="status">
-                          <span className="visually-hidden">Yükleniyor...</span>
+                          <span className="visually-hidden">{t('common.loading')}</span>
                         </div>
                       </div>
                     )}
@@ -524,7 +524,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                           }}
                         >
                           <BsEye size={18} className="me-2 text-primary flex-shrink-0" />
-                          <span>Profil resmini gör</span>
+                          <span>{t('profile.viewProfilePicture')}</span>
                         </button>
                         <button
                           className="w-100 d-flex align-items-center py-2 px-3 bg-transparent border-0 text-start"
@@ -539,7 +539,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                           }}
                         >
                           <BsImage size={18} className="me-2 text-success flex-shrink-0" />
-                          <span>Profil resmi seç</span>
+                          <span>{t('profile.selectProfilePicture')}</span>
                         </button>
                       </div>
                     </>
@@ -594,7 +594,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                           fontWeight: 500
                         }}
                       >
-                        {bioExpanded ? 'Daha Az Göster' : 'Daha Fazla Göster'}
+                        {bioExpanded ? t('profile.showLess') : t('profile.showMore')}
                       </button>
                     )}
                   </div>
@@ -743,7 +743,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
       >
         <div className="modal-content border-0 shadow-lg bg-dark">
           <ModalHeader closeButton className="border-0 bg-dark text-white">
-            <h5 className="modal-title mb-0 fw-bold">Profil Resmi</h5>
+            <h5 className="modal-title mb-0 fw-bold">{t('profile.profilePicture')}</h5>
           </ModalHeader>
           <ModalBody className="p-4 bg-dark">
             <div className="text-center">
@@ -764,7 +764,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
               className="btn btn-light w-100"
               onClick={() => setShowPhotoViewModal(false)}
             >
-              Kapat
+              {t('common.close')}
             </button>
           </ModalFooter>
         </div>
@@ -797,8 +797,8 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                 <BsCamera size={20} className="text-success" />
               </div>
               <div>
-                <h5 className="modal-title mb-0 fw-bold" style={{ color: headingColor }}>Profil Resmini Güncelle</h5>
-                <small className="text-muted">Yeni profil resmi seç</small>
+                <h5 className="modal-title mb-0 fw-bold" style={{ color: headingColor }}>{t('profile.updateProfilePicture')}</h5>
+                <small className="text-muted">{t('profile.newProfilePicture')}</small>
               </div>
             </div>
           </ModalHeader>
@@ -839,12 +839,12 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                 }}>
                   <BsCamera size={28} className="text-success" />
                 </div>
-                <h6 className="fw-bold mb-2" style={{ color: headingColor }}>Fotoğraf Seç</h6>
+                <h6 className="fw-bold mb-2" style={{ color: headingColor }}>{t('profile.selectPhoto')}</h6>
                 <small className="text-muted d-block mb-2">
-                  Maksimum dosya boyutu: 10MB
+                  {t('profile.maxFileSize')}
                 </small>
                 <small className="text-muted">
-                  Desteklenen formatlar: JPG, PNG, GIF, WebP
+                  {t('profile.supportedFormats')}
                 </small>
                 <input
                   id="profile-photo-upload-panel"
@@ -887,7 +887,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                 }}
                 disabled={uploadingPhoto}
               >
-                İptal
+                {t('common.cancel')}
               </button>
               <button
                 type="button"
@@ -898,10 +898,10 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                 {uploadingPhoto ? (
                   <>
                     <span className="spinner-border spinner-border-sm me-2" />
-                    Yükleniyor...
+                    {t('common.loading')}
                   </>
                 ) : (
-                  'Kaydet'
+                  t('common.save')
                 )}
               </button>
             </div>

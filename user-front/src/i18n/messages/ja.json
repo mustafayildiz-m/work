@@ -203,7 +203,23 @@
     "user": "ユーザー",
     "loginRequired": "Login Required",
     "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
-    "loginAction": "Sign In / Sign Up"
+    "loginAction": "Sign In / Sign Up",
+    "viewProfilePicture": "プロフィール写真を見る",
+    "selectProfilePicture": "プロフィール画像を選択",
+    "showLess": "ショー・レス",
+    "showMore": "もっと見る",
+    "profilePicture": "プロフィール写真",
+    "updateProfilePicture": "プロフィール写真の更新",
+    "fileSizeError": "ファイルサイズは10MBまで",
+    "profilePictureUpdated": "プロフィール写真が更新されました",
+    "profilePictureUpdateFailed": "プロフィール写真の更新に失敗しました",
+    "profilePictureUploadError": "プロフィール画像の読み込みエラーが発生しました",
+    "newProfilePicture": "新しいプロフィール写真を選択",
+    "selectPhoto": "写真を選ぶ",
+    "maxFileSize": "最大ファイルサイズ10MB",
+    "supportedFormats": "対応フォーマットJPG、PNG、GIF、WebP",
+    "error": "エラー",
+    "success": "成功"
   },
   "feed": {
     "sortBy": "並び替え",
@@ -904,5 +920,20 @@
     "enterMessage": "メッセージを入力",
     "sendMessage": "メッセージを送る",
     "backToConversations": "対話に戻る"
+  },
+  "notifications": {
+    "title": "お知らせ",
+    "markAllAsRead": "すべて読む",
+    "clearAll": "すべてクリア",
+    "goToProfile": "プロフィールへ",
+    "sendMessage": "メッセージを送る",
+    "markAsRead": "マークは読む",
+    "delete": "シル",
+    "noNotifications": "通知はまだありません。",
+    "loading": "読み込み中...",
+    "loadMore": "より多くの通知をインストールする",
+    "markAllAsReadShort": "すべて読む",
+    "clearAllShort": "すべてクリア",
+    "viewAllNotifications": "すべての通知を見る"
   }
 }

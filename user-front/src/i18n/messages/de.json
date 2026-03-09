@@ -203,7 +203,23 @@
     "user": "Benutzer",
     "loginRequired": "Login Required",
     "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
-    "loginAction": "Sign In / Sign Up"
+    "loginAction": "Sign In / Sign Up",
+    "viewProfilePicture": "Siehe Profilbild",
+    "selectProfilePicture": "Profilbild auswählen",
+    "showLess": "Weniger anzeigen",
+    "showMore": "Mehr anzeigen",
+    "profilePicture": "Profilbild",
+    "updateProfilePicture": "Profilbild aktualisieren",
+    "fileSizeError": "Die Dateigröße darf nicht größer als 10 MB sein.",
+    "profilePictureUpdated": "Ihr Profilbild wurde aktualisiert",
+    "profilePictureUpdateFailed": "Profilbild konnte nicht aktualisiert werden",
+    "profilePictureUploadError": "Es gab einen Fehler beim Laden des Profilbildes",
+    "newProfilePicture": "Neues Profilbild auswählen",
+    "selectPhoto": "Foto auswählen",
+    "maxFileSize": "Maximale Dateigröße: 10MB",
+    "supportedFormats": "Unterstützte Formate: JPG, PNG, GIF, WebP",
+    "error": "Fehler",
+    "success": "Erfolgreich"
   },
   "feed": {
     "sortBy": "Sortieren nach",
@@ -904,5 +920,20 @@
     "enterMessage": "Nachricht eingeben",
     "sendMessage": "Nachricht senden",
     "backToConversations": "Zurück zum Dialog"
+  },
+  "notifications": {
+    "title": "Benachrichtigungen",
+    "markAllAsRead": "Markieren Sie alle gelesenen",
+    "clearAll": "Alle löschen",
+    "goToProfile": "Zum Profil gehen",
+    "sendMessage": "Nachricht senden",
+    "markAsRead": "Mark lesen",
+    "delete": "Sil",
+    "noNotifications": "Sie haben noch keine Benachrichtigung erhalten.",
+    "loading": "Laden...",
+    "loadMore": "Mehr Benachrichtigungen installieren",
+    "markAllAsReadShort": "Alles lesen",
+    "clearAllShort": "Alle löschen",
+    "viewAllNotifications": "Alle Benachrichtigungen anzeigen"
   }
 }

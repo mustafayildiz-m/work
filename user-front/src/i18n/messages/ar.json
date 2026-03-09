@@ -206,7 +206,23 @@
     "user": "مستخدم",
     "loginRequired": "Login Required",
     "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
-    "loginAction": "Sign In / Sign Up"
+    "loginAction": "Sign In / Sign Up",
+    "viewProfilePicture": "انظر صورة الملف الشخصي",
+    "selectProfilePicture": "تحديد صورة الملف الشخصي",
+    "showLess": "عرض أقل",
+    "showMore": "اعرض المزيد",
+    "profilePicture": "صورة الملف الشخصي",
+    "updateProfilePicture": "تحديث صورة الملف الشخصي",
+    "fileSizeError": "لا يمكن أن يكون حجم الملف أكبر من 10 ميغابايت",
+    "profilePictureUpdated": "تم تحديث صورة ملفك الشخصي",
+    "profilePictureUpdateFailed": "فشل في تحديث صورة الملف الشخصي",
+    "profilePictureUploadError": "حدث خطأ في تحميل صورة الملف الشخصي",
+    "newProfilePicture": "تحديد صورة الملف الشخصي الجديد",
+    "selectPhoto": "اختر الصورة",
+    "maxFileSize": "الحد الأقصى لحجم الملف: 10 ميغابايت",
+    "supportedFormats": "التنسيقات المدعومة: JPG، PNG، GIF، WebP، JPG، PNG، GIF، WebP",
+    "error": "خطأ",
+    "success": "ناجح"
   },
   "feed": {
     "sortBy": "ترتيب حسب",
@@ -906,5 +922,20 @@
     "enterMessage": "أدخل الرسالة",
     "sendMessage": "إرسال رسالة",
     "backToConversations": "العودة إلى الحوار"
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "markAllAsRead": "ضع علامة على كل ما يقرأ",
+    "clearAll": "مسح الكل",
+    "goToProfile": "الانتقال إلى الملف الشخصي",
+    "sendMessage": "إرسال رسالة",
+    "markAsRead": "قراءة مارك",
+    "delete": "سيل",
+    "noNotifications": "ليس لديك إشعار بعد.",
+    "loading": "جاري التحميل...",
+    "loadMore": "تثبيت المزيد من الإشعارات",
+    "markAllAsReadShort": "قراءة الكل",
+    "clearAllShort": "مسح الكل",
+    "viewAllNotifications": "عرض جميع الإشعارات"
   }
 }

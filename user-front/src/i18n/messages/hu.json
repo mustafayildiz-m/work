@@ -205,7 +205,23 @@
     "user": "Felhasználó",
     "loginRequired": "Login Required",
     "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
-    "loginAction": "Sign In / Sign Up"
+    "loginAction": "Sign In / Sign Up",
+    "viewProfilePicture": "Lásd a profilképet",
+    "selectProfilePicture": "Profilkép kiválasztása",
+    "showLess": "Kevesebb mutatása",
+    "showMore": "Többet mutasd meg",
+    "profilePicture": "Profilkép",
+    "updateProfilePicture": "Profilkép frissítése",
+    "fileSizeError": "A fájl mérete nem lehet nagyobb 10 MB-nál",
+    "profilePictureUpdated": "A profilképed frissítve lett",
+    "profilePictureUpdateFailed": "Nem sikerült frissíteni a profilképet",
+    "profilePictureUploadError": "Hiba történt a profilkép betöltése",
+    "newProfilePicture": "Új profilkép kiválasztása",
+    "selectPhoto": "Fotó kiválasztása",
+    "maxFileSize": "Maximális fájlméret: 10MB",
+    "supportedFormats": "Támogatott formátumok: JPG, PNG, GIF, WebP",
+    "error": "Hiba",
+    "success": "Sikeres"
   },
   "feed": {
     "sortBy": "Rendezés",
@@ -893,5 +909,20 @@
     "enterMessage": "Üzenet beírása",
     "sendMessage": "Üzenet küldése",
     "backToConversations": "Vissza a párbeszédhez"
+  },
+  "notifications": {
+    "title": "Értesítések",
+    "markAllAsRead": "Jelölje meg az összes olvasott",
+    "clearAll": "Mindent törölni",
+    "goToProfile": "Menj a profilhoz",
+    "sendMessage": "Üzenet küldése",
+    "markAsRead": "Mark olvassa",
+    "delete": "Sil",
+    "noNotifications": "Még nincs értesítésed.",
+    "loading": "Betöltés...",
+    "loadMore": "További értesítések telepítése",
+    "markAllAsReadShort": "Mindent elolvasni",
+    "clearAllShort": "Mindent törölni",
+    "viewAllNotifications": "Minden értesítés megtekintése"
   }
 }

@@ -205,7 +205,23 @@
     "user": "用户",
     "loginRequired": "Login Required",
     "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
-    "loginAction": "Sign In / Sign Up"
+    "loginAction": "Sign In / Sign Up",
+    "viewProfilePicture": "查看个人照片",
+    "selectProfilePicture": "选择个人照片",
+    "showLess": "显示更少",
+    "showMore": "显示更多",
+    "profilePicture": "简介图片",
+    "updateProfilePicture": "更新个人照片",
+    "fileSizeError": "文件大小不能超过 10MB",
+    "profilePictureUpdated": "您的个人照片已更新",
+    "profilePictureUpdateFailed": "更新个人照片失败",
+    "profilePictureUploadError": "加载个人照片时出现错误",
+    "newProfilePicture": "选择新的个人照片",
+    "selectPhoto": "选择照片",
+    "maxFileSize": "最大文件大小：10MB",
+    "supportedFormats": "支持的格式JPG、PNG、GIF、WebP",
+    "error": "错误",
+    "success": "成功"
   },
   "feed": {
     "sortBy": "排序方式",
@@ -905,5 +921,20 @@
     "enterMessage": "输入信息",
     "sendMessage": "发送信息",
     "backToConversations": "返回对话"
+  },
+  "notifications": {
+    "title": "通知",
+    "markAllAsRead": "标记所有已读内容",
+    "clearAll": "全部清除",
+    "goToProfile": "转到简介",
+    "sendMessage": "发送信息",
+    "markAsRead": "马克读",
+    "delete": "Sil",
+    "noNotifications": "您还没有收到通知。",
+    "loading": "正在加载...",
+    "loadMore": "安装更多通知",
+    "markAllAsReadShort": "阅读全部",
+    "clearAllShort": "全部清除",
+    "viewAllNotifications": "查看所有通知"
   }
 }

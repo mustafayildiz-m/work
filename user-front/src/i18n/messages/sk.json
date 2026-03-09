@@ -205,7 +205,23 @@
     "user": "Používateľ",
     "loginRequired": "Login Required",
     "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
-    "loginAction": "Sign In / Sign Up"
+    "loginAction": "Sign In / Sign Up",
+    "viewProfilePicture": "Pozrite si profilový obrázok",
+    "selectProfilePicture": "Vyberte profilový obrázok",
+    "showLess": "Zobraziť menej",
+    "showMore": "Zobraziť viac",
+    "profilePicture": "Profilový obrázok",
+    "updateProfilePicture": "Aktualizácia profilového obrázka",
+    "fileSizeError": "Veľkosť súboru nesmie byť väčšia ako 10 MB",
+    "profilePictureUpdated": "Vaša profilová fotografia bola aktualizovaná",
+    "profilePictureUpdateFailed": "Nepodarilo sa aktualizovať profilový obrázok",
+    "profilePictureUploadError": "Došlo k chybe pri načítaní profilového obrázka",
+    "newProfilePicture": "Výber nového profilového obrázka",
+    "selectPhoto": "Vyberte fotografiu",
+    "maxFileSize": "Maximálna veľkosť súboru: 10 MB",
+    "supportedFormats": "Podporované formáty: JPG, PNG, GIF, WebP",
+    "error": "Chyba",
+    "success": "Úspešné"
   },
   "feed": {
     "sortBy": "Zoradiť podľa",
@@ -893,5 +909,20 @@
     "enterMessage": "Zadajte správu",
     "sendMessage": "Odoslať správu",
     "backToConversations": "Späť na dialóg"
+  },
+  "notifications": {
+    "title": "Oznámenia",
+    "markAllAsRead": "Označte všetky prečítané",
+    "clearAll": "Vymazať všetko",
+    "goToProfile": "Prejsť na profil",
+    "sendMessage": "Odoslať správu",
+    "markAsRead": "Mark čítal",
+    "delete": "Sil",
+    "noNotifications": "Zatiaľ nemáte žiadne oznámenie.",
+    "loading": "Načítanie...",
+    "loadMore": "Inštalácia ďalších oznámení",
+    "markAllAsReadShort": "Prečítajte si všetko",
+    "clearAllShort": "Vymazať všetko",
+    "viewAllNotifications": "Zobraziť všetky oznámenia"
   }
 }

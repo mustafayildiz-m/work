@@ -8,9 +8,11 @@ import { useEffect, useState, useMemo, useRef } from 'react';
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { getImageUrl } from '@/utils/image';
+import { useLanguage } from '@/context/useLanguageContext';
 
 const NotificationDropdown = () => {
   const { theme } = useLayoutContext();
+  const { t } = useLanguage();
   const isDark = theme === 'dark';
   const { notifications: realTimeNotifications, setNotifications } = useWebSocketChatContext();
   const [staticNotifications, setStaticNotifications] = useState([]);
@@ -293,15 +295,15 @@ const NotificationDropdown = () => {
       >
         <Card>
           <CardHeader className="d-flex justify-content-between align-items-center py-2">
-            <h6 className="m-0 small fw-bold">Bildirimler {unreadCount > 0 && <span className="badge bg-danger ms-1">{unreadCount}</span>}</h6>
+            <h6 className="m-0 small fw-bold">{t('notifications.title')} {unreadCount > 0 && <span className="badge bg-danger ms-1">{unreadCount}</span>}</h6>
             <div className="d-flex gap-2">
               {unreadCount > 0 && (
                 <Link className="small text-primary text-decoration-none fw-bold" href="" onClick={handleMarkAllAsRead} style={{ fontSize: '0.7rem' }}>
-                  Hepsini Oku
+                  {t('notifications.markAllAsReadShort')}
                 </Link>
               )}
               <Link className="small text-danger text-decoration-none fw-bold" href="" onClick={handleClearAll} style={{ fontSize: '0.7rem' }}>
-                Hepsini Temizle
+                {t('notifications.clearAllShort')}
               </Link>
             </div>
           </CardHeader>
@@ -370,7 +372,7 @@ const NotificationDropdown = () => {
                               onClick={(e) => e.stopPropagation()}
                             >
                               <BsBoxArrowUpRight className="me-1" size={11} />
-                              Profile Git
+                              {t('notifications.goToProfile')}
                             </Button>
                             <Button
                               size="sm"
@@ -380,7 +382,7 @@ const NotificationDropdown = () => {
                               onClick={(e) => handleOpenMessageFromNotification(e, notification)}
                             >
                               <BsChatLeftText className="me-1" size={11} />
-                              Mesaj Gonder
+                              {t('notifications.sendMessage')}
                             </Button>
                           </div>
                         )}
@@ -390,7 +392,7 @@ const NotificationDropdown = () => {
                           <button
                             className="btn btn-sm btn-link text-primary p-0 border-0 bg-transparent"
                             onClick={(e) => handleMarkAsRead(e, notification.id)}
-                            title="Okundu işaretle"
+                            title={t('notifications.markAsRead')}
                           >
                             <BsCheckLg size={16} />
                           </button>
@@ -398,7 +400,7 @@ const NotificationDropdown = () => {
                         <button
                           className="btn btn-sm btn-link text-danger p-0 border-0 bg-transparent"
                           onClick={(e) => handleDeleteNotification(e, notification.id)}
-                          title="Sil"
+                          title={t('notifications.delete')}
                         >
                           <BsTrash size={16} />
                         </button>
@@ -410,7 +412,7 @@ const NotificationDropdown = () => {
             ) : (
               <div className="p-4 text-center text-muted">
                 <BsBellFill size={24} className="mb-2 opacity-50" />
-                <p className="mb-0 small">Henüz bildiriminiz bulunmuyor.</p>
+                <p className="mb-0 small">{t('notifications.noNotifications')}</p>
               </div>
             )}
           </CardBody>
@@ -420,7 +422,7 @@ const NotificationDropdown = () => {
               href="/feed/notifications"
               onClick={() => setIsOpen(false)}
             >
-              Tüm Bildirimleri Gör
+              {t('notifications.viewAllNotifications')}
             </Link>
           </CardFooter>
         </Card>

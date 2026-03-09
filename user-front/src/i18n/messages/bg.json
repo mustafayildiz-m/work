@@ -205,7 +205,23 @@
     "user": "Потребител",
     "loginRequired": "Login Required",
     "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
-    "loginAction": "Sign In / Sign Up"
+    "loginAction": "Sign In / Sign Up",
+    "viewProfilePicture": "Вижте снимката на профила",
+    "selectProfilePicture": "Избор на профилна снимка",
+    "showLess": "Покажи по-малко",
+    "showMore": "Покажи повече",
+    "profilePicture": "Профилна снимка",
+    "updateProfilePicture": "Актуализиране на профилната снимка",
+    "fileSizeError": "Размерът на файла не може да бъде по-голям от 10 MB",
+    "profilePictureUpdated": "Снимката на профила ви е актуализирана",
+    "profilePictureUpdateFailed": "Не успя да актуализира снимката на профила",
+    "profilePictureUploadError": "Имаше грешка при зареждането на профилната снимка",
+    "newProfilePicture": "Изберете нова профилна снимка",
+    "selectPhoto": "Изберете снимка",
+    "maxFileSize": "Максимален размер на файла: 10MB",
+    "supportedFormats": "Поддържани формати: JPG, PNG, GIF, WebP",
+    "error": "Грешка",
+    "success": "Успешен"
   },
   "feed": {
     "sortBy": "Сортирай по",
@@ -893,5 +909,20 @@
     "enterMessage": "Въведете съобщение",
     "sendMessage": "Изпрати съобщение",
     "backToConversations": "Обратно към диалога"
+  },
+  "notifications": {
+    "title": "Известия",
+    "markAllAsRead": "Маркирайте всички прочетени",
+    "clearAll": "Изчистване на всички",
+    "goToProfile": "Отидете на профил",
+    "sendMessage": "Изпрати съобщение",
+    "markAsRead": "Марк чете",
+    "delete": "Sil",
+    "noNotifications": "Все още нямате известие.",
+    "loading": "Зареждане...",
+    "loadMore": "Инсталиране на повече известия",
+    "markAllAsReadShort": "Прочетете всичко",
+    "clearAllShort": "Изчистване на всички",
+    "viewAllNotifications": "Вижте всички известия"
   }
 }

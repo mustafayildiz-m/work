@@ -205,7 +205,23 @@
     "user": "Utente",
     "loginRequired": "Login Required",
     "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
-    "loginAction": "Sign In / Sign Up"
+    "loginAction": "Sign In / Sign Up",
+    "viewProfilePicture": "Vedi immagine del profilo",
+    "selectProfilePicture": "Selezionare l'immagine del profilo",
+    "showLess": "Mostra meno",
+    "showMore": "Mostra di più",
+    "profilePicture": "Immagine del profilo",
+    "updateProfilePicture": "Aggiornare l'immagine del profilo",
+    "fileSizeError": "La dimensione del file non può essere superiore a 10 MB",
+    "profilePictureUpdated": "L'immagine del profilo è stata aggiornata",
+    "profilePictureUpdateFailed": "Non è stato possibile aggiornare l'immagine del profilo",
+    "profilePictureUploadError": "Si è verificato un errore nel caricamento dell'immagine del profilo",
+    "newProfilePicture": "Selezionare la nuova immagine del profilo",
+    "selectPhoto": "Selezionare la foto",
+    "maxFileSize": "Dimensione massima del file: 10MB",
+    "supportedFormats": "Formati supportati: JPG, PNG, GIF, WebP",
+    "error": "Errore",
+    "success": "Successo"
   },
   "feed": {
     "sortBy": "Ordina per",
@@ -905,5 +921,20 @@
     "enterMessage": "Inserire il messaggio",
     "sendMessage": "Invia il messaggio",
     "backToConversations": "Torna al dialogo"
+  },
+  "notifications": {
+    "title": "Notifiche",
+    "markAllAsRead": "Contrassegnare tutte le letture",
+    "clearAll": "Cancella tutto",
+    "goToProfile": "Vai al profilo",
+    "sendMessage": "Invia il messaggio",
+    "markAsRead": "Mark ha letto",
+    "delete": "Sil",
+    "noNotifications": "Non ci sono ancora notifiche.",
+    "loading": "Caricamento...",
+    "loadMore": "Installare più notifiche",
+    "markAllAsReadShort": "Leggi tutto",
+    "clearAllShort": "Cancella tutto",
+    "viewAllNotifications": "Vedi tutte le notifiche"
   }
 }

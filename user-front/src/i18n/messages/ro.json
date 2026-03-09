@@ -205,7 +205,23 @@
     "user": "Utilizator",
     "loginRequired": "Login Required",
     "loginDescription": "Please sign in or create an account to use profile features and interact with other users.",
-    "loginAction": "Sign In / Sign Up"
+    "loginAction": "Sign In / Sign Up",
+    "viewProfilePicture": "Vezi imaginea de profil",
+    "selectProfilePicture": "Selectați imaginea de profil",
+    "showLess": "Arată mai puțin",
+    "showMore": "Arată mai multe",
+    "profilePicture": "Imagine de profil",
+    "updateProfilePicture": "Actualizarea imaginii de profil",
+    "fileSizeError": "Dimensiunea fișierului nu poate fi mai mare de 10MB",
+    "profilePictureUpdated": "Imaginea dvs. de profil a fost actualizată",
+    "profilePictureUpdateFailed": "A eșuat actualizarea imaginii de profil",
+    "profilePictureUploadError": "A existat o eroare la încărcarea imaginii de profil",
+    "newProfilePicture": "Selectați o nouă imagine de profil",
+    "selectPhoto": "Selectați fotografia",
+    "maxFileSize": "Dimensiunea maximă a fișierului: 10MB",
+    "supportedFormats": "Formate acceptate: JPG, PNG, GIF, WebP",
+    "error": "Eroare",
+    "success": "De succes"
   },
   "feed": {
     "sortBy": "Sortare după",
@@ -893,5 +909,20 @@
     "enterMessage": "Introduceți mesajul",
     "sendMessage": "Trimite mesaj",
     "backToConversations": "Înapoi la dialog"
+  },
+  "notifications": {
+    "title": "Notificări",
+    "markAllAsRead": "Marcați toate citite",
+    "clearAll": "Ștergeți toate",
+    "goToProfile": "Du-te la profil",
+    "sendMessage": "Trimite mesaj",
+    "markAsRead": "Mark citește",
+    "delete": "Sil",
+    "noNotifications": "Nu aveți încă nicio notificare.",
+    "loading": "Încărcare...",
+    "loadMore": "Instalați mai multe notificări",
+    "markAllAsReadShort": "Citește tot",
+    "clearAllShort": "Ștergeți tot",
+    "viewAllNotifications": "Vezi toate notificările"
   }
 }
