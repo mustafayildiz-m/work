@@ -28,6 +28,9 @@ import EditPodcast from '@/pages/podcast/duzenle/[id]';
 import NewsletterList from '../pages/haber-bultenleri/liste/index.jsx';
 import AddNewsletter from '../pages/haber-bultenleri/ekle/index.jsx';
 import EditNewsletter from '../pages/haber-bultenleri/duzenle/[id].jsx';
+import PaperList from '../pages/akademik-yayinlar/liste/index.jsx';
+import AddPaper from '../pages/akademik-yayinlar/ekle/index.jsx';
+import EditPaper from '../pages/akademik-yayinlar/duzenle/[id].jsx';
 import YoneticilerPage from '@/pages/kullanicilar/yoneticiler';
 import EditorlerPage from '@/pages/kullanicilar/editorler';
 import BireyselKullanicilarPage from '@/pages/kullanicilar/bireysel';
@@ -95,6 +98,9 @@ export function AppRoutingSetup() {
           <Route path="/haber-bultenleri/liste" element={<NewsletterList />} />
           <Route path="/haber-bultenleri/ekle" element={<AddNewsletter />} />
           <Route path="/haber-bultenleri/duzenle/:id" element={<EditNewsletter />} />
+          <Route path="/akademik-yayinlar/liste" element={<PaperList />} />
+          <Route path="/akademik-yayinlar/ekle" element={<AddPaper />} />
+          <Route path="/akademik-yayinlar/duzenle/:id" element={<EditPaper />} />
           <Route path="/kullanicilar/yoneticiler" element={<YoneticilerPage />} />
           <Route path="/kullanicilar/editorler" element={<EditorlerPage />} />
           <Route path="/kullanicilar/bireysel" element={<BireyselKullanicilarPage />} />

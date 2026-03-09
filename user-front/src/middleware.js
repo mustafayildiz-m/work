@@ -23,6 +23,7 @@ const publicPages = [
 const protectedPages = [
   '/feed/home',
   '/feed/who-to-follow',
+  '/feed/papers',
   '/messaging',
   '/profile',
   '/settings',

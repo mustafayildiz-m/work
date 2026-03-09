@@ -1,18 +1,38 @@
-'use client';
+import { Col } from 'react-bootstrap';
+import PapersList from './components/PapersList';
 
-import { Card, CardBody, CardHeader, Col } from 'react-bootstrap';
+export const dynamic = 'force-dynamic';
 
-const PapersPage = () => {
+const fetchPapers = async (searchQuery) => {
+  const apiBase =
+    process.env.BACKEND_API_URL ||
+    process.env.NEXT_PUBLIC_API_URL ||
+    'http://localhost:3000';
+  const url = new URL('/papers', apiBase);
+  url.searchParams.set('limit', '100');
+  if (searchQuery) {
+    url.searchParams.set('search', searchQuery);
+  }
+
+  const response = await fetch(url.toString(), {
+    cache: 'no-store'
+  });
+
+  if (!response.ok) {
+    return [];
+  }
+
+  const data = await response.json();
+  return Array.isArray(data?.data) ? data.data : [];
+};
+
+const PapersPage = async ({ searchParams }) => {
+  const search = searchParams?.search?.trim() || '';
+  const items = await fetchPapers(search);
+
   return (
     <Col lg={9}>
-      <Card>
-        <CardHeader>
-          <h5 className="mb-0">Papers</h5>
-        </CardHeader>
-        <CardBody>
-          <p className="mb-0">Paper content will appear here.</p>
-        </CardBody>
-      </Card>
+      <PapersList items={items} search={search} />
     </Col>
   );
 };
