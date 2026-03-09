@@ -21,6 +21,12 @@
     "required": "Požadované",
     "or": "nebo"
   },
+  "tabTitle": {
+    "oneNewMessage": "1 nová zpráva",
+    "newMessages": "{count} nových zpráv",
+    "oneNewNotification": "1 nové oznámení",
+    "newNotifications": "{count} nových oznámení"
+  },
   "auth": {
     "signIn": "Přihlásit se",
     "signUp": "Zaregistrujte se",

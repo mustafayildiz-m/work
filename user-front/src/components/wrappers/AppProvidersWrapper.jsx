@@ -5,13 +5,13 @@ import dynamic from 'next/dynamic';
 import { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { DEFAULT_PAGE_TITLE } from '@/context/constants';
 import { NotificationProvider } from '@/context/useNotificationContext';
 import { ChatProvider } from '@/context/useChatContext';
 import { AuthProvider } from '@/context/useAuthContext';
 import ConditionalWebSocketProvider from '@/components/wrappers/ConditionalWebSocketProvider';
 import { SearchProvider } from '@/context/useSearchContext';
 import { LanguageProvider } from '@/context/useLanguageContext';
+import TabTitleUpdater from '@/components/TabTitleUpdater';
 
 const LayoutProvider = dynamic(() => import('@/context/useLayoutContext').then(mod => mod.LayoutProvider), {
   ssr: false
@@ -20,14 +20,6 @@ const LayoutProvider = dynamic(() => import('@/context/useLayoutContext').then(m
 const AppProvidersWrapper = ({
   children
 }) => {
-  const handleChangeTitle = () => {
-    if (document.visibilityState === 'hidden') {
-      document.title = 'İslamic Windows 🕌';
-    } else {
-      document.title = DEFAULT_PAGE_TITLE;
-    }
-  };
-
   useEffect(() => {
     if (typeof document !== 'undefined') {
       const splashElement = document.querySelector('#splash-screen');
@@ -54,19 +46,11 @@ const AppProvidersWrapper = ({
           subtree: true
         });
 
-        // Cleanup function
         return () => {
           observer.disconnect();
         };
       }
     }
-
-    // Visibility change listener
-    document.addEventListener('visibilitychange', handleChangeTitle);
-
-    return () => {
-      document.removeEventListener('visibilitychange', handleChangeTitle);
-    };
   }, []);
 
   return (
@@ -77,6 +61,7 @@ const AppProvidersWrapper = ({
             <NotificationProvider>
               <ChatProvider>
                 <ConditionalWebSocketProvider>
+                  <TabTitleUpdater />
                   <LayoutProvider>
                     {children}
                     <ToastContainer

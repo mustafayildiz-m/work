@@ -22,6 +22,12 @@
     "required": "Required",
     "or": "or"
   },
+  "tabTitle": {
+    "oneNewMessage": "1 new message",
+    "newMessages": "{count} new messages",
+    "oneNewNotification": "1 new notification",
+    "newNotifications": "{count} new notifications"
+  },
   "guest": {
     "messagingTitle": "Join the Conversation",
     "messagingDesc": "You need to log in to meet people and chat.",

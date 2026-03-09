@@ -21,6 +21,12 @@
     "required": "Požadované",
     "or": "alebo"
   },
+  "tabTitle": {
+    "oneNewMessage": "1 nová správa",
+    "newMessages": "{count} nových správ",
+    "oneNewNotification": "1 nové oznámenie",
+    "newNotifications": "{count} nových oznámení"
+  },
   "auth": {
     "signIn": "Prihlásiť sa",
     "signUp": "Zaregistrujte sa",

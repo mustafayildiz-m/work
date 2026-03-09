@@ -21,6 +21,12 @@
     "required": "Kötelező",
     "or": "vagy"
   },
+  "tabTitle": {
+    "oneNewMessage": "1 új üzenet",
+    "newMessages": "{count} új üzenet",
+    "oneNewNotification": "1 új értesítés",
+    "newNotifications": "{count} új értesítés"
+  },
   "auth": {
     "signIn": "Bejelentkezés",
     "signUp": "Feliratkozás",

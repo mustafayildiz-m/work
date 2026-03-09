@@ -21,6 +21,12 @@
     "required": "Потрібно",
     "or": "або"
   },
+  "tabTitle": {
+    "oneNewMessage": "1 нове повідомлення",
+    "newMessages": "{count} нових повідомлень",
+    "oneNewNotification": "1 нове сповіщення",
+    "newNotifications": "{count} нових сповіщень"
+  },
   "auth": {
     "signIn": "Увійдіть",
     "signUp": "Зареєструватися",

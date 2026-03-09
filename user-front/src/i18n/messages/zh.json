@@ -21,6 +21,12 @@
     "required": "需要",
     "or": "或"
   },
+  "tabTitle": {
+    "oneNewMessage": "1 条新消息",
+    "newMessages": "{count} 条新消息",
+    "oneNewNotification": "1 条新通知",
+    "newNotifications": "{count} 条新通知"
+  },
   "auth": {
     "signIn": "登录",
     "signUp": "注册",

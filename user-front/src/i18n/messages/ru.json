@@ -21,6 +21,12 @@
     "required": "Требуется",
     "or": "или"
   },
+  "tabTitle": {
+    "oneNewMessage": "1 новое сообщение",
+    "newMessages": "{count} новых сообщений",
+    "oneNewNotification": "1 новое уведомление",
+    "newNotifications": "{count} новых уведомлений"
+  },
   "auth": {
     "signIn": "Войти",
     "signUp": "Зарегистрироваться",

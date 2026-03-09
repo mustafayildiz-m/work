@@ -21,6 +21,12 @@
     "required": "Necesar",
     "or": "sau"
   },
+  "tabTitle": {
+    "oneNewMessage": "1 mesaj nou",
+    "newMessages": "{count} mesaje noi",
+    "oneNewNotification": "1 notificare nouă",
+    "newNotifications": "{count} notificări noi"
+  },
   "auth": {
     "signIn": "Înregistrează-te",
     "signUp": "Înscriere",

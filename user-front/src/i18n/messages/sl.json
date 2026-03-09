@@ -21,6 +21,12 @@
     "required": "Zahtevano",
     "or": "ali"
   },
+  "tabTitle": {
+    "oneNewMessage": "1 novo sporočilo",
+    "newMessages": "{count} novih sporočil",
+    "oneNewNotification": "1 novo obvestilo",
+    "newNotifications": "{count} novih obvestil"
+  },
   "auth": {
     "signIn": "Prijavite se",
     "signUp": "Prijavite se",
