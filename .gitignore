@@ -62,3 +62,7 @@ backend/uploads/
 certbot/conf/
 .env.prod.bak
 *.backup
+
+# Nginx/certbot sunucu yedekleri (canlıda oluşur)
+nginx/conf.d/*.bak
+*.bak
