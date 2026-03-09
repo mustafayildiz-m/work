@@ -278,6 +278,10 @@ export const WebSocketChatProvider = ({ children }) => {
     });
   }, []);
 
+  const removeOptimisticMessage = useCallback((messageId) => {
+    setMessages(prev => prev.filter(msg => msg.id !== messageId));
+  }, []);
+
   const updateConversationLastMessage = useCallback((message) => {
     setConversations(prev => {
       const currentUser = currentUserRef.current;
@@ -770,10 +774,22 @@ export const WebSocketChatProvider = ({ children }) => {
     };
 
     addOrUpdateMessage(optimisticMessage);
-    socket.emit('sendMessage', messageData);
 
-    return Promise.resolve(optimisticMessage);
-  }, [socket, isConnected, activeConversation, userMap, addOrUpdateMessage]);
+    return new Promise((resolve, reject) => {
+      socket.emit('sendMessage', messageData, (response) => {
+        if (response?.error) {
+          removeOptimisticMessage(optimisticMessage.id);
+          if (response.code === 'FOLLOW_REQUIRED') {
+            reject(new Error('FOLLOW_REQUIRED'));
+          } else {
+            reject(new Error(response.error || 'Send failed'));
+          }
+        } else {
+          resolve(optimisticMessage);
+        }
+      });
+    });
+  }, [socket, isConnected, activeConversation, userMap, addOrUpdateMessage, removeOptimisticMessage]);
 
   const selectConversation = useCallback(async (conversation) => {
     if (activeConversation?.id === conversation?.id && !conversation?.isTemporary) {

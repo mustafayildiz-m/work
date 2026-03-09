@@ -923,6 +923,7 @@
     "emptyMessageError": "Wiadomość nie może być pusta",
     "maxLengthError": "Wiadomość może zawierać do {count} znaków",
     "sendError": "Nie można wysłać wiadomości. Spróbuj ponownie.",
+    "followRequired": "Aby wysyłać wiadomości, musisz obserwować tę osobę i mieć wzajemne połączenie.",
     "selectConversationPrompt": "Wybierz rozmowę, aby wysłać wiadomość",
     "disconnectedError": "Rozłączono. Próba ponownego połączenia...",
     "selectEmoji": "Wybierz Emoji",

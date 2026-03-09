@@ -1049,6 +1049,7 @@
     "emptyMessageError": "Mesaj boş olamaz",
     "maxLengthError": "Mesaj en fazla {count} karakter olabilir",
     "sendError": "Mesaj gönderilemedi. Lütfen tekrar deneyin.",
+    "followRequired": "Mesaj gönderebilmek için bu kişiyi takip etmeniz ve karşılıklı bağlantı kurmanız gerekir.",
     "selectConversationPrompt": "Mesaj göndermek için bir konuşma seçin",
     "disconnectedError": "Bağlantı kesildi. Yeniden bağlanmaya çalışılıyor...",
     "selectEmoji": "Emoji seç",

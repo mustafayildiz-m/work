@@ -935,6 +935,7 @@
     "emptyMessageError": "El mensaje no puede estar vacío",
     "maxLengthError": "El mensaje puede tener hasta {count} caracteres",
     "sendError": "No se ha podido enviar el mensaje. Por favor, inténtelo de nuevo.",
+    "followRequired": "Para enviar mensajes, debe seguir a esta persona y tener una conexión mutua.",
     "selectConversationPrompt": "Selecciona una conversación para enviar un mensaje",
     "disconnectedError": "Desconectado. Intentando reconectar...",
     "selectEmoji": "Seleccionar Emoji",

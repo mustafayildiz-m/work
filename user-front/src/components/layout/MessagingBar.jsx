@@ -4,6 +4,7 @@ import { useAuthContext } from '@/context/useAuthContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
+import { useOptionalNotificationContext } from '@/context/useNotificationContext';
 import Image from 'next/image';
 import { BsPencilSquare, BsChevronUp, BsChevronDown, BsSearch, BsThreeDots } from 'react-icons/bs';
 import placeholderImg from '@/assets/images/avatar/placeholder.jpg';
@@ -16,6 +17,7 @@ const MessagingBar = () => {
     const { userInfo } = useAuthContext();
     const { conversationPanel } = useLayoutContext();
     const { locale, t } = useLanguage();
+    const notificationContext = useOptionalNotificationContext();
     const { status, data: session } = useSession();
     const { conversations, selectConversation, sendMessage, socket, fetchMessages, isConnected, markMessageAsRead, markConversationAsRead } = useWebSocketChatContext();
 
@@ -576,6 +578,14 @@ const MessagingBar = () => {
             ));
         } catch (error) {
             console.error('Error sending message:', error);
+            if (error?.message === 'FOLLOW_REQUIRED') {
+                notificationContext?.showNotification?.({
+                    title: t('common.warning'),
+                    message: t('messaging.followRequired'),
+                    variant: 'warning',
+                    delay: 6000
+                });
+            }
         }
     };
 

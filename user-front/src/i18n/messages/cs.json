@@ -923,6 +923,7 @@
     "emptyMessageError": "Zpráva nemůže být prázdná",
     "maxLengthError": "Zpráva může mít maximálně {počet} znaků.",
     "sendError": "Zprávu se nepodařilo odeslat. Zkuste to prosím znovu.",
+    "followRequired": "Pro odesílání zpráv musíte sledovat tuto osobu a mít vzájemné propojení.",
     "selectConversationPrompt": "Výběr konverzace pro odeslání zprávy",
     "disconnectedError": "Odpojeno. Pokus o opětovné připojení...",
     "selectEmoji": "Vybrat Emoji",
