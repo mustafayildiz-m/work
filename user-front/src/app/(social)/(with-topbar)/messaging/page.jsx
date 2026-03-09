@@ -8,7 +8,10 @@ import OnlineUsers from '@/components/chat/OnlineUsers';
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 import { useState, useEffect } from 'react';
 
+import { useLanguage } from '@/context/useLanguageContext';
+
 const Messaging = () => {
+  const { t } = useLanguage();
   const { activeConversation } = useWebSocketChatContext();
   const [showConversationList, setShowConversationList] = useState(true);
   const [mobileListView, setMobileListView] = useState('conversations');
@@ -30,27 +33,27 @@ const Messaging = () => {
       <Container fluid className="h-100 px-0 px-md-2">
         <Row className="gx-0 h-100">
           {/* Sol Sidebar - Conversation Listesi */}
-          <Col 
-            lg={3} 
-            xl={3} 
+          <Col
+            lg={3}
+            xl={3}
             className={`h-100 ${showConversationList ? 'd-block' : 'd-none d-lg-block'}`}
           >
             <div className="h-100 d-flex flex-column messaging-pane">
               <div className="d-lg-none p-2 border-bottom bg-body-tertiary">
-                <div className="btn-group w-100" role="group" aria-label="Mesajlaşma liste görünümü">
+                <div className="btn-group w-100" role="group" aria-label={t('messaging.messagingListView')}>
                   <button
                     type="button"
                     className={`btn btn-sm ${mobileListView === 'conversations' ? 'btn-primary' : 'btn-outline-primary'}`}
                     onClick={() => setMobileListView('conversations')}
                   >
-                    Konuşmalar
+                    {t('messaging.conversations')}
                   </button>
                   <button
                     type="button"
                     className={`btn btn-sm ${mobileListView === 'users' ? 'btn-primary' : 'btn-outline-primary'}`}
                     onClick={() => setMobileListView('users')}
                   >
-                    Kişiler
+                    {t('messaging.contacts')}
                   </button>
                 </div>
               </div>
@@ -65,9 +68,9 @@ const Messaging = () => {
           </Col>
 
           {/* Orta Alan - Mesaj Listesi */}
-          <Col 
-            lg={showConversationList ? 6 : 9} 
-            xl={showConversationList ? 6 : 9} 
+          <Col
+            lg={showConversationList ? 6 : 9}
+            xl={showConversationList ? 6 : 9}
             className={`h-100 ${!showConversationList ? 'd-block' : 'd-none d-lg-block'}`}
           >
             <div className="h-100 d-flex flex-column messaging-pane">

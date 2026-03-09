@@ -236,7 +236,19 @@
     "user": "Felhasználó",
     "noSuggestionsYet": "Még nincsenek javaslatok",
     "noPostsFound": "Nincs talált álláshely",
-    "noPostsDescription": "Az Ön által követett személyek még nem osztottak meg bejegyzéseket, vagy Ön még nem követett senkit."
+    "noPostsDescription": "Az Ön által követett személyek még nem osztottak meg bejegyzéseket, vagy Ön még nem követett senkit.",
+    "newslettersTitle": "Hírlevelek",
+    "newslettersSubtitle": "Heti összefoglalók, a szerkesztő választása és a közösség kiemelt hírei.",
+    "newslettersSearchPlaceholder": "Bulletin keresés...",
+    "newslettersFilter": "Szűrő",
+    "newslettersNoItems": "Nem találtak megjelenő közleményeket.",
+    "newslettersRead": "Olvassa el",
+    "newslettersBackToAll": "Vissza az összes közleményhez",
+    "newslettersPublishInfo": "Kiadványinformáció",
+    "newslettersPublishInfoDesc": "Ez a terület tartalmazza az aktuális hírlevél tartalmát.",
+    "newslettersOtherEditions": "Egyéb számok",
+    "newslettersNoOtherEditions": "A másik közleményt nem találták meg.",
+    "newslettersTranslating": "Most fordítják le..."
   },
   "menu": {
     "feed": "Táplálék",
@@ -269,7 +281,8 @@
     "logout": "Kijelentkezés",
     "profileMenu": "Profil menü",
     "user": "Felhasználó",
-    "viewProfile": "Profil megtekintése"
+    "viewProfile": "Profil megtekintése",
+    "newsletters": "Hírlevelek"
   },
   "theme": {
     "themeSelection": "Téma kiválasztása",
@@ -824,8 +837,8 @@
     "cancel": "Cancel"
   },
   "guest": {
-    "messagingTitle": "Join the Conversation",
-    "messagingDesc": "You need to log in to meet people and chat.",
+    "messagingTitle": "Csatlakozz a csevegéshez",
+    "messagingDesc": "Be kell jelentkeznie ahhoz, hogy üzeneteket tudjon váltani más felhasználókkal.",
     "login": "Log In",
     "continue": "Continue Browsing"
   },
@@ -844,6 +857,41 @@
     "newMessageSearchPlaceholder": "Írj be egy vagy több nevet",
     "suggested": "Javasolt",
     "userFallback": "Felhasználó",
-    "unknownUser": "Ismeretlen felhasználó"
+    "unknownUser": "Ismeretlen felhasználó",
+    "conversations": "Beszédek",
+    "contacts": "Kapcsolat",
+    "searching": "Keresett...",
+    "searchResults": "Keresési eredmények",
+    "moreResults": "{count} eredmény tovább",
+    "startConversation": "Beszélgetés indítása új üzenet küldésével",
+    "deleteConversation": "Beszélgetés törlése",
+    "deleteConfirmTitle": "Beszélgetés törlése",
+    "deleteConfirmDesc": "Biztos, hogy törölni szeretné a {név} beszélgetést?",
+    "deleteConfirmNote": "Ez a beszélgetés csak az Ön számára lesz törölve. A másik résztvevő továbbra is láthatja a beszélgetést.",
+    "online": "Online",
+    "offline": "Offline",
+    "selectConversationTitle": "Válasszon beszédet",
+    "selectConversationDesc": "Válasszon ki egy beszélgetést a bal oldalon az üzenetküldés megkezdéséhez.",
+    "loadingMessages": "Üzenetek betöltése...",
+    "noMessagesYet": "Még nincs üzenet",
+    "firstMessagePrompt": "Kezdje a beszélgetést az első üzenet elküldésével",
+    "loadingConversations": "A beszédek feltöltése folyamatban van...",
+    "loadingUsers": "A felhasználók betöltik...",
+    "noUsersFound": "Nincs felhasználó a rendszerben",
+    "tryAgain": "Próbáld újra",
+    "refresh": "Renew",
+    "youSuffix": "(te)",
+    "chatWith": "Csevegj {név}",
+    "thisIsYou": "Ez te vagy",
+    "emojiLoading": "Emoji betöltése...",
+    "emptyMessageError": "Az üzenet nem lehet üres",
+    "maxLengthError": "Az üzenet legfeljebb {szám} karakter lehet.",
+    "sendError": "Az üzenetet nem lehetett elküldeni. Kérjük, próbálja meg újra.",
+    "selectConversationPrompt": "Válasszon ki egy beszélgetést az üzenet küldéséhez",
+    "disconnectedError": "Kikapcsolva. Próbálom újracsatlakoztatni...",
+    "selectEmoji": "Emoji kiválasztása",
+    "enterMessage": "Üzenet beírása",
+    "sendMessage": "Üzenet küldése",
+    "backToConversations": "Vissza a párbeszédhez"
   }
 }

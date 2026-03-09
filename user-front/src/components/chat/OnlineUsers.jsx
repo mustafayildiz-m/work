@@ -7,6 +7,7 @@ import { useMemo, useEffect, useState, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import placeholderImg from '@/assets/images/avatar/placeholder.jpg';
 import { getToken } from '@/utils/auth';
+import { useLanguage } from '@/context/useLanguageContext';
 
 // Helper functions
 const getDisplayAvatar = (photoUrl, apiBaseUrl) => {
@@ -63,12 +64,12 @@ const findUserConversation = (conversations, user) => {
   );
 };
 
-const getDisplayName = (user) => {
-  if (!user) return 'Bilinmeyen Kullanıcı';
+const getDisplayName = (user, t) => {
+  if (!user) return t('messaging.unknownUser');
   const firstName = (user.firstName || '').trim();
   const lastName = (user.lastName || '').trim();
   const fullName = `${firstName} ${lastName}`.trim();
-  return fullName || user.username || 'Bilinmeyen Kullanıcı';
+  return fullName || user.username || t('messaging.unknownUser');
 };
 
 // Custom hook for API calls
@@ -165,6 +166,7 @@ const OnlineUsers = () => {
 
   const { userInfo } = useAuthContext();
   const { conversationPanel, messagingOffcanvas } = useLayoutContext();
+  const { t } = useLanguage();
 
   const { allUsers, onlineUsersList, loading, error, refetch } = useUsersAPI();
 
@@ -179,7 +181,7 @@ const OnlineUsers = () => {
 
     return allUsers.map((user) => {
       const userConversation = findUserConversation(conversations, user);
-      const displayName = getDisplayName(user);
+      const displayName = getDisplayName(user, t);
 
       return {
         id: user.id,
@@ -200,7 +202,7 @@ const OnlineUsers = () => {
       if (!a.isOnline && b.isOnline) return 1;
       return a.name.localeCompare(b.name);
     });
-  }, [allUsers, onlineUsersList, conversations, userInfo, apiBaseUrl]);
+  }, [allUsers, onlineUsersList, conversations, userInfo, apiBaseUrl, t]);
 
   const handleUserClick = useCallback(async (user) => {
     if (user.isCurrentUser) {
@@ -251,16 +253,16 @@ const OnlineUsers = () => {
       <div className="card-header border-0 pb-0">
         <div className="d-flex justify-content-between align-items-center">
           <h6 className="mb-0">
-            Kişiler
+            {t('messaging.contacts')}
             <span className="badge bg-success ms-2">
-              {combinedUserDetails.filter(u => u.isOnline).length} Çevrimiçi
+              {combinedUserDetails.filter(u => u.isOnline).length} {t('messaging.online')}
             </span>
           </h6>
           <button
             className="btn btn-sm btn-outline-secondary"
             onClick={refetch}
             disabled={loading}
-            title="Yenile"
+            title={t('messaging.refresh')}
           >
             {loading ? (
               <div className="spinner-border spinner-border-sm" role="status" />
@@ -285,7 +287,7 @@ const OnlineUsers = () => {
           {loading && allUsers.length === 0 ? (
             <div className="p-3 text-center">
               <div className="spinner-border spinner-border-sm text-primary" role="status" />
-              <div className="mt-2 text-muted small">Kullanıcılar yükleniyor...</div>
+              <div className="mt-2 text-muted small">{t('messaging.loadingUsers')}</div>
             </div>
           ) : error ? (
             <div className="alert alert-danger m-3">
@@ -294,20 +296,20 @@ const OnlineUsers = () => {
                   <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
                 </svg>
                 <div className="flex-grow-1">
-                  <strong>Hata!</strong>
+                  <strong>{t('common.error')}</strong>
                   <div className="small">{error}</div>
                 </div>
                 <button
                   className="btn btn-sm btn-outline-danger"
                   onClick={refetch}
                 >
-                  Tekrar Dene
+                  {t('messaging.tryAgain')}
                 </button>
               </div>
             </div>
           ) : combinedUserDetails.length === 0 ? (
             <div className="p-3 text-center text-muted">
-              <p className="mb-0">Sistemde kullanıcı bulunamadı</p>
+              <p className="mb-0">{t('messaging.noUsersFound')}</p>
             </div>
           ) : (
             combinedUserDetails.map((user) => (
@@ -320,7 +322,7 @@ const OnlineUsers = () => {
                   cursor: user.isCurrentUser ? 'default' : 'pointer',
                   opacity: user.isCurrentUser ? 0.7 : 1
                 }}
-                title={user.isCurrentUser ? 'Bu sizsiniz' : `${user.name} ile sohbet et`}
+                title={user.isCurrentUser ? t('messaging.thisIsYou') : t('messaging.chatWith', { name: user.name })}
                 onMouseEnter={(e) => {
                   if (!user.isCurrentUser) {
                     e.currentTarget.style.backgroundColor = 'var(--bs-tertiary-bg)';
@@ -359,13 +361,13 @@ const OnlineUsers = () => {
                     <h6 className="mb-0">
                       {user.name}
                       {user.isCurrentUser && (
-                        <span className="text-muted ms-2 small">(sen)</span>
+                        <span className="text-muted ms-2 small">{t('messaging.youSuffix')}</span>
                       )}
                     </h6>
                     {user.isOnline ? (
-                      <small className="text-success">Çevrimiçi</small>
+                      <small className="text-success">{t('messaging.online')}</small>
                     ) : (
-                      <small className="text-muted">Çevrimdışı</small>
+                      <small className="text-muted">{t('messaging.offline')}</small>
                     )}
                   </div>
                 </div>

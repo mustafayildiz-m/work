@@ -235,7 +235,19 @@
     "noSuggestionsYet": "Noch keine Vorschläge",
     "noPostsFound": "Keine Beiträge gefunden",
     "noPostsDescription": "Personen, denen Sie folgen, haben noch keine Beiträge geteilt, oder Sie folgen noch niemandem.",
-    "redirectingToLogin": "Weiterleitung zur Anmeldeseite..."
+    "redirectingToLogin": "Weiterleitung zur Anmeldeseite...",
+    "newslettersTitle": "Newsletters",
+    "newslettersSubtitle": "Wöchentliche Zusammenfassungen, Auswahl der Redakteure und Highlights der Community.",
+    "newslettersSearchPlaceholder": "Bulletin-Suche...",
+    "newslettersFilter": "Filter",
+    "newslettersNoItems": "Es wurden keine Bulletins zum Thema gefunden.",
+    "newslettersRead": "Lesen Sie",
+    "newslettersBackToAll": "Zurück zu allen Bulletins",
+    "newslettersPublishInfo": "Informationen zur Veröffentlichung",
+    "newslettersPublishInfoDesc": "Dieser Bereich enthält den aktuellen Inhalt des Newsletters.",
+    "newslettersOtherEditions": "Andere Zahlen",
+    "newslettersNoOtherEditions": "Das andere Bulletin wurde nicht gefunden.",
+    "newslettersTranslating": "Es wird gerade übersetzt..."
   },
   "menu": {
     "feed": "Feed",
@@ -268,7 +280,8 @@
     "logout": "Abmelden",
     "profileMenu": "Profilmenü",
     "user": "Benutzer",
-    "viewProfile": "Profil anzeigen"
+    "viewProfile": "Profil anzeigen",
+    "newsletters": "Newsletters"
   },
   "theme": {
     "themeSelection": "Themenauswahl",
@@ -835,8 +848,8 @@
     "cancel": "Abbrechen"
   },
   "guest": {
-    "messagingTitle": "Join the Conversation",
-    "messagingDesc": "You need to log in to meet people and chat.",
+    "messagingTitle": "Dem Chat beitreten",
+    "messagingDesc": "Sie müssen sich anmelden, um Nachrichten mit anderen Nutzern auszutauschen.",
     "login": "Log In",
     "continue": "Continue Browsing"
   },
@@ -855,6 +868,41 @@
     "newMessageSearchPlaceholder": "Einen oder mehrere Namen eingeben",
     "suggested": "Vorgeschlagen",
     "userFallback": "Benutzer",
-    "unknownUser": "Unbekannter Benutzer"
+    "unknownUser": "Unbekannter Benutzer",
+    "conversations": "Reden",
+    "contacts": "Kontakte",
+    "searching": "Gesucht...",
+    "searchResults": "Suchergebnisse",
+    "moreResults": "{Zahl} Ergebnis mehr",
+    "startConversation": "Beginnen Sie ein Gespräch, indem Sie eine neue Nachricht senden",
+    "deleteConversation": "Konversation löschen",
+    "deleteConfirmTitle": "Konversation löschen",
+    "deleteConfirmDesc": "Sind Sie sicher, dass Sie die Unterhaltung mit {Name} löschen möchten?",
+    "deleteConfirmNote": "Diese Unterhaltung wird nur für Sie gelöscht. Der andere Teilnehmer kann die Konversation weiterhin sehen.",
+    "online": "Online",
+    "offline": "Offline",
+    "selectConversationTitle": "Wählen Sie eine Rede",
+    "selectConversationDesc": "Wählen Sie auf der linken Seite eine Unterhaltung aus, um eine Nachricht zu senden.",
+    "loadingMessages": "Meldungen werden geladen...",
+    "noMessagesYet": "Noch keine Nachricht",
+    "firstMessagePrompt": "Beginnen Sie das Gespräch, indem Sie die erste Nachricht senden",
+    "loadingConversations": "Die Reden werden gerade hochgeladen...",
+    "loadingUsers": "Die Benutzer laden...",
+    "noUsersFound": "Kein Benutzer im System gefunden",
+    "tryAgain": "Erneut versuchen",
+    "refresh": "Erneuern Sie",
+    "youSuffix": "(Sie)",
+    "chatWith": "Chatten Sie mit {Name}",
+    "thisIsYou": "Das bist du",
+    "emojiLoading": "Emoji laden...",
+    "emptyMessageError": "Die Nachricht kann nicht leer sein",
+    "maxLengthError": "Die Nachricht kann bis zu {count} Zeichen umfassen",
+    "sendError": "Die Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+    "selectConversationPrompt": "Wählen Sie eine Unterhaltung aus, um eine Nachricht zu senden",
+    "disconnectedError": "Die Verbindung wurde unterbrochen. Ich versuche, die Verbindung wiederherzustellen...",
+    "selectEmoji": "Emoji auswählen",
+    "enterMessage": "Nachricht eingeben",
+    "sendMessage": "Nachricht senden",
+    "backToConversations": "Zurück zum Dialog"
   }
 }

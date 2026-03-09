@@ -236,7 +236,19 @@
     "user": "Потребител",
     "noSuggestionsYet": "Все още няма предложения",
     "noPostsFound": "Не са намерени никакви публикации",
-    "noPostsDescription": "Хората, които следвате, все още не са споделили публикации или вие все още не сте последвали никого."
+    "noPostsDescription": "Хората, които следвате, все още не са споделили публикации или вие все още не сте последвали никого.",
+    "newslettersTitle": "Haber Bültenleri",
+    "newslettersSubtitle": "Haftalık özetler, editör seçkileri ve topluluk öne çıkanları.",
+    "newslettersSearchPlaceholder": "Bülten ara...",
+    "newslettersFilter": "Filtrele",
+    "newslettersNoItems": "Gösterilecek bülten bulunamadı.",
+    "newslettersRead": "Oku",
+    "newslettersBackToAll": "Tüm bültenlere dön",
+    "newslettersPublishInfo": "Yayın bilgisi",
+    "newslettersPublishInfoDesc": "Bu alanda güncel bülten içerikleri yer alır.",
+    "newslettersOtherEditions": "Diğer sayılar",
+    "newslettersNoOtherEditions": "Diğer bülten bulunamadı.",
+    "newslettersTranslating": "Çevriliyor..."
   },
   "menu": {
     "feed": "Feed",
@@ -269,7 +281,8 @@
     "logout": "Излизане от системата",
     "profileMenu": "Меню на профила",
     "user": "Потребител",
-    "viewProfile": "Преглед на профила"
+    "viewProfile": "Преглед на профила",
+    "newsletters": "Haber Bültenleri"
   },
   "theme": {
     "themeSelection": "Избор на тема",
@@ -824,8 +837,8 @@
     "cancel": "Cancel"
   },
   "guest": {
-    "messagingTitle": "Join the Conversation",
-    "messagingDesc": "You need to log in to meet people and chat.",
+    "messagingTitle": "Sohbete Katıl",
+    "messagingDesc": "Diğer kullanıcılarla mesajlaşmak için giriş yapmalısınız.",
     "login": "Log In",
     "continue": "Continue Browsing"
   },
@@ -844,6 +857,41 @@
     "newMessageSearchPlaceholder": "Внесете едно или повеќе имиња",
     "suggested": "Предложени",
     "userFallback": "Корисник",
-    "unknownUser": "Непознат корисник"
+    "unknownUser": "Непознат корисник",
+    "conversations": "Konuşmalar",
+    "contacts": "Kişiler",
+    "searching": "Aranıyor...",
+    "searchResults": "Arama Sonuçları",
+    "moreResults": "{count} sonuç daha",
+    "startConversation": "Yeni bir mesaj göndererek konuşma başlatın",
+    "deleteConversation": "Konuşmayı Sil",
+    "deleteConfirmTitle": "Konuşmayı Sil",
+    "deleteConfirmDesc": "{name} ile olan konuşmayı silmek istediğinizden emin misiniz?",
+    "deleteConfirmNote": "Bu konuşma sadece sizin için silinecektir. Diğer katılımcı konuşmayı görmeye devam edecektir.",
+    "online": "Çevrimiçi",
+    "offline": "Çevrimdışı",
+    "selectConversationTitle": "Bir konuşma seçin",
+    "selectConversationDesc": "Mesajlaşmaya başlamak için sol taraftan bir konuşma seçin",
+    "loadingMessages": "Mesajlar yükleniyor...",
+    "noMessagesYet": "Henüz mesaj yok",
+    "firstMessagePrompt": "İlk mesajı göndererek konuşmayı başlatın",
+    "loadingConversations": "Konuşmalar yükleniyor...",
+    "loadingUsers": "Kullanıcılar yükleniyor...",
+    "noUsersFound": "Sistemde kullanıcı bulunamadı",
+    "tryAgain": "Tekrar Dene",
+    "refresh": "Yenile",
+    "youSuffix": "(sen)",
+    "chatWith": "{name} ile sohbet et",
+    "thisIsYou": "Bu sizsiniz",
+    "emojiLoading": "Emoji yükleniyor...",
+    "emptyMessageError": "Mesaj boş olamaz",
+    "maxLengthError": "Mesaj en fazla {count} karakter olabilir",
+    "sendError": "Mesaj gönderilemedi. Lütfen tekrar deneyin.",
+    "selectConversationPrompt": "Mesaj göndermek için bir konuşma seçin",
+    "disconnectedError": "Bağlantı kesildi. Yeniden bağlanmaya çalışılıyor...",
+    "selectEmoji": "Emoji seç",
+    "enterMessage": "Mesaj girin",
+    "sendMessage": "Mesaj gönder",
+    "backToConversations": "Konuşmalara geri dön"
   }
 }

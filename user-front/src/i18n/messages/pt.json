@@ -236,7 +236,19 @@
     "user": "Utilizador",
     "noSuggestionsYet": "Ainda não há sugestões",
     "noPostsFound": "Não foram encontradas mensagens",
-    "noPostsDescription": "As pessoas que segue ainda não partilharam mensagens ou ainda não seguiu ninguém."
+    "noPostsDescription": "As pessoas que segue ainda não partilharam mensagens ou ainda não seguiu ninguém.",
+    "newslettersTitle": "Boletins informativos",
+    "newslettersSubtitle": "Resumos semanais, escolhas do editor e destaques da comunidade.",
+    "newslettersSearchPlaceholder": "Pesquisa de boletins...",
+    "newslettersFilter": "Filtro",
+    "newslettersNoItems": "Não foram encontrados boletins para mostrar.",
+    "newslettersRead": "Ler",
+    "newslettersBackToAll": "Voltar a todos os boletins",
+    "newslettersPublishInfo": "Informações sobre a publicação",
+    "newslettersPublishInfoDesc": "Esta área contém o conteúdo atual do boletim informativo.",
+    "newslettersOtherEditions": "Outros números",
+    "newslettersNoOtherEditions": "O outro boletim não foi encontrado.",
+    "newslettersTranslating": "Está a ser traduzido..."
   },
   "menu": {
     "feed": "Alimentação",
@@ -269,7 +281,8 @@
     "logout": "Terminar sessão",
     "profileMenu": "Menu Perfil",
     "user": "Utilizador",
-    "viewProfile": "Ver perfil"
+    "viewProfile": "Ver perfil",
+    "newsletters": "Boletins informativos"
   },
   "theme": {
     "themeSelection": "Seleção do tema",
@@ -836,8 +849,8 @@
     "cancel": "Cancel"
   },
   "guest": {
-    "messagingTitle": "Join the Conversation",
-    "messagingDesc": "You need to log in to meet people and chat.",
+    "messagingTitle": "Participar no chat",
+    "messagingDesc": "É necessário iniciar sessão para trocar mensagens com outros utilizadores.",
     "login": "Log In",
     "continue": "Continue Browsing"
   },
@@ -856,6 +869,41 @@
     "newMessageSearchPlaceholder": "Digite um ou mais nomes",
     "suggested": "Sugeridos",
     "userFallback": "Usuário",
-    "unknownUser": "Usuário desconhecido"
+    "unknownUser": "Usuário desconhecido",
+    "conversations": "Discursos",
+    "contacts": "Contactos",
+    "searching": "Procura-se...",
+    "searchResults": "Resultados da pesquisa",
+    "moreResults": "{count} resultam mais",
+    "startConversation": "Iniciar uma conversa enviando uma nova mensagem",
+    "deleteConversation": "Apagar conversa",
+    "deleteConfirmTitle": "Apagar conversa",
+    "deleteConfirmDesc": "Tem a certeza de que pretende apagar a conversa com {name}?",
+    "deleteConfirmNote": "Esta conversa será eliminada apenas para si. O outro participante continuará a poder ver a conversa.",
+    "online": "Em linha",
+    "offline": "Fora de linha",
+    "selectConversationTitle": "Selecionar um discurso",
+    "selectConversationDesc": "Selecione uma conversa do lado esquerdo para iniciar o envio de mensagens",
+    "loadingMessages": "Carregando mensagens...",
+    "noMessagesYet": "Nenhuma mensagem ainda",
+    "firstMessagePrompt": "Iniciar a conversa enviando a primeira mensagem",
+    "loadingConversations": "Os discursos estão a ser carregados...",
+    "loadingUsers": "Os utilizadores estão a carregar...",
+    "noUsersFound": "Nenhum utilizador encontrado no sistema",
+    "tryAgain": "Tentar de novo",
+    "refresh": "Renovar",
+    "youSuffix": "(tu)",
+    "chatWith": "Conversar com {nome}",
+    "thisIsYou": "Isto é você",
+    "emojiLoading": "Carregando emoji...",
+    "emptyMessageError": "A mensagem não pode estar vazia",
+    "maxLengthError": "A mensagem pode ter um máximo de {count} caracteres",
+    "sendError": "Não foi possível enviar a mensagem. Por favor, tente novamente.",
+    "selectConversationPrompt": "Selecionar uma conversa para enviar uma mensagem",
+    "disconnectedError": "Desconectado. A tentar restabelecer a ligação...",
+    "selectEmoji": "Selecionar Emoji",
+    "enterMessage": "Introduzir mensagem",
+    "sendMessage": "Enviar mensagem",
+    "backToConversations": "Voltar ao diálogo"
   }
 }

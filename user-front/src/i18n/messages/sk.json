@@ -236,7 +236,19 @@
     "user": "Používateľ",
     "noSuggestionsYet": "Zatiaľ žiadne návrhy",
     "noPostsFound": "Nenašli sa žiadne príspevky",
-    "noPostsDescription": "Ľudia, ktorých sledujete, ešte nezdieľali príspevky alebo ste ešte nikoho nesledovali."
+    "noPostsDescription": "Ľudia, ktorých sledujete, ešte nezdieľali príspevky alebo ste ešte nikoho nesledovali.",
+    "newslettersTitle": "Novinky",
+    "newslettersSubtitle": "Týždenné súhrny, výbery redaktorov a najdôležitejšie udalosti v komunite.",
+    "newslettersSearchPlaceholder": "Vyhľadávanie bulletinu...",
+    "newslettersFilter": "Filter",
+    "newslettersNoItems": "Nenašli sa žiadne bulletiny, ktoré by zobrazovali.",
+    "newslettersRead": "Prečítajte si",
+    "newslettersBackToAll": "Späť na všetky bulletiny",
+    "newslettersPublishInfo": "Informácie o publikácii",
+    "newslettersPublishInfoDesc": "Táto oblasť obsahuje aktuálny obsah bulletinu.",
+    "newslettersOtherEditions": "Ostatné čísla",
+    "newslettersNoOtherEditions": "Druhý bulletin sa nenašiel.",
+    "newslettersTranslating": "Prekladá sa..."
   },
   "menu": {
     "feed": "Krmivo",
@@ -269,7 +281,8 @@
     "logout": "Odhlásenie",
     "profileMenu": "Menu profilu",
     "user": "Používateľ",
-    "viewProfile": "Zobraziť profil"
+    "viewProfile": "Zobraziť profil",
+    "newsletters": "Novinky"
   },
   "theme": {
     "themeSelection": "Výber témy",
@@ -824,8 +837,8 @@
     "cancel": "Cancel"
   },
   "guest": {
-    "messagingTitle": "Join the Conversation",
-    "messagingDesc": "You need to log in to meet people and chat.",
+    "messagingTitle": "Pripojte sa k chatu",
+    "messagingDesc": "Ak si chcete vymieňať správy s ostatnými používateľmi, musíte sa prihlásiť.",
     "login": "Log In",
     "continue": "Continue Browsing"
   },
@@ -844,6 +857,41 @@
     "newMessageSearchPlaceholder": "Zadajte jedno alebo viac mien",
     "suggested": "Odporúčané",
     "userFallback": "Používateľ",
-    "unknownUser": "Neznámy používateľ"
+    "unknownUser": "Neznámy používateľ",
+    "conversations": "Prejavy",
+    "contacts": "Kontakty",
+    "searching": "Hľadá sa...",
+    "searchResults": "Výsledky vyhľadávania",
+    "moreResults": "{count} výsledok viac",
+    "startConversation": "Začatie konverzácie odoslaním novej správy",
+    "deleteConversation": "Odstrániť konverzáciu",
+    "deleteConfirmTitle": "Odstrániť konverzáciu",
+    "deleteConfirmDesc": "Ste si istí, že chcete vymazať konverzáciu s {meno}?",
+    "deleteConfirmNote": "Táto konverzácia bude vymazaná len pre vás. Druhý účastník bude môcť konverzáciu stále vidieť.",
+    "online": "Online",
+    "offline": "Offline",
+    "selectConversationTitle": "Výber prejavu",
+    "selectConversationDesc": "Ak chcete začať posielať správy, vyberte konverzáciu z ľavej strany",
+    "loadingMessages": "Načítavanie správ...",
+    "noMessagesYet": "Zatiaľ žiadna správa",
+    "firstMessagePrompt": "Začnite konverzáciu odoslaním prvej správy",
+    "loadingConversations": "Prejavy sa nahrávajú...",
+    "loadingUsers": "Používatelia načítavajú...",
+    "noUsersFound": "V systéme nebol nájdený žiadny používateľ",
+    "tryAgain": "Skúste to znova",
+    "refresh": "Obnoviť",
+    "youSuffix": "(vy)",
+    "chatWith": "Chatovať s {meno}",
+    "thisIsYou": "Toto ste vy",
+    "emojiLoading": "Načítanie emoji...",
+    "emptyMessageError": "Správa nemôže byť prázdna",
+    "maxLengthError": "Správa môže mať maximálne {count} znakov",
+    "sendError": "Správa nemohla byť odoslaná. Skúste to prosím znova.",
+    "selectConversationPrompt": "Výber konverzácie na odoslanie správy",
+    "disconnectedError": "Odpojené. Pokus o opätovné pripojenie...",
+    "selectEmoji": "Vyberte Emoji",
+    "enterMessage": "Zadajte správu",
+    "sendMessage": "Odoslať správu",
+    "backToConversations": "Späť na dialóg"
   }
 }

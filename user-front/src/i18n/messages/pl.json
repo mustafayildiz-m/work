@@ -236,7 +236,19 @@
     "user": "Użytkownik",
     "noSuggestionsYet": "Brak sugestii",
     "noPostsFound": "Nie znaleziono żadnych postów",
-    "noPostsDescription": "Osoby, które obserwujesz, nie udostępniły jeszcze postów lub nie obserwujesz jeszcze nikogo."
+    "noPostsDescription": "Osoby, które obserwujesz, nie udostępniły jeszcze postów lub nie obserwujesz jeszcze nikogo.",
+    "newslettersTitle": "Biuletyny informacyjne",
+    "newslettersSubtitle": "Cotygodniowe podsumowania, wybory redaktorów i najważniejsze wydarzenia społeczności.",
+    "newslettersSearchPlaceholder": "Wyszukiwanie biuletynów...",
+    "newslettersFilter": "Filtr",
+    "newslettersNoItems": "Nie znaleziono żadnych biuletynów.",
+    "newslettersRead": "Czytaj",
+    "newslettersBackToAll": "Powrót do wszystkich biuletynów",
+    "newslettersPublishInfo": "Informacje o publikacji",
+    "newslettersPublishInfoDesc": "Ten obszar zawiera aktualną zawartość biuletynu.",
+    "newslettersOtherEditions": "Inne liczby",
+    "newslettersNoOtherEditions": "Drugi biuletyn nie został znaleziony.",
+    "newslettersTranslating": "Jest tłumaczony..."
   },
   "menu": {
     "feed": "Pasza",
@@ -269,7 +281,8 @@
     "logout": "Wylogowanie",
     "profileMenu": "Menu profilu",
     "user": "Użytkownik",
-    "viewProfile": "Wyświetl profil"
+    "viewProfile": "Wyświetl profil",
+    "newsletters": "Biuletyny informacyjne"
   },
   "theme": {
     "themeSelection": "Wybór tematu",
@@ -824,8 +837,8 @@
     "cancel": "Cancel"
   },
   "guest": {
-    "messagingTitle": "Join the Conversation",
-    "messagingDesc": "You need to log in to meet people and chat.",
+    "messagingTitle": "Dołącz do czatu",
+    "messagingDesc": "Musisz się zalogować, aby wymieniać wiadomości z innymi użytkownikami.",
     "login": "Log In",
     "continue": "Continue Browsing"
   },
@@ -844,6 +857,41 @@
     "newMessageSearchPlaceholder": "Wpisz jedno lub więcej imion",
     "suggested": "Sugerowane",
     "userFallback": "Użytkownik",
-    "unknownUser": "Nieznany użytkownik"
+    "unknownUser": "Nieznany użytkownik",
+    "conversations": "Przemówienia",
+    "contacts": "Kontakty",
+    "searching": "Poszukiwany...",
+    "searchResults": "Wyniki wyszukiwania",
+    "moreResults": "{count} wynik więcej",
+    "startConversation": "Rozpocznij rozmowę, wysyłając nową wiadomość",
+    "deleteConversation": "Usuń konwersację",
+    "deleteConfirmTitle": "Usuń konwersację",
+    "deleteConfirmDesc": "Czy na pewno chcesz usunąć rozmowę z {imię}?",
+    "deleteConfirmNote": "Ta konwersacja zostanie usunięta tylko dla Ciebie. Drugi uczestnik nadal będzie mógł ją zobaczyć.",
+    "online": "Online",
+    "offline": "Offline",
+    "selectConversationTitle": "Wybierz przemówienie",
+    "selectConversationDesc": "Wybierz rozmowę z lewej strony, aby rozpocząć wysyłanie wiadomości",
+    "loadingMessages": "Ładowanie wiadomości...",
+    "noMessagesYet": "Brak wiadomości",
+    "firstMessagePrompt": "Rozpocznij rozmowę, wysyłając pierwszą wiadomość",
+    "loadingConversations": "Przemówienia są przesyłane...",
+    "loadingUsers": "Użytkownicy ładują...",
+    "noUsersFound": "Nie znaleziono użytkownika w systemie",
+    "tryAgain": "Spróbuj ponownie",
+    "refresh": "Odnowienie",
+    "youSuffix": "(ty)",
+    "chatWith": "Czat z {imię}",
+    "thisIsYou": "To ty",
+    "emojiLoading": "Ładowanie emoji...",
+    "emptyMessageError": "Wiadomość nie może być pusta",
+    "maxLengthError": "Wiadomość może zawierać do {count} znaków",
+    "sendError": "Nie można wysłać wiadomości. Spróbuj ponownie.",
+    "selectConversationPrompt": "Wybierz rozmowę, aby wysłać wiadomość",
+    "disconnectedError": "Rozłączono. Próba ponownego połączenia...",
+    "selectEmoji": "Wybierz Emoji",
+    "enterMessage": "Wprowadź wiadomość",
+    "sendMessage": "Wyślij wiadomość",
+    "backToConversations": "Powrót do dialogu"
   }
 }

@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import { timeSince } from '@/utils/date';
 import placeholderImg from '@/assets/images/avatar/placeholder.jpg';
+import { useLanguage } from '@/context/useLanguageContext';
 
 const ConversationList = () => {
   const {
@@ -16,6 +17,8 @@ const ConversationList = () => {
     searchMessages,
     deleteConversation
   } = useWebSocketChatContext();
+
+  const { t } = useLanguage();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -95,8 +98,8 @@ const ConversationList = () => {
 
   // Display helpers
   const getDisplayName = useCallback((conversation) => {
-    return conversation?.participantName || 'Bilinmeyen Kullanıcı';
-  }, []);
+    return conversation?.participantName || t('messaging.unknownUser');
+  }, [t]);
 
   const getDisplayAvatar = useCallback((conversation) => {
     const defaultPlaceholder = typeof placeholderImg === 'string' ? placeholderImg : (placeholderImg?.src || '/images/avatar/placeholder.jpg');
@@ -184,9 +187,9 @@ const ConversationList = () => {
         <div className="card-body d-flex justify-content-center align-items-center">
           <div className="text-center">
             <div className="spinner-border text-primary mb-2" role="status">
-              <span className="visually-hidden">Loading...</span>
+              <span className="visually-hidden">{t('common.loading')}</span>
             </div>
-            <div className="text-muted small">Konuşmalar yükleniyor...</div>
+            <div className="text-muted small">{t('messaging.loadingConversations')}</div>
           </div>
         </div>
       </div>
@@ -198,7 +201,7 @@ const ConversationList = () => {
       {/* Header */}
       <div className="card-header border-0 pb-0">
         <div className="d-flex justify-content-between align-items-center">
-          <h6 className="mb-0">Konuşmalar</h6>
+          <h6 className="mb-0">{t('messaging.conversations')}</h6>
           <span className="badge bg-primary rounded-pill">
             {sortedConversations.length}
           </span>
@@ -211,7 +214,7 @@ const ConversationList = () => {
           <input
             type="text"
             className="form-control form-control-sm"
-            placeholder="Mesajlarda ara..."
+            placeholder={t('messaging.searchPlaceholder') + '...'}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
@@ -234,13 +237,13 @@ const ConversationList = () => {
       {/* Search Results */}
       {searchQuery && (
         <div className="p-3 border-bottom search-results-container">
-          <h6 className="mb-2 fw-semibold">Arama Sonuçları</h6>
+          <h6 className="mb-2 fw-semibold">{t('messaging.searchResults')}</h6>
           {isSearching ? (
             <div className="text-center py-2">
               <div className="spinner-border spinner-border-sm text-primary" role="status">
-                <span className="visually-hidden">Aranıyor...</span>
+                <span className="visually-hidden">{t('messaging.searching')}</span>
               </div>
-              <span className="ms-2 small text-muted">Aranıyor...</span>
+              <span className="ms-2 small text-muted">{t('messaging.searching')}</span>
             </div>
           ) : searchResults.length > 0 ? (
             <div>
@@ -269,7 +272,7 @@ const ConversationList = () => {
                     if (conv) handleConversationClick(conv);
                   }}
                 >
-                  <div className="fw-semibold small">{result.senderName || 'Bilinmeyen'}</div>
+                  <div className="fw-semibold small">{result.senderName || t('messaging.unknownUser')}</div>
                   <div className="text-muted small text-truncate">{result.content}</div>
                   <div className="text-muted" style={{ fontSize: '12px' }}>
                     {result.timestamp ? timeSince(new Date(result.timestamp)) : ''}
@@ -278,12 +281,12 @@ const ConversationList = () => {
               ))}
               {searchResults.length > 3 && (
                 <div className="text-muted text-center small mt-2">
-                  +{searchResults.length - 3} sonuç daha
+                  {t('messaging.moreResults', { count: searchResults.length - 3 })}
                 </div>
               )}
             </div>
           ) : (
-            <div className="text-muted small">Sonuç bulunamadı</div>
+            <div className="text-muted small">{t('messaging.noSearchResults')}</div>
           )}
         </div>
       )}
@@ -300,8 +303,8 @@ const ConversationList = () => {
           {sortedConversations.length === 0 ? (
             <div className="p-4 text-center text-muted">
               <div className="mb-3" style={{ fontSize: '48px' }}>💬</div>
-              <h6 className="mb-2">Henüz konuşma yok</h6>
-              <p className="small mb-0">Yeni bir mesaj göndererek konuşma başlatın</p>
+              <h6 className="mb-2">{t('messaging.noConversations')}</h6>
+              <p className="small mb-0">{t('messaging.startConversation')}</p>
             </div>
           ) : (
             sortedConversations.map((conversation) => {
@@ -382,7 +385,7 @@ const ConversationList = () => {
                       <div className="d-flex justify-content-between align-items-center">
                         <p className={`mb-0 small text-truncate me-2 ${hasUnread ? 'text-body-emphasis fw-medium' : 'text-muted'
                           }`}>
-                          {conversation.lastMessage || 'Henüz mesaj yok'}
+                          {conversation.lastMessage || t('messaging.noMessage')}
                         </p>
                         {hasUnread && (
                           <span className="badge bg-danger rounded-pill">
@@ -400,7 +403,7 @@ const ConversationList = () => {
                           e.stopPropagation();
                           handleDeleteClick(conversation);
                         }}
-                        title="Konuşmayı Sil"
+                        title={t('messaging.deleteConversation')}
                         style={{
                           width: '36px',
                           height: '36px',
@@ -409,16 +412,16 @@ const ConversationList = () => {
                           transition: 'all 0.2s ease'
                         }}
                         onMouseEnter={(e) => {
-                          e.target.style.backgroundColor = '#dc3545';
-                          e.target.style.borderColor = '#dc3545';
-                          e.target.style.color = 'white';
-                          e.target.style.transform = 'scale(1.1)';
+                          e.currentTarget.style.backgroundColor = '#dc3545';
+                          e.currentTarget.style.borderColor = '#dc3545';
+                          e.currentTarget.style.color = 'white';
+                          e.currentTarget.style.transform = 'scale(1.1)';
                         }}
                         onMouseLeave={(e) => {
-                          e.target.style.backgroundColor = 'transparent';
-                          e.target.style.borderColor = '#dc3545';
-                          e.target.style.color = '#dc3545';
-                          e.target.style.transform = 'scale(1)';
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                          e.currentTarget.style.borderColor = '#dc3545';
+                          e.currentTarget.style.color = '#dc3545';
+                          e.currentTarget.style.transform = 'scale(1)';
                         }}
                       >
                         <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -454,7 +457,7 @@ const ConversationList = () => {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title">
-                    Konuşmayı Sil
+                    {t('messaging.deleteConfirmTitle')}
                   </h5>
                   <button
                     type="button"
@@ -464,10 +467,10 @@ const ConversationList = () => {
                 </div>
                 <div className="modal-body">
                   <p className="mb-3">
-                    <strong>{conversationToDelete.participantName}</strong> ile olan konuşmayı silmek istediğinizden emin misiniz?
+                    {t('messaging.deleteConfirmDesc', { name: conversationToDelete.participantName || t('messaging.unknownUser') })}
                   </p>
                   <p className="text-muted small mb-0">
-                    Bu konuşma sadece sizin için silinecektir. Diğer katılımcı konuşmayı görmeye devam edecektir.
+                    {t('messaging.deleteConfirmNote')}
                   </p>
                 </div>
                 <div className="modal-footer">
@@ -476,7 +479,7 @@ const ConversationList = () => {
                     className="btn btn-secondary"
                     onClick={handleDeleteCancel}
                   >
-                    İptal
+                    {t('common.cancel')}
                   </button>
                   <button
                     type="button"
@@ -487,7 +490,7 @@ const ConversationList = () => {
                       <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
                       <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
                     </svg>
-                    Sil
+                    {t('common.delete')}
                   </button>
                 </div>
               </div>

@@ -236,7 +236,19 @@
     "user": "用户",
     "noSuggestionsYet": "尚无建议",
     "noPostsFound": "未找到帖子",
-    "noPostsDescription": "你关注的人还没有分享帖子，或者你还没有关注任何人。"
+    "noPostsDescription": "你关注的人还没有分享帖子，或者你还没有关注任何人。",
+    "newslettersTitle": "新闻简报",
+    "newslettersSubtitle": "每周摘要、编辑精选和社区亮点。",
+    "newslettersSearchPlaceholder": "公告搜索...",
+    "newslettersFilter": "过滤器",
+    "newslettersNoItems": "未找到可显示的公告。",
+    "newslettersRead": "阅读",
+    "newslettersBackToAll": "返回所有公告",
+    "newslettersPublishInfo": "出版信息",
+    "newslettersPublishInfoDesc": "该区域包含当前的通讯内容。",
+    "newslettersOtherEditions": "其他数字",
+    "newslettersNoOtherEditions": "另一份公告没有找到。",
+    "newslettersTranslating": "正在翻译..."
   },
   "menu": {
     "feed": "饲料",
@@ -269,7 +281,8 @@
     "logout": "注销",
     "profileMenu": "简介菜单",
     "user": "用户",
-    "viewProfile": "查看简介"
+    "viewProfile": "查看简介",
+    "newsletters": "新闻简报"
   },
   "theme": {
     "themeSelection": "主题选择",
@@ -836,8 +849,8 @@
     "cancel": "Cancel"
   },
   "guest": {
-    "messagingTitle": "Join the Conversation",
-    "messagingDesc": "You need to log in to meet people and chat.",
+    "messagingTitle": "加入聊天",
+    "messagingDesc": "您必须登录才能与其他用户交换信息。",
     "login": "Log In",
     "continue": "Continue Browsing"
   },
@@ -856,6 +869,41 @@
     "newMessageSearchPlaceholder": "输入一个或多个姓名",
     "suggested": "推荐",
     "userFallback": "用户",
-    "unknownUser": "未知用户"
+    "unknownUser": "未知用户",
+    "conversations": "演讲",
+    "contacts": "联系方式",
+    "searching": "想要...",
+    "searchResults": "搜索结果",
+    "moreResults": "更多",
+    "startConversation": "发送新信息开始对话",
+    "deleteConversation": "删除对话",
+    "deleteConfirmTitle": "删除对话",
+    "deleteConfirmDesc": "您确定要删除与 {name} 的对话吗？",
+    "deleteConfirmNote": "此对话将只对您本人删除。其他参与者仍能看到对话内容。",
+    "online": "在线",
+    "offline": "离线",
+    "selectConversationTitle": "选择发言",
+    "selectConversationDesc": "从左侧选择对话开始发送信息",
+    "loadingMessages": "正在加载信息...",
+    "noMessagesYet": "尚无留言",
+    "firstMessagePrompt": "发送第一条信息，开始对话",
+    "loadingConversations": "演讲稿正在上传...",
+    "loadingUsers": "用户正在加载...",
+    "noUsersFound": "系统中未发现用户",
+    "tryAgain": "再试一次",
+    "refresh": "更新",
+    "youSuffix": "（你）",
+    "chatWith": "与 {name} 聊天",
+    "thisIsYou": "这就是你",
+    "emojiLoading": "加载表情符号...",
+    "emptyMessageError": "信息不能为空",
+    "maxLengthError": "信息最多可包含 {count} 个字符",
+    "sendError": "信息无法发送。请重试。",
+    "selectConversationPrompt": "选择对话以发送信息",
+    "disconnectedError": "断开连接。尝试重新连接...",
+    "selectEmoji": "选择表情符号",
+    "enterMessage": "输入信息",
+    "sendMessage": "发送信息",
+    "backToConversations": "返回对话"
   }
 }

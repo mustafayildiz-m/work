@@ -236,7 +236,19 @@
     "user": "Користувач",
     "noSuggestionsYet": "Пропозицій поки що немає",
     "noPostsFound": "Не знайдено жодного повідомлення",
-    "noPostsDescription": "Люди, за якими ви стежите, ще не поділилися публікаціями або ви ще ні за ким не стежили."
+    "noPostsDescription": "Люди, за якими ви стежите, ще не поділилися публікаціями або ви ще ні за ким не стежили.",
+    "newslettersTitle": "Інформаційні бюлетені",
+    "newslettersSubtitle": "Щотижневі підсумки, добірки редакторів та головні новини спільноти.",
+    "newslettersSearchPlaceholder": "Пошук в бюлетені...",
+    "newslettersFilter": "Фільтр",
+    "newslettersNoItems": "Бюлетені не знайдено.",
+    "newslettersRead": "Прочитайте",
+    "newslettersBackToAll": "Повернутися до всіх бюлетенів",
+    "newslettersPublishInfo": "Інформація про публікацію",
+    "newslettersPublishInfoDesc": "Ця область містить поточний зміст розсилки.",
+    "newslettersOtherEditions": "Інші номери",
+    "newslettersNoOtherEditions": "Інший бюлетень не був знайдений.",
+    "newslettersTranslating": "Його перекладають..."
   },
   "menu": {
     "feed": "Годувати",
@@ -269,7 +281,8 @@
     "logout": "Вийти з системи",
     "profileMenu": "Меню профілю",
     "user": "Користувач",
-    "viewProfile": "Переглянути профіль"
+    "viewProfile": "Переглянути профіль",
+    "newsletters": "Інформаційні бюлетені"
   },
   "theme": {
     "themeSelection": "Вибір теми",
@@ -824,8 +837,8 @@
     "cancel": "Cancel"
   },
   "guest": {
-    "messagingTitle": "Join the Conversation",
-    "messagingDesc": "You need to log in to meet people and chat.",
+    "messagingTitle": "Приєднуйтесь до чату",
+    "messagingDesc": "Ви повинні увійти, щоб обмінюватися повідомленнями з іншими користувачами.",
     "login": "Log In",
     "continue": "Continue Browsing"
   },
@@ -844,6 +857,41 @@
     "newMessageSearchPlaceholder": "Введіть одне або кілька імен",
     "suggested": "Рекомендовані",
     "userFallback": "Користувач",
-    "unknownUser": "Невідомий користувач"
+    "unknownUser": "Невідомий користувач",
+    "conversations": "Виступи",
+    "contacts": "Контакти",
+    "searching": "Розшукується...",
+    "searchResults": "Результати пошуку",
+    "moreResults": "{count} результат більше",
+    "startConversation": "Почніть розмову, надіславши нове повідомлення",
+    "deleteConversation": "Видалити розмову",
+    "deleteConfirmTitle": "Видалити розмову",
+    "deleteConfirmDesc": "Ви впевнені, що хочете видалити розмову з {name}?",
+    "deleteConfirmNote": "Ця розмова буде видалена тільки для вас. Інший учасник все ще зможе бачити бесіду.",
+    "online": "Онлайн",
+    "offline": "Офлайн",
+    "selectConversationTitle": "Виберіть виступ",
+    "selectConversationDesc": "Виберіть розмову зліва, щоб почати обмін повідомленнями",
+    "loadingMessages": "Завантаження повідомлень...",
+    "noMessagesYet": "Ще немає повідомлення",
+    "firstMessagePrompt": "Почніть розмову, надіславши перше повідомлення",
+    "loadingConversations": "Виступи завантажуються...",
+    "loadingUsers": "Користувачі завантажують...",
+    "noUsersFound": "Користувача не знайдено в системі",
+    "tryAgain": "Спробуйте ще раз",
+    "refresh": "Поновити",
+    "youSuffix": "(ти)",
+    "chatWith": "Чат з {ім'я}",
+    "thisIsYou": "Це ти.",
+    "emojiLoading": "Завантаження емодзі...",
+    "emptyMessageError": "Повідомлення не може бути порожнім",
+    "maxLengthError": "Повідомлення може містити до {count} символів",
+    "sendError": "Повідомлення не вдалося відправити. Будь ласка, спробуйте ще раз.",
+    "selectConversationPrompt": "Виберіть розмову, щоб надіслати повідомлення",
+    "disconnectedError": "Від'єднано. Спроба перепідключення...",
+    "selectEmoji": "Виберіть емодзі",
+    "enterMessage": "Введіть повідомлення",
+    "sendMessage": "Надіслати повідомлення",
+    "backToConversations": "Повертаємося до діалогу"
   }
 }

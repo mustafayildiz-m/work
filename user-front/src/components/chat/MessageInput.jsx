@@ -4,15 +4,19 @@ import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { BsEmojiSmileFill, BsSendFill } from 'react-icons/bs';
+import { useLanguage } from '@/context/useLanguageContext';
 
 // Emoji picker'ı lazy load
 const EmojiPicker = dynamic(() => import('@emoji-mart/react'), {
   ssr: false,
-  loading: () => (
-    <div className="p-2 text-muted small bg-white rounded shadow">
-      Emoji yükleniyor...
-    </div>
-  )
+  loading: () => {
+    const { t } = useLanguage();
+    return (
+      <div className="p-2 text-muted small bg-white rounded shadow">
+        {t('messaging.emojiLoading')}
+      </div>
+    );
+  }
 });
 
 // Constants
@@ -25,6 +29,7 @@ const TEXTAREA_MIN_HEIGHT = 40;
 let emojiDataCache = null;
 
 const MessageInput = () => {
+  const { t, language } = useLanguage();
   const {
     activeConversation,
     sendMessage,
@@ -39,7 +44,7 @@ const MessageInput = () => {
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState('');
   const [isDarkTheme, setIsDarkTheme] = useState(false);
-  
+
   // Refs
   const textareaRef = useRef(null);
   const emojiPickerRef = useRef(null);
@@ -89,7 +94,7 @@ const MessageInput = () => {
   // Optimized typing status management
   const updateTypingStatus = useCallback((isTyping) => {
     if (!activeConversation || !isConnected) return;
-    
+
     // Only send if status changed
     if (lastTypingStatusRef.current !== isTyping) {
       sendTypingStatus(activeConversation.id, isTyping);
@@ -127,12 +132,12 @@ const MessageInput = () => {
   // Handle message submission
   const handleSubmit = useCallback(async (e) => {
     e?.preventDefault();
-    
+
     if (!canSend) {
       if (!trimmedMessage) {
-        setError('Mesaj boş olamaz');
+        setError(t('messaging.emptyMessageError'));
       } else if (trimmedMessage.length > MAX_MESSAGE_LENGTH) {
-        setError(`Mesaj en fazla ${MAX_MESSAGE_LENGTH} karakter olabilir`);
+        setError(t('messaging.maxLengthError', { count: MAX_MESSAGE_LENGTH }));
       }
       return;
     }
@@ -140,32 +145,32 @@ const MessageInput = () => {
     try {
       setIsSending(true);
       setError('');
-      
+
       // Stop typing status
       updateTypingStatus(false);
 
       // Send message
       await sendMessage(trimmedMessage, activeConversation.participantId);
-      
+
       // Reset form
       setMessage('');
       setShowEmojiPicker(false);
-      
+
       // Reset textarea height
       setTimeout(adjustTextareaHeight, 0);
-      
+
       // Focus back to textarea
       if (textareaRef.current) {
         textareaRef.current.focus();
       }
-      
+
     } catch (error) {
       console.error('Error sending message:', error);
-      setError('Mesaj gönderilemedi. Lütfen tekrar deneyin.');
+      setError(t('messaging.sendError'));
     } finally {
       setIsSending(false);
     }
-  }, [canSend, trimmedMessage, updateTypingStatus, sendMessage, activeConversation, adjustTextareaHeight]);
+  }, [canSend, trimmedMessage, updateTypingStatus, sendMessage, activeConversation, adjustTextareaHeight, t]);
 
   // Handle key events
   const handleKeyDown = useCallback((e) => {
@@ -185,10 +190,10 @@ const MessageInput = () => {
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const newMessage = message.slice(0, start) + emoji.native + message.slice(end);
-    
+
     setMessage(newMessage);
     setShowEmojiPicker(false);
-    
+
     // Update cursor position after emoji
     setTimeout(() => {
       const newPosition = start + emoji.native.length;
@@ -265,7 +270,7 @@ const MessageInput = () => {
   if (!activeConversation) {
     return (
       <div className="p-3 bg-light text-center text-muted">
-        <p className="mb-0">Mesaj göndermek için bir konuşma seçin</p>
+        <p className="mb-0">{t('messaging.selectConversationPrompt')}</p>
       </div>
     );
   }
@@ -276,18 +281,18 @@ const MessageInput = () => {
       <div className="p-3 bg-warning text-center">
         <div className="d-flex align-items-center justify-content-center text-white">
           <svg width="16" height="16" fill="currentColor" className="me-2" viewBox="0 0 16 16">
-            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
           </svg>
-          Bağlantı kesildi. Yeniden bağlanmaya çalışılıyor...
+          {t('messaging.disconnectedError')}
         </div>
       </div>
     );
   }
 
   return (
-    <div 
-      className="message-input-container p-3 position-relative" 
-      style={{ 
+    <div
+      className="message-input-container p-3 position-relative"
+      style={{
         background:
           'linear-gradient(180deg, rgba(var(--bs-body-bg-rgb), 0.72) 0%, rgba(var(--bs-body-bg-rgb), 0.95) 100%)',
         borderTop: '1px solid var(--bs-border-color)',
@@ -315,8 +320,8 @@ const MessageInput = () => {
             className="btn emoji-btn"
             onClick={handleEmojiToggle}
             disabled={isSending}
-            aria-label="Emoji seç"
-            title="Emoji seç"
+            aria-label={t('messaging.selectEmoji')}
+            title={t('messaging.selectEmoji')}
             style={{
               width: 42,
               height: 42,
@@ -360,7 +365,7 @@ const MessageInput = () => {
             value={message}
             onChange={handleMessageChange}
             onKeyDown={handleKeyDown}
-            placeholder="Mesajınızı yazın..."
+            placeholder={t('messaging.writeMessage')}
             className={`form-control ${error ? 'is-invalid' : ''}`}
             disabled={isSending}
             rows={1}
@@ -376,7 +381,7 @@ const MessageInput = () => {
               color: 'var(--bs-body-color)',
               boxShadow: 'none',
             }}
-            aria-label="Mesaj girin"
+            aria-label={t('messaging.enterMessage')}
             aria-invalid={error ? 'true' : 'false'}
             aria-describedby={error ? 'message-error' : undefined}
           />
@@ -386,8 +391,8 @@ const MessageInput = () => {
             type="submit"
             className="btn send-btn"
             disabled={!canSend}
-            aria-label="Mesaj gönder"
-            title="Mesaj gönder"
+            aria-label={t('messaging.sendMessage')}
+            title={t('messaging.sendMessage')}
             style={{
               width: 46,
               height: 46,
@@ -428,8 +433,8 @@ const MessageInput = () => {
             }}
           >
             {isSending ? (
-              <div 
-                className="spinner-border spinner-border-sm" 
+              <div
+                className="spinner-border spinner-border-sm"
                 role="status"
                 aria-hidden="true"
               />
@@ -458,10 +463,10 @@ const MessageInput = () => {
 
       {/* Emoji picker */}
       {showEmojiPicker && emojiData && (
-        <div 
+        <div
           ref={emojiPickerRef}
-          className="position-absolute mb-2" 
-          style={{ 
+          className="position-absolute mb-2"
+          style={{
             bottom: '100%',
             left: '1rem',
             zIndex: 1000,
@@ -473,7 +478,7 @@ const MessageInput = () => {
               data={emojiData}
               onEmojiSelect={handleEmojiSelect}
               theme={isDarkTheme ? 'dark' : 'light'}
-              locale="tr"
+              locale={language === 'tr' ? 'tr' : 'en'}
               previewPosition="none"
               skinTonePosition="none"
               maxFrequentRows={2}

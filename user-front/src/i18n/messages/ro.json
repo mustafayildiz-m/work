@@ -236,7 +236,19 @@
     "user": "Utilizator",
     "noSuggestionsYet": "Nu există încă sugestii",
     "noPostsFound": "Nu s-au găsit posturi",
-    "noPostsDescription": "Persoanele pe care le urmăriți nu au distribuit încă postări sau nu ați urmărit încă pe nimeni."
+    "noPostsDescription": "Persoanele pe care le urmăriți nu au distribuit încă postări sau nu ați urmărit încă pe nimeni.",
+    "newslettersTitle": "Buletine informative",
+    "newslettersSubtitle": "Rezumate săptămânale, selecții ale editorului și aspecte importante ale comunității.",
+    "newslettersSearchPlaceholder": "Buletin de căutare...",
+    "newslettersFilter": "Filtru",
+    "newslettersNoItems": "Nu s-au găsit buletine care să arate.",
+    "newslettersRead": "Citește",
+    "newslettersBackToAll": "Înapoi la toate buletinele",
+    "newslettersPublishInfo": "Informații privind publicarea",
+    "newslettersPublishInfoDesc": "Această zonă conține conținutul actual al buletinului informativ.",
+    "newslettersOtherEditions": "Alte numere",
+    "newslettersNoOtherEditions": "Celălalt buletin nu a fost găsit.",
+    "newslettersTranslating": "Este în curs de traducere..."
   },
   "menu": {
     "feed": "Alimente",
@@ -269,7 +281,8 @@
     "logout": "Ieșire",
     "profileMenu": "Meniu profil",
     "user": "Utilizator",
-    "viewProfile": "Vezi profilul"
+    "viewProfile": "Vezi profilul",
+    "newsletters": "Buletine informative"
   },
   "theme": {
     "themeSelection": "Selectarea temei",
@@ -824,8 +837,8 @@
     "cancel": "Cancel"
   },
   "guest": {
-    "messagingTitle": "Join the Conversation",
-    "messagingDesc": "You need to log in to meet people and chat.",
+    "messagingTitle": "Alăturați-vă chat-ului",
+    "messagingDesc": "Trebuie să vă conectați pentru a schimba mesaje cu alți utilizatori.",
     "login": "Log In",
     "continue": "Continue Browsing"
   },
@@ -844,6 +857,41 @@
     "newMessageSearchPlaceholder": "Scrie unul sau mai multe nume",
     "suggested": "Sugerați",
     "userFallback": "Utilizator",
-    "unknownUser": "Utilizator necunoscut"
+    "unknownUser": "Utilizator necunoscut",
+    "conversations": "Discursuri",
+    "contacts": "Contacte",
+    "searching": "Căutat...",
+    "searchResults": "Rezultatele căutării",
+    "moreResults": "{număr} rezultat mai mult",
+    "startConversation": "Începeți o conversație prin trimiterea unui mesaj nou",
+    "deleteConversation": "Ștergeți conversația",
+    "deleteConfirmTitle": "Ștergeți conversația",
+    "deleteConfirmDesc": "Sunteți sigur că doriți să ștergeți conversația cu {numele}?",
+    "deleteConfirmNote": "Această conversație va fi ștearsă numai pentru dvs. Celălalt participant va putea în continuare să vadă conversația.",
+    "online": "Online",
+    "offline": "Offline",
+    "selectConversationTitle": "Selectați un discurs",
+    "selectConversationDesc": "Selectați o conversație din partea stângă pentru a începe mesageria",
+    "loadingMessages": "Încărcarea mesajelor...",
+    "noMessagesYet": "Niciun mesaj încă",
+    "firstMessagePrompt": "Începeți conversația trimițând primul mesaj",
+    "loadingConversations": "Discursurile sunt în curs de încărcare...",
+    "loadingUsers": "Utilizatorii încarcă...",
+    "noUsersFound": "Nu a fost găsit niciun utilizator în sistem",
+    "tryAgain": "Încearcă din nou",
+    "refresh": "Reînnoire",
+    "youSuffix": "(tu)",
+    "chatWith": "Chat cu {numele}",
+    "thisIsYou": "Acesta ești tu",
+    "emojiLoading": "Încărcare emoji...",
+    "emptyMessageError": "Mesajul nu poate fi gol",
+    "maxLengthError": "Mesajul poate avea până la {număr} caractere",
+    "sendError": "Mesajul nu a putut fi trimis. Vă rugăm să încercați din nou.",
+    "selectConversationPrompt": "Selectați o conversație pentru a trimite un mesaj",
+    "disconnectedError": "Deconectat. Încerc să mă reconectez...",
+    "selectEmoji": "Selectați Emoji",
+    "enterMessage": "Introduceți mesajul",
+    "sendMessage": "Trimite mesaj",
+    "backToConversations": "Înapoi la dialog"
   }
 }
