@@ -107,8 +107,8 @@ export class UserPostsService {
   }
 
   async getTimeline(userId: number, language: string = 'tr') {
-    // Cache key oluştur - shared posts ve dil için v4 (optimized)
-    const cacheKey = `user-posts:timeline:${userId}:${language}:v4`;
+    // Cache key oluştur - shared posts, dil ve sadece accepted takipler için v5
+    const cacheKey = `user-posts:timeline:${userId}:${language}:v5`;
 
     // Önce cache'den kontrol et
     const cachedResult = await this.cacheService.get<any[]>(cacheKey);
@@ -116,9 +116,9 @@ export class UserPostsService {
       return cachedResult;
     }
 
-    // Cache'de yoksa veritabanından getir
+    // Cache'de yoksa veritabanından getir - sadece kabul edilmiş takipler (pending değil)
     const following = await this.userFollowRepository.find({
-      where: { follower_id: userId },
+      where: { follower_id: userId, status: 'accepted' },
       select: ['following_id'],
     });
     const followingIds = following.map((f) => f.following_id);
@@ -676,22 +676,22 @@ export class UserPostsService {
     // Desteklenen diller
     const languages = ['tr', 'en', 'ar'];
 
-    // Kullanıcının kendi timeline cache'ini temizle (v4)
+    // Kullanıcının kendi timeline cache'ini temizle (v5)
     for (const lang of languages) {
-      const cacheKey = `user-posts:timeline:${userId}:${lang}:v4`;
+      const cacheKey = `user-posts:timeline:${userId}:${lang}:v5`;
       await this.cacheService.del(cacheKey);
     }
 
-    // Bu kullanıcıyı takip edenleri bul
+    // Bu kullanıcıyı kabul edilmiş şekilde takip edenleri bul
     const followers = await this.userFollowRepository.find({
-      where: { following_id: userId },
+      where: { following_id: userId, status: 'accepted' },
       select: ['follower_id'],
     });
 
     // Her takipçinin timeline cache'ini temizle
     for (const follower of followers) {
       for (const lang of languages) {
-        const cacheKey = `user-posts:timeline:${follower.follower_id}:${lang}:v4`;
+        const cacheKey = `user-posts:timeline:${follower.follower_id}:${lang}:v5`;
         await this.cacheService.del(cacheKey);
       }
     }

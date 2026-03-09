@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
+import { getImageUrl } from '@/utils/image';
 
 const SearchContext = createContext();
 
@@ -163,7 +164,7 @@ export const SearchProvider = ({ children }) => {
                 name: item.fullName,
                 username: item.fullName.toLowerCase().replace(/\s+/g, '.'),
                 bio: item.biography,
-                profilePicture: item.photoUrl ? `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}${item.photoUrl}` : '/profile/profile.png',
+                profilePicture: getImageUrl(item.photoUrl) || '/profile/profile.png',
                 lineage: item.lineage,
                 birthDate: item.birthDate,
                 deathDate: item.deathDate,
@@ -176,7 +177,7 @@ export const SearchProvider = ({ children }) => {
                 name: item.fullName,
                 username: item.fullName.toLowerCase().replace(/\s+/g, '.'),
                 bio: item.biography,
-                profilePicture: item.photoUrl ? `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}${item.photoUrl}` : '/profile/profile.png'
+                profilePicture: getImageUrl(item.photoUrl) || '/profile/profile.png'
               });
             } else if (item.type === 'follower') {
               results.followers.push({
@@ -184,7 +185,7 @@ export const SearchProvider = ({ children }) => {
                 name: item.fullName,
                 username: item.fullName.toLowerCase().replace(/\s+/g, '.'),
                 bio: item.biography,
-                profilePicture: item.photoUrl ? `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}${item.photoUrl}` : '/profile/profile.png'
+                profilePicture: getImageUrl(item.photoUrl) || '/profile/profile.png'
               });
             }
           });

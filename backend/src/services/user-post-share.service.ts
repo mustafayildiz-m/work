@@ -134,18 +134,18 @@ export class UserPostShareService {
     const languages = ['tr', 'en', 'ar'];
 
     for (const lang of languages) {
-      const cacheKey = `user-posts:timeline:${userId}:${lang}:v4`;
+      const cacheKey = `user-posts:timeline:${userId}:${lang}:v5`;
       await this.cacheService.del(cacheKey);
     }
 
     const followers = await this.userFollowRepository.find({
-      where: { following_id: userId },
+      where: { following_id: userId, status: 'accepted' },
       select: ['follower_id'],
     });
 
     for (const follower of followers) {
       for (const lang of languages) {
-        const cacheKey = `user-posts:timeline:${follower.follower_id}:${lang}:v4`;
+        const cacheKey = `user-posts:timeline:${follower.follower_id}:${lang}:v5`;
         await this.cacheService.del(cacheKey);
       }
     }

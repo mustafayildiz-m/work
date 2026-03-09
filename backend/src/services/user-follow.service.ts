@@ -38,6 +38,18 @@ export class UserFollowService {
     }
   }
 
+  // Timeline cache'ini temizle (takip kabul edildiğinde yeni paylaşımlar görünsün)
+  private async invalidateTimelineCache(userId: number): Promise<void> {
+    try {
+      const languages = ['tr', 'en', 'ar'];
+      for (const lang of languages) {
+        await this.cacheService.del(`user-posts:timeline:${userId}:${lang}:v5`);
+      }
+    } catch (error) {
+      console.error('Timeline cache invalidation error:', error.message);
+    }
+  }
+
   async follow(follower_id: number, following_id: number) {
     if (follower_id === following_id)
       throw new NotFoundException('Kendini takip edemezsin.');
@@ -128,6 +140,10 @@ export class UserFollowService {
     // Cache'leri temizle (Artık listelerde görünecekler)
     await this.invalidateFollowingCache(follower_id);
     await this.invalidateFollowingCache(following_id);
+
+    // Timeline cache'lerini temizle - her iki kullanıcı da artık birbirinin paylaşımlarını görecek
+    await this.invalidateTimelineCache(follower_id);
+    await this.invalidateTimelineCache(following_id);
 
     // Webhook/Websocket üzerinden bildirim gönder (İsteği gönderene haber ver)
     try {
@@ -223,6 +239,7 @@ export class UserFollowService {
     // Cache'i temizle
     await this.invalidateFollowingCache(follower_id);
     await this.invalidateFollowingCache(following_id);
+    await this.invalidateTimelineCache(follower_id);
 
     return { unfollowed: true };
   }

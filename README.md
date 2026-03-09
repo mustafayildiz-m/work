@@ -39,7 +39,8 @@ docker compose -f docker-compose.prod.yml up -d --build user-front
 # Sadece admin-front
 docker compose -f docker-compose.prod.yml up -d --build admin-front
 
-docker exec islamic_windows_nginx nginx -s reload
+docker exec islamic_windows_nginx nginx -s 
+
 
 ```
 
@@ -96,6 +97,9 @@ docker compose -f docker-compose.prod.yml exec backend npm run migration:run
 
 # Servisleri güncelle
 docker compose -f docker-compose.prod.yml up -d --build backend user-front admin-front
+
+# Nginx'i yeniden yükle (yeni container'lara bağlanması için)
+docker exec islamic_windows_nginx nginx -s reload
 ```
 
 **Not:** `git reset --hard` sunucudaki yerel değişiklikleri siler. certbot/conf, nginx *.bak dosyaları .gitignore'da olduğu için etkilenmez.
