@@ -24,6 +24,11 @@ export default function PaperDetailPageClient({ id }) {
   const [otherItems, setOtherItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [showOriginal, setShowOriginal] = useState(false);
+
+  const lang = locale ? locale.toLowerCase().split('-')[0] : 'tr';
+  const sourceLang = data?.sourceLanguage || 'tr';
+  const effectiveLang = showOriginal && sourceLang !== lang ? sourceLang : lang;
 
   useEffect(() => {
     let cancelled = false;
@@ -33,10 +38,8 @@ export default function PaperDetailPageClient({ id }) {
     const paperUrl = new URL(`/papers/${id}`, API_BASE);
     const listUrl = new URL('/papers', API_BASE);
     listUrl.searchParams.set('limit', '6');
-    if (locale && locale !== 'tr') {
-      paperUrl.searchParams.set('lang', locale);
-      listUrl.searchParams.set('lang', locale);
-    }
+    paperUrl.searchParams.set('lang', effectiveLang);
+    listUrl.searchParams.set('lang', effectiveLang);
 
     Promise.all([
       fetch(paperUrl.toString(), { cache: 'no-store' }),
@@ -69,7 +72,7 @@ export default function PaperDetailPageClient({ id }) {
       });
 
     return () => { cancelled = true; };
-  }, [id, locale]);
+  }, [id, effectiveLang]);
 
   if (loading) {
     return (
@@ -89,7 +92,13 @@ export default function PaperDetailPageClient({ id }) {
     <Col lg={9}>
       <Row className="g-3">
         <Col lg={8}>
-          <PaperContent data={data} themeCardStyle={themeCardStyle} />
+          <PaperContent
+            data={data}
+            themeCardStyle={themeCardStyle}
+            showOriginal={showOriginal}
+            onToggleOriginal={() => setShowOriginal((v) => !v)}
+            canShowOriginal={sourceLang !== lang}
+          />
         </Col>
         <Col lg={4}>
           <PaperSidebar otherItems={otherItems} themeCardStyle={themeCardStyle} />

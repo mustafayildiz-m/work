@@ -35,8 +35,17 @@ function contentSections(data) {
   return [];
 }
 
-export default function PaperContent({ data, themeCardStyle }) {
+const getLangName = (t, code) => t(`feed.papersLang_${code}`) || code;
+
+export default function PaperContent({
+  data,
+  themeCardStyle,
+  showOriginal = false,
+  onToggleOriginal,
+  canShowOriginal = false
+}) {
   const { locale, t } = useLanguage();
+  const sourceLang = data?.sourceLanguage || 'tr';
   const [imageLoading, setImageLoading] = useState(true);
 
   useEffect(() => {
@@ -48,20 +57,34 @@ export default function PaperContent({ data, themeCardStyle }) {
   return (
     <Card className="border-0 shadow-sm" style={themeCardStyle}>
       <CardBody className="p-4 p-md-5">
-        <Button
-          as={Link}
-          href="/feed/papers"
-          variant="light"
-          className="mb-3 d-inline-flex align-items-center gap-2 border"
-          style={{
-            backgroundColor: 'var(--bs-tertiary-bg)',
-            color: 'var(--bs-body-color)',
-            borderColor: 'var(--bs-border-color)'
-          }}
-        >
-          <BsArrowLeft />
-          {t('feed.papersBackToAll')}
-        </Button>
+        <div className="d-flex flex-wrap align-items-center gap-2 mb-3">
+          <Button
+            as={Link}
+            href="/feed/papers"
+            variant="light"
+            className="d-inline-flex align-items-center gap-2 border"
+            style={{
+              backgroundColor: 'var(--bs-tertiary-bg)',
+              color: 'var(--bs-body-color)',
+              borderColor: 'var(--bs-border-color)'
+            }}
+          >
+            <BsArrowLeft />
+            {t('feed.papersBackToAll')}
+          </Button>
+          <span className="badge bg-secondary bg-opacity-25 text-body small">
+            {t('feed.papersPublishedIn', { language: getLangName(t, sourceLang) })}
+          </span>
+          {canShowOriginal && (
+            <button
+              type="button"
+              className="btn btn-outline-primary btn-sm"
+              onClick={onToggleOriginal}
+            >
+              {showOriginal ? t('feed.papersShowTranslation') : t('feed.papersShowOriginal')}
+            </button>
+          )}
+        </div>
 
         <h3 className="fw-bold mb-3">{data?.title}</h3>
 

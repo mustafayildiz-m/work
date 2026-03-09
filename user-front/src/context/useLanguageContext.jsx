@@ -30,9 +30,24 @@ export const useLanguage = () => {
   return context;
 };
 
+const getInitialLocale = () => {
+  if (typeof window === 'undefined') return DEFAULT_LOCALE;
+  const saved = localStorage.getItem('locale');
+  if (saved) {
+    const n = saved.toLowerCase().split('-')[0].split('_')[0];
+    if (SUPPORTED_LOCALES.includes(n)) return n;
+  }
+  const langs = [...(navigator.languages || []), navigator.language, navigator.userLanguage].filter(Boolean);
+  for (const l of langs) {
+    const n = (l || '').toLowerCase().split('-')[0].split('_')[0];
+    if (n && SUPPORTED_LOCALES.includes(n)) return n;
+  }
+  return DEFAULT_LOCALE;
+};
+
 export const LanguageProvider = ({ children }) => {
   const { data: session, status } = useSession();
-  const [locale, setLocaleState] = useState(DEFAULT_LOCALE);
+  const [locale, setLocaleState] = useState(getInitialLocale);
   const [messages, setMessages] = useState({});
   const [fallbackMessages, setFallbackMessages] = useState({});
   const [loading, setLoading] = useState(true);

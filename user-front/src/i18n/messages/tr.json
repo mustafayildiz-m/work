@@ -296,7 +296,21 @@
     "papersLoading": "Yükleniyor...",
     "papersTranslating": "Çevriliyor...",
     "papersTranslationFailed": "Çeviri başarısız",
-    "papersTranslationError": "Çeviri yapılırken hata oluştu"
+    "papersTranslationError": "Çeviri yapılırken hata oluştu",
+    "papersShowOriginal": "Orijinalini göster",
+    "papersShowTranslation": "Çeviriyi göster",
+    "papersPublishedIn": "{language} dilinde yayınlandı",
+    "papersLang_tr": "Türkçe",
+    "papersLang_en": "İngilizce",
+    "papersLang_ar": "Arapça",
+    "papersLang_de": "Almanca",
+    "papersLang_fr": "Fransızca",
+    "papersLang_es": "İspanyolca",
+    "papersLang_it": "İtalyanca",
+    "papersLang_ru": "Rusça",
+    "papersLang_zh": "Çince",
+    "papersLang_ja": "Japonca",
+    "papersLang_ko": "Korece"
   },
   "notifications": {
     "title": "Bildirimler",

@@ -15,6 +15,8 @@ function EditPaper() {
   const fileInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
+  const [languages, setLanguages] = useState([]);
+  const [languagesLoading, setLanguagesLoading] = useState(true);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
   const [form, setForm] = useState({
@@ -24,7 +26,8 @@ function EditPaper() {
     intro: '',
     tags: '',
     imageUrl: '',
-    content: ''
+    content: '',
+    sourceLanguage: 'tr'
   });
 
   const updateField = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
@@ -42,6 +45,17 @@ function EditPaper() {
   };
 
   useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    fetch(`${API_URL.replace('/papers', '')}/languages`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+      .then((r) => r.json())
+      .then((data) => setLanguages(Array.isArray(data) ? data : []))
+      .catch(() => setLanguages([]))
+      .finally(() => setLanguagesLoading(false));
+  }, []);
+
+  useEffect(() => {
     const fetchItem = async () => {
       try {
         const token = localStorage.getItem('access_token');
@@ -56,7 +70,8 @@ function EditPaper() {
           intro: item.intro || '',
           tags: Array.isArray(item.tags) ? item.tags.join(', ') : (item.tags || ''),
           imageUrl: item.imageUrl || '',
-          content: item.sections?.[0]?.content || item.content || ''
+          content: item.sections?.[0]?.content || item.content || '',
+          sourceLanguage: item.sourceLanguage || 'tr'
         });
       } catch (error) {
         toast.error(error.message || 'Yayin yuklenemedi');
@@ -77,6 +92,7 @@ function EditPaper() {
       formData.append('author', form.author);
       formData.append('publishDate', form.publishDate);
       formData.append('intro', form.intro);
+      formData.append('sourceLanguage', form.sourceLanguage || 'tr');
       const tagsArr = form.tags ? form.tags.split(',').map((t) => t.trim()).filter(Boolean) : [];
       formData.append('tags', JSON.stringify(tagsArr));
       if (imageFile) formData.append('imageFile', imageFile);
@@ -125,6 +141,39 @@ function EditPaper() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <input className="input-style" placeholder="Baslik *" value={form.title} onChange={(e) => updateField('title', e.target.value)} required />
               <input type="date" className="input-style" value={form.publishDate} onChange={(e) => updateField('publishDate', e.target.value)} required />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Kaynak dil (icerigin yazildigi dil)</label>
+              <select
+                className="input-style"
+                value={form.sourceLanguage}
+                onChange={(e) => updateField('sourceLanguage', e.target.value)}
+                disabled={languagesLoading}
+              >
+                {languagesLoading ? (
+                  <option value="tr">Diller yukleniyor...</option>
+                ) : languages.length === 0 ? (
+                  <option value="tr">Dil bulunamadi</option>
+                ) : (
+                  (() => {
+                    const activeLangs = languages.filter((l) => l.isActive !== false).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+                    const hasCurrent = activeLangs.some((l) => l.code === form.sourceLanguage);
+                    return (
+                      <>
+                        {!hasCurrent && form.sourceLanguage && (
+                          <option value={form.sourceLanguage}>Kaynak: {form.sourceLanguage}</option>
+                        )}
+                        {activeLangs.map((l) => (
+                          <option key={l.id} value={l.code}>
+                            {l.name}
+                          </option>
+                        ))}
+                      </>
+                    );
+                  })()
+                )}
+              </select>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Kullanici farkli dil kullaniyorsa icerik bu dile cevrilir.</p>
             </div>
             <input className="input-style mb-4" placeholder="Yazar (opsiyonel)" value={form.author} onChange={(e) => updateField('author', e.target.value)} />
             <input className="input-style mb-4" placeholder="Etiketler (virgul ile ayirin)" value={form.tags} onChange={(e) => updateField('tags', e.target.value)} />

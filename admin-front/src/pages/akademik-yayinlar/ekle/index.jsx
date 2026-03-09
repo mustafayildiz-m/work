@@ -13,6 +13,8 @@ function AddPaper() {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
+  const [languages, setLanguages] = useState([]);
+  const [languagesLoading, setLanguagesLoading] = useState(true);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
   const [form, setForm] = useState({
@@ -21,10 +23,22 @@ function AddPaper() {
     publishDate: getTodayDate(),
     intro: '',
     tags: '',
-    content: ''
+    content: '',
+    sourceLanguage: 'tr'
   });
 
   const updateField = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
+
+  React.useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    fetch(`${API_URL.replace('/papers', '')}/languages`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+      .then((r) => r.json())
+      .then((data) => setLanguages(Array.isArray(data) ? data : []))
+      .catch(() => setLanguages([]))
+      .finally(() => setLanguagesLoading(false));
+  }, []);
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
@@ -45,6 +59,7 @@ function AddPaper() {
       formData.append('author', form.author);
       formData.append('publishDate', form.publishDate);
       formData.append('intro', form.intro);
+      formData.append('sourceLanguage', form.sourceLanguage || 'tr');
       const tagsArr = form.tags ? form.tags.split(',').map((t) => t.trim()).filter(Boolean) : [];
       formData.append('tags', JSON.stringify(tagsArr));
       if (imageFile) formData.append('imageFile', imageFile);
@@ -104,6 +119,31 @@ function AddPaper() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <input className="input-style" placeholder="Baslik *" value={form.title} onChange={(e) => updateField('title', e.target.value)} required />
               <input type="date" className="input-style" value={form.publishDate} onChange={(e) => updateField('publishDate', e.target.value)} required />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Kaynak dil (icerigin yazildigi dil)</label>
+              <select
+                className="input-style"
+                value={form.sourceLanguage}
+                onChange={(e) => updateField('sourceLanguage', e.target.value)}
+                disabled={languagesLoading}
+              >
+                {languagesLoading ? (
+                  <option value="tr">Diller yukleniyor...</option>
+                ) : languages.length === 0 ? (
+                  <option value="tr">Dil bulunamadi</option>
+                ) : (
+                  languages
+                    .filter((l) => l.isActive !== false)
+                    .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+                    .map((l) => (
+                      <option key={l.id} value={l.code}>
+                        {l.name}
+                      </option>
+                    ))
+                )}
+              </select>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Kullanici farkli dil kullaniyorsa icerik bu dile cevrilir.</p>
             </div>
             <input className="input-style mb-4" placeholder="Yazar (opsiyonel)" value={form.author} onChange={(e) => updateField('author', e.target.value)} />
             <input className="input-style mb-4" placeholder="Etiketler (virgul ile ayirin: FAITH, ALLAH)" value={form.tags} onChange={(e) => updateField('tags', e.target.value)} />

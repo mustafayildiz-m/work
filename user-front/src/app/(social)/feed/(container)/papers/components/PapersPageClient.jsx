@@ -20,15 +20,15 @@ export default function PapersPageClient({ initialSearch = '' }) {
     setSearch(initialSearch);
   }, [initialSearch]);
 
+  const lang = locale ? locale.toLowerCase().split('-')[0] : 'tr';
+
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
     const url = new URL('/papers', API_BASE);
     url.searchParams.set('limit', '100');
     if (search) url.searchParams.set('search', search);
-    if (locale && locale !== 'tr') {
-      url.searchParams.set('lang', locale);
-    }
+    url.searchParams.set('lang', lang);
 
     fetch(url.toString(), { cache: 'no-store' })
       .then((res) => (res.ok ? res.json() : { data: [] }))
@@ -45,15 +45,11 @@ export default function PapersPageClient({ initialSearch = '' }) {
       });
 
     return () => { cancelled = true; };
-  }, [search, locale]);
+  }, [search, lang]);
 
   return (
     <Col lg={9}>
-      <PapersList
-        items={items}
-        search={search}
-        loading={loading}
-      />
+      <PapersList items={items} search={search} loading={loading} lang={lang} />
     </Col>
   );
 }
