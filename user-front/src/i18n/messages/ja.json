@@ -235,7 +235,19 @@
     "noSuggestionsYet": "まだ提案がありません",
     "noPostsFound": "投稿が見つかりません",
     "noPostsDescription": "フォローしている人はまだ投稿を共有していないか、まだ誰もフォローしていません。",
-    "redirectingToLogin": "ログインページにリダイレクト中..."
+    "redirectingToLogin": "ログインページにリダイレクト中...",
+    "newslettersTitle": "ニュースレター",
+    "newslettersSubtitle": "週間サマリー、エディターズ・ピック、コミュニティ・ハイライト。",
+    "newslettersSearchPlaceholder": "会報検索...",
+    "newslettersFilter": "フィルター",
+    "newslettersNoItems": "該当する速報は見つからなかった。",
+    "newslettersRead": "読む",
+    "newslettersBackToAll": "すべての会報に戻る",
+    "newslettersPublishInfo": "出版情報",
+    "newslettersPublishInfoDesc": "このエリアには、現在のニュースレターの内容が含まれています。",
+    "newslettersOtherEditions": "その他の数字",
+    "newslettersNoOtherEditions": "もう一つの会報は見つからなかった。",
+    "newslettersTranslating": "翻訳されている..."
   },
   "menu": {
     "feed": "フィード",
@@ -268,7 +280,8 @@
     "logout": "ログアウト",
     "profileMenu": "プロフィールメニュー",
     "user": "ユーザー",
-    "viewProfile": "プロフィールを表示"
+    "viewProfile": "プロフィールを表示",
+    "newsletters": "ニュースレター"
   },
   "theme": {
     "themeSelection": "テーマ選択",
@@ -835,8 +848,8 @@
     "cancel": "Cancel"
   },
   "guest": {
-    "messagingTitle": "Join the Conversation",
-    "messagingDesc": "You need to log in to meet people and chat.",
+    "messagingTitle": "チャットに参加する",
+    "messagingDesc": "他のユーザーとメッセージを交換するにはログインする必要があります。",
     "login": "Log In",
     "continue": "Continue Browsing"
   },
@@ -855,6 +868,41 @@
     "newMessageSearchPlaceholder": "1人以上の名前を入力",
     "suggested": "おすすめ",
     "userFallback": "ユーザー",
-    "unknownUser": "不明なユーザー"
+    "unknownUser": "不明なユーザー",
+    "conversations": "スピーチ",
+    "contacts": "連絡先",
+    "searching": "ウォンテッド...",
+    "searchResults": "検索結果",
+    "moreResults": "{カウント｝の結果",
+    "startConversation": "新規メッセージを送信して会話を開始する",
+    "deleteConversation": "会話の削除",
+    "deleteConfirmTitle": "会話の削除",
+    "deleteConfirmDesc": "名前}との会話を本当に削除しますか？",
+    "deleteConfirmNote": "この会話はあなただけが削除されます。他の参加者はまだ会話を見ることができます。",
+    "online": "オンライン",
+    "offline": "オフライン",
+    "selectConversationTitle": "スピーチを選ぶ",
+    "selectConversationDesc": "左側から会話を選択し、メッセージを開始する。",
+    "loadingMessages": "メッセージを読み込んでいます...",
+    "noMessagesYet": "メッセージはまだない",
+    "firstMessagePrompt": "最初のメッセージを送って会話を始める",
+    "loadingConversations": "スピーチをアップロード中...",
+    "loadingUsers": "ユーザーがロードしている...",
+    "noUsersFound": "システムにユーザーが見つからない",
+    "tryAgain": "再挑戦",
+    "refresh": "リニューアル",
+    "youSuffix": "(あなた)",
+    "chatWith": "名前}とチャット",
+    "thisIsYou": "これがあなただ",
+    "emojiLoading": "絵文字を読み込む",
+    "emptyMessageError": "メッセージを空にすることはできません。",
+    "maxLengthError": "メッセージは最大{count}文字です。",
+    "sendError": "メッセージを送信できませんでした。もう一度お試しください。",
+    "selectConversationPrompt": "メッセージを送信する会話を選択する",
+    "disconnectedError": "切断されました。再接続を試みています...",
+    "selectEmoji": "絵文字を選択",
+    "enterMessage": "メッセージを入力",
+    "sendMessage": "メッセージを送る",
+    "backToConversations": "対話に戻る"
   }
 }

@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Mesajlaşma'
+  title: 'Messages'
 };
 
 export default function MessagingLayout({ children }) {

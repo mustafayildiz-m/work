@@ -9,11 +9,11 @@ import { useLanguage } from '@/context/useLanguageContext';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 const SOURCE_LOCALE = 'tr'; // Bulten icerigi varsayilan olarak Turkce
 
-const formatDate = (dateValue) => {
+const formatDate = (dateValue, locale = 'tr-TR') => {
   if (!dateValue) return '-';
   const date = new Date(dateValue);
   if (Number.isNaN(date.getTime())) return '-';
-  return date.toLocaleDateString('tr-TR', {
+  return date.toLocaleDateString(locale === 'tr' ? 'tr-TR' : (locale === 'en' ? 'en-US' : locale), {
     day: 'numeric',
     month: 'long',
     year: 'numeric'
@@ -54,7 +54,7 @@ export default function NewsletterListWithTranslation({ items, search, themeCard
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.message || 'Ceviri basarisiz');
+      throw new Error(err.message || t('feed.newslettersTranslationFailed'));
     }
     const json = await res.json();
     return json.translatedText || '';
@@ -86,7 +86,7 @@ export default function NewsletterListWithTranslation({ items, search, themeCard
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err.message || 'Ceviri yapilirken hata olustu');
+          setError(err.message || t('feed.newslettersTranslationError'));
           setTranslatedItems({});
         }
       } finally {
@@ -174,7 +174,7 @@ export default function NewsletterListWithTranslation({ items, search, themeCard
                       />
                     )}
                     <div className="flex-grow-1">
-                      <small className="text-muted d-block mb-1">{formatDate(item.publishDate || item.publishedAt)}</small>
+                      <small className="text-muted d-block mb-1">{formatDate(item.publishDate || item.publishedAt, locale)}</small>
                       <h6 className="fw-bold mb-1">{display.title}</h6>
                       <p className="text-muted mb-2">{display.intro || '-'}</p>
                     </div>

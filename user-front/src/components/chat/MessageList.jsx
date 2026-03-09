@@ -9,6 +9,7 @@ import Image from 'next/image';
 import clsx from 'clsx';
 import { getToken } from '@/utils/auth';
 import placeholderImg from '@/assets/images/avatar/placeholder.jpg';
+import { useLanguage } from '@/context/useLanguageContext';
 
 // Constants
 const MESSAGE_STATUSES = {
@@ -23,13 +24,13 @@ const getDisplayAvatar = (photoUrl) => {
   if (!photoUrl || typeof photoUrl !== 'string') {
     return placeholderImg;
   }
-  
+
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-  
+
   if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://') || photoUrl.startsWith('data:image/')) {
     return photoUrl;
   }
-  
+
   if (photoUrl.startsWith('/uploads/')) {
     return `${apiUrl}${photoUrl}`;
   }
@@ -37,20 +38,20 @@ const getDisplayAvatar = (photoUrl) => {
   if (photoUrl.startsWith('uploads/')) {
     return `${apiUrl}/${photoUrl}`;
   }
-  
+
   if (!photoUrl.startsWith('/') && !photoUrl.includes('uploads/')) {
     return `${apiUrl}/uploads/${photoUrl}`;
   }
-  
+
   return photoUrl;
 };
 
 const parseTimestamp = (timestamp) => {
   if (!timestamp) return null;
-  
+
   try {
     let date;
-    
+
     if (timestamp instanceof Date) {
       date = timestamp;
     } else if (typeof timestamp === 'string') {
@@ -64,7 +65,7 @@ const parseTimestamp = (timestamp) => {
     } else {
       date = new Date(timestamp);
     }
-    
+
     return (!date || isNaN(date.getTime())) ? null : date;
   } catch (error) {
     console.warn('Error parsing timestamp:', error);
@@ -72,20 +73,20 @@ const parseTimestamp = (timestamp) => {
   }
 };
 
-const formatMessageTime = (timestamp) => {
+const formatMessageTime = (timestamp, locale = 'tr-TR') => {
   const date = parseTimestamp(timestamp);
   if (!date) return '--:--';
-  
-  return date.toLocaleTimeString('tr-TR', {
+
+  return date.toLocaleTimeString(locale, {
     hour: '2-digit',
     minute: '2-digit'
   });
 };
 
-const formatDateHeader = (date) => {
+const formatDateHeader = (date, locale = 'tr-TR') => {
   if (!date) return '';
-  
-  return date.toLocaleDateString('tr-TR', {
+
+  return date.toLocaleDateString(locale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
@@ -124,12 +125,11 @@ const Avatar = memo(({ src, alt, size = 32, className = '' }) => {
 });
 
 // Memoized Message Item Component
-const MessageItem = memo(({ 
-  message, 
-  isOwnMessage, 
-  showDate, 
+const MessageItem = memo(({
+  message,
+  isOwnMessage,
+  showDate,
   messageDate,
-  currentUserId,
   ownAvatar
 }) => {
   return (
@@ -138,7 +138,7 @@ const MessageItem = memo(({
       {showDate && messageDate && (
         <div className="text-center my-3">
           <span className="badge text-body-secondary border" style={{ backgroundColor: 'var(--bs-tertiary-bg)' }}>
-            {formatDateHeader(messageDate)}
+            {formatDateHeader(messageDate, message.locale)}
           </span>
         </div>
       )}
@@ -155,9 +155,9 @@ const MessageItem = memo(({
           {/* Avatar (other user) */}
           {!isOwnMessage && (
             <div className="flex-shrink-0 me-2">
-              <Avatar 
-                src={message.partnerAvatar || message.sender?.photoUrl || message.senderAvatar} 
-                alt="Avatar" 
+              <Avatar
+                src={message.partnerAvatar || message.sender?.photoUrl || message.senderAvatar}
+                alt="Avatar"
                 size={32}
               />
             </div>
@@ -165,7 +165,7 @@ const MessageItem = memo(({
 
           {/* Message content */}
           <div className="message-content" style={{ maxWidth: '75%' }}>
-            <div 
+            <div
               className={clsx('message-bubble p-3 rounded', {
                 'bg-primary text-white': isOwnMessage,
                 'bg-body-tertiary text-body': !isOwnMessage
@@ -177,14 +177,14 @@ const MessageItem = memo(({
               <div className="message-text mb-1">
                 {message.content}
               </div>
-              
+
               {/* Message meta */}
               <div className={clsx('message-meta d-flex align-items-center', {
                 'justify-content-end': isOwnMessage,
                 'justify-content-start': !isOwnMessage
               })}>
-                <small className="text-white-50 me-2">
-                  {formatMessageTime(message.timestamp)}
+                <small className={clsx('me-2', isOwnMessage ? 'text-white-50' : 'text-muted')}>
+                  {formatMessageTime(message.timestamp, message.locale)}
                 </small>
                 {isOwnMessage && getMessageStatusIcon(message.status)}
               </div>
@@ -194,9 +194,9 @@ const MessageItem = memo(({
           {/* Avatar (own message) */}
           {isOwnMessage && (
             <div className="flex-shrink-0 ms-2">
-              <Avatar 
-                src={ownAvatar} 
-                alt="Avatar" 
+              <Avatar
+                src={ownAvatar}
+                alt="Avatar"
                 size={32}
               />
             </div>
@@ -212,9 +212,9 @@ const TypingIndicator = memo(({ participantAvatar }) => {
   return (
     <div className="typing-indicator mb-3">
       <div className="d-flex align-items-center">
-        <Avatar 
-          src={participantAvatar} 
-          alt="Avatar" 
+        <Avatar
+          src={participantAvatar}
+          alt="Avatar"
           size={32}
           className="me-2"
         />
@@ -231,7 +231,7 @@ const TypingIndicator = memo(({ participantAvatar }) => {
 });
 
 // Memoized Header Component
-const MessageHeader = memo(({ activeConversation, onBackToConversations, isOnline, participantAvatar }) => {
+const MessageHeader = memo(({ activeConversation, onBackToConversations, isOnline, participantAvatar, t }) => {
   return (
     <Card.Header className="border-0 bg-body-tertiary">
       <div className="d-flex align-items-center">
@@ -239,24 +239,24 @@ const MessageHeader = memo(({ activeConversation, onBackToConversations, isOnlin
         <button
           className="btn btn-link p-0 me-2 d-lg-none"
           onClick={onBackToConversations}
-          aria-label="Konuşmalara geri dön"
-          title="Konuşmalara geri dön"
+          aria-label={t('messaging.backToConversations')}
+          title={t('messaging.backToConversations')}
         >
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-            <path fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+            <path fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
           </svg>
         </button>
-        
-        <Avatar 
-          src={participantAvatar} 
-          alt="Avatar" 
+
+        <Avatar
+          src={participantAvatar}
+          alt="Avatar"
           size={40}
           className="me-3"
         />
         <div className="flex-grow-1">
           <h6 className="mb-0">{activeConversation.participantName}</h6>
           <small className="text-muted">
-            {isOnline ? 'Çevrimiçi' : 'Çevrimdışı'}
+            {isOnline ? t('messaging.online') : t('messaging.offline')}
           </small>
         </div>
       </div>
@@ -277,9 +277,11 @@ const MessageList = ({ onBackToConversations }) => {
     onlineUsers
   } = useWebSocketChatContext();
 
+  const { t, language } = useLanguage();
+
   const messagesEndRef = useRef(null);
   const [ownAvatarFromProfile, setOwnAvatarFromProfile] = useState(null);
-  
+
   // Memoized current user ID
   const currentUserId = useMemo(() => {
     try {
@@ -324,20 +326,20 @@ const MessageList = ({ onBackToConversations }) => {
   // Memoized filtered messages - PERFORMANCE IMPROVEMENT
   const filteredMessages = useMemo(() => {
     if (!activeConversation || !messages.length) return [];
-    
+
     return messages.filter(message => {
       // Priority: conversationId match
       if (message.conversationId && message.conversationId === activeConversation.id) {
         return true;
       }
-      
+
       // Fallback: participantId match for temp conversations
       if (currentUserId) {
         const participantId = activeConversation.participantId;
         return (String(message.senderId) === String(currentUserId) && String(message.receiverId) === String(participantId)) ||
-               (String(message.senderId) === String(participantId) && String(message.receiverId) === String(currentUserId));
+          (String(message.senderId) === String(participantId) && String(message.receiverId) === String(currentUserId));
       }
-      
+
       return false;
     });
   }, [messages, activeConversation, currentUserId]);
@@ -347,19 +349,20 @@ const MessageList = ({ onBackToConversations }) => {
     return filteredMessages.map((message, index) => {
       const messageDate = parseTimestamp(message.timestamp);
       const prevMessageDate = index > 0 ? parseTimestamp(filteredMessages[index - 1].timestamp) : null;
-      
-      const showDate = index === 0 || 
-        (prevMessageDate && messageDate && 
-         messageDate.toDateString() !== prevMessageDate.toDateString());
+
+      const showDate = index === 0 ||
+        (prevMessageDate && messageDate &&
+          messageDate.toDateString() !== prevMessageDate.toDateString());
 
       return {
         ...message,
         messageDate,
         showDate,
-        isOwnMessage: String(message.senderId) === String(currentUserId)
+        isOwnMessage: String(message.senderId) === String(currentUserId),
+        locale: language === 'tr' ? 'tr-TR' : (language === 'en' ? 'en-US' : language)
       };
     });
-  }, [filteredMessages, currentUserId]);
+  }, [filteredMessages, currentUserId, language]);
 
   // Optimized scroll to bottom
   const scrollToBottom = useCallback(() => {
@@ -375,20 +378,20 @@ const MessageList = ({ onBackToConversations }) => {
   // Mark messages as read - optimized
   useEffect(() => {
     if (!activeConversation || !processedMessages.length || !currentUserId) return;
-    
+
     const unreadMessages = processedMessages.filter(
       msg => !msg.isOwnMessage && msg.status !== MESSAGE_STATUSES.READ
     );
-    
+
     if (unreadMessages.length === 0) return;
-    
+
     // Batch mark as read to prevent multiple calls
     const timeoutId = setTimeout(() => {
       unreadMessages.forEach(msg => {
         markMessageAsRead(msg.id);
       });
     }, 500);
-    
+
     return () => clearTimeout(timeoutId);
   }, [activeConversation?.id, processedMessages.length, currentUserId, markMessageAsRead]);
 
@@ -436,7 +439,7 @@ const MessageList = ({ onBackToConversations }) => {
   }, [activeConversation, onlineUsers]);
 
   const currentUserAvatar = useMemo(() => {
-    return ownAvatarFromProfile || userInfo?.photoUrl || null;
+    return ownAvatarFromProfile || userInfo?.photoUrl || placeholderImg;
   }, [ownAvatarFromProfile, userInfo?.photoUrl]);
 
   // Handle back to conversations (mobile only)
@@ -455,7 +458,7 @@ const MessageList = ({ onBackToConversations }) => {
       <Card className="h-100 d-flex align-items-center justify-content-center">
         <Card.Body className="text-center">
           <Spinner animation="border" variant="primary" />
-          <p className="mt-2 text-muted">Mesajlar yükleniyor...</p>
+          <p className="mt-2 text-muted">{t('messaging.loadingMessages')}</p>
         </Card.Body>
       </Card>
     );
@@ -469,8 +472,8 @@ const MessageList = ({ onBackToConversations }) => {
           <div className="mb-3">
             <i className="fas fa-comments fa-3x"></i>
           </div>
-          <h5>Bir konuşma seçin</h5>
-          <p className="mb-0">Mesajlaşmaya başlamak için sol taraftan bir konuşma seçin</p>
+          <h5>{t('messaging.selectConversationTitle')}</h5>
+          <p className="mb-0">{t('messaging.selectConversationDesc')}</p>
         </Card.Body>
       </Card>
     );
@@ -479,11 +482,12 @@ const MessageList = ({ onBackToConversations }) => {
   return (
     <Card className="h-100 d-flex flex-column">
       {/* Header */}
-      <MessageHeader 
-        activeConversation={activeConversation} 
+      <MessageHeader
+        activeConversation={activeConversation}
         onBackToConversations={handleBackToConversations}
         isOnline={isConversationOnline}
         participantAvatar={resolvedParticipantAvatar}
+        t={t}
       />
 
       {/* Messages */}
@@ -494,8 +498,8 @@ const MessageList = ({ onBackToConversations }) => {
               <div className="mb-3">
                 <i className="fas fa-comment fa-2x"></i>
               </div>
-              <h6>Henüz mesaj yok</h6>
-              <p className="mb-0">İlk mesajı göndererek konuşmayı başlatın</p>
+              <h6>{t('messaging.noMessagesYet')}</h6>
+              <p className="mb-0">{t('messaging.firstMessagePrompt')}</p>
             </div>
           ) : (
             <div className="messages-list">
@@ -506,7 +510,6 @@ const MessageList = ({ onBackToConversations }) => {
                   isOwnMessage={message.isOwnMessage}
                   showDate={message.showDate}
                   messageDate={message.messageDate}
-                  currentUserId={currentUserId}
                   ownAvatar={currentUserAvatar}
                 />
               ))}

@@ -236,7 +236,19 @@
     "user": "Потребител",
     "noSuggestionsYet": "Все още няма предложения",
     "noPostsFound": "Не са намерени никакви публикации",
-    "noPostsDescription": "Хората, които следвате, все още не са споделили публикации или вие все още не сте последвали никого."
+    "noPostsDescription": "Хората, които следвате, все още не са споделили публикации или вие все още не сте последвали никого.",
+    "newslettersTitle": "Информационни бюлетини",
+    "newslettersSubtitle": "Седмични обобщения, избори на редактора и акценти за общността.",
+    "newslettersSearchPlaceholder": "Търсене в бюлетина...",
+    "newslettersFilter": "Филтър",
+    "newslettersNoItems": "Не са намерени бюлетини, които да покажат.",
+    "newslettersRead": "Прочетете",
+    "newslettersBackToAll": "Обратно към всички бюлетини",
+    "newslettersPublishInfo": "Информация за публикацията",
+    "newslettersPublishInfoDesc": "Тази област съдържа текущото съдържание на бюлетина.",
+    "newslettersOtherEditions": "Други номера",
+    "newslettersNoOtherEditions": "Другият бюлетин не беше намерен.",
+    "newslettersTranslating": "В момента се превежда..."
   },
   "menu": {
     "feed": "Feed",
@@ -269,7 +281,8 @@
     "logout": "Излизане от системата",
     "profileMenu": "Меню на профила",
     "user": "Потребител",
-    "viewProfile": "Преглед на профила"
+    "viewProfile": "Преглед на профила",
+    "newsletters": "Информационни бюлетини"
   },
   "theme": {
     "themeSelection": "Избор на тема",
@@ -824,8 +837,8 @@
     "cancel": "Cancel"
   },
   "guest": {
-    "messagingTitle": "Join the Conversation",
-    "messagingDesc": "You need to log in to meet people and chat.",
+    "messagingTitle": "Присъединете се към чата",
+    "messagingDesc": "Трябва да влезете в системата, за да обменяте съобщения с други потребители.",
     "login": "Log In",
     "continue": "Continue Browsing"
   },
@@ -844,6 +857,41 @@
     "newMessageSearchPlaceholder": "Въведете едно или повече имена",
     "suggested": "Предложени",
     "userFallback": "Потребител",
-    "unknownUser": "Неизвестен потребител"
+    "unknownUser": "Неизвестен потребител",
+    "conversations": "Изказвания",
+    "contacts": "Контакти",
+    "searching": "Търси се...",
+    "searchResults": "Резултати от търсенето",
+    "moreResults": "{count} резултат повече",
+    "startConversation": "Започнете разговор, като изпратите ново съобщение",
+    "deleteConversation": "Изтриване на разговора",
+    "deleteConfirmTitle": "Изтриване на разговора",
+    "deleteConfirmDesc": "Сигурни ли сте, че искате да изтриете разговора с {име}?",
+    "deleteConfirmNote": "Този разговор ще бъде изтрит само за вас. Другият участник все още ще може да види разговора.",
+    "online": "Онлайн",
+    "offline": "Офлайн",
+    "selectConversationTitle": "Изберете реч",
+    "selectConversationDesc": "Изберете разговор от лявата страна, за да започнете изпращането на съобщения",
+    "loadingMessages": "Зареждане на съобщения...",
+    "noMessagesYet": "Все още няма съобщение",
+    "firstMessagePrompt": "Започнете разговора, като изпратите първото съобщение",
+    "loadingConversations": "Изказванията се качват...",
+    "loadingUsers": "Потребителите зареждат...",
+    "noUsersFound": "В системата не е открит потребител",
+    "tryAgain": "Опитайте отново",
+    "refresh": "Обновяване на",
+    "youSuffix": "(ти)",
+    "chatWith": "Чат с {име}",
+    "thisIsYou": "Това си ти",
+    "emojiLoading": "Зареждане на емотикони...",
+    "emptyMessageError": "Съобщението не може да бъде празно",
+    "maxLengthError": "Съобщението може да бъде до {count} знаци",
+    "sendError": "Съобщението не може да бъде изпратено. Моля, опитайте отново.",
+    "selectConversationPrompt": "Изберете разговор, за да изпратите съобщение",
+    "disconnectedError": "Изключени. Опитвам се да възстановя връзката...",
+    "selectEmoji": "Изберете Емотикони",
+    "enterMessage": "Въведете съобщение",
+    "sendMessage": "Изпрати съобщение",
+    "backToConversations": "Обратно към диалога"
   }
 }

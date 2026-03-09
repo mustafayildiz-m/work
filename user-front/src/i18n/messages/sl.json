@@ -236,7 +236,19 @@
     "user": "Uporabnik",
     "noSuggestionsYet": "Predlogov še ni",
     "noPostsFound": "Ni najdenih delovnih mest",
-    "noPostsDescription": "Ljudje, ki jim sledite, še niso delili objav ali pa še nikomur ne sledite."
+    "noPostsDescription": "Ljudje, ki jim sledite, še niso delili objav ali pa še nikomur ne sledite.",
+    "newslettersTitle": "Novičke",
+    "newslettersSubtitle": "Tedenski povzetki, uredniški izbori in poudarki skupnosti.",
+    "newslettersSearchPlaceholder": "Iskanje biltena...",
+    "newslettersFilter": "Filter",
+    "newslettersNoItems": "Ni bilo najdenih biltenov, ki bi prikazovali.",
+    "newslettersRead": "Preberi",
+    "newslettersBackToAll": "Nazaj na vse biltene",
+    "newslettersPublishInfo": "Informacije o publikaciji",
+    "newslettersPublishInfoDesc": "To področje vsebuje trenutno vsebino glasila.",
+    "newslettersOtherEditions": "Druge številke",
+    "newslettersNoOtherEditions": "Drugega glasila ni bilo mogoče najti.",
+    "newslettersTranslating": "Prevaja se..."
   },
   "menu": {
     "feed": "Krma",
@@ -269,7 +281,8 @@
     "logout": "Odjava",
     "profileMenu": "Meni profila",
     "user": "Uporabnik",
-    "viewProfile": "Oglejte si profil"
+    "viewProfile": "Oglejte si profil",
+    "newsletters": "Novičke"
   },
   "theme": {
     "themeSelection": "Izbor teme",
@@ -824,8 +837,8 @@
     "cancel": "Cancel"
   },
   "guest": {
-    "messagingTitle": "Join the Conversation",
-    "messagingDesc": "You need to log in to meet people and chat.",
+    "messagingTitle": "Pridružite se klepetu",
+    "messagingDesc": "Za izmenjavo sporočil z drugimi uporabniki se morate prijaviti.",
     "login": "Log In",
     "continue": "Continue Browsing"
   },
@@ -844,6 +857,41 @@
     "newMessageSearchPlaceholder": "Vnesite eno ali več imen",
     "suggested": "Predlagano",
     "userFallback": "Uporabnik",
-    "unknownUser": "Neznan uporabnik"
+    "unknownUser": "Neznan uporabnik",
+    "conversations": "Govori",
+    "contacts": "Kontakti",
+    "searching": "Iščemo...",
+    "searchResults": "Rezultati iskanja",
+    "moreResults": "{count} rezultat več",
+    "startConversation": "Začetek pogovora s pošiljanjem novega sporočila",
+    "deleteConversation": "Brisanje pogovora",
+    "deleteConfirmTitle": "Brisanje pogovora",
+    "deleteConfirmDesc": "Ste prepričani, da želite izbrisati pogovor s {ime}?",
+    "deleteConfirmNote": "Ta pogovor bo izbrisan samo za vas. Drugi udeleženec bo pogovor še vedno lahko videl.",
+    "online": "Spletna stran",
+    "offline": "Brez povezave",
+    "selectConversationTitle": "Izberite govor",
+    "selectConversationDesc": "Na levi strani izberite pogovor, da začnete pošiljati sporočila.",
+    "loadingMessages": "Nalaganje sporočil...",
+    "noMessagesYet": "Še ni sporočila",
+    "firstMessagePrompt": "Začnite pogovor s pošiljanjem prvega sporočila",
+    "loadingConversations": "Govori se nalagajo...",
+    "loadingUsers": "Uporabniki nalagajo...",
+    "noUsersFound": "V sistemu ni bil najden noben uporabnik",
+    "tryAgain": "Poskusite znova",
+    "refresh": "Obnovite",
+    "youSuffix": "(vi)",
+    "chatWith": "Klepetajte z {ime}",
+    "thisIsYou": "To si ti",
+    "emojiLoading": "Nalaganje emoji...",
+    "emptyMessageError": "Sporočilo ne more biti prazno",
+    "maxLengthError": "Sporočilo je lahko dolgo do {count} znakov",
+    "sendError": "Sporočila ni bilo mogoče poslati. Poskusite znova.",
+    "selectConversationPrompt": "Izberite pogovor za pošiljanje sporočila",
+    "disconnectedError": "Odklopljeno. Poskušam ponovno vzpostaviti povezavo...",
+    "selectEmoji": "Izberite Emoji",
+    "enterMessage": "Vnesite sporočilo",
+    "sendMessage": "Pošlji sporočilo",
+    "backToConversations": "Nazaj na dialog"
   }
 }

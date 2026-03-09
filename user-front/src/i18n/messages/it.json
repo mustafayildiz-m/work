@@ -236,7 +236,19 @@
     "user": "Utente",
     "noSuggestionsYet": "Non ci sono ancora suggerimenti",
     "noPostsFound": "Nessun post trovato",
-    "noPostsDescription": "Le persone che seguite non hanno ancora condiviso i post o voi non avete ancora seguito nessuno."
+    "noPostsDescription": "Le persone che seguite non hanno ancora condiviso i post o voi non avete ancora seguito nessuno.",
+    "newslettersTitle": "Newsletter",
+    "newslettersSubtitle": "Riassunti settimanali, scelte del redattore e punti salienti della comunità.",
+    "newslettersSearchPlaceholder": "Ricerca del bollettino...",
+    "newslettersFilter": "Filtro",
+    "newslettersNoItems": "Non sono stati trovati bollettini da mostrare.",
+    "newslettersRead": "Leggi",
+    "newslettersBackToAll": "Torna a tutti i bollettini",
+    "newslettersPublishInfo": "Informazioni sulla pubblicazione",
+    "newslettersPublishInfoDesc": "Quest'area contiene i contenuti attuali della newsletter.",
+    "newslettersOtherEditions": "Altri numeri",
+    "newslettersNoOtherEditions": "L'altro bollettino non è stato trovato.",
+    "newslettersTranslating": "È in corso di traduzione..."
   },
   "menu": {
     "feed": "Alimentazione",
@@ -269,7 +281,8 @@
     "logout": "Disconnessione",
     "profileMenu": "Menu Profilo",
     "user": "Utente",
-    "viewProfile": "Visualizza il profilo"
+    "viewProfile": "Visualizza il profilo",
+    "newsletters": "Newsletter"
   },
   "theme": {
     "themeSelection": "Selezione del tema",
@@ -836,8 +849,8 @@
     "cancel": "Cancel"
   },
   "guest": {
-    "messagingTitle": "Join the Conversation",
-    "messagingDesc": "You need to log in to meet people and chat.",
+    "messagingTitle": "Partecipa alla chat",
+    "messagingDesc": "Per scambiare messaggi con altri utenti è necessario effettuare il login.",
     "login": "Log In",
     "continue": "Continue Browsing"
   },
@@ -856,6 +869,41 @@
     "newMessageSearchPlaceholder": "Digita uno o più nomi",
     "suggested": "Suggeriti",
     "userFallback": "Utente",
-    "unknownUser": "Utente sconosciuto"
+    "unknownUser": "Utente sconosciuto",
+    "conversations": "Discorsi",
+    "contacts": "Contatti",
+    "searching": "Cercasi...",
+    "searchResults": "Risultati della ricerca",
+    "moreResults": "{conteggio} risultato più",
+    "startConversation": "Avviare una conversazione inviando un nuovo messaggio",
+    "deleteConversation": "Cancellare la conversazione",
+    "deleteConfirmTitle": "Cancellare la conversazione",
+    "deleteConfirmDesc": "Sei sicuro di voler cancellare la conversazione con {nome}?",
+    "deleteConfirmNote": "La conversazione verrà eliminata solo per voi. Gli altri partecipanti potranno ancora vedere la conversazione.",
+    "online": "In linea",
+    "offline": "Non in linea",
+    "selectConversationTitle": "Selezionare un discorso",
+    "selectConversationDesc": "Selezionate una conversazione dal lato sinistro per avviare la messaggistica.",
+    "loadingMessages": "Caricamento dei messaggi...",
+    "noMessagesYet": "Nessun messaggio ancora",
+    "firstMessagePrompt": "Iniziare la conversazione inviando il primo messaggio",
+    "loadingConversations": "I discorsi vengono caricati...",
+    "loadingUsers": "Gli utenti stanno caricando...",
+    "noUsersFound": "Nessun utente trovato nel sistema",
+    "tryAgain": "Riprova",
+    "refresh": "Rinnovare",
+    "youSuffix": "(voi)",
+    "chatWith": "Chatta con {name}",
+    "thisIsYou": "Questo sei tu",
+    "emojiLoading": "Emoji di caricamento...",
+    "emptyMessageError": "Il messaggio non può essere vuoto",
+    "maxLengthError": "Il messaggio può avere un massimo di {conteggio} caratteri",
+    "sendError": "Non è stato possibile inviare il messaggio. Si prega di riprovare.",
+    "selectConversationPrompt": "Selezionare una conversazione per inviare un messaggio",
+    "disconnectedError": "Disconnesso. Tentativo di riconnettersi...",
+    "selectEmoji": "Selezionare Emoji",
+    "enterMessage": "Inserire il messaggio",
+    "sendMessage": "Invia il messaggio",
+    "backToConversations": "Torna al dialogo"
   }
 }

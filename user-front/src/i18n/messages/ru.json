@@ -236,7 +236,19 @@
     "user": "Пользователь",
     "noSuggestionsYet": "Предложений пока нет",
     "noPostsFound": "Не найдено ни одного поста",
-    "noPostsDescription": "Люди, за которыми вы следите, еще не делились сообщениями, или вы еще ни за кем не следили."
+    "noPostsDescription": "Люди, за которыми вы следите, еще не делились сообщениями, или вы еще ни за кем не следили.",
+    "newslettersTitle": "Информационные бюллетени",
+    "newslettersSubtitle": "Еженедельные сводки, подборки редакторов и основные моменты жизни сообщества.",
+    "newslettersSearchPlaceholder": "Поиск по бюллетеню...",
+    "newslettersFilter": "Фильтр",
+    "newslettersNoItems": "Не найдено ни одного бюллетеня, который можно было бы показать.",
+    "newslettersRead": "Читать",
+    "newslettersBackToAll": "Вернуться ко всем бюллетеням",
+    "newslettersPublishInfo": "Информация о публикации",
+    "newslettersPublishInfoDesc": "В этой области отображается текущее содержание бюллетеня.",
+    "newslettersOtherEditions": "Другие номера",
+    "newslettersNoOtherEditions": "Другой бюллетень не был найден.",
+    "newslettersTranslating": "Его переводят..."
   },
   "menu": {
     "feed": "Корм",
@@ -269,7 +281,8 @@
     "logout": "Выход из системы",
     "profileMenu": "Меню профиля",
     "user": "Пользователь",
-    "viewProfile": "Просмотр профиля"
+    "viewProfile": "Просмотр профиля",
+    "newsletters": "Информационные бюллетени"
   },
   "theme": {
     "themeSelection": "Выбор темы",
@@ -836,8 +849,8 @@
     "cancel": "Отмена"
   },
   "guest": {
-    "messagingTitle": "Join the Conversation",
-    "messagingDesc": "You need to log in to meet people and chat.",
+    "messagingTitle": "Присоединяйтесь к чату",
+    "messagingDesc": "Чтобы обмениваться сообщениями с другими пользователями, необходимо войти в систему.",
     "login": "Log In",
     "continue": "Continue Browsing"
   },
@@ -856,6 +869,41 @@
     "newMessageSearchPlaceholder": "Введите одно или несколько имен",
     "suggested": "Рекомендуемые",
     "userFallback": "Пользователь",
-    "unknownUser": "Неизвестный пользователь"
+    "unknownUser": "Неизвестный пользователь",
+    "conversations": "Речи",
+    "contacts": "Контакты",
+    "searching": "Требуется...",
+    "searchResults": "Результаты поиска",
+    "moreResults": "{счет} результат больше",
+    "startConversation": "Начните разговор, отправив новое сообщение",
+    "deleteConversation": "Удалить беседу",
+    "deleteConfirmTitle": "Удалить беседу",
+    "deleteConfirmDesc": "Вы уверены, что хотите удалить разговор с {имя}?",
+    "deleteConfirmNote": "Эта беседа будет удалена только для вас. Другой участник по-прежнему сможет видеть беседу.",
+    "online": "Онлайн",
+    "offline": "Offline",
+    "selectConversationTitle": "Выберите речь",
+    "selectConversationDesc": "Выберите беседу в левой части экрана, чтобы начать обмен сообщениями.",
+    "loadingMessages": "Загрузка сообщений...",
+    "noMessagesYet": "Пока нет сообщений",
+    "firstMessagePrompt": "Начните разговор, отправив первое сообщение",
+    "loadingConversations": "Речи загружаются...",
+    "loadingUsers": "Пользователи загружают...",
+    "noUsersFound": "Пользователь не найден в системе",
+    "tryAgain": "Попробуйте еще раз",
+    "refresh": "Обновить",
+    "youSuffix": "(Вы)",
+    "chatWith": "Пообщайтесь с {имя}",
+    "thisIsYou": "Это ты",
+    "emojiLoading": "Загружаем эмодзи...",
+    "emptyMessageError": "Сообщение не может быть пустым",
+    "maxLengthError": "Сообщение может содержать до {count} символов",
+    "sendError": "Сообщение не удалось отправить. Пожалуйста, попробуйте еще раз.",
+    "selectConversationPrompt": "Выберите беседу, чтобы отправить сообщение",
+    "disconnectedError": "Отключен. Попытка повторного подключения...",
+    "selectEmoji": "Выберите Emoji",
+    "enterMessage": "Введите сообщение",
+    "sendMessage": "Отправить сообщение",
+    "backToConversations": "Назад к диалогу"
   }
 }

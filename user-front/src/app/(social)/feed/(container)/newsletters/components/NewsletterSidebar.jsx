@@ -8,11 +8,11 @@ import { useLanguage } from '@/context/useLanguageContext';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 const SOURCE_LOCALE = 'tr';
 
-const formatDate = (dateValue) => {
+const formatDate = (dateValue, locale = 'tr-TR') => {
   if (!dateValue) return '-';
   const date = new Date(dateValue);
   if (Number.isNaN(date.getTime())) return '-';
-  return date.toLocaleDateString('tr-TR', {
+  return date.toLocaleDateString(locale === 'tr' ? 'tr-TR' : (locale === 'en' ? 'en-US' : locale), {
     day: 'numeric',
     month: 'long',
     year: 'numeric'
@@ -45,7 +45,7 @@ export default function NewsletterSidebar({ otherItems, themeCardStyle }) {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.message || 'Ceviri basarisiz');
+      throw new Error(err.message || t('feed.newslettersTranslationFailed'));
     }
     const json = await res.json();
     return json.translatedText || '';
@@ -93,7 +93,7 @@ export default function NewsletterSidebar({ otherItems, themeCardStyle }) {
           {otherItems.map((item) => (
             <div key={item.id} className="mb-3 pb-3 border-bottom">
               <Link href={`/feed/newsletters/${item.id}`} className="text-decoration-none">
-                <small className="text-muted d-block">{formatDate(item.publishDate || item.publishedAt)}</small>
+                <small className="text-muted d-block">{formatDate(item.publishDate || item.publishedAt, locale)}</small>
                 <strong className="d-block">{getDisplayTitle(item)}</strong>
               </Link>
             </div>

@@ -10,11 +10,11 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 const MAX_TEXT_LENGTH = 9000;
 const SOURCE_LOCALE = 'tr'; // Bulten icerigi varsayilan olarak Turkce
 
-const formatDate = (dateValue) => {
+const formatDate = (dateValue, locale = 'tr-TR') => {
   if (!dateValue) return '-';
   const date = new Date(dateValue);
   if (Number.isNaN(date.getTime())) return '-';
-  return date.toLocaleDateString('tr-TR', {
+  return date.toLocaleDateString(locale === 'tr' ? 'tr-TR' : (locale === 'en' ? 'en-US' : locale), {
     day: 'numeric',
     month: 'long',
     year: 'numeric'
@@ -107,7 +107,7 @@ export default function NewsletterContentWithTranslation({ data, themeCardStyle 
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.message || 'Ceviri basarisiz');
+      throw new Error(err.message || t('feed.newslettersTranslationFailed'));
     }
     const json = await res.json();
     return json.translatedText || '';
@@ -157,7 +157,7 @@ export default function NewsletterContentWithTranslation({ data, themeCardStyle 
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err.message || 'Ceviri yapilirken hata olustu');
+          setError(err.message || t('feed.newslettersTranslationError'));
           setTranslated({ title: '', intro: '', sections: [] });
         }
       } finally {
@@ -193,7 +193,7 @@ export default function NewsletterContentWithTranslation({ data, themeCardStyle 
 
         <h3 className="fw-bold mb-3">{displayTitle}</h3>
 
-        <small className="text-muted d-block mb-3">{formatDate(data?.publishDate || data?.publishedAt)}</small>
+        <small className="text-muted d-block mb-3">{formatDate(data?.publishDate || data?.publishedAt, locale)}</small>
 
         {error && (
           <div className="alert alert-warning py-2 mb-3" role="alert">

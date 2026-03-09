@@ -237,7 +237,19 @@
     "user": "مستخدم",
     "noSuggestionsYet": "لا توجد اقتراحات بعد",
     "noPostsFound": "لا توجد منشورات بعد",
-    "noPostsDescription": "الأشخاص الذين تتابعهم لم ينشروا منشورات بعد أو لم تتابع أحداً بعد."
+    "noPostsDescription": "الأشخاص الذين تتابعهم لم ينشروا منشورات بعد أو لم تتابع أحداً بعد.",
+    "newslettersTitle": "النشرات الإخبارية",
+    "newslettersSubtitle": "ملخصات أسبوعية واختيارات المحررين وأبرز أخبار المجتمع.",
+    "newslettersSearchPlaceholder": "البحث في النشرة...",
+    "newslettersFilter": "التصفية",
+    "newslettersNoItems": "لم يتم العثور على أي نشرات لإظهارها.",
+    "newslettersRead": "اقرأ",
+    "newslettersBackToAll": "العودة إلى جميع النشرات",
+    "newslettersPublishInfo": "معلومات النشر",
+    "newslettersPublishInfoDesc": "تحتوي هذه المنطقة على محتويات النشرة الإخبارية الحالية.",
+    "newslettersOtherEditions": "أرقام أخرى",
+    "newslettersNoOtherEditions": "لم يتم العثور على النشرة الأخرى.",
+    "newslettersTranslating": "تتم ترجمتها..."
   },
   "menu": {
     "feed": "الأخبار",
@@ -270,7 +282,8 @@
     "logout": "تسجيل الخروج",
     "profileMenu": "قائمة الملف الشخصي",
     "user": "المستخدم",
-    "viewProfile": "عرض الملف الشخصي"
+    "viewProfile": "عرض الملف الشخصي",
+    "newsletters": "النشرات الإخبارية"
   },
   "theme": {
     "themeSelection": "اختيار السمة",
@@ -837,8 +850,8 @@
     "cancel": "إلغاء"
   },
   "guest": {
-    "messagingTitle": "Join the Conversation",
-    "messagingDesc": "You need to log in to meet people and chat.",
+    "messagingTitle": "انضم إلى الدردشة",
+    "messagingDesc": "يجب عليك تسجيل الدخول لتبادل الرسائل مع المستخدمين الآخرين.",
     "login": "Log In",
     "continue": "Continue Browsing"
   },
@@ -857,6 +870,41 @@
     "newMessageSearchPlaceholder": "اكتب اسماً واحداً أو أكثر",
     "suggested": "مقترح",
     "userFallback": "مستخدم",
-    "unknownUser": "مستخدم غير معروف"
+    "unknownUser": "مستخدم غير معروف",
+    "conversations": "الخطابات",
+    "contacts": "جهات الاتصال",
+    "searching": "مطلوب...",
+    "searchResults": "نتائج البحث",
+    "moreResults": "{عدد} نتيجة أكثر",
+    "startConversation": "ابدأ محادثة بإرسال رسالة جديدة",
+    "deleteConversation": "حذف المحادثة",
+    "deleteConfirmTitle": "حذف المحادثة",
+    "deleteConfirmDesc": "هل أنت متأكد أنك تريد حذف المحادثة مع {الاسم}؟",
+    "deleteConfirmNote": "سيتم حذف هذه المحادثة لك فقط. سيظل المشارك الآخر قادرًا على رؤية المحادثة.",
+    "online": "عبر الإنترنت",
+    "offline": "غير متصل بالإنترنت",
+    "selectConversationTitle": "اختر خطاباً",
+    "selectConversationDesc": "اختر محادثة من الجانب الأيسر لبدء المراسلة",
+    "loadingMessages": "تحميل الرسائل...",
+    "noMessagesYet": "لا توجد رسالة بعد",
+    "firstMessagePrompt": "ابدأ المحادثة بإرسال الرسالة الأولى",
+    "loadingConversations": "يتم رفع الخطابات...",
+    "loadingUsers": "يقوم المستخدمون بتحميل...",
+    "noUsersFound": "لم يتم العثور على مستخدم في النظام",
+    "tryAgain": "حاول مرة أخرى",
+    "refresh": "التجديد",
+    "youSuffix": "(أنت)",
+    "chatWith": "الدردشة مع {الاسم}",
+    "thisIsYou": "هذا هو أنت",
+    "emojiLoading": "تحميل الرموز التعبيرية...",
+    "emptyMessageError": "لا يمكن أن تكون الرسالة فارغة",
+    "maxLengthError": "يمكن أن تصل الرسالة إلى {عدد} الأحرف",
+    "sendError": "تعذر إرسال الرسالة. يرجى المحاولة مرة أخرى.",
+    "selectConversationPrompt": "حدد محادثة لإرسال رسالة",
+    "disconnectedError": "تم قطع الاتصال. محاولة إعادة الاتصال...",
+    "selectEmoji": "تحديد الرموز التعبيرية",
+    "enterMessage": "أدخل الرسالة",
+    "sendMessage": "إرسال رسالة",
+    "backToConversations": "العودة إلى الحوار"
   }
 }
