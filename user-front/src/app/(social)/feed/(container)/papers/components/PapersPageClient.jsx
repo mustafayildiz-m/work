@@ -25,7 +25,7 @@ export default function PapersPageClient({ initialSearch = '' }) {
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    const url = new URL('/papers', API_BASE);
+    const url = new URL(`${API_BASE.replace(/\/$/, '')}/papers`);
     url.searchParams.set('limit', '100');
     if (search) url.searchParams.set('search', search);
     url.searchParams.set('lang', lang);

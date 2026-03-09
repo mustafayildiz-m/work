@@ -35,8 +35,8 @@ export default function NewsletterDetailPageClient({ id }) {
     setLoading(true);
     setNotFoundState(false);
 
-    const newsletterUrl = new URL(`/newsletters/${id}`, API_BASE);
-    const listUrl = new URL('/newsletters', API_BASE);
+    const newsletterUrl = new URL(`${API_BASE.replace(/\/$/, '')}/newsletters/${id}`);
+    const listUrl = new URL(`${API_BASE.replace(/\/$/, '')}/newsletters`);
     listUrl.searchParams.set('limit', '6');
     newsletterUrl.searchParams.set('lang', effectiveLang);
     listUrl.searchParams.set('lang', effectiveLang);

@@ -35,8 +35,8 @@ export default function PaperDetailPageClient({ id }) {
     setLoading(true);
     setNotFound(false);
 
-    const paperUrl = new URL(`/papers/${id}`, API_BASE);
-    const listUrl = new URL('/papers', API_BASE);
+    const paperUrl = new URL(`${API_BASE.replace(/\/$/, '')}/papers/${id}`);
+    const listUrl = new URL(`${API_BASE.replace(/\/$/, '')}/papers`);
     listUrl.searchParams.set('limit', '6');
     paperUrl.searchParams.set('lang', effectiveLang);
     listUrl.searchParams.set('lang', effectiveLang);

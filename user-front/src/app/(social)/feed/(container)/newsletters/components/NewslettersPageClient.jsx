@@ -41,7 +41,7 @@ export default function NewslettersPageClient({ initialSearch = '', initialPage 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    const url = new URL('/newsletters', API_BASE);
+    const url = new URL(`${API_BASE.replace(/\/$/, '')}/newsletters`);
     url.searchParams.set('page', String(page));
     url.searchParams.set('limit', String(ITEMS_PER_PAGE));
     if (search) url.searchParams.set('search', search);
