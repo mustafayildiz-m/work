@@ -6,9 +6,11 @@ import { Card, CardBody, Col, Container, Row } from 'react-bootstrap';
 import Image from 'next/image';
 import avatar7 from '@/assets/images/avatar/07.jpg';
 import { BsGeoAlt, BsCalendarDate, BsPerson } from 'react-icons/bs';
+import { useLanguage } from '@/context/useLanguageContext';
 
 const ScholarLineagePage = () => {
   const params = useParams();
+  const { t } = useLanguage();
   const [scholar, setScholar] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -60,9 +62,9 @@ const ScholarLineagePage = () => {
             <Card>
               <CardBody className="text-center py-5">
                 <div className="spinner-border text-primary" role="status">
-                  <span className="visually-hidden">Loading...</span>
+                  <span className="visually-hidden">{t('scholarActivity.loading')}</span>
                 </div>
-                <p className="mt-3">Nesebi bilgileri yükleniyor...</p>
+                <p className="mt-3">{t('scholarActivity.loading')}</p>
               </CardBody>
             </Card>
           </Col>
@@ -78,8 +80,8 @@ const ScholarLineagePage = () => {
           <Col lg={8}>
             <Card>
               <CardBody className="text-center py-5">
-                <h4>Alim Bulunamadı</h4>
-                <p className="text-muted">Aradığınız alim bulunamadı veya silinmiş olabilir.</p>
+                <h4>{t('scholarActivity.scholarNotFound')}</h4>
+                <p className="text-muted">{t('scholarActivity.scholarNotFoundDesc')}</p>
               </CardBody>
             </Card>
           </Col>
@@ -94,14 +96,14 @@ const ScholarLineagePage = () => {
         <Col lg={12}>
           <Card>
             <CardBody>
-              <h5 className="mb-4">Nesebi Bilgileri</h5>
+              <h5 className="mb-4">{t('scholarActivity.lineageInfo')}</h5>
 
               <div className="row">
                 <div className="col-md-6">
                   <div className="d-flex align-items-center mb-3">
                     <BsPerson className="me-3 text-primary" size={20} />
                     <div>
-                      <strong>Tam Adı:</strong>
+                      <strong>{t('scholarActivity.fullName')}:</strong>
                       <p className="mb-0">{scholar.fullName}</p>
                     </div>
                   </div>
@@ -111,8 +113,8 @@ const ScholarLineagePage = () => {
                   <div className="d-flex align-items-center mb-3">
                     <BsCalendarDate className="me-3 text-primary" size={20} />
                     <div>
-                      <strong>Doğum Tarihi:</strong>
-                      <p className="mb-0">{scholar.birthDate || 'Belirtilmemiş'}</p>
+                      <strong>{t('scholarActivity.birthDate')}:</strong>
+                      <p className="mb-0">{scholar.birthDate || t('scholarActivity.notSpecified')}</p>
                     </div>
                   </div>
                 </div>
@@ -121,8 +123,8 @@ const ScholarLineagePage = () => {
                   <div className="d-flex align-items-center mb-3">
                     <BsCalendarDate className="me-3 text-danger" size={20} />
                     <div>
-                      <strong>Vefat Tarihi:</strong>
-                      <p className="mb-0">{scholar.deathDate || 'Belirtilmemiş'}</p>
+                      <strong>{t('scholarActivity.deathDate')}:</strong>
+                      <p className="mb-0">{scholar.deathDate || t('scholarActivity.notSpecified')}</p>
                     </div>
                   </div>
                 </div>
@@ -131,8 +133,8 @@ const ScholarLineagePage = () => {
                   <div className="d-flex align-items-center mb-3">
                     <BsGeoAlt className="me-3 text-primary" size={20} />
                     <div>
-                      <strong>Doğum Yeri:</strong>
-                      <p className="mb-0">{scholar.locationName || 'Belirtilmemiş'}</p>
+                      <strong>{t('scholarActivity.birthPlace')}:</strong>
+                      <p className="mb-0">{scholar.locationName || t('scholarActivity.notSpecified')}</p>
                     </div>
                   </div>
                 </div>
@@ -140,7 +142,7 @@ const ScholarLineagePage = () => {
 
               {scholar.lineage && (
                 <div className="mt-4">
-                  <h6>Detaylı Nesebi:</h6>
+                  <h6>{t('scholarActivity.detailedLineage')}:</h6>
                   <div className="bg-light p-3 rounded">
                     <p className="mb-0">{scholar.lineage}</p>
                   </div>

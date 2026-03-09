@@ -950,5 +950,50 @@
     "wantsToConnect": "Sizinle bağlantı kurmak istiyor",
     "accept": "Kabul Et",
     "reject": "Reddet"
+  },
+  "scholarFeed": {
+    "loading": "Се вчитуваат објави...",
+    "noPosts": "Сè уште нема објави",
+    "noPostsDesc": "Овој научник сè уште не споделил никакви објави.",
+    "preview": "Преглед"
+  },
+  "scholarActivity": {
+    "loading": "Се вчитуваат информации за семејството...",
+    "scholarNotFound": "Не беше пронајден ниту еден научник.",
+    "scholarNotFoundDesc": "Ученикот што го барате не можеше да се најде или можеби е избришан.",
+    "lineageInfo": "Семејни информации",
+    "fullName": "Целосно име",
+    "birthDate": "Датум на раѓање",
+    "deathDate": "Датум на смртта",
+    "birthPlace": "Место на раѓање",
+    "detailedLineage": "Детална генеалогија",
+    "notSpecified": "Ненаведено"
+  },
+  "scholarConnections": {
+    "loading": "Се вчитуваат книги...",
+    "mapLoading": "Вчитавање на мапата...",
+    "scholarNotFound": "Не беше пронајден ниту еден научник.",
+    "scholarNotFoundDesc": "Ученикот што го барате не можеше да се најде или можеби е избришан.",
+    "books": "Книги",
+    "all": "Сите",
+    "ownBooks": "Нивните сопствени книги",
+    "relatedBooks": "Поврзани книги",
+    "ownBook": "Неговата сопствена книга",
+    "relatedBook": "Релевантна книга",
+    "noBooksInCategory": "Во оваа категорија не беа пронајдени книги.",
+    "noBooksInCategoryDesc": "Нема достапни книги за избраната категорија.",
+    "bookImage": "Крило на книга",
+    "noDescription": "Нема достапен опис",
+    "languages": "Јазици",
+    "noBooksYet": "Сè уште не се пронајдени книги",
+    "noBooksYetDesc": "Овој научник сè уште не додал ниту една книга, или нема достапни релевантни книги.",
+    "languageSelection": "Избор на јазик",
+    "whichLanguageDownload": "Кој јазик би сакале да го преземете?",
+    "download": "Преземи",
+    "noPdf": "Нема PDF",
+    "cancel": "Откажување",
+    "noDownloadOption": "Нема опција за преземање на оваа книга.",
+    "downloadError": "Се случи грешка при преземањето. Ве молиме обидете се повторно.",
+    "downloadFileNotFound": "Датотеката за преземање не можеше да се најде."
   }
 }

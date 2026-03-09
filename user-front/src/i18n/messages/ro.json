@@ -950,5 +950,50 @@
     "wantsToConnect": "Vrea să vă contacteze",
     "accept": "Acceptați",
     "reject": "Respingeți"
+  },
+  "scholarFeed": {
+    "loading": "Posturile se încarcă...",
+    "noPosts": "Nicio expediere încă",
+    "noPostsDesc": "Acest savant nu a postat încă.",
+    "preview": "Previzualizare"
+  },
+  "scholarActivity": {
+    "loading": "Încărcarea informațiilor genealogice...",
+    "scholarNotFound": "Cercetătorul nu a fost găsit",
+    "scholarNotFoundDesc": "Este posibil ca savantul pe care îl căutați să nu fie găsit sau să fi fost șters.",
+    "lineageInfo": "Informații genealogice",
+    "fullName": "Nume și prenume",
+    "birthDate": "Data nașterii",
+    "deathDate": "Data decesului",
+    "birthPlace": "Locul nașterii",
+    "detailedLineage": "Genealogie detaliată",
+    "notSpecified": "Nespecificat"
+  },
+  "scholarConnections": {
+    "loading": "Cărțile sunt în curs de încărcare...",
+    "mapLoading": "Încărcare hartă...",
+    "scholarNotFound": "Cercetătorul nu a fost găsit",
+    "scholarNotFoundDesc": "Este posibil ca savantul pe care îl căutați să nu fie găsit sau să fi fost șters.",
+    "books": "Cărți",
+    "all": "Toate",
+    "ownBooks": "Cărți proprii",
+    "relatedBooks": "Cărți conexe",
+    "ownBook": "Carte proprie",
+    "relatedBook": "Carte înrudită",
+    "noBooksInCategory": "Nu s-au găsit cărți în această categorie",
+    "noBooksInCategoryDesc": "Nu există încă cărți pentru categoria selectată.",
+    "bookImage": "Ilustrație de carte",
+    "noDescription": "Nici o explicație disponibilă",
+    "languages": "Limbi străine",
+    "noBooksYet": "Nu există cărți disponibile încă",
+    "noBooksYetDesc": "Acest cercetător nu a adăugat încă cărți sau nu există cărți conexe.",
+    "languageSelection": "Selectarea limbii",
+    "whichLanguageDownload": "Ce limbă doriți să descărcați?",
+    "download": "Descărcare",
+    "noPdf": "Nu PDF",
+    "cancel": "Anulare",
+    "noDownloadOption": "Nu există nicio opțiune de descărcare pentru această carte.",
+    "downloadError": "A apărut o eroare în timpul descărcării. Vă rugăm să încercați din nou.",
+    "downloadFileNotFound": "Fișierul de descărcare nu a fost găsit."
   }
 }

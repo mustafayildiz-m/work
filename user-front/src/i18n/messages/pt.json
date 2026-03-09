@@ -962,5 +962,50 @@
     "wantsToConnect": "Ele quer contactá-lo",
     "accept": "Aceitar",
     "reject": "Rejeitar"
+  },
+  "scholarFeed": {
+    "loading": "As mensagens estão a carregar...",
+    "noPosts": "Ainda não foi enviado",
+    "noPostsDesc": "Este académico ainda não publicou.",
+    "preview": "Pré-visualização"
+  },
+  "scholarActivity": {
+    "loading": "Carregar informações genealógicas...",
+    "scholarNotFound": "Académico não encontrado",
+    "scholarNotFoundDesc": "O académico que procura pode não ser encontrado ou pode ter sido eliminado.",
+    "lineageInfo": "Informações genealógicas",
+    "fullName": "Nome completo",
+    "birthDate": "Data de nascimento",
+    "deathDate": "Data de falecimento",
+    "birthPlace": "Local de nascimento",
+    "detailedLineage": "Genealogia pormenorizada",
+    "notSpecified": "Não especificado"
+  },
+  "scholarConnections": {
+    "loading": "Os livros estão a ser carregados...",
+    "mapLoading": "Carregar mapa...",
+    "scholarNotFound": "Académico não encontrado",
+    "scholarNotFoundDesc": "O académico que procura pode não ser encontrado ou pode ter sido eliminado.",
+    "books": "Livros",
+    "all": "Todos",
+    "ownBooks": "Livros próprios",
+    "relatedBooks": "Livros relacionados",
+    "ownBook": "Livro próprio",
+    "relatedBook": "Livro relacionado",
+    "noBooksInCategory": "Não foram encontrados livros nesta categoria",
+    "noBooksInCategoryDesc": "Ainda não existem livros para a categoria selecionada.",
+    "bookImage": "Ilustração de livros",
+    "noDescription": "Não há explicação disponível",
+    "languages": "Línguas",
+    "noBooksYet": "Nenhum livro disponível ainda",
+    "noBooksYetDesc": "Este académico ainda não adicionou livros ou não existem livros relacionados.",
+    "languageSelection": "Seleção da língua",
+    "whichLanguageDownload": "Que língua pretende descarregar?",
+    "download": "Descarregar",
+    "noPdf": "Sem PDF",
+    "cancel": "Cancelamento",
+    "noDownloadOption": "Não existe uma opção de transferência para este livro.",
+    "downloadError": "Ocorreu um erro durante a transferência. Por favor, tente novamente.",
+    "downloadFileNotFound": "Ficheiro de download não encontrado."
   }
 }

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Card, CardBody, CardHeader, CardTitle, Modal, Button, ListGroup } from 'react-bootstrap';
+import { useLanguage } from '@/context/useLanguageContext';
 import Image from 'next/image';
 import avatar7 from '@/assets/images/avatar/07.jpg';
 import { BsBook, BsDownload, BsEye, BsPerson, BsX, BsChevronDown, BsHeart, BsFileEarmarkPdf, BsGeoAlt } from 'react-icons/bs';
@@ -14,21 +15,26 @@ import 'swiper/css/effect-coverflow';
 import book1 from '@/assets/images/book/01.jpg';
 import dynamic from 'next/dynamic';
 
-// MapComponent'i dynamic import ile yükle (SSR hatası önlemek için)
-const MapComponent = dynamic(() => import('@/components/MapComponent'), {
-  ssr: false,
-  loading: () => (
+const MapLoadingPlaceholder = () => {
+  const { t } = useLanguage();
+  return (
     <div className="text-center py-3">
       <div className="spinner-border spinner-border-sm text-primary" role="status">
-        <span className="visually-hidden">Harita yükleniyor...</span>
+        <span className="visually-hidden">{t('scholarConnections.mapLoading')}</span>
       </div>
-      <p className="mt-1 text-muted small">Harita yükleniyor...</p>
+      <p className="mt-1 text-muted small">{t('scholarConnections.mapLoading')}</p>
     </div>
-  )
+  );
+};
+
+const MapComponent = dynamic(() => import('@/components/MapComponent'), {
+  ssr: false,
+  loading: () => <MapLoadingPlaceholder />
 });
 
 const ScholarBooksPage = () => {
   const params = useParams();
+  const { t } = useLanguage();
   const [scholar, setScholar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -153,7 +159,7 @@ const ScholarBooksPage = () => {
       downloadBook(book, book.languages[0]);
     } else {
       // No download available
-      alert('Bu kitap için indirme seçeneği bulunmuyor.');
+      alert(t('scholarConnections.noDownloadOption'));
     }
   };
 
@@ -240,12 +246,12 @@ const ScholarBooksPage = () => {
             })
         .catch(error => {
           // console.error('Download error:', error);
-          alert('İndirme sırasında hata oluştu. Lütfen tekrar deneyin.');
+          alert(t('scholarConnections.downloadError'));
           
           // If all download methods fail, don't open in new tab
         });
     } else {
-      alert('İndirme dosyası bulunamadı.');
+      alert(t('scholarConnections.downloadFileNotFound'));
     }
   };
 
@@ -288,9 +294,9 @@ const ScholarBooksPage = () => {
       <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '400px' }}>
         <div className="text-center">
           <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
+            <span className="visually-hidden">{t('scholarConnections.loading')}</span>
           </div>
-          <p className="mt-3">Kitaplar yükleniyor...</p>
+          <p className="mt-3">{t('scholarConnections.loading')}</p>
         </div>
       </div>
     );
@@ -299,8 +305,8 @@ const ScholarBooksPage = () => {
   if (!scholar) {
     return (
       <div className="text-center py-5">
-        <h4>Alim Bulunamadı</h4>
-        <p className="text-muted">Aradığınız alim bulunamadı veya silinmiş olabilir.</p>
+        <h4>{t('scholarConnections.scholarNotFound')}</h4>
+        <p className="text-muted">{t('scholarConnections.scholarNotFoundDesc')}</p>
       </div>
     );
   }
@@ -312,7 +318,7 @@ const ScholarBooksPage = () => {
         <CardHeader className="border-0 pb-0">
           <div className="d-flex justify-content-between align-items-center">
             <CardTitle>
-              Kitaplar
+              {t('scholarConnections.books')}
               <span className="badge bg-primary ms-2">{allBooks.length}</span>
             </CardTitle>
             <div className="btn-group" role="group">
@@ -321,21 +327,21 @@ const ScholarBooksPage = () => {
                 className={`btn btn-sm ${activeTab === 'all' ? 'btn-primary' : 'btn-outline-primary'}`}
                 onClick={() => setActiveTab('all')}
               >
-                Tümü ({allBooks.length})
+                {t('scholarConnections.all')} ({allBooks.length})
               </button>
               <button
                 type="button"
                 className={`btn btn-sm ${activeTab === 'own' ? 'btn-primary' : 'btn-outline-primary'}`}
                 onClick={() => setActiveTab('own')}
               >
-                Kendi Kitapları ({scholar.ownBooks?.length || 0})
+                {t('scholarConnections.ownBooks')} ({scholar.ownBooks?.length || 0})
               </button>
               <button
                 type="button"
                 className={`btn btn-sm ${activeTab === 'related' ? 'btn-primary' : 'btn-outline-primary'}`}
                 onClick={() => setActiveTab('related')}
               >
-                İlgili Kitaplar ({scholar.relatedBooks?.length || 0})
+                {t('scholarConnections.relatedBooks')} ({scholar.relatedBooks?.length || 0})
               </button>
             </div>
           </div>
@@ -385,7 +391,7 @@ const ScholarBooksPage = () => {
                         bg={book.type === 'own' ? 'success' : 'info'} 
                         className="position-absolute top-0 start-0 m-2"
                       >
-                        {book.type === 'own' ? 'Kendi Kitabı' : 'İlgili Kitap'}
+                        {book.type === 'own' ? t('scholarConnections.ownBook') : t('scholarConnections.relatedBook')}
                       </Badge>
                     </div>
                   </SwiperSlide>
@@ -395,8 +401,8 @@ const ScholarBooksPage = () => {
           ) : (
             <div className="text-center py-4">
               <BsBook size={48} className="text-muted mb-2" />
-              <h6>Bu kategoride kitap bulunamadı</h6>
-              <p className="text-muted">Seçilen kategori için henüz kitap bulunmuyor.</p>
+              <h6>{t('scholarConnections.noBooksInCategory')}</h6>
+              <p className="text-muted">{t('scholarConnections.noBooksInCategoryDesc')}</p>
             </div>
           )}
         </CardBody>
@@ -416,7 +422,7 @@ const ScholarBooksPage = () => {
                           <div className="img-container position-relative">
                             <Image
                               src={getBookCoverImage(book) || book1}
-                              alt={book.title || 'Kitap Resmi'}
+                              alt={book.title || t('scholarConnections.bookImage')}
                               width={250}
                               height={350}
                               style={{ objectFit: 'cover' }}
@@ -429,7 +435,7 @@ const ScholarBooksPage = () => {
                               bg={book.type === 'own' ? 'success' : 'info'} 
                               className="position-absolute top-0 start-0 m-2"
                             >
-                              {book.type === 'own' ? 'Kendi Kitabı' : 'İlgili Kitap'}
+                              {book.type === 'own' ? t('scholarConnections.ownBook') : t('scholarConnections.relatedBook')}
                             </Badge>
                             <div className="hover-icons d-flex flex-column gap-2">
                               <div className="icon-btn bg-white shadow rounded p-2">
@@ -438,7 +444,7 @@ const ScholarBooksPage = () => {
                               <div 
                                 className="icon-btn bg-white shadow rounded p-2"
                                 onClick={() => handleDownloadClick(book)}
-                                title="İndir"
+                                title={t('scholarConnections.download')}
                                 style={{ cursor: 'pointer' }}
                               >
                                 <BsDownload />
@@ -449,12 +455,12 @@ const ScholarBooksPage = () => {
                             <div className="text-decoration-none">
                               <Card.Title className="text-center" style={{ fontSize: '1rem' }}>{book.title}</Card.Title>
                               <p className="small text-muted text-center mb-2">
-                                {book.description || 'Açıklama bulunmuyor'}
+                                {book.description || t('scholarConnections.noDescription')}
                               </p>
                               {book.languages && book.languages.length > 0 && (
                                 <div className="text-center">
                                   <small className="text-muted">
-                                    Diller: {book.languages.map(lang => lang.languageCode.toUpperCase()).join(', ')}
+                                    {t('scholarConnections.languages')}: {book.languages.map(lang => lang.languageCode.toUpperCase()).join(', ')}
                                   </small>
                                 </div>
                               )}
@@ -479,8 +485,8 @@ const ScholarBooksPage = () => {
             ) : (
               <div className="text-center py-5">
                 <BsBook size={48} className="text-muted mb-2" />
-                <h6>Henüz Kitap Bulunmuyor</h6>
-                <p className="text-muted">Bu alim henüz kitap eklememiş veya ilgili kitap bulunmuyor.</p>
+                <h6>{t('scholarConnections.noBooksYet')}</h6>
+                <p className="text-muted">{t('scholarConnections.noBooksYetDesc')}</p>
               </div>
             )}
           </div>
@@ -492,14 +498,14 @@ const ScholarBooksPage = () => {
         <Modal.Header closeButton>
           <Modal.Title>
             <BsFileEarmarkPdf className="me-2" />
-            Dil Seçimi
+            {t('scholarConnections.languageSelection')}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {selectedBook && (
             <div>
               <h6 className="mb-3">{selectedBook.title}</h6>
-              <p className="text-muted mb-3">Hangi dilde indirmek istiyorsunuz?</p>
+              <p className="text-muted mb-3">{t('scholarConnections.whichLanguageDownload')}</p>
               <ListGroup>
                 {selectedBook.languages?.map((language) => (
                   <ListGroup.Item 
@@ -518,10 +524,10 @@ const ScholarBooksPage = () => {
                         className="d-flex align-items-center gap-1"
                       >
                         <BsDownload size={14} />
-                        İndir
+                        {t('scholarConnections.download')}
                       </Button>
                     ) : (
-                      <Badge bg="warning">PDF Yok</Badge>
+                      <Badge bg="warning">{t('scholarConnections.noPdf')}</Badge>
                     )}
                   </ListGroup.Item>
                 ))}
@@ -531,7 +537,7 @@ const ScholarBooksPage = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowLanguageModal(false)}>
-            İptal
+            {t('scholarConnections.cancel')}
           </Button>
         </Modal.Footer>
       </Modal>

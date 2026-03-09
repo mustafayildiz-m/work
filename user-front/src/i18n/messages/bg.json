@@ -950,5 +950,50 @@
     "wantsToConnect": "Той иска да се свърже с вас",
     "accept": "Приемане на",
     "reject": "Отхвърляне на"
+  },
+  "scholarFeed": {
+    "loading": "Публикациите се зареждат...",
+    "noPosts": "Все още няма пратка",
+    "noPostsDesc": "Този учен все още не е публикувал.",
+    "preview": "Преглед"
+  },
+  "scholarActivity": {
+    "loading": "Зареждане на генеалогична информация...",
+    "scholarNotFound": "Ученият не е намерен",
+    "scholarNotFoundDesc": "Търсеният от вас учен може да не е намерен или да е изтрит.",
+    "lineageInfo": "Генеалогична информация",
+    "fullName": "Пълно име",
+    "birthDate": "Дата на раждане",
+    "deathDate": "Дата на смъртта",
+    "birthPlace": "Място на раждане",
+    "detailedLineage": "Подробна генеалогия",
+    "notSpecified": "Неуточнено"
+  },
+  "scholarConnections": {
+    "loading": "Книгите се зареждат...",
+    "mapLoading": "Зареждане на картата...",
+    "scholarNotFound": "Ученият не е намерен",
+    "scholarNotFoundDesc": "Търсеният от вас учен може да не е намерен или да е изтрит.",
+    "books": "Книги",
+    "all": "Всички",
+    "ownBooks": "Собствени книги",
+    "relatedBooks": "Свързани книги",
+    "ownBook": "Собствена книга",
+    "relatedBook": "Свързани книги",
+    "noBooksInCategory": "Няма намерени книги в тази категория",
+    "noBooksInCategoryDesc": "Все още няма книги за избраната категория.",
+    "bookImage": "Илюстрация на книги",
+    "noDescription": "Няма налично обяснение",
+    "languages": "Езици",
+    "noBooksYet": "Все още няма налични книги",
+    "noBooksYetDesc": "Този учен все още не е добавил книги или няма свързани книги.",
+    "languageSelection": "Избор на език",
+    "whichLanguageDownload": "Кой език искате да изтеглите?",
+    "download": "Изтегляне",
+    "noPdf": "Не PDF",
+    "cancel": "Анулиране",
+    "noDownloadOption": "За тази книга няма възможност за изтегляне.",
+    "downloadError": "По време на изтеглянето е възникнала грешка. Моля, опитайте отново.",
+    "downloadFileNotFound": "Не е намерен файл за изтегляне."
   }
 }

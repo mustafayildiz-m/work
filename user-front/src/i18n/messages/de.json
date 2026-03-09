@@ -961,5 +961,50 @@
     "wantsToConnect": "Er möchte Sie kontaktieren",
     "accept": "Akzeptieren",
     "reject": "Ablehnen"
+  },
+  "scholarFeed": {
+    "loading": "Beiträge werden geladen...",
+    "noPosts": "Noch keine Beiträge",
+    "noPostsDesc": "Dieser Gelehrte hat noch keine Beiträge geteilt.",
+    "preview": "Vorschau"
+  },
+  "scholarActivity": {
+    "loading": "Laden von genealogischen Informationen...",
+    "scholarNotFound": "Scholar nicht gefunden",
+    "scholarNotFoundDesc": "Das gesuchte Stipendium ist möglicherweise nicht vorhanden oder wurde gelöscht.",
+    "lineageInfo": "Genealogische Informationen",
+    "fullName": "Vollständiger Name",
+    "birthDate": "Geburtsdatum",
+    "deathDate": "Datum des Sterbefalls",
+    "birthPlace": "Ort der Geburt",
+    "detailedLineage": "Ausführliche Genealogie",
+    "notSpecified": "Nicht spezifiziert"
+  },
+  "scholarConnections": {
+    "loading": "Die Bücher werden gerade geladen...",
+    "mapLoading": "Karte laden...",
+    "scholarNotFound": "Scholar nicht gefunden",
+    "scholarNotFoundDesc": "Das gesuchte Stipendium ist möglicherweise nicht vorhanden oder wurde gelöscht.",
+    "books": "Bücher",
+    "all": "Alle",
+    "ownBooks": "Eigene Bücher",
+    "relatedBooks": "Verwandte Bücher",
+    "ownBook": "Eigenes Buch",
+    "relatedBook": "Verwandtes Buch",
+    "noBooksInCategory": "Keine Bücher in dieser Kategorie gefunden",
+    "noBooksInCategoryDesc": "Für die gewählte Kategorie sind noch keine Bücher vorhanden.",
+    "bookImage": "Buchillustration",
+    "noDescription": "Keine Erklärung verfügbar",
+    "languages": "Sprachen",
+    "noBooksYet": "Noch keine Bücher verfügbar",
+    "noBooksYetDesc": "Dieser Wissenschaftler hat noch keine Bücher hinzugefügt oder es gibt keine verwandten Bücher.",
+    "languageSelection": "Auswahl der Sprache",
+    "whichLanguageDownload": "Welche Sprache möchten Sie herunterladen?",
+    "download": "Herunterladen",
+    "noPdf": "Kein PDF",
+    "cancel": "Stornierung",
+    "noDownloadOption": "Für dieses Buch gibt es keine Download-Option.",
+    "downloadError": "Beim Herunterladen ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+    "downloadFileNotFound": "Download-Datei nicht gefunden."
   }
 }

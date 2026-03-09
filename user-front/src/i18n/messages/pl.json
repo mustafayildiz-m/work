@@ -950,5 +950,50 @@
     "wantsToConnect": "Chce się z tobą skontaktować",
     "accept": "Akceptuj",
     "reject": "Odrzucić"
+  },
+  "scholarFeed": {
+    "loading": "Posty się ładują...",
+    "noPosts": "Jeszcze nie wysłano",
+    "noPostsDesc": "Ten naukowiec jeszcze nie opublikował.",
+    "preview": "Podgląd"
+  },
+  "scholarActivity": {
+    "loading": "Ładowanie informacji genealogicznych...",
+    "scholarNotFound": "Scholar Not Found",
+    "scholarNotFoundDesc": "Szukany stypendysta może nie zostać odnaleziony lub mógł zostać usunięty.",
+    "lineageInfo": "Informacje genealogiczne",
+    "fullName": "Imię i nazwisko",
+    "birthDate": "Data urodzenia",
+    "deathDate": "Data śmierci",
+    "birthPlace": "Miejsce urodzenia",
+    "detailedLineage": "Szczegółowa genealogia",
+    "notSpecified": "Nieokreślony"
+  },
+  "scholarConnections": {
+    "loading": "Książki są ładowane...",
+    "mapLoading": "Ładowanie mapy...",
+    "scholarNotFound": "Scholar Not Found",
+    "scholarNotFoundDesc": "Szukany stypendysta może nie zostać odnaleziony lub mógł zostać usunięty.",
+    "books": "Książki",
+    "all": "Wszystkie",
+    "ownBooks": "Własne książki",
+    "relatedBooks": "Powiązane książki",
+    "ownBook": "Własna książka",
+    "relatedBook": "Powiązana książka",
+    "noBooksInCategory": "Nie znaleziono książek w tej kategorii",
+    "noBooksInCategoryDesc": "Nie ma jeszcze książek dla wybranej kategorii.",
+    "bookImage": "Ilustracja książkowa",
+    "noDescription": "Brak dostępnych wyjaśnień",
+    "languages": "Języki",
+    "noBooksYet": "Książki nie są jeszcze dostępne",
+    "noBooksYetDesc": "Ten uczony nie dodał jeszcze książek lub nie ma powiązanych książek.",
+    "languageSelection": "Wybór języka",
+    "whichLanguageDownload": "Który język chcesz pobrać?",
+    "download": "Pobierz",
+    "noPdf": "Brak PDF",
+    "cancel": "Anulowanie",
+    "noDownloadOption": "Nie ma opcji pobrania tej książki.",
+    "downloadError": "Wystąpił błąd podczas pobierania. Spróbuj ponownie.",
+    "downloadFileNotFound": "Nie znaleziono pobranego pliku."
   }
 }

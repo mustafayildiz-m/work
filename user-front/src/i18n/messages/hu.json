@@ -950,5 +950,50 @@
     "wantsToConnect": "Kapcsolatba akar lépni veled",
     "accept": "Elfogadom",
     "reject": "Visszautasítani"
+  },
+  "scholarFeed": {
+    "loading": "Hozzászólások betöltése...",
+    "noPosts": "Még nincs szállítás",
+    "noPostsDesc": "Ez az ösztöndíjas még nem tett közzé.",
+    "preview": "Előnézet"
+  },
+  "scholarActivity": {
+    "loading": "Genealógiai információk betöltése...",
+    "scholarNotFound": "Nem talált ösztöndíjas",
+    "scholarNotFoundDesc": "Előfordulhat, hogy a keresett tudós nem található meg, vagy törölve lett.",
+    "lineageInfo": "Genealógiai információk",
+    "fullName": "Teljes név",
+    "birthDate": "Születési dátum",
+    "deathDate": "Az elhalálozás időpontja",
+    "birthPlace": "Születési hely",
+    "detailedLineage": "Részletes genealógia",
+    "notSpecified": "Meghatározatlan"
+  },
+  "scholarConnections": {
+    "loading": "A könyvek be vannak töltve...",
+    "mapLoading": "Térkép betöltése...",
+    "scholarNotFound": "Nem talált ösztöndíjas",
+    "scholarNotFoundDesc": "Előfordulhat, hogy a keresett tudós nem található meg, vagy törölve lett.",
+    "books": "Könyvek",
+    "all": "Minden",
+    "ownBooks": "Saját könyvek",
+    "relatedBooks": "Kapcsolódó könyvek",
+    "ownBook": "Saját könyv",
+    "relatedBook": "Kapcsolódó könyv",
+    "noBooksInCategory": "Nincs könyv ebben a kategóriában",
+    "noBooksInCategoryDesc": "A kiválasztott kategóriához még nincsenek könyvek.",
+    "bookImage": "Könyvillusztráció",
+    "noDescription": "Nincs magyarázat",
+    "languages": "Nyelvek",
+    "noBooksYet": "Még nincsenek elérhető könyvek",
+    "noBooksYetDesc": "Ez a tudós még nem adott hozzá könyveket, vagy nincsenek kapcsolódó könyvek.",
+    "languageSelection": "Nyelvválasztás",
+    "whichLanguageDownload": "Melyik nyelvet szeretné letölteni?",
+    "download": "Letöltés",
+    "noPdf": "Nincs PDF",
+    "cancel": "Lemondás",
+    "noDownloadOption": "Ehhez a könyvhöz nincs letöltési lehetőség.",
+    "downloadError": "Hiba történt a letöltés során. Kérjük, próbálja meg újra.",
+    "downloadFileNotFound": "Letöltési fájl nem található."
   }
 }

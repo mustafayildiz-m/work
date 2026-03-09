@@ -950,5 +950,50 @@
     "wantsToConnect": "Želi stopiti v stik z vami",
     "accept": "Sprejmite",
     "reject": "Zavrnite"
+  },
+  "scholarFeed": {
+    "loading": "Prispevki se nalagajo...",
+    "noPosts": "Še ni pošiljke",
+    "noPostsDesc": "Ta učenjak še ni objavil.",
+    "preview": "Predogled"
+  },
+  "scholarActivity": {
+    "loading": "Nalaganje rodoslovnih informacij...",
+    "scholarNotFound": "Učenjak ni najden",
+    "scholarNotFoundDesc": "Učenjaka, ki ga iščete, morda ni mogoče najti ali pa je bil izbrisan.",
+    "lineageInfo": "Rodoslovne informacije",
+    "fullName": "Polno ime",
+    "birthDate": "Datum rojstva",
+    "deathDate": "Datum smrti",
+    "birthPlace": "Kraj rojstva",
+    "detailedLineage": "Podrobna genealogija",
+    "notSpecified": "Neopredeljeno"
+  },
+  "scholarConnections": {
+    "loading": "Knjige se nalagajo...",
+    "mapLoading": "Nalaganje zemljevida...",
+    "scholarNotFound": "Učenjak ni najden",
+    "scholarNotFoundDesc": "Učenjaka, ki ga iščete, morda ni mogoče najti ali pa je bil izbrisan.",
+    "books": "Knjige",
+    "all": "Vse",
+    "ownBooks": "Lastne knjige",
+    "relatedBooks": "Sorodne knjige",
+    "ownBook": "Lastna knjiga",
+    "relatedBook": "Sorodna knjiga",
+    "noBooksInCategory": "V tej kategoriji ni bilo najdenih nobenih knjig",
+    "noBooksInCategoryDesc": "Za izbrano kategorijo še ni knjig.",
+    "bookImage": "Knjižna ilustracija",
+    "noDescription": "Razlaga ni na voljo",
+    "languages": "Jeziki",
+    "noBooksYet": "Knjige še niso na voljo",
+    "noBooksYetDesc": "Ta učenjak še ni dodal knjig ali pa ni povezanih knjig.",
+    "languageSelection": "Izbira jezika",
+    "whichLanguageDownload": "Kateri jezik želite prenesti?",
+    "download": "Prenesi",
+    "noPdf": "Ne PDF",
+    "cancel": "Odpoved",
+    "noDownloadOption": "Za to knjigo ni možnosti prenosa.",
+    "downloadError": "Med prenosom je prišlo do napake. Prosimo, poskusite znova.",
+    "downloadFileNotFound": "Datoteka za prenos ni bila najdena."
   }
 }

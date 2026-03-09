@@ -961,5 +961,50 @@
     "wantsToConnect": "Il veut vous contacter",
     "accept": "Accepter",
     "reject": "Rejeter"
+  },
+  "scholarFeed": {
+    "loading": "Les messages sont en cours de chargement...",
+    "noPosts": "Pas encore d'envoi",
+    "noPostsDesc": "Cet universitaire n'a pas encore posté de message.",
+    "preview": "Avant-première"
+  },
+  "scholarActivity": {
+    "loading": "Chargement des informations généalogiques...",
+    "scholarNotFound": "Chercheur introuvable",
+    "scholarNotFoundDesc": "L'universitaire que vous recherchez peut être introuvable ou avoir été supprimé.",
+    "lineageInfo": "Informations généalogiques",
+    "fullName": "Nom complet",
+    "birthDate": "Date de naissance",
+    "deathDate": "Date du décès",
+    "birthPlace": "Lieu de naissance",
+    "detailedLineage": "Généalogie détaillée",
+    "notSpecified": "Non spécifié"
+  },
+  "scholarConnections": {
+    "loading": "Les livres sont en cours de chargement...",
+    "mapLoading": "Chargement de la carte...",
+    "scholarNotFound": "Chercheur introuvable",
+    "scholarNotFoundDesc": "L'universitaire que vous recherchez peut être introuvable ou avoir été supprimé.",
+    "books": "Livres",
+    "all": "Tous",
+    "ownBooks": "Livres personnels",
+    "relatedBooks": "Livres associés",
+    "ownBook": "Livre personnel",
+    "relatedBook": "Livre connexe",
+    "noBooksInCategory": "Aucun livre trouvé dans cette catégorie",
+    "noBooksInCategoryDesc": "Il n'y a pas encore de livres pour la catégorie sélectionnée.",
+    "bookImage": "Illustration de livre",
+    "noDescription": "Pas d'explication disponible",
+    "languages": "Langues",
+    "noBooksYet": "Aucun livre n'est encore disponible",
+    "noBooksYetDesc": "Ce chercheur n'a pas encore ajouté de livres ou il n'y a pas de livres liés.",
+    "languageSelection": "Sélection de la langue",
+    "whichLanguageDownload": "Quelle langue voulez-vous télécharger ?",
+    "download": "Télécharger",
+    "noPdf": "Pas de PDF",
+    "cancel": "Annulation",
+    "noDownloadOption": "Il n'y a pas d'option de téléchargement pour ce livre.",
+    "downloadError": "Une erreur s'est produite pendant le téléchargement. Veuillez réessayer.",
+    "downloadFileNotFound": "Fichier de téléchargement introuvable."
   }
 }
