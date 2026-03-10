@@ -55,7 +55,7 @@
     "confirmPasswordPlaceholder": "પાસવર્ડ કન્ફર્મ કરો*",
     "profilePhotoOptional": "📷 પ્રોફાઇલ ફોટો ઉમેરો (વૈકલ્પિક)",
     "acceptTerms": "હું નિયમો અને શરતો સ્વીકારું છું",
-    "alreadyHaveAccount": "પહેલેથી એકાઉન્ટ છે?",
+    "alreadyHaveAccount": "પહેલેથી જ એકાઉન્ટ છે?",
     "dontHaveAccount": "ખાતું નથી?",
     "createAccount": "બનાવવા માટે ક્લિક કરો",
     "loginSuccess": "લૉગિન સફળ",
@@ -87,20 +87,20 @@
     "newPassword": "નવો પાસવર્ડ",
     "confirmPasswordLabel": "પાસવર્ડની પુષ્ટિ કરો",
     "updatePassword": "પાસવર્ડ અપડેટ કરો",
-    "updating": "અપડેટ થઈ રહ્યું છે...",
+    "updating": "અપડેટ કરી રહ્યું છે...",
     "passwordChanged": "પાસવર્ડ બદલાયો!",
-    "passwordChangedDesc": "તમારો પાસવર્ડ સફળતાપૂર્વક અપડેટ થયો. હવે તમે તમારા નવા પાસવર્ડથી લોગ ઇન કરી શકો છો.",
+    "passwordChangedDesc": "તમારો પાસવર્ડ સફળતાપૂર્વક અપડેટ કરવામાં આવ્યો છે. હવે તમે તમારા નવા પાસવર્ડ વડે સાઇન ઇન કરી શકો છો.",
     "invalidLink": "અમાન્ય લિંક",
-    "invalidLinkDesc": "પાસવર્ડ રીસેટ ટોકન મળ્યો નથી. કૃપા કરીને ખાતરી કરો કે તમે તમારા ઇમેઇલની લિંક પર ક્લિક કર્યું છે.",
+    "invalidLinkDesc": "પાસવર્ડ રીસેટ ટોકન મળ્યું નથી. કૃપા કરીને ખાતરી કરો કે તમે તમારા ઇમેઇલમાંથી લિંક પર ક્લિક કર્યું છે.",
     "requestNewLink": "નવી લિંકની વિનંતી કરો",
-    "resetPasswordError": "પાસવર્ડ રીસેટ કરતી વખતે ભૂલ થઈ.",
-    "passwordMinLength": "પાસવર્ડ ઓછામાં ઓછા 8 અક્ષરોનો હોવો જોઈએ",
+    "resetPasswordError": "તમારો પાસવર્ડ રીસેટ કરતી વખતે એક ભૂલ આવી.",
+    "passwordMinLength": "પાસવર્ડ ઓછામાં ઓછો 8 અક્ષરનો હોવો જોઈએ",
     "passwordRequired": "પાસવર્ડ જરૂરી છે",
     "passwordsMismatch": "પાસવર્ડ મેળ ખાતા નથી",
-    "confirmPasswordRequired": "પાસવર્ડની પુષ્ટિ જરૂરી છે",
+    "confirmPasswordRequired": "પુષ્ટિ કરો પાસવર્ડ જરૂરી છે",
     "resetPasswordErrors": {
-      "INVALID_RESET_TOKEN": "અમાન્ય અથવા સમાપ્ત પાસવર્ડ રીસેટ ટોકન.",
-      "EXPIRED_RESET_TOKEN": "પાસવર્ડ રીસેટ લિંકની સમય સીમા સમાપ્ત થઈ ગઈ છે."
+      "INVALID_RESET_TOKEN": "અમાન્ય અથવા સમાપ્ત થયેલ પાસવર્ડ રીસેટ ટોકન.",
+      "EXPIRED_RESET_TOKEN": "પાસવર્ડ રીસેટ લિંકની સમયસીમા સમાપ્ત થઈ ગઈ છે."
     }
   },
   "navigation": {
@@ -159,7 +159,7 @@
     "shareWithVideo": "વિડિયો સાથે શેર કરો",
     "createEvent": "ઇવેન્ટ બનાવો",
     "uploadPhoto": "ફોટો અપલોડ કરો",
-    "uploadVideo": "વિડિઓ અપલોડ કરો",
+    "uploadVideo": "વિડિયો અપલોડ કરો",
     "title": "શીર્ષક",
     "location": "સ્થાન",
     "eventName": "ઇવેન્ટનું નામ અહીં",
@@ -260,12 +260,12 @@
   "feed": {
     "sortBy": "દ્વારા સૉર્ટ કરો",
     "latest": "નવીનતમ",
-    "top": "ટોપ",
+    "top": "ટોચ",
     "oldest": "સૌથી જૂનું",
     "createPost": "પોસ્ટ બનાવો",
     "shareThoughts": "તમારા વિચારો શેર કરો...",
     "whatsOnYourMind": "તમારા મગજમાં શું છે?",
-    "whoToFollow": "કોને અનુસરો",
+    "whoToFollow": "કોને અનુસરવું",
     "suggestedForYou": "તમારા માટે સૂચવ્યું",
     "followAll": "બધાને અનુસરો",
     "viewAll": "બધા જુઓ",
@@ -285,6 +285,7 @@
     "startFollowing": "લોકોને અનુસરવાનું શરૂ કરો",
     "scholar": "ઇસ્લામિક વિદ્વાન",
     "user": "વપરાશકર્તા",
+    "scholarsUsersFound": "{scholars} વિદ્વાનો, {users} વપરાશકર્તાઓ મળ્યા",
     "noSuggestionsYet": "હજુ સુધી કોઈ સૂચનો નથી",
     "noPostsFound": "કોઈ પોસ્ટ મળી નથી",
     "noPostsDescription": "તમે અનુસરો છો તે લોકોએ હજુ સુધી પોસ્ટ શેર કરી નથી અથવા તમે હજુ સુધી કોઈને અનુસર્યા નથી.",
@@ -341,7 +342,7 @@
   "notifications": {
     "title": "સૂચનાઓ",
     "markAllAsRead": "બધાને વાંચેલા તરીકે ચિહ્નિત કરો",
-    "clearAll": "બધા સાફ કરો",
+    "clearAll": "બધું સાફ કરો",
     "goToProfile": "પ્રોફાઇલ પર જાઓ",
     "sendMessage": "સંદેશ મોકલો",
     "markAsRead": "વાંચેલા તરીકે ચિહ્નિત કરો",
@@ -350,7 +351,7 @@
     "loading": "લોડ કરી રહ્યું છે...",
     "loadMore": "વધુ સૂચનાઓ લોડ કરો",
     "markAllAsReadShort": "બધા વાંચેલા ચિહ્નિત કરો",
-    "clearAllShort": "બધા સાફ કરો",
+    "clearAllShort": "બધું સાફ કરો",
     "viewAllNotifications": "બધી સૂચનાઓ જુઓ"
   },
   "followRequests": {
@@ -620,7 +621,7 @@
     "token_not_found_please_login": "ટોકન મળ્યું નથી. કૃપા કરીને ફરી લોગિન કરો."
   },
   "blogs": {
-    "title": "ઇસ્લામથી સન્માનિત",
+    "title": "વાર્તાઓ",
     "storiesCount": "વાર્તાઓ",
     "searchPlaceholder": "વાર્તાઓમાં શોધો...",
     "clearSearch": "શોધ સાફ કરો",
@@ -832,7 +833,7 @@
       "Altayca": "અલ્તાઇ",
       "Şorca": "શોર",
       "Dolganca": "ડોલગન",
-      "Tofalarca": "ટોફાલર",
+      "Tofalarca": "તોફાલર",
       "Gagavuzca": "ગાગૌઝ",
       "Karaimce": "કરાઈમ",
       "Kırım Tatar Türkçesi": "ક્રિમિઅન તતાર",
@@ -917,7 +918,7 @@
       "page": "પૃષ્ઠ",
       "of": "ના"
     },
-    "share": "શેર બુક",
+    "share": "પુસ્તક શેર કરો",
     "shareOnWhatsApp": "વોટ્સએપ પર શેર કરો",
     "shareToFeed": "ન્યૂઝ ફીડ પર શેર કરો",
     "sharedToFeed": "ન્યૂઝ ફીડ પર પુસ્તક શેર કર્યું",
@@ -1068,8 +1069,8 @@
     "youSuffix": "(તમે)",
     "chatWith": "{name} સાથે ચેટ કરો",
     "thisIsYou": "આ તમે છો",
-    "emojiLoading": "ઇમોજી લોડ કરી રહ્યું છે...",
-    "emptyMessageError": "સંદેશ ખાલી હોઈ શકતો નથી",
+    "emojiLoading": "Loading emoji...",
+    "emptyMessageError": "Message cannot be empty",
     "maxLengthError": "સંદેશ વધુમાં વધુ {count} અક્ષરોનો હોઈ શકે છે",
     "sendError": "સંદેશ મોકલી શકાયો નથી. કૃપા કરીને ફરી પ્રયાસ કરો.",
     "followRequired": "સંદેશા મોકલવા માટે, તમારે આ વ્યક્તિને અનુસરવાની અને પરસ્પર જોડાણ હોવું જરૂરી છે.",
@@ -1078,7 +1079,7 @@
     "selectEmoji": "ઇમોજી પસંદ કરો",
     "enterMessage": "સંદેશ દાખલ કરો",
     "sendMessage": "સંદેશ મોકલો",
-    "backToConversations": "વાર્તાલાપ પર પાછા",
-    "messagingListView": "મેસેજિંગ સૂચિ દૃશ્ય"
+    "backToConversations": "Back to conversations",
+    "messagingListView": "Messaging list view"
   }
 }

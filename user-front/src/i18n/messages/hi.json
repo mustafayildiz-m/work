@@ -85,22 +85,22 @@
     "resetPasswordTitle": "नया पासवर्ड सेट करें",
     "resetPasswordSubtitle": "कृपया अपनी सुरक्षा के लिए एक मजबूत पासवर्ड चुनें।",
     "newPassword": "नया पासवर्ड",
-    "confirmPasswordLabel": "पासवर्ड की पुष्टि करें",
+    "confirmPasswordLabel": "पासवर्ड की पुष्टि कीजिये",
     "updatePassword": "पासवर्ड अपडेट करें",
-    "updating": "अपडेट हो रहा है...",
-    "passwordChanged": "पासवर्ड बदल दिया गया!",
-    "passwordChangedDesc": "आपका पासवर्ड सफलतापूर्वक अपडेट हो गया। अब आप अपने नए पासवर्ड से लॉग इन कर सकते हैं।",
+    "updating": "अद्यतन किया जा रहा है...",
+    "passwordChanged": "पासवर्ड बदला गया!",
+    "passwordChangedDesc": "आपका पासवर्ड सफलतापूर्वक अपडेट कर दिया गया है. अब आप अपने नए पासवर्ड से साइन इन कर सकते हैं।",
     "invalidLink": "अमान्य लिंक",
-    "invalidLinkDesc": "पासवर्ड रीसेट टोकन नहीं मिला। कृपया सुनिश्चित करें कि आपने अपने ईमेल के लिंक पर क्लिक किया है।",
-    "requestNewLink": "नया लिंक अनुरोध करें",
-    "resetPasswordError": "पासवर्ड रीसेट करते समय एक त्रुटि हुई।",
-    "passwordMinLength": "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए",
+    "invalidLinkDesc": "पासवर्ड रीसेट टोकन नहीं मिला. कृपया सुनिश्चित करें कि आपने अपने ईमेल से लिंक पर क्लिक किया है।",
+    "requestNewLink": "नए लिंक का अनुरोध करें",
+    "resetPasswordError": "आपका पासवर्ड रीसेट करते समय एक त्रुटि उत्पन्न हुई.",
+    "passwordMinLength": "पासवर्ड कम से कम 8 वर्णों का होना चाहिए",
     "passwordRequired": "पासवर्ड आवश्यक है",
-    "passwordsMismatch": "पासवर्ड मेल नहीं खाते",
-    "confirmPasswordRequired": "पासवर्ड की पुष्टि आवश्यक है",
+    "passwordsMismatch": "सांकेतिक शब्द मेल नहीं खाते",
+    "confirmPasswordRequired": "पुष्टि पासवर्ड आवश्यक है",
     "resetPasswordErrors": {
       "INVALID_RESET_TOKEN": "अमान्य या समाप्त पासवर्ड रीसेट टोकन।",
-      "EXPIRED_RESET_TOKEN": "पासवर्ड रीसेट लिंक की समय सीमा समाप्त हो गई है।"
+      "EXPIRED_RESET_TOKEN": "पासवर्ड रीसेट लिंक समाप्त हो गया है."
     }
   },
   "navigation": {
@@ -285,6 +285,7 @@
     "startFollowing": "लोगों का अनुसरण करना शुरू करें",
     "scholar": "इस्लामी विद्वान",
     "user": "उपयोगकर्ता",
+    "scholarsUsersFound": "{scholars} विद्वान, {users} उपयोगकर्ता मिले",
     "noSuggestionsYet": "अभी तक कोई सुझाव नहीं",
     "noPostsFound": "कोई पोस्ट नहीं मिली",
     "noPostsDescription": "जिन लोगों को आप फ़ॉलो करते हैं, उन्होंने अभी तक पोस्ट साझा नहीं की हैं या आपने अभी तक किसी को फ़ॉलो नहीं किया है।",
@@ -620,7 +621,7 @@
     "token_not_found_please_login": "टोकन नहीं मिला. कृपया फिर भाग लें।"
   },
   "blogs": {
-    "title": "इस्लाम से सम्मानित",
+    "title": "कहानियां",
     "storiesCount": "कहानियां",
     "searchPlaceholder": "कहानियों में खोजें...",
     "clearSearch": "स्पष्ट खोज",
