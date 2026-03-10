@@ -73,7 +73,27 @@
     "birthDateRequired": "Please enter your birth date",
     "ageLimitError": "You must be at least 16 years old to register",
     "ageConfirm": "I declare and accept that I am over 16 years old.",
-    "visitAsGuest": "Visit as guest"
+    "visitAsGuest": "Visit as guest",
+    "resetPasswordTitle": "Встановити новий пароль",
+    "resetPasswordSubtitle": "Будь ласка, оберіть надійний пароль для безпеки.",
+    "newPassword": "Новий пароль",
+    "confirmPasswordLabel": "Підтвердіть пароль",
+    "updatePassword": "Оновити пароль",
+    "updating": "Оновлення...",
+    "passwordChanged": "Пароль змінено!",
+    "passwordChangedDesc": "Ваш пароль успішно оновлено. Тепер ви можете увійти з новим паролем.",
+    "invalidLink": "Недійсне посилання",
+    "invalidLinkDesc": "Токен скидання пароля не знайдено. Переконайтеся, що ви перейшли за посиланням з листа.",
+    "requestNewLink": "Запросити нове посилання",
+    "resetPasswordError": "Виникла помилка при скиданні пароля.",
+    "passwordMinLength": "Пароль повинен містити щонайменше 8 символів",
+    "passwordRequired": "Пароль обов'язковий",
+    "passwordsMismatch": "Паролі не збігаються",
+    "confirmPasswordRequired": "Підтвердження пароля обов'язкове",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "Недійсний або прострочений токен скидання пароля.",
+      "EXPIRED_RESET_TOKEN": "Термін дії посилання для скидання пароля закінчився."
+    }
   },
   "navigation": {
     "home": "Головна",

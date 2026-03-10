@@ -73,7 +73,27 @@
     "birthDateRequired": "생년월일을 입력해 주세요",
     "ageLimitError": "가입하려면 최소 16세 이상이어야 합니다",
     "ageConfirm": "본인은 16세 이상임을 선언하고 수락합니다.",
-    "visitAsGuest": "게스트로 방문"
+    "visitAsGuest": "게스트로 방문",
+    "resetPasswordTitle": "새 비밀번호 설정",
+    "resetPasswordSubtitle": "보안을 위해 강력한 비밀번호를 선택해 주세요.",
+    "newPassword": "새 비밀번호",
+    "confirmPasswordLabel": "비밀번호 확인",
+    "updatePassword": "비밀번호 업데이트",
+    "updating": "업데이트 중...",
+    "passwordChanged": "비밀번호가 변경되었습니다!",
+    "passwordChangedDesc": "비밀번호가 성공적으로 업데이트되었습니다. 이제 새 비밀번호로 로그인할 수 있습니다.",
+    "invalidLink": "잘못된 링크",
+    "invalidLinkDesc": "비밀번호 재설정 토큰을 찾을 수 없습니다. 이메일의 링크를 클릭했는지 확인하세요.",
+    "requestNewLink": "새 링크 요청",
+    "resetPasswordError": "비밀번호 재설정 중 오류가 발생했습니다.",
+    "passwordMinLength": "비밀번호는 최소 8자 이상이어야 합니다",
+    "passwordRequired": "비밀번호는 필수입니다",
+    "passwordsMismatch": "비밀번호가 일치하지 않습니다",
+    "confirmPasswordRequired": "비밀번호 확인은 필수입니다",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "유효하지 않거나 만료된 비밀번호 재설정 토큰입니다.",
+      "EXPIRED_RESET_TOKEN": "비밀번호 재설정 링크가 만료되었습니다."
+    }
   },
   "navigation": {
     "home": "홈",

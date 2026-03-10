@@ -81,7 +81,27 @@
     "ageLimitError": "Морате имати најмање 16 година да бисте се регистровали",
     "ageConfirm": "Изјављујем и прихватам да имам више од 16 година.",
     "ageRequiredError": "Морате да потврдите да имате 16 година да бисте се пријавили на Гоогле.",
-    "visitAsGuest": "Посетите као гост"
+    "visitAsGuest": "Посетите као гост",
+    "resetPasswordTitle": "Поставите нову лозинку",
+    "resetPasswordSubtitle": "Молимо изаберите јаку лозинку за вашу безбедност.",
+    "newPassword": "Нова лозинка",
+    "confirmPasswordLabel": "Потврдите лозинку",
+    "updatePassword": "Ажурирајте лозинку",
+    "updating": "Ажурирање...",
+    "passwordChanged": "Лозинка је промењена!",
+    "passwordChangedDesc": "Ваша лозинка је успешно ажурирана. Сада се можете пријавити новом лозинком.",
+    "invalidLink": "Неважећа веза",
+    "invalidLinkDesc": "Токен за ресетовање лозинке није пронађен. Молимо осигурајте се да сте кликнули на везу из вашег е-маила.",
+    "requestNewLink": "Затражите нову везу",
+    "resetPasswordError": "Дошло је до грешке при ресетовању лозинке.",
+    "passwordMinLength": "Лозинка мора имати најмање 8 знакова",
+    "passwordRequired": "Лозинка је обавезна",
+    "passwordsMismatch": "Лозинке се не подударају",
+    "confirmPasswordRequired": "Потврда лозинке је обавезна",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "Неважећи или истекао токен за ресетовање лозинке.",
+      "EXPIRED_RESET_TOKEN": "Веза за ресетовање лозинке је истекла."
+    }
   },
   "navigation": {
     "home": "Хоме",

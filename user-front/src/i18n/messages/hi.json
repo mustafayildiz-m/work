@@ -81,7 +81,27 @@
     "ageLimitError": "पंजीकरण के लिए आपकी आयु कम से कम 16 वर्ष होनी चाहिए",
     "ageConfirm": "मैं घोषणा करता हूं और स्वीकार करता हूं कि मेरी उम्र 16 वर्ष से अधिक है।",
     "ageRequiredError": "Google के साथ साइन इन करने के लिए आपको 16 वर्ष पुरानी आवश्यकता की पुष्टि करनी होगी।",
-    "visitAsGuest": "अतिथि के रूप में पधारें"
+    "visitAsGuest": "अतिथि के रूप में पधारें",
+    "resetPasswordTitle": "नया पासवर्ड सेट करें",
+    "resetPasswordSubtitle": "कृपया अपनी सुरक्षा के लिए एक मजबूत पासवर्ड चुनें।",
+    "newPassword": "नया पासवर्ड",
+    "confirmPasswordLabel": "पासवर्ड की पुष्टि करें",
+    "updatePassword": "पासवर्ड अपडेट करें",
+    "updating": "अपडेट हो रहा है...",
+    "passwordChanged": "पासवर्ड बदल दिया गया!",
+    "passwordChangedDesc": "आपका पासवर्ड सफलतापूर्वक अपडेट हो गया। अब आप अपने नए पासवर्ड से लॉग इन कर सकते हैं।",
+    "invalidLink": "अमान्य लिंक",
+    "invalidLinkDesc": "पासवर्ड रीसेट टोकन नहीं मिला। कृपया सुनिश्चित करें कि आपने अपने ईमेल के लिंक पर क्लिक किया है।",
+    "requestNewLink": "नया लिंक अनुरोध करें",
+    "resetPasswordError": "पासवर्ड रीसेट करते समय एक त्रुटि हुई।",
+    "passwordMinLength": "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए",
+    "passwordRequired": "पासवर्ड आवश्यक है",
+    "passwordsMismatch": "पासवर्ड मेल नहीं खाते",
+    "confirmPasswordRequired": "पासवर्ड की पुष्टि आवश्यक है",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "अमान्य या समाप्त पासवर्ड रीसेट टोकन।",
+      "EXPIRED_RESET_TOKEN": "पासवर्ड रीसेट लिंक की समय सीमा समाप्त हो गई है।"
+    }
   },
   "navigation": {
     "home": "घर",

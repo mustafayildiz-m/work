@@ -1,8 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Card, Col, Row, Container, Alert, Button } from 'react-bootstrap';
-import { useState, useEffect } from 'react';
+import { Container, Alert, Button } from 'react-bootstrap';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import styles from '../../auth-advance/auth-pages.module.css';
@@ -20,12 +19,15 @@ const ResetPassword = () => {
             <div className={styles.authWrapper}>
                 <div className={styles.splitLayout}>
                     <div className={styles.leftPanel}>
+                        <div className={styles.languageSwitcher}>
+                            <LanguageSwitcher variant="auth" />
+                        </div>
                         <Container className={styles.leftContainer}>
                             <Alert variant="danger" className="text-center py-4">
-                                <h4 className="mb-3">Geçersiz Bağlantı</h4>
-                                <p>Şifre sıfırlama token'ı bulunamadı. Lütfen mailinizdeki linke tıkladığınızdan emin olun.</p>
+                                <h4 className="mb-3">{t('auth.invalidLink')}</h4>
+                                <p>{t('auth.invalidLinkDesc')}</p>
                                 <Link href="/auth-advance/forgot-pass">
-                                    <Button variant="danger" className="mt-2">Yeni Link İste</Button>
+                                    <Button variant="danger" className="mt-2">{t('auth.requestNewLink')}</Button>
                                 </Link>
                             </Alert>
                         </Container>
@@ -60,10 +62,10 @@ const ResetPassword = () => {
 
                         <div className={styles.formContainer}>
                             <h1 className={styles.welcomeTitle}>
-                                Yeni Şifre Belirleyin
+                                {t('auth.resetPasswordTitle')}
                             </h1>
                             <p className={styles.welcomeSubtitle}>
-                                Güvenliğiniz için lütfen güçlü bir şifre seçin.
+                                {t('auth.resetPasswordSubtitle')}
                             </p>
 
                             <div className={styles.authCard}>

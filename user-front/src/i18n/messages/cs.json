@@ -73,7 +73,27 @@
     "birthDateRequired": "Please enter your birth date",
     "ageLimitError": "You must be at least 16 years old to register",
     "ageConfirm": "I declare and accept that I am over 16 years old.",
-    "visitAsGuest": "Visit as guest"
+    "visitAsGuest": "Visit as guest",
+    "resetPasswordTitle": "Nastavit nové heslo",
+    "resetPasswordSubtitle": "Pro vaši bezpečnost vyberte silné heslo.",
+    "newPassword": "Nové heslo",
+    "confirmPasswordLabel": "Potvrdit heslo",
+    "updatePassword": "Aktualizovat heslo",
+    "updating": "Aktualizace...",
+    "passwordChanged": "Heslo bylo změněno!",
+    "passwordChangedDesc": "Vaše heslo bylo úspěšně aktualizováno. Nyní se můžete přihlásit novým heslem.",
+    "invalidLink": "Neplatný odkaz",
+    "invalidLinkDesc": "Token pro reset hesla nebyl nalezen. Ujistěte se, že jste klikli na odkaz z e-mailu.",
+    "requestNewLink": "Požádat o nový odkaz",
+    "resetPasswordError": "Při resetování hesla došlo k chybě.",
+    "passwordMinLength": "Heslo musí mít alespoň 8 znaků",
+    "passwordRequired": "Heslo je povinné",
+    "passwordsMismatch": "Hesla se neshodují",
+    "confirmPasswordRequired": "Potvrzení hesla je povinné",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "Neplatný nebo vypršený token pro reset hesla.",
+      "EXPIRED_RESET_TOKEN": "Odkaz pro reset hesla vypršel."
+    }
   },
   "navigation": {
     "home": "Home",

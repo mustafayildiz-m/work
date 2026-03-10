@@ -73,7 +73,27 @@
     "birthDateRequired": "Please enter your birth date",
     "ageLimitError": "You must be at least 16 years old to register",
     "ageConfirm": "I declare and accept that I am over 16 years old.",
-    "visitAsGuest": "Visit as guest"
+    "visitAsGuest": "Visit as guest",
+    "resetPasswordTitle": "Поставете нова лозинка",
+    "resetPasswordSubtitle": "Ве молиме изберете јака лозинка за вашата безбедност.",
+    "newPassword": "Нова лозинка",
+    "confirmPasswordLabel": "Потврдете ја лозинката",
+    "updatePassword": "Ажурирајте ја лозинката",
+    "updating": "Ажурирање...",
+    "passwordChanged": "Лозинката е променета!",
+    "passwordChangedDesc": "Вашата лозинка е успешно ажурирана. Сега можете да се најавите со новата лозинка.",
+    "invalidLink": "Невалидна врска",
+    "invalidLinkDesc": "Токенот за ресетирање на лозинка не е пронајден. Ве молиме осигурајте се дека сте кликнале на врската од вашата е-пошта.",
+    "requestNewLink": "Побарајте нова врска",
+    "resetPasswordError": "Настана грешка при ресетирање на лозинката.",
+    "passwordMinLength": "Лозинката мора да има најмалку 8 знаци",
+    "passwordRequired": "Лозинката е задолжителна",
+    "passwordsMismatch": "Лозинките не се совпаѓаат",
+    "confirmPasswordRequired": "Потврдата на лозинката е задолжителна",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "Невалиден или истечен токен за ресетирање на лозинка.",
+      "EXPIRED_RESET_TOKEN": "Врската за ресетирање на лозинка е истечена."
+    }
   },
   "navigation": {
     "home": "Начало",

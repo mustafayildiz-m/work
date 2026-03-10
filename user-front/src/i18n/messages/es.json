@@ -73,7 +73,27 @@
     "birthDateRequired": "Por favor, introduzca su fecha de nacimiento",
     "ageLimitError": "Debes tener al menos 16 años para registrarte",
     "ageConfirm": "Declaro y acepto que soy mayor de 16 años.",
-    "visitAsGuest": "Visitar como invitado"
+    "visitAsGuest": "Visitar como invitado",
+    "resetPasswordTitle": "Establecer nueva contraseña",
+    "resetPasswordSubtitle": "Por favor elija una contraseña segura.",
+    "newPassword": "Nueva contraseña",
+    "confirmPasswordLabel": "Confirmar contraseña",
+    "updatePassword": "Actualizar contraseña",
+    "updating": "Actualizando...",
+    "passwordChanged": "¡Contraseña cambiada!",
+    "passwordChangedDesc": "Su contraseña se ha actualizado correctamente. Ahora puede iniciar sesión con su nueva contraseña.",
+    "invalidLink": "Enlace inválido",
+    "invalidLinkDesc": "No se encontró el token de restablecimiento. Asegúrese de haber hecho clic en el enlace de su correo electrónico.",
+    "requestNewLink": "Solicitar nuevo enlace",
+    "resetPasswordError": "Ocurrió un error al restablecer la contraseña.",
+    "passwordMinLength": "La contraseña debe tener al menos 8 caracteres",
+    "passwordRequired": "La contraseña es obligatoria",
+    "passwordsMismatch": "Las contraseñas no coinciden",
+    "confirmPasswordRequired": "La confirmación de contraseña es obligatoria",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "Token de restablecimiento inválido o expirado.",
+      "EXPIRED_RESET_TOKEN": "El enlace de restablecimiento ha expirado."
+    }
   },
   "navigation": {
     "home": "Inicio",

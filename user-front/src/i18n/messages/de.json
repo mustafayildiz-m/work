@@ -73,7 +73,27 @@
     "birthDateRequired": "Bitte geben Sie Ihr Geburtsdatum ein",
     "ageLimitError": "Sie müssen mindestens 16 Jahre alt sein, um sich zu registrieren",
     "ageConfirm": "Ich erkläre und akzeptiere, dass ich über 16 Jahre alt bin.",
-    "visitAsGuest": "Als Gast besuchen"
+    "visitAsGuest": "Als Gast besuchen",
+    "resetPasswordTitle": "Neues Passwort festlegen",
+    "resetPasswordSubtitle": "Bitte wählen Sie ein sicheres Passwort.",
+    "newPassword": "Neues Passwort",
+    "confirmPasswordLabel": "Passwort bestätigen",
+    "updatePassword": "Passwort aktualisieren",
+    "updating": "Wird aktualisiert...",
+    "passwordChanged": "Passwort geändert!",
+    "passwordChangedDesc": "Ihr Passwort wurde erfolgreich aktualisiert. Sie können sich jetzt mit Ihrem neuen Passwort anmelden.",
+    "invalidLink": "Ungültiger Link",
+    "invalidLinkDesc": "Passwort-Reset-Token nicht gefunden. Bitte stellen Sie sicher, dass Sie auf den Link in Ihrer E-Mail geklickt haben.",
+    "requestNewLink": "Neuen Link anfordern",
+    "resetPasswordError": "Beim Zurücksetzen des Passworts ist ein Fehler aufgetreten.",
+    "passwordMinLength": "Das Passwort muss mindestens 8 Zeichen lang sein",
+    "passwordRequired": "Passwort ist erforderlich",
+    "passwordsMismatch": "Passwörter stimmen nicht überein",
+    "confirmPasswordRequired": "Passwortbestätigung ist erforderlich",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "Ungültiges oder abgelaufenes Passwort-Reset-Token.",
+      "EXPIRED_RESET_TOKEN": "Der Link zum Zurücksetzen des Passworts ist abgelaufen."
+    }
   },
   "navigation": {
     "home": "Startseite",

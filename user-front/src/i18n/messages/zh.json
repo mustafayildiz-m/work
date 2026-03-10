@@ -73,7 +73,27 @@
     "birthDateRequired": "请输入您的出生日期",
     "ageLimitError": "注册账号必须年满16岁",
     "ageConfirm": "我声明并接受我已满16岁。",
-    "visitAsGuest": "以访客身份访问"
+    "visitAsGuest": "以访客身份访问",
+    "resetPasswordTitle": "设置新密码",
+    "resetPasswordSubtitle": "请选择强密码以确保安全。",
+    "newPassword": "新密码",
+    "confirmPasswordLabel": "确认密码",
+    "updatePassword": "更新密码",
+    "updating": "更新中...",
+    "passwordChanged": "密码已更改！",
+    "passwordChangedDesc": "您的密码已成功更新。现在可以使用新密码登录。",
+    "invalidLink": "无效链接",
+    "invalidLinkDesc": "未找到密码重置令牌。请确保您点击了电子邮件中的链接。",
+    "requestNewLink": "请求新链接",
+    "resetPasswordError": "重置密码时发生错误。",
+    "passwordMinLength": "密码至少需要8个字符",
+    "passwordRequired": "密码为必填项",
+    "passwordsMismatch": "两次输入的密码不一致",
+    "confirmPasswordRequired": "确认密码为必填项",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "密码重置令牌无效或已过期。",
+      "EXPIRED_RESET_TOKEN": "密码重置链接已过期。"
+    }
   },
   "navigation": {
     "home": "首页",

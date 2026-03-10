@@ -81,7 +81,27 @@
     "ageLimitError": "Divê kêm kêm 16 salî bî ji bo tomar bûnê",
     "ageConfirm": "Ez îlan û qebûl dikim ku ez ji 16 salî mezintirim.",
     "ageRequiredError": "Divê merca 16 salî piştrast bikî ji bo têketina bi Google.",
-    "visitAsGuest": "Wek mêvan serdana bike"
+    "visitAsGuest": "Wek mêvan serdana bike",
+    "resetPasswordTitle": "Şîfreyê nû destnîşan bikin",
+    "resetPasswordSubtitle": "Ji bo ewlehiya xwe ji kerema xwe şîfreyek bihêz hilbijêrin.",
+    "newPassword": "Şîfreya nû",
+    "confirmPasswordLabel": "Şîfreyê piştrast bikin",
+    "updatePassword": "Şîfreyê nûve bikin",
+    "updating": "Tê nûve kirin...",
+    "passwordChanged": "Şîfre hat guhertin!",
+    "passwordChangedDesc": "Şîfreya we bi serketî hat nûve kirin. Niha dikarin bi şîfreya xwe ya nû têkevin.",
+    "invalidLink": "Girêdan nederbasdar",
+    "invalidLinkDesc": "Tokena vegerandina şîfreyê nehate dîtin. Ji kerema xwe piştrast bikin ku we li girêdana e-nameya xwe tikand.",
+    "requestNewLink": "Girêdana nû bixwazin",
+    "resetPasswordError": "Dema şîfre tê vegerandin xeletiyek çêbû.",
+    "passwordMinLength": "Divê şîfre kêm kêm 8 tîpan hebin",
+    "passwordRequired": "Şîfre pêwîst e",
+    "passwordsMismatch": "Şîfre li hev nakin",
+    "confirmPasswordRequired": "Piştrastkirina şîfreyê pêwîst e",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "Tokena vegerandina şîfreyê nederbasdar an jî qediyaye.",
+      "EXPIRED_RESET_TOKEN": "Girêdana vegerandina şîfreyê qediya."
+    }
   },
   "navigation": {
     "home": "Mal",

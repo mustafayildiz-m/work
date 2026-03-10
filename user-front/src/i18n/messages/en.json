@@ -81,7 +81,27 @@
     "ageLimitError": "You must be at least 16 years old to register",
     "ageConfirm": "I declare and accept that I am over 16 years old.",
     "ageRequiredError": "You must confirm the 16 years old requirement to sign in with Google.",
-    "visitAsGuest": "Visit as guest"
+    "visitAsGuest": "Visit as guest",
+    "resetPasswordTitle": "Set New Password",
+    "resetPasswordSubtitle": "Please choose a strong password for your security.",
+    "newPassword": "New Password",
+    "confirmPasswordLabel": "Confirm Password",
+    "updatePassword": "Update Password",
+    "updating": "Updating...",
+    "passwordChanged": "Password Changed!",
+    "passwordChangedDesc": "Your password has been successfully updated. You can now sign in with your new password.",
+    "invalidLink": "Invalid Link",
+    "invalidLinkDesc": "Password reset token not found. Please make sure you clicked the link from your email.",
+    "requestNewLink": "Request New Link",
+    "resetPasswordError": "An error occurred while resetting your password.",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "passwordRequired": "Password is required",
+    "passwordsMismatch": "Passwords do not match",
+    "confirmPasswordRequired": "Confirm password is required",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "Invalid or expired password reset token.",
+      "EXPIRED_RESET_TOKEN": "The password reset link has expired."
+    }
   },
   "navigation": {
     "home": "Home",

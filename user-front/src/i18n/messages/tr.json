@@ -81,7 +81,27 @@
     "ageLimitError": "Üye olabilmek için en az 16 yaşında olmalısınız",
     "ageConfirm": "16 yaşından büyük olduğumu beyan ve kabul ediyorum.",
     "ageRequiredError": "Google ile giriş yapabilmek için 16 yaş şartını onaylamalısınız.",
-    "visitAsGuest": "Misafir olarak ziyaret et"
+    "visitAsGuest": "Misafir olarak ziyaret et",
+    "resetPasswordTitle": "Yeni Şifre Belirleyin",
+    "resetPasswordSubtitle": "Güvenliğiniz için lütfen güçlü bir şifre seçin.",
+    "newPassword": "Yeni Şifre",
+    "confirmPasswordLabel": "Şifre Tekrar",
+    "updatePassword": "Şifreyi Güncelle",
+    "updating": "Güncelleniyor...",
+    "passwordChanged": "Şifre Değiştirildi!",
+    "passwordChangedDesc": "Şifreniz başarıyla güncellendi. Şimdi yeni şifrenizle giriş yapabilirsiniz.",
+    "invalidLink": "Geçersiz Bağlantı",
+    "invalidLinkDesc": "Şifre sıfırlama token'ı bulunamadı. Lütfen mailinizdeki linke tıkladığınızdan emin olun.",
+    "requestNewLink": "Yeni Link İste",
+    "resetPasswordError": "Şifre sıfırlanırken bir hata oluştu.",
+    "passwordMinLength": "Şifre en az 8 karakter olmalıdır",
+    "passwordRequired": "Şifre gereklidir",
+    "passwordsMismatch": "Şifreler eşleşmiyor",
+    "confirmPasswordRequired": "Şifre tekrarı gereklidir",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "Geçersiz veya süresi dolmuş şifre sıfırlama tokenı.",
+      "EXPIRED_RESET_TOKEN": "Şifre sıfırlama linkinin süresi dolmuş."
+    }
   },
   "navigation": {
     "home": "Ana Sayfa",

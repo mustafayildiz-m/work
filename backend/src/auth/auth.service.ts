@@ -311,15 +311,11 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new UnauthorizedException(
-        'Geçersiz veya süresi dolmuş şifre sıfırlama tokenı.',
-      );
+      throw new UnauthorizedException('INVALID_RESET_TOKEN');
     }
 
     if (user.resetPasswordExpires < new Date()) {
-      throw new UnauthorizedException(
-        'Şifre sıfırlama linkinin süresi dolmuş.',
-      );
+      throw new UnauthorizedException('EXPIRED_RESET_TOKEN');
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);

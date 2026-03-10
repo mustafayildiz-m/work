@@ -73,7 +73,27 @@
     "birthDateRequired": "Please enter your birth date",
     "ageLimitError": "You must be at least 16 years old to register",
     "ageConfirm": "I declare and accept that I am over 16 years old.",
-    "visitAsGuest": "Visit as guest"
+    "visitAsGuest": "Visit as guest",
+    "resetPasswordTitle": "Új jelszó beállítása",
+    "resetPasswordSubtitle": "Kérjük, válasszon erős jelszót a biztonság érdekében.",
+    "newPassword": "Új jelszó",
+    "confirmPasswordLabel": "Jelszó megerősítése",
+    "updatePassword": "Jelszó frissítése",
+    "updating": "Frissítés...",
+    "passwordChanged": "Jelszó megváltoztatva!",
+    "passwordChangedDesc": "A jelszava sikeresen frissítve. Most már bejelentkezhet az új jelszavával.",
+    "invalidLink": "Érvénytelen link",
+    "invalidLinkDesc": "A jelszó-visszaállítási token nem található. Győződjön meg róla, hogy az e-mailben lévő linkre kattintott.",
+    "requestNewLink": "Új link kérése",
+    "resetPasswordError": "Hiba történt a jelszó visszaállítása során.",
+    "passwordMinLength": "A jelszónak legalább 8 karakterből kell állnia",
+    "passwordRequired": "A jelszó kötelező",
+    "passwordsMismatch": "A jelszavak nem egyeznek",
+    "confirmPasswordRequired": "A jelszó megerősítése kötelező",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "Érvénytelen vagy lejárt jelszó-visszaállítási token.",
+      "EXPIRED_RESET_TOKEN": "A jelszó-visszaállítási link lejárt."
+    }
   },
   "navigation": {
     "home": "Home",

@@ -73,7 +73,27 @@
     "birthDateRequired": "Please enter your birth date",
     "ageLimitError": "You must be at least 16 years old to register",
     "ageConfirm": "I declare and accept that I am over 16 years old.",
-    "visitAsGuest": "Visit as guest"
+    "visitAsGuest": "Visit as guest",
+    "resetPasswordTitle": "Задайте нова парола",
+    "resetPasswordSubtitle": "Моля, изберете силна парола за вашата сигурност.",
+    "newPassword": "Нова парола",
+    "confirmPasswordLabel": "Потвърдете паролата",
+    "updatePassword": "Актуализиране на парола",
+    "updating": "Актуализиране...",
+    "passwordChanged": "Паролата е променена!",
+    "passwordChangedDesc": "Паролата ви е успешно актуализирана. Сега можете да влезете с новата си парола.",
+    "invalidLink": "Невалиден линк",
+    "invalidLinkDesc": "Токенът за нулиране на парола не е намерен. Моля, уверете се, че сте кликнали на линка от имейла си.",
+    "requestNewLink": "Заявете нов линк",
+    "resetPasswordError": "Възникна грешка при нулиране на паролата.",
+    "passwordMinLength": "Паролата трябва да съдържа поне 8 символа",
+    "passwordRequired": "Паролата е задължителна",
+    "passwordsMismatch": "Паролите не съвпадат",
+    "confirmPasswordRequired": "Потвърждението на паролата е задължително",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "Невалиден или изтекъл токен за нулиране на парола.",
+      "EXPIRED_RESET_TOKEN": "Връзката за нулиране на парола е изтекла."
+    }
   },
   "navigation": {
     "home": "Начало",

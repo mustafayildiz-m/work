@@ -8,8 +8,10 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import Link from 'next/link';
 import styles from '../../auth-advance/auth-pages.module.css';
+import { useLanguage } from '@/context/useLanguageContext';
 
 const ResetPasswordForm = ({ token }) => {
+    const { t } = useLanguage();
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState(null);
@@ -17,12 +19,12 @@ const ResetPasswordForm = ({ token }) => {
     const resetPasswordSchema = yup.object({
         password: yup
             .string()
-            .min(8, 'Şifre en az 8 karakter olmalıdır')
-            .required('Şifre gereklidir'),
+            .min(8, t('auth.passwordMinLength'))
+            .required(t('auth.passwordRequired')),
         confirmPassword: yup
             .string()
-            .oneOf([yup.ref('password'), null], 'Şifreler eşleşmiyor')
-            .required('Şifre tekrarı gereklidir')
+            .oneOf([yup.ref('password'), null], t('auth.passwordsMismatch'))
+            .required(t('auth.confirmPasswordRequired'))
     });
 
     const {
@@ -32,6 +34,14 @@ const ResetPasswordForm = ({ token }) => {
     } = useForm({
         resolver: yupResolver(resetPasswordSchema)
     });
+
+    const getErrorMessage = (message) => {
+        if (!message) return t('auth.resetPasswordError');
+        const code = message.trim();
+        const translated = t(`auth.resetPasswordErrors.${code}`);
+        if (translated !== `auth.resetPasswordErrors.${code}`) return translated;
+        return message;
+    };
 
     const onSubmit = async (data) => {
         setIsLoading(true);
@@ -51,12 +61,14 @@ const ResetPasswordForm = ({ token }) => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || 'Şifre sıfırlanırken bir hata oluştu');
+                const raw = errorData?.message ?? errorData?.code;
+                const msg = Array.isArray(raw) ? raw[0] : (raw || t('auth.resetPasswordError'));
+                throw new Error(msg);
             }
 
             setIsSuccess(true);
         } catch (err) {
-            setError(err.message);
+            setError(getErrorMessage(err.message));
         } finally {
             setIsLoading(false);
         }
@@ -67,8 +79,8 @@ const ResetPasswordForm = ({ token }) => {
             <div className="text-center">
                 <div className="mb-4">
                     <div style={{ fontSize: '60px', color: '#10b981' }}>✓</div>
-                    <h3 className="h4 font-weight-bold">Şifre Değiştirildi!</h3>
-                    <p className="text-muted">Şifreniz başarıyla güncellendi. Şimdi yeni şifrenizle giriş yapabilirsiniz.</p>
+                    <h3 className="h4 font-weight-bold">{t('auth.passwordChanged')}</h3>
+                    <p className="text-muted">{t('auth.passwordChangedDesc')}</p>
                 </div>
                 <Link href="/auth-advance/sign-in">
                     <Button
@@ -83,7 +95,7 @@ const ResetPasswordForm = ({ token }) => {
                             color: 'white'
                         }}
                     >
-                        Giriş Yap
+                        {t('auth.signIn')}
                     </Button>
                 </Link>
             </div>
@@ -99,7 +111,7 @@ const ResetPasswordForm = ({ token }) => {
             )}
 
             <div className="mb-3">
-                <label className="form-label small font-weight-bold">Yeni Şifre</label>
+                <label className="form-label small font-weight-bold">{t('auth.newPassword')}</label>
                 <PasswordFormInput
                     name="password"
                     control={control}
@@ -112,7 +124,7 @@ const ResetPasswordForm = ({ token }) => {
             </div>
 
             <div className="mb-4">
-                <label className="form-label small font-weight-bold">Şifre Tekrar</label>
+                <label className="form-label small font-weight-bold">{t('auth.confirmPasswordLabel')}</label>
                 <PasswordFormInput
                     name="confirmPassword"
                     control={control}
@@ -140,7 +152,7 @@ const ResetPasswordForm = ({ token }) => {
                         opacity: isLoading ? 0.7 : 1
                     }}
                 >
-                    {isLoading ? 'Güncelleniyor...' : 'Şifreyi Güncelle'}
+                    {isLoading ? t('auth.updating') : t('auth.updatePassword')}
                 </Button>
             </div>
         </form>
