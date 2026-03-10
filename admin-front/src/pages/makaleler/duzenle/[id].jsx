@@ -1,4 +1,4 @@
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -20,6 +20,7 @@ function getCoverUrl(coverImage) {
 function EditArticle() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const intl = useIntl();
   const [form, setForm] = useState({
     bookId: null,
     author: '',
@@ -91,7 +92,7 @@ function EditArticle() {
         });
 
         if (!articleResponse.ok) {
-          throw new Error('Makale bulunamadı');
+          throw new Error(intl.formatMessage({ id: 'UI.MAKALE_BULUNAMADI' }));
         }
 
         const article = await articleResponse.json();
@@ -126,7 +127,7 @@ function EditArticle() {
     };
 
     fetchData();
-  }, [id, navigate]);
+  }, [id, navigate, intl]);
 
   useEffect(() => {
     if (coverImage) {
@@ -255,16 +256,16 @@ function EditArticle() {
             setLoading(false);
             return;
           }
-          throw new Error(errorData.message || 'Makale güncellenemedi');
+          throw new Error(errorData.message || intl.formatMessage({ id: 'UI.MAKALE_GUNCELLENEMEDI' }));
         }
 
-        toast.success('Makale başarıyla güncellendi!');
+        toast.success(intl.formatMessage({ id: 'UI.MAKALE_BASARIYLA_GUNCELLENDI' }));
         navigate('/makaleler/liste');
       };
 
       await submitData();
     } catch (error) {
-      toast.error(error.message || 'Makale güncellenirken bir hata oluştu');
+      toast.error(error.message || intl.formatMessage({ id: 'UI.MAKALE_GUNCELLENIRKEN_HATA' }));
     } finally {
       setLoading(false);
     }
@@ -451,7 +452,7 @@ function EditArticle() {
                         handleTranslationChange(idx, 'title', e.target.value)
                       }
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
-                      placeholder="Makale başlığı"
+                      placeholder={intl.formatMessage({ id: 'UI.KITAPCIK_BASLIGI_PLACEHOLDER' })}
                       required
                     />
                   </div>
@@ -468,7 +469,7 @@ function EditArticle() {
                       }
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
                       rows="6"
-                      placeholder="Makale içeriği..."
+                      placeholder={intl.formatMessage({ id: 'UI.KITAPCIK_ICERIGI_PLACEHOLDER' })}
                       required
                     />
                   </div>

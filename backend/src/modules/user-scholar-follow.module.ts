@@ -5,10 +5,11 @@ import { Scholar } from '../scholars/entities/scholar.entity';
 import { UserScholarFollowService } from '../services/user-scholar-follow.service';
 import { UserScholarFollowController } from '../controllers/user-scholar-follow.controller';
 import { User } from '../users/entities/user.entity';
+import { CacheService } from '../services/cache.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserScholarFollow, Scholar, User])],
-  providers: [UserScholarFollowService],
+  providers: [UserScholarFollowService, CacheService],
   controllers: [UserScholarFollowController],
   exports: [UserScholarFollowService],
 })

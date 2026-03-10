@@ -171,7 +171,7 @@ function ArticleList() {
     Promise.all([
       fetchWithErrorHandling(`${BASE_URL}/languages`, 'Diller'),
       fetchWithErrorHandling(`${BASE_URL}/books?limit=1000`, 'Kitaplar'),
-      fetchWithErrorHandling(`${API_URL}?limit=1000`, 'Makaleler'),
+      fetchWithErrorHandling(`${API_URL}?limit=1000`, 'Kitapçıklar'),
     ]).then(([langs, booksResp, articlesResp]) => {
       if (langs) setLanguages(Array.isArray(langs) ? langs : []);
       if (booksResp) {
@@ -182,7 +182,7 @@ function ArticleList() {
         const articlesData = articlesResp?.data || [];
         const processedAll = articlesData.map(article => ({
           ...article,
-          title: article.translations?.[0]?.title || 'İsimsiz Makale',
+          title: article.translations?.[0]?.title || intl.formatMessage({ id: 'UI.ISIMSIZ_KITAPCIK' }),
           bookTitle: article.book?.translations?.[0]?.title || article.book?.author || '-',
         }));
         setAllData(processedAll);
@@ -190,7 +190,7 @@ function ArticleList() {
     }).catch((err) => {
       console.error('İlk veri yükleme hatası:', err);
     });
-  }, []);
+  }, [intl]);
 
   // Fetch filtered articles
   const fetchArticles = React.useCallback(async () => {
@@ -242,7 +242,7 @@ function ArticleList() {
 
       const processedData = articles.map(article => ({
         ...article,
-        title: article.translations?.[0]?.title || 'İsimsiz Makale',
+        title: article.translations?.[0]?.title || intl.formatMessage({ id: 'UI.ISIMSIZ_KITAPCIK' }),
         bookTitle: article.book?.translations?.[0]?.title || article.book?.author || '-',
       }));
 
@@ -250,11 +250,11 @@ function ArticleList() {
     } catch (err) {
       console.error('❌ Makaleler yüklenirken hata:', err);
       setError(err.message);
-      toast.error('Makaleler yüklenemedi!');
+      toast.error(intl.formatMessage({ id: 'UI.MAKALELER_YUKLENEMEDI' }));
     } finally {
       setLoading(false);
     }
-  }, [filters]);
+  }, [filters, intl]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -305,7 +305,7 @@ function ArticleList() {
         throw new Error(errorMessage);
       }
 
-      toast.success('Makale başarıyla silindi!');
+      toast.success(intl.formatMessage({ id: 'UI.MAKALE_BASARIYLA_SILINDI' }));
       setDeleteModalOpen(false);
       setSelectedArticle(null);
       
@@ -314,7 +314,7 @@ function ArticleList() {
       setAllData(prev => prev.filter(a => a.id !== selectedArticle.id));
     } catch (err) {
       console.error('❌ Makale silme hatası:', err);
-      toast.error(err.message || 'Makale silinemedi!');
+      toast.error(err.message || intl.formatMessage({ id: 'UI.MAKALE_SILINEMEDI' }));
     }
   };
 
@@ -541,8 +541,8 @@ function ArticleList() {
                           <FaNewspaper className="text-6xl text-gray-300 dark:text-gray-600" />
                           <p className="text-lg font-medium text-gray-500 dark:text-gray-400">
                             {filters.search || filters.languageId !== 'all' || filters.bookId !== 'all'
-                              ? 'Arama kriterlerine uygun makale bulunamadı'
-                              : 'Henüz makale eklenmemiş'}
+                              ? <FormattedMessage id="UI.ARAMA_KRITERLERINE_UYGUN_KITAPCIK_BULUNAMADI" />
+                              : <FormattedMessage id="UI.HENUZ_KITAPCIK_EKLENMEMIS" />}
                           </p>
                           {!filters.search && filters.languageId === 'all' && filters.bookId === 'all' && (
                             <Link

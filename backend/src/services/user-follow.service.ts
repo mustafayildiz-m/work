@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
 import { UserFollow } from '../entities/user-follow.entity';
 import { User } from '../users/entities/user.entity';
-import { UserPost } from '../entities/user-post.entity';
+import { UserPost, PostStatus } from '../entities/user-post.entity';
 import { UserScholarFollow } from '../entities/user-scholar-follow.entity';
 import { ScholarPost } from '../scholars/entities/scholar-post.entity';
 import { CacheService } from './cache.service';
@@ -396,13 +396,12 @@ export class UserFollowService {
     }
   }
 
-  // Kullanıcı post'larını getir
+  // Kullanıcı post'larını getir (sadece onaylanmış)
   private async getUserPosts(userIds: number[], limit: number) {
     if (userIds.length === 0) return [];
 
-    // Basit query kullanarak user posts'ları al
     const posts = await this.userPostRepository.find({
-      where: { user_id: In(userIds) },
+      where: { user_id: In(userIds), status: PostStatus.APPROVED },
       order: { created_at: 'DESC' },
       take: limit,
     });
@@ -422,6 +421,10 @@ export class UserFollowService {
           ],
         });
 
+        const fullName = user
+          ? `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.username
+          : '';
+
         return {
           id: post.id,
           title: post.title,
@@ -432,6 +435,7 @@ export class UserFollowService {
             id: user?.id,
             firstName: user?.firstName,
             lastName: user?.lastName,
+            fullName: fullName || undefined,
             username: user?.username,
             photoUrl: user?.photoUrl,
             role: user?.role,

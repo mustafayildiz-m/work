@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react';
 import { FaSearch, FaUser, FaGraduationCap, FaUsers, FaUserFriends } from 'react-icons/fa';
 import Link from 'next/link';
 import { getUserIdFromToken } from '../../../../../utils/auth';
+import { useLanguage } from '@/context/useLanguageContext';
 import './following.css';
 
 export default function FollowingPage() {
+  const { t } = useLanguage();
   const [followingData, setFollowingData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -47,9 +49,14 @@ export default function FollowingPage() {
           setFollowingData(data.items || []);
           setFilteredData(data.items || []);
 
-          // Update stats if available
+          // Update stats - API returns usersCount/scholarsCount/totalCount, map to expected format
           if (data.stats) {
-            setStats(data.stats);
+            const s = data.stats;
+            setStats({
+              followingUsersCount: s.followingUsersCount ?? s.usersCount ?? 0,
+              followingScholarsCount: s.followingScholarsCount ?? s.scholarsCount ?? 0,
+              totalFollowingCount: s.totalFollowingCount ?? s.totalCount ?? 0
+            });
           }
         } else {
           console.error('Failed to fetch following data');
@@ -66,40 +73,14 @@ export default function FollowingPage() {
 
   useEffect(() => {
     let filtered = followingData;
+    const term = searchTerm.trim().toLowerCase();
 
-    // Filter by search term - specifically for firstName and lastName
-    if (searchTerm) {
+    // Filter by search term - API returns name, fullName (scholars), username (users)
+    if (term) {
       filtered = filtered.filter(item => {
-        const searchLower = searchTerm.toLowerCase();
-
-        // Search in firstName
-        if (item.firstName && item.firstName.toLowerCase().includes(searchLower)) {
-          return true;
-        }
-
-        // Search in lastName
-        if (item.lastName && item.lastName.toLowerCase().includes(searchLower)) {
-          return true;
-        }
-
-        // Search in combined firstName + lastName
-        if (item.firstName && item.lastName) {
-          const fullName = `${item.firstName} ${item.lastName}`.toLowerCase();
-          if (fullName.includes(searchLower)) {
-            return true;
-          }
-        }
-
-        // Search in name field (fallback)
-        if (item.name && item.name.toLowerCase().includes(searchLower)) {
-          return true;
-        }
-
-        // Search in fullName field (fallback)
-        if (item.fullName && item.fullName.toLowerCase().includes(searchLower)) {
-          return true;
-        }
-
+        if (item.name && item.name.toLowerCase().includes(term)) return true;
+        if (item.fullName && item.fullName.toLowerCase().includes(term)) return true;
+        if (item.username && item.username.toLowerCase().includes(term)) return true;
         return false;
       });
     }
@@ -181,6 +162,9 @@ export default function FollowingPage() {
             totalFollowingCount: Math.max(0, prev.totalFollowingCount - 1)
           }));
         }
+
+        // Sol paneldeki (ProfilePanel) takip sayılarını güncelle
+        window.dispatchEvent(new Event('followStatusChanged'));
       } else {
         console.error('Unfollow failed');
       }
@@ -217,7 +201,10 @@ export default function FollowingPage() {
                 Takip Edilenler
               </h5>
               <p className="text-muted mb-0 mt-2">
-                {filteredData.length} kişi bulundu
+                {t('feed.scholarsUsersFound', {
+                  scholars: filteredData.filter((i) => i.type === 'scholar').length,
+                  users: filteredData.filter((i) => i.type === 'user').length
+                })}
               </p>
             </div>
             <div className="stats-badges">

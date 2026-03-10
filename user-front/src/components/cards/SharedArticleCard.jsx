@@ -5,7 +5,7 @@ import { Card, CardBody, Button, Spinner, Alert, Dropdown, DropdownToggle, Dropd
 import { BsFileText, BsDownload, BsTrash, BsThreeDots, BsCalendar, BsPerson, BsBook } from 'react-icons/bs';
 import { useLanguage } from '@/context/useLanguageContext';
 import CustomConfirmDialog from '@/components/CustomConfirmDialog';
-import { generateArticleUrl } from '@/utils/articleEncoder';
+import { useLanguages } from '@/hooks/useLanguages';
 import Image from 'next/image';
 import Link from 'next/link';
 import avatar7 from '@/assets/images/avatar/07.jpg';
@@ -14,6 +14,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 const SharedArticleCard = ({ post, onDeletePost }) => {
   const { t, locale } = useLanguage();
+  const { languages } = useLanguages();
   const [articleData, setArticleData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -365,25 +366,37 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
                   </div>
                 )}
 
-                {/* Makale URL'si */}
+                {/* Kitapçık URL'si */}
                 <div className="mb-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
                   <small className="text-dark fw-semibold d-block mb-2">
-                    {t('post.articleLink') || 'Makale Linki'}:
+                    {t('post.articleLink') || 'Kitapçık Linki'}:
                   </small>
                   <div className="d-flex align-items-center bg-white rounded-3 p-2 shadow-sm" style={{ maxWidth: '100%', overflow: 'hidden' }}>
                     <BsFileText size={16} className="me-2 text-info flex-shrink-0" />
                     <code className="small text-truncate flex-grow-1 me-2 text-dark" style={{ minWidth: 0 }}>
-                      {generateArticleUrl(post.shared_article_id, window.location.origin, 'tr')?.replace(window.location.origin, '')}
+                      {(() => {
+                        const lang = languages?.find(l => (l.code || l.language_code) === locale) || languages?.[0];
+                        const params = lang ? new URLSearchParams({
+                          languageId: lang.id,
+                          languageName: lang.name || lang.language_name || '',
+                          languageCode: lang.code || lang.language_code || 'tr'
+                        }) : new URLSearchParams({ languageCode: locale || 'tr' });
+                        return `/feed/articles/${post.shared_article_id}?${params.toString()}`;
+                      })()}
                     </code>
                     <Button
                       variant="outline-info"
                       size="sm"
                       className="rounded-pill px-3 flex-shrink-0"
                       onClick={() => {
-                        const publicUrl = generateArticleUrl(post.shared_article_id, window.location.origin, 'tr');
-                        if (publicUrl) {
-                          navigator.clipboard.writeText(publicUrl);
-                        }
+                        const lang = languages?.find(l => (l.code || l.language_code) === locale) || languages?.[0];
+                        const params = lang ? new URLSearchParams({
+                          languageId: lang.id,
+                          languageName: lang.name || lang.language_name || '',
+                          languageCode: lang.code || lang.language_code || 'tr'
+                        }) : new URLSearchParams({ languageCode: locale || 'tr' });
+                        const articleUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/feed/articles/${post.shared_article_id}?${params.toString()}`;
+                        navigator.clipboard.writeText(articleUrl);
                       }}
                     >
                       {t('post.copy') || 'Kopyala'}

@@ -13,6 +13,14 @@ import { useLanguage } from '@/context/useLanguageContext';
 import { useState, useEffect } from 'react';
 import Followers from '../../../feed/(container)/home/components/Followers';
 
+const getAuthorDisplayName = (author) => {
+  if (!author) return null;
+  if (author.fullName) return author.fullName;
+  if (author.firstName || author.lastName) return [author.firstName, author.lastName].filter(Boolean).join(' ');
+  if (author.name) return author.name;
+  return author.username;
+};
+
 const RecentPost = () => {
   const { getToken, isAuthenticated } = useAuth();
   const token = getToken();
@@ -101,7 +109,7 @@ const RecentPost = () => {
                   >
                     <Image 
                       src={post.author.photoUrl.startsWith('http') ? post.author.photoUrl : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}${post.author.photoUrl}`}
-                      alt={post.author?.fullName || post.author?.name || post.author?.username || t('recentPosts.unknown_user')}
+                      alt={getAuthorDisplayName(post.author) || t('recentPosts.unknown_user')}
                       width={24}
                       height={24}
                       className="rounded-circle"
@@ -123,7 +131,7 @@ const RecentPost = () => {
                   className="text-decoration-none"
                 >
                   <small className="text-muted">
-                    {post.author?.fullName || post.author?.name || post.author?.username || t('recentPosts.unknown_user')}
+                    {getAuthorDisplayName(post.author) || t('recentPosts.unknown_user')}
                   </small>
                 </Link>
               </div>
@@ -133,16 +141,14 @@ const RecentPost = () => {
                   className="text-decoration-none"
                 >
                   {(() => {
-                    // İçerik alanlarını kontrol et
-                    const content = post.content || post.title || post.description || post.text || post.body || post.message || post.caption;
-                    
-                    if (content && content.trim()) {
-                      // HTML tag'lerini temizle ve kısalt
-                      const cleanContent = content.replace(/<[^>]*>/g, '').trim();
+                    // Öncelik: content (ana metin), sonra title. Boş/gereksiz içerikleri atla
+                    const rawContent = post.content || post.title || post.description || post.text || post.body || post.message || post.caption;
+                    const cleanContent = rawContent ? String(rawContent).replace(/<[^>]*>/g, '').trim() : '';
+
+                    if (cleanContent && cleanContent.length > 1) {
                       return cleanContent.substring(0, 60) + (cleanContent.length > 60 ? '...' : '');
                     }
-                    
-                    // Eğer hiçbir içerik yoksa, gönderi tipine göre varsayılan mesaj
+
                     return post.type === 'user_post' ? t('recentPosts.user_post') : t('recentPosts.scholar_post');
                   })()}
                 </Link>

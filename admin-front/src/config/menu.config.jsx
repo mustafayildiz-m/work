@@ -98,15 +98,15 @@ export const MENU_SIDEBAR = [
         ]
       },
       {
-        title: 'Makaleler',
+        title: 'Kitapçık',
         children: [
           {
-            title: 'Makale Ekle',
+            title: 'Kitapçık Ekle',
             path: '/makaleler/ekle',
             status: 'done'
           },
           {
-            title: 'Tüm Makaleler',
+            title: 'Tüm Kitapçıklar',
             path: '/makaleler/liste',
             status: 'done'
           }
@@ -165,7 +165,7 @@ export const MENU_SIDEBAR = [
         ],
       },
       {
-        title: 'İslamla Şereflenenler',
+        title: 'Hikayeler',
         children: [
           { title: 'Video Ekle', path: '/alim-hikayeleri/ekle', status: 'done' },
           { title: 'Tüm Videolar', path: '/alim-hikayeleri/liste', status: 'done' },

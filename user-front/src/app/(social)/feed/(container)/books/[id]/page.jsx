@@ -9,7 +9,6 @@ import Link from 'next/link';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import PdfViewer from '@/components/PdfViewer';
-import { generateBookUrl } from '@/utils/bookEncoder';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import { useLanguages } from '@/hooks/useLanguages';
 import styles from './styles.module.css';
@@ -832,15 +831,11 @@ const BookDetailPage = () => {
     return '/feed/books';
   };
 
-  // Kitap URL'sini oluştur (encoded)
+  // Mevcut sayfa URL'sini döndür (dil parametreleri dahil)
   const getBookUrl = () => {
-    const baseUrl = window.location.origin;
-    const currentLang = languageCode || locale || 'tr';
-
-    if (params?.id) {
-      return generateBookUrl(params.id, baseUrl, currentLang);
+    if (typeof window !== 'undefined') {
+      return window.location.href;
     }
-
     return '';
   };
 
@@ -1147,15 +1142,15 @@ const BookDetailPage = () => {
                 as="button"
                 className="d-flex align-items-center py-2"
                 onClick={() => {
-                  const baseUrl = window.location.origin;
-                  const lang = languageCode || 'tr';
-                  const bookUrl = generateBookUrl(params.id, baseUrl, lang);
-                  navigator.clipboard.writeText(bookUrl);
-                  showNotification({
-                    title: 'Başarılı',
-                    message: 'Kitap linki kopyalandı',
-                    variant: 'success'
-                  });
+                  const bookUrl = getBookUrl();
+                  if (bookUrl) {
+                    navigator.clipboard.writeText(bookUrl);
+                    showNotification({
+                      title: 'Başarılı',
+                      message: 'Kitap linki kopyalandı',
+                      variant: 'success'
+                    });
+                  }
                 }}
               >
                 <BsShare size={16} className="me-2" />
@@ -1165,10 +1160,8 @@ const BookDetailPage = () => {
                 as="button"
                 className="d-flex align-items-center py-2"
                 onClick={() => {
-                  const baseUrl = window.location.origin;
-                  const lang = languageCode || 'tr';
-                  const bookUrl = generateBookUrl(params.id, baseUrl, lang);
-                  const title = book.title || 'Kitap';
+                  const bookUrl = getBookUrl();
+                  const title = book?.title || 'Kitap';
                   const message = `${title} kitabını görüntüle: ${bookUrl}`;
                   const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
                   window.open(whatsappUrl, '_blank');
