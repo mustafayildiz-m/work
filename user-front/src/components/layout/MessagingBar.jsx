@@ -207,7 +207,7 @@ const MessagingBar = () => {
 
             // Update existing tab or open new one
             setActiveChats(prev => {
-                const existingChatIndex = prev.findIndex(c => c.user.id === otherUserId);
+                const existingChatIndex = prev.findIndex(c => String(c.user.id) === String(otherUserId));
 
                 const formattedMsg = {
                     id: message.id || Date.now() + Math.random(),
@@ -410,7 +410,9 @@ const MessagingBar = () => {
         setActiveChats(prev => {
             if (prev.find(chat => String(chat.user.id) === String(normalizedUser.id))) {
                 return prev.map(chat =>
-                    String(chat.user.id) === String(normalizedUser.id) ? { ...chat, user: { ...chat.user, ...normalizedUser }, isExpanded: true, unreadCount: 0 } : chat
+                    String(chat.user.id) === String(normalizedUser.id)
+                        ? { ...chat, user: { ...chat.user, ...normalizedUser }, isExpanded: true, unreadCount: 0 }
+                        : chat
                 );
             }
             return [{
@@ -440,7 +442,7 @@ const MessagingBar = () => {
                         .forEach((m) => markMessageAsRead?.(m.id, conv.id));
 
                     setActiveChats(prev => prev.map(chat =>
-                        chat.user.id === normalizedUser.id
+                        String(chat.user.id) === String(normalizedUser.id)
                             ? {
                                 ...chat,
                                 messages: history.map(m => ({
