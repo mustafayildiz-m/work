@@ -75,6 +75,10 @@ docker-compose restart
 # Veritabanını sıfırlayıp yeniden başlat (migration'lar tekrar çalışır)
 docker-compose down -v
 docker-compose up -d --build
+
+# Seeder'lar (Docker içinde çalıştırılmalı)
+docker compose exec backend npm run seed:languages          # Diller
+docker compose exec backend npm run seed:language-flags     # Dil bayrakları (flagUrl null olanlar)
 ```
 
 ## Teknolojiler
@@ -94,6 +98,10 @@ git reset --hard origin/main
 
 # Gerekirse migration
 docker compose -f docker-compose.prod.yml exec backend npm run migration:run
+
+# Dil bayrakları (flagUrl null olanları doldur)
+docker compose exec backend npm run seed:language-flags
+# veya prod: docker compose -f docker-compose.prod.yml exec backend npm run seed:language-flags
 
 # Servisleri güncelle
 docker compose -f docker-compose.prod.yml up -d --build backend user-front admin-front

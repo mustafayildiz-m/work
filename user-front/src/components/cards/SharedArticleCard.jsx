@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardBody, Button, Spinner, Alert, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'react-bootstrap';
 import { BsFileText, BsDownload, BsTrash, BsThreeDots, BsCalendar, BsPerson, BsBook } from 'react-icons/bs';
 import { useLanguage } from '@/context/useLanguageContext';
+import { useLayoutContext } from '@/context/useLayoutContext';
 import CustomConfirmDialog from '@/components/CustomConfirmDialog';
 import { useLanguages } from '@/hooks/useLanguages';
 import Image from 'next/image';
@@ -14,7 +15,9 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 const SharedArticleCard = ({ post, onDeletePost }) => {
   const { t, locale } = useLanguage();
+  const { theme } = useLayoutContext();
   const { languages } = useLanguages();
+  const isDarkMode = theme === 'dark';
   const [articleData, setArticleData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -186,7 +189,7 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
 
   if (loading) {
     return (
-      <Card className="mb-3 border-0 shadow-sm">
+      <Card className={`mb-3 border-0 shadow-sm ${isDarkMode ? 'bg-dark' : ''}`}>
         <CardBody className="text-center py-5">
           <Spinner animation="border" size="sm" variant="primary" />
           <span className="ms-2 text-muted">{t('post.sharedArticleLoading') || 'Makale yükleniyor...'}</span>
@@ -197,7 +200,7 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
 
   if (error) {
     return (
-      <Card className="mb-3 border-0 shadow-sm">
+      <Card className={`mb-3 border-0 shadow-sm ${isDarkMode ? 'bg-dark' : ''}`}>
         <CardBody>
           <Alert variant="danger" className="mb-0 border-0">
             <strong>{t('error') || 'Hata'}:</strong> {error === 'Makale yüklenirken bir hata oluştu' ? t('post.articleNotFoundError') || error : error}
@@ -217,7 +220,7 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
 
   return (
     <>
-      <Card className="mb-3 border-0 shadow-sm" style={{ maxWidth: '100%', overflow: 'hidden' }}>
+      <Card className={`mb-3 border-0 shadow-sm ${isDarkMode ? 'bg-dark' : ''}`} style={{ maxWidth: '100%', overflow: 'hidden' }}>
         <CardBody className="p-4" style={{ maxWidth: '100%', overflow: 'hidden' }}>
           {/* Kullanıcı Bilgileri */}
           <div className="d-flex align-items-center mb-3">
@@ -235,17 +238,17 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
               />
             </div>
             <div className="flex-grow-1">
-              <h6 className="mb-0" style={{ color: '#2c3e50' }}>
+              <h6 className="mb-0" style={{ color: isDarkMode ? '#e9ecef' : '#2c3e50' }}>
                 {post.user_id ? (
                   <Link
                     href={`/profile/user/${post.user_id}`}
                     className="text-decoration-none"
-                    style={{ color: '#2c3e50' }}
+                    style={{ color: isDarkMode ? '#e9ecef' : '#2c3e50' }}
                   >
                     {post.user_name || `User ${post.user_id}`}
                   </Link>
                 ) : (
-                  <span className="text-decoration-none" style={{ color: '#2c3e50' }}>
+                  <span className="text-decoration-none" style={{ color: isDarkMode ? '#e9ecef' : '#2c3e50' }}>
                     {post.user_name || t('common.user') || 'Kullanıcı'}
                   </span>
                 )}
@@ -275,12 +278,12 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
               <div className="bg-info bg-opacity-10 rounded-circle p-2 me-2">
                 <BsFileText size={16} className="text-info" />
               </div>
-              <span className="fw-semibold text-dark">{t('post.sharedArticle') || 'Makale Paylaştı'}</span>
+              <span className="fw-semibold" style={{ color: isDarkMode ? '#e9ecef' : '#212529' }}>{t('post.sharedArticle') || 'Makale Paylaştı'}</span>
             </div>
           </div>
 
           {/* Makale Kartı */}
-          <div className="border-0 rounded-3 p-4 mb-3" style={{ background: 'linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%)', maxWidth: '100%', overflow: 'hidden' }}>
+          <div className="border-0 rounded-3 p-4 mb-3" style={{ background: isDarkMode ? 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)' : 'linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%)', maxWidth: '100%', overflow: 'hidden' }}>
             <div className="d-flex gap-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
               {/* Makale Kapağı */}
               {articleData.coverImage && (
@@ -297,8 +300,8 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
                         height: '140px',
                         objectFit: 'cover',
                         objectPosition: 'center',
-                        boxShadow: '0 10px 30px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.1)',
-                        border: '3px solid white',
+                        boxShadow: isDarkMode ? '0 10px 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08)' : '0 10px 30px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.1)',
+                        border: isDarkMode ? '3px solid rgba(255,255,255,0.1)' : '3px solid white',
                         transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                         cursor: 'pointer'
                       }}
@@ -307,11 +310,11 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
                       }}
                       onMouseEnter={(e) => {
                         e.target.style.transform = 'translateY(-5px) scale(1.02)';
-                        e.target.style.boxShadow = '0 15px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,0,0,0.1)';
+                        e.target.style.boxShadow = isDarkMode ? '0 15px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.12)' : '0 15px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,0,0,0.1)';
                       }}
                       onMouseLeave={(e) => {
                         e.target.style.transform = 'translateY(0) scale(1)';
-                        e.target.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.1)';
+                        e.target.style.boxShadow = isDarkMode ? '0 10px 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08)' : '0 10px 30px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.1)';
                       }}
                     />
                   </div>
@@ -320,16 +323,16 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
 
               {/* Makale Detayları */}
               <div className="flex-grow-1" style={{ position: 'relative', zIndex: 1, minWidth: 0, maxWidth: articleData.coverImage ? 'calc(100% - 120px)' : '100%' }}>
-                <h5 className="mb-3 fw-bold text-truncate" style={{ color: '#006064', fontSize: '1.25rem' }}>
+                <h5 className="mb-3 fw-bold text-truncate" style={{ color: isDarkMode ? '#67d7e8' : '#006064', fontSize: '1.25rem' }}>
                   {articleTitle}
                 </h5>
 
                 <div className="mb-3">
                   {articleData.author && (
                     <div className="d-flex align-items-center mb-2">
-                      <div className="bg-white bg-opacity-75 rounded-pill px-3 py-1 d-flex align-items-center" style={{ maxWidth: '100%' }}>
+                      <div className="rounded-pill px-3 py-1 d-flex align-items-center" style={{ maxWidth: '100%', background: isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.75)' }}>
                         <BsPerson size={16} className="me-2 text-info flex-shrink-0" />
-                        <span className="small fw-medium text-dark text-truncate">
+                        <span className="small fw-medium text-truncate" style={{ color: isDarkMode ? '#e2e8f0' : '#212529' }}>
                           {articleData.author}
                         </span>
                       </div>
@@ -337,17 +340,17 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
                   )}
                   {articleData.publishDate && (
                     <div className="d-flex align-items-center mb-2">
-                      <div className="bg-white bg-opacity-75 rounded-pill px-3 py-1 d-flex align-items-center" style={{ maxWidth: '100%' }}>
+                      <div className="rounded-pill px-3 py-1 d-flex align-items-center" style={{ maxWidth: '100%', background: isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.75)' }}>
                         <BsCalendar size={14} className="me-2 text-info flex-shrink-0" />
-                        <span className="small text-dark text-truncate">{formatDate(articleData.publishDate)}</span>
+                        <span className="small text-truncate" style={{ color: isDarkMode ? '#e2e8f0' : '#212529' }}>{formatDate(articleData.publishDate)}</span>
                       </div>
                     </div>
                   )}
                   {articleData.book && (
                     <div className="d-flex align-items-center">
-                      <div className="bg-white bg-opacity-75 rounded-pill px-3 py-1 d-flex align-items-center" style={{ maxWidth: '100%' }}>
+                      <div className="rounded-pill px-3 py-1 d-flex align-items-center" style={{ maxWidth: '100%', background: isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.75)' }}>
                         <BsBook size={14} className="me-2 text-info flex-shrink-0" />
-                        <span className="small text-dark text-truncate">
+                        <span className="small text-truncate" style={{ color: isDarkMode ? '#e2e8f0' : '#212529' }}>
                           {articleData.book.translations?.[0]?.title || articleData.book.author || t('post.relatedBook') || 'İlgili Kitap'}
                         </span>
                       </div>
@@ -356,8 +359,8 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
                 </div>
 
                 {mainTranslation?.summary && (
-                  <div className="bg-white bg-opacity-75 rounded-3 p-3 mb-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
-                    <p className="small text-secondary mb-0" style={{ lineHeight: '1.6', wordBreak: 'break-word' }}>
+                  <div className="rounded-3 p-3 mb-3" style={{ maxWidth: '100%', overflow: 'hidden', background: isDarkMode ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.75)' }}>
+                    <p className="small mb-0" style={{ lineHeight: '1.6', wordBreak: 'break-word', color: isDarkMode ? '#94a3b8' : '#6c757d' }}>
                       {mainTranslation.summary.length > 200
                         ? `${mainTranslation.summary.substring(0, 200)}...`
                         : mainTranslation.summary
@@ -368,12 +371,12 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
 
                 {/* Kitapçık URL'si */}
                 <div className="mb-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
-                  <small className="text-dark fw-semibold d-block mb-2">
+                  <small className="fw-semibold d-block mb-2" style={{ color: isDarkMode ? '#e2e8f0' : '#212529' }}>
                     {t('post.articleLink') || 'Kitapçık Linki'}:
                   </small>
-                  <div className="d-flex align-items-center bg-white rounded-3 p-2 shadow-sm" style={{ maxWidth: '100%', overflow: 'hidden' }}>
+                  <div className="d-flex align-items-center rounded-3 p-2 shadow-sm" style={{ maxWidth: '100%', overflow: 'hidden', background: isDarkMode ? 'rgba(255,255,255,0.06)' : '#ffffff' }}>
                     <BsFileText size={16} className="me-2 text-info flex-shrink-0" />
-                    <code className="small text-truncate flex-grow-1 me-2 text-dark" style={{ minWidth: 0 }}>
+                    <code className="small text-truncate flex-grow-1 me-2" style={{ minWidth: 0, color: isDarkMode ? '#cbd5e1' : '#212529' }}>
                       {(() => {
                         const lang = languages?.find(l => (l.code || l.language_code) === locale) || languages?.[0];
                         const params = lang ? new URLSearchParams({
@@ -385,7 +388,7 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
                       })()}
                     </code>
                     <Button
-                      variant="outline-info"
+                      variant={isDarkMode ? 'outline-light' : 'outline-info'}
                       size="sm"
                       className="rounded-pill px-3 flex-shrink-0"
                       onClick={() => {
@@ -412,7 +415,7 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
                       size="sm"
                       className="rounded-pill px-4 shadow-sm"
                       style={{
-                        background: 'linear-gradient(135deg, #00acc1 0%, #00838f 100%)',
+                        background: isDarkMode ? 'linear-gradient(135deg, #0d9488 0%, #0f766e 100%)' : 'linear-gradient(135deg, #00acc1 0%, #00838f 100%)',
                         border: 'none',
                         color: 'white',
                         transition: 'transform 0.2s ease'
@@ -431,7 +434,7 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
                     </Button>
                   )}
                   <Button
-                    variant="outline-info"
+                    variant={isDarkMode ? 'outline-light' : 'outline-info'}
                     size="sm"
                     className="rounded-pill px-4"
                     onClick={() => window.open(`/feed/articles/${post.shared_article_id}`, '_blank')}

@@ -96,8 +96,13 @@ export class UserPostsController {
       }
     }
 
-    // Fotoğraf ise image_url, video ise video_url olarak kaydet
+    // FormData'dan gelen string değerleri sayıya çevir
     const payload: any = { ...body };
+    if (payload.user_id != null) payload.user_id = parseInt(payload.user_id, 10);
+    if (payload.shared_article_id != null) payload.shared_article_id = parseInt(payload.shared_article_id, 10);
+    if (payload.shared_book_id != null) payload.shared_book_id = parseInt(payload.shared_book_id, 10);
+    if (payload.shared_profile_id != null) payload.shared_profile_id = parseInt(payload.shared_profile_id, 10);
+
     if (file) {
       const ext = extname(file.originalname).toLowerCase();
       if (['.jpg', '.jpeg', '.png', '.gif'].includes(ext)) {

@@ -43,9 +43,15 @@ export class UserPostsService {
       true,
     );
 
+    // Kitapçık ve kitap paylaşımları onay beklemeden doğrudan yayınlansın
+    const isSharedContent =
+      createUserPostDto.type === 'shared_article' ||
+      createUserPostDto.type === 'shared_book';
+    const shouldAutoApprove = isSharedContent || !isApprovalEnabled;
+
     const post = this.userPostRepository.create({
       ...createUserPostDto,
-      status: isApprovalEnabled ? PostStatus.PENDING : PostStatus.APPROVED,
+      status: shouldAutoApprove ? PostStatus.APPROVED : PostStatus.PENDING,
     });
     const savedPost = await this.userPostRepository.save(post);
 
