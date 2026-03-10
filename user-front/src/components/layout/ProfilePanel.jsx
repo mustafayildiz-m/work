@@ -697,6 +697,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
               fontWeight: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link))) ? 600 : 500,
               fontSize: '0.9rem'
             };
+            const isActive = pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link));
             const content = (
               <>
                 <img
@@ -706,10 +707,10 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                   width={18}
                   style={{
                     marginRight: '12px',
-                    opacity: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link))) ? 1 : 0.7,
-                    filter: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))
+                    opacity: isActive ? 1 : 0.85,
+                    filter: isActive
                       ? 'brightness(0) invert(1)'
-                      : 'none'
+                      : (isDarkMode ? 'invert(1)' : 'none')
                   }}
                 />
                 <span>{item.name || t(item.nameKey)}</span>
