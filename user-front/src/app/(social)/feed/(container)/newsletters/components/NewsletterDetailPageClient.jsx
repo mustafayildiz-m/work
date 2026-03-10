@@ -30,6 +30,11 @@ export default function NewsletterDetailPageClient({ id }) {
   const sourceLang = data?.sourceLanguage || 'tr';
   const effectiveLang = showOriginal && sourceLang !== lang ? sourceLang : lang;
 
+  // Dil değiştiğinde "Orijinali göster" modunu sıfırla - yeni dilde çeviriyi göster
+  useEffect(() => {
+    setShowOriginal(false);
+  }, [locale]);
+
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
@@ -72,7 +77,7 @@ export default function NewsletterDetailPageClient({ id }) {
       });
 
     return () => { cancelled = true; };
-  }, [id, effectiveLang]);
+  }, [id, effectiveLang, locale]);
 
   if (loading) {
     return (
