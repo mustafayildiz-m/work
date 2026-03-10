@@ -69,7 +69,7 @@ export const profilePanelLinksData1 = [{
 }, {
   image: typeof bulbImg === 'string' ? bulbImg : bulbImg.src,
   nameKey: 'menu.askAboutIslam',
-  link: 'https://www.google.com',
+  link: 'https://www.askaboutislam.ai/',
   external: true
 }];
 

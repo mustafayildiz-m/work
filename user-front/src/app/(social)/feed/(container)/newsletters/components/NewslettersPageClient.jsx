@@ -71,7 +71,7 @@ export default function NewslettersPageClient({ initialSearch = '', initialPage 
       });
 
     return () => { cancelled = true; };
-  }, [search, lang, page]);
+  }, [search, lang, page, locale]);
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
