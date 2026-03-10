@@ -40,6 +40,7 @@ import { CronService } from './services/cron.service';
 import { CacheModule } from '@nestjs/cache-manager';
 import { cacheConfig } from './config/cache.config';
 import { LanguagesSeeder } from './seeders/languages-seeder';
+import { LanguageFlagsSeeder } from './seeders/language-flags-seeder';
 import { RegionalBooksSeeder } from './seeders/regional-books-seeder';
 import { ReligiousBooksSeeder } from './seeders/religious-books-seeder';
 import { MultiLanguageBooksSeeder } from './seeders/multilanguage-books-seeder';
@@ -134,6 +135,7 @@ import { PaperModule } from './modules/paper.module';
   providers: [
     CronService,
     LanguagesSeeder,
+    LanguageFlagsSeeder,
     RegionalBooksSeeder,
     ReligiousBooksSeeder,
     MultiLanguageBooksSeeder,

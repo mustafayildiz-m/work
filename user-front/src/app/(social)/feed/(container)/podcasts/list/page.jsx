@@ -707,25 +707,42 @@ export default function PodcastsListPage() {
                       )}
 
                       {/* Play Button Overlay */}
-                      <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center opacity-0 hover-overlay" style={{
-                        background: 'rgba(0,0,0,0.7)',
-                        transition: 'opacity 0.3s ease'
+                      <div className="position-absolute opacity-0 hover-overlay" style={{
+                        inset: 0,
+                        background: 'rgba(0,0,0,0.6)',
+                        transition: 'opacity 0.3s ease',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}>
                         <button
-                          onClick={() => togglePlay(podcast)}
-                          className="btn btn-lg rounded-circle"
+                          onClick={(e) => { e.stopPropagation(); togglePlay(podcast); }}
+                          className="rounded-circle border-0 d-flex align-items-center justify-content-center"
                           style={{
-                            width: '56px',
-                            height: '56px',
-                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                            border: 'none',
-                            boxShadow: '0 4px 12px rgba(102, 126, 234, 0.5)',
+                            width: '52px',
+                            height: '52px',
+                            background: 'rgba(255,255,255,0.95)',
+                            boxShadow: '0 2px 12px rgba(0,0,0,0.4)',
+                            transition: 'transform 0.2s ease, background 0.2s ease',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'scale(1.08)';
+                            e.currentTarget.style.background = 'rgba(255,255,255,1)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'scale(1)';
+                            e.currentTarget.style.background = 'rgba(255,255,255,0.95)';
                           }}
                         >
                           {currentlyPlaying?.id === podcast.id ? (
-                            <BsPauseFill className="text-white" size={24} />
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style={{ color: '#1a1a2e' }}>
+                              <rect x="6" y="4" width="4" height="16" rx="1" />
+                              <rect x="14" y="4" width="4" height="16" rx="1" />
+                            </svg>
                           ) : (
-                            <BsPlayFill className="text-white" size={24} style={{ marginLeft: '3px' }} />
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style={{ color: '#1a1a2e' }}>
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
                           )}
                         </button>
                       </div>

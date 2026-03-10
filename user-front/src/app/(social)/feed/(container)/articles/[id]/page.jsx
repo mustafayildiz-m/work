@@ -925,6 +925,9 @@ const ArticleDetailPage = () => {
           message: 'Kitapçık haber akışında paylaşıldı',
           variant: 'success'
         });
+        // Timeline'ı yenile (haber akışı sayfası açıksa güncellenir)
+        window.dispatchEvent(new CustomEvent('timelineRefreshRequested'));
+        router.push('/feed/home');
       } else {
         throw new Error('Paylaşım başarısız');
       }
@@ -1302,6 +1305,8 @@ const ArticleDetailPage = () => {
                                           message: 'Kitapçık haber akışında paylaşıldı',
                                           variant: 'success'
                                         });
+                                        window.dispatchEvent(new CustomEvent('timelineRefreshRequested'));
+                                        router.push('/feed/home');
                                       } else {
                                         throw new Error('Paylaşım başarısız');
                                       }
