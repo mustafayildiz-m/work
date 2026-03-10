@@ -430,6 +430,22 @@ const PublicPostPage = () => {
     fetchPost();
   }, [params.id, isAuthenticated]);
 
+  // Yeni yorum anlık görünsün (biri bu paylaşıma yorum yaptı)
+  useEffect(() => {
+    const handleNewComment = (event) => {
+      const { postId, comment } = event.detail || {};
+      if (!postId || !comment || !post) return;
+      if (post.postType === 'user' && Number(post.id) === Number(postId)) {
+        setComments(prev => {
+          if (prev.some(c => c.id === comment.id)) return prev;
+          return [...prev, comment];
+        });
+      }
+    };
+    window.addEventListener('newCommentInPost', handleNewComment);
+    return () => window.removeEventListener('newCommentInPost', handleNewComment);
+  }, [post]);
+
   const loadComments = async (postId, postType) => {
     try {
       setLoadingComments(true);

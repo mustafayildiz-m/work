@@ -67,6 +67,21 @@ const Posts = ({ userId, showOwnPosts = false }) => {
     setSelectedLanguages({});
   }
 
+  // Yeni yorum anlık görünsün (biri paylaşımıma yorum yaptı)
+  useEffect(() => {
+    const handleNewComment = (event) => {
+      const { postId, comment } = event.detail || {};
+      if (!postId || !comment) return;
+      setPostComments(prev => {
+        const existing = prev[postId] || [];
+        if (existing.some(c => c.id === comment.id)) return prev;
+        return { ...prev, [postId]: [...existing, comment] };
+      });
+    };
+    window.addEventListener('newCommentInPost', handleNewComment);
+    return () => window.removeEventListener('newCommentInPost', handleNewComment);
+  }, []);
+
   // Handler functions for post actions
   const handleUnfollow = async (userIdToUnfollow, userType = 'user') => {
     // Store the action details and show confirmation dialog

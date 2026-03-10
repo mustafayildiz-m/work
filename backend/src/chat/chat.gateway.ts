@@ -41,6 +41,28 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
+  /**
+   * Birden fazla kullanıcıya aynı event'i gönderir (örn: yeni post takipçilere)
+   */
+  broadcastToUsers(userIds: number[], event: string, data: any) {
+    if (!this.server || !userIds?.length) return;
+    for (const userId of userIds) {
+      const socketId = this.connectedUsers.get(userId);
+      if (socketId) {
+        this.server.to(socketId).emit(event, data);
+      }
+    }
+  }
+
+  /**
+   * Tüm bağlı istemcilere event gönderir (post silindi gibi - herkes kendi timeline'ında kontrol eder)
+   */
+  broadcastToAll(event: string, data: any) {
+    if (this.server) {
+      this.server.emit(event, data);
+    }
+  }
+
   async handleConnection(client: AuthenticatedSocket) {
     try {
       // WsJwtGuard already set client.user, so we can use it directly

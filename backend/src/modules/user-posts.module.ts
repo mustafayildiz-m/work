@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserPost } from '../entities/user-post.entity';
 import { UserPostsController } from '../controllers/user-posts.controller';
@@ -10,10 +10,13 @@ import { User } from '../users/entities/user.entity';
 import { Scholar } from '../scholars/entities/scholar.entity';
 import { UserPostComment } from '../entities/user-post-comment.entity';
 import { UserPostShare } from '../entities/user-post-share.entity';
+import { UserPostLike } from '../entities/user-post-like.entity';
+import { UserPostSave } from '../entities/user-post-save.entity';
 import { UserPostShareController } from '../controllers/user-post-share.controller';
 import { UserPostShareService } from '../services/user-post-share.service';
 import { CacheService } from '../services/cache.service';
 import { SystemSettingsModule } from './system-settings.module';
+import { ChatModule } from '../chat/chat.module';
 
 @Module({
   imports: [
@@ -26,8 +29,11 @@ import { SystemSettingsModule } from './system-settings.module';
       Scholar,
       UserPostComment,
       UserPostShare,
+      UserPostLike,
+      UserPostSave,
     ]),
     SystemSettingsModule,
+    forwardRef(() => ChatModule),
   ],
   controllers: [UserPostsController, UserPostShareController],
   providers: [UserPostsService, UserPostShareService, CacheService],
