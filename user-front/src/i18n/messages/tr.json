@@ -269,6 +269,7 @@
     "startFollowing": "İnsanları takip etmeye başlayın",
     "scholar": "İslami Bilgin",
     "user": "Kullanıcı",
+    "scholarsUsersFound": "{scholars} alim, {users} kullanıcı bulundu",
     "noSuggestionsYet": "Henüz öneri yok",
     "noPostsFound": "Henüz gönderi bulunmuyor",
     "noPostsDescription": "Takip ettiğiniz kişiler henüz gönderi paylaşmamış veya henüz kimseyi takip etmiyorsunuz.",
@@ -604,7 +605,7 @@
     "token_not_found_please_login": "Token bulunamadı. Lütfen tekrar giriş yapın."
   },
   "blogs": {
-    "title": "İslamla Şereflenenler",
+    "title": "Hikayeler",
     "storiesCount": "hikaye",
     "searchPlaceholder": "Hikayelerde ara...",
     "clearSearch": "Aramayı Temizle",
@@ -703,12 +704,12 @@
       "viewDetails": "Detayları Gör"
     },
     "detail": {
-      "loadingArticle": "Makale yükleniyor...",
+      "loadingArticle": "Kitapçık yükleniyor...",
       "error": "Hata!",
-      "notFound": "Makale Bulunamadı",
-      "notAvailable": "Bu makale mevcut değil.",
+      "notFound": "Kitapçık Bulunamadı",
+      "notAvailable": "Bu kitapçık mevcut değil.",
       "backToList": "Listeye Dön",
-      "backToLanguageArticles": "Makalelerine Dön",
+      "backToLanguageArticles": "Kitapçıklarına Dön",
       "author": "Yazar:",
       "publishDate": "Yayın Tarihi:",
       "book": "Kitap:",
@@ -718,7 +719,7 @@
       "downloadPdf": "PDF İndir",
       "summary": "Özet:",
       "content": "İçerik:",
-      "title": "Makale"
+      "title": "Kitapçık"
     },
     "share": "Paylaş",
     "shareOnWhatsApp": "WhatsApp'ta Paylaş",

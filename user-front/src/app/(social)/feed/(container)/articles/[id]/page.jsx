@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardBody, CardHeader, CardTitle, Row, Col, Button, Badge, Spinner, Alert, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Modal, ProgressBar } from 'react-bootstrap';
-import { BsDownload, BsCalendar, BsPerson, BsFileText, BsArrowLeft, BsEyeFill, BsBook, BsGrid3X3, BsShare, BsWhatsapp, BsNewspaper, BsX, BsVolumeUp, BsTranslate, BsPause, BsPlay, BsSkipBackward, BsSkipForward, BsArrowsMove } from 'react-icons/bs';
+import { BsDownload, BsCalendar, BsPerson, BsFileText, BsArrowLeft, BsEyeFill, BsBook, BsShare, BsWhatsapp, BsNewspaper, BsX, BsVolumeUp, BsTranslate, BsPause, BsPlay, BsSkipBackward, BsSkipForward, BsArrowsMove } from 'react-icons/bs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLanguage } from '@/context/useLanguageContext';
@@ -11,7 +11,6 @@ import { useLayoutContext } from '@/context/useLayoutContext';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import { useLanguages } from '@/hooks/useLanguages';
 import PdfViewer from '@/components/PdfViewer';
-import { generateArticleUrl } from '@/utils/articleEncoder';
 import { pdfjs } from 'react-pdf';
 import { getLanguageCode, cleanTextForTTS, fetchTTSAudio } from '@/utils/textToSpeech';
 
@@ -727,15 +726,11 @@ const ArticleDetailPage = () => {
     return '/feed/articles';
   };
 
-  // Makale URL'sini oluştur (encoded)
+  // Mevcut sayfa URL'sini döndür (dil parametreleri dahil)
   const getArticleUrl = () => {
-    const baseUrl = window.location.origin;
-    const currentLang = languageCode || locale || 'tr';
-
-    if (params?.id) {
-      return generateArticleUrl(params.id, baseUrl, currentLang);
+    if (typeof window !== 'undefined') {
+      return window.location.href;
     }
-
     return '';
   };
 
@@ -746,7 +741,7 @@ const ArticleDetailPage = () => {
       if (!articleUrl) {
         showNotification({
           title: 'Hata',
-          message: 'Makale URL\'si oluşturulamadı',
+          message: 'Kitapçık URL\'si oluşturulamadı',
           variant: 'danger'
         });
         return;
@@ -754,15 +749,15 @@ const ArticleDetailPage = () => {
 
       if (navigator.share) {
         await navigator.share({
-          title: article?.title || 'Makale',
-          text: `${article?.title || 'Bu makaleyi'} görüntüle`,
+          title: article?.title || 'Kitapçık',
+          text: `${article?.title || 'Bu kitapçığı'} görüntüle`,
           url: articleUrl,
         });
       } else {
         await navigator.clipboard.writeText(articleUrl);
         showNotification({
           title: 'Başarılı',
-          message: 'Makale linki kopyalandı',
+          message: 'Kitapçık linki kopyalandı',
           variant: 'success'
         });
       }
@@ -770,7 +765,7 @@ const ArticleDetailPage = () => {
       console.error('Error sharing article:', error);
       showNotification({
         title: 'Hata',
-        message: 'Makale paylaşılırken bir hata oluştu',
+        message: 'Kitapçık paylaşılırken bir hata oluştu',
         variant: 'danger'
       });
     }
@@ -796,18 +791,18 @@ const ArticleDetailPage = () => {
           if (response.ok) {
             const articleData = await response.json();
             // İlk çeviriden başlığı al
-            articleName = articleData.translations?.[0]?.title || articleData.author || 'Makale';
+            articleName = articleData.translations?.[0]?.title || articleData.author || 'Kitapçık';
           } else {
-            articleName = 'Makale';
+            articleName = 'Kitapçık';
           }
         } catch (err) {
-          articleName = 'Makale';
+          articleName = 'Kitapçık';
         }
       }
 
       // Dile göre mesaj şablonu
       const messageTemplates = {
-        tr: `${articleName} makalesini görüntüle: ${articleUrl}`,
+        tr: `${articleName} kitapçığını görüntüle: ${articleUrl}`,
         en: `View the article "${articleName}": ${articleUrl}`,
         ar: `عرض المقال "${articleName}": ${articleUrl}`,
         de: `Den Artikel "${articleName}" ansehen: ${articleUrl}`,
@@ -900,12 +895,12 @@ const ArticleDetailPage = () => {
           if (response.ok) {
             const articleData = await response.json();
             // İlk çeviriden başlığı al
-            articleName = articleData.translations?.[0]?.title || articleData.author || 'Makale';
+            articleName = articleData.translations?.[0]?.title || articleData.author || 'Kitapçık';
           } else {
-            articleName = 'Makale';
+            articleName = 'Kitapçık';
           }
         } catch (err) {
-          articleName = 'Makale';
+          articleName = 'Kitapçık';
         }
       }
 
@@ -915,7 +910,7 @@ const ArticleDetailPage = () => {
       formData.append('user_id', userId);
       formData.append('type', 'shared_article');
       formData.append('title', ''); // Empty title for shared article posts
-      formData.append('content', `${articleName} makalesini paylaştı`);
+      formData.append('content', `${articleName} kitapçığını paylaştı`);
       formData.append('shared_article_id', params.id);
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user-posts`, {
@@ -927,7 +922,7 @@ const ArticleDetailPage = () => {
       if (response.ok) {
         showNotification({
           title: 'Başarılı',
-          message: 'Makale haber akışında paylaşıldı',
+          message: 'Kitapçık haber akışında paylaşıldı',
           variant: 'success'
         });
       } else {
@@ -984,7 +979,7 @@ const ArticleDetailPage = () => {
 
   // İlk çeviriyi al
   const mainTranslation = article.translations?.[0];
-  const articleTitle = mainTranslation?.title || article.title || 'Makale';
+  const articleTitle = mainTranslation?.title || article.title || 'Kitapçık';
 
   return (
     <Col lg={9}>
@@ -1003,7 +998,7 @@ const ArticleDetailPage = () => {
                     className="me-3"
                   >
                     <BsArrowLeft className="me-1" />
-                    {languageName ? `${translate(`books.languages.${languageName}`, languageName)} ${translate('articles.detail.backToLanguageArticles', 'Makalelerine Dön')}` : translate('articles.detail.backToList', 'Listeye Dön')}
+                    {languageName ? `${translate(`books.languages.${languageName}`, languageName)} ${translate('articles.detail.backToLanguageArticles', 'Kitapçıklarına Dön')}` : translate('articles.detail.backToList', 'Listeye Dön')}
                   </Button>
                 </Link>
                 <CardTitle className="mb-0 h4">
@@ -1028,16 +1023,16 @@ const ArticleDetailPage = () => {
         }}>
           <Dropdown className="d-inline-block" style={{ position: 'static' }}>
             <DropdownToggle
-              variant="light"
+              variant={isDarkMode ? 'outline-light' : 'light'}
               size="sm"
               id="article-share-dropdown"
               className="article-share-dropdown-toggle"
               style={{
                 borderRadius: '10px',
                 padding: '0.5rem 0.75rem',
-                border: '1px solid rgba(181, 231, 160, 0.3)',
-                background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
-                boxShadow: '0 2px 8px rgba(181, 231, 160, 0.15)',
+                border: isDarkMode ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(181, 231, 160, 0.3)',
+                background: isDarkMode ? 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%)' : 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+                boxShadow: isDarkMode ? '0 2px 8px rgba(0, 0, 0, 0.3)' : '0 2px 8px rgba(181, 231, 160, 0.15)',
                 transition: 'all 0.3s ease',
                 display: 'flex',
                 alignItems: 'center',
@@ -1046,27 +1041,27 @@ const ArticleDetailPage = () => {
                 height: '40px'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(181, 231, 160, 0.25)';
+                e.currentTarget.style.background = isDarkMode ? 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%)' : 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)';
+                e.currentTarget.style.boxShadow = isDarkMode ? '0 4px 12px rgba(0, 0, 0, 0.4)' : '0 4px 12px rgba(181, 231, 160, 0.25)';
                 e.currentTarget.style.transform = 'translateY(-2px)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)';
-                e.currentTarget.style.boxShadow = '0 2px 8px rgba(181, 231, 160, 0.15)';
+                e.currentTarget.style.background = isDarkMode ? 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%)' : 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)';
+                e.currentTarget.style.boxShadow = isDarkMode ? '0 2px 8px rgba(0, 0, 0, 0.3)' : '0 2px 8px rgba(181, 231, 160, 0.15)';
                 e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
-              <BsGrid3X3
+              <BsShare
                 size={18}
                 style={{
-                  color: '#66BB6A',
+                  color: isDarkMode ? '#81c784' : '#66BB6A',
                   transition: 'transform 0.3s ease'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'rotate(90deg)';
+                  e.currentTarget.style.transform = 'scale(1.1)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'rotate(0deg)';
+                  e.currentTarget.style.transform = 'scale(1)';
                 }}
               />
             </DropdownToggle>
@@ -1225,15 +1220,15 @@ const ArticleDetailPage = () => {
                                 <DropdownItem
                                   as="button"
                                   onClick={() => {
-                                    const baseUrl = window.location.origin;
-                                    const lang = translation.language?.code || languageCode || 'tr';
-                                    const articleUrl = generateArticleUrl(params.id, baseUrl, lang);
-                                    navigator.clipboard.writeText(articleUrl);
-                                    showNotification({
-                                      title: 'Başarılı',
-                                      message: 'Makale linki kopyalandı',
-                                      variant: 'success'
-                                    });
+                                    const articleUrl = getArticleUrl();
+                                    if (articleUrl) {
+                                      navigator.clipboard.writeText(articleUrl);
+                                      showNotification({
+                                        title: 'Başarılı',
+                                        message: 'Kitapçık linki kopyalandı',
+                                        variant: 'success'
+                                      });
+                                    }
                                   }}
                                 >
                                   <BsShare size={16} className="me-2" />
@@ -1242,10 +1237,8 @@ const ArticleDetailPage = () => {
                                 <DropdownItem
                                   as="button"
                                   onClick={() => {
-                                    const baseUrl = window.location.origin;
-                                    const lang = translation.language?.code || languageCode || 'tr';
-                                    const articleUrl = generateArticleUrl(params.id, baseUrl, lang);
-                                    const message = `${translation.title} makalesini görüntüle: ${articleUrl}`;
+                                    const articleUrl = getArticleUrl();
+                                    const message = `${translation.title} kitapçığını görüntüle: ${articleUrl}`;
                                     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
                                     window.open(whatsappUrl, '_blank');
                                   }}
@@ -1294,7 +1287,7 @@ const ArticleDetailPage = () => {
                                       formData.append('user_id', userId);
                                       formData.append('type', 'shared_article');
                                       formData.append('title', '');
-                                      formData.append('content', `${translation.title} makalesini paylaştı`);
+                                      formData.append('content', `${translation.title} kitapçığını paylaştı`);
                                       formData.append('shared_article_id', params.id);
 
                                       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user-posts`, {
@@ -1306,7 +1299,7 @@ const ArticleDetailPage = () => {
                                       if (response.ok) {
                                         showNotification({
                                           title: 'Başarılı',
-                                          message: 'Makale haber akışında paylaşıldı',
+                                          message: 'Kitapçık haber akışında paylaşıldı',
                                           variant: 'success'
                                         });
                                       } else {
@@ -1715,7 +1708,7 @@ const ArticleDetailPage = () => {
         </Modal.Header>
         <Modal.Body>
           <p className="mb-3 text-muted">
-            Makaleyi hangi dilde okumak istersiniz? Seçtiğiniz dilde çeviri yapılıp sesli okunacaktır.
+            Kitapçığı hangi dilde okumak istersiniz? Seçtiğiniz dilde çeviri yapılıp sesli okunacaktır.
           </p>
           {languagesLoading ? (
             <div className="text-center py-4">

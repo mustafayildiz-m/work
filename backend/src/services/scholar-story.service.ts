@@ -6,6 +6,9 @@ import { StoryView } from '../entities/story-view.entity';
 import { StoryLike } from '../entities/story-like.entity';
 import { CreateScholarStoryDto } from '../dto/scholar-story/create-scholar-story.dto';
 import { UpdateScholarStoryDto } from '../dto/scholar-story/update-scholar-story.dto';
+import { CacheService } from './cache.service';
+
+const CACHE_TTL = 300; // 5 dakika
 
 @Injectable()
 export class ScholarStoryService {
@@ -18,6 +21,7 @@ export class ScholarStoryService {
     private storyViewRepository: Repository<StoryView>,
     @InjectRepository(StoryLike)
     private storyLikeRepository: Repository<StoryLike>,
+    private readonly cacheService: CacheService,
   ) {}
 
   async create(
@@ -28,12 +32,21 @@ export class ScholarStoryService {
         createScholarStoryDto,
       );
       const savedStory = await this.scholarStoryRepository.save(scholarStory);
+      await this.invalidateStoriesCache();
 
       this.logger.log(`Yeni alim hikayesi oluşturuldu: ${savedStory.title}`);
       return savedStory;
     } catch (error) {
       this.logger.error('Alim hikayesi oluşturulurken hata:', error.message);
       throw error;
+    }
+  }
+
+  private async invalidateStoriesCache(): Promise<void> {
+    try {
+      await this.cacheService.delPattern('scholar-stories:*');
+    } catch (error) {
+      this.logger.warn('Cache invalidation error:', error?.message);
     }
   }
 
@@ -45,6 +58,12 @@ export class ScholarStoryService {
     search?: string,
   ): Promise<any> {
     try {
+      const cacheKey = `scholar-stories:${page}:${limit}:${language || 'all'}:${isActive ?? 'all'}:${search?.trim() || ''}`;
+      const cached = await this.cacheService.get<any>(cacheKey);
+      if (cached) {
+        return cached;
+      }
+
       this.logger.log(
         `findAll called with page: ${page}, limit: ${limit}, language: ${language}, isActive: ${isActive}`,
       );
@@ -97,6 +116,7 @@ export class ScholarStoryService {
         limit: limit,
       };
 
+      await this.cacheService.set(cacheKey, result, CACHE_TTL);
       this.logger.log(`Returning ${stories.length} stories for page ${page}`);
       return result;
     } catch (error) {
@@ -168,6 +188,7 @@ export class ScholarStoryService {
 
       Object.assign(story, updateScholarStoryDto);
       const updatedStory = await this.scholarStoryRepository.save(story);
+      await this.invalidateStoriesCache();
 
       this.logger.log(`Alim hikayesi güncellendi: ${updatedStory.title}`);
       return updatedStory;
@@ -184,6 +205,7 @@ export class ScholarStoryService {
     try {
       const story = await this.findOne(id);
       await this.scholarStoryRepository.remove(story);
+      await this.invalidateStoriesCache();
 
       this.logger.log(`Alim hikayesi silindi: ${story.title}`);
     } catch (error) {

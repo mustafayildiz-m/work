@@ -9,7 +9,7 @@ const dict = {
     'Makaleler': 'Articles', 'Makale Ekle': 'Add Article', 'Tüm Makaleler': 'All Articles',
     'Podcast': 'Podcast', 'Podcast Ekle': 'Add Podcast', 'Tüm Podcast\'ler': 'All Podcasts',
     'Alimler': 'Scholars', 'Alim Ekle': 'Add Scholar', 'Tüm Alimler': 'All Scholars',
-    'İslamla Şereflenenler': 'Honored with Islam', 'Video Ekle': 'Add Video', 'Tüm Videolar': 'All Videos',
+    'İslamla Şereflenenler': 'Stories', 'Video Ekle': 'Add Video', 'Tüm Videolar': 'All Videos',
     'Envanter Yönetimi': 'Inventory Management', 'Depolar': 'Warehouses', 'Depo Ekle': 'Add Warehouse',
     'Tüm Depolar': 'All Warehouses', 'Stoklar': 'Stocks', 'Stok Ekle': 'Add Stock', 'Tüm Stoklar': 'All Stocks',
     'Stok Transferleri': 'Stock Transfers', 'Stok Transferi Ekle': 'Add Stock Transfer', 'Tüm Transferler': 'All Transfers',

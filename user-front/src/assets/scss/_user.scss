@@ -1553,7 +1553,9 @@
 }
 
 // Remove dropdown caret icon
-.dropdown-toggle-no-caret::after {
+.dropdown-toggle-no-caret::after,
+.article-share-dropdown-toggle::after,
+.article-share-dropdown-toggle::before {
   display: none !important;
   content: none !important;
 }

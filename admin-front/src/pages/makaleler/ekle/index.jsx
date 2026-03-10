@@ -204,17 +204,17 @@ function AddArticle() {
             setLoading(false);
             return;
           }
-          throw new Error(errorData.message || 'Makale eklenemedi');
+          throw new Error(errorData.message || intl.formatMessage({ id: 'UI.MAKALE_EKLENEMEDI' }));
         }
 
         const data = await response.json();
-        toast.success('Makale başarıyla eklendi!');
+        toast.success(intl.formatMessage({ id: 'UI.MAKALE_BASARIYLA_EKLENDI' }));
         navigate('/makaleler/liste');
       };
 
       await submitData();
     } catch (error) {
-      toast.error(error.message || 'Makale eklenirken bir hata oluştu');
+      toast.error(error.message || intl.formatMessage({ id: 'UI.MAKALE_EKLENIRKEN_HATA' }));
     } finally {
       setLoading(false);
     }
@@ -283,7 +283,7 @@ function AddArticle() {
                   <Select
                     options={bookOptions}
                     onChange={(option) => setForm({ ...form, bookId: option?.value || null })}
-                    placeholder="Makaleyle ilişkili kitabı seçin..."
+                    placeholder={intl.formatMessage({ id: 'UI.KITAPCIKLA_ILISKILI_KITABI_SECIN' })}
                     className="react-select-container"
                     classNamePrefix="react-select"
                     styles={getSelectStyles(currentTheme)}
@@ -459,7 +459,7 @@ function AddArticle() {
                           handleTranslationChange(idx, 'title', e.target.value)
                         }
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition"
-                        placeholder="Bu dil için makale başlığı"
+                        placeholder={intl.formatMessage({ id: 'UI.BU_DIL_ICIN_KITAPCIK_BASLIGI' })}
                         required
                       />
                     </div>
@@ -478,7 +478,7 @@ function AddArticle() {
                         }
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition resize-none"
                         rows="6"
-                        placeholder="Makale içeriğini buraya yazın..."
+                        placeholder={intl.formatMessage({ id: 'UI.KITAPCIK_ICERIGINI_BURAYA_YAZIN' })}
                         required
                       />
                     </div>

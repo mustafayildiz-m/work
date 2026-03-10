@@ -7,14 +7,15 @@ import { Scholar } from '../scholars/entities/scholar.entity';
 import { ScholarStoryService } from '../services/scholar-story.service';
 import { ScholarStoryController } from '../controllers/scholar-story.controller';
 import { UploadModule } from '../upload/upload.module';
+import { CacheService } from '../services/cache.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([ScholarStory, StoryView, StoryLike, Scholar]),
-    UploadModule, // File upload için gerekli
+    UploadModule,
   ],
   controllers: [ScholarStoryController],
-  providers: [ScholarStoryService],
+  providers: [ScholarStoryService, CacheService],
   exports: [ScholarStoryService],
 })
 export class ScholarStoriesModule {}

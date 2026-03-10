@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Card, Col, Row, Form, Button, Spinner, Alert, Dropdown, ButtonGroup } from 'react-bootstrap';
-import { BsCalendarDate, BsSearch, BsPlayCircle, BsEye, BsHeart, BsGlobe2, BsChevronDown, BsGrid3X3Gap, BsList } from 'react-icons/bs';
+import { useState, useEffect, useMemo } from 'react';
+import Select from 'react-select';
+import { Card, Col, Row, Form, Button, Spinner, Alert, ButtonGroup } from 'react-bootstrap';
+import { BsCalendarDate, BsPlayCircle, BsEye, BsHeart, BsGlobe2, BsGrid3X3Gap, BsList } from 'react-icons/bs';
 import { useScholarStories } from '@/hooks/useScholarStories';
 import NewsImage from './NewsImage';
 import Link from 'next/link';
@@ -30,9 +31,9 @@ const StoryCard = ({ story, languages = [] }) => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('tr-TR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
     });
   };
 
@@ -57,103 +58,63 @@ const StoryCard = ({ story, languages = [] }) => {
 
   return (
     <Link href={`/blogs/story/${id}`} className="text-decoration-none">
-      <Card className={`h-100 border-0 shadow-sm hover-elevate transition-all ${is_featured ? 'border-warning border-2' : ''}`} style={{ cursor: 'pointer' }}>
-        <div className="position-relative">
-          {/* Story Thumbnail */}
-          <div className="position-relative overflow-hidden" style={{ height: '180px' }}>
-            <NewsImage
-              className="w-100 h-100"
-              src={getThumbnailUrl() || '/images/book-placeholder.jpg'}
-              alt={title}
-              width={400}
-              height={180}
-              style={{
-                objectFit: 'cover',
-                width: '100%',
-                height: '100%'
-              }}
-            />
-            {/* Play Button */}
-            {video_url && (
-              <div className="position-absolute top-50 start-50 translate-middle">
-                <BsPlayCircle size={48} className="text-white opacity-75" />
-              </div>
-            )}
-            {/* Duration Badge */}
-            {duration && (
-              <div className="position-absolute bottom-0 end-0 m-2">
-                <span className="badge bg-dark bg-opacity-75 text-white">
-                  {formatDuration(duration)}
-                </span>
-              </div>
-            )}
-            {/* Language Badge */}
-            <div className="position-absolute top-0 start-0 m-2">
-              <span className="badge bg-primary bg-opacity-90 shadow-sm">
-                {getLanguageLabel(language)}
-              </span>
+      <Card className={`story-video-card border-0 shadow-sm ${is_featured ? 'border-warning border-2' : ''}`}>
+        {/* Thumbnail - 16:9 video oranı */}
+        <div className="story-video-card__thumb position-relative overflow-hidden">
+          <NewsImage
+            className="w-100 h-100"
+            src={getThumbnailUrl() || '/images/book-placeholder.jpg'}
+            alt={title}
+            width={400}
+            height={225}
+            style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+          />
+          {video_url && (
+            <div className="position-absolute top-50 start-50 translate-middle">
+              <BsPlayCircle size={56} className="text-white opacity-90 drop-shadow" />
             </div>
-            {/* Featured Badge */}
-            {is_featured && (
-              <div className="position-absolute top-0 end-0 m-2">
-                <span className="badge bg-warning bg-opacity-90 shadow-sm text-dark fw-bold">
-                  ⭐ Öne Çıkan
-                </span>
-              </div>
-            )}
-          </div>
-
-          {/* Card Body */}
-          <Card.Body className="p-3">
-            {/* Title */}
-            <h6 className="mb-2 fw-bold line-clamp-2 text-reset" style={{
-              minHeight: '2.5rem',
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              color: 'inherit'
-            }}>
-              {title}
-            </h6>
-
-            {/* Scholar Name */}
-            {scholar && (
-              <p className="text-primary small mb-2 fw-semibold">
-                {scholar.fullName}
-              </p>
-            )}
-
-            {/* Description */}
-            <p className="text-muted small mb-3 line-clamp-3" style={{
-              display: '-webkit-box',
-              WebkitLineClamp: 3,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              minHeight: '3.6rem'
-            }}>
-              {description}
-            </p>
-
-            {/* Meta Information */}
-            <div className="d-flex justify-content-between align-items-center">
-              <div className="d-flex align-items-center gap-2">
-                <BsCalendarDate size={14} className="text-muted" />
-                <small className="text-muted">{formatDate(created_at)}</small>
-              </div>
-              <div className="d-flex align-items-center gap-3">
-                <div className="d-flex align-items-center gap-1">
-                  <BsEye size={12} className="text-muted" />
-                  <small className="text-muted">{view_count || 0}</small>
-                </div>
-                <div className="d-flex align-items-center gap-1">
-                  <BsHeart size={12} className="text-muted" />
-                  <small className="text-muted">{like_count || 0}</small>
-                </div>
-              </div>
-            </div>
-          </Card.Body>
+          )}
+          {duration && (
+            <span className="position-absolute bottom-0 end-0 m-2 badge bg-dark bg-opacity-80 text-white">
+              {formatDuration(duration)}
+            </span>
+          )}
+          <span className="position-absolute top-0 start-0 m-2 badge bg-primary">
+            {getLanguageLabel(language)}
+          </span>
+          {is_featured && (
+            <span className="position-absolute top-0 end-0 m-2 badge bg-warning text-dark fw-bold">
+              ⭐ Öne Çıkan
+            </span>
+          )}
         </div>
+
+        {/* Sabit yükseklikte içerik alanı - tüm kartlar aynı */}
+        <Card.Body className="story-video-card__body p-3">
+          <h6 className="story-video-card__title mb-1 fw-semibold text-reset">
+            {title}
+          </h6>
+          {scholar && (
+            <p className="text-primary small mb-2 fw-medium opacity-90">
+              {scholar.fullName}
+            </p>
+          )}
+          <div className="story-video-card__meta d-flex align-items-center gap-1 flex-nowrap">
+            <small className="text-muted d-flex align-items-center gap-1 text-nowrap">
+              <BsCalendarDate size={11} />
+              {formatDate(created_at)}
+            </small>
+            <span className="text-muted flex-shrink-0">•</span>
+            <small className="text-muted d-flex align-items-center gap-1 flex-shrink-0">
+              <BsEye size={11} />
+              {view_count || 0}
+            </small>
+            <small className="text-muted d-flex align-items-center gap-1 flex-shrink-0">
+              <BsHeart size={11} />
+              {like_count || 0}
+            </small>
+          </div>
+        </Card.Body>
       </Card>
     </Link>
   );
@@ -194,11 +155,52 @@ const ScholarStories = () => {
     }
   }, [viewMode]);
 
-  // Dilleri backend'den yükle
+  // Yazarken debounced arama (Enter'a basmadan)
   useEffect(() => {
-    const fetchLanguages = async () => {
+    const trimmed = localSearchQuery.trim();
+    const timer = setTimeout(() => {
+      if (trimmed) {
+        searchStories(trimmed);
+      } else if (searchQuery) {
+        clearSearch();
+      }
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [localSearchQuery, searchStories, clearSearch]);
+
+  // Dilleri backend'den yükle (sessionStorage cache ile hızlı yenileme)
+  useEffect(() => {
+    const CACHE_KEY = 'languages-cache';
+    const CACHE_TTL_MS = 10 * 60 * 1000; // 10 dakika
+
+    const getCached = () => {
       try {
+        const raw = sessionStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+        const { data, ts } = JSON.parse(raw);
+        if (Date.now() - ts > CACHE_TTL_MS) return null;
+        return data;
+      } catch {
+        return null;
+      }
+    };
+
+    const setCached = (data) => {
+      try {
+        sessionStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() }));
+      } catch {}
+    };
+
+    const fetchLanguages = async () => {
+      const cached = getCached();
+      if (cached) {
+        setLanguages(cached);
+        setLanguagesLoading(false);
+      } else {
         setLanguagesLoading(true);
+      }
+
+      try {
         const token = localStorage.getItem('token');
         const headers = {
           'Content-Type': 'application/json'
@@ -210,13 +212,16 @@ const ScholarStories = () => {
           headers: headers
         });
 
-
         if (response.ok) {
           const data = await response.json();
-          setLanguages(data || []);
+          const activeLangs = (data || []).filter(l => l.isActive !== false);
+          const sorted = activeLangs.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+          setCached(sorted);
+          setLanguages(sorted);
         }
       } catch (error) {
         console.error('Diller yüklenirken hata:', error);
+        if (!cached) setLanguages([]);
       } finally {
         setLanguagesLoading(false);
       }
@@ -225,30 +230,48 @@ const ScholarStories = () => {
     fetchLanguages();
   }, []);
 
-  // Dil bayrakları mapping
-  const languageFlags = {
-    'tr': '🇹🇷',
-    'en': '🇬🇧',
-    'ar': '🇸🇦',
-    'de': '🇩🇪',
-    'fr': '🇫🇷',
-    'ja': '🇯🇵',
-    'ru': '🇷🇺',
-    'it': '🇮🇹',
-    'es': '🇪🇸',
+  // Dil kodu -> bayrak emoji (flagUrl yoksa kullanılır)
+  const languageFlagEmojis = {
+    tr: '🇹🇷', en: '🇬🇧', ar: '🇸🇦', de: '🇩🇪', fr: '🇫🇷', ja: '🇯🇵', ru: '🇷🇺', it: '🇮🇹', es: '🇪🇸',
+    zh: '🇨🇳', hi: '🇮🇳', ko: '🇰🇷', pt: '🇵🇹', nl: '🇳🇱', pl: '🇵🇱', uk: '🇺🇦', ku: '🇮🇶', ro: '🇷🇴',
+    bg: '🇧🇬', sr: '🇷🇸', hu: '🇭🇺', cs: '🇨🇿', sk: '🇸🇰', sl: '🇸🇮', mk: '🇲🇰', hy: '🇦🇲',
+    mr: '🇮🇳', te: '🇮🇳', gu: '🇮🇳', ml: '🇮🇳', kn: '🇮🇳', or: '🇮🇳', fa: '🇮🇷', ur: '🇵🇰',
+    id: '🇮🇩', ms: '🇲🇾', th: '🇹🇭', vi: '🇻🇳', bn: '🇧🇩', ta: '🇱🇰', az: '🇦🇿', kk: '🇰🇿',
+    uz: '🇺🇿', ky: '🇰🇬', tk: '🇹🇲', he: '🇮🇱', sv: '🇸🇪', no: '🇳🇴', da: '🇩🇰', fi: '🇫🇮',
+    el: '🇬🇷', ca: '🇪🇸', ps: '🇦🇫', ha: '🇳🇬', sw: '🇹🇿', am: '🇪🇹', so: '🇸🇴', mn: '🇲🇳',
+    km: '🇰🇭', lo: '🇱🇦', my: '🇲🇲', si: '🇱🇰', jv: '🇮🇩', tl: '🇵🇭', eo: '🌍', eu: '🇪🇸'
   };
 
-  // Dil seçenekleri - backend'den gelen diller
-  const languageOptions = languages.map(lang => ({
-    code: lang.code,
-    label: lang.name,
-    flag: languageFlags[lang.code] || '🌍'
-  }));
+  const selectOptions = useMemo(() => {
+    const allOption = { value: 'all', label: t('blogs.allLanguages'), flagUrl: null, flagEmoji: '🌍' };
+    const langOpts = languages.map(lang => ({
+      value: lang.code,
+      label: lang.name,
+      flagUrl: lang.flagUrl,
+      flagEmoji: languageFlagEmojis[lang.code] || '🌍'
+    }));
+    return [allOption, ...langOpts];
+  }, [languages, t]);
 
-  // Mevcut dil - "all" veya seçili dil
-  const currentLanguage = selectedLanguage === 'all' || !selectedLanguage
-    ? { code: 'all', label: 'Tüm Diller', flag: '🌍' }
-    : languageOptions.find(lang => lang.code === selectedLanguage) || languageOptions[0] || { code: 'tr', label: 'Türkçe', flag: '🇹🇷' };
+  const selectedOption = useMemo(() => {
+    if (selectedLanguage === 'all' || !selectedLanguage) return selectOptions[0];
+    return selectOptions.find(o => o.value === selectedLanguage) || selectOptions[0];
+  }, [selectedLanguage, selectOptions]);
+
+  const formatOptionLabel = (option) => (
+    <span className="d-flex align-items-center gap-2">
+      {option.flagUrl ? (
+        <img
+          src={option.flagUrl.startsWith('http') ? option.flagUrl : `${API_BASE_URL}${option.flagUrl}`}
+          alt=""
+          className="language-flag-icon"
+        />
+      ) : (
+        <span className="language-flag-emoji">{option.flagEmoji}</span>
+      )}
+      {option.label}
+    </span>
+  );
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -406,72 +429,43 @@ const ScholarStories = () => {
                 <BsGlobe2 size={14} className="me-1" />
                 {t('blogs.filterByLanguage')}
               </Form.Label>
-              <Dropdown className="w-100">
-                <Dropdown.Toggle
-                  variant="outline-primary"
-                  id="language-dropdown"
-                  className="w-100 d-flex align-items-center justify-content-between"
-                  disabled={languagesLoading}
-                >
-                  <span>
-                    {languagesLoading ? (
-                      <span>Yükleniyor...</span>
-                    ) : (
-                      <>
-                        <span className="me-2">{currentLanguage?.flag || '🌍'}</span>
-                        {currentLanguage?.label || 'Dil Seçin'}
-                      </>
-                    )}
-                  </span>
-                  <BsChevronDown size={14} />
-                </Dropdown.Toggle>
-                <Dropdown.Menu className="w-100 dropdown-menu-end">
-                  {/* Tüm Diller Seçeneği */}
-                  <Dropdown.Item
-                    active={!selectedLanguage || selectedLanguage === 'all'}
-                    onClick={() => changeLanguage('all')}
-                  >
-                    <span className="me-2">🌍</span>
-                    Tüm Diller
-                    {(!selectedLanguage || selectedLanguage === 'all') && (
-                      <span className="ms-2 text-success">✓</span>
-                    )}
-                  </Dropdown.Item>
-                  <Dropdown.Divider />
-                  {languageOptions.map((lang) => (
-                    <Dropdown.Item
-                      key={lang.code}
-                      active={selectedLanguage === lang.code}
-                      onClick={() => changeLanguage(lang.code)}
-                    >
-                      <span className="me-2">{lang.flag}</span>
-                      {lang.label}
-                      {selectedLanguage === lang.code && (
-                        <span className="ms-2 text-success">✓</span>
-                      )}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
+              <Select
+                value={selectedOption}
+                options={selectOptions}
+                formatOptionLabel={formatOptionLabel}
+                onChange={(opt) => changeLanguage(opt?.value || 'all')}
+                isDisabled={languagesLoading}
+                isSearchable
+                placeholder={languagesLoading ? t('common.loading') : t('blogs.selectLanguage')}
+                className="blogs-language-select"
+                classNamePrefix="blogs-lang"
+                maxMenuHeight={280}
+                noOptionsMessage={() => 'Sonuç bulunamadı'}
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    minHeight: 38,
+                    borderColor: 'var(--bs-border-color)'
+                  }),
+                  menu: (base) => ({
+                    ...base,
+                    zIndex: 1060
+                  })
+                }}
+              />
             </Form.Group>
           </Col>
           <Col md={5}>
             <Form.Group>
               <Form.Label className="small text-muted mb-1">
-                <BsSearch size={14} className="me-1" />
                 {t('common.search')}
               </Form.Label>
-              <div className="input-group">
-                <Form.Control
-                  type="text"
-                  placeholder={t('blogs.searchPlaceholder')}
-                  value={localSearchQuery}
-                  onChange={(e) => setLocalSearchQuery(e.target.value)}
-                />
-                <Button type="submit" variant="primary">
-                  <BsSearch size={16} />
-                </Button>
-              </div>
+              <Form.Control
+                type="text"
+                placeholder={t('blogs.searchPlaceholder')}
+                value={localSearchQuery}
+                onChange={(e) => setLocalSearchQuery(e.target.value)}
+              />
             </Form.Group>
           </Col>
           <Col md={3}>

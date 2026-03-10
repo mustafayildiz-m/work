@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { UserScholarFollow } from '../entities/user-scholar-follow.entity';
 import { Scholar } from '../scholars/entities/scholar.entity';
 import { User } from '../users/entities/user.entity';
+import { CacheService } from './cache.service';
 
 @Injectable()
 export class UserScholarFollowService {
@@ -14,7 +15,22 @@ export class UserScholarFollowService {
     private scholarRepository: Repository<Scholar>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private readonly cacheService: CacheService,
   ) {}
+
+  private async invalidateWhoToFollowCache(userId: number): Promise<void> {
+    try {
+      const limits = [10, 15, 200];
+      const types = ['scholars', 'users', 'all'];
+      for (const type of types) {
+        for (const limit of limits) {
+          await this.cacheService.del(`who-to-follow:${type}:${userId}:${limit}`);
+        }
+      }
+    } catch (error) {
+      console.error('Who-to-follow cache invalidation error:', error?.message);
+    }
+  }
 
   async follow(user_id: number, scholar_id: number) {
     const existing = await this.userScholarFollowRepository.findOneBy({
@@ -26,7 +42,9 @@ export class UserScholarFollowService {
       user_id,
       scholar_id,
     });
-    return this.userScholarFollowRepository.save(follow);
+    const saved = await this.userScholarFollowRepository.save(follow);
+    await this.invalidateWhoToFollowCache(user_id);
+    return saved;
   }
 
   async unfollow(user_id: number, scholar_id: number) {
@@ -36,6 +54,7 @@ export class UserScholarFollowService {
     });
     if (!follow) throw new NotFoundException('Takip ilişkisi bulunamadı.');
     await this.userScholarFollowRepository.remove(follow);
+    await this.invalidateWhoToFollowCache(user_id);
     return { unfollowed: true };
   }
 

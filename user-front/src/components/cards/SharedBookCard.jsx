@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react';
 import { Card, CardBody, Button, Spinner, Alert, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'react-bootstrap';
 import { BsBook, BsDownload, BsTrash, BsThreeDots, BsCalendar, BsPerson } from 'react-icons/bs';
 import { useLanguage } from '@/context/useLanguageContext';
+import { useLayoutContext } from '@/context/useLayoutContext';
+import { useNotificationContext } from '@/context/useNotificationContext';
 import CustomConfirmDialog from '@/components/CustomConfirmDialog';
-import { generateBookUrl } from '@/utils/bookEncoder';
+import { useLanguages } from '@/hooks/useLanguages';
 import Image from 'next/image';
 import Link from 'next/link';
 import avatar7 from '@/assets/images/avatar/07.jpg';
@@ -14,6 +16,10 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 const SharedBookCard = ({ post, onDeletePost }) => {
   const { t, locale } = useLanguage();
+  const { theme } = useLayoutContext();
+  const { showNotification } = useNotificationContext();
+  const { languages } = useLanguages();
+  const isDarkMode = theme === 'dark';
   const [bookData, setBookData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -157,6 +163,44 @@ const SharedBookCard = ({ post, onDeletePost }) => {
     return '/images/book-placeholder.jpg';
   };
 
+  const getPdfUrl = (pdfUrl) => {
+    if (!pdfUrl) return null;
+    return pdfUrl.startsWith('http') ? pdfUrl : `${API_BASE_URL}${pdfUrl}`;
+  };
+
+  const handleDownloadPdf = async (pdfUrl, title) => {
+    const fullPdfUrl = getPdfUrl(pdfUrl);
+    if (!fullPdfUrl) return;
+
+    try {
+      const safeTitle = (title || 'book').replace(/[^\w\-]+/g, '_');
+      const filename = `${safeTitle}.pdf`;
+      const downloadUrl = `/api/download-pdf?pdfUrl=${encodeURIComponent(fullPdfUrl)}&filename=${encodeURIComponent(filename)}`;
+      const response = await fetch(downloadUrl);
+      if (!response.ok) {
+        throw new Error('PDF indirilemedi');
+      }
+
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename;
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error('PDF download error:', error);
+      showNotification({
+        title: 'Hata',
+        message: 'PDF indirilemedi. Lütfen tekrar deneyin.',
+        variant: 'danger'
+      });
+    }
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return '';
     try {
@@ -237,17 +281,17 @@ const SharedBookCard = ({ post, onDeletePost }) => {
               />
             </div>
             <div className="flex-grow-1">
-              <h6 className="mb-0" style={{ color: '#2c3e50' }}>
+              <h6 className="mb-0" style={{ color: isDarkMode ? '#e9ecef' : '#2c3e50' }}>
                 {post.user_id ? (
                   <Link
                     href={`/profile/user/${post.user_id}`}
                     className="text-decoration-none"
-                    style={{ color: '#2c3e50' }}
+                    style={{ color: isDarkMode ? '#e9ecef' : '#2c3e50' }}
                   >
                     {post.user_name || `User ${post.user_id}`}
                   </Link>
                 ) : (
-                  <span className="text-decoration-none" style={{ color: '#2c3e50' }}>
+                  <span className="text-decoration-none" style={{ color: isDarkMode ? '#e9ecef' : '#2c3e50' }}>
                     {post.user_name || t('common.user')}
                   </span>
                 )}
@@ -277,12 +321,16 @@ const SharedBookCard = ({ post, onDeletePost }) => {
               <div className="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
                 <BsBook size={16} className="text-primary" />
               </div>
-              <span className="fw-semibold text-dark">{t('post.sharedBook')}</span>
+              <span className="fw-semibold" style={{ color: isDarkMode ? '#e9ecef' : '#212529' }}>{t('post.sharedBook')}</span>
             </div>
           </div>
 
           {/* Kitap Kartı */}
-          <div className="border-0 rounded-3 p-4 mb-3" style={{ background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)', maxWidth: '100%', overflow: 'hidden' }}>
+          <div className="border-0 rounded-3 p-4 mb-3" style={{
+            background: isDarkMode ? 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)' : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+            maxWidth: '100%',
+            overflow: 'hidden'
+          }}>
             <div className="d-flex gap-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
               {/* Kitap Kapağı - Improved z-index and positioning */}
               <div style={{ position: 'relative', zIndex: 10, flexShrink: 0 }}>
@@ -296,8 +344,8 @@ const SharedBookCard = ({ post, onDeletePost }) => {
                       height: '140px',
                       objectFit: 'cover',
                       objectPosition: 'center',
-                      boxShadow: '0 10px 30px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.1)',
-                      border: '3px solid white',
+                      boxShadow: isDarkMode ? '0 10px 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08)' : '0 10px 30px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.1)',
+                      border: isDarkMode ? '3px solid rgba(255,255,255,0.1)' : '3px solid white',
                       transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                       cursor: 'pointer'
                     }}
@@ -306,11 +354,11 @@ const SharedBookCard = ({ post, onDeletePost }) => {
                     }}
                     onMouseEnter={(e) => {
                       e.target.style.transform = 'translateY(-5px) scale(1.02)';
-                      e.target.style.boxShadow = '0 15px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,0,0,0.1)';
+                      e.target.style.boxShadow = isDarkMode ? '0 15px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.12)' : '0 15px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,0,0,0.1)';
                     }}
                     onMouseLeave={(e) => {
                       e.target.style.transform = 'translateY(0) scale(1)';
-                      e.target.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.1)';
+                      e.target.style.boxShadow = isDarkMode ? '0 10px 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08)' : '0 10px 30px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.1)';
                     }}
                   />
                 </div>
@@ -318,30 +366,30 @@ const SharedBookCard = ({ post, onDeletePost }) => {
 
               {/* Kitap Detayları */}
               <div className="flex-grow-1" style={{ position: 'relative', zIndex: 1, minWidth: 0, maxWidth: 'calc(100% - 120px)' }}>
-                <h5 className="mb-3 fw-bold text-truncate" style={{ color: '#1e3a8a', fontSize: '1.25rem' }}>
+                <h5 className="mb-3 fw-bold text-truncate" style={{ color: isDarkMode ? '#93c5fd' : '#1e3a8a', fontSize: '1.25rem' }}>
                   {bookData.title}
                 </h5>
 
                 <div className="mb-3">
                   <div className="d-flex align-items-center mb-2">
-                    <div className="bg-white bg-opacity-75 rounded-pill px-3 py-1 d-flex align-items-center" style={{ maxWidth: '100%' }}>
+                    <div className="rounded-pill px-3 py-1 d-flex align-items-center" style={{ maxWidth: '100%', background: isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.75)' }}>
                       <BsPerson size={16} className="me-2 text-primary flex-shrink-0" />
-                      <span className="small fw-medium text-dark text-truncate">
+                      <span className="small fw-medium text-truncate" style={{ color: isDarkMode ? '#e2e8f0' : '#212529' }}>
                         {bookData.author || t('post.authorNotSpecified')}
                       </span>
                     </div>
                   </div>
                   <div className="d-flex align-items-center">
-                    <div className="bg-white bg-opacity-75 rounded-pill px-3 py-1 d-flex align-items-center" style={{ maxWidth: '100%' }}>
+                    <div className="rounded-pill px-3 py-1 d-flex align-items-center" style={{ maxWidth: '100%', background: isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.75)' }}>
                       <BsCalendar size={14} className="me-2 text-primary flex-shrink-0" />
-                      <span className="small text-dark text-truncate">{formatDate(bookData.publishDate)}</span>
+                      <span className="small text-truncate" style={{ color: isDarkMode ? '#e2e8f0' : '#212529' }}>{formatDate(bookData.publishDate)}</span>
                     </div>
                   </div>
                 </div>
 
                 {bookData.description && (
-                  <div className="bg-white bg-opacity-75 rounded-3 p-3 mb-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
-                    <p className="small text-secondary mb-0" style={{ lineHeight: '1.6', wordBreak: 'break-word' }}>
+                  <div className="rounded-3 p-3 mb-3" style={{ maxWidth: '100%', overflow: 'hidden', background: isDarkMode ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.75)' }}>
+                    <p className="small mb-0" style={{ lineHeight: '1.6', wordBreak: 'break-word', color: isDarkMode ? '#94a3b8' : '#6c757d' }}>
                       {bookData.description.length > 200
                         ? `${bookData.description.substring(0, 200)}...`
                         : bookData.description
@@ -352,23 +400,35 @@ const SharedBookCard = ({ post, onDeletePost }) => {
 
                 {/* Kitap URL'si */}
                 <div className="mb-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
-                  <small className="text-dark fw-semibold d-block mb-2">
+                  <small className="fw-semibold d-block mb-2" style={{ color: isDarkMode ? '#e2e8f0' : '#212529' }}>
                     {t('post.bookLink')}:
                   </small>
-                  <div className="d-flex align-items-center bg-white rounded-3 p-2 shadow-sm" style={{ maxWidth: '100%', overflow: 'hidden' }}>
+                  <div className="d-flex align-items-center rounded-3 p-2 shadow-sm" style={{ maxWidth: '100%', overflow: 'hidden', background: isDarkMode ? 'rgba(255,255,255,0.06)' : '#ffffff' }}>
                     <BsBook size={16} className="me-2 text-primary flex-shrink-0" />
-                    <code className="small text-truncate flex-grow-1 me-2 text-dark" style={{ minWidth: 0 }}>
-                      {generateBookUrl(post.shared_book_id, window.location.origin, 'tr')?.replace(window.location.origin, '')}
+                    <code className="small text-truncate flex-grow-1 me-2" style={{ minWidth: 0, color: isDarkMode ? '#cbd5e1' : '#212529' }}>
+                      {(() => {
+                        const lang = languages?.find(l => (l.code || l.language_code) === locale) || languages?.[0];
+                        const params = lang ? new URLSearchParams({
+                          languageId: lang.id,
+                          languageName: lang.name || lang.language_name || '',
+                          languageCode: lang.code || lang.language_code || 'tr'
+                        }) : new URLSearchParams({ languageCode: locale || 'tr' });
+                        return `/feed/books/${post.shared_book_id}?${params.toString()}`;
+                      })()}
                     </code>
                     <Button
-                      variant="outline-primary"
+                      variant={isDarkMode ? 'outline-light' : 'outline-primary'}
                       size="sm"
                       className="rounded-pill px-3 flex-shrink-0"
                       onClick={() => {
-                        const publicUrl = generateBookUrl(post.shared_book_id, window.location.origin, 'tr');
-                        if (publicUrl) {
-                          navigator.clipboard.writeText(publicUrl);
-                        }
+                        const lang = languages?.find(l => (l.code || l.language_code) === locale) || languages?.[0];
+                        const params = lang ? new URLSearchParams({
+                          languageId: lang.id,
+                          languageName: lang.name || lang.language_name || '',
+                          languageCode: lang.code || lang.language_code || 'tr'
+                        }) : new URLSearchParams({ languageCode: locale || 'tr' });
+                        const bookUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/feed/books/${post.shared_book_id}?${params.toString()}`;
+                        navigator.clipboard.writeText(bookUrl);
                       }}
                     >
                       {t('post.copy')}
@@ -388,12 +448,7 @@ const SharedBookCard = ({ post, onDeletePost }) => {
                         border: 'none',
                         transition: 'transform 0.2s ease'
                       }}
-                      onClick={() => {
-                        const fullUrl = bookData.pdfUrl.startsWith('/uploads/')
-                          ? `${process.env.NEXT_PUBLIC_API_URL}${bookData.pdfUrl}`
-                          : bookData.pdfUrl;
-                        window.open(fullUrl, '_blank');
-                      }}
+                      onClick={() => handleDownloadPdf(bookData.pdfUrl, bookData.title)}
                       onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'}
                       onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
                     >
@@ -401,12 +456,12 @@ const SharedBookCard = ({ post, onDeletePost }) => {
                       {t('post.downloadPdf')}
                     </Button>
                   )}
-                  <Button
-                    variant="outline-primary"
-                    size="sm"
-                    className="rounded-pill px-4"
-                    onClick={() => window.open(`/feed/books/${post.shared_book_id}`, '_blank')}
-                  >
+                    <Button
+                      variant={isDarkMode ? 'outline-light' : 'outline-primary'}
+                      size="sm"
+                      className="rounded-pill px-4"
+                      onClick={() => window.open(`/feed/books/${post.shared_book_id}`, '_blank')}
+                    >
                     <BsBook size={14} className="me-2" />
                     {t('post.viewBook')}
                   </Button>
