@@ -73,7 +73,27 @@
     "birthDateRequired": "Please enter your birth date",
     "ageLimitError": "You must be at least 16 years old to register",
     "ageConfirm": "I declare and accept that I am over 16 years old.",
-    "visitAsGuest": "Odwiedź jako gość"
+    "visitAsGuest": "Odwiedź jako gość",
+    "resetPasswordTitle": "Ustaw nowe hasło",
+    "resetPasswordSubtitle": "Wybierz silne hasło ze względów bezpieczeństwa.",
+    "newPassword": "Nowe hasło",
+    "confirmPasswordLabel": "Potwierdź hasło",
+    "updatePassword": "Zaktualizuj hasło",
+    "updating": "Aktualizowanie...",
+    "passwordChanged": "Hasło zostało zmienione!",
+    "passwordChangedDesc": "Twoje hasło zostało pomyślnie zaktualizowane. Możesz się teraz zalogować nowym hasłem.",
+    "invalidLink": "Nieprawidłowy link",
+    "invalidLinkDesc": "Nie znaleziono tokenu resetowania hasła. Upewnij się, że kliknąłeś link z e-maila.",
+    "requestNewLink": "Poproś o nowy link",
+    "resetPasswordError": "Wystąpił błąd podczas resetowania hasła.",
+    "passwordMinLength": "Hasło musi mieć co najmniej 8 znaków",
+    "passwordRequired": "Hasło jest wymagane",
+    "passwordsMismatch": "Hasła nie są zgodne",
+    "confirmPasswordRequired": "Potwierdzenie hasła jest wymagane",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "Nieprawidłowy lub wygasły token resetowania hasła.",
+      "EXPIRED_RESET_TOKEN": "Link do resetowania hasła wygasł."
+    }
   },
   "navigation": {
     "home": "Strona główna",

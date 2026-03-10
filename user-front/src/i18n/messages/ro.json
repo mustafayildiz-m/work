@@ -73,7 +73,27 @@
     "birthDateRequired": "Please enter your birth date",
     "ageLimitError": "You must be at least 16 years old to register",
     "ageConfirm": "I declare and accept that I am over 16 years old.",
-    "visitAsGuest": "Visit as guest"
+    "visitAsGuest": "Visit as guest",
+    "resetPasswordTitle": "Setați o parolă nouă",
+    "resetPasswordSubtitle": "Vă rugăm să alegeți o parolă puternică pentru securitate.",
+    "newPassword": "Parolă nouă",
+    "confirmPasswordLabel": "Confirmați parola",
+    "updatePassword": "Actualizați parola",
+    "updating": "Se actualizează...",
+    "passwordChanged": "Parola a fost schimbată!",
+    "passwordChangedDesc": "Parola dvs. a fost actualizată cu succes. Acum vă puteți autentifica cu noua parolă.",
+    "invalidLink": "Link invalid",
+    "invalidLinkDesc": "Tokenul de resetare a parolei nu a fost găsit. Asigurați-vă că ați dat clic pe linkul din e-mail.",
+    "requestNewLink": "Solicitați un link nou",
+    "resetPasswordError": "A apărut o eroare la resetarea parolei.",
+    "passwordMinLength": "Parola trebuie să aibă cel puțin 8 caractere",
+    "passwordRequired": "Parola este obligatorie",
+    "passwordsMismatch": "Parolele nu se potrivesc",
+    "confirmPasswordRequired": "Confirmarea parolei este obligatorie",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "Token de resetare invalid sau expirat.",
+      "EXPIRED_RESET_TOKEN": "Linkul de resetare a parolei a expirat."
+    }
   },
   "navigation": {
     "home": "Acasă",

@@ -73,7 +73,27 @@
     "birthDateRequired": "生年月日を入力してください",
     "ageLimitError": "登録するには16歳以上である必要があります",
     "ageConfirm": "私は16歳以上であることを宣言し、同意します。",
-    "visitAsGuest": "ゲストとして訪問"
+    "visitAsGuest": "ゲストとして訪問",
+    "resetPasswordTitle": "新しいパスワードを設定",
+    "resetPasswordSubtitle": "セキュリティのため、強力なパスワードを選択してください。",
+    "newPassword": "新しいパスワード",
+    "confirmPasswordLabel": "パスワード確認",
+    "updatePassword": "パスワードを更新",
+    "updating": "更新中...",
+    "passwordChanged": "パスワードを変更しました！",
+    "passwordChangedDesc": "パスワードが正常に更新されました。新しいパスワードでログインできます。",
+    "invalidLink": "無効なリンク",
+    "invalidLinkDesc": "パスワードリセットトークンが見つかりません。メールのリンクをクリックしたことを確認してください。",
+    "requestNewLink": "新しいリンクをリクエスト",
+    "resetPasswordError": "パスワードのリセット中にエラーが発生しました。",
+    "passwordMinLength": "パスワードは8文字以上である必要があります",
+    "passwordRequired": "パスワードは必須です",
+    "passwordsMismatch": "パスワードが一致しません",
+    "confirmPasswordRequired": "パスワード確認は必須です",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "無効または期限切れのパスワードリセットトークンです。",
+      "EXPIRED_RESET_TOKEN": "パスワードリセットリンクの有効期限が切れています。"
+    }
   },
   "navigation": {
     "home": "ホーム",

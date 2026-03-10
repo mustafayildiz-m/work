@@ -73,7 +73,27 @@
     "birthDateRequired": "Inserisci la tua data di nascita",
     "ageLimitError": "Devi avere almeno 16 anni per registrarti",
     "ageConfirm": "Dichiaro e accetto di avere più di 16 anni.",
-    "visitAsGuest": "Visita come ospite"
+    "visitAsGuest": "Visita come ospite",
+    "resetPasswordTitle": "Imposta nuova password",
+    "resetPasswordSubtitle": "Scegli una password sicura.",
+    "newPassword": "Nuova password",
+    "confirmPasswordLabel": "Conferma password",
+    "updatePassword": "Aggiorna password",
+    "updating": "Aggiornamento...",
+    "passwordChanged": "Password modificata!",
+    "passwordChangedDesc": "La password è stata aggiornata con successo. Ora puoi accedere con la nuova password.",
+    "invalidLink": "Link non valido",
+    "invalidLinkDesc": "Token di reimpostazione non trovato. Assicurati di aver cliccato sul link nell'email.",
+    "requestNewLink": "Richiedi nuovo link",
+    "resetPasswordError": "Si è verificato un errore durante il reset della password.",
+    "passwordMinLength": "La password deve contenere almeno 8 caratteri",
+    "passwordRequired": "La password è obbligatoria",
+    "passwordsMismatch": "Le password non coincidono",
+    "confirmPasswordRequired": "La conferma della password è obbligatoria",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "Token di reimpostazione non valido o scaduto.",
+      "EXPIRED_RESET_TOKEN": "Il link di reimpostazione è scaduto."
+    }
   },
   "navigation": {
     "home": "Casa",

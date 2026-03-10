@@ -73,7 +73,27 @@
     "birthDateRequired": "Por favor, insira a sua data de nascimento",
     "ageLimitError": "Deve ter pelo menos 16 anos para se registar",
     "ageConfirm": "Declaro e aceito que tenho mais de 16 anos.",
-    "visitAsGuest": "Visitar como convidado"
+    "visitAsGuest": "Visitar como convidado",
+    "resetPasswordTitle": "Definir nova senha",
+    "resetPasswordSubtitle": "Por favor escolha uma senha forte.",
+    "newPassword": "Nova senha",
+    "confirmPasswordLabel": "Confirmar senha",
+    "updatePassword": "Atualizar senha",
+    "updating": "Atualizando...",
+    "passwordChanged": "Senha alterada!",
+    "passwordChangedDesc": "Sua senha foi atualizada com sucesso. Agora você pode entrar com sua nova senha.",
+    "invalidLink": "Link inválido",
+    "invalidLinkDesc": "Token de redefinição não encontrado. Certifique-se de ter clicado no link do seu e-mail.",
+    "requestNewLink": "Solicitar novo link",
+    "resetPasswordError": "Ocorreu um erro ao redefinir a senha.",
+    "passwordMinLength": "A senha deve ter pelo menos 8 caracteres",
+    "passwordRequired": "A senha é obrigatória",
+    "passwordsMismatch": "As senhas não coincidem",
+    "confirmPasswordRequired": "A confirmação da senha é obrigatória",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "Token de redefinição inválido ou expirado.",
+      "EXPIRED_RESET_TOKEN": "O link de redefinição expirou."
+    }
   },
   "navigation": {
     "home": "Início",

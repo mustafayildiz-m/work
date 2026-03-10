@@ -73,7 +73,27 @@
     "birthDateRequired": "Пожалуйста, введите вашу дату рождения",
     "ageLimitError": "Вам должно быть не менее 16 лет для регистрации",
     "ageConfirm": "Я заявляю и принимаю, что мне больше 16 лет.",
-    "visitAsGuest": "Войти как гость"
+    "visitAsGuest": "Войти как гость",
+    "resetPasswordTitle": "Установить новый пароль",
+    "resetPasswordSubtitle": "Пожалуйста, выберите надёжный пароль.",
+    "newPassword": "Новый пароль",
+    "confirmPasswordLabel": "Подтвердите пароль",
+    "updatePassword": "Обновить пароль",
+    "updating": "Обновление...",
+    "passwordChanged": "Пароль изменён!",
+    "passwordChangedDesc": "Ваш пароль успешно обновлён. Теперь вы можете войти с новым паролем.",
+    "invalidLink": "Недействительная ссылка",
+    "invalidLinkDesc": "Токен сброса пароля не найден. Убедитесь, что вы перешли по ссылке из письма.",
+    "requestNewLink": "Запросить новую ссылку",
+    "resetPasswordError": "Произошла ошибка при сбросе пароля.",
+    "passwordMinLength": "Пароль должен содержать не менее 8 символов",
+    "passwordRequired": "Пароль обязателен",
+    "passwordsMismatch": "Пароли не совпадают",
+    "confirmPasswordRequired": "Подтверждение пароля обязательно",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "Недействительный или просроченный токен сброса пароля.",
+      "EXPIRED_RESET_TOKEN": "Срок действия ссылки для сброса пароля истёк."
+    }
   },
   "navigation": {
     "home": "Главная",

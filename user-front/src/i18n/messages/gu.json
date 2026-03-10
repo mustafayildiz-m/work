@@ -81,7 +81,27 @@
     "ageLimitError": "નોંધણી કરાવવા માટે તમારી ઉંમર ઓછામાં ઓછી 16 વર્ષની હોવી જોઈએ",
     "ageConfirm": "હું જાહેર કરું છું અને સ્વીકારું છું કે મારી ઉંમર 16 વર્ષથી વધુ છે.",
     "ageRequiredError": "તમારે Google સાથે સાઇન ઇન કરવા માટે 16 વર્ષ જૂની આવશ્યકતાની પુષ્ટિ કરવી આવશ્યક છે.",
-    "visitAsGuest": "મહેમાન તરીકે મુલાકાત લો"
+    "visitAsGuest": "મહેમાન તરીકે મુલાકાત લો",
+    "resetPasswordTitle": "નવો પાસવર્ડ સેટ કરો",
+    "resetPasswordSubtitle": "કૃપા કરીને તમારી સુરક્ષા માટે મજબૂત પાસવર્ડ પસંદ કરો.",
+    "newPassword": "નવો પાસવર્ડ",
+    "confirmPasswordLabel": "પાસવર્ડની પુષ્ટિ કરો",
+    "updatePassword": "પાસવર્ડ અપડેટ કરો",
+    "updating": "અપડેટ થઈ રહ્યું છે...",
+    "passwordChanged": "પાસવર્ડ બદલાયો!",
+    "passwordChangedDesc": "તમારો પાસવર્ડ સફળતાપૂર્વક અપડેટ થયો. હવે તમે તમારા નવા પાસવર્ડથી લોગ ઇન કરી શકો છો.",
+    "invalidLink": "અમાન્ય લિંક",
+    "invalidLinkDesc": "પાસવર્ડ રીસેટ ટોકન મળ્યો નથી. કૃપા કરીને ખાતરી કરો કે તમે તમારા ઇમેઇલની લિંક પર ક્લિક કર્યું છે.",
+    "requestNewLink": "નવી લિંકની વિનંતી કરો",
+    "resetPasswordError": "પાસવર્ડ રીસેટ કરતી વખતે ભૂલ થઈ.",
+    "passwordMinLength": "પાસવર્ડ ઓછામાં ઓછા 8 અક્ષરોનો હોવો જોઈએ",
+    "passwordRequired": "પાસવર્ડ જરૂરી છે",
+    "passwordsMismatch": "પાસવર્ડ મેળ ખાતા નથી",
+    "confirmPasswordRequired": "પાસવર્ડની પુષ્ટિ જરૂરી છે",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "અમાન્ય અથવા સમાપ્ત પાસવર્ડ રીસેટ ટોકન.",
+      "EXPIRED_RESET_TOKEN": "પાસવર્ડ રીસેટ લિંકની સમય સીમા સમાપ્ત થઈ ગઈ છે."
+    }
   },
   "navigation": {
     "home": "ઘર",

@@ -73,7 +73,27 @@
     "birthDateRequired": "Veuillez entrer votre date de naissance",
     "ageLimitError": "Vous devez avoir au moins 16 ans pour vous inscrire",
     "ageConfirm": "Je déclare et accepte que j'ai plus de 16 ans.",
-    "visitAsGuest": "Visiter en tant qu'invité"
+    "visitAsGuest": "Visiter en tant qu'invité",
+    "resetPasswordTitle": "Définir un nouveau mot de passe",
+    "resetPasswordSubtitle": "Veuillez choisir un mot de passe sécurisé.",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPasswordLabel": "Confirmer le mot de passe",
+    "updatePassword": "Mettre à jour le mot de passe",
+    "updating": "Mise à jour...",
+    "passwordChanged": "Mot de passe modifié !",
+    "passwordChangedDesc": "Votre mot de passe a été mis à jour avec succès. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.",
+    "invalidLink": "Lien invalide",
+    "invalidLinkDesc": "Jeton de réinitialisation introuvable. Veuillez vous assurer d'avoir cliqué sur le lien dans votre e-mail.",
+    "requestNewLink": "Demander un nouveau lien",
+    "resetPasswordError": "Une erreur s'est produite lors de la réinitialisation du mot de passe.",
+    "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
+    "passwordRequired": "Le mot de passe est requis",
+    "passwordsMismatch": "Les mots de passe ne correspondent pas",
+    "confirmPasswordRequired": "La confirmation du mot de passe est requise",
+    "resetPasswordErrors": {
+      "INVALID_RESET_TOKEN": "Jeton de réinitialisation invalide ou expiré.",
+      "EXPIRED_RESET_TOKEN": "Le lien de réinitialisation a expiré."
+    }
   },
   "navigation": {
     "home": "Accueil",

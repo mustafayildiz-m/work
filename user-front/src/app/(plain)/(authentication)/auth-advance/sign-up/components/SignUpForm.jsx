@@ -45,7 +45,7 @@ const SignUpForm = () => {
       }),
     password: yup.string().min(6, t('auth.passwordMinLength') || 'Şifre en az 6 karakter olmalıdır').required(t('auth.passwordRequired') || 'Lütfen şifrenizi girin'),
     confirmPassword: yup.string()
-      .oneOf([yup.ref('password')], t('auth.passwordsNotMatch') || 'Parolalar eşleşmelidir')
+      .oneOf([yup.ref('password')], t('auth.passwordsMismatch') || 'Parolalar eşleşmelidir')
       .required(t('auth.confirmPasswordRequired') || 'Lütfen şifrenizi doğrulayın'),
     acceptTerms: yup.boolean()
       .oneOf([true], t('auth.acceptTermsRequired') || 'Kullanım şartlarını kabul etmelisiniz')
