@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
 import { UserPost, PostStatus } from '../entities/user-post.entity';
@@ -11,8 +11,11 @@ import { User } from '../users/entities/user.entity';
 import { Scholar } from '../scholars/entities/scholar.entity';
 import { UserPostComment } from '../entities/user-post-comment.entity';
 import { UserPostShare } from '../entities/user-post-share.entity';
+import { UserPostLike } from '../entities/user-post-like.entity';
+import { UserPostSave } from '../entities/user-post-save.entity';
 import { CacheService } from './cache.service';
 import { SystemSettingsService } from './system-settings.service';
+import { ChatGateway } from '../chat/chat.gateway';
 
 @Injectable()
 export class UserPostsService {
@@ -33,8 +36,14 @@ export class UserPostsService {
     private userPostCommentRepository: Repository<UserPostComment>,
     @InjectRepository(UserPostShare)
     private userPostShareRepository: Repository<UserPostShare>,
+    @InjectRepository(UserPostLike)
+    private userPostLikeRepository: Repository<UserPostLike>,
+    @InjectRepository(UserPostSave)
+    private userPostSaveRepository: Repository<UserPostSave>,
     private readonly cacheService: CacheService,
     private readonly settingsService: SystemSettingsService,
+    @Inject(forwardRef(() => ChatGateway))
+    private readonly chatGateway: ChatGateway,
   ) {}
 
   async create(createUserPostDto: CreateUserPostDto) {
@@ -57,6 +66,13 @@ export class UserPostsService {
 
     // Cache'i temizle - kullanıcının kendi timeline'ı ve onu takip edenlerin timeline'ları
     await this.clearTimelineCacheForUser(savedPost.user_id);
+
+    // Onaylı post ise takipçilere WebSocket ile anında bildir
+    if (savedPost.status === PostStatus.APPROVED) {
+      this.broadcastNewPostToFollowers(savedPost).catch((err) =>
+        console.error('broadcastNewPostToFollowers error:', err),
+      );
+    }
 
     return savedPost;
   }
@@ -103,13 +119,38 @@ export class UserPostsService {
   async remove(id: number) {
     const post = await this.userPostRepository.findOneBy({ id });
     if (!post) throw new NotFoundException('Post not found');
-    const userId = post.user_id;
+    const postAuthorId = post.user_id;
+
+    // Takipçilere silme bildirimi gönder (önce, silmeden önce)
+    try {
+      this.broadcastPostDeletedToFollowers(postAuthorId, id);
+    } catch (err) {
+      console.error('broadcastPostDeletedToFollowers error:', err);
+    }
+
+    // FK constraint: Önce ilişkili kayıtları sil (silinmezse 500 hatası)
+    await this.userPostCommentRepository.delete({ post_id: id });
+    await this.userPostLikeRepository.delete({ post_id: id });
+    await this.userPostSaveRepository.delete({ post_id: id });
+    await this.userPostShareRepository.delete({
+      post_type: 'user',
+      post_id: String(id),
+    });
+
     await this.userPostRepository.remove(post);
 
     // Cache'i temizle
-    await this.clearTimelineCacheForUser(userId);
+    await this.clearTimelineCacheForUser(postAuthorId);
 
     return { deleted: true };
+  }
+
+  /**
+   * Silinen postu tüm bağlı istemcilere bildirir - her istemci kendi timeline'ında varsa kaldırır
+   * (broadcastToUsers userId eşleşmesinde sorun olabiliyordu, bu yöntem daha güvenilir)
+   */
+  private broadcastPostDeletedToFollowers(_postAuthorId: number, postId: number) {
+    this.chatGateway.broadcastToAll('postDeletedFromFeed', { postId });
   }
 
   async getTimeline(userId: number, language: string = 'tr') {
@@ -649,6 +690,11 @@ export class UserPostsService {
     // Cache'i temizle
     await this.clearTimelineCacheForUser(updatedPost.user_id);
 
+    // Takipçilere WebSocket ile anında bildir
+    this.broadcastNewPostToFollowers(updatedPost).catch((err) =>
+      console.error('broadcastNewPostToFollowers error:', err),
+    );
+
     return updatedPost;
   }
 
@@ -672,6 +718,53 @@ export class UserPostsService {
       relations: ['user'],
       order: { created_at: 'DESC' },
     });
+  }
+
+  /**
+   * Yeni onaylanan postu takipçilere WebSocket ile anında gönderir (LinkedIn/Facebook tarzı)
+   */
+  private async broadcastNewPostToFollowers(post: UserPost) {
+    const followers = await this.userFollowRepository.find({
+      where: { following_id: post.user_id, status: 'accepted' },
+      select: ['follower_id'],
+    });
+    const followerIds = followers.map((f) => f.follower_id);
+    if (followerIds.length === 0) return;
+
+    const author = await this.userRepository.findOne({
+      where: { id: post.user_id },
+      select: ['id', 'firstName', 'lastName', 'photoUrl', 'username', 'role'],
+    });
+
+    const postPayload = {
+      type: (post as any).type || 'user',
+      id: post.id,
+      user_id: post.user_id,
+      scholar_id: null,
+      content: post.content,
+      title: post.title,
+      image_url: post.image_url,
+      video_url: (post as any).video_url,
+      created_at: post.created_at,
+      updated_at: post.updated_at,
+      timeAgo: 'Az önce',
+      user_name: author ? `${author.firstName} ${author.lastName}` : null,
+      user_username: author ? author.username : null,
+      user_photo_url: author ? author.photoUrl : null,
+      user_role: author ? author.role : null,
+      ownPost: false,
+      comment_count: 0,
+      isShared: false,
+      shared_at: null,
+      shared_by_user: null,
+      original_user: null,
+      shared_profile_type: null,
+      shared_profile_id: null,
+      shared_book_id: null,
+      shared_article_id: null,
+    };
+
+    this.chatGateway.broadcastToUsers(followerIds, 'newPostInFeed', postPayload);
   }
 
   /**

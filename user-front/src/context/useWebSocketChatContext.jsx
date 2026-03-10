@@ -576,6 +576,31 @@ export const WebSocketChatProvider = ({ children }) => {
         window.dispatchEvent(new Event('followStatusChanged'));
       });
 
+      // Post silindi - takipçilerin timeline'ından anında kaldır
+      socketInstance.on('postDeletedFromFeed', (data) => {
+        if (data && data.postId) {
+          window.dispatchEvent(new CustomEvent('postDeletedFromFeed', { detail: { postId: data.postId } }));
+        }
+      });
+
+      // Yeni post feed'e düştü (takip ettiğin biri paylaştı) - LinkedIn/Facebook tarzı anında görünüm
+      socketInstance.on('newPostInFeed', (post) => {
+        if (post && post.id) {
+          window.dispatchEvent(new CustomEvent('postCreated', {
+            detail: { post, fromRealtime: true }
+          }));
+        }
+      });
+
+      // Yeni yorum (biri paylaşımına yorum yaptı) - anlık görünüm
+      socketInstance.on('newCommentInPost', (data) => {
+        if (data && data.postId && data.comment) {
+          window.dispatchEvent(new CustomEvent('newCommentInPost', {
+            detail: { postId: data.postId, comment: data.comment }
+          }));
+        }
+      });
+
       socketInstance.on('newNotification', (notification) => {
         const formattedNotification = {
           ...notification,
@@ -608,11 +633,14 @@ export const WebSocketChatProvider = ({ children }) => {
         playNotificationSound();
 
         if (notificationContext?.showNotification) {
-          const scholarName = notification.related_user?.firstName?.trim();
+          const isComment = notification.type === 'post_comment';
+          const displayTitle = isComment
+            ? (notification.title || '🔔 Yeni yorum')
+            : (notification.related_user?.firstName?.trim()
+              ? `🔔 ${notification.related_user.firstName} yeni bir gönderi paylaştı`
+              : '🔔 Yeni Bildirim');
           notificationContext.showNotification({
-            title: scholarName
-              ? `🔔 ${scholarName} yeni bir gönderi paylaştı`
-              : '🔔 Yeni Bildirim',
+            title: displayTitle,
             message: notification.message || notification.title || 'Yeni bir bildiriminiz var.',
             variant: 'info',
             delay: 5000,

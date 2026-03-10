@@ -144,7 +144,7 @@ export class UserPostsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.userPostsService.remove(id);
   }
 

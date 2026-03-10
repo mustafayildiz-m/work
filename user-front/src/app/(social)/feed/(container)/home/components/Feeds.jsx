@@ -264,6 +264,21 @@ const Feeds = ({ userId }) => {
     };
   }, [userId]);
 
+  // Yeni yorum anlık görünsün (biri paylaşımıma yorum yaptı)
+  useEffect(() => {
+    const handleNewComment = (event) => {
+      const { postId, comment } = event.detail || {};
+      if (!postId || !comment) return;
+      setPostComments(prev => {
+        const existing = prev[postId] || [];
+        if (existing.some(c => c.id === comment.id)) return prev;
+        return { ...prev, [postId]: [...existing, comment] };
+      });
+    };
+    window.addEventListener('newCommentInPost', handleNewComment);
+    return () => window.removeEventListener('newCommentInPost', handleNewComment);
+  }, []);
+
   // Handler functions for post actions
   const handleUnfollow = async (userIdToUnfollow, userType = 'user') => {
     // Store the action details and show confirmation dialog
@@ -500,8 +515,7 @@ const Feeds = ({ userId }) => {
         removePost(postId);
         // Also remove from pending posts if it exists there
         setPendingPosts(prev => prev.filter(p => p.id !== postId));
-        // Refresh timeline to sync with server
-        refetch();
+        // refetch kaldırıldı - silinen post cache/race nedeniyle geri geliyordu
       } else {
         // console.error('Failed to delete post:', response.status, response.statusText);
         const errorData = await response.text();

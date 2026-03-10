@@ -38,17 +38,25 @@ export const useTimelinePosts = (userId) => {
       // If we have post data in the event, add it immediately for instant feedback
       if (event.detail && event.detail.post) {
         const newPost = event.detail.post;
-        
+        const fromRealtime = event.detail.fromRealtime === true; // WebSocket'ten gelen (başkasının paylaşımı)
+
         // Ensure video_url is properly formatted for immediate display
         if (newPost.video_url && newPost.video_url.startsWith('blob:')) {
           // This is a blob URL from file selection, keep it for immediate display
         }
-        
+
         // Add the new post to the beginning of the list
-        setPosts(prevPosts => [newPost, ...prevPosts]);
+        setPosts(prevPosts => {
+          const exists = prevPosts.some(p => p.id === newPost.id);
+          if (exists) return prevPosts;
+          return [newPost, ...prevPosts];
+        });
+
+        // Realtime'dan geldiyse (başkası paylaştı) refetch yapma - zaten doğru veri var
+        if (fromRealtime) return;
       }
-      
-      // Then refresh from server to get accurate data
+
+      // Kendi paylaşımın veya local event - sunucudan güncel veriyi al
       if (userId) {
         try {
           setLoading(true);
@@ -72,6 +80,19 @@ export const useTimelinePosts = (userId) => {
       window.removeEventListener('postCreated', handlePostCreated);
     };
   }, [userId, locale]);
+
+  // Listen for post deletion - remove from timeline instantly
+  useEffect(() => {
+    const handlePostDeleted = (event) => {
+      const postId = event.detail?.postId;
+      if (postId != null) {
+        const id = Number(postId);
+        setPosts(prevPosts => prevPosts.filter(post => Number(post.id) !== id));
+      }
+    };
+    window.addEventListener('postDeletedFromFeed', handlePostDeleted);
+    return () => window.removeEventListener('postDeletedFromFeed', handlePostDeleted);
+  }, []);
 
   // Listen for share/unshare changes and refresh timeline instantly
   useEffect(() => {
@@ -120,7 +141,8 @@ export const useTimelinePosts = (userId) => {
   };
 
   const removePost = (postId) => {
-    setPosts(prevPosts => prevPosts.filter(post => post.id !== postId));
+    const id = Number(postId);
+    setPosts(prevPosts => prevPosts.filter(post => Number(post.id) !== id));
   };
 
   return {
