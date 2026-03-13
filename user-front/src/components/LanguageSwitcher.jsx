@@ -28,7 +28,7 @@ const MenuList = (props) => {
   );
 };
 
-const LanguageSwitcher = ({ variant = 'dropdown' }) => {
+const LanguageSwitcher = ({ variant = 'dropdown', compact = false }) => {
   const { locale, changeLocale, supportedLocales, t } = useLanguage();
   const [mounted, setMounted] = useState(false);
 
@@ -403,7 +403,7 @@ const LanguageSwitcher = ({ variant = 'dropdown' }) => {
   }
 
   return (
-    <div className="language-switcher-select2" style={{ minWidth: '200px', maxWidth: '250px', position: 'relative', zIndex: 1000 }}>
+    <div className={`language-switcher-select2 ${compact ? 'language-switcher-compact' : ''}`} style={{ minWidth: compact ? '80px' : '200px', maxWidth: compact ? '120px' : '250px', position: 'relative', zIndex: 1000 }}>
       <Select
         value={currentOption}
         onChange={(selectedOption) => changeLocale(selectedOption.value)}
@@ -411,11 +411,13 @@ const LanguageSwitcher = ({ variant = 'dropdown' }) => {
         styles={customStyles}
         components={{ MenuList }}
         isSearchable={true}
-        placeholder="Select language..."
-        formatOptionLabel={({ flag, name }) => (
+        placeholder="Dil"
+        formatOptionLabel={({ flag, name, code }, { context }) => (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0 }}>
             <span style={{ fontSize: '1.2rem' }}>{flag}</span>
-            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{name}</span>
+            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {compact && context === 'value' ? (code || '').toUpperCase() : name}
+            </span>
           </div>
         )}
         className="language-select"

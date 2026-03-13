@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google';
 import Image from 'next/image';
 import NextTopLoader from 'nextjs-toploader';
 import { DEFAULT_PAGE_TITLE } from '@/context/constants';
-import logo from '@/assets/images/logo.svg';
 import '@/assets/scss/style.scss';
 import 'leaflet/dist/leaflet.css';
 const AppProvidersWrapper = dynamic(() => import('@/components/wrappers/AppProvidersWrapper'));
@@ -71,11 +70,11 @@ const RootLayout = ({
     </head>
     <body className={inter.className}>
       <div id="splash-screen">
-        <Image alt="Logo" width={200} height={50} src={logo} style={{
+        <Image alt="Islamic Windows" width={200} height={200} src="/logo/logo.png" style={{
           height: 'auto',
           width: '200px',
           maxWidth: '80%'
-        }} priority />
+        }} priority unoptimized />
       </div>
       <NextTopLoader color="#1c84ee" showSpinner={false} />
       <div id="__next_splash">

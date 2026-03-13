@@ -57,6 +57,12 @@
   z-index: 1000;
 }
 
+/* Mobile/compact: hide indicator separator, cleaner look */
+.mobile-language-switcher .language-select__indicator-separator,
+.language-switcher-compact .language-select__indicator-separator {
+  display: none !important;
+}
+
 .language-select__menu {
   z-index: 10000 !important;
 }
@@ -168,6 +174,13 @@ body>div[id*="react-select"]>div {
 
 .language-switcher-simple-container::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.5);
+}
+
+/* Mobile / compact dil seçici - daha iyi dokunma alanı */
+.mobile-language-switcher .language-select__control,
+.language-switcher-compact .language-select__control {
+  border-radius: 12px !important;
+  min-height: 36px !important;
 }
 
 /* Language Switcher Item */

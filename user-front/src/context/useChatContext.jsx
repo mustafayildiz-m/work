@@ -1,10 +1,10 @@
 'use client';
 
-import { createContext, use, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { getUserById } from '@/helpers/data';
 const ChatContext = createContext(undefined);
 export const useChatContext = () => {
-  const context = use(ChatContext);
+  const context = useContext(ChatContext);
   if (!context) {
     throw new Error('useChatContext can only be used within ChatProvider');
   }

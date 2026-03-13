@@ -1258,10 +1258,10 @@
     min-height: 56px !important;
     max-height: 56px !important;
 
-    .container {
-      padding-left: 0.75rem !important;
-      padding-right: 0.75rem !important;
-      height: 56px !important;
+      .container {
+        padding-left: 0 !important;
+        padding-right: 0.75rem !important;
+        height: 56px !important;
       min-height: 56px !important;
       max-height: 56px !important;
     }
@@ -1315,10 +1315,11 @@
     max-width: 120px !important;
   }
 
-  // Navbar brand mobile
+  // Navbar brand mobile - logo tam sol üstte
   .navbar-brand {
     padding-top: 0.25rem !important;
     padding-bottom: 0.25rem !important;
+    padding-left: 0 !important;
   }
 
   // Main content spacing after fixed header
@@ -1337,10 +1338,10 @@
     min-height: 52px !important;
     max-height: 52px !important;
 
-    .container {
-      padding-left: 0.5rem !important;
-      padding-right: 0.5rem !important;
-      height: 52px !important;
+      .container {
+        padding-left: 0 !important;
+        padding-right: 0.5rem !important;
+        height: 52px !important;
       min-height: 52px !important;
       max-height: 52px !important;
     }
@@ -1462,10 +1463,10 @@
     min-height: 48px !important;
     max-height: 48px !important;
 
-    .container {
-      padding-left: 0.4rem !important;
-      padding-right: 0.4rem !important;
-      height: 48px !important;
+      .container {
+        padding-left: 0 !important;
+        padding-right: 0.4rem !important;
+        height: 48px !important;
       min-height: 48px !important;
       max-height: 48px !important;
     }
@@ -2270,7 +2271,7 @@
       max-height: 56px !important;
 
       .container {
-        padding-left: 0.75rem !important;
+        padding-left: 0 !important;
         padding-right: 0.75rem !important;
         height: 56px !important;
         min-height: 56px !important;
@@ -2331,6 +2332,12 @@
     header.fixed-top+main {
       padding-top: calc(56px + 1rem) !important;
     }
+
+    // Offcanvas - header altında başlasın (üst üste binmeyi önle)
+    .offcanvas.offcanvas-start.show {
+      top: 56px !important;
+      height: calc(100vh - 56px) !important;
+    }
   }
 
   // Extra small devices (phones, less than 576px)
@@ -2344,12 +2351,16 @@
       max-height: 52px !important;
 
       .container {
-        padding-left: 0.5rem !important;
+        padding-left: 0 !important;
         padding-right: 0.5rem !important;
         height: 52px !important;
         min-height: 52px !important;
         max-height: 52px !important;
         overflow: visible !important;
+      }
+
+      .navbar-brand {
+        padding-left: 0 !important;
       }
 
       .navbar {
@@ -2405,6 +2416,12 @@
     header.fixed-top+main {
       padding-top: calc(52px + 0.75rem) !important;
     }
+
+    // Offcanvas - header (52px) altında başlasın
+    .offcanvas.offcanvas-start.show {
+      top: 52px !important;
+      height: calc(100vh - 52px) !important;
+    }
   }
 
   // Very small devices (phones in portrait, less than 375px)
@@ -2418,7 +2435,7 @@
       max-height: 48px !important;
 
       .container {
-        padding-left: 0.4rem !important;
+        padding-left: 0 !important;
         padding-right: 0.4rem !important;
         height: 48px !important;
         min-height: 48px !important;
@@ -2476,6 +2493,44 @@
     }
 
     padding-top: calc(48px + 0.5rem) !important;
+  }
+}
+
+// Logo mobilde tam sol üstte - header container ve logo sıfır padding
+@media (max-width: 991.98px) {
+  header .top-header-inner,
+  header .container.top-header-inner {
+    padding-left: 0 !important;
+  }
+  header .top-header-inner .logo-container,
+  header .container .logo-container {
+    margin-left: -3rem !important;
+    padding-left: 0 !important;
+  }
+  header .navbar-brand {
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+  }
+
+  // Giriş Yap butonu mobilde taşmasın - daha kompakt
+  header .header-login-btn {
+    padding: 0.3rem 0.5rem !important;
+    font-size: 0.75rem !important;
+    white-space: nowrap;
+  }
+  header .header-login-btn-wrap {
+    margin-left: 0.25rem !important;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 399.98px) {
+  header .header-login-btn {
+    padding: 0.25rem 0.4rem !important;
+    font-size: 0.7rem !important;
+  }
+  header .header-login-btn-wrap {
+    margin-left: 0.15rem !important;
   }
 }
 
