@@ -419,10 +419,10 @@ const ProfileDropdown = () => {
 
   if (status === 'unauthenticated') {
     return (
-      <div className="ms-2 ms-lg-2 d-flex align-items-center">
+      <div className="ms-2 ms-lg-2 d-flex align-items-center header-login-btn-wrap">
         <Link
           href="/auth-advance/sign-in"
-          className="btn btn-sm px-3 fw-bold"
+          className="btn btn-sm px-3 fw-bold header-login-btn"
           style={{
             background: isDark ? 'rgba(102, 187, 106, 0.15)' : 'rgba(102, 187, 106, 0.1)',
             color: '#66BB6A',

@@ -1,4 +1,4 @@
-import { createContext, use, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { ToastBody, ToastHeader } from 'react-bootstrap';
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
@@ -80,7 +80,7 @@ function Toastr({
 }
 
 export function useNotificationContext() {
-  const context = use(NotificationContext);
+  const context = useContext(NotificationContext);
   if (!context) {
     throw new Error('useNotificationContext must be used within an NotificationProvider');
   }

@@ -88,8 +88,10 @@ header {
   padding-bottom: $navbar-brand-padding-y;
   .navbar-brand-item {
     height: $navbar-brand-height;
+    width: auto !important;
+    max-height: $navbar-brand-height;
+    object-fit: contain;
     display: block;
-    width: auto;
   }
 }
 

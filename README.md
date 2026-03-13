@@ -39,7 +39,7 @@ docker compose -f docker-compose.prod.yml up -d --build user-front
 # Sadece admin-front
 docker compose -f docker-compose.prod.yml up -d --build admin-front
 
-docker exec islamic_windows_nginx nginx -s 
+docker exec islamic_windows_nginx nginx -s reload
 
 
 ```

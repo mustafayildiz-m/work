@@ -88,8 +88,6 @@ const MessagingBar = () => {
         if (status === 'authenticated') fetchConnections();
     }, [status]);
 
-    if (status === 'unauthenticated') return null;
-
     const getLocalized = (key, trValue, enValue) => {
         const value = t(key);
         if (value === key) {

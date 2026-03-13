@@ -1,10 +1,10 @@
 'use client';
 
-import { createContext, use, useMemo, useState, useCallback, useEffect } from 'react';
+import { createContext, useContext, useMemo, useState, useCallback, useEffect } from 'react';
 import { toggleDocumentAttribute } from '@/utils/layout';
 const LayoutContext = createContext(undefined);
 function useLayoutContext() {
-  const context = use(LayoutContext);
+  const context = useContext(LayoutContext);
   if (context === undefined) {
     throw new Error('useLayoutContext must be used within an LayoutProvider');
   }
