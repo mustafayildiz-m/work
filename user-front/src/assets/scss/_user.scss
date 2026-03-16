@@ -3107,4 +3107,138 @@
     }
   }
 
+  // CreatePostCard - Fotoğraf/Video butonları
+  .card .nav-link.bg-light {
+    background: rgba(46, 125, 50, 0.4) !important;
+    color: #e0f0e0 !important;
+    border: 1px solid rgba(67, 160, 71, 0.5) !important;
+
+    &:hover {
+      background: rgba(67, 160, 71, 0.6) !important;
+      color: #fff !important;
+    }
+
+    .text-success { color: #81c784 !important; }
+    .text-info { color: #64b5f6 !important; }
+  }
+
+  // CreatePostCard - textarea arka planı
+  .card-body .form-control.border-0 {
+    background: rgba(35, 77, 42, 0.8) !important;
+    color: #e0f0e0 !important;
+
+    &::placeholder {
+      color: #7ab07a !important;
+    }
+  }
+
+  // Yorum alanı (comment-section)
+  .comment-section {
+    .comment-input-container {
+      background: rgba(35, 77, 42, 0.9) !important;
+      border: 1px solid rgba(67, 160, 71, 0.4) !important;
+
+      &:hover {
+        background: rgba(45, 90, 45, 0.95) !important;
+        border-color: rgba(67, 160, 71, 0.5) !important;
+      }
+
+      &:focus-within {
+        background: #234d2a !important;
+        border-color: rgba(67, 160, 71, 0.6) !important;
+        box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.25) !important;
+      }
+    }
+
+    .comment-textarea {
+      color: #e0f0e0 !important;
+
+      &::placeholder {
+        color: #7ab07a !important;
+      }
+    }
+
+    .comment-send-button {
+      background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+      color: #fff !important;
+      box-shadow: 0 2px 8px rgba(46, 125, 50, 0.35) !important;
+
+      &:hover {
+        background: linear-gradient(135deg, #388e3c 0%, #4caf50 100%) !important;
+        box-shadow: 0 4px 12px rgba(46, 125, 50, 0.4) !important;
+      }
+    }
+
+    .comments-list {
+      border-top-color: rgba(67, 160, 71, 0.35) !important;
+
+      .comment-item {
+        &:hover {
+          background-color: rgba(45, 90, 45, 0.5) !important;
+        }
+
+        .comment-header .fw-bold,
+        .comment-text,
+        .comment-content {
+          color: #e0f0e0 !important;
+        }
+
+        small {
+          color: #9bc99b !important;
+        }
+      }
+
+      .text-center small {
+        color: #9bc99b !important;
+      }
+    }
+  }
+
+  // CommentItem - yorum balonu (bg-light)
+  .comment-item .bg-light {
+    background: rgba(45, 90, 45, 0.6) !important;
+    color: #e0f0e0 !important;
+    border: 1px solid rgba(67, 160, 71, 0.3) !important;
+
+    h6, p, a, small {
+      color: #e0f0e0 !important;
+    }
+
+    a:hover {
+      color: #a5d6a7 !important;
+    }
+  }
+
+  // Önerilen İslam Alimleri - Card içindeki metinler
+  .card .h6,
+  .card .card-title,
+  .card .small,
+  .card p {
+    color: #e0f0e0 !important;
+  }
+
+  .card .text-muted {
+    color: #9bc99b !important;
+  }
+
+  // "tarafından paylaşıldı" (shared post) göstergesi
+  .shared-post-indicator {
+    background: linear-gradient(135deg, rgba(45, 90, 45, 0.95) 0%, rgba(35, 77, 42, 0.98) 100%) !important;
+    border-bottom: 1px solid rgba(67, 160, 71, 0.4) !important;
+
+    /* Paylaş ikonu konteyneri */
+    > div > div:first-child {
+      background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+      box-shadow: 0 2px 8px rgba(46, 125, 50, 0.35) !important;
+    }
+
+    .fw-bold {
+      color: #e0f0e0 !important;
+    }
+
+    .text-muted {
+      color: #9bc99b !important;
+    }
+  }
+
 }
