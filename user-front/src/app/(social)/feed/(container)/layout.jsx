@@ -39,7 +39,7 @@ const FeedLayout = ({
                 <span className="btn btn-primary profile-toggle-icon">
                   <FaSlidersH />
                 </span>
-                <span className="h6 mb-0 fw-bold d-lg-none ms-2 profile-toggle-text">{t('menu.profile')}</span>
+                <span className="h6 mb-0 fw-bold d-lg-none ms-2 profile-toggle-text">{t('menu.menu')}</span>
               </button>
             </div>
 

@@ -9,7 +9,7 @@ const LogoBox = () => {
     theme
   } = useLayoutContext();
   return (
-    <Link className="navbar-brand" href="/">
+    <Link className="navbar-brand" href="/" aria-label="Anasayfaya dön" title="Anasayfaya dön">
       {/* Desktop logo - açık tema ile aynı, header (80px) sınırları içinde */}
       <Image
         src="/logo/logo.png"
@@ -23,14 +23,14 @@ const LogoBox = () => {
         priority
       />
 
-      {/* Mobile logo */}
+      {/* Mobile logo - kompakt, anasayfaya tıklanabilir */}
       <Image
         src="/logo/logo.png"
-        alt="Islamic Windows"
-        height={72}
-        width={270}
+        alt="Islamic Windows - Anasayfa"
+        height={36}
+        width={100}
         className="navbar-brand-item d-lg-none"
-        style={{ height: 72, width: 'auto', minWidth: 200 }}
+        style={{ height: 36, width: 'auto', maxWidth: 100, minWidth: 60, objectFit: 'contain' }}
         quality={95}
         unoptimized
       />
