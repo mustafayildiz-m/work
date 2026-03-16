@@ -19,27 +19,27 @@ const TopHeader = () => {
   const isGuest = status === 'unauthenticated';
 
   return <StyledHeader>
-    <div className="container top-header-inner position-relative d-flex align-items-center justify-content-center flex-nowrap" style={{
+    <div className="container top-header-inner position-relative d-flex align-items-center justify-content-between flex-nowrap" style={{
       height: '80px',
       minHeight: '80px',
       maxHeight: '80px',
       maxWidth: '1040px',
       margin: '0 auto',
       overflow: 'visible',
-      gap: '2rem'
+      gap: '1.5rem'
     }}>
-      {/* Sol: Logo - mobilde sol üstte görünür (anasayfaya dönüş), masaüstünde merkeze yakın */}
-      <div className="d-flex align-items-center justify-content-start justify-content-lg-end flex-shrink-0 logo-container" style={{ flex: '1 1 0', minWidth: '0', maxWidth: '280px' }}>
+      {/* Sol: Logo - solda sabit */}
+      <div className="d-flex align-items-center justify-content-start flex-shrink-0 logo-container" style={{ flex: '0 0 auto', minWidth: '0' }}>
         <LogoBox />
       </div>
 
-      {/* Orta: Arama - merkezde */}
-      <div className="d-none d-lg-flex align-items-center flex-shrink-0" style={{ flex: '0 0 auto', minWidth: '280px', maxWidth: '420px', justifyContent: 'center' }}>
+      {/* Orta: Arama - merkezde, kalan alanı doldurur */}
+      <div className="d-none d-lg-flex align-items-center" style={{ flex: '1 1 auto', minWidth: '200px', maxWidth: '420px', justifyContent: 'center' }}>
         <CollapseMenu isSearch />
       </div>
 
-      {/* Sağ: İkonlar - eşit alan için flex */}
-      <ul className="nav flex-nowrap align-items-center d-none d-lg-flex list-unstyled mb-0" style={{ flex: '1 1 0', gap: '0.5rem', overflow: 'visible', justifyContent: 'flex-start', minWidth: '0', maxWidth: '280px' }}>
+      {/* Sağ: İkonlar - sağda sabit */}
+      <ul className="nav flex-nowrap align-items-center d-none d-lg-flex list-unstyled mb-0" style={{ flex: '0 0 auto', gap: '0.5rem', overflow: 'visible', justifyContent: 'flex-end', minWidth: '0' }}>
         {!isGuest && (
           <>
             <li className="nav-item">
