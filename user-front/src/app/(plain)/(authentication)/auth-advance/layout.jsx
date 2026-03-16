@@ -1,19 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useLayoutContext } from '@/context/useLayoutContext';
 import { Col, Container, Row } from 'react-bootstrap';
 
 const AuthLayout = ({
   children
 }) => {
-  const { updateTheme } = useLayoutContext();
-
-  useEffect(() => {
-    // Force light theme on all auth-advance pages
-    updateTheme('light');
-  }, [updateTheme]);
-
   return <>
     <main>
       <div className="bg-primary pt-5 pb-0 position-relative">
