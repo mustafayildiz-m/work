@@ -60,6 +60,11 @@ const RootLayout = ({
       <style>{splashScreenStyles}</style>
       <script
         dangerouslySetInnerHTML={{
+          __html: `(function(){try{var k='SOCIAL_NEXTJS_THEME_KEY';if(!localStorage.getItem(k)){document.documentElement.setAttribute('data-bs-theme','green');localStorage.setItem(k,'green');}}catch(e){}})();`,
+        }}
+      />
+      <script
+        dangerouslySetInnerHTML={{
           __html: `
               if (typeof window !== 'undefined' && typeof window.global === 'undefined') {
                 window.global = window;

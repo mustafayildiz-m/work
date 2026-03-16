@@ -26,8 +26,11 @@ const LayoutProvider = ({
       toggleDocumentAttribute(themeAttributeKey, foundTheme);
       return foundTheme;
     }
-    if (!foundTheme) localStorage.setItem(storageThemeKey, preferredTheme);
-    return preferredTheme;
+    // İlk giriş: varsayılan tema koyu yeşil
+    const defaultTheme = 'green';
+    toggleDocumentAttribute(themeAttributeKey, defaultTheme);
+    localStorage.setItem(storageThemeKey, defaultTheme);
+    return defaultTheme;
   };
   const INIT_STATE = {
     theme: getSavedTheme()
