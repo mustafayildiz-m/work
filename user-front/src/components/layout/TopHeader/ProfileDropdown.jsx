@@ -564,7 +564,7 @@ const ProfileDropdown = () => {
       {/* Dropdown Menu */}
       {isOpen && (
         <div
-          className={`position-absolute top-100 mt-2 bg-body rounded-4 shadow-lg border-0 ${isRTL ? 'start-0' : 'end-0'}`}
+          className={`profile-dropdown-menu position-absolute top-100 mt-2 bg-body rounded-4 shadow-lg border-0 ${isRTL ? 'start-0' : 'end-0'}`}
           style={{
             width: '240px',
             zIndex: 1050,

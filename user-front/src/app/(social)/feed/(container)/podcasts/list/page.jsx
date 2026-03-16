@@ -287,7 +287,7 @@ export default function PodcastsListPage() {
   const categories = ['Hadis', 'Fıkıh', 'Tefsir', 'Siyer', 'Akaid', 'Tasavvuf', 'Genel'];
 
   return (
-    <Col lg={9} style={{ paddingBottom: currentlyPlaying ? '120px' : '0' }}>
+    <Col lg={9} className="podcasts-list-page" style={{ paddingBottom: currentlyPlaying ? '120px' : '0' }}>
       {/* Audio Player (Hidden) */}
       <audio
         ref={(ref) => setAudioRef(ref)}
