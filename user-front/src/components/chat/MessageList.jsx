@@ -394,7 +394,7 @@ const MessageList = ({ onBackToConversations }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
-  // Auto scroll effect - optimized
+  // Auto scroll effect - yeni mesaj geldiğinde en alta kaydır
   useEffect(() => {
     const timeoutId = setTimeout(scrollToBottom, 100);
     return () => clearTimeout(timeoutId);

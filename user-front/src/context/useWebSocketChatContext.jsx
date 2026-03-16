@@ -459,6 +459,10 @@ export const WebSocketChatProvider = ({ children }) => {
       });
 
       socketInstance.on('typing', ({ userId, conversationId, isTyping }) => {
+        // Kendi yazma durumumuzu gösterme - odak kaybını önler
+        const currentUser = getCurrentUserInfo();
+        if (currentUser && String(userId) === String(currentUser.id)) return;
+
         setTypingUsers(prev => ({
           ...prev,
           [conversationId]: isTyping ? userId : null

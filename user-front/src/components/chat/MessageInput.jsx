@@ -163,10 +163,10 @@ const MessageInput = () => {
       // Reset textarea height
       setTimeout(adjustTextareaHeight, 0);
 
-      // Focus back to textarea
-      if (textareaRef.current) {
-        textareaRef.current.focus();
-      }
+      // Focus - scroll tamamlandıktan sonra (MessageList 100ms'de scroll yapıyor)
+      setTimeout(() => {
+        textareaRef.current?.focus();
+      }, 150);
 
     } catch (err) {
       console.error('Error sending message:', err);
