@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Card, CardBody, Form, Spinner, Pagination } from 'react-bootstrap';
 import { BsSearch, BsArrowRight } from 'react-icons/bs';
 import Link from 'next/link';
@@ -26,6 +27,8 @@ const resolveImageUrl = (imageUrl) => {
 
 const getLangName = (t, code) => t(`feed.papersLang_${code}`) || code;
 
+const DEBOUNCE_MS = 350;
+
 export default function NewsletterListWithTranslation({
   items = [],
   search = '',
@@ -34,11 +37,32 @@ export default function NewsletterListWithTranslation({
   pagination = { total: 0, totalPages: 0, page: 1, limit: 12 },
   currentPage = 1,
   onPageChange,
+  onSearchChange,
   itemsPerPage = 12
 }) {
   const { locale, t } = useLanguage();
   const totalPages = pagination.totalPages || 0;
   const total = pagination.total || 0;
+  const [localSearch, setLocalSearch] = useState(search);
+
+  useEffect(() => {
+    setLocalSearch(search);
+  }, [search]);
+
+  useEffect(() => {
+    const trimmed = localSearch.trim();
+    const timer = setTimeout(() => {
+      if (trimmed !== search) {
+        onSearchChange?.(trimmed);
+      }
+    }, DEBOUNCE_MS);
+    return () => clearTimeout(timer);
+  }, [localSearch]);
+
+  const handleSubmit = (e) => {
+    e?.preventDefault();
+    onSearchChange?.(localSearch.trim());
+  };
 
   return (
     <Card className="border-0 shadow-sm overflow-hidden" style={themeCardStyle}>
@@ -56,16 +80,17 @@ export default function NewsletterListWithTranslation({
       </div>
 
       <CardBody>
-        <Form className="d-flex flex-column flex-md-row gap-2 mb-4" method="get" action="/feed/newsletters">
+        <Form className="d-flex flex-column flex-md-row gap-2 mb-4" onSubmit={handleSubmit}>
           <div className="position-relative flex-grow-1">
             <BsSearch
               className="position-absolute text-muted"
               style={{ left: 12, top: '50%', transform: 'translateY(-50%)' }}
             />
             <Form.Control
-              name="search"
+              type="search"
               placeholder={t('feed.newslettersSearchPlaceholder')}
-              defaultValue={search}
+              value={localSearch}
+              onChange={(e) => setLocalSearch(e.target.value)}
               style={{
                 paddingLeft: 36,
                 backgroundColor: 'var(--bs-body-bg)',
@@ -74,9 +99,6 @@ export default function NewsletterListWithTranslation({
               }}
             />
           </div>
-          <button type="submit" className="btn btn-outline-secondary">
-            {t('feed.newslettersFilter')}
-          </button>
         </Form>
 
         {loading ? (

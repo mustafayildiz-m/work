@@ -82,6 +82,14 @@ export default function NewslettersPageClient({ initialSearch = '', initialPage 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleSearchChange = (newSearch) => {
+    setSearch(newSearch);
+    setPage(1);
+    const params = new URLSearchParams();
+    if (newSearch) params.set('search', newSearch);
+    router.replace(params.toString() ? `${pathname}?${params}` : pathname);
+  };
+
   const themeCardStyle = {
     backgroundColor: 'var(--bs-body-bg)',
     color: 'var(--bs-body-color)',
@@ -98,6 +106,7 @@ export default function NewslettersPageClient({ initialSearch = '', initialPage 
         pagination={pagination}
         currentPage={page}
         onPageChange={handlePageChange}
+        onSearchChange={handleSearchChange}
         itemsPerPage={ITEMS_PER_PAGE}
       />
     </Col>
