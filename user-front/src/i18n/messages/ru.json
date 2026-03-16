@@ -258,6 +258,7 @@
     "shareThoughts": "Поделитесь своими мыслями...",
     "whatsOnYourMind": "Что у вас на уме?",
     "whoToFollow": "За кем следить",
+    "suggestedScholars": "Рекомендуемые исламские учёные",
     "suggestedForYou": "Предлагается для вас",
     "followAll": "Следить за всеми",
     "viewAll": "Смотреть все",
@@ -332,6 +333,7 @@
     "themeSelection": "Выбор темы",
     "lightTheme": "Светлая тема",
     "darkTheme": "Темная тема",
+    "greenTheme": "Темно-зеленая тема",
     "systemTheme": "Системная тема",
     "activeTheme": "Активная тема:",
     "title": "Тема"

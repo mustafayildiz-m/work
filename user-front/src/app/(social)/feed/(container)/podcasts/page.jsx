@@ -16,7 +16,7 @@ const PodcastLanguageSelector = () => {
   const { theme } = useLayoutContext();
   const router = useRouter();
   const [selectedLanguage, setSelectedLanguage] = useState(null);
-  const isDark = theme === 'dark';
+  const isDark = theme === 'dark' || theme === 'green';
   const [podcastCounts, setPodcastCounts] = useState({});
   const [loadingCounts, setLoadingCounts] = useState(true);
   const continueButtonRef = useRef(null);

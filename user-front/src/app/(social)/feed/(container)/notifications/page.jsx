@@ -16,7 +16,7 @@ import { useLanguage } from '@/context/useLanguageContext';
 const NotificationsPage = () => {
   const { theme } = useLayoutContext();
   const { t } = useLanguage();
-  const isDark = theme === 'dark';
+  const isDark = theme === 'dark' || theme === 'green';
   const { notifications: realTimeNotifications, setNotifications } = useWebSocketChatContext();
   const [staticNotifications, setStaticNotifications] = useState([]);
   const [loading, setLoading] = useState(true);

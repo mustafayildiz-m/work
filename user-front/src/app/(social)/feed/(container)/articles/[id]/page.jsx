@@ -24,7 +24,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 const ArticleDetailPage = () => {
   const { t, loading: langLoading, locale } = useLanguage();
   const { theme } = useLayoutContext();
-  const isDarkMode = theme === 'dark';
+  const isDarkMode = theme === 'dark' || theme === 'green';
   const { showNotification } = useNotificationContext();
   const params = useParams();
   const router = useRouter();

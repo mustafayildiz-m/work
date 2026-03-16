@@ -16,7 +16,7 @@ const LanguageSelector = () => {
   const { theme } = useLayoutContext();
   const router = useRouter();
   const [selectedLanguage, setSelectedLanguage] = useState(null);
-  const isDark = theme === 'dark';
+  const isDark = theme === 'dark' || theme === 'green';
   const continueButtonRef = useRef(null);
   const [articleCounts, setArticleCounts] = useState({});
   const [countsLoading, setCountsLoading] = useState(true);

@@ -266,6 +266,7 @@
     "shareThoughts": "अपने विचार साझा करें...",
     "whatsOnYourMind": "आपके दिमाग में क्या है?",
     "whoToFollow": "किसका अनुगमन करना है",
+    "suggestedScholars": "सुझाए गए इस्लामी विद्वान",
     "suggestedForYou": "आपके लिए सुझाव दिया गया है",
     "followAll": "सभी को फॉलो करें",
     "viewAll": "सभी को देखें",
@@ -404,6 +405,7 @@
     "themeSelection": "थीम चयन",
     "lightTheme": "लाइट थीम",
     "darkTheme": "डार्क थीम",
+    "greenTheme": "डार्क ग्रीन थीम",
     "systemTheme": "सिस्टम थीम",
     "activeTheme": "सक्रिय विषय:",
     "title": "विषय"

@@ -259,6 +259,7 @@
     "shareThoughts": "شارك أفكارك...",
     "whatsOnYourMind": "بماذا تفكر؟",
     "whoToFollow": "من تتابع",
+    "suggestedScholars": "العلماء الإسلاميون المقترحون",
     "suggestedForYou": "مقترحة لك",
     "followAll": "متابعة الكل",
     "viewAll": "عرض الكل",
@@ -332,6 +333,7 @@
     "themeSelection": "اختيار السمة",
     "lightTheme": "السمة الفاتحة",
     "darkTheme": "السمة الداكنة",
+    "greenTheme": "السمة الخضراء الداكنة",
     "systemTheme": "سمة النظام",
     "activeTheme": "السمة النشطة:",
     "title": "موضوع"

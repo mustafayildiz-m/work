@@ -258,6 +258,7 @@
     "shareThoughts": "Podeľte sa o svoje názory...",
     "whatsOnYourMind": "Čo máte na mysli?",
     "whoToFollow": "Koho sledovať",
+    "suggestedScholars": "Odporúčaní islamskí učení",
     "suggestedForYou": "Navrhnuté pre vás",
     "followAll": "Sledovať všetko",
     "viewAll": "Zobraziť všetko",
@@ -332,6 +333,7 @@
     "themeSelection": "Výber témy",
     "lightTheme": "Téma svetla",
     "darkTheme": "Tmavá téma",
+    "greenTheme": "Tmavo zelená téma",
     "systemTheme": "Téma systému",
     "activeTheme": "Aktívna téma:",
     "title": "Theme"

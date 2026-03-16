@@ -12,7 +12,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 const ChangePassword = () => {
   const { t } = useLanguage();
   const { theme } = useLayoutContext();
-  const isDark = theme === 'dark';
+  const isDark = theme === 'dark' || theme === 'green';
   const [formData, setFormData] = useState({
     currentPassword: '',
     newPassword: '',
@@ -426,7 +426,7 @@ const ChangePassword = () => {
 const AccountSettings = () => {
   const { t } = useLanguage();
   const { theme } = useLayoutContext();
-  const isDark = theme === 'dark';
+  const isDark = theme === 'dark' || theme === 'green';
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);

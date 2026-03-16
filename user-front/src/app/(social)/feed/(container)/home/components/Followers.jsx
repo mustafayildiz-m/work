@@ -180,7 +180,7 @@ const Followers = () => {
   };
   return <Card>
     <CardHeader className="pb-0 border-0">
-      <CardTitle className="mb-0">{t('feed.whoToFollow')}</CardTitle>
+      <CardTitle className="mb-0">{t('feed.suggestedScholars')}</CardTitle>
     </CardHeader>
 
     <CardBody>

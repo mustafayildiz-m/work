@@ -258,6 +258,7 @@
     "shareThoughts": "여러분의 생각을 공유하세요...",
     "whatsOnYourMind": "무슨 생각을 하고 계신가요?",
     "whoToFollow": "팔로우할 대상",
+    "suggestedScholars": "추천 이슬람 학자",
     "suggestedForYou": "귀하를 위한 제안",
     "followAll": "모두 팔로우",
     "viewAll": "모두 보기",
@@ -332,6 +333,7 @@
     "themeSelection": "테마 선택",
     "lightTheme": "조명 테마",
     "darkTheme": "어두운 테마",
+    "greenTheme": "다크 그린 테마",
     "systemTheme": "시스템 테마",
     "activeTheme": "활성 테마:",
     "title": "테마"

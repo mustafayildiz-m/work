@@ -298,11 +298,63 @@
   display: none !important;
 }
 
-[data-bs-theme="dark"]{
+[data-bs-theme="dark"],
+[data-bs-theme="green"]{
   .dark-mode-item{
     display: inline-block !important;
   }
   .light-mode-item{
     display: none !important;
+  }
+}
+
+// Green theme - uyumlu: arka plan koyu, kartlar yumuşak yeşil
+[data-bs-theme="green"] {
+  --bs-card-cap-bg: #234d2a !important;
+  --bs-card-bg: #2d5a2d !important;
+  --bs-card-border-color: rgba(67, 160, 71, 0.35);
+  --bs-dropdown-bg: #234d2a;
+  --bs-modal-bg: #234d2a;
+  --bs-offcanvas-bg: #132d13;
+  --bs-popover-bg: #234d2a;
+  --bs-accordion-bg: #132d13;
+  --bs-accordion-active-bg: #132d13;
+
+  .navbar {
+    --bs-navbar-color: #c0e0c0;
+  }
+
+  .dropdown-menu {
+    --bs-dropdown-bg: #234d2a;
+    border: 1px solid rgba(67, 160, 71, 0.4);
+  }
+
+  .modal {
+    --bs-modal-bg: #234d2a;
+    --bs-modal-footer-border-color: rgba(67, 160, 71, 0.35);
+  }
+
+  .card {
+    --bs-card-cap-bg: #234d2a !important;
+    --bs-card-bg: #2d5a2d !important;
+    --bs-card-border-color: rgba(67, 160, 71, 0.35);
+  }
+
+  .offcanvas, .offcanvas-xxl, .offcanvas-xl, .offcanvas-lg, .offcanvas-md, .offcanvas-sm {
+    --bs-offcanvas-bg: #132d13;
+  }
+
+  .form-control {
+    background-color: #234d2a !important;
+    border-color: rgba(67, 160, 71, 0.4);
+    color: #e0f0e0;
+
+    &:focus {
+      border-color: #43a047;
+    }
+  }
+
+  .btn-close {
+    filter: invert(1) hue-rotate(100deg) brightness(1.2);
   }
 }

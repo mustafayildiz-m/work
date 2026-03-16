@@ -266,6 +266,7 @@
     "shareThoughts": "Поделите своја размишљања...",
     "whatsOnYourMind": "Шта ти је на уму?",
     "whoToFollow": "Кога пратити",
+    "suggestedScholars": "Препоручени исламски учењаци",
     "suggestedForYou": "Предложено за вас",
     "followAll": "Прати све",
     "viewAll": "Прикажи све",
@@ -404,6 +405,7 @@
     "themeSelection": "Избор теме",
     "lightTheme": "Лигхт Тхеме",
     "darkTheme": "Дарк Тхеме",
+    "greenTheme": "Дарк Греен Тхеме",
     "systemTheme": "Системска тема",
     "activeTheme": "Активна тема:",
     "title": "Тема"

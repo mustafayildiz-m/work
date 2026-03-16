@@ -266,6 +266,7 @@
     "shareThoughts": "നിങ്ങളുടെ ചിന്തകൾ പങ്കുവെക്കൂ...",
     "whatsOnYourMind": "നിങ്ങളുടെ മനസ്സിൽ എന്താണ്?",
     "whoToFollow": "ആരെയാണ് പിന്തുടരേണ്ടത്",
+    "suggestedScholars": "നിർദ്ദേശിച്ച ഇസ്ലാമിക പണ്ഡിതർ",
     "suggestedForYou": "നിങ്ങൾക്കായി നിർദ്ദേശിച്ചു",
     "followAll": "എല്ലാം പിന്തുടരുക",
     "viewAll": "എല്ലാം കാണുക",
@@ -404,6 +405,7 @@
     "themeSelection": "തീം തിരഞ്ഞെടുക്കൽ",
     "lightTheme": "ലൈറ്റ് തീം",
     "darkTheme": "ഇരുണ്ട തീം",
+    "greenTheme": "ഇരുണ്ട പച്ച തീം",
     "systemTheme": "സിസ്റ്റം തീം",
     "activeTheme": "സജീവ തീം:",
     "title": "തീം"

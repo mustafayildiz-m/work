@@ -15,7 +15,7 @@ const SettingPanel = ({
   const { t } = useLanguage();
   const { theme } = useLayoutContext();
   const [userId, setUserId] = useState(null);
-  const isDark = theme === 'dark';
+  const isDark = theme === 'dark' || theme === 'green';
 
   useEffect(() => {
     const getUserId = async () => {

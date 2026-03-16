@@ -10,14 +10,14 @@ const LogoBox = () => {
   } = useLayoutContext();
   return (
     <Link className="navbar-brand" href="/">
-      {/* Desktop logo - 100px, header sınırları içinde */}
+      {/* Desktop logo - açık tema ile aynı, header (80px) sınırları içinde */}
       <Image
         src="/logo/logo.png"
         alt="Islamic Windows - Your window to a beautiful world"
-        height={100}
+        height={72}
         width={380}
         className="navbar-brand-item d-none d-lg-block"
-        style={{ height: 100, maxHeight: 100, width: 'auto', maxWidth: 400, objectFit: 'contain' }}
+        style={{ height: 72, maxHeight: 72, width: 'auto', maxWidth: 400, objectFit: 'contain' }}
         quality={100}
         unoptimized
         priority
