@@ -254,7 +254,7 @@ const BooksListPage = () => {
   }
 
   return (
-    <Col lg={9}>
+    <Col lg={9} className="books-list-page">
       {/* Header */}
       <Card className="mb-3 mb-md-4 border-0 shadow-sm">
         <CardHeader className="bg-gradient text-white border-0 books-header" style={{

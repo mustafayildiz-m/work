@@ -3500,8 +3500,22 @@
   }
 
   /* Kitaplar listesi - BooksListPage */
+  .books-list-page .card {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .books-list-page .card .card-body {
+    background: transparent !important;
+    color: #e0f0e0 !important;
+  }
+
   .books-header {
     background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+  }
+
+  .books-header .card-title {
+    color: #fff !important;
   }
 
   .books-header .btn-light {
@@ -3515,6 +3529,11 @@
     color: #fff !important;
   }
 
+  .books-header .btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+  }
+
   .books-header .form-control.bg-white {
     background: rgba(255, 255, 255, 0.9) !important;
     color: #1a1a1a !important;
@@ -3522,6 +3541,61 @@
 
   .books-header .form-control::placeholder {
     color: #6c757d !important;
+  }
+
+  /* Kategori filtresi kartı */
+  .books-list-page .card .card-body h6 {
+    color: #e0f0e0 !important;
+  }
+
+  .books-list-page .card .card-body .text-primary {
+    color: #81c784 !important;
+  }
+
+  .books-list-page .card .card-body .text-primary svg {
+    color: inherit !important;
+  }
+
+  /* İstatistik kartları */
+  .books-list-page .card .card-body h4,
+  .books-list-page .card .card-body .h5,
+  .books-list-page .card .card-body .h3-md {
+    color: #81c784 !important;
+  }
+
+  .books-list-page .card .card-body small.text-muted {
+    color: #9bc99b !important;
+  }
+
+  /* Loading, Error, No Results */
+  .books-list-page .text-center .text-muted,
+  .books-list-page .text-center p {
+    color: #9bc99b !important;
+  }
+
+  .books-list-page .alert {
+    background: rgba(45, 90, 45, 0.6) !important;
+    border-color: rgba(67, 160, 71, 0.5) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .books-list-page .alert .alert-heading,
+  .books-list-page .alert-heading {
+    color: #e0f0e0 !important;
+  }
+
+  .books-list-page .alert-info {
+    border-color: rgba(67, 160, 71, 0.5) !important;
+  }
+
+  .books-list-page .alert-danger {
+    background: rgba(139, 69, 69, 0.4) !important;
+    border-color: rgba(220, 53, 69, 0.5) !important;
+  }
+
+  /* Pagination info text */
+  .books-list-page .text-center.text-muted small {
+    color: #9bc99b !important;
   }
 
   /* Kategori filtresi ve istatistik kartları */
@@ -3570,21 +3644,539 @@
   }
 
   /* Pagination */
+  .books-list-page .pagination .page-link,
   .pagination-mobile .page-link {
     background: rgba(45, 90, 45, 0.5) !important;
     border-color: rgba(67, 160, 71, 0.4) !important;
     color: #e0f0e0 !important;
   }
 
+  .books-list-page .pagination .page-item.active .page-link,
   .pagination-mobile .page-item.active .page-link {
     background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
     border-color: rgba(67, 160, 71, 0.6) !important;
     color: #fff !important;
   }
 
+  .books-list-page .pagination .page-link:hover,
   .pagination-mobile .page-link:hover {
     background: rgba(67, 160, 71, 0.5) !important;
     color: #fff !important;
+    border-color: rgba(67, 160, 71, 0.5) !important;
+  }
+
+  .books-list-page .pagination .page-item.disabled .page-link {
+    background: rgba(35, 77, 42, 0.5) !important;
+    color: #7ab07a !important;
+  }
+
+  // ============================================
+  // Makaleler listesi (articles list)
+  // ============================================
+  .articles-list-page .card {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .articles-list-page .card .card-body {
+    background: transparent !important;
+    color: #e0f0e0 !important;
+  }
+
+  .articles-list-page .card-header {
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+  }
+
+  .articles-list-page .card-header .card-title {
+    color: #fff !important;
+  }
+
+  .articles-list-page .card-header .btn-light {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .articles-list-page .card-header .btn-light:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    color: #fff !important;
+  }
+
+  .articles-list-page .card-header .btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+  }
+
+  .articles-list-page .card-header .form-control.bg-white {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: #1a1a1a !important;
+  }
+
+  .articles-list-page .card-header .form-control::placeholder {
+    color: #6c757d !important;
+  }
+
+  .articles-list-page .card-header .input-group-text {
+    background: rgba(255, 255, 255, 0.9) !important;
+  }
+
+  /* Kitap filtresi kartı */
+  .articles-list-page .card .card-body h6 {
+    color: #e0f0e0 !important;
+  }
+
+  .articles-list-page .card .card-body .text-primary {
+    color: #81c784 !important;
+  }
+
+  .articles-list-page .card .card-body small.text-muted {
+    color: #9bc99b !important;
+  }
+
+  /* ArticleGrid - makale kartları */
+  .articles-list-page .article-card {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .articles-list-page .article-card:hover {
+    box-shadow: 0 10px 30px rgba(46, 125, 50, 0.25) !important;
+  }
+
+  .articles-list-page .article-card .card-body,
+  .articles-list-page .article-card .card-title,
+  .articles-list-page .article-card a,
+  .articles-list-page .article-card .text-muted {
+    color: #e0f0e0 !important;
+  }
+
+  .articles-list-page .article-card a:hover {
+    color: #a5d6a7 !important;
+  }
+
+  .articles-list-page .article-card .text-muted {
+    color: #9bc99b !important;
+  }
+
+  .articles-list-page .article-card .btn {
+    color: #e0f0e0 !important;
+    border-color: rgba(67, 160, 71, 0.5) !important;
+  }
+
+  .articles-list-page .article-card .text-primary {
+    color: #81c784 !important;
+  }
+
+  /* Liste görünümü */
+  .articles-list-page .article-list-card {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .articles-list-page .article-list-card:hover {
+    box-shadow: 0 10px 30px rgba(46, 125, 50, 0.25) !important;
+  }
+
+  .articles-list-page .article-list-card .card-title,
+  .articles-list-page .article-list-card .card-body {
+    color: #e0f0e0 !important;
+  }
+
+  .articles-list-page .article-list-card .text-primary {
+    color: #81c784 !important;
+  }
+
+  /* Loading, Error, Alerts */
+  .articles-list-page .text-center p,
+  .articles-list-page .text-center .text-muted {
+    color: #9bc99b !important;
+  }
+
+  .articles-list-page .alert {
+    background: rgba(45, 90, 45, 0.6) !important;
+    border-color: rgba(67, 160, 71, 0.5) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .articles-list-page .alert .alert-heading {
+    color: #e0f0e0 !important;
+  }
+
+  .articles-list-page .alert-danger {
+    background: rgba(139, 69, 69, 0.4) !important;
+    border-color: rgba(220, 53, 69, 0.5) !important;
+  }
+
+  /* Pagination */
+  .articles-list-page .pagination .page-link {
+    background: rgba(45, 90, 45, 0.5) !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .articles-list-page .pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+    border-color: rgba(67, 160, 71, 0.6) !important;
+    color: #fff !important;
+  }
+
+  .articles-list-page .pagination .page-link:hover {
+    background: rgba(67, 160, 71, 0.5) !important;
+    color: #fff !important;
+  }
+
+  .articles-list-page .pagination .page-item.disabled .page-link {
+    background: rgba(35, 77, 42, 0.5) !important;
+    color: #7ab07a !important;
+  }
+
+  /* react-select - kitap seçici */
+  .articles-list-page .basic-multi-select .select__control {
+    background: #234d2a !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+  }
+
+  .articles-list-page .basic-multi-select .select__control:hover,
+  .articles-list-page .basic-multi-select .select__control--is-focused {
+    border-color: rgba(67, 160, 71, 0.6) !important;
+  }
+
+  .articles-list-page .basic-multi-select .select__input-container,
+  .articles-list-page .basic-multi-select .select__single-value,
+  .articles-list-page .basic-multi-select .select__placeholder {
+    color: #e0f0e0 !important;
+  }
+
+  .articles-list-page .basic-multi-select .select__multi-value {
+    background: rgba(46, 125, 50, 0.5) !important;
+  }
+
+  .articles-list-page .basic-multi-select .select__multi-value__label {
+    color: #e0f0e0 !important;
+  }
+
+  .articles-list-page .basic-multi-select .select__menu {
+    background: #234d2a !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+  }
+
+  .articles-list-page .basic-multi-select .select__option {
+    color: #e0f0e0 !important;
+  }
+
+  .articles-list-page .basic-multi-select .select__option--is-focused {
+    background: rgba(67, 160, 71, 0.4) !important;
+  }
+
+  .articles-list-page .basic-multi-select .select__option--is-selected {
+    background: rgba(46, 125, 50, 0.6) !important;
+  }
+
+  // ============================================
+  // Podcasts listesi
+  // ============================================
+  .podcasts-list-page .card {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .podcasts-list-page .card .card-body {
+    background: transparent !important;
+    color: #e0f0e0 !important;
+  }
+
+  .podcasts-list-page .card-header {
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+  }
+
+  .podcasts-list-page .card-header .card-title {
+    color: #fff !important;
+  }
+
+  .podcasts-list-page .card-header .text-white-50 {
+    color: rgba(255, 255, 255, 0.85) !important;
+  }
+
+  .podcasts-list-page .card-header .btn-light {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .podcasts-list-page .card-header .btn-light:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    color: #fff !important;
+  }
+
+  .podcasts-list-page .card-header .btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+  }
+
+  .podcasts-list-page .card-header .form-control.bg-white {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: #1a1a1a !important;
+  }
+
+  .podcasts-list-page .card-header .form-control::placeholder {
+    color: #6c757d !important;
+  }
+
+  /* Kategori filtresi */
+  .podcasts-list-page .card .card-body h6 {
+    color: #e0f0e0 !important;
+  }
+
+  .podcasts-list-page .card .card-body .text-primary {
+    color: #81c784 !important;
+  }
+
+  .podcasts-list-page .card .card-body small.text-muted {
+    color: #9bc99b !important;
+  }
+
+  .podcasts-list-page .card .card-body .btn-primary {
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+    border-color: rgba(67, 160, 71, 0.6) !important;
+    color: #fff !important;
+  }
+
+  .podcasts-list-page .card .card-body .btn-outline-primary {
+    border-color: rgba(129, 199, 132, 0.6) !important;
+    color: #81c784 !important;
+  }
+
+  .podcasts-list-page .card .card-body .btn-outline-primary:hover {
+    background: rgba(67, 160, 71, 0.3) !important;
+    border-color: #81c784 !important;
+    color: #e0f0e0 !important;
+  }
+
+  .podcasts-list-page .card .card-body .badge.bg-primary {
+    background: rgba(67, 160, 71, 0.8) !important;
+    color: #e0f0e0 !important;
+  }
+
+  /* İstatistik kartları */
+  .podcasts-list-page .card .card-body h3 {
+    color: #81c784 !important;
+  }
+
+  /* Podcast kartları */
+  .podcasts-list-page .podcast-card,
+  .podcasts-list-page .podcast-list-card {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .podcasts-list-page .podcast-card:hover,
+  .podcasts-list-page .podcast-list-card:hover {
+    box-shadow: 0 10px 30px rgba(46, 125, 50, 0.25) !important;
+  }
+
+  .podcasts-list-page .podcast-card .card-title,
+  .podcasts-list-page .podcast-card .card-body,
+  .podcasts-list-page .podcast-list-card .card-title,
+  .podcasts-list-page .podcast-list-card .card-body {
+    color: #e0f0e0 !important;
+  }
+
+  .podcasts-list-page .podcast-card .text-muted,
+  .podcasts-list-page .podcast-list-card .text-muted {
+    color: #9bc99b !important;
+  }
+
+  .podcasts-list-page .podcast-list-card .card-title[style*="667eea"] {
+    color: #81c784 !important;
+  }
+
+  .podcasts-list-page .podcast-card .btn-link .text-muted {
+    color: #9bc99b !important;
+  }
+
+  /* Loading, Alerts */
+  .podcasts-list-page .text-center p {
+    color: #9bc99b !important;
+  }
+
+  .podcasts-list-page .alert {
+    background: rgba(45, 90, 45, 0.6) !important;
+    border-color: rgba(67, 160, 71, 0.5) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .podcasts-list-page .alert .alert-heading {
+    color: #e0f0e0 !important;
+  }
+
+  .podcasts-list-page .alert-danger {
+    background: rgba(139, 69, 69, 0.4) !important;
+    border-color: rgba(220, 53, 69, 0.5) !important;
+  }
+
+  /* Pagination */
+  .podcasts-list-page .pagination .page-link {
+    background: rgba(45, 90, 45, 0.5) !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .podcasts-list-page .pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+    border-color: rgba(67, 160, 71, 0.6) !important;
+    color: #fff !important;
+  }
+
+  .podcasts-list-page .pagination .page-link:hover {
+    background: rgba(67, 160, 71, 0.5) !important;
+    color: #fff !important;
+  }
+
+  .podcasts-list-page .pagination .page-item.disabled .page-link {
+    background: rgba(35, 77, 42, 0.5) !important;
+    color: #7ab07a !important;
+  }
+
+  .podcasts-list-page .text-center.text-muted small {
+    color: #9bc99b !important;
+  }
+
+  /* Podcast oynatıcı - altta sabit */
+  [data-bs-theme="green"] .podcast-player-container {
+    background: rgba(35, 77, 42, 0.98) !important;
+    border-top-color: rgba(67, 160, 71, 0.4) !important;
+    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  [data-bs-theme="green"] .podcast-player-container .text-dark {
+    color: #e0f0e0 !important;
+  }
+
+  [data-bs-theme="green"] .podcast-player-container .text-muted {
+    color: #9bc99b !important;
+  }
+
+  [data-bs-theme="green"] .podcast-player-container .btn-link.text-dark {
+    color: #e0f0e0 !important;
+  }
+
+  [data-bs-theme="green"] .podcast-player-container [style*="667eea"],
+  [data-bs-theme="green"] .podcast-player-container [style*="764ba2"] {
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+    border-color: rgba(67, 160, 71, 0.5) !important;
+  }
+
+  [data-bs-theme="green"] .podcast-player-container .progress-bar {
+    background: rgba(67, 160, 71, 0.5) !important;
+  }
+
+  [data-bs-theme="green"] .podcast-player-container div[style*="667eea"] {
+    background: linear-gradient(90deg, #2e7d32 0%, #43a047 100%) !important;
+  }
+
+  // ============================================
+  // Profil dropdown kartı
+  // ============================================
+  .profile-dropdown-menu {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(46, 125, 50, 0.2) !important;
+
+    /* Kullanıcı bilgisi bölümü */
+    > div:first-child {
+      background: linear-gradient(135deg, rgba(46, 125, 50, 0.3) 0%, rgba(67, 160, 71, 0.2) 100%) !important;
+      border-color: rgba(67, 160, 71, 0.35) !important;
+    }
+
+    .fw-bold.text-body,
+    .text-body {
+      color: #e0f0e0 !important;
+    }
+
+    .text-muted {
+      color: #9bc99b !important;
+    }
+
+    /* Menü linkleri (Profil, Ayarlar) */
+    .py-2 > a {
+      color: #e0f0e0 !important;
+    }
+
+    .py-2 > a:hover {
+      background-color: rgba(67, 160, 71, 0.35) !important;
+      color: #fff !important;
+    }
+
+    .profile-dropdown-menu .py-2 > a span:first-child,
+    .profile-dropdown-menu .py-2 > a span[style*="764ba2"] {
+      color: #81c784 !important;
+    }
+
+    .profile-dropdown-menu .py-2 > a:hover span {
+      color: #fff !important;
+    }
+
+    /* Tema seçimi başlığı */
+    .small.text-muted.fw-bold {
+      color: #9bc99b !important;
+    }
+
+    /* Tema butonları - seçili olmayan (açık mor arka planlı olanlar) */
+    .profile-dropdown-menu .d-flex.flex-column.gap-1 > button {
+      background: rgba(45, 90, 45, 0.6) !important;
+      color: #c0e0c0 !important;
+      border: 1px solid rgba(67, 160, 71, 0.3) !important;
+    }
+
+    .profile-dropdown-menu .d-flex.flex-column.gap-1 > button:hover {
+      background: rgba(67, 160, 71, 0.5) !important;
+      color: #e0f0e0 !important;
+    }
+
+    /* Seçili tema (yeşil gradient) - özel stil */
+    .profile-dropdown-menu .d-flex.flex-column.gap-1 > button[style*="2e7d32"],
+    .profile-dropdown-menu .d-flex.flex-column.gap-1 > button[style*="1b5e20"] {
+      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%) !important;
+      color: #fff !important;
+      border-color: rgba(67, 160, 71, 0.6) !important;
+    }
+
+    /* Bildirim sesleri butonu */
+    .profile-dropdown-menu .py-2.px-3 > button.mt-2 {
+      background: rgba(46, 125, 50, 0.5) !important;
+      color: #e0f0e0 !important;
+      border: 1px solid rgba(67, 160, 71, 0.4) !important;
+    }
+
+    .profile-dropdown-menu .py-2.px-3 > button.mt-2:hover {
+      background: rgba(67, 160, 71, 0.6) !important;
+    }
+
+    /* Bildirim sesleri - açıkken yeşil gradient */
+    .profile-dropdown-menu .py-2.px-3 > button.mt-2[style*="667eea"] {
+      background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+      color: #fff !important;
+    }
+
+    /* Çıkış butonu - kırmızı kalmalı */
+    .profile-dropdown-menu .text-danger {
+      color: #f08a8a !important;
+    }
+
+    .profile-dropdown-menu .text-danger:hover {
+      background-color: rgba(220, 53, 69, 0.2) !important;
+    }
+
+    /* Bölüm ayırıcıları */
+    .profile-dropdown-menu div[style*="borderTop"],
+    .profile-dropdown-menu div[style*="border-top"] {
+      border-top-color: rgba(67, 160, 71, 0.35) !important;
+    }
+
+    /* Avatar border in dropdown */
+    .profile-dropdown-menu img.rounded-circle {
+      border-color: rgba(67, 160, 71, 0.5) !important;
+    }
   }
 
 }

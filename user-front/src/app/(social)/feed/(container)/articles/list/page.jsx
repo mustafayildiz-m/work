@@ -194,7 +194,7 @@ const ArticlesListPage = () => {
   };
 
   return (
-    <Col lg={9}>
+    <Col lg={9} className="articles-list-page">
       {/* Header with Search */}
       <Card className="mb-4 border-0 shadow-sm">
         <CardHeader className="bg-gradient text-white border-0" style={{
