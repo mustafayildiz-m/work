@@ -47,6 +47,7 @@ import { MultiLanguageBooksSeeder } from './seeders/multilanguage-books-seeder';
 import { MultiLanguageArticlesSeeder } from './seeders/multilanguage-articles-seeder';
 import { NewslettersSeeder } from './seeders/newsletters-seeder';
 import { PapersSeeder } from './seeders/papers-seeder';
+import { ScholarAlimImagesSeeder } from './seeders/scholar-alim-images-seeder';
 import { PublicProfileModule } from './modules/public-profile.module';
 import { PodcastModule } from './modules/podcast.module';
 import { AdminUsersModule } from './modules/admin-users.module';
@@ -142,6 +143,7 @@ import { PaperModule } from './modules/paper.module';
     MultiLanguageArticlesSeeder,
     NewslettersSeeder,
     PapersSeeder,
+    ScholarAlimImagesSeeder,
   ],
 })
 export class AppModule { }
