@@ -31,6 +31,15 @@ const THEME_MODES = [
     )
   },
   {
+    id: 'green',
+    labelKey: 'theme.greenTheme',
+    icon: (
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M1.4 1.7c.216.289.65.84 1.725 1.274 1.093.44 2.884.774 5.834.528l.37-.023c1.823-.06 3.117.598 3.956 1.579C14.16 6.082 14.5 7.41 14.5 8.5c0 .58-.032 1.285-.229 1.997q.198.248.382.54c.756 1.2 1.19 2.563 1.348 3.966a1 1 0 0 1-1.98.198c-.13-.97-.397-1.913-.868-2.77C12.173 13.386 10.565 14 8 14c-1.854 0-3.32-.544-4.45-1.435-1.125-.887-1.89-2.095-2.391-3.383C.16 6.62.16 3.646.509 1.902L.73.806zm-.05 1.39c-.146 1.609-.008 3.809.74 5.728.457 1.17 1.13 2.213 2.079 2.961.942.744 2.185 1.22 3.83 1.221 2.588 0 3.91-.66 4.609-1.445-1.789-2.46-4.121-1.213-6.342-2.68-.74-.488-1.735-1.323-1.844-2.308-.023-.214.237-.274.38-.112 1.4 1.6 3.573 1.757 5.59 2.045 1.227.215 2.21.526 3.033 1.158.058-.39.075-.782.075-1.158 0-.91-.288-1.988-.975-2.792-.626-.732-1.622-1.281-3.167-1.229l-.316.02c-3.05.253-5.01-.08-6.291-.598a5.3 5.3 0 0 1-1.4-.811" />
+      </svg>
+    )
+  },
+  {
     id: 'auto',
     labelKey: 'theme.systemTheme',
     icon: (
@@ -80,7 +89,7 @@ const ProfileDropdown = () => {
   const { logout, userInfo } = useAuth();
   const { theme: themeMode, updateTheme, resetTheme } = useLayoutContext();
   const { t, isRTL } = useLanguage();
-  const isDark = themeMode === 'dark';
+  const isDark = themeMode === 'dark' || themeMode === 'green';
 
   // Get image URL with proper fallback and cache busting
   const getImageUrl = useCallback((photoUrl, bustCache = false) => {
@@ -331,6 +340,23 @@ const ProfileDropdown = () => {
     }
   }, [logout, resetTheme]);
 
+  // Theme-specific gradient for selected state
+  const getThemeGradient = (modeId) => {
+    if (themeMode !== modeId) return 'rgba(118, 75, 162, 0.05)';
+    if (modeId === 'green') return 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%)';
+    return 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+  };
+  const getThemeShadow = (modeId) => {
+    if (themeMode !== modeId) return 'none';
+    if (modeId === 'green') return '0 4px 12px rgba(27, 94, 32, 0.35)';
+    return '0 4px 12px rgba(118, 75, 162, 0.2)';
+  };
+  const getThemeIconColor = (modeId) => {
+    if (themeMode === modeId) return '#ffffff';
+    if (modeId === 'green') return '#2e7d32';
+    return '#764ba2';
+  };
+
   // Handle theme change
   const handleThemeChange = useCallback(async (theme) => {
     try {
@@ -517,18 +543,18 @@ const ProfileDropdown = () => {
             }}
           />
 
-          {/* Online indicator - Fixed position */}
+          {/* Online indicator - açık tema ile aynı konum */}
           <div
             className="position-absolute bg-success rounded-circle profile-online-indicator"
             style={{
-              width: '14px',
-              height: '14px',
-              bottom: '-2px',
-              right: '-2px',
-              border: '3px solid #ffffff',
+              width: '12px',
+              height: '12px',
+              bottom: '0',
+              right: '0',
+              border: '2px solid #ffffff',
               boxShadow: '0 2px 6px rgba(40, 167, 69, 0.4)',
               zIndex: 10,
-              transform: isOpen ? 'scale(1.15)' : 'scale(1)',
+              transform: isOpen ? 'scale(1.1)' : 'scale(1)',
               transition: 'all 0.2s ease'
             }}
           />
@@ -663,16 +689,16 @@ const ProfileDropdown = () => {
                     padding: '6px 10px',
                     transition: 'all 0.2s ease',
                     borderRadius: '8px',
-                    background: themeMode === mode.id ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'rgba(118, 75, 162, 0.05)',
+                    background: getThemeGradient(mode.id),
                     color: themeMode === mode.id ? '#ffffff' : (isDark ? '#dee2e6' : '#495057'),
-                    boxShadow: themeMode === mode.id ? '0 4px 12px rgba(118, 75, 162, 0.2)' : 'none'
+                    boxShadow: getThemeShadow(mode.id)
                   }}
                 >
                   <span className="d-flex align-items-center justify-content-center" style={{
                     minWidth: '16px',
                     width: '16px',
                     height: '16px',
-                    color: themeMode === mode.id ? '#ffffff' : '#764ba2'
+                    color: getThemeIconColor(mode.id)
                   }}>
                     {mode.icon}
                   </span>
@@ -798,8 +824,8 @@ const ProfileDropdown = () => {
             width: 10px !important;
             height: 10px !important;
             border-width: 2px !important;
-            bottom: -1px !important;
-            right: -1px !important;
+            bottom: 0 !important;
+            right: 0 !important;
           }
         }
 

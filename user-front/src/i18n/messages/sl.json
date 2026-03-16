@@ -258,6 +258,7 @@
     "shareThoughts": "Delite svoje misli...",
     "whatsOnYourMind": "Kaj vam leži na duši?",
     "whoToFollow": "Komu slediti",
+    "suggestedScholars": "Predlagani islamski učenjaki",
     "suggestedForYou": "Predlagano za vas",
     "followAll": "Sledite vsem",
     "viewAll": "Oglejte si vse",
@@ -332,6 +333,7 @@
     "themeSelection": "Izbor teme",
     "lightTheme": "Tema svetlobe",
     "darkTheme": "Temna tema",
+    "greenTheme": "Temno zelena tema",
     "systemTheme": "Tema sistema",
     "activeTheme": "Aktivna tema:",
     "title": "Theme"

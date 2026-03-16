@@ -256,6 +256,7 @@
     "shareThoughts": "あなたの考えを共有...",
     "whatsOnYourMind": "何を考えていますか？",
     "whoToFollow": "フォローする人",
+    "suggestedScholars": "おすすめのイスラム学者",
     "suggestedForYou": "おすすめ",
     "followAll": "全員をフォロー",
     "viewAll": "すべて表示",
@@ -331,6 +332,7 @@
     "themeSelection": "テーマ選択",
     "lightTheme": "ライトテーマ",
     "darkTheme": "ダークテーマ",
+    "greenTheme": "ダークグリーンテーマ",
     "systemTheme": "システムテーマ",
     "activeTheme": "アクティブなテーマ：",
     "title": "テーマ"

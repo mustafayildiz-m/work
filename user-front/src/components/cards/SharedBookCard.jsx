@@ -19,7 +19,7 @@ const SharedBookCard = ({ post, onDeletePost }) => {
   const { theme } = useLayoutContext();
   const { showNotification } = useNotificationContext();
   const { languages } = useLanguages();
-  const isDarkMode = theme === 'dark';
+  const isDarkMode = theme === 'dark' || theme === 'green';
   const [bookData, setBookData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

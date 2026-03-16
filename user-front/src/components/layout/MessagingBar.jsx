@@ -341,7 +341,7 @@ const MessagingBar = () => {
     };
 
     const { theme } = useLayoutContext();
-    const isDark = theme === 'dark';
+    const isDark = theme === 'dark' || theme === 'green';
 
     const colors = isDark ? {
         bg: '#1d2226',

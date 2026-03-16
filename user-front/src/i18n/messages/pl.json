@@ -258,6 +258,7 @@
     "shareThoughts": "Podziel się swoimi przemyśleniami...",
     "whatsOnYourMind": "Co ci chodzi po głowie?",
     "whoToFollow": "Kogo śledzić",
+    "suggestedScholars": "Sugerowani uczeni islamscy",
     "suggestedForYou": "Sugerowane dla Ciebie",
     "followAll": "Śledź wszystko",
     "viewAll": "Wyświetl wszystko",
@@ -332,6 +333,7 @@
     "themeSelection": "Wybór tematu",
     "lightTheme": "Motyw światła",
     "darkTheme": "Ciemny motyw",
+    "greenTheme": "Ciemnozielony motyw",
     "systemTheme": "Motyw systemowy",
     "activeTheme": "Aktywny temat:",
     "title": "Motyw"

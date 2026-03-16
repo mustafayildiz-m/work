@@ -340,15 +340,16 @@ const ProfilePanel = ({ links, onLinkClick }) => {
 
   // Get theme-aware colors
   // Giriş yapmamış kullanıcılar için her zaman açık tema (ilk ziyarette tutarlı görünüm)
-  const isDarkMode = status === 'unauthenticated' ? false : theme === 'dark';
-  const cardBg = isDarkMode ? '#151a22' : '#ffffff';
-  const textColor = isDarkMode ? '#b3bcc8' : '#536471';
-  const headingColor = isDarkMode ? '#f5f7fa' : '#0f1419';
-  const borderColor = isDarkMode ? 'rgba(255, 255, 255, 0.09)' : 'rgba(15, 20, 25, 0.08)';
+  const isDarkMode = status === 'unauthenticated' ? false : (theme === 'dark' || theme === 'green');
+  const isGreenTheme = theme === 'green';
+  const cardBg = isGreenTheme ? '#234d2a' : (isDarkMode ? '#151a22' : '#ffffff');
+  const textColor = isGreenTheme ? '#c0e0c0' : (isDarkMode ? '#b3bcc8' : '#536471');
+  const headingColor = isGreenTheme ? '#e8f5e9' : (isDarkMode ? '#f5f7fa' : '#0f1419');
+  const borderColor = isGreenTheme ? 'rgba(67, 160, 71, 0.35)' : (isDarkMode ? 'rgba(255, 255, 255, 0.09)' : 'rgba(15, 20, 25, 0.08)');
   const accentColor = '#66BB6A';
-  const cardShadow = isDarkMode
-    ? '0 14px 36px -20px rgba(0, 0, 0, 0.9)'
-    : '0 14px 36px -24px rgba(15, 20, 25, 0.3)';
+  const cardShadow = isGreenTheme
+    ? '0 14px 36px -20px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(46, 125, 50, 0.15)'
+    : (isDarkMode ? '0 14px 36px -20px rgba(0, 0, 0, 0.9)' : '0 14px 36px -24px rgba(15, 20, 25, 0.3)');
 
   if (status === 'loading') {
     return (
@@ -439,7 +440,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                         style={{
                           width: '100px',
                           height: '100px',
-                          backgroundColor: isDarkMode ? '#464950' : '#f5f5f5',
+                          backgroundColor: isGreenTheme ? '#2d5a2d' : (isDarkMode ? '#464950' : '#f5f5f5'),
                           zIndex: 2,
                           border: `5px solid ${cardBg}`
                         }}
@@ -851,7 +852,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
             </div>
 
             <div className="p-4 rounded-3 border border-2 border-dashed position-relative" style={{
-              backgroundColor: isDarkMode ? '#202227' : '#f8f9fa',
+              backgroundColor: isGreenTheme ? '#1e4620' : (isDarkMode ? '#202227' : '#f8f9fa'),
               borderColor: borderColor
             }}>
               <label

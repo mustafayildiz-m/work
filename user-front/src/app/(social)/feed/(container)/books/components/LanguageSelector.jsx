@@ -19,7 +19,7 @@ const LanguageSelector = () => {
   const { getBookCount } = useBookCounts();
   const router = useRouter();
   const [selectedLanguage, setSelectedLanguage] = useState(null);
-  const isDark = theme === 'dark';
+  const isDark = theme === 'dark' || theme === 'green';
   const continueButtonRef = useRef(null);
 
   // Dil seçildiğinde state'e kaydet ve butona scroll et

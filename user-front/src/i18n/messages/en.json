@@ -266,6 +266,7 @@
     "shareThoughts": "Share your thoughts...",
     "whatsOnYourMind": "What's on your mind?",
     "whoToFollow": "Who to Follow",
+    "suggestedScholars": "Suggested Islamic Scholars",
     "suggestedForYou": "Suggested for you",
     "followAll": "Follow All",
     "viewAll": "View All",
@@ -404,6 +405,7 @@
     "themeSelection": "Theme Selection",
     "lightTheme": "Light Theme",
     "darkTheme": "Dark Theme",
+    "greenTheme": "Dark Green Theme",
     "systemTheme": "System Theme",
     "activeTheme": "Active theme:",
     "title": "Theme"

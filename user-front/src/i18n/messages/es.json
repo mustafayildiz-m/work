@@ -258,6 +258,7 @@
     "shareThoughts": "Comparte tus pensamientos...",
     "whatsOnYourMind": "¿En qué piensas?",
     "whoToFollow": "A quién seguir",
+    "suggestedScholars": "Estudiosos islámicos sugeridos",
     "suggestedForYou": "Sugerido para usted",
     "followAll": "Seguir todos",
     "viewAll": "Ver todos",
@@ -332,6 +333,7 @@
     "themeSelection": "Selección de temas",
     "lightTheme": "Tema luminoso",
     "darkTheme": "Tema oscuro",
+    "greenTheme": "Tema verde oscuro",
     "systemTheme": "Tema del sistema",
     "activeTheme": "Tema activo:",
     "title": "Tema"

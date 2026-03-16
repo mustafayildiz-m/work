@@ -17,7 +17,7 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
   const { t, locale } = useLanguage();
   const { theme } = useLayoutContext();
   const { languages } = useLanguages();
-  const isDarkMode = theme === 'dark';
+  const isDarkMode = theme === 'dark' || theme === 'green';
   const [articleData, setArticleData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

@@ -258,6 +258,7 @@
     "shareThoughts": "分享您的想法...",
     "whatsOnYourMind": "你在想什么？",
     "whoToFollow": "关注谁",
+    "suggestedScholars": "推荐伊斯兰学者",
     "suggestedForYou": "为您推荐",
     "followAll": "关注全部",
     "viewAll": "查看全部",
@@ -332,6 +333,7 @@
     "themeSelection": "主题选择",
     "lightTheme": "灯光主题",
     "darkTheme": "深色主题",
+    "greenTheme": "深绿色主题",
     "systemTheme": "系统主题",
     "activeTheme": "活跃的主题：",
     "title": "主题"

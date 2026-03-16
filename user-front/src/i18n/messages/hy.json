@@ -266,6 +266,7 @@
     "shareThoughts": "Կիսվեք ձեր մտքերով...",
     "whatsOnYourMind": "Ի՞նչ է ձեր մտքում:",
     "whoToFollow": "Ում հետևել",
+    "suggestedScholars": "Առաջարկվող իսլամական գիտնականներ",
     "suggestedForYou": "Առաջարկվում է ձեզ համար",
     "followAll": "Հետևեք բոլորին",
     "viewAll": "Դիտել բոլորը",
@@ -404,6 +405,7 @@
     "themeSelection": "Թեմայի ընտրություն",
     "lightTheme": "Թեթև թեմա",
     "darkTheme": "Մութ թեմա",
+    "greenTheme": "Մուգ կանաչ թեմա",
     "systemTheme": "Համակարգի թեմա",
     "activeTheme": "Ակտիվ թեմա.",
     "title": "Թեմա"

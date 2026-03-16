@@ -258,6 +258,7 @@
     "shareThoughts": "Împărtășește-ți gândurile...",
     "whatsOnYourMind": "La ce vă gândiți?",
     "whoToFollow": "Pe cine să urmăriți",
+    "suggestedScholars": "Cercetători islamici recomandați",
     "suggestedForYou": "Sugerat pentru dvs.",
     "followAll": "Urmăriți toate",
     "viewAll": "Vezi toate",
@@ -332,6 +333,7 @@
     "themeSelection": "Selectarea temei",
     "lightTheme": "Temă de lumină",
     "darkTheme": "Temă întunecată",
+    "greenTheme": "Temă verde închis",
     "systemTheme": "Tema sistemului",
     "activeTheme": "Temă activă:",
     "title": "Theme"

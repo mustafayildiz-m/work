@@ -258,6 +258,7 @@
     "shareThoughts": "Ossza meg gondolatait...",
     "whatsOnYourMind": "Mi jár a fejedben?",
     "whoToFollow": "Kiket kell követni",
+    "suggestedScholars": "Javasolt iszlám tudósok",
     "suggestedForYou": "Az Ön számára javasolt",
     "followAll": "Kövesse az összes",
     "viewAll": "Minden megtekintése",
@@ -332,6 +333,7 @@
     "themeSelection": "Téma kiválasztása",
     "lightTheme": "Light téma",
     "darkTheme": "Sötét téma",
+    "greenTheme": "Sötétzöld téma",
     "systemTheme": "Rendszer téma",
     "activeTheme": "Aktív téma:",
     "title": "Theme"

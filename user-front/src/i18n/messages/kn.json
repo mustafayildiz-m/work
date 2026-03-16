@@ -266,6 +266,7 @@
     "shareThoughts": "ನಿಮ್ಮ ಆಲೋಚನೆಗಳನ್ನು ಹಂಚಿಕೊಳ್ಳಿ...",
     "whatsOnYourMind": "ನಿಮ್ಮ ಮನಸ್ಸಿನಲ್ಲಿ ಏನಿದೆ?",
     "whoToFollow": "ಯಾರನ್ನು ಅನುಸರಿಸಬೇಕು",
+    "suggestedScholars": "ಸೂಚಿಸಿದ ಇಸ್ಲಾಮಿ ವಿದ್ವಾಂಸರು",
     "suggestedForYou": "ನಿಮಗಾಗಿ ಸೂಚಿಸಲಾಗಿದೆ",
     "followAll": "ಎಲ್ಲವನ್ನೂ ಅನುಸರಿಸಿ",
     "viewAll": "ಎಲ್ಲವನ್ನೂ ವೀಕ್ಷಿಸಿ",
@@ -404,6 +405,7 @@
     "themeSelection": "ಥೀಮ್ ಆಯ್ಕೆ",
     "lightTheme": "ಲೈಟ್ ಥೀಮ್",
     "darkTheme": "ಡಾರ್ಕ್ ಥೀಮ್",
+    "greenTheme": "ಡಾರ್ಕ್ ಗ್ರೀನ್ ಥೀಮ್",
     "systemTheme": "ಸಿಸ್ಟಮ್ ಥೀಮ್",
     "activeTheme": "ಸಕ್ರಿಯ ಥೀಮ್:",
     "title": "ಥೀಮ್"
