@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { Card, CardBody, CardHeader, CardTitle, Row, Col, Button, Form, Alert, Spinner } from 'react-bootstrap';
 import { Badge } from 'react-bootstrap';
-import { BsSearch, BsPerson, BsMortarboard, BsPeople, BsPlus, BsEye } from 'react-icons/bs';
+import { BsSearch, BsPerson, BsPeople, BsPlus, BsEye } from 'react-icons/bs';
+import scholarIcon from '@/assets/images/icon/islamic-scholars.svg';
 import Link from 'next/link';
 import Image from 'next/image';
 import avatar7 from '@/assets/images/avatar/07.jpg';
@@ -274,7 +275,9 @@ const ScholarsPage = () => {
         {/* Modern Header Gradient */}
         <div style={{
           height: '80px',
-          background: 'linear-gradient(135deg, #66BB6A 0%, #2E7D32 100%)',
+          backgroundImage: scholar.coverImage ? `url(${getImageUrl(scholar.coverImage)})` : 'linear-gradient(135deg, #66BB6A 0%, #2E7D32 100%)',
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
           position: 'relative',
           overflow: 'hidden'
         }}>
@@ -304,7 +307,7 @@ const ScholarsPage = () => {
             zIndex: 2,
             transition: 'transform 0.3s ease'
           }}>
-            <BsMortarboard size={16} style={{ color: '#2E7D32' }} />
+            <Image src={scholarIcon} alt="Scholar" width={18} height={18} />
           </div>
         </div>
 
@@ -424,7 +427,7 @@ const ScholarsPage = () => {
             fontWeight: '600',
             color: '#1e293b'
           }}>
-            <BsMortarboard className="me-2 text-primary" size={24} />
+            <Image src={scholarIcon} alt="Scholar" width={24} height={24} className="me-2" />
             <span className="flex-grow-1">{t('scholars.title')}</span>
             <div
               className="ms-2 d-flex align-items-center"
@@ -439,7 +442,7 @@ const ScholarsPage = () => {
                 boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
               }}
             >
-              <BsMortarboard size={16} className="me-2" style={{ opacity: 0.8 }} />
+              <Image src={scholarIcon} alt="Scholar" width={14} height={14} className="me-2" />
               <span>{totalCount} {t('scholars.totalScholars') || 'Alim'}</span>
             </div>
           </CardTitle>
@@ -509,7 +512,7 @@ const ScholarsPage = () => {
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <BsMortarboard size={40} className="text-primary" />
+                <Image src={scholarIcon} alt="Scholar" width={40} height={40} />
               </div>
               <h5 className="mb-2" style={{
                 color: '#64748b',
