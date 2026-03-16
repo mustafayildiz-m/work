@@ -606,7 +606,7 @@ const PostCard = ({
     }}>
       {/* Shared Post Indicator - Facebook Style */}
       {isSharedPost && originalUser && (
-        <div className="px-3 py-3" style={{
+        <div className="shared-post-indicator px-3 py-3" style={{
           background: 'linear-gradient(135deg, var(--bs-tertiary-bg) 0%, var(--bs-secondary-bg) 100%)',
           borderBottom: '1px solid var(--bs-border-color)',
           borderTopLeftRadius: '12px',
