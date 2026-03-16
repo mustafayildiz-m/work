@@ -81,7 +81,7 @@ export default function NewsletterDetailPageClient({ id }) {
 
   if (loading) {
     return (
-      <Col lg={9}>
+      <Col lg={9} className="newsletter-detail-page">
         <div className="d-flex align-items-center justify-content-center py-5">
           <div className="spinner-border text-secondary" role="status" />
         </div>
@@ -94,7 +94,7 @@ export default function NewsletterDetailPageClient({ id }) {
   }
 
   return (
-    <Col lg={9}>
+    <Col lg={9} className="newsletter-detail-page">
       <Row className="g-3">
         <Col lg={8}>
           <NewsletterContentWithTranslation
