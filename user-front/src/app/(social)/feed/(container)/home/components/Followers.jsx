@@ -46,11 +46,10 @@ const Followers = () => {
   // Helper function to get proper image URL
   const getImageUrl = (photoUrl) => {
     if (!photoUrl) return '/profile/profile.png';
-    if (photoUrl.startsWith('/uploads/')) {
-      const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-      return `${apiBaseUrl}${photoUrl}`;
-    }
-    return photoUrl;
+    if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) return photoUrl;
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+    const path = photoUrl.startsWith('/') ? photoUrl : `/${photoUrl}`;
+    return `${apiBaseUrl}${path}`;
   };
 
   // Follow function
