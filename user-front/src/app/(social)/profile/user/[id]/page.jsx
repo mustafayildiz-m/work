@@ -131,7 +131,7 @@ const UserProfilePage = () => {
   }
 
   return (
-    <div className="vstack gap-4">
+    <div className="vstack gap-4 profile-user-about">
 
       {/* 1. Biyografi Kartı - En Üstte */}
       <Card className="border-0 shadow-sm overflow-hidden">

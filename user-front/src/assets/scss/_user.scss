@@ -4681,6 +4681,142 @@
   }
 
   // ============================================
+  // Profil kullanıcı - About (Hakkımda) bölümü
+  // ============================================
+  .profile-user-about .card {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .profile-user-about .card .card-body {
+    background: transparent !important;
+    color: #e0f0e0 !important;
+  }
+
+  .profile-user-about .card-title.text-primary {
+    color: #81c784 !important;
+  }
+
+  .profile-user-about .card-title .text-primary {
+    color: #81c784 !important;
+  }
+
+  .profile-user-about .text-body {
+    color: #e0f0e0 !important;
+  }
+
+  .profile-user-about .text-muted {
+    color: #9bc99b !important;
+  }
+
+  .profile-user-about .bg-light,
+  .profile-user-about .bg-light.bg-opacity-50 {
+    background: rgba(45, 90, 45, 0.5) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .profile-user-about .rounded-3.bg-light {
+    background: rgba(45, 90, 45, 0.5) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .profile-user-about .fw-medium {
+    color: #e0f0e0 !important;
+  }
+
+  .profile-user-about .border,
+  .profile-user-about .border-light {
+    border-color: rgba(67, 160, 71, 0.3) !important;
+  }
+
+  .profile-user-about .border-top {
+    border-top-color: rgba(67, 160, 71, 0.3) !important;
+  }
+
+  .profile-user-about hr {
+    border-color: rgba(67, 160, 71, 0.3) !important;
+  }
+
+  .profile-user-about .icon-lg,
+  .profile-user-about [class*="bg-"].icon-lg,
+  .profile-user-about .rounded-circle.bg-primary,
+  .profile-user-about .rounded-circle.bg-info,
+  .profile-user-about .rounded-circle.bg-success,
+  .profile-user-about .rounded-circle.bg-warning,
+  .profile-user-about .rounded-circle.bg-danger {
+    background: rgba(67, 160, 71, 0.6) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .profile-user-about .badge {
+    border-color: rgba(67, 160, 71, 0.4) !important;
+  }
+
+  .profile-user-about .badge.bg-primary {
+    background: rgba(67, 160, 71, 0.7) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .profile-user-about .badge.bg-success {
+    background: rgba(67, 160, 71, 0.8) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .profile-user-about .badge.bg-danger {
+    color: #f08a8a !important;
+  }
+
+  .profile-user-about .spinner-border.text-primary {
+    color: #81c784 !important;
+  }
+
+  .profile-user-about .font-monospace {
+    color: #9bc99b !important;
+  }
+
+  .profile-user-about .position-absolute[style*="gradient"] {
+    background: linear-gradient(45deg, rgba(67, 160, 71, 0.15) 0%, transparent 100%) !important;
+  }
+
+  .profile-user-about .d-flex.align-items-start.mb-3.p-3.rounded-3 {
+    background: rgba(45, 90, 45, 0.4) !important;
+    border-color: rgba(67, 160, 71, 0.3) !important;
+  }
+
+  .profile-user-about .fst-italic {
+    color: #9bc99b !important;
+  }
+
+  .profile-user-about .text-primary {
+    color: #81c784 !important;
+  }
+
+  .profile-user-about .text-info {
+    color: #81c784 !important;
+  }
+
+  // ============================================
+  // Mesajlaşma widget (sağ alttaki MessagingBar)
+  // ============================================
+  .messaging-bar-widget .text-muted {
+    color: #9bc99b !important;
+  }
+
+  .messaging-bar-widget .form-control {
+    background: rgba(45, 90, 45, 0.6) !important;
+    border-color: rgba(67, 160, 71, 0.3) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .messaging-bar-widget .form-control::placeholder {
+    color: #7ab07a !important;
+  }
+
+  .messaging-bar-widget .badge.bg-danger {
+    background: rgba(220, 53, 69, 0.8) !important;
+  }
+
+  // ============================================
   // Profil dropdown kartı
   // ============================================
   .profile-dropdown-menu {

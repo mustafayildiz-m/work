@@ -341,9 +341,19 @@ const MessagingBar = () => {
     };
 
     const { theme } = useLayoutContext();
-    const isDark = theme === 'dark' || theme === 'green';
+    const isDark = theme === 'dark';
+    const isGreen = theme === 'green';
 
-    const colors = isDark ? {
+    const colors = isGreen ? {
+        bg: '#234d2a',
+        header: '#2d5a2d',
+        itemHover: 'rgba(67, 160, 71, 0.35)',
+        textMain: '#e0f0e0',
+        textMuted: '#9bc99b',
+        searchBg: 'rgba(45, 90, 45, 0.6)',
+        border: 'rgba(67, 160, 71, 0.35)',
+        shadow: '0 8px 30px rgba(0,0,0,0.3)'
+    } : isDark ? {
         bg: '#1d2226',
         header: '#1d2226',
         itemHover: '#293138',
@@ -363,7 +373,7 @@ const MessagingBar = () => {
         shadow: '0 8px 30px rgba(0,0,0,0.12)'
     };
 
-    const iconClass = isDark ? "text-white-50" : "text-black-50";
+    const iconClass = (isDark || isGreen) ? "text-white-50" : "text-black-50";
     const messagingTitle = t('menu.messaging') === 'menu.messaging'
         ? getLocalized('messaging.title', 'Mesajlaşma', 'Messaging')
         : t('menu.messaging');
@@ -592,7 +602,7 @@ const MessagingBar = () => {
 
     return (
         <div
-            className="d-none d-lg-block position-fixed end-0 bottom-0"
+            className="d-none d-lg-block position-fixed end-0 bottom-0 messaging-bar-widget"
             style={{
                 zIndex: 1050,
                 width: '420px',
@@ -907,11 +917,17 @@ const MessagingBar = () => {
                                                         </div>
                                                         <div
                                                             style={{
-                                                                color: colors.textMain,
+                                                                color: msg.isMe && isGreen ? '#fff' : colors.textMain,
                                                                 fontSize: '0.9rem',
                                                                 whiteSpace: 'pre-wrap',
                                                                 wordBreak: 'break-word',
-                                                                backgroundColor: msg.isMe ? (isDark ? '#057642' : '#e7f3ed') : (isDark ? '#38434f' : '#f3f6f8'),
+                                                                ...(msg.isMe && isGreen
+                                                                    ? { background: 'linear-gradient(135deg, #2e7d32 0%, #43a047 100%)' }
+                                                                    : {
+                                                                        backgroundColor: msg.isMe
+                                                                            ? (isDark ? '#057642' : '#e7f3ed')
+                                                                            : (isGreen ? 'rgba(45, 90, 45, 0.6)' : (isDark ? '#38434f' : '#f3f6f8'))
+                                                                      }),
                                                                 padding: '8px 12px',
                                                                 borderRadius: '12px',
                                                                 borderTopRightRadius: msg.isMe ? '2px' : '12px',
@@ -928,7 +944,7 @@ const MessagingBar = () => {
                                 </div>
 
                                 {/* Input Area */}
-                                <div className="p-3" style={{ borderTop: `1px solid ${colors.border}`, backgroundColor: isDark ? '#1d2226' : '#ffffff' }}>
+                                <div className="p-3" style={{ borderTop: `1px solid ${colors.border}`, backgroundColor: isGreen ? '#234d2a' : (isDark ? '#1d2226' : '#ffffff') }}>
                                     <div
                                         className="rounded p-2 mb-2"
                                         style={{
@@ -966,7 +982,9 @@ const MessagingBar = () => {
                                             onClick={() => handleSendMessage(chat.user.id)}
                                             className="btn btn-sm px-3 fw-bold shadow-none"
                                             style={{
-                                                backgroundColor: chat.input?.trim() ? '#0a66c2' : 'transparent',
+                                                ...(chat.input?.trim() && isGreen
+                                                    ? { background: 'linear-gradient(135deg, #2e7d32 0%, #43a047 100%)' }
+                                                    : { backgroundColor: chat.input?.trim() ? '#0a66c2' : 'transparent' }),
                                                 color: chat.input?.trim() ? '#ffffff' : colors.textMuted,
                                                 borderRadius: '16px',
                                                 pointerEvents: chat.input?.trim() ? 'auto' : 'none',
