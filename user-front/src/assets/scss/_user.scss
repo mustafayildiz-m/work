@@ -3231,14 +3231,37 @@
           background-color: rgba(45, 90, 45, 0.5) !important;
         }
 
+        .comment-bubble {
+          background-color: rgba(45, 90, 45, 0.95) !important;
+          border-color: rgba(67, 160, 71, 0.4) !important;
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .comment-bubble:hover {
+          box-shadow: 0 2px 8px rgba(46, 125, 50, 0.2) !important;
+        }
+
         .comment-header .fw-bold,
         .comment-text,
         .comment-content {
           color: #e0f0e0 !important;
         }
 
-        small {
+        .comment-text {
+          color: #c8e6c8 !important;
+        }
+
+        small,
+        .comment-header small.text-muted {
           color: #9bc99b !important;
+        }
+
+        .btn-link.text-danger {
+          color: #e57373 !important;
+        }
+
+        .btn-link.text-danger:hover {
+          color: #ef5350 !important;
         }
       }
 
