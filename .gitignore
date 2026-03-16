@@ -53,10 +53,8 @@ docker-compose.override.yml
 *.sqlite
 *.db
 
-# Uploads - tüm upload klasörünü ignore et (alimler hariç - 1 kerelik track)
-backend/uploads/*
-!backend/uploads/alimler/
-!backend/uploads/alimler/**
+# Uploads - tüm upload klasörünü ignore et
+backend/uploads/
 admin-front/public/uploads/
 user-front/public/uploads/
 certbot/conf/
