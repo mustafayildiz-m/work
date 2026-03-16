@@ -31,10 +31,21 @@ const MessagingBar = () => {
     const [activeChats, setActiveChats] = useState([]); // List of { user, messages, input, isExpanded }
     const chatInputRef = useRef(null);
     const activeChatsRef = useRef([]);
+    const chatTextareaRefs = useRef({});
 
     useEffect(() => {
         activeChatsRef.current = activeChats;
     }, [activeChats]);
+
+    // Mesaj yazarken textarea'yı en alta kaydır
+    useEffect(() => {
+        activeChats.forEach((chat) => {
+            const el = chatTextareaRefs.current[chat.user.id];
+            if (el) {
+                el.scrollTop = el.scrollHeight;
+            }
+        });
+    }, [activeChats.map((c) => c.input).join('\n')]);
 
     // Fetch fresh user data to ensure photoUrl is present
     useEffect(() => {
@@ -346,11 +357,14 @@ const MessagingBar = () => {
 
     const colors = isGreen ? {
         bg: '#234d2a',
+        chatAreaBg: '#1e4224',
+        inputAreaBg: '#2d5a2d',
         header: '#2d5a2d',
         itemHover: 'rgba(67, 160, 71, 0.35)',
         textMain: '#e0f0e0',
         textMuted: '#9bc99b',
         searchBg: 'rgba(45, 90, 45, 0.6)',
+        inputFieldBg: 'rgba(35, 77, 42, 0.8)',
         border: 'rgba(67, 160, 71, 0.35)',
         shadow: '0 8px 30px rgba(0,0,0,0.3)'
     } : isDark ? {
@@ -867,7 +881,7 @@ const MessagingBar = () => {
                     {chat.isExpanded && (
                         <>
                             {/* Chat Content */}
-                            <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: colors.bg }}>
+                            <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: isGreen ? colors.chatAreaBg : colors.bg }}>
                                 <div style={{ flex: 1, minHeight: 0 }}>
                                     <SimplebarReactClient style={{ height: '100%' }}>
                                         <div className="p-3">
@@ -944,17 +958,20 @@ const MessagingBar = () => {
                                 </div>
 
                                 {/* Input Area */}
-                                <div className="p-3" style={{ borderTop: `1px solid ${colors.border}`, backgroundColor: isGreen ? '#234d2a' : (isDark ? '#1d2226' : '#ffffff') }}>
+                                <div className="p-3" style={{ borderTop: `1px solid ${colors.border}`, backgroundColor: isGreen ? (colors.inputAreaBg || '#2d5a2d') : (isDark ? '#1d2226' : '#ffffff') }}>
                                     <div
                                         className="rounded p-2 mb-2"
                                         style={{
-                                            backgroundColor: colors.searchBg,
-                                            minHeight: '100px',
+                                            backgroundColor: isGreen ? (colors.inputFieldBg || colors.searchBg) : colors.searchBg,
+                                            minHeight: '80px',
+                                            maxHeight: '140px',
                                             display: 'flex',
-                                            flexDirection: 'column'
+                                            flexDirection: 'column',
+                                            overflow: 'hidden'
                                         }}
                                     >
                                         <textarea
+                                            ref={(el) => { if (el) chatTextareaRefs.current[chat.user.id] = el; }}
                                             placeholder={getLocalized('messaging.writeMessage', 'Bir mesaj yazın...', 'Write a message...')}
                                             className="w-100 border-0 bg-transparent shadow-none"
                                             style={{
@@ -962,7 +979,9 @@ const MessagingBar = () => {
                                                 fontSize: '0.9rem',
                                                 resize: 'none',
                                                 outline: 'none',
-                                                flex: 1
+                                                minHeight: '60px',
+                                                maxHeight: '120px',
+                                                overflowY: 'auto'
                                             }}
                                             value={chat.input}
                                             onChange={(e) => updateChatInput(chat.user.id, e.target.value)}
