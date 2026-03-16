@@ -4075,6 +4075,612 @@
   }
 
   // ============================================
+  // Blogs sayfası
+  // ============================================
+  .blogs-page .bg-mode {
+    background: transparent !important;
+  }
+
+  .blogs-page h1,
+  .blogs-page .h4 {
+    color: #e0f0e0 !important;
+  }
+
+  .blogs-page .badge.bg-primary {
+    background: rgba(67, 160, 71, 0.8) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .blogs-page .btn-primary {
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+    border-color: rgba(67, 160, 71, 0.6) !important;
+    color: #fff !important;
+  }
+
+  .blogs-page .btn-outline-primary {
+    border-color: rgba(129, 199, 132, 0.6) !important;
+    color: #81c784 !important;
+  }
+
+  .blogs-page .btn-outline-primary:hover {
+    background: rgba(67, 160, 71, 0.3) !important;
+    border-color: #81c784 !important;
+    color: #e0f0e0 !important;
+  }
+
+  .blogs-page .btn-outline-secondary {
+    border-color: rgba(129, 199, 132, 0.6) !important;
+    color: #81c784 !important;
+  }
+
+  .blogs-page .btn-outline-secondary:hover {
+    background: rgba(67, 160, 71, 0.3) !important;
+    border-color: #81c784 !important;
+    color: #e0f0e0 !important;
+  }
+
+  .blogs-page .form-label.text-muted {
+    color: #9bc99b !important;
+  }
+
+  .blogs-page .form-control {
+    background: rgba(45, 90, 45, 0.6) !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .blogs-page .form-control::placeholder {
+    color: #7ab07a !important;
+  }
+
+  /* react-select dil seçici */
+  .blogs-page .blogs-language-select .blogs-lang__control {
+    background: #234d2a !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+  }
+
+  .blogs-page .blogs-language-select .blogs-lang__control:hover,
+  .blogs-page .blogs-language-select .blogs-lang__control--is-focused {
+    border-color: rgba(67, 160, 71, 0.6) !important;
+  }
+
+  .blogs-page .blogs-language-select .blogs-lang__single-value,
+  .blogs-page .blogs-language-select .blogs-lang__placeholder,
+  .blogs-page .blogs-language-select .blogs-lang__input-container input {
+    color: #e0f0e0 !important;
+  }
+
+  .blogs-page .blogs-language-select .blogs-lang__menu {
+    background: #234d2a !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+  }
+
+  .blogs-page .blogs-language-select .blogs-lang__option {
+    color: #e0f0e0 !important;
+  }
+
+  .blogs-page .blogs-language-select .blogs-lang__option--is-focused {
+    background: rgba(67, 160, 71, 0.4) !important;
+  }
+
+  .blogs-page .blogs-language-select .blogs-lang__option--is-selected {
+    background: rgba(46, 125, 50, 0.6) !important;
+  }
+
+  /* Sidebar kartları (RecentPost, Followers) - genel card önce */
+  .blogs-page .card {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .blogs-page .card .card-header,
+  .blogs-page .card .card-body {
+    background: transparent !important;
+    color: #e0f0e0 !important;
+    border-color: rgba(67, 160, 71, 0.2) !important;
+  }
+
+  .blogs-page .card .card-title {
+    color: #e0f0e0 !important;
+  }
+
+  .blogs-page .card .text-muted {
+    color: #9bc99b !important;
+  }
+
+  .blogs-page .card .btn-primary {
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+    border-color: rgba(67, 160, 71, 0.6) !important;
+    color: #fff !important;
+  }
+
+  .blogs-page .card .btn-outline-primary {
+    border-color: rgba(129, 199, 132, 0.6) !important;
+    color: #81c784 !important;
+  }
+
+  .blogs-page .card .btn-outline-primary:hover {
+    background: rgba(67, 160, 71, 0.3) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .blogs-page .card a {
+    color: #81c784 !important;
+  }
+
+  .blogs-page .card a:hover {
+    color: #a5d6a7 !important;
+  }
+
+  /* Hikaye kartları - grid */
+  .blogs-page .story-video-card {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .blogs-page .story-video-card:hover {
+    box-shadow: 0 8px 24px rgba(46, 125, 50, 0.25) !important;
+  }
+
+  .blogs-page .story-video-card__body,
+  .blogs-page .story-video-card__title {
+    color: #e0f0e0 !important;
+  }
+
+  .blogs-page .story-video-card .text-primary {
+    color: #81c784 !important;
+  }
+
+  .blogs-page .story-video-card .text-muted {
+    color: #9bc99b !important;
+  }
+
+  .blogs-page .story-video-card .badge.bg-primary {
+    background: rgba(67, 160, 71, 0.8) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .blogs-page .story-video-card .badge.bg-dark {
+    background: rgba(0, 0, 0, 0.5) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .blogs-page .story-video-card .badge.bg-warning {
+    color: #1a1a1a !important;
+  }
+
+  /* Hikaye kartları - list view */
+  .blogs-page .list-view .card {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .blogs-page .list-view .card:hover {
+    box-shadow: 0 5px 20px rgba(46, 125, 50, 0.25) !important;
+  }
+
+  .blogs-page .list-view .card .card-body,
+  .blogs-page .list-view .card h5 {
+    color: #e0f0e0 !important;
+  }
+
+  .blogs-page .list-view .card .text-primary {
+    color: #81c784 !important;
+  }
+
+  .blogs-page .list-view .card .text-muted {
+    color: #9bc99b !important;
+  }
+
+  .blogs-page .list-view .card .badge.bg-primary {
+    background: rgba(67, 160, 71, 0.8) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .blogs-page .list-view .card .badge.bg-warning {
+    color: #1a1a1a !important;
+  }
+
+  /* Loading, boş sonuç, hata */
+  .blogs-page .text-center h5,
+  .blogs-page .text-center p {
+    color: #9bc99b !important;
+  }
+
+  .blogs-page .alert {
+    background: rgba(45, 90, 45, 0.6) !important;
+    border-color: rgba(67, 160, 71, 0.5) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .blogs-page .alert .alert-heading {
+    color: #e0f0e0 !important;
+  }
+
+  .blogs-page .alert-danger {
+    background: rgba(139, 69, 69, 0.4) !important;
+    border-color: rgba(220, 53, 69, 0.5) !important;
+  }
+
+  /* Pagination */
+  .blogs-page .pagination .page-link {
+    background: rgba(45, 90, 45, 0.5) !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .blogs-page .pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+    border-color: rgba(67, 160, 71, 0.6) !important;
+    color: #fff !important;
+  }
+
+  .blogs-page .pagination .page-link:hover {
+    background: rgba(67, 160, 71, 0.5) !important;
+    color: #fff !important;
+  }
+
+  .blogs-page .pagination .page-item.disabled .page-link {
+    background: rgba(35, 77, 42, 0.5) !important;
+    color: #7ab07a !important;
+  }
+
+  .blogs-page .text-center.text-muted small {
+    color: #9bc99b !important;
+  }
+
+  // ============================================
+  // Papers sayfası
+  // ============================================
+  .papers-page {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .papers-header {
+    background: rgba(35, 77, 42, 0.6) !important;
+    border-bottom-color: rgba(67, 160, 71, 0.3) !important;
+  }
+
+  .papers-header h4 {
+    color: #e0f0e0 !important;
+  }
+
+  .papers-header p {
+    color: #9bc99b !important;
+  }
+
+  .papers-search {
+    border-bottom-color: rgba(67, 160, 71, 0.3) !important;
+  }
+
+  .papers-search .form-control,
+  .papers-search .papers-search-input {
+    background: rgba(45, 90, 45, 0.6) !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .papers-search .form-control::placeholder {
+    color: #7ab07a !important;
+  }
+
+  .papers-search .form-control:focus {
+    background: rgba(45, 90, 45, 0.8) !important;
+    border-color: rgba(67, 160, 71, 0.6) !important;
+    color: #e0f0e0 !important;
+    box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.2) !important;
+  }
+
+  .papers-search .btn-outline-secondary {
+    border-color: rgba(129, 199, 132, 0.6) !important;
+    color: #81c784 !important;
+  }
+
+  .papers-search .btn-outline-secondary:hover {
+    background: rgba(67, 160, 71, 0.3) !important;
+    border-color: #81c784 !important;
+    color: #e0f0e0 !important;
+  }
+
+  .papers-hero-card {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+  }
+
+  .papers-hero-content {
+    color: #e0f0e0 !important;
+  }
+
+  .papers-tag {
+    color: #e0f0e0 !important;
+    border-color: rgba(67, 160, 71, 0.5) !important;
+    background: rgba(67, 160, 71, 0.2) !important;
+  }
+
+  .papers-hero-title {
+    color: #e0f0e0 !important;
+  }
+
+  .papers-hero-title:hover {
+    color: #a5d6a7 !important;
+  }
+
+  .papers-meta {
+    color: #9bc99b !important;
+  }
+
+  .papers-description {
+    color: #9bc99b !important;
+  }
+
+  .papers-page .badge.bg-secondary {
+    background: rgba(67, 160, 71, 0.5) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .papers-page .btn-outline-primary {
+    border-color: rgba(129, 199, 132, 0.6) !important;
+    color: #81c784 !important;
+  }
+
+  .papers-page .btn-outline-primary:hover:not(:disabled) {
+    background: rgba(67, 160, 71, 0.3) !important;
+    border-color: #81c784 !important;
+    color: #e0f0e0 !important;
+  }
+
+  .papers-nav-btn {
+    border-color: rgba(67, 160, 71, 0.5) !important;
+    color: #e0f0e0 !important;
+    background: rgba(45, 90, 45, 0.4) !important;
+  }
+
+  .papers-nav-btn:hover:not(:disabled) {
+    border-color: #81c784 !important;
+    color: #fff !important;
+    background: rgba(67, 160, 71, 0.5) !important;
+  }
+
+  .papers-nav-btn:disabled {
+    color: #7ab07a !important;
+    opacity: 0.5 !important;
+  }
+
+  .papers-empty {
+    color: #9bc99b !important;
+  }
+
+  .papers-page .text-muted {
+    color: #9bc99b !important;
+  }
+
+  .papers-page .px-4.pb-2.text-muted {
+    color: #9bc99b !important;
+  }
+
+  /* Papers hero image loading overlay */
+  .papers-hero-image .position-absolute[style*="tertiary-bg"] {
+    background-color: rgba(35, 77, 42, 0.8) !important;
+  }
+
+  // ============================================
+  // Newsletters sayfası
+  // ============================================
+  .newsletters-page .card {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .newsletters-page .card .card-body {
+    background: transparent !important;
+    color: #e0f0e0 !important;
+    border-color: rgba(67, 160, 71, 0.2) !important;
+  }
+
+  .newsletters-page .p-4.border-bottom,
+  .newsletters-page .p-md-5.border-bottom {
+    background: rgba(35, 77, 42, 0.6) !important;
+    border-color: rgba(67, 160, 71, 0.3) !important;
+  }
+
+  .newsletters-page .p-4 h4,
+  .newsletters-page .p-md-5 h4 {
+    color: #e0f0e0 !important;
+  }
+
+  .newsletters-page .p-4 .text-muted,
+  .newsletters-page .p-md-5 .text-muted {
+    color: #9bc99b !important;
+  }
+
+  .newsletters-page .form-control {
+    background: rgba(45, 90, 45, 0.6) !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .newsletters-page .form-control::placeholder {
+    color: #7ab07a !important;
+  }
+
+  .newsletters-page .btn-outline-secondary {
+    border-color: rgba(129, 199, 132, 0.6) !important;
+    color: #81c784 !important;
+  }
+
+  .newsletters-page .btn-outline-secondary:hover {
+    background: rgba(67, 160, 71, 0.3) !important;
+    border-color: #81c784 !important;
+    color: #e0f0e0 !important;
+  }
+
+  .newsletters-page .btn-outline-success {
+    border-color: rgba(129, 199, 132, 0.6) !important;
+    color: #81c784 !important;
+  }
+
+  .newsletters-page .btn-outline-success:hover {
+    background: rgba(67, 160, 71, 0.3) !important;
+    border-color: #81c784 !important;
+    color: #e0f0e0 !important;
+  }
+
+  .newsletters-page .text-muted {
+    color: #9bc99b !important;
+  }
+
+  .newsletters-page .badge.bg-secondary {
+    background: rgba(67, 160, 71, 0.5) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .newsletters-page .card h6 {
+    color: #e0f0e0 !important;
+  }
+
+  .newsletters-page .card .border-bottom {
+    border-color: rgba(67, 160, 71, 0.25) !important;
+  }
+
+  .newsletters-page .card img.rounded-3 {
+    border-color: rgba(67, 160, 71, 0.4) !important;
+  }
+
+  .newsletters-page .pagination .page-link {
+    background: rgba(45, 90, 45, 0.5) !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .newsletters-page .pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+    border-color: rgba(67, 160, 71, 0.6) !important;
+    color: #fff !important;
+  }
+
+  .newsletters-page .pagination .page-link:hover {
+    background: rgba(67, 160, 71, 0.5) !important;
+    color: #fff !important;
+  }
+
+  .newsletters-page .pagination .page-item.disabled .page-link {
+    background: rgba(35, 77, 42, 0.5) !important;
+    color: #7ab07a !important;
+  }
+
+  .newsletters-page .text-center.text-muted small {
+    color: #9bc99b !important;
+  }
+
+  // ============================================
+  // Newsletter detay sayfası
+  // ============================================
+  .newsletter-detail-page .card {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .newsletter-detail-page .card .card-body {
+    background: transparent !important;
+    color: #e0f0e0 !important;
+  }
+
+  .newsletter-detail-page .btn-light,
+  .newsletter-detail-page .btn[style*="tertiary-bg"] {
+    background: rgba(45, 90, 45, 0.6) !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .newsletter-detail-page .btn-light:hover,
+  .newsletter-detail-page .btn[style*="tertiary-bg"]:hover {
+    background: rgba(67, 160, 71, 0.4) !important;
+    border-color: #81c784 !important;
+    color: #fff !important;
+  }
+
+  .newsletter-detail-page .btn-outline-primary {
+    border-color: rgba(129, 199, 132, 0.6) !important;
+    color: #81c784 !important;
+  }
+
+  .newsletter-detail-page .btn-outline-primary:hover {
+    background: rgba(67, 160, 71, 0.3) !important;
+    border-color: #81c784 !important;
+    color: #e0f0e0 !important;
+  }
+
+  .newsletter-detail-page .badge.bg-secondary {
+    background: rgba(67, 160, 71, 0.5) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .newsletter-detail-page .card h3,
+  .newsletter-detail-page .card h6 {
+    color: #e0f0e0 !important;
+  }
+
+  .newsletter-detail-page .card p,
+  .newsletter-detail-page .card .text-muted {
+    color: #9bc99b !important;
+  }
+
+  .newsletter-detail-page .card strong {
+    color: #e0f0e0 !important;
+  }
+
+  .newsletter-detail-page .card a {
+    color: #81c784 !important;
+  }
+
+  .newsletter-detail-page .card a:hover {
+    color: #a5d6a7 !important;
+  }
+
+  .newsletter-detail-page .card .border-bottom {
+    border-color: rgba(67, 160, 71, 0.25) !important;
+  }
+
+  .newsletter-detail-page .newsletter-content {
+    color: #e0f0e0 !important;
+  }
+
+  .newsletter-detail-page .newsletter-content p,
+  .newsletter-detail-page .newsletter-content li,
+  .newsletter-detail-page .newsletter-content span,
+  .newsletter-detail-page .newsletter-content div {
+    color: inherit !important;
+  }
+
+  .newsletter-detail-page .newsletter-content a {
+    color: #81c784 !important;
+  }
+
+  .newsletter-detail-page .newsletter-content a:hover {
+    color: #a5d6a7 !important;
+  }
+
+  .newsletter-detail-page .newsletter-content h1,
+  .newsletter-detail-page .newsletter-content h2,
+  .newsletter-detail-page .newsletter-content h3,
+  .newsletter-detail-page .newsletter-content h4 {
+    color: #e0f0e0 !important;
+  }
+
+  .newsletter-detail-page figure img.rounded-3 {
+    border-color: rgba(67, 160, 71, 0.4) !important;
+  }
+
+  .newsletter-detail-page figure .position-absolute[style*="tertiary-bg"] {
+    background-color: rgba(35, 77, 42, 0.8) !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+  }
+
+  .newsletter-detail-page .spinner-border.text-secondary {
+    color: #81c784 !important;
+  }
+
+  // ============================================
   // Profil dropdown kartı
   // ============================================
   .profile-dropdown-menu {

@@ -89,7 +89,7 @@ export default function NewslettersPageClient({ initialSearch = '', initialPage 
   };
 
   return (
-    <Col lg={9}>
+    <Col lg={9} className="newsletters-page">
       <NewsletterListWithTranslation
         items={items}
         search={search}

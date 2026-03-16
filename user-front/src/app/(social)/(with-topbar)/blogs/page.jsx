@@ -7,7 +7,7 @@ import Footer from './components/Footer';
 
 const Blogs = () => {
   return <>
-    <main style={{ marginTop: '72px', paddingTop: '1.5rem' }}>
+    <main className="blogs-page" style={{ marginTop: '72px', paddingTop: '1.5rem' }}>
       <Container>
         <Row className="g-4">
           <Col lg={8}>
