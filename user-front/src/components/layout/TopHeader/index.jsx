@@ -28,8 +28,8 @@ const TopHeader = () => {
       overflow: 'visible',
       gap: '2rem'
     }}>
-      {/* Sol: Logo - eşit alan için flex */}
-      <div className="d-flex align-items-center justify-content-end flex-shrink-0 logo-container" style={{ flex: '1 1 0', minWidth: '0', maxWidth: '280px' }}>
+      {/* Sol: Logo - mobilde sol üstte görünür (anasayfaya dönüş), masaüstünde merkeze yakın */}
+      <div className="d-flex align-items-center justify-content-start justify-content-lg-end flex-shrink-0 logo-container" style={{ flex: '1 1 0', minWidth: '0', maxWidth: '280px' }}>
         <LogoBox />
       </div>
 
@@ -63,8 +63,8 @@ const TopHeader = () => {
         </li>
       </ul>
 
-      {/* Mobile navigation - düzenli ikon düzeni */}
-      <div className="d-flex align-items-center d-lg-none flex-nowrap mobile-header-actions" style={{
+      {/* Mobile navigation - profil butonu ekranda kalacak şekilde */}
+      <div className="d-flex align-items-center d-lg-none flex-nowrap mobile-header-actions overflow-visible" style={{
         gap: '0.5rem',
         flex: '1 1 auto',
         justifyContent: 'flex-end',
@@ -93,26 +93,31 @@ const TopHeader = () => {
     <style jsx>{`
         @media (max-width: 991.98px) {
           .container {
-            padding-left: 0 !important;
-            padding-right: 0.5rem !important;
+            padding-left: 0.5rem !important;
+            padding-right: 1rem !important;
+            justify-content: space-between !important;
+            max-width: 100vw !important;
           }
           
           .logo-container {
-            max-width: 160px !important;
+            max-width: 110px !important;
             margin-right: 0.35rem !important;
-            margin-left: -3rem !important;
+            margin-left: 0 !important;
             padding-left: 0 !important;
+            flex: 0 0 auto !important;
+            justify-content: flex-start !important;
           }
           
           .mobile-header-actions {
-            gap: 0.35rem !important;
+            gap: 0.25rem !important;
             min-width: 0;
             flex-shrink: 0;
+            overflow: visible !important;
           }
           
           .mobile-profile :global(.nav-link),
           .mobile-profile :global(.btn) {
-            padding: 0.35rem 0.6rem !important;
+            padding: 0.3rem 0.5rem !important;
             font-size: 0.8rem !important;
           }
           
@@ -161,18 +166,18 @@ const TopHeader = () => {
         
         @media (max-width: 575.98px) {
           .container {
-            padding-left: 0 !important;
-            padding-right: 0.35rem !important;
+            padding-left: 0.5rem !important;
+            padding-right: 1rem !important;
           }
           
           .logo-container {
-            max-width: 130px !important;
-            margin-left: -3rem !important;
+            max-width: 90px !important;
+            margin-left: 0 !important;
             padding-left: 0 !important;
           }
           
           .mobile-language-switcher {
-            max-width: 110px;
+            max-width: 90px;
           }
           
           .mobile-language-switcher :global(.language-switcher-select2) {
@@ -201,13 +206,22 @@ const TopHeader = () => {
         }
         
         @media (max-width: 399.98px) {
+          .container {
+            padding-left: 0.4rem !important;
+            padding-right: 0.75rem !important;
+          }
+          
+          .mobile-theme-switcher {
+            display: none !important;
+          }
+          
           .logo-container {
-            max-width: 110px !important;
-            margin-left: -3rem !important;
+            max-width: 75px !important;
+            margin-left: 0 !important;
           }
           
           .mobile-language-switcher {
-            max-width: 95px;
+            max-width: 75px;
           }
           
           .mobile-language-switcher :global(.language-switcher-select2) {

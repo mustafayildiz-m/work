@@ -4,12 +4,14 @@ import { profilePanelLinksData2 } from '@/assets/data/layout';
 import ProfilePanel from '@/components/layout/ProfilePanel';
 import SimplebarReactClient from '@/components/wrappers/SimplebarReactClient';
 import { useLayoutContext } from '@/context/useLayoutContext';
+import { useLanguage } from '@/context/useLanguageContext';
 import useViewPort from '@/hooks/useViewPort';
 import { Container, Offcanvas, OffcanvasBody, OffcanvasHeader } from 'react-bootstrap';
 import { FaSlidersH } from 'react-icons/fa';
 const Feed2Layout = ({
   children
 }) => {
+  const { t } = useLanguage();
   const {
     startOffcanvas
   } = useLayoutContext();
@@ -24,7 +26,7 @@ const Feed2Layout = ({
               <span className="btn btn-primary">
                 <FaSlidersH />
               </span>
-              <span className="h6 mb-0 fw-bold d-lg-none ms-2">Profilim</span>
+              <span className="h6 mb-0 fw-bold d-lg-none ms-2">{t('menu.menu')}</span>
             </button>
           </div>
 
