@@ -270,7 +270,7 @@ const MessageInput = () => {
 
     const updateThemeState = () => {
       const currentTheme = document.documentElement.getAttribute('data-bs-theme');
-      setIsDarkTheme(currentTheme === 'dark');
+      setIsDarkTheme(currentTheme === 'dark' || currentTheme === 'green');
     };
 
     updateThemeState();

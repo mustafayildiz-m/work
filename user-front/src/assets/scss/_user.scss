@@ -3241,4 +3241,350 @@
     }
   }
 
+  // ============================================
+  // Mesajlaşma sayfası (messaging)
+  // ============================================
+
+  /* Mesaj yazma alanı */
+  .message-input-container {
+    background: linear-gradient(180deg, rgba(15, 36, 16, 0.9) 0%, rgba(35, 77, 42, 0.98) 100%) !important;
+    border-top-color: rgba(67, 160, 71, 0.4) !important;
+  }
+
+  .message-composer-shell {
+    background: #234d2a !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25) !important;
+  }
+
+  .message-input-container .form-control {
+    background: #234d2a !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .message-input-container .form-control::placeholder {
+    color: #7ab07a !important;
+  }
+
+  .message-input-container .emoji-btn {
+    background: linear-gradient(145deg, rgba(45, 90, 45, 0.9) 0%, rgba(35, 77, 42, 0.95) 100%) !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+    color: #81c784 !important;
+  }
+
+  .message-input-container .send-btn:not(:disabled) {
+    background: linear-gradient(145deg, #2e7d32 0%, #43a047 60%, #388e3c 100%) !important;
+    border-color: rgba(67, 160, 71, 0.6) !important;
+    color: #fff !important;
+    box-shadow: 0 14px 30px rgba(46, 125, 50, 0.4) !important;
+  }
+
+  .message-input-container .send-btn:disabled {
+    background: rgba(45, 90, 45, 0.5) !important;
+    border-color: rgba(67, 160, 71, 0.3) !important;
+    color: #7ab07a !important;
+  }
+
+  /* Mesaj balonları */
+  .message-bubble.bg-primary {
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+    border: none !important;
+    color: #fff !important;
+  }
+
+  .message-bubble.bg-body-tertiary {
+    background: rgba(45, 90, 45, 0.6) !important;
+    border: 1px solid rgba(67, 160, 71, 0.4) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .message-bubble .message-meta small.text-muted {
+    color: #9bc99b !important;
+  }
+
+  .message-bubble.bg-primary .message-meta small.text-white-50 {
+    color: rgba(255, 255, 255, 0.85) !important;
+  }
+
+  /* Tarih ayırıcı */
+  .badge.text-body-secondary {
+    background-color: rgba(45, 90, 45, 0.5) !important;
+    color: #9bc99b !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+  }
+
+  /* Mesaj listesi header */
+  .messaging-main .card-header.bg-body-tertiary {
+    background: rgba(45, 90, 45, 0.95) !important;
+    border-bottom-color: rgba(67, 160, 71, 0.35) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .messaging-main .card-header.bg-body-tertiary h6,
+  .messaging-main .card-header.bg-body-tertiary .text-muted {
+    color: #e0f0e0 !important;
+  }
+
+  .messaging-main .card-header.bg-body-tertiary small.text-muted {
+    color: #9bc99b !important;
+  }
+
+  /* Konuşma listesi - arama */
+  .messaging-main .form-control {
+    background: #234d2a !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .messaging-main .form-control::placeholder {
+    color: #7ab07a !important;
+  }
+
+  .messaging-main .card-header.border-0 + .border-bottom,
+  .messaging-main .p-3.border-bottom {
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .messaging-main .border-bottom .position-absolute {
+    color: #81c784 !important;
+  }
+
+  /* Typing indicator */
+  .typing-indicator .bg-body-tertiary {
+    background: rgba(45, 90, 45, 0.6) !important;
+    border: 1px solid rgba(67, 160, 71, 0.3) !important;
+  }
+
+  .typing-indicator .typing-dots span {
+    background-color: #81c784 !important;
+  }
+
+  /* Konuşma seçili değil / select conversation prompt */
+  .messaging-main .bg-light.text-center {
+    background: rgba(45, 90, 45, 0.5) !important;
+    color: #9bc99b !important;
+  }
+
+  /* Konuşmalar & Kişiler - metin renkleri ve hover */
+  .messaging-main .conversation-item,
+  .messaging-main .online-user-item {
+    border-bottom-color: rgba(67, 160, 71, 0.25) !important;
+  }
+
+  .messaging-main .conversation-item h6,
+  .messaging-main .conversation-item .text-muted {
+    color: #e0f0e0 !important;
+  }
+
+  .messaging-main .conversation-item .text-muted {
+    color: #9bc99b !important;
+  }
+
+  .messaging-main .online-user-item h6,
+  .messaging-main .online-user-item .text-muted {
+    color: #e0f0e0 !important;
+  }
+
+  .messaging-main .online-user-item .text-muted {
+    color: #9bc99b !important;
+  }
+
+  .messaging-main .online-user-item.bg-body-tertiary {
+    background-color: rgba(45, 90, 45, 0.4) !important;
+  }
+
+  .messaging-main .conversation-item:hover {
+    background-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .messaging-main .conversation-item:hover h6,
+  .messaging-main .conversation-item:hover small,
+  .messaging-main .conversation-item:hover .text-muted {
+    color: #e0f0e0 !important;
+  }
+
+  /* Seçili konuşma */
+  .messaging-main .conversation-item.bg-primary.bg-opacity-10 {
+    background-color: rgba(46, 125, 50, 0.25) !important;
+  }
+
+  .messaging-main .online-user-item:hover {
+    background-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .messaging-main .online-user-item:hover h6,
+  .messaging-main .online-user-item:hover small,
+  .messaging-main .online-user-item:hover .text-muted {
+    color: #e0f0e0 !important;
+  }
+
+  /* Arama sonuçları hover */
+  .messaging-main .search-results-container .rounded:hover {
+    background-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .messaging-main .search-results-container .rounded:hover .fw-semibold,
+  .messaging-main .search-results-container .rounded:hover .text-muted {
+    color: #e0f0e0 !important;
+  }
+
+  /* Mesajlaşma panelleri */
+  .messaging-main .messaging-pane .card {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .messaging-main .messaging-pane .card-header {
+    background: rgba(45, 90, 45, 0.95) !important;
+    border-color: rgba(67, 160, 71, 0.3) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .messaging-main .messaging-pane .card-body {
+    background: transparent !important;
+    color: #c0e0c0 !important;
+  }
+
+  // ============================================
+  // Kitaplar sayfası (books)
+  // ============================================
+
+  /* Dil seçici - LanguageSelector */
+  .language-selector-container .card-header {
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+  }
+
+  .lang-box {
+    background-color: rgba(45, 90, 45, 0.6) !important;
+    border-color: rgba(67, 160, 71, 0.5) !important;
+  }
+
+  .lang-box:hover {
+    box-shadow: 0 8px 25px rgba(46, 125, 50, 0.35) !important;
+  }
+
+  .lang-box.active {
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+    border-color: rgba(67, 160, 71, 0.8) !important;
+    box-shadow: 0 8px 25px rgba(46, 125, 50, 0.4) !important;
+  }
+
+  .lang-text {
+    color: #e0f0e0 !important;
+  }
+
+  .lang-badge {
+    background-color: rgba(46, 125, 50, 0.4) !important;
+    color: #c0e0c0 !important;
+    border-color: rgba(67, 160, 71, 0.5) !important;
+  }
+
+  .lang-box.active .lang-badge {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+  }
+
+  .language-selector-container .text-muted {
+    color: #9bc99b !important;
+  }
+
+  .language-selector-container .card-body {
+    background: transparent !important;
+  }
+
+  .language-selector-container .card {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  /* Kitaplar listesi - BooksListPage */
+  .books-header {
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+  }
+
+  .books-header .btn-light {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .books-header .btn-light:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    color: #fff !important;
+  }
+
+  .books-header .form-control.bg-white {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: #1a1a1a !important;
+  }
+
+  .books-header .form-control::placeholder {
+    color: #6c757d !important;
+  }
+
+  /* Kategori filtresi ve istatistik kartları */
+  .book-card,
+  .book-list-card {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .book-card:hover,
+  .book-list-card:hover {
+    box-shadow: 0 10px 30px rgba(46, 125, 50, 0.25) !important;
+  }
+
+  .book-card .card-body,
+  .book-list-card .card-body {
+    background: transparent !important;
+  }
+
+  .book-card .book-title,
+  .book-list-card .card-title,
+  .book-card a,
+  .book-list-card a {
+    color: #e0f0e0 !important;
+  }
+
+  .book-card .book-title:hover,
+  .book-list-card a:hover {
+    color: #a5d6a7 !important;
+  }
+
+  .book-card .text-muted,
+  .book-list-card .text-muted {
+    color: #9bc99b !important;
+  }
+
+  .book-list-card .card-title[style*="667eea"] {
+    color: #81c784 !important;
+  }
+
+  /* Hover overlay butonu */
+  .book-card .hover-overlay .btn-light {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: #234d2a !important;
+    border: none !important;
+  }
+
+  /* Pagination */
+  .pagination-mobile .page-link {
+    background: rgba(45, 90, 45, 0.5) !important;
+    border-color: rgba(67, 160, 71, 0.4) !important;
+    color: #e0f0e0 !important;
+  }
+
+  .pagination-mobile .page-item.active .page-link {
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%) !important;
+    border-color: rgba(67, 160, 71, 0.6) !important;
+    color: #fff !important;
+  }
+
+  .pagination-mobile .page-link:hover {
+    background: rgba(67, 160, 71, 0.5) !important;
+    color: #fff !important;
+  }
+
 }

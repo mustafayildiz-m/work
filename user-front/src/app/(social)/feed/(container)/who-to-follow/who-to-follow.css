@@ -532,6 +532,129 @@
   border-top-color: var(--bs-primary, #007bff);
 }
 
+/* ============================================
+   KOYU YEŞİL TEMA (green theme)
+   ============================================ */
+[data-bs-theme="green"] .who-to-follow-card {
+  background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+  border: 1px solid rgba(67, 160, 71, 0.35) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(46, 125, 50, 0.15) !important;
+}
+
+[data-bs-theme="green"] .who-to-follow-card:hover {
+  box-shadow: 0 8px 24px rgba(46, 125, 50, 0.25), 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+[data-bs-theme="green"] .who-to-follow-header {
+  background: rgba(45, 90, 45, 0.95) !important;
+  border-bottom: 1px solid rgba(67, 160, 71, 0.3) !important;
+}
+
+[data-bs-theme="green"] .who-to-follow-header h5 {
+  color: #e0f0e0 !important;
+}
+
+[data-bs-theme="green"] .who-to-follow-header .badge.bg-light {
+  background: rgba(46, 125, 50, 0.5) !important;
+  color: #c0e0c0 !important;
+  border: 1px solid rgba(67, 160, 71, 0.4) !important;
+}
+
+/* Arama bölümü - koyu yeşil tema */
+[data-bs-theme="green"] .search-filter-section {
+  background: linear-gradient(135deg, rgba(35, 77, 42, 0.95) 0%, rgba(45, 90, 45, 0.9) 100%) !important;
+  border: 1px solid rgba(67, 160, 71, 0.4) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-bs-theme="green"] .search-input-group {
+  background: #234d2a !important;
+  border: 1px solid rgba(67, 160, 71, 0.4) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-bs-theme="green"] .search-input-group .input-group-text {
+  background: #234d2a !important;
+  border: none !important;
+  color: #81c784 !important;
+}
+
+[data-bs-theme="green"] .search-input-group .form-control {
+  background: #234d2a !important;
+  color: #e0f0e0 !important;
+}
+
+[data-bs-theme="green"] .search-input-group .form-control::placeholder {
+  color: #7ab07a !important;
+}
+
+[data-bs-theme="green"] .search-input-group .form-control:focus {
+  background: #234d2a !important;
+  border-color: rgba(67, 160, 71, 0.6) !important;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.25) !important;
+}
+
+/* Kullanıcı kartları */
+[data-bs-theme="green"] .user-item-card {
+  background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+  border: 1px solid rgba(67, 160, 71, 0.35) !important;
+}
+
+[data-bs-theme="green"] .user-item-card:hover {
+  border-color: rgba(67, 160, 71, 0.5) !important;
+  box-shadow: 0 8px 24px rgba(46, 125, 50, 0.2) !important;
+}
+
+[data-bs-theme="green"] .user-card-name,
+[data-bs-theme="green"] .user-card-name a {
+  color: #e0f0e0 !important;
+}
+
+[data-bs-theme="green"] .user-card-name a:hover {
+  color: #a5d6a7 !important;
+}
+
+[data-bs-theme="green"] .unfollow-btn-custom {
+  border-color: rgba(67, 160, 71, 0.5) !important;
+  color: #9bc99b !important;
+  background: rgba(46, 125, 50, 0.15) !important;
+}
+
+[data-bs-theme="green"] .unfollow-btn-custom:hover {
+  background: rgba(46, 125, 50, 0.3) !important;
+  color: #c0e0c0 !important;
+  border-color: rgba(67, 160, 71, 0.7) !important;
+}
+
+[data-bs-theme="green"] .empty-state-icon {
+  color: #81c784 !important;
+}
+
+[data-bs-theme="green"] .empty-state h5,
+[data-bs-theme="green"] .empty-state p {
+  color: #9bc99b !important;
+}
+
+[data-bs-theme="green"] .clear-filters-btn {
+  background: rgba(46, 125, 50, 0.5) !important;
+  color: #e0f0e0 !important;
+  border: 1px solid rgba(67, 160, 71, 0.4) !important;
+}
+
+[data-bs-theme="green"] .clear-filters-btn:hover {
+  background: rgba(67, 160, 71, 0.6) !important;
+  color: #fff !important;
+}
+
+[data-bs-theme="green"] .loading-spinner {
+  border-color: rgba(67, 160, 71, 0.2);
+  border-top-color: #81c784;
+}
+
+[data-bs-theme="green"] .loading-container .text-muted {
+  color: #9bc99b !important;
+}
+
 /* Responsive design */
 @media (max-width: 991.98px) {
   .who-to-follow-header {
