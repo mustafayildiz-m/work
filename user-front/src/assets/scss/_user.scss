@@ -3083,56 +3083,28 @@
     }
   }
 
-  // Arama sonuçları - tam görünsün (parent overflow'dan etkilenmesin)
-  .search-results-dropdown {
-    position: fixed !important;
-    top: 80px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    max-width: 600px !important;
-    width: 550px !important;
-    z-index: 10000 !important;
-    max-height: 500px !important;
-  }
-  .search-results-dropdown.position-fixed {
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    width: 100% !important;
-    max-width: none !important;
-    transform: none !important;
-  }
+  // Arama sonuçları - metinler görünür olsun (inline color override)
+  .search-container .nav-item > div.position-absolute,
+  .search-container .nav-item > div.position-fixed {
+    color: #fff !important;
 
-  // Renk override - metinler görünür
-  .search-results-dropdown {
-    background-color: #234d2a !important;
-    border-color: rgba(67, 160, 71, 0.5) !important;
+    a,
+    a * {
+      color: #fff !important;
+    }
 
-    .search-result-item {
-      color: #e8f5e9 !important;
-      border-bottom-color: rgba(67, 160, 71, 0.3) !important;
+    a:hover,
+    a:hover * {
+      color: #e0f0e0 !important;
+    }
 
-      div {
-        color: inherit !important;
-      }
+    button {
+      color: #fff !important;
 
       &:hover {
-        background-color: rgba(67, 160, 71, 0.25) !important;
+        color: #e0f0e0 !important;
       }
     }
-
-    .search-results-category,
-    .search-results-header,
-    .search-results-empty,
-    .search-results-close {
-      color: #c0e0c0 !important;
-    }
-
-    .search-tab-inactive {
-      background-color: rgba(46, 125, 50, 0.4) !important;
-      border-color: rgba(67, 160, 71, 0.5) !important;
-      color: #e8f5e9 !important;
-    }
   }
+
 }
