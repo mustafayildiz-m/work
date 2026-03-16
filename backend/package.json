@@ -30,6 +30,7 @@
     "seed:multilanguage-articles": "ts-node scripts/seed-multilanguage-articles.ts",
     "seed:newsletters": "ts-node scripts/seed-newsletters.ts",
     "seed:papers": "ts-node scripts/seed-papers.ts",
+    "seed:scholar-alim-images": "ts-node scripts/seed-scholar-alim-images.ts",
     "seed:all": "npm run seed:languages && npm run seed:multilanguage-books && npm run seed:multilanguage-articles"
   },
   "dependencies": {
