@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { Card, CardBody, CardHeader, CardTitle, Button, Form, Row, Col, Alert } from 'react-bootstrap';
 import { Badge } from 'react-bootstrap';
-import { BsSearch, BsPerson, BsMortarboard, BsPeople } from 'react-icons/bs';
+import { BsSearch, BsPerson, BsPeople } from 'react-icons/bs';
+import Image from 'next/image';
+import scholarIcon from '@/assets/images/icon/islamic-scholars.svg';
 
 const SearchTestPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -79,7 +81,7 @@ const SearchTestPage = () => {
     <div key={scholar.id} className="d-flex align-items-center p-3 border rounded mb-2">
       <div className="flex-shrink-0 me-3">
         <div className="bg-success rounded-circle d-flex align-items-center justify-content-center" style={{ width: '50px', height: '50px' }}>
-          <BsMortarboard size={24} className="text-white" />
+          <BsJournalText size={24} className="text-white" />
         </div>
       </div>
       <div className="flex-grow-1">
@@ -197,7 +199,7 @@ const SearchTestPage = () => {
                       {searchResults.scholars.length > 0 && (
                         <div className="mb-4">
                           <h6 className="text-success mb-3">
-                            <BsMortarboard className="me-2" />
+                            <Image src={scholarIcon} alt="Scholar" width={16} height={16} className="me-2" />
                             Alimler ({searchResults.scholars.length})
                           </h6>
                           {searchResults.scholars.map(renderScholarItem)}
