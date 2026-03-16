@@ -721,7 +721,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
               <li key={(item.nameKey || item.name || item.link) + idx}>
                 {item.external ? (
                   <a
-                    className="d-flex align-items-center text-decoration-none"
+                    className={`d-flex align-items-center text-decoration-none ${isActive ? 'profile-nav-active' : ''}`}
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -738,7 +738,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                   </a>
                 ) : (
                   <Link
-                    className="d-flex align-items-center text-decoration-none"
+                    className={`d-flex align-items-center text-decoration-none ${isActive ? 'profile-nav-active' : ''}`}
                     href={item.link}
                     onClick={(e) => handleLinkClick(e, item.link)}
                     style={linkStyle}
