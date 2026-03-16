@@ -467,7 +467,7 @@ export default function WhoToFollowPage() {
           <div className="row">
             <div className="col-md-12">
               <div className="input-group search-input-group shadow-sm">
-                <span className="input-group-text border-0 bg-white ps-3">
+                <span className="input-group-text border-0 ps-3">
                   {searchLoading ? (
                     <div className="spinner-border spinner-border-sm text-success" role="status">
                       <span className="visually-hidden">{t('search.searching')}</span>
