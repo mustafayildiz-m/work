@@ -2943,6 +2943,24 @@
     }
   }
 
+  // Create post - Fotoğraf ve Video butonları
+  .nav-pills .nav-link.bg-light {
+    background: rgba(46, 125, 50, 0.45) !important;
+    color: #e8f5e9 !important;
+    border: 1px solid rgba(67, 160, 71, 0.5) !important;
+
+    .text-success,
+    .text-info,
+    svg {
+      color: inherit !important;
+    }
+
+    &:hover {
+      background: rgba(67, 160, 71, 0.6) !important;
+      color: #ffffff !important;
+    }
+  }
+
   // Header icon buttons - mesaj, takip istekleri, bildirim - ikonlar koyu yeşil temada görünür
   header .nav-link.icon-md,
   header .nav-link.btn-light.icon-md,
