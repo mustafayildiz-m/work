@@ -32,9 +32,23 @@ const MessagingBar = () => {
     const chatInputRef = useRef(null);
     const activeChatsRef = useRef([]);
     const chatTextareaRefs = useRef({});
+    const chatMessagesEndRefs = useRef({});
 
     useEffect(() => {
         activeChatsRef.current = activeChats;
+    }, [activeChats]);
+
+    // Mesaj listesini en alta kaydır (açılışta ve yeni mesaj geldiğinde)
+    useEffect(() => {
+        const timeouts = [];
+        activeChats.forEach((chat) => {
+            if (!chat.isExpanded) return;
+            const el = chatMessagesEndRefs.current?.[chat.user.id];
+            if (el) {
+                timeouts.push(setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 50));
+            }
+        });
+        return () => timeouts.forEach(clearTimeout);
     }, [activeChats]);
 
     // Mesaj yazarken textarea'yı en alta kaydır
@@ -953,6 +967,13 @@ const MessagingBar = () => {
                                                     </div>
                                                 </div>
                                             ))}
+                                            {/* Scroll anchor - en alta kaydırmak için */}
+                                            <div
+                                                ref={(el) => {
+                                                    if (el) chatMessagesEndRefs.current[chat.user.id] = el;
+                                                    else delete chatMessagesEndRefs.current[chat.user.id];
+                                                }}
+                                            />
                                         </div>
                                     </SimplebarReactClient>
                                 </div>
