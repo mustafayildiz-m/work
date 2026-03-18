@@ -211,10 +211,6 @@ const TopHeader = () => {
             padding-right: 0.75rem !important;
           }
           
-          .mobile-theme-switcher {
-            display: none !important;
-          }
-          
           .logo-container {
             max-width: 75px !important;
             margin-left: 0 !important;

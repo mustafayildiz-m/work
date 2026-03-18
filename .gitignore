@@ -54,7 +54,12 @@ docker-compose.override.yml
 *.db
 
 # Uploads - tüm upload klasörünü ignore et
-backend/uploads/
+backend/uploads/*
+# Manuel kitap kapakları ve thumbnails git ile takip edilsin
+!backend/uploads/books/
+!backend/uploads/books/*
+!backend/uploads/books/thumbnails/
+!backend/uploads/books/thumbnails/*
 admin-front/public/uploads/
 user-front/public/uploads/
 certbot/conf/

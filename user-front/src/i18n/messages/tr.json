@@ -758,6 +758,9 @@
       "viewBooks": "{language} Kitaplarını Görüntüle",
       "booksAvailable": "{count} kitap bu dilde mevcut"
     },
+    "globalSearchPlaceholder": "Kitap adına göre ara...",
+    "globalSearchButton": "Ara",
+    "noResults": "Sonuç bulunamadı",
     "page": {
       "searchPlaceholder": "Kitap ara...",
       "back": "Geri",
@@ -777,6 +780,7 @@
       "error": "Hata!",
       "noBooks": "Kitap Bulunamadı",
       "noSearchResults": "araması için sonuç bulunamadı.",
+      "searchResults": "arama sonuçları",
       "noLanguageBooks": "Bu dilde henüz kitap yok.",
       "viewDetails": "Detayları Gör",
       "availableLanguages": "dilde mevcut",
