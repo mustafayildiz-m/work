@@ -31,6 +31,8 @@
     "seed:newsletters": "ts-node scripts/seed-newsletters.ts",
     "seed:papers": "ts-node scripts/seed-papers.ts",
     "seed:scholar-alim-images": "ts-node scripts/seed-scholar-alim-images.ts",
+    "seed:book-covers": "ts-node scripts/seed-book-covers.ts",
+    "report:book-covers": "ts-node scripts/report-book-covers.ts",
     "seed:all": "npm run seed:languages && npm run seed:multilanguage-books && npm run seed:multilanguage-articles"
   },
   "dependencies": {
@@ -74,6 +76,7 @@
     "rxjs": "^7.8.1",
     "sharp": "^0.34.5",
     "socket.io": "^4.8.1",
+    "string-similarity": "^4.0.4",
     "tesseract.js": "^7.0.0",
     "typeorm": "^0.3.20",
     "uuid": "^11.1.0"

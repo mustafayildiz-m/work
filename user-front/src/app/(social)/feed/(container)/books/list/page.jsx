@@ -17,12 +17,13 @@ const BooksListPage = () => {
   const languageId = searchParams.get('languageId');
   const languageName = decodeURIComponent(searchParams.get('languageName') || '');
   const languageCode = searchParams.get('languageCode');
+  const urlSearch = searchParams.get('search') || '';
 
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeSearch, setActiveSearch] = useState(''); // Aktif arama terimi
+  const [searchQuery, setSearchQuery] = useState(urlSearch || '');
+  const [activeSearch, setActiveSearch] = useState(urlSearch || ''); // Aktif arama terimi
   const [selectedCategory, setSelectedCategory] = useState(''); // Seçili kategori
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
@@ -88,9 +89,7 @@ const BooksListPage = () => {
       const token = localStorage.getItem('token');
 
       const params = new URLSearchParams();
-      if (languageId) {
-        params.append('languageId', languageId);
-      }
+      if (languageId) params.append('languageId', languageId);
       params.append('page', page.toString());
       params.append('limit', itemsPerPage.toString());
 
@@ -157,9 +156,17 @@ const BooksListPage = () => {
     }
   }, [languageId, itemsPerPage, t]);
 
-  // Dil değiştiğinde kitapları getir (kategoriler kitaplardan çıkarılacak)
+  // URL'den gelen search parametresini state'e aktar (ilk yüklemede)
   useEffect(() => {
-    if (languageId) {
+    if (urlSearch) {
+      setSearchQuery(urlSearch);
+      setActiveSearch(urlSearch);
+    }
+  }, [urlSearch]);
+
+  // Dil değiştiğinde veya global arama ile kitapları getir
+  useEffect(() => {
+    if (languageId || activeSearch) {
       fetchBooks(currentPage, activeSearch, selectedCategory);
     }
   }, [languageId, currentPage, activeSearch, selectedCategory, fetchBooks]);
@@ -242,14 +249,14 @@ const BooksListPage = () => {
     }
   }, [showCategoryFilter]);
 
-  // languageId yoksa dil seçim sayfasına yönlendir (useEffect içinde)
+  // languageId ve search yoksa dil seçim sayfasına yönlendir
   useEffect(() => {
-    if (!languageId) {
+    if (!languageId && !activeSearch) {
       router.push('/feed/books');
     }
-  }, [languageId, router]);
+  }, [languageId, activeSearch, router]);
 
-  if (!languageId) {
+  if (!languageId && !activeSearch) {
     return null;
   }
 
@@ -276,7 +283,9 @@ const BooksListPage = () => {
                 </Link>
                 <CardTitle className="mb-0 h5 h4-md">
                   <BsBook className="me-2 d-none d-sm-inline" />
-                  {t(`books.languages.${languageName}`)} {t('books.list.booksTitle')}
+                  {activeSearch && !languageId
+                    ? `"${activeSearch}" ${t('books.list.searchResults') || 'arama sonuçları'}`
+                    : `${t(`books.languages.${languageName}`)} ${t('books.list.booksTitle')}`}
                 </CardTitle>
               </div>
             </Col>

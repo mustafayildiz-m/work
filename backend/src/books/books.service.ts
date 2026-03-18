@@ -121,11 +121,11 @@ export class BooksService {
       });
     }
 
-    // Arama filtreleme - seçili dildeki translation'larda arama yap
+    // Arama filtreleme - sadece kitap adına (başlığa) göre arama
     if (search && search.trim()) {
       const searchTerm = `%${search.trim().toLowerCase()}%`;
       subQuery = subQuery.andWhere(
-        '(LOWER(bookTranslations.title) LIKE :search OR LOWER(book.author) LIKE :search OR LOWER(bookTranslations.description) LIKE :search OR LOWER(bookTranslations.summary) LIKE :search)',
+        'LOWER(bookTranslations.title) LIKE :search',
         { search: searchTerm },
       );
     }

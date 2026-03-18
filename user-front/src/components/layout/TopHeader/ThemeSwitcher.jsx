@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { useLanguage } from '@/context/useLanguageContext';
 import { BsCheckLg, BsSunFill, BsMoonStarsFill, BsCircleHalf } from 'react-icons/bs';
@@ -34,7 +33,6 @@ const THEME_MODES = [
 ];
 
 const ThemeSwitcher = () => {
-    const { status } = useSession();
     const { theme: themeMode, updateTheme } = useLayoutContext();
     const { t, isRTL } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
@@ -52,8 +50,7 @@ const ThemeSwitcher = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    if (status === 'authenticated') return null;
-
+    // Tema değiştirici tüm kullanıcılar için görünür (misafir ve giriş yapmış)
     const toggleDropdown = () => setIsOpen(!isOpen);
 
     const handleThemeChange = (id) => {
@@ -199,6 +196,17 @@ const ThemeSwitcher = () => {
           .theme-switcher-btn {
             width: 30px;
             height: 30px;
+          }
+        }
+
+        @media (max-width: 399.98px) {
+          .theme-switcher-btn {
+            width: 28px;
+            height: 28px;
+          }
+          
+          .theme-icon-wrapper {
+            border-width: 1.5px;
           }
         }
       `}</style>

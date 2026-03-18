@@ -1,0 +1,6 @@
+# Bu klasöre manuel kitap kapakları ekleyin.
+# Dosya adı = book_translations.title ile birebir eşleşmeli.
+# Örnek: BELEGE FÜR DAS WAHRE WORT.png
+#
+# npm run seed:book-covers çalıştırıldığında:
+# - thumbnails/ alt klasörüne 200x300 thumbnail'ler otomatik oluşturulur

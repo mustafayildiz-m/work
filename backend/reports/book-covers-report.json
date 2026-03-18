@@ -1,0 +1,1931 @@
+{
+  "generatedAt": "2026-03-18T13:04:58.292Z",
+  "tablesUpdated": [
+    "books"
+  ],
+  "columnsUpdated": [
+    "coverImage",
+    "coverUrl"
+  ],
+  "summary": {
+    "totalImageFiles": 415,
+    "matchedCount": 187,
+    "unmatchedCount": 228
+  },
+  "matched": [
+    {
+      "id": 92,
+      "title": "BELEGE FÜR DAS WAHRE WORT",
+      "author": "Hüseyn Hilmi Işık",
+      "coverImage": "/uploads/books/BELEGE FÜR DAS WAHRE WORT.png",
+      "languages": [
+        "Almanca"
+      ]
+    },
+    {
+      "id": 93,
+      "title": "BEWEISE FÜR DAS PROPHETENTUM",
+      "author": "Mawlānā Abdurrahmān al-Dschāmī",
+      "coverImage": "/uploads/books/BEWEISE FÜR DAS PROPHETENTUM.png",
+      "languages": [
+        "Almanca"
+      ]
+    },
+    {
+      "id": 94,
+      "title": "DAS GEBETSBUCH",
+      "author": "Hüseyn Hilmi Işık",
+      "coverImage": "/uploads/books/DAS GEBETSBUCH.png",
+      "languages": [
+        "Almanca"
+      ]
+    },
+    {
+      "id": 95,
+      "title": "DER JÜNGSTE TAG UND DAS JENSEITS",
+      "author": "Imām al-Ghazālī",
+      "coverImage": "/uploads/books/DER JÜNGSTE TAG UND DAS JENSEITS.png",
+      "languages": [
+        "Almanca"
+      ]
+    },
+    {
+      "id": 96,
+      "title": "DER WEG DER AHLUS-SUNNA",
+      "author": "Ahmad Cevdet Pascha",
+      "coverImage": "/uploads/books/DER WEG DER AHLUSSUNNA.png",
+      "languages": [
+        "Almanca"
+      ]
+    },
+    {
+      "id": 97,
+      "title": "DIE EDLEN GEFÄHRTEN",
+      "author": "Ahmad al-Fārūqī",
+      "coverImage": "/uploads/books/DIE EDLEN GEFÄHRTEN.png",
+      "languages": [
+        "Almanca"
+      ]
+    },
+    {
+      "id": 100,
+      "title": "GLAUBE UND ISLAM",
+      "author": "Khalid al-Baghdādī",
+      "coverImage": "/uploads/books/GLAUBE UND ISLAM.png",
+      "languages": [
+        "Almanca"
+      ]
+    },
+    {
+      "id": 101,
+      "title": "ISLAM UND CHRISTENTUM",
+      "author": "Ishāq Efendi",
+      "coverImage": "/uploads/books/ISLAM UND CHRISTENTUM.png",
+      "languages": [
+        "Almanca"
+      ]
+    },
+    {
+      "id": 102,
+      "title": "ISLAMISCHE ETHIK",
+      "author": "Alī ibn Amrullah & Muhammad al-Khādimī",
+      "coverImage": "/uploads/books/ISLAMISCHE ETHIK.png",
+      "languages": [
+        "Almanca"
+      ]
+    },
+    {
+      "id": 103,
+      "title": "NAMAZ KİTABI",
+      "author": "Həsən Yavaş",
+      "coverImage": "/uploads/books/NAMAZ KİTABI.png",
+      "languages": [
+        "Azerbaycan Türkçesi"
+      ]
+    },
+    {
+      "id": 104,
+      "title": "İSLAM ƏXLAQI",
+      "author": "Əli ibn Əmrullah – Muhammad Hadimi",
+      "coverImage": "/uploads/books/İSLAM ƏXLAQI.png",
+      "languages": [
+        "Azerbaycan Türkçesi"
+      ]
+    },
+    {
+      "id": 105,
+      "title": "EY OĞUL ELMİHALI",
+      "author": "Hüseyn Hilmi Işık",
+      "coverImage": "/uploads/books/EY OĞUL ELMİHALI.png",
+      "languages": [
+        "Azerbaycan Türkçesi"
+      ]
+    },
+    {
+      "id": 106,
+      "title": "CƏNNƏT YOLU ELMİHALI",
+      "author": "Muhamməd ibn Qutbuddini İznikî",
+      "coverImage": "/uploads/books/CƏNNƏT YOLU ELMİHALI.png",
+      "languages": [
+        "Azerbaycan Türkçesi"
+      ]
+    },
+    {
+      "id": 107,
+      "title": "ইসলামের শত্রুমের জন্য জবাব",
+      "author": "Hüseyn Hilmi Işık",
+      "coverImage": "/uploads/books/ইসলামের শত্রুমের জন্য জবাব.png",
+      "languages": [
+        "Bengalce"
+      ]
+    },
+    {
+      "id": 108,
+      "title": "ঈমান ও ইসলাম",
+      "author": "Hüseyn Hilmi Işık",
+      "coverImage": "/uploads/books/ঈমান ও ইসলাম.png",
+      "languages": [
+        "Bengalce"
+      ]
+    },
+    {
+      "id": 110,
+      "title": "ΙΜΑΝ ΚΑΙ ΙΣΛΑΜ",
+      "author": null,
+      "coverImage": "/uploads/books/ΙΜΑΝ ΚΑΙ ΙΣΛΑΜ.png",
+      "languages": [
+        "Yunanca"
+      ]
+    },
+    {
+      "id": 112,
+      "title": "Η ΚΑΤΗΧΗΣΗ ΤΟΥ ΔΡΟΜΟΥ ΠΡΟΣ ΤΟΝ ΠΑΡΑΔΕΙΣΟ",
+      "author": null,
+      "coverImage": "/uploads/books/Η ΚΑΤΗΧΗΣΗ ΤΟΥ ΔΡΟΜΟΥ ΠΡΟΣ ΤΟΝ ΠΑΡΑΔΕΙΣΟ.png",
+      "languages": [
+        "Yunanca"
+      ]
+    },
+    {
+      "id": 113,
+      "title": "NIỀM TIN VÀ HỒI GIÁO",
+      "author": "MAWLANA DIYA AD-DIN KHALID AL-BAGHDADI",
+      "coverImage": "/uploads/books/NIỀM TIN VÀ HỒI GIÁO.png",
+      "languages": [
+        "Vietnamca"
+      ]
+    },
+    {
+      "id": 114,
+      "title": "ئىمان ۋە ئىسالم",
+      "author": null,
+      "coverImage": "/uploads/books/ئىمان ۋە ئىسالم.png",
+      "languages": [
+        "Uygur Türkçesi"
+      ]
+    },
+    {
+      "id": 115,
+      "title": "信仰和伊斯兰教",
+      "author": null,
+      "coverImage": "/uploads/books/信仰和伊斯兰教.png",
+      "languages": [
+        "Uygur Türkçesi"
+      ]
+    },
+    {
+      "id": 116,
+      "title": "НАМАЗ КИТАБЫ",
+      "author": "Hüseyn Hilmi Işık (Хюсейин Хилми ышік)",
+      "coverImage": "/uploads/books/НАМАЗ КИТАБЫ.png",
+      "languages": [
+        "Türkmence"
+      ]
+    },
+    {
+      "id": 118,
+      "title": "MAADILI YA UISLAM",
+      "author": null,
+      "coverImage": "/uploads/books/MAADILI YA UISLAM.png",
+      "languages": [
+        "Swahili"
+      ]
+    },
+    {
+      "id": 119,
+      "title": "NJIA YA PEPONI",
+      "author": "Muhammad Kutbudyn Izniky (Muhammad bin Qutb-ud-dîn Iznikî)",
+      "coverImage": "/uploads/books/NJIA YA PEPONI.png",
+      "languages": [
+        "Swahili"
+      ]
+    },
+    {
+      "id": 120,
+      "title": "ஈமான் உடன் இஸ் லாம்",
+      "author": "MAWLANA DIYA AD-DIN KHALID AL-BAGHDADI",
+      "coverImage": "/uploads/books/ஈமான் உடன் இஸ் லாம்.jpeg",
+      "languages": [
+        "Tamilce"
+      ]
+    },
+    {
+      "id": 124,
+      "title": "АЙЙУХАЛЬ ВАЛЯД (О сын)",
+      "author": null,
+      "coverImage": "/uploads/books/АЙЙУХАЛЬ ВАЛЯД (О СЫН).png",
+      "languages": [
+        "Rusça"
+      ]
+    },
+    {
+      "id": 126,
+      "title": "Ваххабитская смута",
+      "author": "Sayyid Ahmad Bin Zayni Dahlan (Сайид Ахмад Бин Зайни Дахлан)",
+      "coverImage": "/uploads/books/ВАХХАБИТСКАЯ СМУТА.png",
+      "languages": [
+        "Rusça"
+      ]
+    },
+    {
+      "id": 129,
+      "title": "ПРИЗНАНИЯ АНГЛИЙСКОГО  ШПИОНА",
+      "author": null,
+      "coverImage": "/uploads/books/ПРИЗНАНИЯ АНГЛИЙСКОГО ШПИОНА.png",
+      "languages": [
+        "Rusça"
+      ]
+    },
+    {
+      "id": 130,
+      "title": "О, СЫН МОЙ! ",
+      "author": "Süleyman Bin Ceza (осподином Сулейманом бин Джаза)",
+      "coverImage": "/uploads/books/О, СЫН МОЙ!.png",
+      "languages": [
+        "Rusça"
+      ]
+    },
+    {
+      "id": 131,
+      "title": "ИМАН И ИСЛАМ",
+      "author": "Hüseyn Hilmi Işık (Хюсеин Хилми Ышык)",
+      "coverImage": "/uploads/books/ИМАН и ИСЛАМ.jpeg",
+      "languages": [
+        "Rusça"
+      ]
+    },
+    {
+      "id": 132,
+      "title": "ИСЛАМСКАЯ ЭТИКА",
+      "author": "Alî bin Emrullah & Muhammed Hâdimî (Али бин Эмруллах & Мухаммед Хадими)",
+      "coverImage": "/uploads/books/ИСЛАМСКАЯ ЭТИКА.jpeg",
+      "languages": [
+        "Rusça"
+      ]
+    },
+    {
+      "id": 133,
+      "title": "IMÂN ADDE ISLÂM DÓRMÓ",
+      "author": null,
+      "coverImage": "/uploads/books/IMÂN ADDE ISLÂM DÓRMÓ.png",
+      "languages": [
+        "Rohingya"
+      ]
+    },
+    {
+      "id": 134,
+      "title": "Crença e Islam",
+      "author": "MAWLANA DIYA AD-DIN KHALID AL-BAGHDADI",
+      "coverImage": "/uploads/books/CRENÇA E ISLAM.png",
+      "languages": [
+        "Portekizce"
+      ]
+    },
+    {
+      "id": 135,
+      "title": "O CAMİNHO SUNNİ",
+      "author": null,
+      "coverImage": "/uploads/books/O CAMINHO SUNNI.jpeg",
+      "languages": [
+        "Portekizce"
+      ]
+    },
+    {
+      "id": 136,
+      "title": "MIFTAH-UL-JANNA  (A Chave do Paraíso)",
+      "author": null,
+      "coverImage": "/uploads/books/MIFTAH-UL-JANNA (A Chave do Paraíso).jpeg",
+      "languages": [
+        "Portekizce"
+      ]
+    },
+    {
+      "id": 138,
+      "title": "ЖИЗНЬ ПРОРОКА МУХАММЕДА",
+      "author": null,
+      "coverImage": "/uploads/books/ЖИЗНЬ ПРОРОКА МУХАММЕДА.jpeg",
+      "languages": [
+        "Özbekçe"
+      ]
+    },
+    {
+      "id": 139,
+      "title": "Ибратли воқеалар",
+      "author": "NA",
+      "coverImage": "/uploads/books/ИБРАТЛИ ВОҚЕАЛАР.png",
+      "languages": [
+        "Özbekçe"
+      ]
+    },
+    {
+      "id": 140,
+      "title": "ИНГЛИЗ ЖОСУСИНИНГ ЭЪТИРОФЛАРИ",
+      "author": null,
+      "coverImage": "/uploads/books/ИНГЛИЗ ЖОСУСИНИНГ ЭЪТИРОФЛАРИ.png",
+      "languages": [
+        "Özbekçe"
+      ]
+    },
+    {
+      "id": 141,
+      "title": "ИСЛОМ АХЛОҚИ",
+      "author": "Alî bin Emrullah & Muhammed Hâdimî (Муҳаммад Ходимий & Али бин Амруллоҳ)",
+      "coverImage": "/uploads/books/ИСЛОМ АХЛОҚИ_UZ.png",
+      "languages": [
+        "Özbekçe"
+      ]
+    },
+    {
+      "id": 142,
+      "title": "НАМОЗ КИТОБИ",
+      "author": null,
+      "coverImage": "/uploads/books/НАМОЗ КИТОБИ.png",
+      "languages": [
+        "Özbekçe"
+      ]
+    },
+    {
+      "id": 144,
+      "title": "СИЛСИЛАИ ОЛИЯ ",
+      "author": "Türkistan Kültür Vakfı (Түркістан мәдениет қоры)",
+      "coverImage": "/uploads/books/СИЛСИЛАИ ОЛИЯ.png",
+      "languages": [
+        "Özbekçe"
+      ]
+    },
+    {
+      "id": 146,
+      "title": "IMAN DAN ISLAM",
+      "author": null,
+      "coverImage": "/uploads/books/IMAN DAN ISLAM.png",
+      "languages": [
+        "Malayca"
+      ]
+    },
+    {
+      "id": 148,
+      "title": "믿음과 이슬람",
+      "author": "MAWLANA DIYA AD-DIN KHALID AL-BAGHDADI (메블라나 할리디 바다디)",
+      "coverImage": "/uploads/books/믿음과이슬람.png",
+      "languages": [
+        "Korece"
+      ]
+    },
+    {
+      "id": 150,
+      "title": "ИСЛАМ ДИНИ",
+      "author": null,
+      "coverImage": "/uploads/books/ИСЛАМ ДИНИ.png",
+      "languages": [
+        "Kırgızca"
+      ]
+    },
+    {
+      "id": 151,
+      "title": "КЫЯМАТ жана АКЫРЕТ",
+      "author": null,
+      "coverImage": "/uploads/books/КЫЯМАТ ЖАНА АКЫРЕТ.png",
+      "languages": [
+        "Kırgızca"
+      ]
+    },
+    {
+      "id": 152,
+      "title": "Хазрети Мухаммед алейхиссаламдын өмүрү",
+      "author": "Prof. Dr. Ramazan Ayvallı (Проф. Др. Рамазан Айваллы)",
+      "coverImage": "/uploads/books/ХАЗРЕТИ МУХАММЕД АЛЕЙХИССАЛАМДЫН ӨМҮРҮ.png",
+      "languages": [
+        "Kırgızca"
+      ]
+    },
+    {
+      "id": 155,
+      "title": "ЖАННАТ ЖОЛУ ИЛМИХАЛЫ",
+      "author": "Muḥammad bin Quṭb-ud-dīn Iznikī  (Мухаммед бин Кутбуддин Изники)",
+      "coverImage": "/uploads/books/ЖАННАТ ЖОЛУ ИЛМИХАЛЫ.png",
+      "languages": [
+        "Kırgızca"
+      ]
+    },
+    {
+      "id": 156,
+      "title": "Ибреттүү окуялар",
+      "author": "NA",
+      "coverImage": "/uploads/books/ИБРЕТТҮҮ ОКУЯЛАР.png",
+      "languages": [
+        "Kırgızca"
+      ]
+    },
+    {
+      "id": 157,
+      "title": "ИСЛАМ АХЛАГЫ",
+      "author": "Alî bin Emrullah & Muhammed Hâdimî (Али бин Эмруллах & Мухаммед Хадими)",
+      "coverImage": "/uploads/books/ИСЛАМ АХЛАГЫ.png",
+      "languages": [
+        "Kırgızca"
+      ]
+    },
+    {
+      "id": 159,
+      "title": "НАМАЗ КИТЕБИ",
+      "author": "Hasan Yavaş (ХАСАН ЯВАШ)",
+      "coverImage": "/uploads/books/НАМАЗ КИТЕБИ.png",
+      "languages": [
+        "Kırgızca"
+      ]
+    },
+    {
+      "id": 160,
+      "title": "СИЛСИЛЕ-И АЛИЙЙА",
+      "author": "Collective",
+      "coverImage": "/uploads/books/СИЛСИЛЕИ АЛИЙЙА.png",
+      "languages": [
+        "Kırgızca"
+      ]
+    },
+    {
+      "id": 161,
+      "title": "Сукбаттар",
+      "author": "Collective",
+      "coverImage": "/uploads/books/СУКБАТТАР.png",
+      "languages": [
+        "Kırgızca"
+      ]
+    },
+    {
+      "id": 162,
+      "title": "АҒЫЛШЫН ТЫҢШЫСЫНЫҢ  МОЙЫНДАУЛАРЫ",
+      "author": null,
+      "coverImage": "/uploads/books/АҒЫЛШЫН ТЫҢШЫСЫНЫҢ МОЙЫНДАУЛАРЫ.png",
+      "languages": [
+        "Kazakça"
+      ]
+    },
+    {
+      "id": 163,
+      "title": "ҒИБРАТТЫ ОҚИҒАЛАР",
+      "author": "Türkistan Kültür Vakfı (Түркістан мәдениет қоры)",
+      "coverImage": "/uploads/books/ҒИБРАТТЫ ОҚИҒАЛАР.png",
+      "languages": [
+        "Kazakça"
+      ]
+    },
+    {
+      "id": 166,
+      "title": "ИСЛАМ АХЛАҚЫ",
+      "author": "Muhammad Hatimi (Мұхаммед Хадими)",
+      "coverImage": "/uploads/books/ИСЛАМ АХЛАҚЫ.png",
+      "languages": [
+        "Kazakça"
+      ]
+    },
+    {
+      "id": 168,
+      "title": "ҚИЯМЕТ жане АХИРЕТ",
+      "author": null,
+      "coverImage": "/uploads/books/ҚИЯМЕТ ЖАНЕ АХИРЕТ.png",
+      "languages": [
+        "Kazakça"
+      ]
+    },
+    {
+      "id": 169,
+      "title": "НАМАЗ КІТАБЫ",
+      "author": "Hasan Yavaş (ХАСАН ЯВАШ)",
+      "coverImage": "/uploads/books/НАМАЗ КІТАБЫ.png",
+      "languages": [
+        "Kazakça"
+      ]
+    },
+    {
+      "id": 170,
+      "title": "ХАЗРЕТІ МҰХАММЕД алейһиссаламның ӨМІРІ",
+      "author": null,
+      "coverImage": "/uploads/books/ХАЗРЕТІ МҰХАММЕД АЛЕЙҺИССАЛАМНЫҢ ӨМІРІ.png",
+      "languages": [
+        "Kazakça"
+      ]
+    },
+    {
+      "id": 172,
+      "title": "天国の道 イルミハール",
+      "author": null,
+      "coverImage": "/uploads/books/天国の道 イルミハール.png",
+      "languages": [
+        "Japonca"
+      ]
+    },
+    {
+      "id": 173,
+      "title": "有益な知識",
+      "author": null,
+      "coverImage": "/uploads/books/有益な知識.png",
+      "languages": [
+        "Japonca"
+      ]
+    },
+    {
+      "id": 174,
+      "title": "イーマーンとイスラーム",
+      "author": null,
+      "coverImage": "/uploads/books/イーマーンとイスラーム.png",
+      "languages": [
+        "Japonca"
+      ]
+    },
+    {
+      "id": 175,
+      "title": "皆が必要とする信仰",
+      "author": "Hüseyn Hilmi Işık (フセイン・ヒルミ・ウシュック)",
+      "coverImage": "/uploads/books/皆が必要とする信仰.jpeg",
+      "languages": [
+        "Japonca"
+      ]
+    },
+    {
+      "id": 176,
+      "title": "礼拝の書 ",
+      "author": null,
+      "coverImage": "/uploads/books/礼拝の書.png",
+      "languages": [
+        "Japonca"
+      ]
+    },
+    {
+      "id": 177,
+      "title": "ÎMÂN E ISLÂM",
+      "author": "Mawlânâ Diyâʼ al-Dîn Khâlid al-Baghdâdî",
+      "coverImage": "/uploads/books/ÎMÂN E ISLÂM.png",
+      "languages": [
+        "İtalyanca"
+      ]
+    },
+    {
+      "id": 178,
+      "title": "SUNNIVÄGEN",
+      "author": "Ahmed Cevdet Pasha",
+      "coverImage": "/uploads/books/SUNNIVÄGEN.png",
+      "languages": [
+        "İsveççe"
+      ]
+    },
+    {
+      "id": 179,
+      "title": "CREENCIA E ISLAM",
+      "author": null,
+      "coverImage": "/uploads/books/CREENCIA E ISLAM.png",
+      "languages": [
+        "İspanyolca"
+      ]
+    },
+    {
+      "id": 180,
+      "title": "EL CAMINO SUNNÎ",
+      "author": null,
+      "coverImage": "/uploads/books/EL CAMINO SUNNÎ.png",
+      "languages": [
+        "İspanyolca"
+      ]
+    },
+    {
+      "id": 181,
+      "title": "Sa’âdat-i-Abadiyya LA FELICIDAD ETERNA",
+      "author": null,
+      "coverImage": "/uploads/books/Sa’âdat-i-Abadiyya LA FELICIDAD ETERNA SEXTO FASCÍCULO.jpeg",
+      "languages": [
+        "İspanyolca"
+      ]
+    },
+    {
+      "id": 184,
+      "title": "NO PUDIERON RESPONDER",
+      "author": "Hüseyn Hilmi Işık",
+      "coverImage": "/uploads/books/NO PUDIERON RESPONDER.png",
+      "languages": [
+        "İspanyolca"
+      ]
+    },
+    {
+      "id": 185,
+      "title": "अंग्रेज जासूस के ऐतराफात और अंग्रेजों की इस्लाम के खिलाफ दुश्मनी",
+      "author": null,
+      "coverImage": "/uploads/books/अंग्रेज जासूस के ऐतराफात और अंग्रेजों की इस्लाम के खिलाफ दुश्मनी.png",
+      "languages": [
+        "Hintçe"
+      ]
+    },
+    {
+      "id": 187,
+      "title": "इस्लाम के इल्मे अखलाक",
+      "author": null,
+      "coverImage": "/uploads/books/इस्लाम के इल्मे अखलाक.png",
+      "languages": [
+        "Hintçe"
+      ]
+    },
+    {
+      "id": 189,
+      "title": "नबुव्वत का सबूत",
+      "author": null,
+      "coverImage": "/uploads/books/नबुव्वत का सबूत.png",
+      "languages": [
+        "Hintçe"
+      ]
+    },
+    {
+      "id": 190,
+      "title": "नमाज़ की किताब",
+      "author": null,
+      "coverImage": "/uploads/books/नमाज़ की किताब.png",
+      "languages": [
+        "Hintçe"
+      ]
+    },
+    {
+      "id": 191,
+      "title": "SEADET-İ EBEDİYYE  ENDLESS BLISS  FIRST FASCICLE",
+      "author": null,
+      "coverImage": "/uploads/books/SEÂDETI EBEDIYYE ENDLESS BLISS FIRST FASCICLE.png",
+      "languages": [
+        "İngilizce"
+      ]
+    },
+    {
+      "id": 192,
+      "title": "SE’ÂDET-İ EBEDİYYE  ENDLESS BLISS  SECOND FASCICLE",
+      "author": null,
+      "coverImage": "/uploads/books/SEÂDETI EBEDIYYE ENDLESS BLISS SECOND FASCICLE.png",
+      "languages": [
+        "İngilizce"
+      ]
+    },
+    {
+      "id": 196,
+      "title": "SE’ÂDET-İ EBEDİYYE  ENDLESS BLISS  SIXTH FASCICLE",
+      "author": null,
+      "coverImage": "/uploads/books/SEÂDETI EBEDIYYE ENDLESS BLISS SIXTH FASCICLE.png",
+      "languages": [
+        "İngilizce"
+      ]
+    },
+    {
+      "id": 197,
+      "title": "THE PROOF OF PROPHETHOOD",
+      "author": null,
+      "coverImage": "/uploads/books/THE PROOF OF PROPHETHOOD.png",
+      "languages": [
+        "İngilizce"
+      ]
+    },
+    {
+      "id": 198,
+      "title": "ANSWER TO AN ENEMY OF ISLAM",
+      "author": null,
+      "coverImage": "/uploads/books/ANSWER TO AN ENEMY OF ISLAM.png",
+      "languages": [
+        "İngilizce"
+      ]
+    },
+    {
+      "id": 199,
+      "title": "ADVICE FOR THE MUSLIM",
+      "author": null,
+      "coverImage": "/uploads/books/ADVICE FOR THE MUSLIM.png",
+      "languages": [
+        "İngilizce"
+      ]
+    },
+    {
+      "id": 200,
+      "title": "ISLAM AND  CHRISTIANITY",
+      "author": null,
+      "coverImage": "/uploads/books/ISLAM AND CHRISTIANITY.png",
+      "languages": [
+        "İngilizce"
+      ]
+    },
+    {
+      "id": 201,
+      "title": "Could Not Answer",
+      "author": null,
+      "coverImage": "/uploads/books/COULD NOT ANSWER.png",
+      "languages": [
+        "İngilizce"
+      ]
+    },
+    {
+      "id": 202,
+      "title": "CONFESSIONS  OF  A BRITISH SPY  AND  BRITISH ENMITY AGAINST ISLAM",
+      "author": null,
+      "coverImage": "/uploads/books/CONFESSIONS OF A BRITISH SPY AND BRITISH ENMITY AGAINST ISLAM.png",
+      "languages": [
+        "İngilizce"
+      ]
+    },
+    {
+      "id": 203,
+      "title": "DOCUMENTS  of the  RIGHT WORD",
+      "author": null,
+      "coverImage": "/uploads/books/DOCUMENTS OF THE RIGHT WORD.png",
+      "languages": [
+        "İngilizce"
+      ]
+    },
+    {
+      "id": 204,
+      "title": "ETHICS OF ISLAM",
+      "author": null,
+      "coverImage": "/uploads/books/ETHICS OF ISLAM.png",
+      "languages": [
+        "İngilizce"
+      ]
+    },
+    {
+      "id": 206,
+      "title": "ISLAM’S REFORMERS",
+      "author": null,
+      "coverImage": "/uploads/books/ISLAM&#39;S REFORMERS.png",
+      "languages": [
+        "İngilizce"
+      ]
+    },
+    {
+      "id": 207,
+      "title": "the RISING and the  HEREAFTER",
+      "author": null,
+      "coverImage": "/uploads/books/THE RISING AND THE HEREAFTER.png",
+      "languages": [
+        "İngilizce"
+      ]
+    },
+    {
+      "id": 209,
+      "title": "O SON",
+      "author": null,
+      "coverImage": "/uploads/books/O SON.png",
+      "languages": [
+        "İngilizce"
+      ]
+    },
+    {
+      "id": 210,
+      "title": "BELIEF AND ISLAM",
+      "author": "test",
+      "coverImage": "/uploads/books/BELIEF AND ISLAM.jpeg",
+      "languages": [
+        "İngilizce",
+        "Arapça"
+      ]
+    },
+    {
+      "id": 217,
+      "title": "THE SUNNI PATH",
+      "author": null,
+      "coverImage": "/uploads/books/THE SUNNI PATH.png",
+      "languages": [
+        "İngilizce"
+      ]
+    },
+    {
+      "id": 221,
+      "title": "L’évidence de la Prophétie",
+      "author": "Ahmed Fârûkî Serhendî",
+      "coverImage": "/uploads/books/L’ÉVIDENCE DE LA PROPHÉTIE.png",
+      "languages": [
+        "Fransızca"
+      ]
+    },
+    {
+      "id": 223,
+      "title": "AL-MUNQID MIN ADDALÂL",
+      "author": null,
+      "coverImage": "/uploads/books/ALMUNQID MIN ADDALÂL.png",
+      "languages": [
+        "Fransızca"
+      ]
+    },
+    {
+      "id": 224,
+      "title": "FOI ET ISLAM",
+      "author": null,
+      "coverImage": "/uploads/books/FOI ET ISLAM.png",
+      "languages": [
+        "Fransızca"
+      ]
+    },
+    {
+      "id": 225,
+      "title": "LIVRE DE LA PRIÈRE",
+      "author": null,
+      "coverImage": "/uploads/books/LIVRE DE LA PRIÈRE.png",
+      "languages": [
+        "Fransızca"
+      ]
+    },
+    {
+      "id": 226,
+      "title": "ISLAM et CHRISTIANISME",
+      "author": "M. Siddık Gümüş",
+      "coverImage": "/uploads/books/ISLAM ET CHRISTIANISME.png",
+      "languages": [
+        "Fransızca"
+      ]
+    },
+    {
+      "id": 228,
+      "title": "LES CONFESSIONS DE L’ESPION BRITANNIQUE",
+      "author": "M. Sıddık Gümüş",
+      "coverImage": "/uploads/books/LES CONFESSIONS DE L’ESPION BRITANNIQUE.png",
+      "languages": [
+        "Fransızca"
+      ]
+    },
+    {
+      "id": 231,
+      "title": "学习礼拜指南",
+      "author": "Hüseyn Hilmi Işık",
+      "coverImage": "/uploads/books/学习礼拜指南.png",
+      "languages": [
+        "Çince"
+      ]
+    },
+    {
+      "id": 232,
+      "title": "天园之路",
+      "author": "Muhammed bin Qutb-ud-din Iznikî",
+      "coverImage": "/uploads/books/天园之路.png",
+      "languages": [
+        "Çince"
+      ]
+    },
+    {
+      "id": 233,
+      "title": "伊斯兰教道德规范",
+      "author": "Alî bin Emrullah / Muhammed Hâdimî",
+      "coverImage": "/uploads/books/伊斯兰教道德规范.png",
+      "languages": [
+        "Çince"
+      ]
+    },
+    {
+      "id": 235,
+      "title": "有利的知识",
+      "author": "Hüseyn Hilmi Işık",
+      "coverImage": "/uploads/books/有利的知识.png",
+      "languages": [
+        "Çince"
+      ]
+    },
+    {
+      "id": 237,
+      "title": "MIFTAHUL JANNAH",
+      "author": "Muhammad bin Qutbuddīn İznīkī",
+      "coverImage": "/uploads/books/MIFTAHUL JANNAH.png",
+      "languages": [
+        "Endonezyaca"
+      ]
+    },
+    {
+      "id": 238,
+      "title": "ITSBAT AN-NUBUWWA",
+      "author": "Hüseyn Hilmi Işık",
+      "coverImage": "/uploads/books/ITSBAT ANNUBUWWA.png",
+      "languages": [
+        "Endonezyaca"
+      ]
+    },
+    {
+      "id": 239,
+      "title": "PENGAKUAN SEORANG MATA-MATA INGGRIS",
+      "author": "Hüseyn Hilmi Işık",
+      "coverImage": "/uploads/books/PENGAKUAN SEORANG MATAMATA INGGRIS.png",
+      "languages": [
+        "Endonezyaca"
+      ]
+    },
+    {
+      "id": 240,
+      "title": "TERJEMAHAN BUKU SHALAT LENGKAP",
+      "author": null,
+      "coverImage": "/uploads/books/TERJEMAHANBUKUSHALATLENGKAP.png",
+      "languages": [
+        "Endonezyaca"
+      ]
+    },
+    {
+      "id": 241,
+      "title": "KIAMAT DAN AKHIRAT",
+      "author": "Hüseyn Hilmi Işık",
+      "coverImage": "/uploads/books/KIAMAT DAN AKHIRAT.png",
+      "languages": [
+        "Endonezyaca"
+      ]
+    },
+    {
+      "id": 242,
+      "title": "JALAN ISLAM SUNNI",
+      "author": "Hüseyn Hilmi Işık",
+      "coverImage": "/uploads/books/JALAN ISLAM SUNNI.png",
+      "languages": [
+        "Endonezyaca"
+      ]
+    },
+    {
+      "id": 244,
+      "title": "ISLAM dan KRISTEN",
+      "author": "Hüseyn Hilmi Işık",
+      "coverImage": "/uploads/books/ISLAM DAN KRISTEN.png",
+      "languages": [
+        "Endonezyaca"
+      ]
+    },
+    {
+      "id": 245,
+      "title": "MENGAPA MEREKA MENJADI MUSLIM",
+      "author": "M. Siddik Gümüş",
+      "coverImage": "/uploads/books/MENGAPA MEREKA MENJADI MUSLIM.png",
+      "languages": [
+        "Endonezyaca"
+      ]
+    },
+    {
+      "id": 246,
+      "title": "AKHLAQ-AKHLAQ DALAM ISLAM",
+      "author": "Ali bin Emrullah Muhammed Hadimi",
+      "coverImage": "/uploads/books/AKHLAQAKHLAQ DALAM ISLAM.png",
+      "languages": [
+        "Endonezyaca"
+      ]
+    },
+    {
+      "id": 247,
+      "title": "PARA REFORMIS  ISLAM",
+      "author": null,
+      "coverImage": "/uploads/books/PARA REFORMİS ISLAM.png",
+      "languages": [
+        "Endonezyaca"
+      ]
+    },
+    {
+      "id": 248,
+      "title": "NAMÂZ KİTÂBI",
+      "author": null,
+      "coverImage": "/uploads/books/NAMÂZ KİTÂBI.png",
+      "languages": [
+        "Türkçe"
+      ]
+    },
+    {
+      "id": 249,
+      "title": "CEVÂB VEREMEDİ",
+      "author": null,
+      "coverImage": "/uploads/books/CEVÂB VEREMEDİ.png",
+      "languages": [
+        "Türkçe"
+      ]
+    },
+    {
+      "id": 252,
+      "title": "ESHÂB-I KİRÂM",
+      "author": null,
+      "coverImage": "/uploads/books/ESHÂBI KİRÂM.png",
+      "languages": [
+        "Türkçe"
+      ]
+    },
+    {
+      "id": 253,
+      "title": "EY OĞUL",
+      "author": "Süleyman Bin Ceza",
+      "coverImage": "/uploads/books/EY OĞUL.jpeg",
+      "languages": [
+        "Türkçe"
+      ]
+    },
+    {
+      "id": 254,
+      "title": "FÂİDELİ BİLGİLER",
+      "author": null,
+      "coverImage": "/uploads/books/FÂİDELİ BİLGİLER.png",
+      "languages": [
+        "Türkçe"
+      ]
+    },
+    {
+      "id": 256,
+      "title": "HAK SÖZÜN VESÎKALARI",
+      "author": null,
+      "coverImage": "/uploads/books/HAK SÖZÜN VESÎKALARI.png",
+      "languages": [
+        "Türkçe"
+      ]
+    },
+    {
+      "id": 258,
+      "title": "HERKESE LÂZIM OLAN  ÎMÂN",
+      "author": null,
+      "coverImage": "/uploads/books/HERKESE LÂZIM OLAN ÎMÂN.png",
+      "languages": [
+        "Türkçe"
+      ]
+    },
+    {
+      "id": 260,
+      "title": "İSLÂM AHLÂKI",
+      "author": null,
+      "coverImage": "/uploads/books/İSLÂM AHLÂKI.png",
+      "languages": [
+        "Türkçe"
+      ]
+    },
+    {
+      "id": 261,
+      "title": "KIYÂMET ve ÂHIRET",
+      "author": null,
+      "coverImage": "/uploads/books/KIYÂMET VE ÂHIRET.png",
+      "languages": [
+        "Türkçe"
+      ]
+    },
+    {
+      "id": 262,
+      "title": "KIYMETSİZ YAZILAR",
+      "author": null,
+      "coverImage": "/uploads/books/KIYMETSİZ YAZILAR.png",
+      "languages": [
+        "Türkçe"
+      ]
+    },
+    {
+      "id": 263,
+      "title": "MAHZEN-ÜL  ULÛM",
+      "author": null,
+      "coverImage": "/uploads/books/MAHZENÜLULÛM.png",
+      "languages": [
+        "Türkçe"
+      ]
+    },
+    {
+      "id": 264,
+      "title": "MEKTÛBÂT TERCEMESİ",
+      "author": null,
+      "coverImage": "/uploads/books/MEKTÛBAT TERCEMESİ.png",
+      "languages": [
+        "Türkçe"
+      ]
+    },
+    {
+      "id": 270,
+      "title": "الخيرات الحسان",
+      "author": null,
+      "coverImage": "/uploads/books/الخيرات الحسان.png",
+      "languages": [
+        "Urduca"
+      ]
+    },
+    {
+      "id": 271,
+      "title": "عقائد نظامية",
+      "author": null,
+      "coverImage": "/uploads/books/عقائد نظاميه.png",
+      "languages": [
+        "Urduca"
+      ]
+    },
+    {
+      "id": 272,
+      "title": "المدارج السنية",
+      "author": null,
+      "coverImage": "/uploads/books/المدارج السنية.png",
+      "languages": [
+        "Urduca"
+      ]
+    },
+    {
+      "id": 273,
+      "title": "মুসলিমদের প্রতি হিতোপদেশ",
+      "author": "Hüseyn Hilmi Işık",
+      "coverImage": "/uploads/books/মুসলিমদের প্রতি হিতোপদেশ.png",
+      "languages": [
+        "Bengalce"
+      ]
+    },
+    {
+      "id": 274,
+      "title": "মিফতাহুল জান্নাহ",
+      "author": "Muhammad ibn Qutbuddin al-Izniki",
+      "coverImage": "/uploads/books/মিফতাহুল জান্নাহ.png",
+      "languages": [
+        "Bengalce"
+      ]
+    },
+    {
+      "id": 275,
+      "title": "مكتوبات امام رباني 1 ",
+      "author": null,
+      "coverImage": "/uploads/books/مكتوبات إمام رباني.jpeg",
+      "languages": [
+        "Farsça"
+      ]
+    },
+    {
+      "id": 277,
+      "title": "منتخبات از مكتوبات امام رباني",
+      "author": null,
+      "coverImage": "/uploads/books/منتخبات از مكتوبات امام ربani.png",
+      "languages": [
+        "Farsça"
+      ]
+    },
+    {
+      "id": 279,
+      "title": "مبدأ و معاد",
+      "author": null,
+      "coverImage": "/uploads/books/مبدأ ومعاد.png",
+      "languages": [
+        "Farsça"
+      ]
+    },
+    {
+      "id": 281,
+      "title": "رياض الناصحين",
+      "author": null,
+      "coverImage": "/uploads/books/رياض النّاصحين.jpeg",
+      "languages": [
+        "Farsça"
+      ]
+    },
+    {
+      "id": 282,
+      "title": "مكاتيب شريفة",
+      "author": null,
+      "coverImage": "/uploads/books/مكاتيب شريفه.png",
+      "languages": [
+        "Farsça"
+      ]
+    },
+    {
+      "id": 283,
+      "title": "در المعارف",
+      "author": null,
+      "coverImage": "/uploads/books/درّ المعارف.jpeg",
+      "languages": [
+        "Farsça"
+      ]
+    },
+    {
+      "id": 287,
+      "title": "مفتاح النجاة",
+      "author": null,
+      "coverImage": "/uploads/books/مفتاح النجاة.png",
+      "languages": [
+        "Farsça"
+      ]
+    },
+    {
+      "id": 288,
+      "title": "ميزان الموازين",
+      "author": null,
+      "coverImage": "/uploads/books/ميزان الموازين.png",
+      "languages": [
+        "Farsça"
+      ]
+    },
+    {
+      "id": 289,
+      "title": "مقامات مظهرية",
+      "author": null,
+      "coverImage": "/uploads/books/مقامات مظهريه.png",
+      "languages": [
+        "Farsça"
+      ]
+    },
+    {
+      "id": 290,
+      "title": "مناهج العباد",
+      "author": null,
+      "coverImage": "/uploads/books/مناهج العباد.png",
+      "languages": [
+        "Farsça"
+      ]
+    },
+    {
+      "id": 293,
+      "title": "مسموعات",
+      "author": null,
+      "coverImage": "/uploads/books/٠ مسموعات.png",
+      "languages": [
+        "Farsça"
+      ]
+    },
+    {
+      "id": 294,
+      "title": "١۸- رسالهء تورپشتى",
+      "author": null,
+      "coverImage": "/uploads/books/رسالهء تورپشتى.png",
+      "languages": [
+        "Farsça"
+      ]
+    },
+    {
+      "id": 295,
+      "title": "ترغيب الصلاة",
+      "author": null,
+      "coverImage": "/uploads/books/ترغيب الصلاة.png",
+      "languages": [
+        "Farsça"
+      ]
+    },
+    {
+      "id": 296,
+      "title": "أنيس الطالبين",
+      "author": null,
+      "coverImage": "/uploads/books/أنيس الطالبين.png",
+      "languages": [
+        "Farsça"
+      ]
+    },
+    {
+      "id": 297,
+      "title": "شواهد النبوة",
+      "author": null,
+      "coverImage": "/uploads/books/شواهد النبوة.png",
+      "languages": [
+        "Farsça"
+      ]
+    },
+    {
+      "id": 298,
+      "title": "عمد المقامات ",
+      "author": null,
+      "coverImage": "/uploads/books/عمدة المقامات.png",
+      "languages": [
+        "Farsça"
+      ]
+    },
+    {
+      "id": 302,
+      "title": "الإيمان والإسلام",
+      "author": null,
+      "coverImage": "/uploads/books/الايمان والإسلام.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 303,
+      "title": "نخبة اللالئ لشرح بدء الأمالي",
+      "author": null,
+      "coverImage": "/uploads/books/نخبة اللآلي لشرح بدء الأمالي.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 304,
+      "title": "الحديقة الندية شرح الطريقة المحمدية الجزء الأول",
+      "author": null,
+      "coverImage": "/uploads/books/الحديقة الندية شرح الطريقة المحمدية.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 305,
+      "title": "علماء المسلمين وجهلة الوهابيين",
+      "author": null,
+      "coverImage": "/uploads/books/علماء المسلمين وجهلة الوهابيين.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 307,
+      "title": "هدية المهديين",
+      "author": null,
+      "coverImage": "/uploads/books/هدية المهديين.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 308,
+      "title": "المنقذ من الضلال ويليه إلجام العوام عن علم الكلام",
+      "author": null,
+      "coverImage": "/uploads/books/المنقذ من الضلال ويليه إلجام العوام.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 312,
+      "title": "خلاصة التحقيق في بيان حكم التقليد والتلفيق",
+      "author": null,
+      "coverImage": "/uploads/books/خلاصة التحقيق في بيان حكم التقليدوالتلفيق.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 313,
+      "title": "المنحة الوهبية في رد الوهابية",
+      "author": null,
+      "coverImage": "/uploads/books/المنحة الوهبية في ردّ الوهابية.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 314,
+      "title": "البصائر لمنكري التوسل بأهل المقابر",
+      "author": null,
+      "coverImage": "/uploads/books/البصائر لمنكري التوسل باهل المقابر.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 315,
+      "title": "فتنة الوهابية والصواعق الالهية",
+      "author": null,
+      "coverImage": "/uploads/books/فتنة الوهابية والصواعق الالهية.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 316,
+      "title": "تطهير الفؤاد ويليه شفاء السقام",
+      "author": null,
+      "coverImage": "/uploads/books/٠ تطهير الفؤاد ويليه شفاء السقام.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 318,
+      "title": "الحبل المتين في إتباع السلف الصاحين",
+      "author": null,
+      "coverImage": "/uploads/books/الحبل المتين في إتباع السلف الصالحين.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 319,
+      "title": "خلاصة الكلام في أمراء البلد الحرام",
+      "author": null,
+      "coverImage": "/uploads/books/خلاصة الكلام في أمراء البلد الحرام لزيني دحلان.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 320,
+      "title": "التوسل بالنبي والصالحين",
+      "author": null,
+      "coverImage": "/uploads/books/التوسل بالنبي وبالصالحين.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 321,
+      "title": "الدرر السنية في الرد على الوهابية",
+      "author": null,
+      "coverImage": "/uploads/books/الدرر السنية في الردّ على الوهابية.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 322,
+      "title": "سبيل النجاة عن بدعة أهل الزيغ والضلال ",
+      "author": null,
+      "coverImage": "/uploads/books/سبيل النجاة عن بدعة أهل الزيغ والضلالة.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 323,
+      "title": "كتاب الإنصاف ويليه عقد الجيد",
+      "author": null,
+      "coverImage": "/uploads/books/كتاب الإنصاف ويليه عقد الجيد.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 324,
+      "title": "المستند المعتمد بناء نجاة الأبد",
+      "author": null,
+      "coverImage": "/uploads/books/المستند المعتمد بناء نجاة الأبد.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 327,
+      "title": "الفقه على المذاهب الأربعة 1",
+      "author": null,
+      "coverImage": "/uploads/books/الفقه على المذاهب الأربعة۱.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 331,
+      "title": "البريقة شرح الطريقة 1 ",
+      "author": null,
+      "coverImage": "/uploads/books/البريقة شرح الطريقة ۱.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 332,
+      "title": "البريقة شرح الطريقة 2 ويليه منهل الواردين ",
+      "author": null,
+      "coverImage": "/uploads/books/البريقة شرح الطريقة۲ ويليه منهل الواردين.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 333,
+      "title": "السعادة الأبدية فيما جاء به النقشبندية",
+      "author": null,
+      "coverImage": "/uploads/books/السعادة الأبدية فيما جاء به النقشبندية.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 334,
+      "title": "مفتاح الفلاح ويليه خطبة عيد الفطر",
+      "author": null,
+      "coverImage": "/uploads/books/مفتاح الفلاح ويليه خطبة عيد الفطر.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 335,
+      "title": "مفاتيح الجنان شرح شرعة الإسلام",
+      "author": null,
+      "coverImage": "/uploads/books/٠ مفاتيح الجنان شرح شرعة الإسلام.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 336,
+      "title": "الأنوار المحمدية من المواهب اللدنية",
+      "author": null,
+      "coverImage": "/uploads/books/الأنوار المحمدية من المواهب اللدنية.jpeg",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 337,
+      "title": "حجة الله على العالمين في معجزات سيد المرسلين ",
+      "author": null,
+      "coverImage": "/uploads/books/حجة الله على العالمين في معجزات سيد المرسلين.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 338,
+      "title": "إثبات النبوة ويليه الدولة المكية بالمادة الغيبية",
+      "author": null,
+      "coverImage": "/uploads/books/إثبات النبوة ويليه الدولة المكية بالمادة الغيبية.jpeg",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 339,
+      "title": "النعمة الكبرى على العالم في مولد سيد ولد آدم",
+      "author": null,
+      "coverImage": "/uploads/books/النعمة الكبرى على العالم في مولد سيد ولد آدم.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 340,
+      "title": "تسهيل المنافع وبهامشه الطب النبوي",
+      "author": null,
+      "coverImage": "/uploads/books/تسهيل المنافع وبهامشه الطب النبوي.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 341,
+      "title": "الدولة العثمانية من كتاب الفتوحات الإسلامية",
+      "author": null,
+      "coverImage": "/uploads/books/الدولة العثمانية من كتاب الفتوحات الإسلامية.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 342,
+      "title": "كتاب الصلاة",
+      "author": null,
+      "coverImage": "/uploads/books/كتاب الصلاة.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 343,
+      "title": "الصواعق المحرقة في الرد على أهل البدع والزندقة",
+      "author": null,
+      "coverImage": "/uploads/books/الصواعق المحرقة في الردّ على أهل البدع والزندقة.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 344,
+      "title": "الحقائق الإسلامية في الرد على مزاعم الوهابية",
+      "author": null,
+      "coverImage": "/uploads/books/٠ الحقائق الإسلامية في الرد على المزاعم الوهابية.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 346,
+      "title": "الصراط المستقيم في رد التصارى",
+      "author": null,
+      "coverImage": "/uploads/books/الصراط المستقيم في رد النصارى.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 348,
+      "title": "طريق النجاة ويليه المكتوبات المنتخبة لمحمد معصوم",
+      "author": null,
+      "coverImage": "/uploads/books/طريق النجاة ويليه المكتوبات المنتخبة لمحمد معصوم.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 349,
+      "title": "القول الفصل شرح الفقه الأكبر للإمام الأعظم",
+      "author": null,
+      "coverImage": "/uploads/books/القول الفصل شرح الفقه الأكبر للامام الاعظم.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 351,
+      "title": "إعترافات الجاسوس الإنجليزي",
+      "author": null,
+      "coverImage": "/uploads/books/إعترافات الجاسوس الانكليزي.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 352,
+      "title": "غاية التحقيق ونهاية التدقيق للشيخ السندي",
+      "author": null,
+      "coverImage": "/uploads/books/غاية التحقيق ونهاية التدقيق للشيخ السندي.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 353,
+      "title": "المعلومات النافعة لأحمد جودت باشا",
+      "author": null,
+      "coverImage": "/uploads/books/المعلومات النافعة لأحمد جودت باشا.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 354,
+      "title": "مصباح الأنام وجلاء الظلام في رد شبه البدعي",
+      "author": null,
+      "coverImage": "/uploads/books/٠ مصباح الأنام وجلاء الظلام في ردّ شبه البدعي.png",
+      "languages": [
+        "Arapça"
+      ]
+    },
+    {
+      "id": 365,
+      "title": "SEVGİLİ PEYĞƏMBƏRİM",
+      "author": "Prof. Dr. Ramazan Ayvallı",
+      "coverImage": "/uploads/books/SEVGİLİ PEYĞƏMBƏRİM.png",
+      "languages": [
+        "Azerbaycan Türkçesi"
+      ]
+    },
+    {
+      "id": 366,
+      "title": "SƏADƏTİ ƏBƏDİYYƏ",
+      "author": "NA",
+      "coverImage": "/uploads/books/SƏADƏTİ ƏBƏDİYYƏ.png",
+      "languages": [
+        "Azerbaycan Türkçesi"
+      ]
+    },
+    {
+      "id": 372,
+      "title": "Mein geliebter Prophet",
+      "author": "Prof. Dr. Ramazan Ayvallı",
+      "coverImage": "/uploads/books/MEIN GELIEBTER PROPHET.png",
+      "languages": [
+        "Almanca"
+      ]
+    },
+    {
+      "id": 374,
+      "title": "MI AMADO PROFETA",
+      "author": "Prof. Dr. Ramazan Ayvallı",
+      "coverImage": "/uploads/books/MI AMADO PROFETA.png",
+      "languages": [
+        "İspanyolca"
+      ]
+    },
+    {
+      "id": 375,
+      "title": "Min älskade Profet",
+      "author": "Prof. Dr. Ramazan Ayvallı",
+      "coverImage": "/uploads/books/MIN ÄLSKADE PROFET.png",
+      "languages": [
+        "İsveççe"
+      ]
+    },
+    {
+      "id": 376,
+      "title": "Mio Amato Profet",
+      "author": null,
+      "coverImage": "/uploads/books/MIO AMATO PROFETA.png",
+      "languages": [
+        "İtalyanca"
+      ]
+    }
+  ],
+  "unmatched": [
+    "(LA LLAVE DEL PARAÍSO) MIFTAHUL JANNAH.png",
+    "1.png",
+    "2.png",
+    "27.DİNİ SÖZLÜK TÜRKÇE.png",
+    "4.jpg",
+    "5.jpg",
+    "6.jpg",
+    "A BIOGRAPHY OF IMÂMIAHMAD RABBÂNÎ.png",
+    "A MINDENKINEK SZÜKSÉGES HIT.jpeg",
+    "BEKENTENISSEN VAN EEN BRITSE SPION.png",
+    "BELIEF AND ISLAM.png",
+    "BESIMI DHE ISLAMI.png",
+    "BOEK DER GEBED.png",
+    "CALEA EHLI SUNNET.png",
+    "CARTE DE RUGĂCIUNE.jpeg",
+    "CHEIA PORȚII CĂTRE PARADIS.png",
+    "CHIKHULUPILIRO NDI CHISILAMU.png",
+    "CONCEIT (KIBR).png",
+    "CREDINȚA ȘI ISLAMUL.png",
+    "Çelësi i Xhenetit.jpeg",
+    "DE LAATSTE DAG EN HET HIERNAMAALS.png",
+    "DIE EWIGE GLÜCKSELIGKEIT.png",
+    "DINI YA KIISLAM.png",
+    "DÜRRÜL ME’ÂRİF.png",
+    "Dragul Meu Profet.jpeg",
+    "ELMÜNKIZÜ MİNEDDALÂL.png",
+    "FASTING IN RAMADÂN.png",
+    "FURAHA JANNADA Buugga Yar ee Ku Saabsan Jidka Jannada.jpeg",
+    "GELOOF EN ISLAM.png",
+    "GENCLERİN REHBERİ.png",
+    "GESTÄNDNISSE EINES BRITISCHEN SPIONS.png",
+    "HANİMLARA REHBER BİLGİLER.png",
+    "HET GEBEDSBOEK.png",
+    "HET PAD VAN DE AHL ALSOENNA.png",
+    "HET SOENNITISCHE PAD.jpeg",
+    "IIMAANKA IYO ISLAAMKA_SO.png",
+    "ILMIHALI RRUGA E XHENNETIT.png",
+    "IM I DASHUR I DËRGUARI I ALLAHUT.png",
+    "IMAN DAN ISLAM_MS.png",
+    "IMAN I ISLAM.png",
+    "IMANI DA MUSULUNCI WALLAFAR FASSARAR LITTAFIN I’TIQÂD-NÂMA.jpeg",
+    "IMANI DA MUSULUNCI.png",
+    "IMANI I NEVOJSHËM PËR TË GJITHË.png",
+    "IMÂN NA UISLAM.png",
+    "ISLAM AND THE WOMAN.png",
+    "ISPOVIJESTI JEDNOG ENGLESKOG ŠPIJUNA I ENGLESKO NEPRIJATELJSTVO PROTIV ISLAMA.png",
+    "Imaanii fi Islaamummaa.jpeg",
+    "ÌGBÀGBỌÀTI ISLAM_YO.png",
+    "ÎMÂN I ISLAM.jpeg",
+    "İNGİLİZ CÂSÛSUNUN İ`TİRÂFLARI.png",
+    "İslâm Âlimleri ve Evliyâlar Biyogrofisi.jpeg",
+    "JAWABAN KEPADA SEORANG MUSUH ISLAM.png",
+    "JEALOUSY (HASAD).png",
+    "KIYI WA KHOMO LA KU JANNA.png",
+    "KNJIGA O NAMAZU.png",
+    "Kyrgyzменин кымбаттуу пайгамбар Хазрети Мухаммед алейхиссаламдын өмүрү_KY.png",
+    "L&#39;ÉTHIQUE ISLAMIQUE.png",
+    "LA RÉSURRECTION ET L’AUDELÀ.png",
+    "LA VOIE D&#39; AHLUSSUNNA.png",
+    "LAFWA AK ISLAM.jpeg",
+    "LIBRI I NAMAZIT.png",
+    "LIBRO DEL NAMÂZ.png",
+    "La Llave del Paraíso.jpeg",
+    "La Voie d&#39; Ahlus-Sunna(Ehli Sunnet Yolu).jpeg",
+    "MENÂKIBI ÇİHÂR YÂRİ GÜZÎN.png",
+    "MEU AMAD PROPHETA (SALALAHU &#39;ALAIHI UA SALAM).png",
+    "MIFTAHULJANNA (BOOKLET FOR WAY TO PARADISE).png",
+    "MIFTAHULJANNA (EKISUMULUZO KY&#39;EJJANNA).png",
+    "MIFTAHULJANNA.png",
+    "MIN ELSKEDE PROFET.png",
+    "MİZRAKLİ İLMİHAL.png",
+    "MON BIENAIMÉ PROPHÈTE.png",
+    "MORALI ISLAM.jpeg",
+    "MÓJ UMIŁOWANY PROROK.png",
+    "MUSLIM RITUAL PRAYERS (KITAB ASSALAT).png",
+    "MY BELOVED PROPHET.png",
+    "NABIKU TERCINTA.png",
+    "NABIKU TERİNCTA.png",
+    "NIE POTRAFIŁ ODPOWIEDZIEĆ.png",
+    "NIJE MOGAO ODGOVORITI.png",
+    "NKWENYE NA ISLAM.jpeg",
+    "ODGOVOR NEPRIJATELJU ISLAMA.png",
+    "Olufẹ mi Anobi (sallallahu ‘alaihi wa sallam)_YO.png",
+    "POSLJEDNJI ALLAHOV POSLANIK Sallallahu alejhi ve sellem.jpeg",
+    "PRAYER BOOK.png",
+    "PS_ايمان او اسلام.png",
+    "PUT EHLI SUNNETA.png",
+    "QIRASHADII JAAJUUSKA INGIRIISKA IYO CADAWTINIMADA INGIRIISKA EE ISLAAMKA U HAYO.png",
+    "RRËFİMET E SPIUNIT ANGLEZ.png",
+    "SAHABA &#39;THE BLESSED&#39;.png",
+    "SEÂDETI EBEDIYYE ENDLESS BLISS FIFTH FASCICLE.png",
+    "SEÂDETI EBEDIYYE ENDLESS BLISS FOURTH FASCICLE.png",
+    "SEÂDETI EBEDIYYE ENDLESS BLISS THIRD FASCICLE.png",
+    "SUPREME EPISTLES.png",
+    "Sevgili_peygamberim_TR.png",
+    "Susi Ng Daan Patungong Paraiso.jpeg",
+    "ŞEVÂHİDÜN NÜBÜVVE.png",
+    "TAM İLMİHÂL SE`ÂDETİ EBEDİYYE.png",
+    "THE GLAD TIDING OF PROPHETHOOD SHAWAHID.png",
+    "THE NAMÂZ OF ’IYD.jpeg",
+    "TICĪBA UN ISLĀMS.jpeg",
+    "TRO OG ISLAM EN KOMMENTERT OVERSETTELSE AV ITIQAD-NAMA.png",
+    "TRÚ OG ÍSLAM.jpeg",
+    "Türkçe kutub-i-sitte_TR.png",
+    "UR_مفتاح الجنة.png",
+    "USKO JA ISLAM.png",
+    "VEROVANJE IN ISLAM.png",
+    "VÍRA A ISLÁM.png",
+    "VỊ TIÊN TRI KÍNH YÊU CỦA TÔI (SALL-ALLAHU ‘ALAIHI WA SALLAM).png",
+    "Viera a Islam.png",
+    "WADDADA SUNNIGA.jpeg",
+    "WHY DID THEY BECOME.png",
+    "WIARA I ISLAM.png",
+    "_الإسلام وسائر الأديان.jpeg",
+    "ƊABI’O’IN MUSULUNCI.png",
+    "ΑΓΑΠΗΤΌΣ Ο ΠΡΟΦΉΤΗΣΜΟΥ.png",
+    "ΧΡΗΣΙΜΕΣ ΠΛΗΡΟΦΟΡΙΕΣ ΠΡΟΛΟΓΟΣ.png",
+    "БИР АГЕНТТИН МОЮНДООЛОРУ.png",
+    "ВЕРА НЕОБХОДИМАЯ КАЖДОМУ.png",
+    "ВЕРБА КОЈА ИМ Е ПОТРЕБНА НА СИТЕ (1).png",
+    "ВСІМ  ПОТРІБНА  ВІРА_UK.png",
+    "ВЯРАТА, НУЖНА НА ВСЕКИ.png",
+    "ЖАНҰЯ.png",
+    "ЖИВОТЪТ И НАСТАВЛЕНИЯТА НА ВЕЛИКИЯ ИСЛЯМСКИ УЧЕН ИМАМ МУХАММЕД ГАЗАЛИ.png",
+    "ЖИВОТЪТ НА ЛЮБИМИЯ МИ ПЕЙГАМБЕР МУХАММЕД.png",
+    "ЖИЗНЬ ПРОРОКА МУХАММЕДА.png",
+    "Жизнь Пророка Мухаммеда (Саллаллаху алейхи уа саллам).jpeg",
+    "ЖӘННАТ ЖОЛЫ ІЛІМХАЛЫ.jpeg",
+    "ЗАЩО СТАНАЛИ МЮСЮЛМАНИ.jpeg",
+    "ИМАН И ИСЛАМ_RU.png",
+    "ИМОНИ БА ҲАМА ЛОЗИМ.png",
+    "ИСЛАМ ДІНІ.png",
+    "ИСЛЯМЪТ И ХРИСТИЯНСТВОТО_BG.png",
+    "ИСЛЯМЪТ, ХРИСТИЯНСТВОТО, ЮДАИЗМЪТ И ДРУГИТЕ РЕЛИГИИ 1.jpeg",
+    "ИСЛЯМЪТ, ХРИСТИЯНСТВОТО, ЮДАИЗМЪТ И ДРУГИТЕ РЕЛИГИИ 2.jpeg",
+    "КИТАБ-УС-САЛАТ МОЛИТВЕННИК (Книга о намазе).jpeg",
+    "КНИГА ЗА НАМАЗА.png",
+    "ЛЮДИ СУННЫ И СОГЛАСИЯ - КТО ОНИ.jpeg",
+    "МЕКТУБАТ”.png",
+    "МОЙ ДОРОГОЙ ПРОРОК.png",
+    "МУХТАСАР ИЛЬМИХАЛ MUHTASAR İLMİHAL.jpeg",
+    "НАЙ- ЗАБЕЛЕЖИТЕЛНИТЕ УЧЕНИ И ЕВЛИИ В ИСЛЯМА I.png",
+    "НАЙ- ЗАБЕЛЕЖИТЕЛНИТЕ УЧЕН�� И ЕВЛИИ В ИСЛЯМА II.png",
+    "НАМАЗИЙН HOM.jpeg",
+    "НАСТАВЛЕНИЯ ЗА МЮСЮЛМАНИНА.png",
+    "Нуман бин Сабит Куфии Имам а’зам Ебу Ханифе.jpeg",
+    "О, синко! (наставления).jpeg",
+    "ОИЛА ВА НИКОҲ (OİLA VA NİKOH).png",
+    "ПАТОТ КОН РАЈОТ.jpeg",
+    "ПРИЗНАНИЯТА НА АНГЛИЙСКИЯ ШПИОНИН И ИСЛЯМСКАТА ВРАЖДА НА АНГЛИЧАНИТЕ.png",
+    "ПЪЛЕН ИЛМИХАЛ СЕ’АДЕТ-И ЕБЕ- ДИЙЙЕ (Вечното щастие) II.jpeg",
+    "ПЪЛЕН ИЛМИХАЛ СЕ’АДЕТИ ЕБЕ ДИЙЙЕ.png",
+    "ПЪТЯТ КЪМ ДЖЕННЕТА.png",
+    "Религия Ислам_RU.png",
+    "СЕ’А̄ДЕТИ ЕБЕДИЙЙЕ.png",
+    "СУНИТСКИОТ ПАТ ОД ХУСЕИН ХИЛМИ ИШИК.png",
+    "СЪДНИЯТ ДЕН И ОТВЪДНИЯТ ЖИВОТ.png",
+    "Светът на пророците_BG.png",
+    "ХАЙРТ БОШИГЛОГЧ МИНЬ.png",
+    "ХЕМПЕР СЫРЛАРЫНЫ АЧЯР.png",
+    "ХҮН БҮХЭНД ХЭРЭГТЭЙ ИТГЭЛ ҮНЭМШИЛ.jpeg",
+    "ЭЙ БАЛАМ ИЛМИХАЛЫ.png",
+    "ҮЙБҮЛӨ.png",
+    "Ҳазрати Муҳаммад (алайҳиссалом) ҳаёти.jpeg",
+    "ӘЙ, ҰЛЫМ ІЛІМХАЛЫӘЙ,.png",
+    "اعترافات جاسوس انگليسى.png",
+    "اعتقاد واسلام.jpeg",
+    "الادلة القواطع ويليه فتاوى علماء الهند على منع الخطبة.png",
+    "الأستاذ المودودي وشيء من حياته أفكاره.jpeg",
+    "الأصول الأربعة في ترديد الوهّابيّة.jpeg",
+    "البهجة السنية في آداب الطريقة العلية الخالدية.png",
+    "الرَّدُّ الْجَمِيِلُ لِإِلَهِيَّةِ عِيسَى بِصَريح الإنجيل.png",
+    "الفقه على المذاهب الأربعة۳.png",
+    "المعتقد المنتقد.png",
+    "المنتخبات من المكتوبات للإمام الرّباني.png",
+    "الناهية عن طعن امير المؤمنين معاوية.png",
+    "الِفبا.png",
+    "أنيس الطَالِبِيْنَ و عَدْةٌ السَّالِكِينَ.jpeg",
+    "إبتغاء الوصول لحب الله بمدح الرسول.png",
+    "إعتقادنامه.png",
+    "ایمان اتے اسلام.jpeg",
+    "بركات أحمديه.jpeg",
+    "تبتقادنامه_UG (2).png",
+    "تحفهء اثنى عشريه.png",
+    "جاليةُ اْلأكدار.png",
+    "حقوق الإسلام.png",
+    "راه سنت.jpeg",
+    "ردّ وهابيه بحجة الإسلام.jpeg",
+    "سويوملوك پهيغه مبريم (سه لله للاهو ئه له يهى وهسه للهم).png",
+    "فتاوى الحرمين.png",
+    "كتاب الأَيْمَان.jpeg",
+    "كتاب نماز.png",
+    "كيمياى سعادت.png",
+    "مختصر (التحفة الاثنى عشرية).png",
+    "مختصر تذكرة القرطبي.png",
+    "مقصود وبناء وأمثلة وعوامل والكافية لابن الحاجب.png",
+    "مكتوبات امام رباني (دفتر دوم و سوم).png",
+    "مكتوبات معصوميه.png",
+    "نور الإسلام.png",
+    "پيامبر عزيزم صلى اللّٰه عليه و سلم.jpeg",
+    "ہر کسی کیلئے لازم ایمان.png",
+    "ް ާ ނ ކ މ ލ އި އިސ މ ކ ނ އީމ.jpeg",
+    "मानव और इस्लाम.jpeg",
+    "मिफ़्ताह-उल-जन्नत.jpeg",
+    "নবুওয়াতের প্রমাণ.png",
+    "নামােজর বই.png",
+    "সুন্নিপথ.png",
+    "இஸ்லாமிய வாழ்க்கை நெறி.jpeg",
+    "உளவாளி ஒத்த வாதங்கள்.jpeg",
+    "ஜன்னத் வழி.jpeg",
+    "ணது அன்தரர்ந்பி (மல்னல்னரயு அனஹி மல்னம்).jpeg",
+    "സുന്നി_ML.png",
+    "මගේ ආදරණීය නබි (සල්ලල්ලාහු අලෙයිහි වසල්ලම්)_Sİ.png",
+    "ව ිශ්වාසය සහ ඉස්ලාම්.jpeg",
+    "ความศ&amp;ทธา)_กคน-องการ.jpeg",
+    "นบีที่รัก (ศ็อลลลลอฮุอะลยฮุวะซัลลม).jpeg",
+    "ศรัทธาและอิสลาม.jpeg",
+    "အစ္စလာမ် နှင့် ယုံကြည်မှုအကြောင်.jpeg",
+    "나의 사랑하는 예언자 (살랄라후 알라히 와살람).jpeg",
+    "እምነት እና እስልምና.png",
+    "សេចក្តីជំនឿ និងសាសនាអ៊ីស្លាម.jpeg",
+    "ᲜᲐᲛᲐᲖᲘᲡ ᲬᲘᲒᲜᲘ.png",
+    "ᲡᲐᲧᲕᲐᲠᲔᲚᲘ ᲛᲣᲰᲐᲛᲛᲔᲓ ᲨᲣᲐᲛᲐᲕᲐᲚᲘ.png",
+    "ミフターフルジュンナ.png",
+    "愛すべき預言者 ムハンマド様.png",
+    "教爱的光知 （愿主福安之）.jpeg",
+    "末日与来世.jpeg",
+    "皆が必要とする信仰.png"
+  ]
+}

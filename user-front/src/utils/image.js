@@ -37,3 +37,35 @@ export const getImageUrl = (imageUrl, baseUrl = process.env.NEXT_PUBLIC_API_URL 
 export const getFallbackImageUrl = (fallbackPath = '/logo/logo.png') => {
   return fallbackPath;
 };
+
+/**
+ * Kitap kapak resmi URL'i. Thumbnail desteği:
+ * - uploads/books/X.png → uploads/books/thumbnails/X.jpg (manuel kapaklar)
+ * - uploads/xxx.jpg → uploads/thumbnails/xxx.jpg (API ile yüklenenler)
+ * @param {object} book - Kitap objesi (coverImage veya coverUrl)
+ * @param {string} size - 'full' | 'thumb' - thumb = küçük versiyon (liste/grid)
+ * @param {string} baseUrl - API base URL
+ * @returns {string} - Tam resim URL'i
+ */
+export const getBookCoverUrl = (book, size = 'full', baseUrl = process.env.NEXT_PUBLIC_API_URL || '') => {
+  const img = book?.coverImage || book?.coverUrl;
+  if (!img || img === 'null' || img === 'undefined') return '/images/book-placeholder.jpg';
+  if (img.startsWith('http')) return img;
+
+  const normalized = img.startsWith('/') ? img : `/${img}`;
+  const fullUrl = `${baseUrl}${normalized}`;
+
+  if (size !== 'thumb') return fullUrl;
+
+  // uploads/books/ manuel kapaklar: .../books/X.png → .../books/thumbnails/X.jpg
+  if (normalized.startsWith('/uploads/books/') && !normalized.includes('/thumbnails/')) {
+    const thumbPath = normalized.replace(/\/uploads\/books\//, '/uploads/books/thumbnails/').replace(/\.[^.]+$/, '.jpg');
+    return `${baseUrl}${thumbPath}`;
+  }
+  // API yüklemeleri: /uploads/X.jpg → /uploads/thumbnails/X.jpg
+  if (normalized.startsWith('/uploads/') && !normalized.includes('/thumbnails/') && !normalized.includes('/books/')) {
+    const thumbPath = normalized.replace(/\/uploads\//, '/uploads/thumbnails/');
+    return `${baseUrl}${thumbPath}`;
+  }
+  return fullUrl;
+};

@@ -754,6 +754,9 @@
       "viewBooks": "View {language} Books",
       "booksAvailable": "{count} books available in this language"
     },
+    "globalSearchPlaceholder": "Search books by title...",
+    "globalSearchButton": "Search",
+    "noResults": "No results found",
     "page": {
       "searchPlaceholder": "Search books...",
       "back": "Back",
@@ -773,6 +776,7 @@
       "error": "Error!",
       "noBooks": "No Books Found",
       "noSearchResults": "search returned no results.",
+      "searchResults": "search results",
       "noLanguageBooks": "No books available in this language yet.",
       "viewDetails": "View Details",
       "availableLanguages": "available in languages",

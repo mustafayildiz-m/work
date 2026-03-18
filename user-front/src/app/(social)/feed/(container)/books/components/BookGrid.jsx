@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Row, Col, Card, Pagination, Spinner, Alert } from 'react-bootstrap';
 import { BsDownload, BsHeart, BsEye } from 'react-icons/bs';
 import { useBooks } from '@/hooks/useBooks';
+import { getBookCoverUrl } from '@/utils/image';
 
 const itemsPerPage = 12;
 
@@ -19,15 +20,8 @@ export default function BookGrid({ selectedLanguageId, languageCode, languageNam
   };
 
   const getBookImage = (book) => {
-    // Backend'den gelen coverImage veya coverUrl'i kullan
-    if (book.coverImage) {
-      return book.coverImage.startsWith('http') ? book.coverImage : `${process.env.NEXT_PUBLIC_API_URL}${book.coverImage}`;
-    }
-    if (book.coverUrl) {
-      return book.coverUrl.startsWith('http') ? book.coverUrl : `${process.env.NEXT_PUBLIC_API_URL}${book.coverUrl}`;
-    }
-    // Default kitap resmi
-    return '/images/book-placeholder.jpg';
+    // Grid'de thumbnail kullan (uploads/books/ için otomatik)
+    return getBookCoverUrl(book, 'thumb', process.env.NEXT_PUBLIC_API_URL);
   };
 
   // Kitap detay URL'ini oluştur
@@ -99,7 +93,10 @@ export default function BookGrid({ selectedLanguageId, languageCode, languageNam
                     style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
                     className="card-img-top"
                     onError={(e) => {
-                      e.target.src = '/images/book-placeholder.jpg';
+                      // Thumbnail yoksa full resme düş
+                      const fullUrl = getBookCoverUrl(book, 'full', process.env.NEXT_PUBLIC_API_URL);
+                      if (e.target.src !== fullUrl) e.target.src = fullUrl;
+                      else e.target.src = '/images/book-placeholder.jpg';
                     }}
                   />
                   <div className="hover-icons d-flex flex-column gap-2">

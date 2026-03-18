@@ -3,6 +3,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow } from 'swiper/modules';
 import { useBooks } from '@/hooks/useBooks';
+import { getBookCoverUrl } from '@/utils/image';
 import Image from 'next/image';
 import { Spinner, Alert } from 'react-bootstrap';
 import Link from 'next/link';
@@ -13,15 +14,8 @@ export default function BookSlider({ selectedLanguageId, languageCode, languageN
   const { books, loading, error } = useBooks(selectedLanguageId);
 
   const getBookImage = (book) => {
-    // Backend'den gelen coverImage veya coverUrl'i kullan
-    if (book.coverImage) {
-      return book.coverImage.startsWith('http') ? book.coverImage : `${process.env.NEXT_PUBLIC_API_URL}${book.coverImage}`;
-    }
-    if (book.coverUrl) {
-      return book.coverUrl.startsWith('http') ? book.coverUrl : `${process.env.NEXT_PUBLIC_API_URL}${book.coverUrl}`;
-    }
-    // Default kitap resmi
-    return '/images/book-placeholder.jpg';
+    // Slider'da thumbnail kullan (uploads/books/ için otomatik)
+    return getBookCoverUrl(book, 'thumb', process.env.NEXT_PUBLIC_API_URL);
   };
 
   // Kitap detay URL'ini oluştur
