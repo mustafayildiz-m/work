@@ -132,8 +132,7 @@ const BooksPage = () => {
         {/* Sonuçlar - yazdıkça altta */}
         {showResults && (
           <div
-            className="mt-3 rounded-4 overflow-hidden border-0 shadow-lg animate-fade-in"
-            className="book-search-results"
+            className="mt-3 rounded-4 overflow-hidden border-0 shadow-lg animate-fade-in book-search-results"
             style={{
               backgroundColor: 'var(--bs-body-bg, #fff)',
               maxHeight: '70vh',
