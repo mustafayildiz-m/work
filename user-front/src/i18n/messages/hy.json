@@ -754,6 +754,9 @@
       "viewBooks": "Դիտեք {language} գրքերը",
       "booksAvailable": "{count} գրքերը հասանելի են այս լեզվով"
     },
+    "globalSearchPlaceholder": "Գրքեր որոնել ըստ վերնագրի...",
+    "globalSearchButton": "Որոնել",
+    "noResults": "Ոչ մի արդյունք չի գտնվել",
     "page": {
       "searchPlaceholder": "Որոնել գրքեր...",
       "back": "Ետ",

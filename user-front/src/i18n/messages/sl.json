@@ -670,6 +670,9 @@
       "viewBooks": "{jezik} Ogledati si knjige",
       "booksAvailable": "{count} knjige, ki so na voljo v tem jeziku"
     },
+    "globalSearchPlaceholder": "Išči knjige po naslovu...",
+    "globalSearchButton": "Išči",
+    "noResults": "Ni bilo najdenih rezultatov",
     "page": {
       "searchPlaceholder": "Iskanje knjig...",
       "back": "Nazaj",

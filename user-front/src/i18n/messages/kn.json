@@ -754,6 +754,9 @@
       "viewBooks": "{language} ಪುಸ್ತಕಗಳನ್ನು ವೀಕ್ಷಿಸಿ",
       "booksAvailable": "ಈ ಭಾಷೆಯಲ್ಲಿ {count} ಪುಸ್ತಕಗಳು ಲಭ್ಯವಿದೆ"
     },
+    "globalSearchPlaceholder": "ಶೀರ್ಷಿಕೆಯಿಂದ ಪುಸ್ತಕಗಳನ್ನು ಹುಡುಕಿ...",
+    "globalSearchButton": "ಹುಡುಕಿ",
+    "noResults": "ಯಾವುದೇ ಫಲಿತಾಂಶಗಳು ಕಂಡುಬಂದಿಲ್ಲ",
     "page": {
       "searchPlaceholder": "ಪುಸ್ತಕಗಳನ್ನು ಹುಡುಕಿ...",
       "back": "ಹಿಂದೆ",

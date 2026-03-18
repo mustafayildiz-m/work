@@ -682,6 +682,9 @@
       "viewBooks": "{language} Посмотреть книги",
       "booksAvailable": "{count} книг, доступных на этом языке"
     },
+    "globalSearchPlaceholder": "Поиск книг по названию...",
+    "globalSearchButton": "Поиск",
+    "noResults": "Результаты не найдены",
     "page": {
       "searchPlaceholder": "Поиск книг...",
       "back": "Назад",

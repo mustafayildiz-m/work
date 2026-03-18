@@ -670,6 +670,9 @@
       "viewBooks": "{language} Преглед на книгите",
       "booksAvailable": "{count} налични книги на този език"
     },
+    "globalSearchPlaceholder": "Търсене на книги по заглавие...",
+    "globalSearchButton": "Търсене",
+    "noResults": "Не са намерени резултати",
     "page": {
       "searchPlaceholder": "Търсене на книги...",
       "back": "Обратно",

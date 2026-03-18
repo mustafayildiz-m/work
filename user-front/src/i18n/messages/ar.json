@@ -682,6 +682,9 @@
       "viewBooks": "عرض كتب {language}",
       "booksAvailable": "هناك {count} كتب متاحة بهذه اللغة"
     },
+    "globalSearchPlaceholder": "ابحث عن الكتب بالعنوان...",
+    "globalSearchButton": "بحث",
+    "noResults": "لم يتم العثور على نتائج",
     "page": {
       "searchPlaceholder": "البحث في الكتب...",
       "back": "رجوع",
