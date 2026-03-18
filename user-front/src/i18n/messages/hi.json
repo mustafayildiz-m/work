@@ -754,6 +754,9 @@
       "viewBooks": "{language} पुस्तकें देखें",
       "booksAvailable": "{count} पुस्तकें इस भाषा में उपलब्ध हैं"
     },
+    "globalSearchPlaceholder": "शीर्षक से किताबें खोजें...",
+    "globalSearchButton": "खोजें",
+    "noResults": "कोई परिणाम नहीं मिला",
     "page": {
       "searchPlaceholder": "पुस्तकें खोजें...",
       "back": "पीछे",

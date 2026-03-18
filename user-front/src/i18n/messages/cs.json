@@ -670,6 +670,9 @@
       "viewBooks": "{language} Zobrazit knihy",
       "booksAvailable": "{count} knihy dostupné v tomto jazyce"
     },
+    "globalSearchPlaceholder": "Hledat knihy podle názvu...",
+    "globalSearchButton": "Hledat",
+    "noResults": "Nebyly nalezeny žádné výsledky",
     "page": {
       "searchPlaceholder": "Vyhledávání knih...",
       "back": "Zpět",

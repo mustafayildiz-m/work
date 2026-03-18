@@ -754,6 +754,9 @@
       "viewBooks": "{language} పుస్తకాలను వీక్షించండి",
       "booksAvailable": "ఈ భాషలో {count} పుస్తకాలు అందుబాటులో ఉన్నాయి"
     },
+    "globalSearchPlaceholder": "శీర్షిక ద్వారా పుస్తకాలను శోధించండి...",
+    "globalSearchButton": "శోధించండి",
+    "noResults": "ఫలితాలు ఏవీ కనుగొనబడలేదు",
     "page": {
       "searchPlaceholder": "పుస్తకాలను వెతకండి...",
       "back": "వెనుకకు",

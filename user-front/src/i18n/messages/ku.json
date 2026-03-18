@@ -753,6 +753,9 @@
       "viewBooks": "Pirtûkên {language} Bibîne",
       "booksAvailable": "{count} pirtûk di vî zimanî de berdest in"
     },
+    "globalSearchPlaceholder": "Pirtûkan bi sernavê bigerin...",
+    "globalSearchButton": "Lêbigere",
+    "noResults": "Encam nehate dîtin",
     "page": {
       "searchPlaceholder": "Pirtûk lêgerîne...",
       "back": "Paş",

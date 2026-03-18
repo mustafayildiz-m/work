@@ -681,6 +681,9 @@
       "viewBooks": "{language}の本を表示",
       "booksAvailable": "この言語では{count}冊の本が利用可能です"
     },
+    "globalSearchPlaceholder": "タイトルで書籍を検索...",
+    "globalSearchButton": "検索",
+    "noResults": "結果が見つかりません",
     "page": {
       "searchPlaceholder": "本を検索...",
       "back": "戻る",

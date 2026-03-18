@@ -29,6 +29,21 @@ const BooksPage = () => {
     return () => clearTimeout(timer);
   }, [query]);
 
+  const pickBestTranslation = useCallback((book, search) => {
+    const translations = book.translations || [];
+    if (translations.length === 0) return null;
+    const searchNorm = (search || '').trim().toLowerCase().normalize('NFC');
+    if (searchNorm.length >= 2) {
+      const matched = translations.find((t) => {
+        if (!t?.title) return false;
+        const titleNorm = String(t.title).toLowerCase().normalize('NFC');
+        return titleNorm.includes(searchNorm) || searchNorm.includes(titleNorm);
+      });
+      if (matched) return matched;
+    }
+    return translations[0];
+  }, []);
+
   const fetchBooks = useCallback(async (search) => {
     if (!search || search.length < 2) {
       setBooks([]);
@@ -43,10 +58,11 @@ const BooksPage = () => {
       const data = json.data || [];
       setBooks(
         data.map((book) => {
-          const trans = book.translations?.[0];
+          const trans = pickBestTranslation(book, search);
           const lang = trans?.language;
           return {
             ...book,
+            _matchedTranslation: trans,
             title: trans?.title || book.author || 'Başlıksız Kitap',
             author: book.author,
             languageName: lang?.name,
@@ -59,14 +75,14 @@ const BooksPage = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [pickBestTranslation]);
 
   useEffect(() => {
     fetchBooks(debouncedQuery);
   }, [debouncedQuery, fetchBooks]);
 
   const getBookDetailUrl = (book) => {
-    const trans = book.translations?.[0];
+    const trans = book._matchedTranslation || book.translations?.[0];
     if (trans?.languageId) {
       const params = new URLSearchParams({
         languageId: trans.languageId,

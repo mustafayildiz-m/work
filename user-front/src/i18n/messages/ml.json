@@ -754,6 +754,9 @@
       "viewBooks": "{language} പുസ്തകങ്ങൾ കാണുക",
       "booksAvailable": "ഈ ഭാഷയിൽ {count} പുസ്തകങ്ങൾ ലഭ്യമാണ്"
     },
+    "globalSearchPlaceholder": "തലക്കെട്ട് അനുസരിച്ച് പുസ്തകങ്ങൾ തിരയുക...",
+    "globalSearchButton": "തിരയുക",
+    "noResults": "ഫലങ്ങളൊന്നും കണ്ടെത്തിയില്ല",
     "page": {
       "searchPlaceholder": "പുസ്തകങ്ങൾ തിരയുക...",
       "back": "തിരികെ",

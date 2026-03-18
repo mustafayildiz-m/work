@@ -670,6 +670,9 @@
       "viewBooks": "{nyelv} Könyvek megtekintése",
       "booksAvailable": "{szám} könyvek ezen a nyelven"
     },
+    "globalSearchPlaceholder": "Könyvek keresése cím alapján...",
+    "globalSearchButton": "Keresés",
+    "noResults": "Nincs eredmény",
     "page": {
       "searchPlaceholder": "Könyvek keresése...",
       "back": "Vissza",

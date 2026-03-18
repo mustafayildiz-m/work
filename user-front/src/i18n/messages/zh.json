@@ -677,11 +677,14 @@
       "title": "选择您喜欢的语言",
       "subtitle": "您希望看到哪种语言版本的图书？",
       "continue": "查看书籍",
-      "loading": "加载舌头...",
+      "loading": "加载语言...",
       "errorTitle": "错误！",
       "viewBooks": "{语言｝查看书籍",
       "booksAvailable": "以该语言提供的{count}书籍"
     },
+    "globalSearchPlaceholder": "按标题搜索书籍...",
+    "globalSearchButton": "搜索",
+    "noResults": "未找到结果",
     "page": {
       "searchPlaceholder": "搜索书籍...",
       "back": "返回",

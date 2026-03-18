@@ -670,6 +670,9 @@
       "viewBooks": "{language} Переглянути книги",
       "booksAvailable": "{count} книг, доступних цією мовою"
     },
+    "globalSearchPlaceholder": "Пошук книг за назвою...",
+    "globalSearchButton": "Пошук",
+    "noResults": "Не знайдено жодного результату",
     "page": {
       "searchPlaceholder": "Пошукайте книги...",
       "back": "Назад",

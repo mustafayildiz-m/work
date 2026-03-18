@@ -754,6 +754,9 @@
       "viewBooks": "Прикажи __ПЛАЦЕХОЛДЕР_0__ књиге",
       "booksAvailable": "__ПЛАЦЕХОЛДЕР_0__ књига доступних на овом језику"
     },
+    "globalSearchPlaceholder": "Претражи књиге по наслову...",
+    "globalSearchButton": "Претрага",
+    "noResults": "Нема пронађених резултата",
     "page": {
       "searchPlaceholder": "Претражи књиге...",
       "back": "Назад",

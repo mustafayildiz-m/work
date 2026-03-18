@@ -160,4 +160,32 @@ export class LanguageFlagsSeeder {
     );
     return { updated, skipped, total: languages.length };
   }
+
+  /**
+   * Yanlış bayrak URL'lerini düzeltir (örn. Bengalce için Japon bayrağı).
+   * Sadece flagcdn.com URL'leri için - beklenen ülke kodu ile uyuşmuyorsa günceller.
+   */
+  async fixWrongFlags(): Promise<{ fixed: number }> {
+    const FLAG_CDN_PATTERN = /flagcdn\.com\/[^/]+\/([a-z]{2})\.png/i;
+    const languages = await this.languageRepository.find();
+
+    let fixed = 0;
+    for (const language of languages) {
+      const langCode = String(language.code || '').toLowerCase().split('-')[0];
+      const expectedCountry = LANGUAGE_TO_COUNTRY[langCode];
+      if (!expectedCountry || !language.flagUrl) continue;
+
+      const match = language.flagUrl.match(FLAG_CDN_PATTERN);
+      const currentCountry = match ? match[1].toLowerCase() : null;
+      if (currentCountry && currentCountry !== expectedCountry) {
+        const correctUrl = `${FLAG_CDN_BASE}/${expectedCountry}.png`;
+        await this.languageRepository.update(language.id, { flagUrl: correctUrl });
+        console.log(
+          `🔧 Düzeltildi: ${language.name} (${language.code}) ${currentCountry} -> ${expectedCountry}`,
+        );
+        fixed += 1;
+      }
+    }
+    return { fixed };
+  }
 }

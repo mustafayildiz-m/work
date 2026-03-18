@@ -682,6 +682,9 @@
       "viewBooks": "{language} Ver livros",
       "booksAvailable": "{count} livros disponíveis nesta língua"
     },
+    "globalSearchPlaceholder": "Pesquisar livros por título...",
+    "globalSearchButton": "Pesquisar",
+    "noResults": "Não foram encontrados resultados",
     "page": {
       "searchPlaceholder": "Procurar livros...",
       "back": "Voltar",

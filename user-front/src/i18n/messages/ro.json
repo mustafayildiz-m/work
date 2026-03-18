@@ -670,6 +670,9 @@
       "viewBooks": "{language} Vezi cărțile",
       "booksAvailable": "{count} cărți disponibile în această limbă"
     },
+    "globalSearchPlaceholder": "Căutați cărți după titlu...",
+    "globalSearchButton": "Căutare",
+    "noResults": "Nu s-au găsit rezultate",
     "page": {
       "searchPlaceholder": "Căutare cărți...",
       "back": "Înapoi",
