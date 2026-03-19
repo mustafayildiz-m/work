@@ -4,6 +4,27 @@
  */
 
 /**
+ * iOS Safari requires audio.play() to be called during a direct user gesture.
+ * After async operations (API calls, etc.), the gesture context is lost and play() fails.
+ * Call this at the very start of a click/tap handler (before any await) to "unlock" audio.
+ * @see https://developer.apple.com/forums/thread/94522
+ */
+export const unlockAudioForPlayback = () => {
+  if (typeof window === 'undefined') return;
+  try {
+    const audio = new window.Audio();
+    audio.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+    const p = audio.play();
+    if (p && typeof p.then === 'function') {
+      p.then(() => { audio.pause(); audio.currentTime = 0; }).catch(() => {});
+    } else {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+  } catch (_) {}
+};
+
+/**
  * Get the best available voice for English (special handling)
  * @param {Array<SpeechSynthesisVoice>} voices - All available voices
  * @returns {SpeechSynthesisVoice|null}

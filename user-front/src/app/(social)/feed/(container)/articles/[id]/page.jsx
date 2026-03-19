@@ -16,7 +16,7 @@ import styles from './styles.module.css';
 
 const PdfViewer = dynamic(() => import('@/components/PdfViewer'), { ssr: false });
 import { pdfjs } from 'react-pdf';
-import { getLanguageCode, cleanTextForTTS, fetchTTSAudio } from '@/utils/textToSpeech';
+import { getLanguageCode, cleanTextForTTS, fetchTTSAudio, unlockAudioForPlayback } from '@/utils/textToSpeech';
 
 // PDF.js worker'ı yapılandır
 if (typeof window !== 'undefined') {
@@ -521,6 +521,8 @@ const ArticleDetailPage = () => {
   // Seçilen dilde çeviri yap ve sesli oku (Sayfa bazlı)
   const handleTranslateAndRead = async (targetLanguage, startPage = 1) => {
     if (!selectedTranslationForTranslate) return;
+
+    unlockAudioForPlayback();
     disposeCurrentAudio();
     readingSessionIdRef.current += 1;
     playbackQueueRef.current = [];

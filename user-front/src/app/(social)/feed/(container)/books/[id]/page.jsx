@@ -15,7 +15,7 @@ import { useNotificationContext } from '@/context/useNotificationContext';
 import { useLanguages } from '@/hooks/useLanguages';
 import useViewPort from '@/hooks/useViewPort';
 import styles from './styles.module.css';
-import { getLanguageCode, cleanTextForTTS, fetchTTSAudio } from '@/utils/textToSpeech';
+import { getLanguageCode, cleanTextForTTS, fetchTTSAudio, unlockAudioForPlayback } from '@/utils/textToSpeech';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -580,6 +580,8 @@ const BookDetailPage = () => {
   // Seçilen dilde çeviri yap ve sesli oku (Google Translate TTS - yüksek kalite)
   const handleTranslateAndRead = async (targetLanguage, startPage = 1) => {
     if (!selectedTranslationForTranslate) return;
+
+    unlockAudioForPlayback();
 
     // Önceki audio'yu durdur
     disposeCurrentAudio();
