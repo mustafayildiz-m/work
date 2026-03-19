@@ -69,6 +69,7 @@
     "signInWithGoogle": "Google ile giriş yap",
     "registering": "Kaydediliyor...",
     "bismillah": "Bismillahirrahmanirrahim",
+    "bismillahArabic": "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ",
     "platformWelcome": "İslami içerik platformuna hoş geldiniz",
     "forgotPasswordTitle": "Şifremi Unuttum",
     "forgotPasswordDesc": "E-posta adresinizi girin, size şifre sıfırlama bağlantısı gönderelim.",
@@ -107,7 +108,9 @@
     "pathToLightP1": "\"Îmân, kelime-i tevhîdin (Lâ ilâhe illallah ve Muhammedün Resûlullah) iki kısmına birlikde inanmakdır. Ya'nî, müslimân olmak için, Muhammed aleyhisselâmın Peygamber olduğuna da inanmak lâzımdır. Ya'nî Muhammed aleyhisselâm, Allahın Peygamberidir. Allahü teâlâ, Cebrâîl ismindeki melek ile, kendisine (Kur'ân-ı kerîm)i göndermişdir. Bu Kur'ân-ı kerîm, Allah kelâmıdır.",
     "pathToLightP2": "Muhammed aleyhisselâmın kendi düşünceleri ve felsefecilerin, târîhcilerin sözleri değildir. Muhammed aleyhisselâm, Kur'ân-ı kerîmi tefsîr etmişdir. Ya'nî açıklamışdır. Bu açıklamalara, (Hadîs-i şerîf) denir. İslâmiyyet, (Kur'ân-ı kerîm) ile (Hadîs-i şerîf)lerdir. Dünyânın her yerindeki, milyonlarca islâm kitâbı, (Kur'ân-ı kerîm) ile (Hadîs-i şerîf)lerin açıklamalarıdır. Muhammed aleyhisselâmdan gelmiyen bir söz, islâm kitâbı olamaz.",
     "pathToLightP3": "Îmân ve islâm demek, (Kur'ân-ı kerîm) ve (Hadîs-i şerîf)lere inanmak demekdir. Onun bildirdiklerine inanmıyan, Allah kelâmına inanmamış olur. Muhammed aleyhisselâm Allahü teâlânın bildirdiklerini Eshâbına bildirdi. Onlar da, talebelerine bildirdi. Bunlar da, kitâblarına yazdılar. Bu kitâbları yazan âlimlere (Ehl-i sünnet âlimi) denir. Ehl-i sünnet kitâblarına inanan, Allah kelâmına inanmış olur. Müslimân olur.",
-    "pathToLightP4": "Bizde sizleri bu kıymetli kitaplarla ve bu kitapları hazırlayan Ehli Sünnet Alimleri (Rahmetullahi Aleyhim Ecmain) muhabbet yolu ile tanıştırmak istiyoruz.\""
+    "pathToLightP4": "Bizde sizleri bu kıymetli kitaplarla ve bu kitapları hazırlayan Ehli Sünnet Alimleri (Rahmetullahi Aleyhim Ecmain) muhabbet yolu ile tanıştırmak istiyoruz.\"",
+    "authQuote": "İlim öğrenmek her Müslümana farzdır.",
+    "authQuoteSource": "Hadis-i Şerif"
   },
   "navigation": {
     "home": "Ana Sayfa",
