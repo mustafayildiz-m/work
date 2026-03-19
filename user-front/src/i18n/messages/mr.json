@@ -101,7 +101,13 @@
     "resetPasswordErrors": {
       "INVALID_RESET_TOKEN": "अवैध किंवा कालबाह्य पासवर्ड रीसेट टोकन.",
       "EXPIRED_RESET_TOKEN": "पासवर्ड रीसेट लिंक कालबाह्य झाली आहे."
-    }
+    },
+    "pathToLightBismillahSecondary": "\"In the name of Allah, the Most Compassionate, the Most Merciful\"",
+    "pathToLightSubtitle": "The Path To The Light",
+    "pathToLightP1": "Îmân is to believe together in the two parts of the word of tawhid, “Lâ ilâhe illallah” and “Muhammadun Rasûlallah.” That is, in order to be a Muslim, it is also necessary to believe that Muhammad (Sallallahu Alayhi wa Sallam) is a Prophet. That is, Muhammad (Sallallahu Alayhi wa Sallam) is the Prophet of Allah ﷻ. Allah ﷻ, through the angel named Jibril (Alayhi s-salam), sent down to him the (Qur'an al-karim). This Qur'an al-karim is the Word of Allah ﷻ.",
+    "pathToLightP2": "It is not the personal thoughts of Muhammad (Sallallahu Alayhi wa Sallam), nor the words of philosophers or historians. Muhammad (Sallallahu Alayhi wa Sallam) made tafsir of the Qur'an al-karim. That is, he explained it. These explanations are called (Hadith ash-sharif). Islam consists of the (Qur'an al-karim) and the (Hadith ash-sharif). The millions of Islamic books in every part of the world are explanations of the (Qur'an al-karim) and the (Hadith ash-sharif). A statement that does not come from Muhammad (Sallallahu Alayhi wa Sallam) cannot be an Islamic book.",
+    "pathToLightP3": "Îmân and Islam mean to believe in the (Qur'an al-karim) and the (Hadith ash-sharif). One who does not believe in what he communicated will not have believed in the Word of Allah ﷻ. Muhammad (Sallallahu Alayhi wa Sallam) conveyed what Allah ﷻ revealed to his Companions (Radiyallahu Anhum). They, in turn, conveyed it to their students. These also wrote them in their books. The scholars who wrote these books are called (Ahl as-Sunnah scholars). One who believes in the books of Ahl as-Sunnah will have believed in the Word of Allah ﷻ. He becomes a Muslim.",
+    "pathToLightP4": "Inshaallah, we also wish to deliver these valuable books to you and to bring you together with the Ahl as-Sunnah Scholars (Rahmatullahi Alaihim Ecmain) through bond of love."
   },
   "navigation": {
     "home": "घर",

@@ -28,6 +28,14 @@ cd iw_project
 docker-compose down
 docker-compose up -d --build
 
+
+
+git fetch origin
+git reset --hard origin/main
+docker compose -f docker-compose.prod.yml up -d --build user-front
+docker exec islamic_windows_nginx nginx -s reload
+
+
 docker compose -f docker-compose.prod.yml up -d --build
 
 # Sadece backend

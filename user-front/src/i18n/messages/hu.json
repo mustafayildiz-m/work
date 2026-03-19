@@ -93,7 +93,13 @@
     "resetPasswordErrors": {
       "INVALID_RESET_TOKEN": "Érvénytelen vagy lejárt jelszó-visszaállítási token.",
       "EXPIRED_RESET_TOKEN": "A jelszó-visszaállítási link lejárt."
-    }
+    },
+    "pathToLightBismillahSecondary": "\"Allah nevében, a Legkönyörületesebb, a Legkönyörületesebb\"",
+    "pathToLightSubtitle": "Az út a fényhez",
+    "pathToLightP1": "Az Îmân azt jelenti, hogy együtt hiszünk a tawhid szó két részében, a \"Lâ ilâhe illallah\"-ban és a \"Muhammadun Rasűlallah\"-ban. Vagyis ahhoz, hogy valaki muszlim legyen, hinni kell abban is, hogy Mohamed (Sallallallahu Alayhi wa Sallam) egy Próféta. Vagyis, hogy Mohamed (Sallallallahu Alayhi wa Sallam) Allah ﷻ prófétája. Allah ﷻ a Dzsibril (Alajhi s-salam) nevű angyal által leküldte neki a (Korán al-karim). Ez a Korán al-karim Allah ﷻ szava.",
+    "pathToLightP2": "Ez nem Mohamed (Sallallahu Alayhi wa Sallam) személyes gondolatai, sem filozófusok vagy történészek szavai. Mohamed (Sallallahu Alayhi wa Sallam) a Korán al-karim tafsirját készítette. Vagyis megmagyarázta azt. Ezeket a magyarázatokat nevezik (Hadith ash-sharif). Az iszlám a (Korán al-karim) és a (Hadith ash-sharif). Az iszlám könyvek milliói a világ minden részén a (Korán al-karim) és a (Hadith ash-sharif) magyarázatai. Egy olyan kijelentés, amely nem Mohamedtől (Sallallahu Alayhi wa Sallam) származik, nem lehet iszlám könyv.",
+    "pathToLightP3": "Îmân és iszlám azt jelenti, hogy hiszünk a (Korán al-karim) és a (Hadith ash-sharif). Aki nem hisz abban, amit közölt, az nem hisz Allah ﷻ szavában. Mohamed (Sallallahu Alayhi wa Sallam) azt közvetítette, amit Allah ﷻ kinyilatkoztatott a társainak (Radiyallahu Anhum). Ők viszont továbbadták azt a tanítványaiknak. Ezek is leírták a könyveikben. Azokat a tudósokat, akik ezeket a könyveket írták, úgy hívják, hogy (Ahl as-Sunnah tudósok). Aki hisz az Ahl as-Sunnah könyveiben, az Allah ﷻ szavában hisz. Muszlim lesz.",
+    "pathToLightP4": "Inshaallah, mi is szeretnénk eljuttatni ezeket az értékes könyveket hozzátok, és összehozni benneteket az Ahl as-Sunnah tudósaival (Rahmatullahi Alaihim Ecmain) a szeretet kötelékén keresztül."
   },
   "navigation": {
     "home": "Home",

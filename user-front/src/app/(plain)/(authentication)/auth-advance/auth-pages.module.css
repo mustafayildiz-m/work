@@ -72,26 +72,88 @@
 /* Right Panel - Background Image */
 .rightPanel {
   flex: 0 0 50%;
-  min-height: 100vh;
+  max-height: 100vh;
   position: relative;
   overflow: hidden;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  background-color: #f7f4ec; /* Soft beige fallback matching the artwork */
+}
+
+.imageWrapper {
+  width: 100%;
+  height: 40vh;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.textContentWrapper {
+  flex: 1;
+  width: 100%;
+  padding: 1.5rem 4rem 3rem 4rem;
+  z-index: 2;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background: #f7f4ec;
+  box-shadow: 0 -15px 25px rgba(247, 244, 236, 1); /* smooth fade from image */
+}
+
+.textTitle {
+  font-family: 'Georgia', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1b3a2a;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.textBody {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #2c362d;
+  text-align: justify;
+  max-width: 600px;
+}
+
+.textBody p {
+  margin-bottom: 1rem;
+}
+
+.rightPanel::before {
+  content: "";
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  right: -10%;
+  bottom: -10%;
+  background-image: url('/bg/background.jpeg');
+  background-size: cover;
+  background-position: center center;
+  filter: blur(25px);
+  opacity: 0.6;
+  z-index: 0;
 }
 
 .backgroundImage {
   width: 100%;
   height: 100%;
-  background-image: url('/bg/login.png');
-  background-size: cover;
-  background-position: 92% center;
+  background-image: url('/bg/background.jpeg');
+  background-size: contain;
+  background-position: center center;
   background-repeat: no-repeat;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 1;
 }
 
 @keyframes float {

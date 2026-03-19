@@ -14,7 +14,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Alert } from 'react-bootstrap';
 
 const SignIn = () => {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const { status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -94,9 +94,32 @@ const SignIn = () => {
           </Container>
         </div>
 
-        {/* Right Side - Background Image */}
+        {/* Right Side - Background Image & Text */}
         <div className={styles.rightPanel}>
-          <div className={styles.backgroundImage}></div>
+          <div className={styles.imageWrapper}>
+            <div className={styles.backgroundImage}></div>
+          </div>
+          <div className={styles.textContentWrapper}>
+            <h2 className={styles.textTitle}>
+              <span style={{ fontSize: '1.2rem', display: 'block', marginBottom: '8px', color: '#4a5d4e' }}>
+                Bismillahirrahmanirrahim
+                {t('auth.pathToLightBismillahSecondary') && (
+                  <span style={{ display: 'block', fontSize: '0.9rem', marginTop: '4px', fontStyle: 'italic' }}>
+                    {t('auth.pathToLightBismillahSecondary')}
+                  </span>
+                )}
+              </span>
+              {t('auth.pathToLightSubtitle')}
+            </h2>
+            <div className={styles.textBody}>
+              <p>{t('auth.pathToLightP1')}</p>
+              <p>{t('auth.pathToLightP2')}</p>
+              <p>{t('auth.pathToLightP3')}</p>
+              <p style={{ fontStyle: 'italic', fontWeight: '500', color: '#1b3a2a', marginTop: '1.5rem', textAlign: 'center' }}>
+                {t('auth.pathToLightP4')}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

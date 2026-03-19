@@ -93,7 +93,13 @@
     "resetPasswordErrors": {
       "INVALID_RESET_TOKEN": "Neplatný nebo vypršený token pro reset hesla.",
       "EXPIRED_RESET_TOKEN": "Odkaz pro reset hesla vypršel."
-    }
+    },
+    "pathToLightBismillahSecondary": "\"Ve jménu Alláha, Nejslitovnějšího, Milosrdného.\"",
+    "pathToLightSubtitle": "Cesta ke světlu",
+    "pathToLightP1": "Îmân znamená věřit společně ve dvě části slova tawhid: \"Lâ ilâhe illallah\" a \"Muhammadun Rasûlallah\". To znamená, že k tomu, abychom byli muslimy, je nutné také věřit, že Muhammad (sallallahu alajhi wa sallam) je Prorok. To znamená, že Muhammad (sallallahu alejhi wa salám) je Alláhův prorok ﷻ. Alláh ﷻ mu prostřednictvím anděla jménem Džibril (alejhi s-salám) seslal (Korán al-karim). Tento Korán al-karim je slovo Alláha ﷻ.",
+    "pathToLightP2": "Nejde o osobní myšlenky Muhammada (sallallahu alayhi wa sallam) ani o slova filozofů či historiků. Muhammad (sallallahu alejhi wa salám) provedl tafsír Koránu al-karim. To znamená, že jej vysvětlil. Tato vysvětlení se nazývají (hadís aš-šaríf). Islám se skládá z (Koránu al-karim) a (hadísů aš-šaríf). Miliony islámských knih ve všech částech světa jsou vysvětleními (Koránu al-karim) a (hadísů aš-šaríf). Prohlášení, které nepochází od Muhammada (sallallahu alejhi wa sallam), nemůže být islámskou knihou.",
+    "pathToLightP3": "Îmân a islám znamenají věřit v (Korán al-karim) a (hadísy aš-šaríf). Ten, kdo nevěří v to, co sdělil, neuvěří v Alláhovo slovo ﷻ. Muhammad (sallallahu alejhi wa salám) sdělil to, co Alláh ﷻ zjevil svým společníkům (rádijálahu anhum). Ti to zase předávali svým žákům. Ti je také zapsali do svých knih. Učenci, kteří tyto knihy napsali, se nazývají (učenci ahl as-Sunna). Ten, kdo věří v knihy ahl as-Sunny, uvěří v Alláhovo slovo ﷻ. Stane se muslimem.",
+    "pathToLightP4": "Inšaalláh, chceme vám také doručit tyto cenné knihy a spojit vás s učenci ahl as-Sunna (Rahmatullahi Alaihim Ecmain) prostřednictvím pouta lásky."
   },
   "navigation": {
     "home": "Home",
