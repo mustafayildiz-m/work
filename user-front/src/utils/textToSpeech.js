@@ -3,16 +3,21 @@
  * Provides high-quality voice selection for all languages
  */
 
+let _unlockedAudioElement = null;
+
 /**
- * iOS Safari requires audio.play() to be called during a direct user gesture.
- * After async operations (API calls, etc.), the gesture context is lost and play() fails.
- * Call this at the very start of a click/tap handler (before any await) to "unlock" audio.
- * @see https://developer.apple.com/forums/thread/94522
+ * iOS Safari/Chrome: audio.play() must be called during a direct user gesture.
+ * After async operations the gesture context is lost. Solution: reuse the SAME
+ * Audio element that was unlocked during user gesture for all TTS playback.
+ * Call this at the very start of a click/tap handler (before any await).
+ * @returns {HTMLAudioElement|null} The unlocked element to reuse for playback
  */
 export const unlockAudioForPlayback = () => {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined') return null;
   try {
+    if (_unlockedAudioElement) return _unlockedAudioElement;
     const audio = new window.Audio();
+    _unlockedAudioElement = audio;
     audio.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
     const p = audio.play();
     if (p && typeof p.then === 'function') {
@@ -21,8 +26,18 @@ export const unlockAudioForPlayback = () => {
       audio.pause();
       audio.currentTime = 0;
     }
-  } catch (_) {}
+    return audio;
+  } catch (_) {
+    return null;
+  }
 };
+
+/**
+ * Get the unlocked Audio element for TTS playback. Use this element and set
+ * src to your blob URL instead of creating new Audio() - required for iOS.
+ * Returns null if unlock wasn't called during user gesture; caller falls back to new Audio().
+ */
+export const getUnlockedAudioElement = () => _unlockedAudioElement || null;
 
 /**
  * Get the best available voice for English (special handling)

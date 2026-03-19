@@ -10,7 +10,7 @@ import dynamic from 'next/dynamic';
 import { BsTranslate, BsVolumeUp, BsX, BsPause, BsPlay, BsSkipBackward, BsSkipForward } from 'react-icons/bs';
 import { useLanguages } from '@/hooks/useLanguages';
 import { useNotificationContext } from '@/context/useNotificationContext';
-import { cleanTextForTTS, fetchTTSAudio, unlockAudioForPlayback } from '@/utils/textToSpeech';
+import { cleanTextForTTS, fetchTTSAudio, unlockAudioForPlayback, getUnlockedAudioElement } from '@/utils/textToSpeech';
 import { useLanguage } from '@/context/useLanguageContext';
 
 // Map loading placeholder - uses hook so must be a component
@@ -293,7 +293,8 @@ const ScholarProfilePage = () => {
 
     queueIndexRef.current = queueIndex;
     const queueItem = queue[queueIndex];
-    const audio = new Audio(queueItem.audioUrl);
+    const audio = getUnlockedAudioElement() || new Audio();
+    audio.src = queueItem.audioUrl;
     currentAudioRef.current = audio;
     audio.playbackRate = playbackRate;
     audio.currentTime = Math.max(0, offsetSeconds);
