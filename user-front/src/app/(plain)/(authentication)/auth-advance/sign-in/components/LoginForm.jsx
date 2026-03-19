@@ -201,7 +201,7 @@ const LoginForm = () => {
           <Button
             size="lg"
             type="button"
-            variant="outline-primary"
+            variant="success"
             disabled={loading || showSuccess}
             onClick={() => window.location.href = '/'}
             className={styles.guestButton}
