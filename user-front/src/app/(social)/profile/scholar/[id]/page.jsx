@@ -10,7 +10,7 @@ import dynamic from 'next/dynamic';
 import { BsTranslate, BsVolumeUp, BsX, BsPause, BsPlay, BsSkipBackward, BsSkipForward } from 'react-icons/bs';
 import { useLanguages } from '@/hooks/useLanguages';
 import { useNotificationContext } from '@/context/useNotificationContext';
-import { cleanTextForTTS, fetchTTSAudio } from '@/utils/textToSpeech';
+import { cleanTextForTTS, fetchTTSAudio, unlockAudioForPlayback } from '@/utils/textToSpeech';
 import { useLanguage } from '@/context/useLanguageContext';
 
 // Map loading placeholder - uses hook so must be a component
@@ -341,6 +341,8 @@ const ScholarProfilePage = () => {
 
   const handleTranslateAndRead = async (targetLanguage) => {
     if (!scholar?.biography) return;
+
+    unlockAudioForPlayback();
     setTranslating(true);
     setShowLanguageModal(false);
 
