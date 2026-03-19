@@ -70,8 +70,9 @@ const SignIn = () => {
               </div>
 
               <div className={styles.authCard}>
+                <div className={styles.authCardAccent}></div>
                 <div className="p-4">
-                  <div className="mb-3">
+                  <div className={styles.cardTitleWrap}>
                     <h2 className={`h2 ${styles.cardTitle}`}>{t('auth.signIn')}</h2>
                   </div>
                   {message === 'login_required' && (
