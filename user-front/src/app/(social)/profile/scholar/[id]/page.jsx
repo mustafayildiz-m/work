@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
+import { useProfileHash } from '@/hooks/useProfileHash';
 import { Card, CardBody, Col, Container, Row, Button, Modal, Spinner, Alert, Dropdown, DropdownToggle, DropdownMenu } from 'react-bootstrap';
 import Image from 'next/image';
 import avatar7 from '@/assets/images/avatar/07.jpg';
@@ -34,6 +35,7 @@ const MapComponent = dynamic(() => import('@/components/MapComponent'), {
 const ScholarProfilePage = () => {
   const { t } = useLanguage();
   const params = useParams();
+  const { profileId, isValid } = useProfileHash();
   const { showNotification } = useNotificationContext();
   const { languages: availableLanguages, loading: languagesLoading } = useLanguages();
   const [scholar, setScholar] = useState(null);
@@ -80,7 +82,7 @@ const ScholarProfilePage = () => {
   useEffect(() => {
     const fetchScholarData = async () => {
       try {
-        const scholarId = params.id;
+        const scholarId = profileId;
         if (scholarId) {
           // JWT token'ı localStorage'dan al
           const token = localStorage.getItem('token');
@@ -119,7 +121,7 @@ const ScholarProfilePage = () => {
     };
 
     fetchScholarData();
-  }, [params.id]);
+  }, [profileId]);
 
   // Helper function to get proper image URL
   const getImageUrl = (photoUrl) => {

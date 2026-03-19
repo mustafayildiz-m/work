@@ -104,3 +104,28 @@ export const parseProfileHash = (hash) => {
   return decodeProfileId(hash);
 };
 
+/**
+ * Uygulama içi profil URL path'i oluşturur (hash'li)
+ * @param {string} type - 'user' veya 'scholar'
+ * @param {number|string} id - Profile ID
+ * @param {string} subPath - Alt path (örn: 'feed', 'followers', 'following')
+ * @returns {string} /profile/user/{hash}/feed gibi path
+ */
+export const getProfilePath = (type, id, subPath = '') => {
+  if (id == null || id === '' || id === 'undefined') return null;
+  const hash = encodeProfileId(type, id);
+  if (!hash) return null;
+  const path = subPath ? `/${subPath}` : '';
+  return `/profile/${type}/${hash}${path}`;
+};
+
+/**
+ * Param'ın sayısal ID mi yoksa hash mi olduğunu kontrol eder
+ * @param {string} param - URL param değeri
+ * @returns {boolean}
+ */
+export const isNumericProfileId = (param) => {
+  if (!param || typeof param !== 'string') return false;
+  return /^\d+$/.test(param);
+};
+

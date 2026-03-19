@@ -3,16 +3,18 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Card, CardBody } from 'react-bootstrap';
+import { useProfileHash } from '@/hooks/useProfileHash';
 
 const UserAboutPage = () => {
   const params = useParams();
+  const { profileId, isValid } = useProfileHash();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userId = params.id;
+        const userId = profileId;
         if (userId) {
           const token = localStorage.getItem('token');
           
@@ -37,9 +39,21 @@ const UserAboutPage = () => {
     };
 
     fetchUserData();
-  }, [params.id]);
+  }, [profileId]);
 
 
+
+  if (params.id && !isValid) {
+    return (
+      <Card>
+        <CardBody className="text-center py-5">
+          <h4>Profil Bulunamadı</h4>
+          <p className="text-muted">Geçersiz profil linki.</p>
+          <a href="/feed" className="btn btn-primary">Ana Sayfaya Dön</a>
+        </CardBody>
+      </Card>
+    );
+  }
 
   if (loading) {
     return (

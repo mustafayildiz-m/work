@@ -9,6 +9,7 @@ import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { getImageUrl } from '@/utils/image';
 import { useLanguage } from '@/context/useLanguageContext';
+import { getProfilePath } from '@/utils/profileEncoder';
 
 const NotificationDropdown = () => {
   const { theme } = useLayoutContext();
@@ -285,7 +286,7 @@ const NotificationDropdown = () => {
     if (!scholarId || !postId) return;
 
     setIsOpen(false);
-    window.location.href = `/profile/scholar/${scholarId}/feed?postId=${encodeURIComponent(postId)}`;
+    window.location.href = (getProfilePath('scholar', scholarId, 'feed') || `/profile/scholar/${scholarId}/feed`) + `?postId=${encodeURIComponent(postId)}`;
   };
 
   return (
@@ -388,7 +389,7 @@ const NotificationDropdown = () => {
                           <div className="d-flex gap-2 mt-1">
                             <Button
                               as={Link}
-                              href={`/profile/user/${notification.relatedUserId || notification.related_user_id}`}
+                              href={getProfilePath('user', notification.relatedUserId || notification.related_user_id) || '#'}
                               size="sm"
                               variant="outline-primary"
                               className="py-0 px-2 d-flex align-items-center"

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Card, CardBody, Row, Col, Badge } from 'react-bootstrap';
+import { useProfileHash } from '@/hooks/useProfileHash';
 import {
   BsEnvelope, BsCalendar, BsPerson, BsClock, BsGeoAlt,
   BsTelephone, BsCake, BsShieldCheck, BsInfoCircle, BsPersonX
@@ -43,22 +44,23 @@ async function fetchUserById(userId) {
 
 const UserProfilePage = () => {
   const params = useParams();
+  const { profileId, isValid } = useProfileHash();
   const { t, locale } = useLanguage();
   const { userInfo } = useAuthContext();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const isOwnProfile = userInfo?.id && params.id && (String(userInfo.id) === String(params.id));
+  const isOwnProfile = userInfo?.id && profileId && (String(userInfo.id) === String(profileId));
   const isAdmin = userInfo?.role === 'admin';
   const canSeeSensitiveInfo = isOwnProfile || isAdmin;
 
   useEffect(() => {
-    if (!params.id) return;
-    fetchUserById(params.id)
+    if (!profileId) return;
+    fetchUserById(profileId)
       .then(data => setUser(data))
       .catch(err => console.error('Error fetching user data:', err))
       .finally(() => setLoading(false));
-  }, [params.id]);
+  }, [profileId]);
 
   // Tarih formatını düzenle
   const formatDate = (dateString, includeDay = true) => {
@@ -102,6 +104,18 @@ const UserProfilePage = () => {
       </Badge>
     );
   };
+
+  if (params.id && !isValid) {
+    return (
+      <Card className="border-0 shadow-sm">
+        <CardBody className="text-center py-5">
+          <h4>{t('userProfile.notFound', 'Profil Bulunamadı')}</h4>
+          <p className="text-muted">Geçersiz profil linki.</p>
+          <a href="/feed" className="btn btn-primary">Ana Sayfaya Dön</a>
+        </CardBody>
+      </Card>
+    );
+  }
 
   if (loading) {
     return (

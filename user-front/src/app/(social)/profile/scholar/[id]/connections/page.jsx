@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import { useProfileHash } from '@/hooks/useProfileHash';
 import { Card, CardBody, CardHeader, CardTitle, Modal, Button, ListGroup } from 'react-bootstrap';
 import { useLanguage } from '@/context/useLanguageContext';
 import Image from 'next/image';
@@ -34,6 +35,7 @@ const MapComponent = dynamic(() => import('@/components/MapComponent'), {
 
 const ScholarBooksPage = () => {
   const params = useParams();
+  const { profileId } = useProfileHash();
   const { t } = useLanguage();
   const [scholar, setScholar] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -51,7 +53,7 @@ const ScholarBooksPage = () => {
   useEffect(() => {
     const fetchScholarData = async () => {
       try {
-        const scholarId = params.id;
+        const scholarId = profileId;
         if (scholarId) {
           const token = localStorage.getItem('token');
 
@@ -84,7 +86,7 @@ const ScholarBooksPage = () => {
     };
 
     fetchScholarData();
-  }, [params.id]);
+  }, [profileId]);
 
   // Filter books based on active tab
   const getFilteredBooks = () => {

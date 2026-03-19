@@ -3,6 +3,7 @@
 import { useAuthContext } from '@/context/useAuthContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { useLanguage } from '@/context/useLanguageContext';
+import { getProfilePath } from '@/utils/profileEncoder';
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 import { useOptionalNotificationContext } from '@/context/useNotificationContext';
 import Image from 'next/image';
@@ -854,7 +855,7 @@ const MessagingBar = () => {
                     >
                         <div className="d-flex align-items-center overflow-hidden">
                             <Link
-                                href={`/profile/user/${chat.user.id}`}
+                                href={getProfilePath('user', chat.user.id) || '#'}
                                 onClick={(e) => e.stopPropagation()}
                                 className="position-relative me-2 flex-shrink-0"
                                 style={{ width: 32, height: 32, display: 'block' }}
@@ -901,7 +902,7 @@ const MessagingBar = () => {
                                         <div className="p-3">
                                             {/* User Info Card */}
                                             <div className="text-center mb-4">
-                                                <Link href={`/profile/user/${chat.user.id}`} className="d-inline-block mb-2">
+                                                <Link href={getProfilePath('user', chat.user.id) || '#'} className="d-inline-block mb-2">
                                                     <Image
                                                         src={getDisplayAvatar(chat.user.photoUrl)}
                                                         alt={chat.user.firstName}
@@ -911,7 +912,7 @@ const MessagingBar = () => {
                                                         style={{ objectFit: 'cover' }}
                                                     />
                                                 </Link>
-                                                <Link href={`/profile/user/${chat.user.id}`} className="text-decoration-none">
+                                                <Link href={getProfilePath('user', chat.user.id) || '#'} className="text-decoration-none">
                                                     <h5 className="mb-0 fw-bold" style={{ color: colors.textMain }}>{chat.user.firstName} {chat.user.lastName}</h5>
                                                 </Link>
                                                 {(chat.user.tagline || chat.user.role) && (
@@ -923,7 +924,7 @@ const MessagingBar = () => {
                                             {chat.messages.map((msg) => (
                                                 <div key={msg.id} className={clsx("d-flex align-items-start mb-3", msg.isMe ? "flex-row-reverse" : "flex-row")}>
                                                     <Link
-                                                        href={`/profile/user/${msg.isMe ? (userInfo?.id || session?.user?.id) : chat.user.id}`}
+                                                        href={getProfilePath('user', msg.isMe ? (userInfo?.id || session?.user?.id) : chat.user.id) || '#'}
                                                         className={clsx("flex-shrink-0", msg.isMe ? "ms-2" : "me-2")}
                                                         style={{ width: 32, height: 32, display: 'block' }}
                                                     >

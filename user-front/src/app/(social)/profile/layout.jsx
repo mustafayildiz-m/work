@@ -30,6 +30,7 @@ import album4 from '@/assets/images/albums/04.jpg';
 import album5 from '@/assets/images/albums/05.jpg';
 import { useEffect, useState, memo, useCallback, useMemo } from 'react';
 import { useParams } from 'next/navigation';
+import { useProfileHash } from '@/hooks/useProfileHash';
 const Experience = () => {
   return <Card>
     <CardHeader className="d-flex justify-content-between border-0">
@@ -113,6 +114,7 @@ const ProfileLayout = ({
 }) => {
   const pathName = usePathname();
   const params = useParams();
+  const { profileId: resolvedProfileId, isValid } = useProfileHash();
   const { data: session, update } = useSession();
   const { t, locale } = useLanguage();
   const [profileData, setProfileData] = useState(null);
@@ -237,8 +239,8 @@ const ProfileLayout = ({
       if (!token) return;
 
       // Scholar profile: only followersCount
-      if (profileType === 'scholar' && params?.id) {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scholars/${params.id}/follow-stats`, {
+      if (profileType === 'scholar' && resolvedProfileId) {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scholars/${resolvedProfileId}/follow-stats`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -255,7 +257,7 @@ const ProfileLayout = ({
       }
 
       // Specific user profile or own profile
-      let targetUserId = params?.id;
+      let targetUserId = resolvedProfileId;
       if (!targetUserId) {
         targetUserId = getUserIdFromToken();
       }
@@ -277,11 +279,11 @@ const ProfileLayout = ({
     } catch (error) {
       // console.error('Error fetching follow stats:', error);
     }
-  }, [profileType, params?.id]);
+  }, [profileType, resolvedProfileId]);
 
   const fetchScholarData = useCallback(async () => {
     try {
-      const scholarId = params.id;
+      const scholarId = resolvedProfileId;
       if (scholarId) {
         const token = localStorage.getItem('token');
         const userId = getUserIdFromToken();
@@ -317,11 +319,11 @@ const ProfileLayout = ({
     } catch (error) {
       console.error('Error fetching scholar data:', error);
     }
-  }, [params.id]);
+  }, [resolvedProfileId]);
 
   const fetchUserData = useCallback(async () => {
     try {
-      const userId = params.id;
+      const userId = resolvedProfileId;
 
       if (userId) {
         const token = localStorage.getItem('token');
@@ -351,7 +353,7 @@ const ProfileLayout = ({
     } catch (error) {
       // console.error('Error fetching user data:', error);
     }
-  }, [params.id]);
+  }, [resolvedProfileId]);
 
   const fetchCurrentUserData = useCallback(async () => {
     try {
@@ -632,10 +634,10 @@ const ProfileLayout = ({
     const baseUrl = window.location.origin;
     const currentLang = locale || 'tr'; // Mevcut dil
 
-    if (profileType === 'scholar' && params?.id) {
-      return generateProfileUrl('scholar', params.id, baseUrl, currentLang);
-    } else if (profileType === 'user' && params?.id) {
-      return generateProfileUrl('user', params.id, baseUrl, currentLang);
+    if (profileType === 'scholar' && resolvedProfileId) {
+      return generateProfileUrl('scholar', resolvedProfileId, baseUrl, currentLang);
+    } else if (profileType === 'user' && resolvedProfileId) {
+      return generateProfileUrl('user', resolvedProfileId, baseUrl, currentLang);
     } else {
       // Kendi profilimiz için
       const currentUserId = getUserIdFromToken();
@@ -731,8 +733,8 @@ const ProfileLayout = ({
       const profileName = getProfileDisplayName();
       const profileUrl = getProfileUrl();
 
-      // Profil ID'sini al
-      const sharedProfileId = params?.id || userId;
+      // Profil ID'sini al (numeric ID - API için)
+      const sharedProfileId = resolvedProfileId || userId;
 
       // Post oluştur
       const formData = new FormData();
@@ -791,7 +793,7 @@ const ProfileLayout = ({
       if (profileType === 'scholar') {
         const requestBody = {
           user_id: parseInt(userId),
-          scholar_id: parseInt(params.id)
+          scholar_id: parseInt(resolvedProfileId)
         };
 
         response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user-scholar-follow/follow`, {
@@ -805,7 +807,7 @@ const ProfileLayout = ({
       } else if (profileType === 'user') {
         const requestBody = {
           follower_id: parseInt(userId),
-          following_id: parseInt(params.id)
+          following_id: parseInt(resolvedProfileId)
         };
 
         response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user-follow/follow`, {
@@ -865,7 +867,7 @@ const ProfileLayout = ({
       if (profileType === 'scholar') {
         const requestBody = {
           user_id: parseInt(userId),
-          scholar_id: parseInt(params.id)
+          scholar_id: parseInt(resolvedProfileId)
         };
 
         response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user-scholar-follow/unfollow`, {
@@ -879,7 +881,7 @@ const ProfileLayout = ({
       } else if (profileType === 'user') {
         const requestBody = {
           follower_id: parseInt(userId),
-          following_id: parseInt(params.id)
+          following_id: parseInt(resolvedProfileId)
         };
 
         response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user-follow/unfollow`, {
@@ -1044,6 +1046,24 @@ const ProfileLayout = ({
     return dynamicUrl;
   };
 
+  // Geçersiz hash (örn: /profile/user/adasdasd) - Sayfa Bulunamadı göster
+  const isProfilePath = pathName.includes('/profile/user/') || pathName.includes('/profile/scholar/');
+  if (isProfilePath && params?.id && !isValid) {
+    return (
+      <main>
+        <Container>
+          <Card className="border-0 shadow-sm mt-5">
+            <CardBody className="text-center py-5">
+              <h4>Sayfa Bulunamadı</h4>
+              <p className="text-muted">Geçersiz profil linki veya bu sayfa mevcut değil.</p>
+              <Link href="/feed" className="btn btn-primary">Ana Sayfaya Dön</Link>
+            </CardBody>
+          </Card>
+        </Container>
+      </main>
+    );
+  }
+
   return <>
     <main>
       <Container>
@@ -1168,8 +1188,8 @@ const ProfileLayout = ({
                           const currentUserId = decodedPayload.sub;
 
 
-                          // If no params.id (general profile) or params.id matches current user
-                          if (!params.id || params.id === currentUserId || params.id === currentUserId.toString()) {
+                          // If no params.id (general profile) or resolvedProfileId matches current user
+                          if (!params.id || resolvedProfileId == currentUserId || String(resolvedProfileId) === String(currentUserId)) {
                             return (
                               <Button
                                 as={Link}
@@ -1274,7 +1294,7 @@ const ProfileLayout = ({
                               className="me-2 px-4"
                               onClick={() => {
                                 const targetUser = {
-                                  id: params?.id,
+                                  id: resolvedProfileId,
                                   firstName: profileData?.firstName || '',
                                   lastName: profileData?.lastName || '',
                                   username: profileData?.username || '',
@@ -1370,7 +1390,7 @@ const ProfileLayout = ({
                         const payload = token.split('.')[1];
                         const decodedPayload = JSON.parse(atob(payload));
                         const currentUserId = decodedPayload.sub?.toString();
-                        if (profileType === 'user' && params?.id && params.id.toString() !== currentUserId) {
+                        if (profileType === 'user' && params?.id && resolvedProfileId != currentUserId && String(resolvedProfileId) !== String(currentUserId)) {
                           return `/profile/user/${params.id}/followers`;
                         }
                         if (profileType === 'scholar' && params?.id) {
@@ -1393,7 +1413,7 @@ const ProfileLayout = ({
                             const payload = token.split('.')[1];
                             const decodedPayload = JSON.parse(atob(payload));
                             const currentUserId = decodedPayload.sub?.toString();
-                            if (profileType === 'user' && params?.id && params.id.toString() !== currentUserId) {
+                            if (profileType === 'user' && params?.id && resolvedProfileId != currentUserId && String(resolvedProfileId) !== String(currentUserId)) {
                               return `/profile/user/${params.id}/following`;
                             }
                           }

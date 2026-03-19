@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { FaSearch, FaUser, FaGraduationCap, FaUsers, FaUserFriends } from 'react-icons/fa';
 import Link from 'next/link';
 import { getUserIdFromToken } from '../../../../../utils/auth';
+import { getProfilePath } from '@/utils/profileEncoder';
 import { useLanguage } from '../../../../../context/useLanguageContext';
 import './followers.css';
 
@@ -279,7 +280,7 @@ export default function FollowersPage() {
 
                       <h6 className="item-name">
                         {follower.id && follower.id !== 'undefined' ? (
-                          <Link href={`/profile/${getFollowerType(follower)}/${follower.id}`} className="text-decoration-none">
+                          <Link href={getProfilePath(getFollowerType(follower), follower.id) || '#'} className="text-decoration-none">
                             {getFollowerDisplayName(follower)}
                           </Link>
                         ) : (
@@ -303,7 +304,7 @@ export default function FollowersPage() {
                       <div className="mt-auto">
                         {follower.id && follower.id !== 'undefined' && (
                           <Link
-                            href={`/profile/${getFollowerType(follower)}/${follower.id}`}
+                            href={getProfilePath(getFollowerType(follower), follower.id) || '#'}
                             className="btn btn-outline-primary w-100 me-2"
                           >
                             {t('followers.viewProfile')}

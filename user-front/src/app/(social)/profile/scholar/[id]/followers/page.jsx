@@ -4,9 +4,12 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { FaSearch, FaUserFriends, FaUser } from 'react-icons/fa';
+import { useProfileHash } from '@/hooks/useProfileHash';
+import { getProfilePath } from '@/utils/profileEncoder';
 
 export default function ScholarFollowersPage() {
   const params = useParams();
+  const { profileId } = useProfileHash();
   const [followersData, setFollowersData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,7 +21,7 @@ export default function ScholarFollowersPage() {
       try {
         setLoading(true);
         const token = localStorage.getItem('token');
-        const scholarId = params?.id;
+        const scholarId = profileId;
         if (!token || !scholarId) { setLoading(false); return; }
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scholars/${scholarId}/followers?limit=100`, {
@@ -58,7 +61,7 @@ export default function ScholarFollowersPage() {
     };
 
     fetchFollowersData();
-  }, [params?.id]);
+  }, [profileId]);
 
   useEffect(() => {
     let filtered = followersData;
@@ -134,7 +137,7 @@ export default function ScholarFollowersPage() {
                     </div>
                     <h6 className="item-name">
                       {item.id ? (
-                        <Link href={`/profile/${item.type || 'user'}/${item.id}`} className="text-decoration-none">{item.name || item.username}</Link>
+                        <Link href={getProfilePath(item.type || 'user', item.id) || '#'} className="text-decoration-none">{item.name || item.username}</Link>
                       ) : (
                         <span className="text-decoration-none">{item.name || item.username}</span>
                       )}

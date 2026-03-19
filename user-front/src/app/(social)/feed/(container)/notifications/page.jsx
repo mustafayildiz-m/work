@@ -12,6 +12,7 @@ import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 import { getImageUrl } from '@/utils/image';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { useLanguage } from '@/context/useLanguageContext';
+import { getProfilePath } from '@/utils/profileEncoder';
 
 const NotificationsPage = () => {
   const { theme } = useLayoutContext();
@@ -305,7 +306,7 @@ const NotificationsPage = () => {
                         <div className="d-flex gap-2 mt-2">
                           <Button
                             as={Link}
-                            href={`/profile/user/${notification.relatedUserId || notification.related_user_id}`}
+                            href={getProfilePath('user', notification.relatedUserId || notification.related_user_id) || '#'}
                             size="sm"
                             variant="outline-primary"
                             className="py-0 px-2 d-flex align-items-center"

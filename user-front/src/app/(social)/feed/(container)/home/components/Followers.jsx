@@ -10,6 +10,7 @@ import { FaPlus } from 'react-icons/fa';
 import React, { useState, useEffect } from 'react';
 import { getUserIdFromToken } from '../../../../../../utils/auth';
 import { useLanguage } from '@/context/useLanguageContext';
+import { getProfilePath } from '@/utils/profileEncoder';
 import { useSession } from 'next-auth/react';
 
 const Followers = () => {
@@ -224,7 +225,7 @@ const Followers = () => {
             {follower.id && follower.id !== 'undefined' ? (
               <Link
                 className="h6 mb-0"
-                href={`/profile/${follower.type || 'scholar'}/${follower.id}`}
+                href={getProfilePath(follower.type || 'scholar', follower.id) || '#'}
               >
                 {follower.name || follower.fullName}{' '}
               </Link>

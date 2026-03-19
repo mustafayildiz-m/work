@@ -9,6 +9,7 @@ import CustomConfirmDialog from '@/components/CustomConfirmDialog';
 import { useLanguages } from '@/hooks/useLanguages';
 import Image from 'next/image';
 import Link from 'next/link';
+import { getProfilePath } from '@/utils/profileEncoder';
 import avatar7 from '@/assets/images/avatar/07.jpg';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
@@ -241,7 +242,7 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
               <h6 className="mb-0" style={{ color: isDarkMode ? '#e9ecef' : '#2c3e50' }}>
                 {post.user_id ? (
                   <Link
-                    href={`/profile/user/${post.user_id}`}
+                    href={getProfilePath('user', post.user_id) || '#'}
                     className="text-decoration-none"
                     style={{ color: isDarkMode ? '#e9ecef' : '#2c3e50' }}
                   >

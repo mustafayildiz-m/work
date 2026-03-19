@@ -7,6 +7,7 @@ import Link from 'next/link';
 import './who-to-follow.css';
 import { getUserIdFromToken } from '../../../../../utils/auth';
 import { useLanguage } from '@/context/useLanguageContext';
+import { getProfilePath } from '@/utils/profileEncoder';
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 
 export default function WhoToFollowPage() {
@@ -496,7 +497,7 @@ export default function WhoToFollowPage() {
                 <div key={`${user.type}-${user.id}`} className="user-card-col px-2 mb-4">
                   <div className="card h-100 border-0 shadow-sm user-item-card">
                     {/* Top Image Section - Edge to Edge */}
-                    <Link href={`/profile/${user.type || 'user'}/${user.id}`} style={{ display: 'block', position: 'relative', width: '100%', aspectRatio: '1/1', overflow: 'hidden' }}>
+                    <Link href={getProfilePath(user.type || 'user', user.id) || '#'} style={{ display: 'block', position: 'relative', width: '100%', aspectRatio: '1/1', overflow: 'hidden' }}>
                       <img
                         src={getImageUrl(user.photoUrl)}
                         alt={user.name}
@@ -529,7 +530,7 @@ export default function WhoToFollowPage() {
                       </div>
 
                       <h6 className="mb-2 user-card-name">
-                        <Link href={`/profile/${user.type || 'user'}/${user.id}`} className="text-decoration-none text-dark dark:text-white">
+                        <Link href={getProfilePath(user.type || 'user', user.id) || '#'} className="text-decoration-none text-dark dark:text-white">
                           {user.name}
                         </Link>
                       </h6>

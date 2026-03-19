@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useState, useEffect } from 'react';
 import { useLayoutContext } from '@/context/useLayoutContext';
+import { getProfilePath } from '@/utils/profileEncoder';
 
 const SettingPanel = ({
   links
@@ -109,7 +110,7 @@ const SettingPanel = ({
 
         <li style={{ margin: 0, marginTop: '0.5rem', paddingTop: '0.5rem', borderTop: isDark ? '1px solid #454d55' : '1px solid #F1F8F4' }}>
           <Link
-            href={userId ? `/profile/user/${userId}/feed` : '/profile/feed'}
+            href={userId ? getProfilePath('user', userId, 'feed') : '/profile/feed'}
             className="d-flex align-items-center text-decoration-none"
             style={{
               borderRadius: '10px',

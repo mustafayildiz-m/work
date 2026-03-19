@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react';
 import { useAuth } from '@/hooks/useAuth';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { useLanguage } from '@/context/useLanguageContext';
+import { getProfilePath } from '@/utils/profileEncoder';
 import avatar7 from '@/assets/images/avatar/07.jpg';
 import { BsCheckLg } from 'react-icons/bs';
 
@@ -171,7 +172,7 @@ const ProfileDropdown = () => {
   // Dynamic menu items with user ID
   const dynamicMenuItems = useMemo(() => {
     const userId = getUserId();
-    const profileHref = userId ? `/profile/user/${userId}/feed` : '/profile';
+    const profileHref = userId ? getProfilePath('user', userId, 'feed') : '/profile';
 
     return MENU_ITEMS.map(item => ({
       ...item,

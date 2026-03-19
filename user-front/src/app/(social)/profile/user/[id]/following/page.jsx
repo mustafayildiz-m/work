@@ -5,9 +5,12 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { FaSearch, FaUser, FaGraduationCap, FaUsers, FaUserFriends } from 'react-icons/fa';
 import { useLanguage } from '@/context/useLanguageContext';
+import { useProfileHash } from '@/hooks/useProfileHash';
+import { getProfilePath } from '@/utils/profileEncoder';
 
 export default function UserFollowingPage() {
   const params = useParams();
+  const { profileId, isValid } = useProfileHash();
   const { t } = useLanguage();
   const [followingData, setFollowingData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -25,7 +28,7 @@ export default function UserFollowingPage() {
       try {
         setLoading(true);
         const token = localStorage.getItem('token');
-        const userId = params?.id;
+        const userId = profileId;
         if (!token || !userId) {
           setLoading(false);
           return;
@@ -100,7 +103,7 @@ export default function UserFollowingPage() {
     };
 
     fetchFollowingData();
-  }, [params?.id]);
+  }, [profileId]);
 
   useEffect(() => {
     let filtered = followingData;
@@ -220,7 +223,7 @@ export default function UserFollowingPage() {
                     </div>
                     <h6 className="item-name">
                       {item.id ? (
-                        <Link href={`/profile/${item.type || 'user'}/${item.id}`} className="text-decoration-none">
+                        <Link href={getProfilePath(item.type || 'user', item.id) || `#`} className="text-decoration-none">
                           {item.name || item.fullName}
                         </Link>
                       ) : (

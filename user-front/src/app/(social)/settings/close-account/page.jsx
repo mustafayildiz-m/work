@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { getProfilePath } from '@/utils/profileEncoder';
 import { Button, Card, CardBody, CardHeader, CardTitle } from 'react-bootstrap';
 import { useLanguage } from '@/context/useLanguageContext';
 import { toast } from 'react-toastify';
@@ -38,7 +39,7 @@ const AccountClose = () => {
 
   const handleKeepAccount = () => {
     if (userId) {
-      router.push(`/profile/user/${userId}/feed`);
+      router.push(getProfilePath('user', userId, 'feed') || '/profile/feed');
     } else {
       router.push('/profile/feed');
     }
