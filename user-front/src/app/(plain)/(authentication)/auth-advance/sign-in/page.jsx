@@ -101,23 +101,23 @@ const SignIn = () => {
           </div>
           <div className={styles.textContentWrapper}>
             <h2 className={styles.textTitle}>
-              <span style={{ fontSize: '1.2rem', display: 'block', marginBottom: '8px', color: '#4a5d4e' }}>
+              <span className={styles.textTitleBismillah}>
                 Bismillahirrahmanirrahim
-                {t('auth.pathToLightBismillahSecondary') && (
-                  <span style={{ display: 'block', fontSize: '0.9rem', marginTop: '4px', fontStyle: 'italic' }}>
-                    {t('auth.pathToLightBismillahSecondary')}
-                  </span>
-                )}
+                {(() => {
+                  const secondary = t('auth.pathToLightBismillahSecondary');
+                  const isValid = secondary && secondary.trim() !== '' && !secondary.startsWith('auth.');
+                  return isValid ? (
+                    <span className={styles.textTitleBismillahSecondary}>{secondary}</span>
+                  ) : null;
+                })()}
               </span>
-              {t('auth.pathToLightSubtitle')}
+              <span className={styles.textTitleMain}>{t('auth.pathToLightSubtitle')}</span>
             </h2>
             <div className={styles.textBody}>
               <p>{t('auth.pathToLightP1')}</p>
               <p>{t('auth.pathToLightP2')}</p>
               <p>{t('auth.pathToLightP3')}</p>
-              <p style={{ fontStyle: 'italic', fontWeight: '500', color: '#1b3a2a', marginTop: '1.5rem', textAlign: 'center' }}>
-                {t('auth.pathToLightP4')}
-              </p>
+              <p className={styles.textBodyHighlight}>{t('auth.pathToLightP4')}</p>
             </div>
           </div>
         </div>

@@ -21,6 +21,7 @@ const LoginForm = () => {
   const router = useRouter();
   const queryParams = useQueryParams();
   const [ageConfirmed, setAgeConfirmed] = useState(false);
+  const [ageConfirmError, setAgeConfirmError] = useState(false);
   const {
     loading,
     showSuccess,
@@ -148,13 +149,16 @@ const LoginForm = () => {
           <div className={styles.dividerLine} />
         </div>
 
-        <div className="mb-3">
+        <div className={`mb-3 ${styles.ageConfirmWrapper} ${ageConfirmError ? styles.ageConfirmError : ''}`}>
           <FormCheck
             type="checkbox"
             id="ageConfirmCheck"
-            label={<span style={{ fontSize: '0.85rem', color: '#64748b' }}>{t('auth.ageConfirm')}</span>}
+            label={<span style={{ fontSize: '0.85rem', color: ageConfirmError ? '#dc2626' : '#64748b' }}>{t('auth.ageConfirm')}</span>}
             checked={ageConfirmed}
-            onChange={(e) => setAgeConfirmed(e.target.checked)}
+            onChange={(e) => {
+              setAgeConfirmed(e.target.checked);
+              if (e.target.checked) setAgeConfirmError(false);
+            }}
             className="custom-green-check"
           />
         </div>
@@ -167,6 +171,7 @@ const LoginForm = () => {
             disabled={loading || showSuccess}
             onClick={() => {
               if (!ageConfirmed) {
+                setAgeConfirmError(true);
                 showNotification({
                   variant: 'warning',
                   message: t('auth.ageRequiredError'),
@@ -199,32 +204,7 @@ const LoginForm = () => {
             variant="outline-primary"
             disabled={loading || showSuccess}
             onClick={() => window.location.href = '/'}
-            style={{
-              borderRadius: '24px',
-              minHeight: '52px',
-              fontWeight: '700',
-              border: '2px solid #764ba2',
-              color: '#764ba2',
-              backgroundColor: 'rgba(118, 75, 162, 0.05)',
-              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#764ba2';
-              e.currentTarget.style.color = 'white';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(118, 75, 162, 0.3)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'rgba(118, 75, 162, 0.05)';
-              e.currentTarget.style.color = '#764ba2';
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
-            }}
+            className={styles.guestButton}
           >
             <BsPerson size={22} />
             <span>{t('auth.visitAsGuest')}</span>
