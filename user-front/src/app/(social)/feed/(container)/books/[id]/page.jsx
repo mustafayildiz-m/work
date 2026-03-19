@@ -15,7 +15,7 @@ import { useNotificationContext } from '@/context/useNotificationContext';
 import { useLanguages } from '@/hooks/useLanguages';
 import useViewPort from '@/hooks/useViewPort';
 import styles from './styles.module.css';
-import { getLanguageCode, cleanTextForTTS, fetchTTSAudio, unlockAudioForPlayback } from '@/utils/textToSpeech';
+import { getLanguageCode, cleanTextForTTS, fetchTTSAudio, unlockAudioForPlayback, getUnlockedAudioElement } from '@/utils/textToSpeech';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -181,7 +181,8 @@ const BookDetailPage = () => {
 
       const segmentBlob = await fetchTTSAudio(segmentText, langCode, API_BASE_URL, token);
       const segmentUrl = URL.createObjectURL(segmentBlob);
-      const audio = new Audio(segmentUrl);
+      const audio = getUnlockedAudioElement() || new Audio();
+      audio.src = segmentUrl;
       audio.playbackRate = playbackRate || 1.0;
       currentAudioRef.current = audio;
 

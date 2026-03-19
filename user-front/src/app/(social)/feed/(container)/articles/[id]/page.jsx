@@ -16,7 +16,7 @@ import styles from './styles.module.css';
 
 const PdfViewer = dynamic(() => import('@/components/PdfViewer'), { ssr: false });
 import { pdfjs } from 'react-pdf';
-import { getLanguageCode, cleanTextForTTS, fetchTTSAudio, unlockAudioForPlayback } from '@/utils/textToSpeech';
+import { getLanguageCode, cleanTextForTTS, fetchTTSAudio, unlockAudioForPlayback, getUnlockedAudioElement } from '@/utils/textToSpeech';
 
 // PDF.js worker'ı yapılandır
 if (typeof window !== 'undefined') {
@@ -342,7 +342,8 @@ const ArticleDetailPage = () => {
 
       const segmentBlob = await fetchTTSAudio(segmentText, langCode, API_BASE_URL, token);
       const segmentUrl = URL.createObjectURL(segmentBlob);
-      const audio = new Audio(segmentUrl);
+      const audio = getUnlockedAudioElement() || new Audio();
+      audio.src = segmentUrl;
       audio.playbackRate = playbackRate || 1.0;
       currentAudioRef.current = audio;
 
