@@ -55,12 +55,19 @@ const SignIn = () => {
             </div>
 
             <div className={styles.formContainer}>
-              <h1 className={styles.welcomeTitle}>
-                {t('auth.bismillah')}
-              </h1>
-              <p className={styles.welcomeSubtitle}>
-                {t('auth.platformWelcome')}
-              </p>
+              <div className={styles.mobileHeaderWrap}>
+                <p className={styles.welcomeBismillahArabic}>{t('auth.bismillahArabic')}</p>
+                <h1 className={styles.welcomeTitle}>
+                  {t('auth.bismillah')}
+                </h1>
+                <p className={styles.welcomeSubtitle}>
+                  {t('auth.platformWelcome')}
+                </p>
+              </div>
+              <div className={styles.mobileQuoteBlock}>
+                <p className={styles.mobileQuoteText}>"{t('auth.authQuote')}"</p>
+                <span className={styles.mobileQuoteSource}>— {t('auth.authQuoteSource')}</span>
+              </div>
 
               <div className={styles.authCard}>
                 <div className="p-4">
@@ -101,18 +108,22 @@ const SignIn = () => {
           </div>
           <div className={styles.textContentWrapper}>
             <h2 className={styles.textTitle}>
-              <span className={styles.textTitleBismillah}>
-                Bismillahirrahmanirrahim
-                {(() => {
-                  const secondary = t('auth.pathToLightBismillahSecondary');
-                  const isValid = secondary && secondary.trim() !== '' && !secondary.startsWith('auth.');
-                  return isValid ? (
-                    <span className={styles.textTitleBismillahSecondary}>{secondary}</span>
-                  ) : null;
-                })()}
+              <span className={styles.textTitleBismillahArabic}>
+                {t('auth.bismillahArabic')}
               </span>
+              {(() => {
+                const secondary = t('auth.pathToLightBismillahSecondary');
+                const isValid = secondary && secondary.trim() !== '' && !secondary.startsWith('auth.');
+                return isValid ? (
+                  <span className={styles.textTitleBismillahSecondary}>{secondary}</span>
+                ) : null;
+              })()}
               <span className={styles.textTitleMain}>{t('auth.pathToLightSubtitle')}</span>
             </h2>
+            <div className={styles.authQuoteBlock}>
+              <p className={styles.authQuoteText}>"{t('auth.authQuote')}"</p>
+              <span className={styles.authQuoteSource}>— {t('auth.authQuoteSource')}</span>
+            </div>
             <div className={styles.textBody}>
               <p>{t('auth.pathToLightP1')}</p>
               <p>{t('auth.pathToLightP2')}</p>
