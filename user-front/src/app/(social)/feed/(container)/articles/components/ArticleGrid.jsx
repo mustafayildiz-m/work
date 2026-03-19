@@ -134,31 +134,31 @@ export default function ArticleGrid({
   return (
     <div>
       {/* Stats Card */}
-      <Card className="mb-4 border-0 shadow-sm">
-        <Card.Body>
-          <Row className="text-center">
+      <Card className="mb-3 mb-md-4 border-0 shadow-sm">
+        <Card.Body className="p-2 p-md-3">
+          <Row className="text-center g-0">
             <Col xs={6} md={3}>
-              <div className="p-3">
-                <h3 className="mb-0 text-primary">{pagination.totalItems}</h3>
-                <small className="text-muted">{t('articles.list.totalArticles')}</small>
+              <div className="p-2 p-md-3">
+                <h3 className="mb-0 text-primary h5 h3-md">{pagination.totalItems}</h3>
+                <small className="text-muted d-block" style={{ fontSize: '0.75rem' }}>{t('articles.list.totalArticles')}</small>
               </div>
             </Col>
             <Col xs={6} md={3}>
-              <div className="p-3">
-                <h3 className="mb-0 text-success">{currentPage}</h3>
-                <small className="text-muted">{t('articles.list.currentPage')}</small>
+              <div className="p-2 p-md-3">
+                <h3 className="mb-0 text-success h5 h3-md">{currentPage}</h3>
+                <small className="text-muted d-block" style={{ fontSize: '0.75rem' }}>{t('articles.list.currentPage')}</small>
               </div>
             </Col>
             <Col xs={6} md={3}>
-              <div className="p-3">
-                <h3 className="mb-0 text-info">{pagination.totalPages}</h3>
-                <small className="text-muted">{t('articles.list.totalPages')}</small>
+              <div className="p-2 p-md-3">
+                <h3 className="mb-0 text-info h5 h3-md">{pagination.totalPages}</h3>
+                <small className="text-muted d-block" style={{ fontSize: '0.75rem' }}>{t('articles.list.totalPages')}</small>
               </div>
             </Col>
             <Col xs={6} md={3}>
-              <div className="p-3">
-                <h3 className="mb-0 text-warning">{articles.length}</h3>
-                <small className="text-muted">{t('articles.list.onThisPage')}</small>
+              <div className="p-2 p-md-3">
+                <h3 className="mb-0 text-warning h5 h3-md">{articles.length}</h3>
+                <small className="text-muted d-block" style={{ fontSize: '0.75rem' }}>{t('articles.list.onThisPage')}</small>
               </div>
             </Col>
           </Row>
@@ -167,7 +167,7 @@ export default function ArticleGrid({
 
       {/* Grid View */}
       {viewMode === 'grid' && (
-        <Row>
+        <Row className="g-1 g-sm-2 g-md-4 mb-3 mb-md-4 articles-grid">
           {articles.map((article, idx) => {
             // İlk translation'ı al (seçilen dildeki translation)
             const translation = article.translations?.[0];
@@ -175,32 +175,31 @@ export default function ArticleGrid({
             const summary = translation?.summary;
 
             return (
-              <Col key={article.id || idx} xs={12} md={6} lg={4} className="mb-4">
+              <Col key={article.id || idx} xs={4} sm={4} md={6} lg={4}>
                 <Card
-                  className="h-100 shadow-sm border-0 article-card"
+                  className="h-100 border-0 article-card"
                   onClick={() => handleCardClick(article.id)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <div className="img-container position-relative">
+                  <Link href={getArticleDetailUrl(article.id)} className="d-block position-relative article-image-wrapper text-decoration-none" style={{ paddingTop: '62%', overflow: 'hidden' }} onClick={(e) => e.stopPropagation()}>
                     <Image
                       src={getArticleImage(article)}
                       alt={title}
-                      width={400}
-                      height={250}
-                      style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
-                      className="card-img-top"
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      className="rounded-top"
                       onError={() => handleImageError(article.id)}
                     />
-                  </div>
-                  <Card.Body className="d-flex flex-column">
+                  </Link>
+                  <Card.Body className="d-flex flex-column p-1 p-sm-2 p-md-3 article-card-body">
                     <div className="text-decoration-none">
-                      <Card.Title className="mb-3" style={{ fontSize: '1.1rem', minHeight: '50px' }}>
+                      <Card.Title className="mb-1 mb-md-3 article-title" style={{ fontSize: '1.1rem', minHeight: '50px' }}>
                         {title}
                       </Card.Title>
                     </div>
 
                     {summary && (
-                      <Card.Text className="text-muted small mb-3" style={{
+                      <Card.Text className="text-muted small mb-1 mb-md-3 d-none d-sm-block" style={{
                         display: '-webkit-box',
                         WebkitLineClamp: 3,
                         WebkitBoxOrient: 'vertical',
@@ -212,21 +211,21 @@ export default function ArticleGrid({
 
                     <div className="mt-auto">
                       {article.author && (
-                        <div className="d-flex align-items-center mb-2 text-muted small">
+                        <div className="d-flex align-items-center mb-1 mb-md-2 text-muted small d-none d-md-flex">
                           <BsPerson className="me-1" />
                           <span>{article.author}</span>
                         </div>
                       )}
 
                       {article.publishDate && (
-                        <div className="d-flex align-items-center mb-2 text-muted small">
+                        <div className="d-flex align-items-center mb-1 mb-md-2 text-muted small d-none d-md-flex">
                           <BsCalendar className="me-1" />
                           <span>{new Date(article.publishDate).toLocaleDateString('tr-TR')}</span>
                         </div>
                       )}
 
                       <div className="text-decoration-none">
-                        <div className="d-flex align-items-center text-primary small mt-3">
+                        <div className="d-flex align-items-center text-primary small mt-1 mt-md-3">
                           <BsEye className="me-1" />
                           <span>{t('books.detail.readPdf')}</span>
                         </div>
@@ -242,7 +241,7 @@ export default function ArticleGrid({
 
       {/* List View */}
       {viewMode === 'list' && (
-        <div className="mb-4">
+        <div className="mb-3 mb-md-4">
           {articles.map((article, idx) => {
             // İlk translation'ı al (seçilen dildeki translation)
             const translation = article.translations?.[0];
@@ -252,7 +251,7 @@ export default function ArticleGrid({
             return (
               <Card
                 key={article.id || idx}
-                className="mb-3 shadow-sm border-0 article-list-card"
+                className="mb-2 mb-md-3 border-0 article-list-card"
                 onClick={() => handleCardClick(article.id)}
                 style={{
                   transition: 'all 0.3s ease',
@@ -260,8 +259,8 @@ export default function ArticleGrid({
                 }}
               >
                 <Row className="g-0">
-                  <Col xs={12} md={3} lg={2}>
-                    <div className="position-relative" style={{ height: '100%', minHeight: '200px' }}>
+                  <Col xs={3} md={3} lg={2} className="article-list-cover-col">
+                    <Link href={getArticleDetailUrl(article.id)} className="d-block position-relative article-list-image-link" style={{ height: '100%' }} onClick={(e) => e.stopPropagation()}>
                       <Image
                         src={getArticleImage(article)}
                         alt={title}
@@ -270,10 +269,10 @@ export default function ArticleGrid({
                         className="rounded-start"
                         onError={() => handleImageError(article.id)}
                       />
-                    </div>
+                    </Link>
                   </Col>
-                  <Col xs={12} md={9} lg={10}>
-                    <Card.Body className="p-4">
+                  <Col xs={9} md={9} lg={10}>
+                    <Card.Body className="p-2 p-md-4">
                       <Row>
                         <Col xs={12} lg={8}>
                           <div className="text-decoration-none">
@@ -340,11 +339,12 @@ export default function ArticleGrid({
 
       {pagination.totalPages > 1 && (
         <>
-          <div className="d-flex justify-content-center mb-4">
-            <Pagination>
+          <div className="d-flex justify-content-center mb-3 mb-md-4">
+            <Pagination size="sm" className="pagination-mobile">
               <Pagination.First
                 disabled={currentPage === 1}
                 onClick={() => handlePageChange(1)}
+                className="d-none d-md-inline-flex"
               />
               <Pagination.Prev
                 disabled={currentPage === 1}
@@ -384,12 +384,13 @@ export default function ArticleGrid({
               <Pagination.Last
                 disabled={currentPage === pagination.totalPages}
                 onClick={() => handlePageChange(pagination.totalPages)}
+                className="d-none d-md-inline-flex"
               />
             </Pagination>
           </div>
 
-          {/* Pagination Info */}
-          <div className="text-center text-muted mb-4">
+          {          /* Pagination Info */}
+          <div className="text-center text-muted mb-3 mb-md-4">
             <small>
               {t('books.list.showing')}: {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, pagination.totalItems)} / {pagination.totalItems} {t('articles.languageSelector.articleCount')}
             </small>
@@ -399,33 +400,87 @@ export default function ArticleGrid({
 
       <style jsx global>{`
         .article-card {
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .article-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
-        }
-
-        .article-card .img-container {
+          transition: all 0.3s ease !important;
+          border-radius: 10px !important;
           overflow: hidden;
+          border: 1px solid rgba(0, 0, 0, 0.06) !important;
         }
-
-        .article-card .img-container img {
-          transition: transform 0.3s ease;
-        }
-
-        .article-card:hover .img-container img {
-          transform: scale(1.05);
-        }
-
         .article-list-card {
           transition: all 0.3s ease !important;
+          border-radius: 10px !important;
+          overflow: hidden;
+          border: 1px solid rgba(0, 0, 0, 0.06) !important;
         }
-
-        .article-list-card:hover {
-          transform: translateX(5px) !important;
-          box-shadow: 0 5px 20px rgba(33, 147, 176, 0.15) !important;
+        
+        @media (min-width: 768px) {
+          .article-card:hover {
+            transform: translateY(-5px) !important;
+            box-shadow: 0 10px 30px rgba(33, 147, 176, 0.2) !important;
+            border-color: rgba(33, 147, 176, 0.2) !important;
+          }
+          .article-list-card:hover {
+            transform: translateX(5px) !important;
+            box-shadow: 0 5px 20px rgba(33, 147, 176, 0.15) !important;
+          }
+        }
+        
+        /* Mobile - compact */
+        @media (max-width: 767.98px) {
+          .articles-grid .article-card {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06) !important;
+            border-radius: 8px !important;
+          }
+          .article-image-wrapper {
+            padding-top: 70% !important;
+            border-radius: 8px 8px 0 0;
+          }
+          .article-card-body {
+            padding: 0.4rem 0.5rem !important;
+          }
+          .article-title {
+            font-size: 0.68rem !important;
+            font-weight: 600;
+            min-height: 2em !important;
+            line-height: 1.15 !important;
+          }
+          .article-list-cover-col {
+            min-height: 95px;
+          }
+          .article-list-image-link {
+            min-height: 95px !important;
+          }
+          .article-list-card .card-body {
+            padding: 0.5rem !important;
+          }
+          .article-list-card .card-title {
+            font-size: 0.8rem !important;
+            line-height: 1.2;
+          }
+        }
+        @media (min-width: 768px) {
+          .article-list-cover-col {
+            min-height: 140px;
+          }
+          .article-list-image-link {
+            min-height: 140px !important;
+          }
+        }
+        @media (max-width: 575.98px) {
+          .article-title {
+            font-size: 0.62rem !important;
+          }
+        }
+        :global([data-bs-theme='dark']) .article-card,
+        :global([data-bs-theme='green']) .article-card,
+        :global([data-bs-theme='dark']) .article-list-card,
+        :global([data-bs-theme='green']) .article-list-card {
+          border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+        @media (max-width: 767.98px) {
+          .pagination-mobile .page-link {
+            padding: 0.35rem 0.65rem !important;
+            font-size: 0.8rem !important;
+          }
         }
       `}</style>
     </div>

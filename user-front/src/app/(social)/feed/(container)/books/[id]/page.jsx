@@ -1121,7 +1121,7 @@ const BookDetailPage = () => {
       {/* Kitap Detayları */}
       <Card className={`border-0 shadow-sm ${styles.detailCard}`} style={{ position: 'relative' }}>
         {/* Dropdown Button - Sağ Üst Köşe */}
-        <div style={{
+        <div className={styles.shareButtonWrapper} style={{
           position: 'absolute',
           top: '1rem',
           right: '1rem',

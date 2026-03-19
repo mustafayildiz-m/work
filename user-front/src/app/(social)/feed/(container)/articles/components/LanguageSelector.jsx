@@ -205,24 +205,24 @@ const LanguageSelector = () => {
   }
 
   return (
-    <Card className="mb-4 border-0 shadow-lg">
-      <CardHeader className="bg-gradient text-white border-0" style={{
+    <Card className="mb-3 mb-md-4 border-0 shadow-lg language-selector-container">
+      <CardHeader className="bg-gradient text-white border-0 py-2 py-md-3" style={{
         background: 'linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)'
       }}>
-        <CardTitle className="mb-0 d-flex align-items-center">
+        <CardTitle className="mb-0 d-flex align-items-center" style={{ fontSize: 'clamp(1rem, 4vw, 1.25rem)' }}>
           <BsFileText className="me-2" size={24} />
           {t('articles.languageSelector.title')}
         </CardTitle>
-        <p className="mb-0 mt-2 opacity-90">
+        <p className="mb-0 mt-1 mt-md-2 opacity-90 small" style={{ fontSize: '0.8rem' }}>
           {t('articles.languageSelector.subtitle')}
         </p>
       </CardHeader>
-      <CardBody className="p-4">
-        <Row className="g-3">
+      <CardBody className="p-2 p-sm-3 p-md-4">
+        <Row className="g-2 g-sm-3">
           {languages.map((language) => {
             const count = articleCounts[language.id] || 0;
             return (
-              <Col key={language.id} xs={6} sm={4} md={3} lg={2}>
+              <Col key={language.id} xs={4} sm={4} md={3} lg={2}>
                 <Button
                   variant={selectedLanguage?.id === language.id ? "primary" : "outline-primary"}
                   className={`w-100 p-0 h-100 d-flex flex-column align-items-stretch justify-content-start position-relative lang-box ${selectedLanguage?.id === language.id ? 'active shadow' : ''
@@ -249,7 +249,7 @@ const LanguageSelector = () => {
                   }}
                 >
                   <div
-                    className="w-100"
+                    className="w-100 lang-flag-area"
                     style={{
                       height: '56px',
                       overflow: 'hidden',
@@ -265,7 +265,7 @@ const LanguageSelector = () => {
                         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                       />
                     ) : (
-                      <div style={{ fontSize: '2rem', lineHeight: '56px', textAlign: 'center' }}>
+                      <div className="lang-flag-emoji" style={{ fontSize: '2rem', lineHeight: '56px', textAlign: 'center' }}>
                         {getFlagEmoji(language.code)}
                       </div>
                     )}
@@ -282,7 +282,7 @@ const LanguageSelector = () => {
                     <Badge
                       bg={selectedLanguage?.id === language.id ? "light" : "primary"}
                       text={selectedLanguage?.id === language.id ? "dark" : "white"}
-                      className="mt-1"
+                      className="mt-1 lang-badge"
                       style={{
                         fontSize: '0.7rem',
                         padding: '4px 8px'
@@ -293,7 +293,7 @@ const LanguageSelector = () => {
                   )}
                   {selectedLanguage?.id === language.id && (
                     <div
-                      className="position-absolute top-0 end-0 m-2"
+                      className="position-absolute top-0 end-0 lang-check-badge"
                       style={{
                         width: '24px',
                         height: '24px',
@@ -314,11 +314,11 @@ const LanguageSelector = () => {
         </Row>
 
         {selectedLanguage && (
-          <div ref={continueButtonRef} className="text-center mt-4 animate-fade-in">
+          <div ref={continueButtonRef} className="text-center mt-3 mt-md-4 animate-fade-in">
             <Button
               variant="success"
               size="lg"
-              className="px-5 py-3 rounded-pill shadow-lg"
+              className="px-4 px-md-5 py-2 py-md-3 rounded-pill shadow-lg"
               onClick={handleContinue}
               style={{
                 background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
@@ -406,6 +406,58 @@ const LanguageSelector = () => {
           to {
             opacity: 1;
             transform: translateY(0);
+          }
+        }
+        
+        /* Mobile - compact language cards */
+        @media (max-width: 767.98px) {
+          .language-selector-container .lang-box {
+            min-height: 88px !important;
+            border-radius: 10px !important;
+          }
+          .language-selector-container .lang-flag-area {
+            height: 38px !important;
+            border-top-left-radius: 8px !important;
+            border-top-right-radius: 8px !important;
+          }
+          .language-selector-container .lang-flag-emoji {
+            font-size: 1.4rem !important;
+            line-height: 38px !important;
+          }
+          .language-selector-container .lang-text {
+            font-size: 0.7rem !important;
+            margin-top: 0.25rem !important;
+            padding: 0 0.25rem !important;
+          }
+          .language-selector-container .lang-badge {
+            font-size: 0.6rem !important;
+            margin-top: 0.15rem !important;
+            padding: 0.15rem 0.35rem !important;
+          }
+          .language-selector-container .lang-check-badge {
+            margin: 0.25rem !important;
+            width: 18px !important;
+            height: 18px !important;
+          }
+          .language-selector-container .lang-check-badge svg {
+            width: 10px !important;
+            height: 10px !important;
+          }
+        }
+        @media (max-width: 399.98px) {
+          .language-selector-container .lang-box {
+            min-height: 80px !important;
+            border-radius: 8px !important;
+          }
+          .language-selector-container .lang-flag-area {
+            height: 32px !important;
+          }
+          .language-selector-container .lang-flag-emoji {
+            font-size: 1.2rem !important;
+            line-height: 32px !important;
+          }
+          .language-selector-container .lang-text {
+            font-size: 0.65rem !important;
           }
         }
       `}</style>

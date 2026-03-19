@@ -682,8 +682,10 @@
     "list": {
       "pleaseLogin": "Prijavite se",
       "searchPlaceholder": "Iskanje knjig...",
+      "back": "Nazaj",
       "backToLanguages": "Nazaj na Jeziki",
       "booksTitle": "Knjige",
+      "filter": "Filter",
       "totalBooks": "Skupno število knjig",
       "currentPage": "Trenutna stran",
       "totalPages": "Skupaj strani",

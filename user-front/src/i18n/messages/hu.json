@@ -682,8 +682,10 @@
     "list": {
       "pleaseLogin": "Kérjük, jelentkezzen be",
       "searchPlaceholder": "Könyvek keresése...",
+      "back": "Vissza",
       "backToLanguages": "Vissza a Nyelvek oldalra",
       "booksTitle": "Könyvek",
+      "filter": "Szűrő",
       "totalBooks": "Könyvek összesen",
       "currentPage": "Jelenlegi oldal",
       "totalPages": "Összes oldal",

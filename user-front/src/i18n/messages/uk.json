@@ -682,8 +682,10 @@
     "list": {
       "pleaseLogin": "Будь ласка, увійдіть до системи",
       "searchPlaceholder": "Пошукайте книги...",
+      "back": "Назад",
       "backToLanguages": "Повернутися до мов",
       "booksTitle": "Книги",
+      "filter": "Фільтр",
       "totalBooks": "Всього книг",
       "currentPage": "Поточна сторінка",
       "totalPages": "Всього сторінок",

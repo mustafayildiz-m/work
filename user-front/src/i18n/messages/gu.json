@@ -766,8 +766,10 @@
     "list": {
       "pleaseLogin": "કૃપા કરીને લૉગ ઇન કરો",
       "searchPlaceholder": "પુસ્તકો શોધો...",
+      "back": "પાછા",
       "backToLanguages": "ભાષાઓ પર પાછા જાઓ",
       "booksTitle": "પુસ્તકો",
+      "filter": "ફિલ્ટર",
       "totalBooks": "કુલ પુસ્તકો",
       "currentPage": "વર્તમાન પૃષ્ઠ",
       "totalPages": "કુલ પૃષ્ઠો",

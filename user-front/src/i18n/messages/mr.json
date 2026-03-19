@@ -766,8 +766,10 @@
     "list": {
       "pleaseLogin": "कृपया लॉग इन करा",
       "searchPlaceholder": "पुस्तके शोधा...",
+      "back": "मागे",
       "backToLanguages": "भाषांकडे परत जा",
       "booksTitle": "पुस्तके",
+      "filter": "फिल्टर",
       "totalBooks": "एकूण पुस्तके",
       "currentPage": "वर्तमान पृष्ठ",
       "totalPages": "एकूण पृष्ठे",

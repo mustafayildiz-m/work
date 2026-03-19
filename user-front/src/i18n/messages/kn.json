@@ -766,8 +766,10 @@
     "list": {
       "pleaseLogin": "ದಯವಿಟ್ಟು ಲಾಗ್ ಇನ್ ಮಾಡಿ",
       "searchPlaceholder": "ಪುಸ್ತಕಗಳನ್ನು ಹುಡುಕಿ...",
+      "back": "ಹಿಂದೆ",
       "backToLanguages": "ಭಾಷೆಗಳಿಗೆ ಹಿಂತಿರುಗಿ",
       "booksTitle": "ಪುಸ್ತಕಗಳು",
+      "filter": "ಫಿಲ್ಟರ್",
       "totalBooks": "ಒಟ್ಟು ಪುಸ್ತಕಗಳು",
       "currentPage": "ಪ್ರಸ್ತುತ ಪುಟ",
       "totalPages": "ಒಟ್ಟು ಪುಟಗಳು",

@@ -101,13 +101,13 @@ const BooksPage = () => {
       {/* Live arama - buton yok, yazdıkça listele */}
       <div className="mb-4">
         <div
-          className="position-relative rounded-4 overflow-hidden"
+          className="position-relative rounded-4 overflow-hidden books-search-banner"
           style={{
             background: 'linear-gradient(135deg, #2e7d32 0%, #43a047 50%, #66bb6a 100%)',
             boxShadow: '0 10px 40px rgba(46, 125, 50, 0.25)',
           }}
         >
-          <div className="p-3 p-lg-4">
+          <div className="p-2 p-md-3 p-lg-4">
             <div className="position-relative">
               <BsSearch
                 className="position-absolute top-50 translate-middle-y opacity-80"
@@ -118,7 +118,7 @@ const BooksPage = () => {
                 placeholder={t('books.globalSearchPlaceholder') || 'Kitap adına göre ara...'}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="border-0 rounded-pill ps-5 py-3 shadow-sm"
+                className="border-0 rounded-pill ps-5 shadow-sm books-search-input"
                 style={{
                   fontSize: '1rem',
                   backgroundColor: 'rgba(255,255,255,0.98)',
@@ -291,18 +291,35 @@ const BooksPage = () => {
         /* Small mobile */
         @media (max-width: 399.98px) {
           .book-search-cover {
-            width: 36px;
-            height: 54px;
+            width: 32px;
+            height: 48px;
           }
           .book-flag-badge {
-            width: 48px;
-            height: 36px;
-            min-width: 48px;
-            border-radius: 10px;
+            width: 40px;
+            height: 30px;
+            min-width: 40px;
+            border-radius: 8px;
           }
           .book-flag-spacer {
-            width: 48px;
-            min-width: 48px;
+            width: 40px;
+            min-width: 40px;
+          }
+          .book-search-item {
+            padding: 0.35rem 0.5rem !important;
+          }
+          .book-search-item .fw-semibold {
+            font-size: 0.75rem !important;
+          }
+        }
+        /* Search bar mobile */
+        @media (max-width: 767.98px) {
+          .books-search-banner .p-2 {
+            padding: 0.5rem 0.75rem !important;
+          }
+          .books-search-input {
+            padding-top: 0.5rem !important;
+            padding-bottom: 0.5rem !important;
+            font-size: 0.9rem !important;
           }
         }
       `}</style>

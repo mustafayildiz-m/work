@@ -766,8 +766,10 @@
     "list": {
       "pleaseLogin": "దయచేసి లాగిన్ అవ్వండి",
       "searchPlaceholder": "పుస్తకాలను వెతకండి...",
+      "back": "వెనుకకు",
       "backToLanguages": "తిరిగి భాషలకు",
       "booksTitle": "పుస్తకాలు",
+      "filter": "ఫిల్టర్",
       "totalBooks": "మొత్తం పుస్తకాలు",
       "currentPage": "ప్రస్తుత పేజీ",
       "totalPages": "మొత్తం పేజీలు",

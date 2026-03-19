@@ -694,8 +694,10 @@
     "list": {
       "pleaseLogin": "Пожалуйста, войдите в систему",
       "searchPlaceholder": "Поиск книг...",
+      "back": "Назад",
       "backToLanguages": "Назад к языкам",
       "booksTitle": "Книги",
+      "filter": "Фильтр",
       "totalBooks": "Всего книг",
       "currentPage": "Текущая страница",
       "totalPages": "Всего страниц",

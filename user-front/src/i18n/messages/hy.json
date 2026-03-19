@@ -766,8 +766,10 @@
     "list": {
       "pleaseLogin": "Խնդրում ենք մուտք գործել",
       "searchPlaceholder": "Որոնել գրքեր...",
+      "back": "Հետ",
       "backToLanguages": "Վերադարձ դեպի Լեզուներ",
       "booksTitle": "Գրքեր",
+      "filter": "Զտիչ",
       "totalBooks": "Ընդհանուր գրքեր",
       "currentPage": "Ընթացիկ էջ",
       "totalPages": "Ընդհանուր Էջեր",

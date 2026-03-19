@@ -58,7 +58,7 @@ const StoryCard = ({ story, languages = [] }) => {
 
   return (
     <Link href={`/blogs/story/${id}`} className="text-decoration-none">
-      <Card className={`story-video-card border-0 shadow-sm ${is_featured ? 'border-warning border-2' : ''}`}>
+      <Card className={`story-video-card border-0 shadow-sm ${is_featured ? 'border-warning border-2' : 'story-video-card-default'}`}>
         {/* Thumbnail - 16:9 video oranı */}
         <div className="story-video-card__thumb position-relative overflow-hidden">
           <NewsImage
@@ -90,7 +90,7 @@ const StoryCard = ({ story, languages = [] }) => {
         </div>
 
         {/* Sabit yükseklikte içerik alanı - tüm kartlar aynı */}
-        <Card.Body className="story-video-card__body p-3">
+        <Card.Body className="story-video-card__body p-2 p-sm-3">
           <h6 className="story-video-card__title mb-1 fw-semibold text-reset">
             {title}
           </h6>
@@ -394,11 +394,11 @@ const ScholarStories = () => {
   }
 
   return (
-    <div className="bg-mode p-4">
-      <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-        <h1 className="h4 mb-0">{t('blogs.title')}</h1>
-        <div className="d-flex align-items-center gap-2 flex-wrap">
-          <span className="badge bg-primary">{pagination.total} {t('blogs.storiesCount')}</span>
+    <div className="bg-mode p-2 p-sm-3 p-md-4 blogs-content">
+      <div className="d-flex justify-content-between align-items-center mb-3 mb-md-4 flex-wrap gap-2">
+        <h1 className="h5 h4-md mb-0 blogs-title">{t('blogs.title')}</h1>
+        <div className="d-flex align-items-center gap-1 gap-sm-2 flex-wrap">
+          <span className="badge bg-primary" style={{ fontSize: '0.75rem' }}>{pagination.total} {t('blogs.storiesCount')}</span>
           <div className="btn-group" role="group">
             <Button
               variant={viewMode === 'grid' ? 'primary' : 'outline-primary'}
@@ -421,9 +421,9 @@ const ScholarStories = () => {
       </div>
 
       {/* Language Selector & Search Form */}
-      <Form onSubmit={handleSearch} className="mb-4">
-        <Row className="g-3">
-          <Col md={4}>
+      <Form onSubmit={handleSearch} className="mb-3 mb-md-4">
+        <Row className="g-2 g-md-3">
+          <Col xs={12} md={4}>
             <Form.Group>
               <Form.Label className="small text-muted mb-1">
                 <BsGlobe2 size={14} className="me-1" />
@@ -455,20 +455,21 @@ const ScholarStories = () => {
               />
             </Form.Group>
           </Col>
-          <Col md={5}>
+          <Col xs={12} md={5}>
             <Form.Group>
               <Form.Label className="small text-muted mb-1">
                 {t('common.search')}
               </Form.Label>
               <Form.Control
                 type="text"
+                className="blogs-search-input"
                 placeholder={t('blogs.searchPlaceholder')}
                 value={localSearchQuery}
                 onChange={(e) => setLocalSearchQuery(e.target.value)}
               />
             </Form.Group>
           </Col>
-          <Col md={3}>
+          <Col xs={12} md={3}>
             <Form.Group>
               <Form.Label className="small text-muted mb-1 d-none d-md-block">&nbsp;</Form.Label>
               {searchQuery && (
@@ -487,10 +488,10 @@ const ScholarStories = () => {
 
       {/* Stories Grid/List */}
       {viewMode === 'grid' ? (
-        <Row className="g-4">
+        <Row className="g-1 g-sm-2 g-md-4 blogs-grid">
           {filteredStories.length > 0 ? (
             filteredStories.map((story) => (
-              <Col key={story.id} xs={12} md={6} lg={4}>
+              <Col key={story.id} xs={6} md={6} lg={4}>
                 <StoryCard story={story} languages={languages} />
               </Col>
             ))
@@ -512,7 +513,7 @@ const ScholarStories = () => {
           )}
         </Row>
       ) : (
-        <div className="list-view">
+        <div className="list-view blogs-list-view">
           {filteredStories.length > 0 ? (
             filteredStories.map((story) => {
               const {
@@ -559,10 +560,10 @@ const ScholarStories = () => {
 
               return (
                 <Link key={id} href={`/blogs/story/${id}`} className="text-decoration-none">
-                  <Card className="mb-3 shadow-sm border-0 hover-elevate transition-all" style={{ cursor: 'pointer' }}>
+                  <Card className="mb-2 mb-md-3 shadow-sm border-0 hover-elevate transition-all blogs-list-card">
                     <Row className="g-0">
-                      <Col xs={12} md={4} lg={3}>
-                        <div className="position-relative" style={{ height: '100%', minHeight: '200px' }}>
+                      <Col xs={4} md={4} lg={3} className="blogs-list-cover-col">
+                        <div className="position-relative" style={{ height: '100%', minHeight: '95px' }}>
                           <NewsImage
                             className="w-100 h-100 rounded-start"
                             src={getThumbnailUrl() || '/images/book-placeholder.jpg'}
@@ -589,8 +590,8 @@ const ScholarStories = () => {
                           )}
                         </div>
                       </Col>
-                      <Col xs={12} md={8} lg={9}>
-                        <Card.Body className="p-4">
+                      <Col xs={8} md={8} lg={9}>
+                        <Card.Body className="p-2 p-md-4">
                           <div className="d-flex justify-content-between align-items-start mb-2">
                             <div className="flex-grow-1">
                               <h5 className="mb-2 text-reset">{title}</h5>
@@ -663,9 +664,9 @@ const ScholarStories = () => {
 
       {/* Pagination */}
       {filteredStories.length > 0 && pagination.totalPages > 1 && (
-        <div className="mt-4">
+        <div className="mt-3 mt-md-4">
           <nav aria-label="Hikaye sayfalama">
-            <ul className="pagination pagination-light d-inline-block d-md-flex justify-content-center">
+            <ul className="pagination pagination-light pagination-mobile d-inline-flex justify-content-center flex-wrap">
               {generatePaginationItems()}
             </ul>
           </nav>
@@ -674,7 +675,7 @@ const ScholarStories = () => {
 
       {/* Pagination Info */}
       {filteredStories.length > 0 && (
-        <div className="mt-4 text-center">
+        <div className="mt-3 mt-md-4 text-center">
           <small className="text-muted">
             {searchQuery ?
               `"${searchQuery}" ${t('blogs.searchResults')} ${filteredStories.length} ${t('blogs.storiesFound')}` :
