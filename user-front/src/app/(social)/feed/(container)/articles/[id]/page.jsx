@@ -715,6 +715,7 @@ const ArticleDetailPage = () => {
 
   // Dil seçim modalını aç
   const openLanguageModal = (translation, translationIndex, pdfUrl = null) => {
+    unlockAudioForPlayback();
     setSelectedTranslationForTranslate(translation);
     setSelectedTranslationIndexForTranslate(translationIndex);
     setSelectedPdfUrlForTranslate(pdfUrl);
