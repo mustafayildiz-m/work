@@ -10,7 +10,11 @@ import { useLanguage } from '@/context/useLanguageContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import { useLanguages } from '@/hooks/useLanguages';
-import PdfViewer from '@/components/PdfViewer';
+import useViewPort from '@/hooks/useViewPort';
+import dynamic from 'next/dynamic';
+import styles from './styles.module.css';
+
+const PdfViewer = dynamic(() => import('@/components/PdfViewer'), { ssr: false });
 import { pdfjs } from 'react-pdf';
 import { getLanguageCode, cleanTextForTTS, fetchTTSAudio } from '@/utils/textToSpeech';
 
@@ -22,6 +26,8 @@ if (typeof window !== 'undefined') {
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 const ArticleDetailPage = () => {
+  const { width } = useViewPort();
+  const isDesktop = width >= 769;
   const { t, loading: langLoading, locale } = useLanguage();
   const { theme } = useLayoutContext();
   const isDarkMode = theme === 'dark' || theme === 'green';
@@ -1361,23 +1367,27 @@ const ArticleDetailPage = () => {
       {/* Modern Floating Audio Player */}
       {isPlayerOpen && (
         <div
-          className="p-3 d-flex justify-content-center"
+          className={`p-3 d-flex justify-content-center reading-player-modal ${styles.readingPlayerModal}`}
           style={{
             zIndex: 1050,
             position: 'fixed',
             left: '50%',
-            bottom: '0.5rem',
+            ...(isDesktop ? { top: '50%', bottom: 'auto' } : { bottom: '0.5rem' }),
             width: '100%',
             maxWidth: '1160px',
-            transform: `translate(-50%, 0) translate(${playerPosition.x}px, ${playerPosition.y}px)`,
+            transform: isDesktop
+              ? `translate(-50%, -50%) translate(${playerPosition.x}px, ${playerPosition.y}px)`
+              : `translate(-50%, 0) translate(${playerPosition.x}px, ${playerPosition.y}px)`,
             cursor: isDraggingPlayer ? 'grabbing' : 'grab',
-            userSelect: 'none'
+            userSelect: 'none',
+            '--player-drag-x': `${playerPosition.x}px`,
+            '--player-drag-y': `${playerPosition.y}px`
           }}
           onMouseDown={handlePlayerDragStart}
           onDoubleClick={() => setPlayerPosition({ x: 0, y: 0 })}
         >
           <Card
-            className={`border-0 shadow-lg ${isDarkMode ? '' : 'border'}`}
+            className={`border-0 shadow-lg reading-player-card ${isDarkMode ? '' : 'border'}`}
             style={{
               width: '100%',
               maxWidth: '1000px',
@@ -1390,9 +1400,9 @@ const ArticleDetailPage = () => {
             }}
           >
             <CardBody className="p-3" style={{ overflow: 'visible' }}>
-              <div className="d-flex flex-column align-items-center mb-3">
+              <div className={`d-flex flex-column align-items-center mb-3 ${styles.playerDragHandle}`}>
                 <div style={{ width: '44px', height: '4px', borderRadius: '4px', background: isDarkMode ? 'rgba(255,255,255,0.28)' : 'rgba(0,0,0,0.12)' }} />
-                <div className="d-flex align-items-center gap-2 mt-2 drag-hint-animation" style={{
+                <div className="d-none d-md-flex align-items-center gap-2 mt-2 drag-hint-animation" style={{
                   fontSize: '0.9rem',
                   color: '#dc3545',
                   fontWeight: 'bold',
@@ -1404,10 +1414,11 @@ const ArticleDetailPage = () => {
               </div>
               {showReadingAssist && (currentOriginalChunks.length > 0 || currentTranslatedChunks.length > 0) && (
                 <div
-                  className="mb-3 p-2 rounded"
+                  className={`mb-3 p-2 rounded ${styles.readingAssistSection}`}
                   style={{
-                    maxHeight: '500px',
-                    overflowY: 'hidden',
+                    overflowY: 'auto',
+                    overflowX: 'hidden',
+                    WebkitOverflowScrolling: 'touch',
                     background: isDarkMode ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.03)',
                     border: isDarkMode ? '1px solid rgba(255,255,255,0.12)' : '1px solid rgba(0,0,0,0.08)'
                   }}
@@ -1420,7 +1431,7 @@ const ArticleDetailPage = () => {
                   </div>
                   {currentOriginalChunks.length > 0 && (
                     <div
-                      className="mb-2 p-2 rounded"
+                      className={`mb-2 p-2 rounded ${styles.chunkBox}`}
                       style={{
                         background: isDarkMode ? 'rgba(255,255,255,0.04)' : '#f8f9fa',
                         border: isDarkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.06)',
@@ -1430,7 +1441,7 @@ const ArticleDetailPage = () => {
                       <small style={{ color: isDarkMode ? 'rgba(255,255,255,0.6)' : '#6c757d', display: 'block', marginBottom: '4px', fontWeight: '500' }}>
                         Orijinal Metin
                       </small>
-                      <div ref={originalChunksContainerRef} style={{ maxHeight: '180px', overflowY: 'auto' }}>
+                      <div ref={originalChunksContainerRef} className={styles.chunkScrollArea} style={{ overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
                         {currentOriginalChunks.map((chunk, idx) => (
                           <span
                             key={`o-${idx}-${chunk.slice(0, 10)}`}
@@ -1455,7 +1466,7 @@ const ArticleDetailPage = () => {
                   )}
                   {currentTranslatedChunks.length > 0 && (
                     <div
-                      className="p-2 rounded"
+                      className={`p-2 rounded ${styles.chunkBox}`}
                       style={{
                         background: isDarkMode ? 'rgba(0,123,255,0.08)' : 'rgba(0,123,255,0.04)',
                         border: isDarkMode ? '1px solid rgba(0,123,255,0.25)' : '1px solid rgba(0,123,255,0.15)',
@@ -1465,7 +1476,7 @@ const ArticleDetailPage = () => {
                       <small style={{ color: isDarkMode ? 'rgba(255,255,255,0.72)' : '#0d6efd', display: 'block', marginBottom: '4px', fontWeight: '500' }}>
                         Çeviri Metni
                       </small>
-                      <div ref={translatedChunksContainerRef} style={{ maxHeight: '180px', overflowY: 'auto' }}>
+                      <div ref={translatedChunksContainerRef} className={styles.chunkScrollArea} style={{ overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}>
                         {currentTranslatedChunks.map((chunk, idx) => (
                           <span
                             key={`t-${idx}-${chunk.slice(0, 10)}`}
@@ -1490,11 +1501,11 @@ const ArticleDetailPage = () => {
                   )}
                 </div>
               )}
-              <Row className="align-items-center g-3">
-                <Col xs={12} md={3}>
-                  <div className="d-flex align-items-center gap-3">
+              <Row className={`align-items-center g-3 ${styles.playerControlsRow}`}>
+                <Col xs={12} md={3} className={styles.playerBookInfoCol}>
+                  <div className={`d-flex align-items-center gap-3 ${styles.playerBookInfoInner}`}>
                     <div
-                      className="bg-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm"
+                      className="bg-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm player-volume-icon"
                       style={{ width: '45px', height: '45px', animation: isReading && !isPaused ? 'pulse 2s infinite' : 'none' }}
                     >
                       <BsVolumeUp size={22} style={{ color: '#fff' }} />
@@ -1510,24 +1521,26 @@ const ArticleDetailPage = () => {
                     </div>
                   </div>
                 </Col>
-                <Col xs={12} md={4} className="d-flex flex-column align-items-center">
-                  <div className="d-flex align-items-center gap-3 mb-2 player-control-cluster">
+                <Col xs={12} md={4} className={`d-flex flex-column align-items-center ${styles.playerMainControlsCol}`}>
+                  <div className={styles.playerControlsInline}>
+                    <div className={`d-flex align-items-center gap-3 mb-2 player-control-cluster ${styles.playerControlRow}`}>
                     <Button variant="link" className="player-icon-btn" disabled={currentPage <= 1 || translating} onClick={() => handleTranslateAndRead(targetLang, currentPage - 1)}><BsSkipBackward size={20} /></Button>
                     <Button variant={isDarkMode ? "light" : "primary"} className="rounded-circle d-flex align-items-center justify-content-center shadow player-main-btn" onClick={pauseResumeTextToSpeech} disabled={translating || !currentAudioRef.current}>
                       {isPaused ? <BsPlay size={28} /> : <BsPause size={28} />}
                     </Button>
                     <Button variant="link" className="player-icon-btn" disabled={currentPage >= totalPages || translating} onClick={() => handleTranslateAndRead(targetLang, currentPage + 1)}><BsSkipForward size={20} /></Button>
-                  </div>
-                  <div className={`player-page-chip mb-2 text-center ${isDarkMode ? '' : 'bg-light'}`}>
-                    <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '1px', color: isDarkMode ? 'rgba(255,255,255,0.5)' : '#6c757d' }}>SAYFA</div>
-                    <div className="d-flex align-items-center gap-1 justify-content-center">
-                      <select className="bg-transparent border-0 fw-bold p-0 pe-1 player-select" style={{ fontSize: '1.2rem', color: isDarkMode ? '#007bff' : '#0d6efd' }} value={currentPage} onChange={(e) => handleTranslateAndRead(targetLang, parseInt(e.target.value))}>
-                        {[...Array(totalPages || 1)].map((_, i) => (<option key={i + 1} value={i + 1} style={{ backgroundColor: isDarkMode ? '#1c1f2e' : '#ffffff', color: isDarkMode ? '#ffffff' : '#000000' }}>{i + 1}</option>))}
-                      </select>
-                      <span style={{ fontSize: '1rem', color: isDarkMode ? 'rgba(255,255,255,0.62)' : 'rgba(0,0,0,0.5)' }}>/ {totalPages || 1}</span>
+                    </div>
+                    <div className={`player-page-chip mb-2 text-center ${isDarkMode ? '' : 'bg-light'} ${styles.playerPageChip}`}>
+                      <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '1px', color: isDarkMode ? 'rgba(255,255,255,0.5)' : '#6c757d' }}>SAYFA</div>
+                      <div className="d-flex align-items-center gap-1 justify-content-center">
+                        <select className="bg-transparent border-0 fw-bold p-0 pe-1 player-select" style={{ fontSize: '1.2rem', color: isDarkMode ? '#007bff' : '#0d6efd' }} value={currentPage} onChange={(e) => handleTranslateAndRead(targetLang, parseInt(e.target.value))}>
+                          {[...Array(totalPages || 1)].map((_, i) => (<option key={i + 1} value={i + 1} style={{ backgroundColor: isDarkMode ? '#1c1f2e' : '#ffffff', color: isDarkMode ? '#ffffff' : '#000000' }}>{i + 1}</option>))}
+                        </select>
+                        <span style={{ fontSize: '1rem', color: isDarkMode ? 'rgba(255,255,255,0.62)' : 'rgba(0,0,0,0.5)' }}>/ {totalPages || 1}</span>
+                      </div>
                     </div>
                   </div>
-                  <div className="w-100 px-3 mt-1">
+                  <div className={`w-100 px-3 mt-1 ${styles.playerSliderWrap}`}>
                     <input
                       type="range"
                       className="w-100 player-slider"
@@ -1548,8 +1561,8 @@ const ArticleDetailPage = () => {
                     />
                   </div>
                 </Col>
-                <Col xs={12} md={5}>
-                  <div className="d-flex flex-column align-items-end gap-2 px-2">
+                <Col xs={12} md={5} className={styles.playerActionsCol}>
+                  <div className={`d-flex flex-column align-items-end gap-2 px-2 ${styles.playerActionsWrap}`}>
                     <div className="d-flex align-items-center gap-2 flex-nowrap">
                       <Dropdown drop="up" style={{ overflow: 'visible' }}>
                         <DropdownToggle variant={isDarkMode ? "outline-light" : "outline-primary"} size="sm" className="rounded-pill px-3 d-flex align-items-center gap-1 player-pill-btn" style={{ color: isDarkMode ? '#ffffff' : '#0d6efd' }}>{playbackRate}x</DropdownToggle>
@@ -1562,7 +1575,7 @@ const ArticleDetailPage = () => {
                         </DropdownMenu>
                       </Dropdown>
                     </div>
-                    <div className="d-flex align-items-center gap-2 flex-wrap justify-content-end">
+                    <div className={`d-flex align-items-center gap-2 flex-wrap justify-content-end ${styles.playerActionsRow}`}>
                       <Button variant={isDarkMode ? "outline-light" : "outline-primary"} size="sm" className="rounded-pill px-2 player-pill-btn" onClick={() => {
                         if (selectedPdfUrlForTranslate || selectedPdfUrl) {
                           setSelectedPdfUrl(selectedPdfUrlForTranslate || selectedPdfUrl);
