@@ -694,8 +694,10 @@
     "list": {
       "pleaseLogin": "请登录",
       "searchPlaceholder": "搜索书籍...",
+      "back": "返回",
       "backToLanguages": "返回语言",
       "booksTitle": "书籍",
+      "filter": "筛选",
       "totalBooks": "书籍总数",
       "currentPage": "当前页",
       "totalPages": "总页数",

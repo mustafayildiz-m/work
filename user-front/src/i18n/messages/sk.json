@@ -682,8 +682,10 @@
     "list": {
       "pleaseLogin": "Prihláste sa, prosím",
       "searchPlaceholder": "Vyhľadávanie kníh...",
+      "back": "Späť",
       "backToLanguages": "Späť na jazyky",
       "booksTitle": "Knihy",
+      "filter": "Filter",
       "totalBooks": "Celkový počet kníh",
       "currentPage": "Aktuálna stránka",
       "totalPages": "Celkový počet strán",

@@ -682,8 +682,10 @@
     "list": {
       "pleaseLogin": "Vă rugăm să vă conectați",
       "searchPlaceholder": "Căutare cărți...",
+      "back": "Înapoi",
       "backToLanguages": "Înapoi la Limbi",
       "booksTitle": "Cărți",
+      "filter": "Filtru",
       "totalBooks": "Total cărți",
       "currentPage": "Pagina curentă",
       "totalPages": "Total pagini",

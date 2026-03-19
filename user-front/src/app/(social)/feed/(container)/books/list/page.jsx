@@ -443,14 +443,11 @@ const BooksListPage = () => {
         <>
           {/* Grid View */}
           {viewMode === 'grid' && (
-            <Row className="g-2 g-md-4 mb-3 mb-md-4">
+            <Row className="g-1 g-sm-2 g-md-4 mb-3 mb-md-4 books-grid">
               {books.map((book) => (
-                <Col key={book.id} xs={6} sm={6} md={4} lg={3}>
-                  <Card className="h-100 shadow-sm border-0 book-card" style={{
-                    transition: 'all 0.3s ease',
-                    cursor: 'pointer'
-                  }}>
-                    <div className="position-relative book-image-wrapper" style={{ paddingTop: '140%', overflow: 'hidden' }}>
+                <Col key={book.id} xs={4} sm={4} md={4} lg={3}>
+                  <Card className="h-100 border-0 book-card">
+                    <Link href={getBookDetailUrl(book.id)} className="d-block position-relative book-image-wrapper text-decoration-none" style={{ paddingTop: '140%', overflow: 'hidden' }}>
                       <Image
                         src={getBookImage(book)}
                         alt={book.title}
@@ -466,17 +463,15 @@ const BooksListPage = () => {
                         background: 'rgba(0,0,0,0.7)',
                         transition: 'opacity 0.3s ease'
                       }}>
-                        <Link href={getBookDetailUrl(book.id)}>
-                          <Button variant="light" size="sm">
-                            {t('books.list.viewDetails')}
-                          </Button>
-                        </Link>
+                        <Button variant="light" size="sm" as="span">
+                          {t('books.list.viewDetails')}
+                        </Button>
                       </div>
-                    </div>
+                    </Link>
 
-                    <Card.Body className="p-2 p-md-3">
+                    <Card.Body className="p-1 p-sm-2 p-md-3 book-card-body">
                       <Link href={getBookDetailUrl(book.id)} className="text-decoration-none">
-                        <Card.Title className="text-center mb-1 mb-md-2 book-title" style={{
+                        <Card.Title className="text-center mb-0 mb-md-2 book-title" style={{
                           fontSize: '0.8rem',
                           minHeight: '2.2em',
                           display: '-webkit-box',
@@ -538,13 +533,10 @@ const BooksListPage = () => {
           {viewMode === 'list' && (
             <div className="mb-3 mb-md-4">
               {books.map((book) => (
-                <Card key={book.id} className="mb-2 mb-md-3 shadow-sm border-0 book-list-card" style={{
-                  transition: 'all 0.3s ease',
-                  cursor: 'pointer'
-                }}>
+                <Card key={book.id} className="mb-2 mb-md-3 border-0 book-list-card">
                   <Row className="g-0">
-                    <Col xs={4} md={3} lg={2}>
-                      <div className="position-relative" style={{ height: '100%', minHeight: '140px', minHeightMd: '200px' }}>
+                    <Col xs={3} md={3} lg={2} className="book-list-cover-col">
+                      <Link href={getBookDetailUrl(book.id)} className="d-block position-relative text-decoration-none book-list-image-link" style={{ height: '100%' }}>
                         <Image
                           src={getBookImage(book)}
                           alt={book.title}
@@ -555,9 +547,9 @@ const BooksListPage = () => {
                             e.target.src = '/images/book-placeholder.jpg';
                           }}
                         />
-                      </div>
+                      </Link>
                     </Col>
-                    <Col xs={8} md={9} lg={10}>
+                    <Col xs={9} md={9} lg={10}>
                       <Card.Body className="p-2 p-md-4">
                         <Row>
                           <Col xs={12} lg={8}>
@@ -724,6 +716,18 @@ const BooksListPage = () => {
         .book-card {
           transition: all 0.3s ease !important;
           animation: fadeIn 0.4s ease-out;
+          cursor: pointer;
+          border-radius: 10px !important;
+          overflow: hidden;
+          border: 1px solid rgba(0, 0, 0, 0.06) !important;
+        }
+        .book-list-card {
+          transition: all 0.3s ease !important;
+          animation: fadeIn 0.4s ease-out;
+          cursor: pointer;
+          border-radius: 10px !important;
+          overflow: hidden;
+          border: 1px solid rgba(0, 0, 0, 0.06) !important;
         }
         
         /* Desktop hover effects */
@@ -731,6 +735,7 @@ const BooksListPage = () => {
           .book-card:hover {
             transform: translateY(-5px) !important;
             box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2) !important;
+            border-color: rgba(102, 126, 234, 0.2) !important;
           }
           .book-card .hover-overlay {
             opacity: 0;
@@ -745,35 +750,45 @@ const BooksListPage = () => {
           }
         }
         
-        .book-list-card {
-          transition: all 0.3s ease !important;
-          animation: fadeIn 0.4s ease-out;
-        }
-        
-        /* Mobile optimizations */
+        /* Mobile - compact & stylish */
         @media (max-width: 767.98px) {
+          .books-grid .book-card {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06) !important;
+            border-radius: 8px !important;
+          }
+          .book-image-wrapper {
+            padding-top: 118% !important;
+            border-radius: 8px 8px 0 0;
+          }
+          .book-card-body {
+            padding: 0.4rem 0.5rem !important;
+          }
+          .book-title {
+            font-size: 0.68rem !important;
+            font-weight: 600;
+            min-height: 2em !important;
+            line-height: 1.15 !important;
+          }
+          .book-list-cover-col {
+            min-height: 95px;
+          }
+          .book-list-image-link {
+            min-height: 95px !important;
+          }
+          .book-list-card .card-body {
+            padding: 0.5rem 0.5rem !important;
+          }
+          .book-list-card .card-title {
+            font-size: 0.8rem !important;
+            line-height: 1.2;
+          }
           .books-header .card-title {
             font-size: 1rem !important;
             line-height: 1.3;
           }
-          .book-title {
-            font-size: 0.75rem !important;
-            font-weight: 600;
-          }
-          .book-image-wrapper {
-            border-radius: 0.5rem 0.5rem 0 0;
-          }
-          .book-card {
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
-          }
-          .book-list-card .card-title {
-            font-size: 0.9rem !important;
-          }
-          /* Stats more compact on mobile */
           .h5.h3-md {
             font-size: 1.1rem !important;
           }
-          /* Pagination mobile */
           .pagination-mobile .page-link {
             padding: 0.35rem 0.65rem !important;
             font-size: 0.8rem !important;
@@ -782,18 +797,32 @@ const BooksListPage = () => {
             border-color: #dee2e6;
           }
         }
+        @media (min-width: 768px) {
+          .book-list-cover-col {
+            min-height: 140px;
+          }
+          .book-list-image-link {
+            min-height: 140px !important;
+          }
+        }
         
         @media (max-width: 575.98px) {
           .books-header {
             padding: 0.75rem !important;
           }
           .book-title {
-            font-size: 0.7rem !important;
-            min-height: 2em !important;
+            font-size: 0.62rem !important;
           }
-          .book-card .card-body {
-            padding: 0.5rem !important;
-          }
+        }
+        
+        /* Dark theme */
+        :global([data-bs-theme='dark']) .book-card,
+        :global([data-bs-theme='green']) .book-card {
+          border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+        :global([data-bs-theme='dark']) .book-list-card,
+        :global([data-bs-theme='green']) .book-list-card {
+          border-color: rgba(255, 255, 255, 0.1) !important;
         }
         
         /* Medium screens */

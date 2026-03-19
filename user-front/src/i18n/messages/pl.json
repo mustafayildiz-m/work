@@ -682,8 +682,10 @@
     "list": {
       "pleaseLogin": "Zaloguj się",
       "searchPlaceholder": "Wyszukiwanie książek...",
+      "back": "Wstecz",
       "backToLanguages": "Powrót do języków",
       "booksTitle": "Książki",
+      "filter": "Filtruj",
       "totalBooks": "Książki ogółem",
       "currentPage": "Bieżąca strona",
       "totalPages": "Łączna liczba stron",

@@ -694,8 +694,10 @@
     "list": {
       "pleaseLogin": "Iniciar sessão",
       "searchPlaceholder": "Procurar livros...",
+      "back": "Voltar",
       "backToLanguages": "Voltar a Línguas",
       "booksTitle": "Livros",
+      "filter": "Filtro",
       "totalBooks": "Total de livros",
       "currentPage": "Página atual",
       "totalPages": "Total de páginas",

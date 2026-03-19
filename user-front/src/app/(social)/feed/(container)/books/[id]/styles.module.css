@@ -24,6 +24,28 @@
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
 }
 
+.shareButtonWrapper {
+  padding: 0.25rem;
+  border-radius: 999px;
+}
+
+@media (max-width: 768px) {
+  .shareButtonWrapper {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 0.2rem;
+  }
+}
+
+
+@media (max-width: 768px) {
+  :global([data-bs-theme='dark']) .shareButtonWrapper,
+  :global([data-bs-theme='green']) .shareButtonWrapper {
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  }
+}
+
 .shareToggleButton {
   border-radius: 999px !important;
   border: 1px solid rgba(13, 110, 253, 0.28) !important;
@@ -131,6 +153,46 @@
   .bookActionButtons button {
     flex: 1;
     min-width: 100px;
+  }
+}
+
+/* Mobilde Kitap Paylaş butonu - kapak üzerinde okunabilir olması için */
+@media (max-width: 768px) {
+  .shareToggleButton {
+    background: #ffffff !important;
+    border: 2px solid #0d6efd !important;
+    color: #0d6efd !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.5) !important;
+    font-weight: 700 !important;
+  }
+  
+  .shareToggleButton:hover,
+  .shareToggleButton:focus,
+  .shareToggleButton:active {
+    background: #0d6efd !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 16px rgba(13, 110, 253, 0.5) !important;
+  }
+}
+
+
+@media (max-width: 768px) {
+  :global([data-bs-theme='dark']) .shareToggleButton,
+  :global([data-bs-theme='green']) .shareToggleButton {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 2px solid #0d6efd !important;
+    color: #0d6efd !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+  }
+  
+  :global([data-bs-theme='dark']) .shareToggleButton:hover,
+  :global([data-bs-theme='dark']) .shareToggleButton:focus,
+  :global([data-bs-theme='dark']) .shareToggleButton:active,
+  :global([data-bs-theme='green']) .shareToggleButton:hover,
+  :global([data-bs-theme='green']) .shareToggleButton:focus,
+  :global([data-bs-theme='green']) .shareToggleButton:active {
+    background: #0d6efd !important;
+    color: #ffffff !important;
   }
 }
 

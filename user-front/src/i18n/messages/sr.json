@@ -766,8 +766,10 @@
     "list": {
       "pleaseLogin": "Молимо пријавите се",
       "searchPlaceholder": "Претражи књиге...",
+      "back": "Назад",
       "backToLanguages": "Назад на језике",
       "booksTitle": "Књиге",
+      "filter": "Филтер",
       "totalBooks": "Тотал Боокс",
       "currentPage": "Цуррент Паге",
       "totalPages": "Укупно страница",

@@ -501,35 +501,36 @@ export default function PodcastsListPage() {
 
 
       {/* Header */}
-      <Card className="mb-4 border-0 shadow-sm">
-        <CardHeader className="bg-gradient text-white border-0" style={{
+      <Card className="mb-3 mb-md-4 border-0 shadow-sm">
+        <CardHeader className="bg-gradient text-white border-0 podcasts-header py-2 py-md-3" style={{
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
         }}>
-          <Row className="align-items-center g-3">
+          <Row className="align-items-center g-2 g-md-3">
             <Col xs={12} md={5}>
-              <div className="d-flex align-items-center">
+              <div className="d-flex align-items-center flex-wrap">
                 <Link href="/feed/podcasts">
                   <Button
                     variant="light"
                     size="sm"
-                    className="me-3"
+                    className="me-2 mb-2 mb-md-0"
                   >
                     <BsArrowLeft className="me-1" />
-                    {t('podcasts.list.backToLanguages')}
+                    <span className="d-none d-sm-inline">{t('podcasts.list.backToLanguages')}</span>
+                    <span className="d-sm-none">{t('podcasts.list.back')}</span>
                   </Button>
                 </Link>
                 <div>
-                  <CardTitle className="mb-0 h4">
-                    <BsMicFill className="me-2" />
+                  <CardTitle className="mb-0 h5 h4-md">
+                    <BsMicFill className="me-2 d-none d-sm-inline" />
                     {t(`books.languages.${languageName}`)} {t('podcasts.list.podcastsTitle')}
                   </CardTitle>
-                  <small className="text-white-50">İslami içerikli sesli yayınlar</small>
+                  <small className="text-white-50 d-none d-sm-inline">İslami içerikli sesli yayınlar</small>
                 </div>
               </div>
             </Col>
             <Col xs={12} md={5}>
               <Form onSubmit={handleSearch}>
-                <InputGroup>
+                <InputGroup size="sm">
                   <Form.Control
                     type="text"
                     placeholder={t('podcasts.list.searchPlaceholder')}
@@ -569,16 +570,17 @@ export default function PodcastsListPage() {
 
       {/* Category Filter - Collapsible */}
       {categories.length > 0 && (
-        <Card className="mb-4 border-0 shadow-sm">
-          <CardBody>
+        <Card className="mb-3 mb-md-4 border-0 shadow-sm">
+          <CardBody className="p-2 p-md-3">
             <div
               onClick={() => setShowCategoryFilter(!showCategoryFilter)}
               style={{ cursor: 'pointer' }}
-              className="d-flex align-items-center justify-content-between mb-3"
+              className="d-flex align-items-center justify-content-between mb-2 mb-md-3"
             >
-              <h6 className="mb-0">
-                <BsFilter className="me-2" />
-                {t('podcasts.list.filterByCategory')}
+              <h6 className="mb-0" style={{ fontSize: '0.9rem' }}>
+                <BsFilter className="me-1 me-md-2" />
+                <span className="d-none d-sm-inline">{t('podcasts.list.filterByCategory')}</span>
+                <span className="d-sm-none">{t('podcasts.list.filter')}</span>
                 {selectedCategory && (
                   <Badge bg="primary" className="ms-2">{selectedCategory}</Badge>
                 )}
@@ -590,12 +592,12 @@ export default function PodcastsListPage() {
 
             <Collapse in={showCategoryFilter}>
               <div>
-                <div className="d-flex flex-wrap gap-2">
+                <div className="d-flex flex-wrap gap-1 gap-md-2">
                   <Button
                     variant={selectedCategory === '' ? 'primary' : 'outline-primary'}
                     size="sm"
                     onClick={() => handleCategoryChange('')}
-                    className="mb-2"
+                    className="mb-1 mb-md-2"
                   >
                     {t('podcasts.list.allCategories')}
                   </Button>
@@ -605,7 +607,7 @@ export default function PodcastsListPage() {
                       variant={selectedCategory === category ? 'primary' : 'outline-primary'}
                       size="sm"
                       onClick={() => handleCategoryChange(category)}
-                      className="mb-2"
+                      className="mb-1 mb-md-2"
                     >
                       {category}
                     </Button>
@@ -618,31 +620,31 @@ export default function PodcastsListPage() {
       )}
 
       {/* Stats */}
-      <Card className="mb-4 border-0 shadow-sm">
-        <CardBody>
-          <Row className="text-center">
+      <Card className="mb-3 mb-md-4 border-0 shadow-sm">
+        <CardBody className="p-2 p-md-3">
+          <Row className="text-center g-0">
             <Col xs={6} md={3}>
-              <div className="p-3">
-                <h3 className="mb-0 text-primary">{pagination.totalCount}</h3>
-                <small className="text-muted">{t('podcasts.list.totalPodcasts')}</small>
+              <div className="p-2 p-md-3">
+                <h3 className="mb-0 text-primary h5 h3-md">{pagination.totalCount}</h3>
+                <small className="text-muted d-block" style={{ fontSize: '0.75rem' }}>{t('podcasts.list.totalPodcasts')}</small>
               </div>
             </Col>
             <Col xs={6} md={3}>
-              <div className="p-3">
-                <h3 className="mb-0 text-success">{pagination.currentPage}</h3>
-                <small className="text-muted">{t('podcasts.list.currentPage')}</small>
+              <div className="p-2 p-md-3">
+                <h3 className="mb-0 text-success h5 h3-md">{pagination.currentPage}</h3>
+                <small className="text-muted d-block" style={{ fontSize: '0.75rem' }}>{t('podcasts.list.currentPage')}</small>
               </div>
             </Col>
             <Col xs={6} md={3}>
-              <div className="p-3">
-                <h3 className="mb-0 text-info">{pagination.totalPages}</h3>
-                <small className="text-muted">{t('podcasts.list.totalPages')}</small>
+              <div className="p-2 p-md-3">
+                <h3 className="mb-0 text-info h5 h3-md">{pagination.totalPages}</h3>
+                <small className="text-muted d-block" style={{ fontSize: '0.75rem' }}>{t('podcasts.list.totalPages')}</small>
               </div>
             </Col>
             <Col xs={6} md={3}>
-              <div className="p-3">
-                <h3 className="mb-0 text-warning">{podcasts.length}</h3>
-                <small className="text-muted">{t('podcasts.list.onThisPage')}</small>
+              <div className="p-2 p-md-3">
+                <h3 className="mb-0 text-warning h5 h3-md">{podcasts.length}</h3>
+                <small className="text-muted d-block" style={{ fontSize: '0.75rem' }}>{t('podcasts.list.onThisPage')}</small>
               </div>
             </Col>
           </Row>
@@ -678,14 +680,11 @@ export default function PodcastsListPage() {
         <>
           {/* Grid View */}
           {viewMode === 'grid' && (
-            <Row className="g-4 mb-4">
+            <Row className="g-1 g-sm-2 g-md-4 mb-3 mb-md-4 podcasts-grid">
               {podcasts.map((podcast) => (
-                <Col key={podcast.id} xs={12} sm={6} md={4} lg={3}>
-                  <Card className="h-100 shadow-sm border-0 podcast-card" style={{
-                    transition: 'all 0.3s ease',
-                    cursor: 'pointer'
-                  }}>
-                    <div className="position-relative" style={{ paddingTop: '100%', overflow: 'hidden' }}>
+                <Col key={podcast.id} xs={4} sm={4} md={4} lg={3}>
+                  <Card className="h-100 border-0 podcast-card" onClick={() => togglePlay(podcast)}>
+                    <div className="position-relative podcast-image-wrapper" style={{ paddingTop: '100%', overflow: 'hidden' }}>
                       <Image
                         src={getCoverUrl(podcast.coverImage)}
                         alt={podcast.title}
@@ -748,8 +747,8 @@ export default function PodcastsListPage() {
                       </div>
                     </div>
 
-                    <Card.Body className="p-3">
-                      <Card.Title className="text-center mb-2" style={{
+                    <Card.Body className="p-1 p-sm-2 p-md-3 podcast-card-body">
+                      <Card.Title className="text-center mb-1 mb-md-2 podcast-title" style={{
                         fontSize: '0.95rem',
                         minHeight: '2.4em',
                         display: '-webkit-box',
@@ -761,7 +760,7 @@ export default function PodcastsListPage() {
                       </Card.Title>
 
                       {podcast.author && (
-                        <p className="text-muted small text-center mb-2" style={{
+                        <p className="text-muted small text-center mb-1 mb-md-2 d-none d-md-block" style={{
                           fontSize: '0.8rem',
                           whiteSpace: 'nowrap',
                           overflow: 'hidden',
@@ -773,14 +772,14 @@ export default function PodcastsListPage() {
                       )}
 
                       {podcast.category && (
-                        <div className="text-center mb-2">
+                        <div className="text-center mb-1 mb-md-2 d-none d-md-block">
                           <Badge bg="primary" style={{ fontSize: '0.7rem' }}>
                             {podcast.category}
                           </Badge>
                         </div>
                       )}
 
-                      <div className="d-flex align-items-center justify-content-between text-muted" style={{ fontSize: '0.75rem' }}>
+                      <div className="d-flex align-items-center justify-content-between text-muted d-none d-sm-flex" style={{ fontSize: '0.75rem' }}>
                         <span className="d-flex align-items-center gap-1">
                           <BsClock size={12} />
                           {formatDuration(podcast.duration)}
@@ -809,15 +808,20 @@ export default function PodcastsListPage() {
 
           {/* List View */}
           {viewMode === 'list' && (
-            <div className="mb-4">
+            <div className="mb-3 mb-md-4">
               {podcasts.map((podcast) => (
-                <Card key={podcast.id} className="mb-3 shadow-sm border-0 podcast-list-card" style={{
-                  transition: 'all 0.3s ease',
-                  cursor: 'pointer'
-                }}>
+                <Card key={podcast.id} className="mb-2 mb-md-3 border-0 podcast-list-card">
                   <Row className="g-0">
-                    <Col xs={12} md={3} lg={2}>
-                      <div className="position-relative" style={{ height: '100%', minHeight: '200px' }}>
+                    <Col xs={3} md={3} lg={2} className="podcast-list-cover-col">
+                      <div
+                        className="position-relative podcast-list-image-link"
+                        style={{ height: '100%', minHeight: '95px', cursor: 'pointer' }}
+                        onClick={() => togglePlay(podcast)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => e.key === 'Enter' && togglePlay(podcast)}
+                        aria-label={t('podcasts.list.playNow')}
+                      >
                         <Image
                           src={getCoverUrl(podcast.coverImage)}
                           alt={podcast.title}
@@ -837,8 +841,8 @@ export default function PodcastsListPage() {
                         )}
                       </div>
                     </Col>
-                    <Col xs={12} md={9} lg={10}>
-                      <Card.Body className="p-4">
+                    <Col xs={9} md={9} lg={10}>
+                      <Card.Body className="p-2 p-md-4">
                         <Row>
                           <Col xs={12} lg={8}>
                             <Card.Title className="mb-2 h5" style={{ color: '#667eea' }}>
@@ -926,11 +930,12 @@ export default function PodcastsListPage() {
 
           {/* Pagination */}
           {pagination.totalPages > 1 && (
-            <div className="d-flex justify-content-center mb-4">
-              <Pagination>
+            <div className="d-flex justify-content-center mb-3 mb-md-4">
+              <Pagination size="sm" className="pagination-mobile">
                 <Pagination.First
                   disabled={!pagination.hasPreviousPage}
                   onClick={() => handlePageChange(1)}
+                  className="d-none d-md-inline-flex"
                 />
                 <Pagination.Prev
                   disabled={!pagination.hasPreviousPage}
@@ -969,13 +974,14 @@ export default function PodcastsListPage() {
                 <Pagination.Last
                   disabled={!pagination.hasNextPage}
                   onClick={() => handlePageChange(pagination.totalPages)}
+                  className="d-none d-md-inline-flex"
                 />
               </Pagination>
             </div>
           )}
 
           {/* Pagination Info */}
-          <div className="text-center text-muted mb-4">
+          <div className="text-center text-muted mb-3 mb-md-4">
             <small>
               {t('podcasts.list.showing')}: {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, pagination.totalCount)} {t('podcasts.list.paginationInfo')} {pagination.totalCount} {t('podcasts.list.podcasts')}
             </small>
@@ -997,25 +1003,98 @@ export default function PodcastsListPage() {
         .podcast-card {
           transition: all 0.3s ease !important;
           animation: fadeIn 0.4s ease-out;
-        }
-        .podcast-card:hover {
-          transform: translateY(-5px) !important;
-          box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2) !important;
-        }
-        .podcast-card .hover-overlay {
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
-        .podcast-card:hover .hover-overlay {
-          opacity: 1 !important;
+          cursor: pointer;
+          border-radius: 10px !important;
+          overflow: hidden;
+          border: 1px solid rgba(0, 0, 0, 0.06) !important;
         }
         .podcast-list-card {
           transition: all 0.3s ease !important;
           animation: fadeIn 0.4s ease-out;
+          cursor: pointer;
+          border-radius: 10px !important;
+          overflow: hidden;
+          border: 1px solid rgba(0, 0, 0, 0.06) !important;
         }
-        .podcast-list-card:hover {
-          transform: translateX(5px) !important;
-          box-shadow: 0 5px 20px rgba(102, 126, 234, 0.15) !important;
+        @media (min-width: 768px) {
+          .podcast-card:hover {
+            transform: translateY(-5px) !important;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2) !important;
+            border-color: rgba(102, 126, 234, 0.2) !important;
+          }
+          .podcast-card .hover-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+          }
+          .podcast-card:hover .hover-overlay {
+            opacity: 1 !important;
+          }
+          .podcast-list-card:hover {
+            transform: translateX(5px) !important;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.15) !important;
+          }
+        }
+        @media (max-width: 767.98px) {
+          .podcasts-grid .podcast-card {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06) !important;
+            border-radius: 8px !important;
+          }
+          .podcast-image-wrapper {
+            padding-top: 100% !important;
+            border-radius: 8px 8px 0 0;
+          }
+          .podcast-card-body {
+            padding: 0.4rem 0.5rem !important;
+          }
+          .podcast-title {
+            font-size: 0.68rem !important;
+            font-weight: 600;
+            min-height: 2em !important;
+            line-height: 1.15 !important;
+          }
+          .podcast-list-cover-col {
+            min-height: 95px;
+          }
+          .podcast-list-image-link {
+            min-height: 95px !important;
+          }
+          .podcast-list-card .card-body {
+            padding: 0.5rem !important;
+          }
+          .podcast-list-card .card-title {
+            font-size: 0.8rem !important;
+            line-height: 1.2;
+          }
+          .podcasts-header .card-title {
+            font-size: 1rem !important;
+            line-height: 1.3;
+          }
+          .pagination-mobile .page-link {
+            padding: 0.35rem 0.65rem !important;
+            font-size: 0.8rem !important;
+          }
+        }
+        @media (min-width: 768px) {
+          .podcast-list-cover-col {
+            min-height: 140px;
+          }
+          .podcast-list-image-link {
+            min-height: 140px !important;
+          }
+        }
+        @media (max-width: 575.98px) {
+          .podcasts-header {
+            padding: 0.75rem !important;
+          }
+          .podcast-title {
+            font-size: 0.62rem !important;
+          }
+        }
+        :global([data-bs-theme='dark']) .podcast-card,
+        :global([data-bs-theme='green']) .podcast-card,
+        :global([data-bs-theme='dark']) .podcast-list-card,
+        :global([data-bs-theme='green']) .podcast-list-card {
+          border-color: rgba(255, 255, 255, 0.1) !important;
         }
 
         /* Dark Mode for Podcast Player */

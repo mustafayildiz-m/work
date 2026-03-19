@@ -196,32 +196,33 @@ const ArticlesListPage = () => {
   return (
     <Col lg={9} className="articles-list-page">
       {/* Header with Search */}
-      <Card className="mb-4 border-0 shadow-sm">
-        <CardHeader className="bg-gradient text-white border-0" style={{
+      <Card className="mb-3 mb-md-4 border-0 shadow-sm">
+        <CardHeader className="bg-gradient text-white border-0 articles-header py-2 py-md-3" style={{
           background: 'linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)'
         }}>
-          <Row className="align-items-center g-3">
+          <Row className="align-items-center g-2 g-md-3">
             <Col xs={12} md={5}>
-              <div className="d-flex align-items-center">
+              <div className="d-flex align-items-center flex-wrap">
                 <Link href="/feed/articles">
                   <Button
                     variant="light"
                     size="sm"
-                    className="me-3"
+                    className="me-2 mb-2 mb-md-0"
                   >
                     <BsArrowLeft className="me-1" />
-                    {t('articles.list.backToLanguages')}
+                    <span className="d-none d-sm-inline">{t('articles.list.backToLanguages')}</span>
+                    <span className="d-sm-none">{t('articles.list.back') || t('books.list.back')}</span>
                   </Button>
                 </Link>
-                <CardTitle className="mb-0 h4">
-                  <BsFileText className="me-2" />
+                <CardTitle className="mb-0 h5 h4-md">
+                  <BsFileText className="me-2 d-none d-sm-inline" />
                   {t(`books.languages.${languageName}`) || languageName} {t('articles.list.articlesTitle')}
                 </CardTitle>
               </div>
             </Col>
             <Col xs={12} md={5}>
               <Form onSubmit={handleSearch}>
-                <InputGroup>
+                <InputGroup size="sm">
                   <Form.Control
                     type="text"
                     placeholder={t('articles.list.searchPlaceholder')}
@@ -261,17 +262,18 @@ const ArticlesListPage = () => {
 
       {/* Book Filter - Collapsible Multi Select */}
       {books.length > 0 && (
-        <Card className="mb-4 border-0 shadow-sm">
-          <CardBody>
+        <Card className="mb-3 mb-md-4 border-0 shadow-sm">
+          <CardBody className="p-2 p-md-3">
             <div
               onClick={() => setShowBookFilter(!showBookFilter)}
               style={{ cursor: 'pointer' }}
-              className="d-flex align-items-center justify-content-between mb-3"
+              className="d-flex align-items-center justify-content-between mb-2 mb-md-3"
             >
               <div>
-                <h6 className="mb-0">
-                  <BsBook className="me-2" />
-                  {t('articles.list.filterByBook')}
+                <h6 className="mb-0" style={{ fontSize: '0.9rem' }}>
+                  <BsBook className="me-1 me-md-2" />
+                  <span className="d-none d-sm-inline">{t('articles.list.filterByBook')}</span>
+                  <span className="d-sm-none">{t('articles.list.filter') || t('books.list.filter')}</span>
                   {selectedBooks.length > 0 && (
                     <Badge bg="primary" className="ms-2">{selectedBooks.length} {t('articles.list.booksSelected')}</Badge>
                   )}
@@ -306,6 +308,20 @@ const ArticlesListPage = () => {
           </CardBody>
         </Card>
       )}
+
+      <style jsx global>{`
+        @media (max-width: 767.98px) {
+          .articles-header .card-title {
+            font-size: 1rem !important;
+            line-height: 1.3;
+          }
+        }
+        @media (max-width: 575.98px) {
+          .articles-header {
+            padding: 0.75rem !important;
+          }
+        }
+      `}</style>
 
       {/* Makale Grid/List */}
       <ArticleGrid

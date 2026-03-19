@@ -694,8 +694,10 @@
     "list": {
       "pleaseLogin": "로그인하세요",
       "searchPlaceholder": "도서 검색...",
+      "back": "뒤로",
       "backToLanguages": "언어로 돌아가기",
       "booksTitle": "도서",
+      "filter": "필터",
       "totalBooks": "총 도서",
       "currentPage": "현재 페이지",
       "totalPages": "총 페이지 수",

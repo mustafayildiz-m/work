@@ -694,8 +694,10 @@
     "list": {
       "pleaseLogin": "يرجى تسجيل الدخول",
       "searchPlaceholder": "البحث في الكتب...",
+      "back": "رجوع",
       "backToLanguages": "العودة إلى اللغات",
       "booksTitle": "الكتب",
+      "filter": "تصفية",
       "totalBooks": "إجمالي الكتب",
       "currentPage": "الصفحة الحالية",
       "totalPages": "إجمالي الصفحات",

@@ -693,8 +693,10 @@
     "list": {
       "pleaseLogin": "ログインしてください",
       "searchPlaceholder": "本を検索...",
+      "back": "戻る",
       "backToLanguages": "言語に戻る",
       "booksTitle": "本",
+      "filter": "フィルター",
       "totalBooks": "合計冊数",
       "currentPage": "現在のページ",
       "totalPages": "合計ページ数",

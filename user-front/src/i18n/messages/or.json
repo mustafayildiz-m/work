@@ -766,8 +766,10 @@
     "list": {
       "pleaseLogin": "ଦୟାକରି ଲଗ୍ ଇନ୍ କରନ୍ତୁ |",
       "searchPlaceholder": "ବହି ଖୋଜ ...",
+      "back": "ପଛକୁ",
       "backToLanguages": "ଭାଷାକୁ ଫେରନ୍ତୁ |",
       "booksTitle": "ପୁସ୍ତକ",
+      "filter": "ଫିଲ୍ଟର୍",
       "totalBooks": "ସମୁଦାୟ ପୁସ୍ତକ",
       "currentPage": "ସାମ୍ପ୍ରତିକ ପୃଷ୍ଠା |",
       "totalPages": "ସମୁଦାୟ ପୃଷ୍ଠାଗୁଡ଼ିକ |",

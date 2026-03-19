@@ -693,8 +693,10 @@
     "list": {
       "pleaseLogin": "Veuillez vous connecter",
       "searchPlaceholder": "Rechercher des livres...",
+      "back": "Retour",
       "backToLanguages": "Retour aux langues",
       "booksTitle": "Livres",
+      "filter": "Filtre",
       "totalBooks": "Total des livres",
       "currentPage": "Page actuelle",
       "totalPages": "Total des pages",

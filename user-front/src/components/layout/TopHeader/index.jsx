@@ -72,7 +72,7 @@ const TopHeader = () => {
         flexShrink: 0
       }}>
         {!isGuest && (
-          <div className="d-flex align-items-center flex-nowrap" style={{ gap: '0.35rem' }}>
+          <div className="d-flex align-items-center flex-nowrap mobile-icons-group" style={{ gap: '0.35rem' }}>
             <MessageIconWithBadge />
             <FollowRequestsDropdown />
             <NotificationDropdown />
@@ -81,7 +81,7 @@ const TopHeader = () => {
         <div className="mobile-language-switcher flex-shrink-0">
           <LanguageSwitcher compact />
         </div>
-        <div className="mobile-theme-switcher flex-shrink-0">
+        <div className="mobile-theme-switcher flex-shrink-0 theme-switcher-mobile">
           <ThemeSwitcher />
         </div>
         <div className="mobile-profile flex-shrink-0">
@@ -205,10 +205,24 @@ const TopHeader = () => {
           }
         }
         
+        /* iPhone SE (375px): Tema seçici gizlenir, profil her zaman görünür (tema profil menüsünden değiştirilebilir) */
         @media (max-width: 399.98px) {
+          .theme-switcher-mobile {
+            display: none !important;
+          }
+          
           .container {
             padding-left: 0.4rem !important;
-            padding-right: 0.75rem !important;
+            padding-right: 0.5rem !important;
+            gap: 0.5rem !important;
+          }
+          
+          .mobile-header-actions {
+            gap: 0.2rem !important;
+          }
+          
+          .mobile-icons-group {
+            gap: 0.2rem !important;
           }
           
           .logo-container {
@@ -217,12 +231,12 @@ const TopHeader = () => {
           }
           
           .mobile-language-switcher {
-            max-width: 75px;
+            max-width: 68px;
           }
           
           .mobile-language-switcher :global(.language-switcher-select2) {
-            min-width: 80px !important;
-            max-width: 95px !important;
+            min-width: 60px !important;
+            max-width: 68px !important;
           }
           
           .mobile-language-switcher :global(.language-select__control) {

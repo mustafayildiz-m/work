@@ -766,8 +766,10 @@
     "list": {
       "pleaseLogin": "ദയവായി ലോഗിൻ ചെയ്യുക",
       "searchPlaceholder": "പുസ്തകങ്ങൾ തിരയുക...",
+      "back": "പിന്നോട്ട്",
       "backToLanguages": "ഭാഷകളിലേക്ക് മടങ്ങുക",
       "booksTitle": "പുസ്തകങ്ങൾ",
+      "filter": "ഫിൽട്ടർ",
       "totalBooks": "ആകെ പുസ്തകങ്ങൾ",
       "currentPage": "നിലവിലെ പേജ്",
       "totalPages": "ആകെ പേജുകൾ",
