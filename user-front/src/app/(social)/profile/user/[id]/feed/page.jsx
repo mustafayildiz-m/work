@@ -669,7 +669,9 @@ const UserFeedPage = () => {
           }
 
           // Sadece bu kullanıcının post'ları (user endpoint'inden geliyor, timeline değil, sadece kendi post'ları, başka kullanıcıların post'ları yok, sadece kendi gönderileri, resim ve video dahil, sadece kendi paylaştığı içerikler, sadece kendi profilinde görünen içerikler)
-          if (post.type === 'user' || post.type === 'text' || !post.type) {
+          // type: 'user' | 'text' | 'image' | 'video' - hepsi user post olarak gösterilmeli
+          const isUserPost = ['user', 'text', 'image', 'video'].includes(post.type) || !post.type;
+          if (isUserPost) {
             const isSharedPost = post.isShared;
 
             // Post yazarı (Orijinal post ise yazar, shared post ise orijinal yazar)
