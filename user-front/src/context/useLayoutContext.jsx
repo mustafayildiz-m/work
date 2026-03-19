@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useMemo, useState, useCallback, useEffect } from 'react';
 import { toggleDocumentAttribute } from '@/utils/layout';
+import { useAuthContext } from '@/context/useAuthContext';
+
 const LayoutContext = createContext(undefined);
 function useLayoutContext() {
   const context = useContext(LayoutContext);
@@ -15,6 +17,8 @@ const themeAttributeKey = 'data-bs-theme';
 const LayoutProvider = ({
   children
 }) => {
+  const { isAuthenticated } = useAuthContext();
+
   const getSavedTheme = () => {
     const foundTheme = localStorage.getItem(storageThemeKey);
     const preferredTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -60,6 +64,18 @@ const LayoutProvider = ({
       }));
     }
   }, []);
+
+  // Giriş yapıldığında her zaman koyu yeşil temadan başla
+  useEffect(() => {
+    if (isAuthenticated && typeof window !== 'undefined') {
+      const currentTheme = document.documentElement.getAttribute(themeAttributeKey);
+      if (currentTheme !== 'green') {
+        toggleDocumentAttribute(themeAttributeKey, 'green');
+        localStorage.setItem(storageThemeKey, 'green');
+        setSettings(prev => ({ ...prev, theme: 'green' }));
+      }
+    }
+  }, [isAuthenticated]);
 
   const resetTheme = useCallback(() => {
     const defaultTheme = 'light';

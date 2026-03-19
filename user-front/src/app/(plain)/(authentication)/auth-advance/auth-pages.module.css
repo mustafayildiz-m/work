@@ -604,28 +604,28 @@
   border-color: #dc2626 !important;
 }
 
-/* Guest button - premium gold/emerald Islamic style */
+/* Guest button - solid green with white text */
 .guestButton {
   border-radius: 18px !important;
   min-height: 40px !important;
   font-weight: 700 !important;
-  border: 2px solid #b8860b !important;
-  color: #b8860b !important;
-  background: linear-gradient(135deg, rgba(184, 134, 11, 0.15) 0%, rgba(212, 175, 55, 0.08) 100%) !important;
+  border: 2px solid #047857 !important;
+  color: white !important;
+  background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 10px !important;
-  box-shadow: 0 4px 14px rgba(184, 134, 11, 0.25) !important;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35) !important;
 }
 
 .guestButton:hover {
-  background: linear-gradient(135deg, #b8860b 0%, #9a7209 100%) !important;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
   color: white !important;
-  border-color: #b8860b !important;
+  border-color: #047857 !important;
   transform: translateY(-2px) !important;
-  box-shadow: 0 8px 24px rgba(184, 134, 11, 0.4) !important;
+  box-shadow: 0 8px 24px rgba(5, 150, 105, 0.45) !important;
 }
 
 .guestButton:active {
@@ -969,6 +969,18 @@
     left: auto !important;
     z-index: 10000;
   }
+
+  .guestButton {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+    border: 2px solid #047857 !important;
+    color: white !important;
+    box-shadow: 0 4px 16px rgba(5, 150, 105, 0.35) !important;
+  }
+
+  .guestButton:hover {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: white !important;
+  }
 }
 
 /* Mobile Large */
@@ -1043,6 +1055,7 @@
   .submitButton {
     min-height: 48px !important;
   }
+
 }
 
 /* Mobile Medium - 576px and below (includes 375px) */
