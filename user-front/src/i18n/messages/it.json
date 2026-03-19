@@ -93,7 +93,13 @@
     "resetPasswordErrors": {
       "INVALID_RESET_TOKEN": "Token di reimpostazione non valido o scaduto.",
       "EXPIRED_RESET_TOKEN": "Il link di reimpostazione è scaduto."
-    }
+    },
+    "pathToLightBismillahSecondary": "\"Nel nome di Allah, il più compassionevole, il più misericordioso\".",
+    "pathToLightSubtitle": "Il cammino verso la luce",
+    "pathToLightP1": "Îmân è credere insieme nelle due parti della parola del tawhid, \"Lâ ilâhe illallah\" e \"Muhammadun Rasûlallah\". Cioè, per essere musulmani è necessario credere anche che Muhammad (Sallallahu Alayhi wa Sallam) sia un Profeta. Cioè, Muhammad (Sallallahu Alayhi wa Sallam) è il Profeta di Allah ﷻ. Allah ﷻ, attraverso l'angelo Jibril (Alayhi s-salam), gli ha fatto scendere il (Corano al-karim). Questo Corano al-karim è la Parola di Allah ﷻ.",
+    "pathToLightP2": "Non sono i pensieri personali di Muhammad (Sallallahu Alayhi wa Sallam), né le parole di filosofi o storici. Muhammad (Sallallahu Alayhi wa Sallam) ha fatto tafsir del Corano al-karim. Cioè, lo ha spiegato. Queste spiegazioni sono chiamate (Hadith ash-sharif). L'Islam è composto dal (Corano al-karim) e dagli (Hadith ash-sharif). I milioni di libri islamici presenti in ogni parte del mondo sono spiegazioni del (Corano al-karim) e degli (Hadith ash-sharif). Una dichiarazione che non proviene da Muhammad (Sallallahu Alayhi wa Sallam) non può essere un libro islamico.",
+    "pathToLightP3": "Îmân e Islam significano credere nel (Corano al-karim) e negli (Hadith ash-sharif). Chi non crede in ciò che ha comunicato non avrà creduto nella Parola di Allah ﷻ. Muhammad (Sallallahu Alayhi wa Sallam) trasmise ciò che Allah ﷻ rivelò ai suoi Compagni (Radiyallahu Anhum). Questi, a loro volta, lo trasmisero ai loro studenti. Anche questi ultimi li scrissero nei loro libri. Gli studiosi che hanno scritto questi libri sono chiamati (studiosi dell'Ahl as-Sunnah). Chi crede nei libri degli Ahl as-Sunnah avrà creduto nella Parola di Allah ﷻ. Diventa un musulmano.",
+    "pathToLightP4": "Inshaallah, desideriamo anche consegnarvi questi preziosi libri e farvi incontrare gli studiosi dell'Ahl as-Sunnah (Rahmatullahi Alaihim Ecmain) attraverso un legame d'amore."
   },
   "navigation": {
     "home": "Casa",
