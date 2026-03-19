@@ -729,6 +729,7 @@ const BookDetailPage = () => {
 
   // Dil seçim modalını aç
   const openLanguageModal = (translation, translationIndex) => {
+    unlockAudioForPlayback();
     setSelectedTranslationForTranslate(translation);
     setSelectedTranslationIndexForTranslate(translationIndex);
     setSelectedPdfUrlForTranslate(translation.pdfUrl ? getPdfUrl(translation.pdfUrl) : null);
