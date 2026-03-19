@@ -11,6 +11,7 @@ import clsx from 'clsx';
 import { getToken } from '@/utils/auth';
 import placeholderImg from '@/assets/images/avatar/placeholder.jpg';
 import { useLanguage } from '@/context/useLanguageContext';
+import { getProfilePath } from '@/utils/profileEncoder';
 
 // Constants
 const MESSAGE_STATUSES = {
@@ -512,7 +513,7 @@ const MessageList = ({ onBackToConversations }) => {
         onBackToConversations={handleBackToConversations}
         isOnline={isConversationOnline}
         participantAvatar={resolvedParticipantAvatar}
-        participantProfileHref={activeConversation?.participantId ? `/profile/user/${activeConversation.participantId}` : undefined}
+        participantProfileHref={activeConversation?.participantId ? getProfilePath('user', activeConversation.participantId) : undefined}
         t={t}
       />
 
@@ -537,8 +538,8 @@ const MessageList = ({ onBackToConversations }) => {
                   showDate={message.showDate}
                   messageDate={message.messageDate}
                   ownAvatar={currentUserAvatar}
-                  participantProfileHref={activeConversation?.participantId ? `/profile/user/${activeConversation.participantId}` : undefined}
-                  currentUserProfileHref={currentUserId ? `/profile/user/${currentUserId}` : undefined}
+                  participantProfileHref={activeConversation?.participantId ? getProfilePath('user', activeConversation.participantId) : undefined}
+                  currentUserProfileHref={currentUserId ? getProfilePath('user', currentUserId) : undefined}
                 />
               ))}
 

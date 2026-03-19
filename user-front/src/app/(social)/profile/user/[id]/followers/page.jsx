@@ -5,9 +5,12 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { FaSearch, FaUser, FaUserFriends } from 'react-icons/fa';
 import { useLanguage } from '@/context/useLanguageContext';
+import { useProfileHash } from '@/hooks/useProfileHash';
+import { getProfilePath } from '@/utils/profileEncoder';
 
 export default function UserFollowersPage() {
   const params = useParams();
+  const { profileId, isValid } = useProfileHash();
   const { t } = useLanguage();
   const [followersData, setFollowersData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -22,7 +25,7 @@ export default function UserFollowersPage() {
       try {
         setLoading(true);
         const token = localStorage.getItem('token');
-        const userId = params?.id;
+        const userId = profileId;
         if (!token || !userId) {
           setLoading(false);
           return;
@@ -77,7 +80,7 @@ export default function UserFollowersPage() {
     };
 
     fetchFollowersData();
-  }, [params?.id]);
+  }, [profileId]);
 
   useEffect(() => {
     let filtered = followersData;
@@ -178,7 +181,7 @@ export default function UserFollowersPage() {
                     </div>
                     <h6 className="item-name">
                       {item.id ? (
-                        <Link href={`/profile/${item.type || 'user'}/${item.id}`} className="text-decoration-none">
+                        <Link href={getProfilePath(item.type || 'user', item.id) || `#`} className="text-decoration-none">
                           {item.name || item.username}
                         </Link>
                       ) : (

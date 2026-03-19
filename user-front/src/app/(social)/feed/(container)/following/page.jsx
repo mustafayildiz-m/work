@@ -5,6 +5,7 @@ import { FaSearch, FaUser, FaGraduationCap, FaUsers, FaUserFriends } from 'react
 import Link from 'next/link';
 import { getUserIdFromToken } from '../../../../../utils/auth';
 import { useLanguage } from '@/context/useLanguageContext';
+import { getProfilePath } from '@/utils/profileEncoder';
 import './following.css';
 
 export default function FollowingPage() {
@@ -280,7 +281,7 @@ export default function FollowingPage() {
 
                       <h6 className="item-name">
                         {item.id && item.id !== 'undefined' ? (
-                          <Link href={`/profile/${item.type || 'user'}/${item.id}`} className="text-decoration-none">
+                          <Link href={getProfilePath(item.type || 'user', item.id) || '#'} className="text-decoration-none">
                             {item.name || item.fullName}
                           </Link>
                         ) : (

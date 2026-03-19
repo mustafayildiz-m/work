@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import { useProfileHash } from '@/hooks/useProfileHash';
 import { Card, CardBody, Col, Container, Row } from 'react-bootstrap';
 import Image from 'next/image';
 import avatar7 from '@/assets/images/avatar/07.jpg';
@@ -10,6 +11,7 @@ import { useLanguage } from '@/context/useLanguageContext';
 
 const ScholarLineagePage = () => {
   const params = useParams();
+  const { profileId } = useProfileHash();
   const { t } = useLanguage();
   const [scholar, setScholar] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -17,7 +19,7 @@ const ScholarLineagePage = () => {
   useEffect(() => {
     const fetchScholarData = async () => {
       try {
-        const scholarId = params.id;
+        const scholarId = profileId;
         if (scholarId) {
           const token = localStorage.getItem('token');
 
@@ -42,7 +44,7 @@ const ScholarLineagePage = () => {
     };
 
     fetchScholarData();
-  }, [params.id]);
+  }, [profileId]);
 
   // Helper function to get proper image URL
   const getImageUrl = (photoUrl) => {

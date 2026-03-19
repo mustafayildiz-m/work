@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
+import { getProfilePath } from '@/utils/profileEncoder';
 import { BsCamera, BsCheckCircleFill, BsEye, BsImage, BsShieldLock } from 'react-icons/bs';
 
 
@@ -551,7 +552,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                 <h5 className="mb-1 mt-2 fw-bold" style={{ fontSize: '1.55rem', letterSpacing: '-0.01em' }}>
                   {user?.id && user?.id !== 'undefined' ? (
                     <Link
-                      href={`/profile/user/${user.id}`}
+                      href={getProfilePath('user', user.id) || '#'}
                       className="text-decoration-none"
                       style={{
                         color: headingColor,
@@ -657,7 +658,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
         border: `1px solid ${borderColor}`
       }}>
         <Link
-          href={user?.id && user?.id !== 'undefined' ? `/profile/user/${user.id}/feed` : '/profile/feed'}
+          href={user?.id && user?.id !== 'undefined' ? getProfilePath('user', user.id, 'feed') : '/profile/feed'}
           className="d-block text-center text-decoration-none"
           onClick={(e) => handleLinkClick(e, '/profile/feed')}
           style={{

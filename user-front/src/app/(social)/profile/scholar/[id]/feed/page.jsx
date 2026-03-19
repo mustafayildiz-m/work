@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
+import { useProfileHash } from '@/hooks/useProfileHash';
 import { Card, CardBody, Col, Container, Row } from 'react-bootstrap';
 import Image from 'next/image';
 import avatar7 from '@/assets/images/avatar/07.jpg';
@@ -52,6 +53,7 @@ async function loadScholarData(scholarId) {
 
 const ScholarFeedPage = () => {
   const params = useParams();
+  const { profileId } = useProfileHash();
   const searchParams = useSearchParams();
   const { locale, t } = useLanguage();
   const [posts, setPosts] = useState([]);
@@ -68,15 +70,15 @@ const ScholarFeedPage = () => {
   }
 
   useEffect(() => {
-    if (!params.id) return;
-    loadScholarData(params.id)
+    if (!profileId) return;
+    loadScholarData(profileId)
       .then(({ scholar, posts }) => {
         setScholar(scholar);
         setPosts(posts);
       })
       .catch(err => console.error('Error fetching data:', err))
       .finally(() => setLoading(false));
-  }, [params.id, locale]);
+  }, [profileId, locale]);
 
   useEffect(() => {
     const targetPostId = searchParams.get('postId');

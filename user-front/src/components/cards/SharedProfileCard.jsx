@@ -9,6 +9,7 @@ import avatar7 from '@/assets/images/avatar/07.jpg';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import { getUserIdFromToken } from '@/utils/auth';
+import { getProfilePath } from '@/utils/profileEncoder';
 import CustomConfirmDialog from '../CustomConfirmDialog';
 
 const SharedProfileCard = ({
@@ -71,10 +72,7 @@ const SharedProfileCard = ({
   };
 
   const getProfileLink = () => {
-    if (sharedProfileType === 'scholar') {
-      return `/profile/scholar/${sharedProfileId}`;
-    }
-    return `/profile/user/${sharedProfileId}`;
+    return getProfilePath(sharedProfileType === 'scholar' ? 'scholar' : 'user', sharedProfileId) || '#';
   };
 
   // Check if this is the current user's post
@@ -120,7 +118,7 @@ const SharedProfileCard = ({
           <div className="d-flex align-items-center">
             <div className="avatar avatar-story me-2">
               {userId ? (
-                <Link href={`/profile/user/${userId}`}>
+                <Link href={getProfilePath('user', userId) || '#'}>
                   <Image
                     className="avatar-img rounded-circle"
                     src={getImageUrl(userAvatar)}
@@ -149,7 +147,7 @@ const SharedProfileCard = ({
               <div className="nav nav-divider">
                 <h6 className="nav-item card-title mb-0">
                   {userId ? (
-                    <Link href={`/profile/user/${userId}`}> {userName} </Link>
+                    <Link href={getProfilePath('user', userId) || '#'}> {userName} </Link>
                   ) : (
                     <span className="text-decoration-none"> {userName} </span>
                   )}

@@ -5,6 +5,7 @@ import { useSearchContext } from '@/context/useSearchContext';
 import { useLanguage } from '@/context/useLanguageContext';
 import Link from 'next/link';
 import Image from 'next/image';
+import { getProfilePath } from '@/utils/profileEncoder';
 
 // Tab configuration
 const TABS = [
@@ -165,7 +166,7 @@ const SearchResults = () => {
     user.id && user.id !== 'undefined' ? (
       <Link
         key={user.id}
-        href={`/profile/user/${user.id}`}
+        href={getProfilePath('user', user.id) || '#'}
         style={linkStyle}
         onClick={clearSearch}
         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.02)'}
@@ -183,7 +184,7 @@ const SearchResults = () => {
     scholar.id && scholar.id !== 'undefined' ? (
       <Link
         key={scholar.id}
-        href={`/profile/scholar/${scholar.id}`}
+        href={getProfilePath('scholar', scholar.id) || '#'}
         style={linkStyle}
         onClick={clearSearch}
         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.02)'}
@@ -211,7 +212,7 @@ const SearchResults = () => {
     follower.id && follower.id !== 'undefined' ? (
       <Link
         key={follower.id}
-        href={`/profile/user/${follower.id}`}
+        href={getProfilePath('user', follower.id) || '#'}
         style={linkStyle}
         onClick={clearSearch}
         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.02)'}

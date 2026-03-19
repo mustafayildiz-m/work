@@ -10,6 +10,7 @@ import { FaPlus } from 'react-icons/fa';
 import { useRecentPosts } from '@/hooks/useRecentPosts';
 import { useAuth } from '@/hooks/useAuth';
 import { useLanguage } from '@/context/useLanguageContext';
+import { getProfilePath } from '@/utils/profileEncoder';
 import { useState, useEffect } from 'react';
 import Followers from '../../../feed/(container)/home/components/Followers';
 
@@ -104,7 +105,7 @@ const RecentPost = () => {
               <div className="d-flex align-items-center gap-2 mb-1">
                 {post.author?.photoUrl ? (
                   <Link 
-                    href={post.type === 'scholar_post' ? `/profile/scholar/${post.author.id}` : `/profile/user/${post.author.id}`} 
+                    href={getProfilePath(post.type === 'scholar_post' ? 'scholar' : 'user', post.author.id) || '#'} 
                     className="text-decoration-none"
                   >
                     <Image 
@@ -127,7 +128,7 @@ const RecentPost = () => {
                   style={{ display: post.author?.photoUrl ? 'none' : 'inline' }}
                 />
                 <Link 
-                  href={post.type === 'scholar_post' ? `/profile/scholar/${post.author.id}` : `/profile/user/${post.author.id}`} 
+                  href={getProfilePath(post.type === 'scholar_post' ? 'scholar' : 'user', post.author.id) || '#'} 
                   className="text-decoration-none"
                 >
                   <small className="text-muted">
@@ -137,7 +138,7 @@ const RecentPost = () => {
               </div>
               <h6 className="mb-0">
                 <Link 
-                  href={post.type === 'scholar_post' ? `/profile/scholar/${post.author.id}/feed` : `/profile/user/${post.author.id}/feed`} 
+                  href={getProfilePath(post.type === 'scholar_post' ? 'scholar' : 'user', post.author.id, 'feed') || '#'} 
                   className="text-decoration-none"
                 >
                   {(() => {

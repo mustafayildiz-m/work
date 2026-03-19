@@ -7,6 +7,7 @@ import { useEffect, useRef, useState, useMemo } from 'react';
 import { getImageUrl } from '@/utils/image';
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 import { useLanguage } from '@/context/useLanguageContext';
+import { getProfilePath } from '@/utils/profileEncoder';
 
 const FollowRequestsDropdown = () => {
     const { t } = useLanguage();
@@ -188,7 +189,7 @@ const FollowRequestsDropdown = () => {
                                                     )}
                                                 </div>
                                                 <div className="mx-sm-2 my-2 my-sm-0 flex-grow-1">
-                                                    <Link href={`/profile/user/${requestUser.id}`} className="text-decoration-none text-body">
+                                                    <Link href={getProfilePath('user', requestUser.id) || '#'} className="text-decoration-none text-body">
                                                         <p className="mb-0 fw-bold small text-truncate" style={{ maxWidth: '140px' }}>{requestUser.firstName} {requestUser.lastName}</p>
                                                     </Link>
                                                     <p className="text-muted mb-0" style={{ fontSize: '0.70rem' }}>{t('followRequests.wantsToConnect')}</p>

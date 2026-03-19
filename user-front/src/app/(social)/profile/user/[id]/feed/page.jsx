@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Card, CardBody, Col, Container, Row } from 'react-bootstrap';
+import { useProfileHash } from '@/hooks/useProfileHash';
 import Image from 'next/image';
 import avatar7 from '@/assets/images/avatar/07.jpg';
 import { BsHandThumbsUpFill, BsShare, BsEye, BsDownload, BsX } from 'react-icons/bs';
@@ -18,6 +19,7 @@ import { useLanguage } from '@/context/useLanguageContext';
 const UserFeedPage = () => {
   const { t } = useLanguage();
   const params = useParams();
+  const { profileId, isValid } = useProfileHash();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -45,7 +47,7 @@ const UserFeedPage = () => {
 
   const fetchUserInfo = async () => {
     try {
-      const userId = params.id;
+      const userId = profileId;
       if (userId) {
         const token = localStorage.getItem('token');
 
@@ -72,7 +74,7 @@ const UserFeedPage = () => {
 
   const fetchPosts = async () => {
     try {
-      const userId = params.id;
+      const userId = profileId;
       if (userId) {
         const token = localStorage.getItem('token');
 
@@ -103,7 +105,7 @@ const UserFeedPage = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const userId = params.id;
+        const userId = profileId;
         if (userId) {
           const token = localStorage.getItem('token');
 
@@ -113,7 +115,7 @@ const UserFeedPage = () => {
             const decodedPayload = JSON.parse(atob(payload));
             const currentUserIdFromToken = decodedPayload.sub;
             setCurrentUserId(currentUserIdFromToken);
-            setIsCurrentUser(currentUserIdFromToken === userId || currentUserIdFromToken.toString() === userId);
+            setIsCurrentUser(Number(currentUserIdFromToken) === Number(userId));
           } catch (error) {
             // console.error('Error checking current user:', error);
           }
@@ -140,7 +142,7 @@ const UserFeedPage = () => {
     return () => {
       window.removeEventListener('postCreated', handlePostCreated);
     };
-  }, [params.id]);
+  }, [profileId]);
 
   // Yeni yorum anlık görünsün (biri paylaşımıma yorum yaptı)
   useEffect(() => {
@@ -578,6 +580,18 @@ const UserFeedPage = () => {
     }
   };
 
+  if (params.id && !isValid) {
+    return (
+      <Card>
+        <CardBody className="text-center py-5">
+          <h4>Profil Bulunamadı</h4>
+          <p className="text-muted">Geçersiz profil linki veya bu profil mevcut değil.</p>
+          <a href="/feed" className="btn btn-primary">Ana Sayfaya Dön</a>
+        </CardBody>
+      </Card>
+    );
+  }
+
   if (loading) {
     return (
       <div className="text-center py-5">
@@ -636,7 +650,7 @@ const UserFeedPage = () => {
                 userId={post.user_id || post.userId}
                 userName={userInfo?.firstName && userInfo?.lastName
                   ? `${userInfo.firstName} ${userInfo.lastName}`
-                  : userInfo?.fullName || userInfo?.username || `Kullanıcı ${params.id}`}
+                  : userInfo?.fullName || userInfo?.username || `Kullanıcı ${profileId || ''}`}
                 userAvatar={userInfo?.photoUrl || avatar7}
                 timeAgo={post.time_ago || post.timeAgo}
                 sharedProfileType={post.shared_profile_type}
@@ -676,10 +690,10 @@ const UserFeedPage = () => {
 
             // Post yazarı (Orijinal post ise yazar, shared post ise orijinal yazar)
             const postAuthor = {
-              id: post.user_id || post.userId || params.id,
+              id: post.user_id || post.userId || profileId,
               name: post.user_name || (userInfo?.firstName && userInfo?.lastName
                 ? `${userInfo.firstName} ${userInfo.lastName}`
-                : userInfo?.fullName || userInfo?.username || `Kullanıcı ${params.id}`),
+                : userInfo?.fullName || userInfo?.username || `Kullanıcı ${profileId || ''}`),
               username: post.user_username || userInfo?.username,
               avatar: post.user_photo_url || userInfo?.photoUrl || avatar7,
               role: post.user_role || userInfo?.role || 'user'

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { getProfilePath } from '@/utils/profileEncoder';
 import CreatePostCard from '@/components/cards/CreatePostCard';
 import Posts from './components/Posts';
 
@@ -26,7 +27,7 @@ const Feed = () => {
 
         if (userId) {
           // Redirect to the user's own profile feed
-          router.push(`/profile/user/${userId}/feed`);
+          router.push(getProfilePath('user', userId, 'feed') || `/profile/user/${userId}/feed`);
         } else {
           setLoading(false);
         }

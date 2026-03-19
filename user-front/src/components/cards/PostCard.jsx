@@ -19,6 +19,7 @@ import { useLanguage } from '@/context/useLanguageContext';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import { useAuthContext } from '@/context/useAuthContext';
 import { encodePostId } from '@/utils/encoding';
+import { getProfilePath } from '@/utils/profileEncoder';
 import GuestMessagingModal from '@/components/layout/GuestMessagingModal';
 
 const ActionMenu = ({
@@ -684,7 +685,7 @@ const PostCard = ({
                   {' '}
                   {socialUser?.id ? (
                     <Link
-                      href={isUserPost ? `/profile/user/${socialUser?.id}` : `/profile/scholar/${socialUser?.id}`}
+                      href={getProfilePath(isUserPost ? 'user' : 'scholar', socialUser?.id) || '#'}
                       className="text-decoration-none"
                       onClick={(e) => handleGuestInteraction(e)}
                     >
