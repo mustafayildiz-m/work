@@ -50,7 +50,34 @@ const SignUp = () => {
         </div>
 
         <div className={styles.rightPanel}>
-          <div className={styles.backgroundImage}></div>
+          <div className={styles.imageWrapper}>
+            <div className={styles.backgroundImage}></div>
+          </div>
+          <div className={styles.textContentWrapper}>
+            <h2 className={styles.textTitle}>
+              <span className={styles.textTitleBismillahArabic}>
+                {t('auth.bismillahArabic')}
+              </span>
+              {(() => {
+                const secondary = t('auth.pathToLightBismillahSecondary');
+                const isValid = secondary && secondary.trim() !== '' && !secondary.startsWith('auth.');
+                return isValid ? (
+                  <span className={styles.textTitleBismillahSecondary}>{secondary}</span>
+                ) : null;
+              })()}
+              <span className={styles.textTitleMain}>{t('auth.pathToLightSubtitle')}</span>
+            </h2>
+            <div className={styles.authQuoteBlock}>
+              <p className={styles.authQuoteText}>"{t('auth.authQuote')}"</p>
+              <span className={styles.authQuoteSource}>— {t('auth.authQuoteSource')}</span>
+            </div>
+            <div className={styles.textBody}>
+              <p>{t('auth.pathToLightP1')}</p>
+              <p>{t('auth.pathToLightP2')}</p>
+              <p>{t('auth.pathToLightP3')}</p>
+              <p className={styles.textBodyHighlight}>{t('auth.pathToLightP4')}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
