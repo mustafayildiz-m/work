@@ -19,7 +19,6 @@ import clipboardImg from '@/assets/images/icon/clipboard-list-outline-filled.svg
 import microphoneImg from '@/assets/images/icon/chat-alt-outline-filled.svg'; // Geçici olarak chat-alt kullanıyoruz
 import myNetworkImg from '@/assets/images/icon/my-network-outline-filled.svg';
 import newspaperSmallImg from '@/assets/images/icon/newspaper-small.svg';
-import islamicScholarsImg from '@/assets/images/icon/islamic-scholars.svg';
 import bulbImg from '@/assets/images/icon/bulb-outline-filled.svg';
 
 export const profilePanelLinksData1 = [{
@@ -55,7 +54,7 @@ export const profilePanelLinksData1 = [{
   nameKey: 'menu.worldNews',
   link: '/blogs'
 }, {
-  image: typeof islamicScholarsImg === 'string' ? islamicScholarsImg : islamicScholarsImg.src,
+  image: typeof bookOpenImg === 'string' ? bookOpenImg : bookOpenImg.src,
   nameKey: 'menu.islamicScholars',
   link: '/feed/scholars'
 }, {
