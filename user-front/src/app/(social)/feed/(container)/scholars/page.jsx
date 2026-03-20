@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardBody, CardHeader, CardTitle, Row, Col, Button, Form, Alert, Spinner } from 'react-bootstrap';
 import { Badge } from 'react-bootstrap';
 import { BsSearch, BsPerson, BsPeople, BsPlus, BsEye } from 'react-icons/bs';
-import scholarIcon from '@/assets/images/icon/islamic-scholars.svg';
+import bookOpenIcon from '@/assets/images/icon/book-open-outline-filled.svg';
 import Link from 'next/link';
 import Image from 'next/image';
 import avatar7 from '@/assets/images/avatar/07.jpg';
@@ -291,24 +291,6 @@ const ScholarsPage = () => {
             opacity: 0.1,
             backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.8) 0%, transparent 20%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.8) 0%, transparent 20%)'
           }} />
-
-          {/* Büyütülmüş ve Şık Badge */}
-          <div className="position-absolute" style={{
-            top: '15px',
-            right: '15px',
-            width: '34px',
-            height: '34px',
-            background: '#ffffff',
-            borderRadius: '10px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-            zIndex: 2,
-            transition: 'transform 0.3s ease'
-          }}>
-            <Image src={scholarIcon} alt="Scholar" width={18} height={18} />
-          </div>
         </div>
 
         <div className="d-flex flex-column flex-grow-1 px-3 pb-3 pt-0 text-center position-relative">
@@ -427,7 +409,7 @@ const ScholarsPage = () => {
             fontWeight: '600',
             color: '#1e293b'
           }}>
-            <Image src={scholarIcon} alt="Scholar" width={24} height={24} className="me-2" />
+            <Image src={bookOpenIcon} alt="Scholar" width={24} height={24} className="me-2" />
             <span className="flex-grow-1">{t('scholars.title')}</span>
             <div
               className="ms-2 d-flex align-items-center"
@@ -442,7 +424,7 @@ const ScholarsPage = () => {
                 boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
               }}
             >
-              <Image src={scholarIcon} alt="Scholar" width={14} height={14} className="me-2" />
+              <Image src={bookOpenIcon} alt="Scholar" width={14} height={14} className="me-2" />
               <span>{totalCount} {t('scholars.totalScholars') || 'Alim'}</span>
             </div>
           </CardTitle>
@@ -512,7 +494,7 @@ const ScholarsPage = () => {
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <Image src={scholarIcon} alt="Scholar" width={40} height={40} />
+                <Image src={bookOpenIcon} alt="Scholar" width={40} height={40} />
               </div>
               <h5 className="mb-2" style={{
                 color: '#64748b',
