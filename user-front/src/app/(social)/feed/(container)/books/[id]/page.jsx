@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardBody, CardHeader, CardTitle, Row, Col, Button, Badge, Spinner, Alert, Modal, ProgressBar } from 'react-bootstrap';
 import { BsDownload, BsCalendar, BsPerson, BsBook, BsArrowLeft, BsEyeFill, BsShare, BsWhatsapp, BsNewspaper, BsThreeDotsVertical, BsGrid3X3, BsX, BsVolumeUp, BsTranslate, BsPause, BsPlay, BsSkipBackward, BsSkipForward, BsArrowsMove } from 'react-icons/bs';
@@ -1434,7 +1435,7 @@ const BookDetailPage = () => {
                         {lang.name}
                       </div>
                       <div style={{ fontSize: '1rem', lineHeight: 1, marginTop: '2px' }}>
-                        {getLanguageFlag(lang, API_BASE_URL)}
+                        {getLanguageFlag(lang)}
                       </div>
                     </Button>
                   </Col>
@@ -1997,4 +1998,10 @@ const BookDetailPage = () => {
   );
 };
 
-export default BookDetailPage;
+const BookDetailPageWithBoundary = () => (
+  <ErrorBoundary fallbackUrl="/feed/books" fallbackLabel="Kitaplara Dön">
+    <BookDetailPage />
+  </ErrorBoundary>
+);
+
+export default BookDetailPageWithBoundary;

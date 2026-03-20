@@ -1,9 +1,7 @@
 /**
- * Sistemdeki dillerden bayrak gösterimi - flagUrl varsa kullan, yoksa emoji fallback
+ * Sistemdeki dillerden bayrak gösterimi - emoji fallback (eski tarayıcı uyumluluğu)
  * API'den gelen dil objesi (id, name, code, flagUrl) ile kullanılır
  */
-
-import React from 'react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -35,24 +33,13 @@ export const getFlagImageUrl = (flagUrl, baseUrl = API_BASE_URL) => {
 };
 
 /**
- * Dil objesinden bayrak gösterimi döndürür (flagUrl varsa img, yoksa emoji)
+ * Dil objesinden bayrak gösterimi - sadece emoji döndürür (eski tarayıcı uyumluluğu için JSX/img yok)
+ * flagUrl varsa bile emoji kullan - img eski Safari/Android'de hydration/parse sorunlarına yol açabiliyor
  * @param {Object} lang - { code, name, flagUrl?, ... } API'den gelen dil objesi
- * @param {string} [baseUrl] - API base URL
- * @param {Object} [imgStyle] - img için ek stil
- * @returns {React.ReactNode|string}
+ * @returns {string}
  */
-export const getLanguageFlag = (lang, baseUrl = API_BASE_URL, imgStyle = {}) => {
+export const getLanguageFlag = (lang) => {
   if (!lang) return '🌐';
-  if (lang.flagUrl) {
-    const url = getFlagImageUrl(lang.flagUrl, baseUrl);
-    return (
-      <img
-        src={url}
-        alt={lang.name || ''}
-        style={{ width: '24px', height: '18px', objectFit: 'cover', ...imgStyle }}
-      />
-    );
-  }
   const code = (lang.code || '').toLowerCase();
   return FALLBACK_EMOJI_MAP[code] || '🌐';
 };

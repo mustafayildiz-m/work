@@ -789,7 +789,7 @@ const ScholarProfilePage = () => {
                         flexDirection: 'column'
                       }}
                     >
-                      <div style={{ fontSize: '1.2rem', lineHeight: 1 }}>{getLanguageFlag(lang, API_BASE_URL)}</div>
+                      <div style={{ fontSize: '1.2rem', lineHeight: 1 }}>{getLanguageFlag(lang)}</div>
                       <div style={{ fontSize: '0.9rem', fontWeight: '500' }}>{lang.name}</div>
                     </Button>
                   </Col>
