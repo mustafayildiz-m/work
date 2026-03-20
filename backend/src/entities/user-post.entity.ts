@@ -56,6 +56,9 @@ export class UserPost {
   @Column({ nullable: true })
   shared_story_id: number;
 
+  @Column({ nullable: true })
+  shared_newsletter_id: number;
+
   @Column({
     type: 'enum',
     enum: PostStatus,

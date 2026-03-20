@@ -17,6 +17,7 @@ import SharedBookCard from '@/components/cards/SharedBookCard';
 import SharedArticleCard from '@/components/cards/SharedArticleCard';
 import SharedPodcastCard from '@/components/cards/SharedPodcastCard';
 import SharedStoryCard from '@/components/cards/SharedStoryCard';
+import SharedNewsletterCard from '@/components/cards/SharedNewsletterCard';
 import CustomConfirmDialog from '@/components/CustomConfirmDialog';
 import EditPostModal from '@/components/EditPostModal';
 import Link from 'next/link';
@@ -445,6 +446,30 @@ const Feeds = ({ userId }) => {
   };
 
   // Separate handler for shared story posts - no confirmation dialog needed
+  const handleDeleteSharedNewsletterPost = async (postId) => {
+    try {
+      setDeletingPostId(postId);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setDeletingPostId(null);
+        return;
+      }
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/user-posts/${postId}`;
+      const response = await fetch(apiUrl, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+      });
+      if (response.ok) {
+        removePost(postId);
+        setPendingPosts(prev => prev.filter(p => p.id !== postId));
+      }
+    } catch (err) {
+      console.error('Error deleting shared newsletter post:', err);
+    } finally {
+      setDeletingPostId(null);
+    }
+  };
+
   const handleDeleteSharedStoryPost = async (postId) => {
     try {
       setDeletingPostId(postId);
@@ -1155,6 +1180,17 @@ const Feeds = ({ userId }) => {
               onLoadComments={() => loadComments(post.id)}
               onAddComment={handleAddComment}
               onDeleteComment={handleDeleteComment}
+            />
+          );
+        }
+
+        // Check if this is a shared newsletter post
+        if (post.type === 'shared_newsletter' && post.shared_newsletter_id) {
+          return (
+            <SharedNewsletterCard
+              key={`shared-newsletter-${post.id}`}
+              post={post}
+              onDeletePost={handleDeleteSharedNewsletterPost}
             />
           );
         }

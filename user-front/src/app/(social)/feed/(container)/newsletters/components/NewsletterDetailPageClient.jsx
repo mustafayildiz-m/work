@@ -103,6 +103,7 @@ export default function NewsletterDetailPageClient({ id }) {
             showOriginal={showOriginal}
             onToggleOriginal={() => setShowOriginal((v) => !v)}
             canShowOriginal={sourceLang !== lang}
+            newsletterId={id}
           />
         </Col>
         <Col lg={4}>

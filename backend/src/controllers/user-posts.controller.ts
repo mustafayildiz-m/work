@@ -103,6 +103,7 @@ export class UserPostsController {
     if (payload.shared_book_id != null) payload.shared_book_id = parseInt(payload.shared_book_id, 10);
     if (payload.shared_podcast_id != null) payload.shared_podcast_id = parseInt(payload.shared_podcast_id, 10);
     if (payload.shared_story_id != null) payload.shared_story_id = parseInt(payload.shared_story_id, 10);
+    if (payload.shared_newsletter_id != null) payload.shared_newsletter_id = parseInt(payload.shared_newsletter_id, 10);
     if (payload.shared_profile_id != null) payload.shared_profile_id = parseInt(payload.shared_profile_id, 10);
 
     if (file) {

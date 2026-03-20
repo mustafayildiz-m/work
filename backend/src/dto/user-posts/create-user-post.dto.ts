@@ -46,4 +46,6 @@ export class CreateUserPostDto {
   @IsInt()
   @IsOptional()
   shared_story_id?: number;
+
+  shared_newsletter_id?: number;
 }
