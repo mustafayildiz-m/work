@@ -334,7 +334,8 @@
     "viewProfile": "Oglejte si profil",
     "newsletters": "Novičke",
     "papers": "Akademske publikacije",
-    "askAboutIslam": "Vprašajte o islamu"
+    "askAboutIslam": "Vprašajte o islamu",
+    "languageSelection": "Izbira jezika"
   },
   "theme": {
     "themeSelection": "Izbor teme",

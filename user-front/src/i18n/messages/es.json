@@ -334,7 +334,8 @@
     "viewProfile": "Ver perfil",
     "newsletters": "Boletines",
     "papers": "Publicaciones académicas",
-    "askAboutIslam": "Pregunta sobre el Islam"
+    "askAboutIslam": "Pregunta sobre el Islam",
+    "languageSelection": "Selección de idioma"
   },
   "theme": {
     "themeSelection": "Selección de temas",

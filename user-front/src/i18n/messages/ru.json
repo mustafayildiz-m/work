@@ -334,7 +334,8 @@
     "viewProfile": "Просмотр профиля",
     "newsletters": "Информационные бюллетени",
     "papers": "Академические издания",
-    "askAboutIslam": "Спросите об исламе"
+    "askAboutIslam": "Спросите об исламе",
+    "languageSelection": "Выбор языка"
   },
   "theme": {
     "themeSelection": "Выбор темы",

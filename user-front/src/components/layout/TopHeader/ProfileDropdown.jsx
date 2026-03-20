@@ -9,6 +9,7 @@ import { useLayoutContext } from '@/context/useLayoutContext';
 import { useLanguage } from '@/context/useLanguageContext';
 import { getProfilePath } from '@/utils/profileEncoder';
 import avatar7 from '@/assets/images/avatar/07.jpg';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { BsCheckLg } from 'react-icons/bs';
 
 // Theme modes configuration (labels will be translated in component)
@@ -676,6 +677,14 @@ const ProfileDropdown = () => {
             ))}
           </div>
 
+          {/* Language Selector (Mobile Only) */}
+          <div className="py-2 px-3 dropdown-language-section" style={{ borderTop: '1px solid rgba(118, 75, 162, 0.1) !important' }}>
+            <div className="small text-muted mb-2 fw-bold text-uppercase" style={{ fontSize: '10px', letterSpacing: '0.5px' }}>{t('menu.languageSelection') || 'DİL SEÇİMİ'}</div>
+            <div className="dropdown-language-wrapper">
+              <LanguageSwitcher variant="dropdown" compact />
+            </div>
+          </div>
+
           {/* Theme Selector */}
           <div className="py-2 px-3" style={{ borderTop: '1px solid rgba(118, 75, 162, 0.1) !important' }}>
             <div className="small text-muted mb-2 fw-bold text-uppercase" style={{ fontSize: '10px', letterSpacing: '0.5px' }}>{t('theme.themeSelection')}</div>
@@ -808,6 +817,27 @@ const ProfileDropdown = () => {
           min-width: 0;
         }
 
+        .dropdown-language-section {
+          display: none !important;
+        }
+
+        .dropdown-language-wrapper :global(.language-switcher-select2) {
+          min-width: 100% !important;
+          max-width: 100% !important;
+        }
+
+        .dropdown-language-wrapper :global(.language-select__control) {
+          border-radius: 10px !important;
+          background: rgba(118, 75, 162, 0.05) !important;
+          border-color: rgba(118, 75, 162, 0.1) !important;
+        }
+        
+        .dropdown-language-wrapper :global(.language-select__single-value) {
+          font-size: 13px !important;
+          font-weight: 500 !important;
+          color: inherit !important;
+        }
+
         /* Mobile responsive styles */
         @media (max-width: 991.98px) {
           :global(.profile-avatar-container) {
@@ -827,6 +857,10 @@ const ProfileDropdown = () => {
             border-width: 2px !important;
             bottom: 0 !important;
             right: 0 !important;
+          }
+
+          .dropdown-language-section {
+            display: block !important;
           }
         }
 

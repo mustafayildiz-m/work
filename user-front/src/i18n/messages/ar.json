@@ -337,7 +337,8 @@
     "user": "المستخدم",
     "viewProfile": "عرض الملف الشخصي",
     "newsletters": "النشرات الإخبارية",
-    "askAboutIslam": "اسأل عن الإسلام"
+    "askAboutIslam": "اسأل عن الإسلام",
+    "languageSelection": "اختيار اللغة"
   },
   "theme": {
     "themeSelection": "اختيار السمة",

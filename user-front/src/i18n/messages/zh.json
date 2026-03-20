@@ -334,7 +334,8 @@
     "viewProfile": "查看简介",
     "newsletters": "新闻简报",
     "papers": "学术出版物",
-    "askAboutIslam": "询问伊斯兰教"
+    "askAboutIslam": "询问伊斯兰教",
+    "languageSelection": "语言选择"
   },
   "theme": {
     "themeSelection": "主题选择",
