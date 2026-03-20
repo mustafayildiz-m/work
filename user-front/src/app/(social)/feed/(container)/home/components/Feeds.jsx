@@ -180,7 +180,39 @@ const Feeds = ({ userId }) => {
   const { t, locale } = useLanguage();
 
   // Always call hooks first, before any conditional returns
-  const { posts: timelinePosts, loading, error, refetch, removePost } = useTimelinePosts(userId);
+  const { 
+    posts: timelinePosts, 
+    loading, 
+    loadingMore, 
+    hasMore, 
+    loadMore, 
+    error, 
+    refetch, 
+    removePost 
+  } = useTimelinePosts(userId);
+
+  // Setup Intersection Observer for Infinite Scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loadingMore && !loading) {
+          loadMore();
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    const observerTarget = document.getElementById('infinite-scroll-trigger');
+    if (observerTarget) {
+      observer.observe(observerTarget);
+    }
+
+    return () => {
+      if (observerTarget) {
+        observer.unobserve(observerTarget);
+      }
+    };
+  }, [hasMore, loadingMore, loading, loadMore]);
 
   // State for user's own pending posts
   const [pendingPosts, setPendingPosts] = useState([]);
@@ -1313,8 +1345,18 @@ const Feeds = ({ userId }) => {
         </p>
       </div>
     )}
-
-
+    
+    {/* Infinite Scroll Trigger & Loading More Spinner */}
+    <div id="infinite-scroll-trigger" className="text-center py-3" style={{ minHeight: '50px' }}>
+      {loadingMore && (
+        <div className="spinner-border text-primary spinner-border-sm" role="status">
+          <span className="visually-hidden">Daha fazla yükleniyor...</span>
+        </div>
+      )}
+      {!hasMore && timelinePosts && timelinePosts.length > 0 && (
+        <p className="text-muted small">Başka gönderi yok.</p>
+      )}
+    </div>
   </>;
 };
 export default Feeds;
