@@ -78,7 +78,7 @@
 
 .leftContainer {
   width: 100%;
-  max-width: 340px;
+  max-width: 570px;
   position: relative;
   z-index: 20;
   display: flex;
@@ -116,7 +116,7 @@
 
 .imageWrapper {
   width: 100%;
-  height: 40vh;
+  height: 50vh;
   flex-shrink: 0;
   position: relative;
   z-index: 1;
@@ -325,6 +325,7 @@
 
 .formContainer {
   width: 100%;
+  margin-top: 3.5rem;
   animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
 }
 
@@ -429,19 +430,19 @@
 }
 
 .authCard .p-4 {
-  padding: 0.75rem 1rem !important;
+  padding: 0.6rem 1rem !important;
 }
 
 .authCard .mb-2 {
-  margin-bottom: 0.35rem !important;
+  margin-bottom: 0.25rem !important;
 }
 
 .authCard .mb-3 {
-  margin-bottom: 0.5rem !important;
+  margin-bottom: 0.4rem !important;
 }
 
 .authCard .mt-2 {
-  margin-top: 0.35rem !important;
+  margin-top: 0.25rem !important;
 }
 
 .authCard .mt-3 {
@@ -481,7 +482,7 @@
   background-image: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
   border: none !important;
   color: white !important;
-  min-height: 40px !important;
+  min-height: 36px !important;
   border-radius: 18px !important;
   box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3) !important;
   transition: all 0.3s ease !important;
@@ -517,7 +518,7 @@
 /* Social / Provider Buttons */
 .providerButton {
   border-radius: 18px !important;
-  min-height: 40px;
+  min-height: 36px;
   font-weight: 700 !important;
   border: 1px solid rgba(4, 120, 87, 0.2) !important;
   background: rgba(255, 255, 255, 0.55) !important;
@@ -607,7 +608,7 @@
 /* Guest button - solid green with white text */
 .guestButton {
   border-radius: 18px !important;
-  min-height: 40px !important;
+  min-height: 36px !important;
   font-weight: 700 !important;
   border: 2px solid #047857 !important;
   color: white !important;
@@ -715,9 +716,9 @@
   border-radius: 8px !important;
   transition: all 0.2s ease !important;
   font-weight: 500 !important;
-  padding: 0.4rem 0.75rem !important;
-  font-size: 0.9rem !important;
-  min-height: 40px !important;
+  padding: 0.35rem 0.65rem !important;
+  font-size: 0.82rem !important;
+  min-height: 36px !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
 }
 
@@ -782,10 +783,12 @@
   background-color: #f8fafc !important;
   border: 2px dashed #cbd5e1 !important;
   border-radius: 12px !important;
-  padding: 0.5rem !important;
-  /* Reduced padding */
+  padding: 0.35rem 0.5rem !important;
   transition: all 0.3s ease;
-  min-height: auto !important;
+  min-height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .authCard .profile-dropzone:hover {
@@ -797,15 +800,19 @@
 
 .authCard .dropzone .dz-message {
   margin: 0 !important;
-  padding: 0.5rem !important;
+  padding: 0 !important;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .authCard .dropzone .dz-message svg {
   color: #10b981;
   /* Green icon */
-  margin-bottom: 0.1rem;
-  font-size: 1.2rem;
+  margin-bottom: 0 !important;
+  font-size: 1.1rem;
 }
 
 .hiddenOnMobile {

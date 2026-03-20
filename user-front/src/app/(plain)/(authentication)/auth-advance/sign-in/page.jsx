@@ -43,16 +43,6 @@ const SignIn = () => {
           </div>
 
           <Container className={styles.leftContainer}>
-            <div className={styles.logoContainer}>
-              <Image
-                src="/logo/logo.png"
-                alt="Site Logo"
-                width={80}
-                height={80}
-                className={styles.logoImage}
-                priority
-              />
-            </div>
 
             <div className={styles.formContainer}>
               <div className={styles.mobileHeaderWrap}>

@@ -9,7 +9,7 @@ import { currentYear, developedBy, developedByLink } from '@/context/constants';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Button, FormCheck } from 'react-bootstrap';
+import { Button, FormCheck, Row, Col } from 'react-bootstrap';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { useRouter } from 'next/navigation';
@@ -133,38 +133,42 @@ const SignUpForm = () => {
   };
 
   return <form className="mt-2" onSubmit={handleSubmit(onSubmit)}>
-    <div className="mb-1 text-start">
-      <TextFormInput
-        name="firstName"
-        control={control}
-        placeholder={t('auth.firstNamePlaceholder')}
-      />
-    </div>
-    <div className="mb-1 text-start">
-      <TextFormInput
-        name="lastName"
-        control={control}
-        placeholder={t('auth.lastNamePlaceholder')}
-      />
-    </div>
-    <div className="mb-1 text-start">
-      <TextFormInput
-        name="email"
-        control={control}
-        placeholder={t('auth.emailPlaceholderRequired')}
-      />
-    </div>
+    <Row className="mb-1 g-2">
+      <Col xs={6} className="text-start">
+        <TextFormInput
+          name="firstName"
+          control={control}
+          placeholder={t('auth.firstNamePlaceholder')}
+        />
+      </Col>
+      <Col xs={6} className="text-start">
+        <TextFormInput
+          name="lastName"
+          control={control}
+          placeholder={t('auth.lastNamePlaceholder')}
+        />
+      </Col>
+    </Row>
 
-    <div className="mb-1 text-start">
-      <DateFormInput
-        name="birthDate"
-        control={control}
-        placeholder={t('auth.birthDatePlaceholder')}
-        options={{
-          maxDate: new Date()
-        }}
-      />
-    </div>
+    <Row className="mb-1 g-2">
+      <Col xs={6} className="text-start">
+        <TextFormInput
+          name="email"
+          control={control}
+          placeholder={t('auth.emailPlaceholderRequired')}
+        />
+      </Col>
+      <Col xs={6} className="text-start">
+        <DateFormInput
+          name="birthDate"
+          control={control}
+          placeholder={t('auth.birthDatePlaceholder')}
+          options={{
+            maxDate: new Date()
+          }}
+        />
+      </Col>
+    </Row>
 
     {/* Profil Fotoğrafı Yükleme - Compact on mobile */}
     <div className="mb-1 text-start">
