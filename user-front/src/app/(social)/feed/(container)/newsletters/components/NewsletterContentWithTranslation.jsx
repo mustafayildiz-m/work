@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button, Card, CardBody } from 'react-bootstrap';
-import { BsArrowLeft } from 'react-icons/bs';
+import { Button, Card, CardBody, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'react-bootstrap';
+import { BsArrowLeft, BsShare, BsWhatsapp, BsNewspaper } from 'react-icons/bs';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/context/useLanguageContext';
+import { useNotificationContext } from '@/context/useNotificationContext';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -42,11 +44,67 @@ export default function NewsletterContentWithTranslation({
   themeCardStyle,
   showOriginal = false,
   onToggleOriginal,
-  canShowOriginal = false
+  canShowOriginal = false,
+  newsletterId
 }) {
   const { locale, t } = useLanguage();
+  const router = useRouter();
+  const { showNotification } = useNotificationContext();
   const sourceLang = data?.sourceLanguage || 'tr';
   const [imageLoading, setImageLoading] = useState(true);
+  const [shareDropdownOpen, setShareDropdownOpen] = useState(false);
+
+  const newsletterUrl = typeof window !== 'undefined' ? `${window.location.origin}/feed/newsletters/${newsletterId}` : '';
+
+  const handleShareToFeed = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        showNotification({ title: 'Hata', message: 'Giriş yapmalısınız', variant: 'danger' });
+        return;
+      }
+      let userId;
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        userId = payload.id || payload.userId || payload.sub;
+      } catch {
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          try {
+            userId = JSON.parse(userData).id;
+          } catch {}
+        }
+      }
+      if (!userId) {
+        showNotification({ title: 'Hata', message: 'Kullanıcı bilgisi bulunamadı', variant: 'danger' });
+        return;
+      }
+      const formData = new FormData();
+      formData.append('user_id', String(userId));
+      formData.append('type', 'shared_newsletter');
+      formData.append('title', '');
+      formData.append('content', `${data?.title || 'Bülten'} bültenini paylaştı`);
+      formData.append('shared_newsletter_id', String(newsletterId));
+
+      const res = await fetch(`${API_BASE_URL}/user-posts`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData
+      });
+      if (res.ok) {
+        showNotification({ title: 'Başarılı', message: 'Bülten haber akışında paylaşıldı', variant: 'success' });
+        window.dispatchEvent(new CustomEvent('timelineRefreshRequested'));
+        router.push('/feed/home');
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        const errMsg = errData?.message || errData?.error || 'Paylaşım başarısız';
+        showNotification({ title: 'Hata', message: errMsg, variant: 'danger' });
+      }
+    } catch (err) {
+      console.error('Error sharing newsletter to feed:', err);
+      showNotification({ title: 'Hata', message: 'Haber akışında paylaşımda bir hata oluştu', variant: 'danger' });
+    }
+  };
 
   useEffect(() => {
     setImageLoading(true);
@@ -75,6 +133,26 @@ export default function NewsletterContentWithTranslation({
           <span className="badge bg-secondary bg-opacity-25 text-body small">
             {t('feed.newslettersPublishedIn', { language: getLangName(t, sourceLang) })}
           </span>
+          <Dropdown show={shareDropdownOpen} onToggle={(open) => setShareDropdownOpen(open)} className="ms-auto">
+            <DropdownToggle variant="outline-primary" size="sm" className="d-flex align-items-center dropdown-toggle-no-caret">
+              <BsShare className="me-1" />
+              {t('post.share') || 'Paylaş'}
+            </DropdownToggle>
+            <DropdownMenu align="end">
+              <DropdownItem as="button" onSelect={() => { if (newsletterUrl) navigator.clipboard.writeText(newsletterUrl); setShareDropdownOpen(false); showNotification({ title: 'Başarılı', message: 'Link kopyalandı', variant: 'success' }); }}>
+                <BsShare size={14} className="me-2" />
+                {t('post.copyLink') || 'Link Kopyala'}
+              </DropdownItem>
+              <DropdownItem as="button" onSelect={() => { if (newsletterUrl) window.open(`https://wa.me/?text=${encodeURIComponent(`${data?.title || 'Bülten'} - ${newsletterUrl}`)}`, '_blank'); setShareDropdownOpen(false); }}>
+                <BsWhatsapp size={14} className="me-2 text-success" />
+                WhatsApp&apos;ta Paylaş
+              </DropdownItem>
+              <DropdownItem as="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShareDropdownOpen(false); handleShareToFeed(); }}>
+                <BsNewspaper size={14} className="me-2 text-primary" />
+                Haber Akışında Paylaş
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
           {canShowOriginal && (
             <button
               type="button"
