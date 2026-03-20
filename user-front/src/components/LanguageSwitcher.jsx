@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Select from 'react-select';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
@@ -90,19 +91,26 @@ const MobileLanguageModal = ({ isOpen, onClose, options, locale, onChange, t, ge
     onClose();
   };
 
-  return (
+  const modalContent = (
     <div
       className="language-modal-overlay"
       onClick={onClose}
       style={{
         position: 'fixed',
-        inset: 0,
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100vw',
+        height: '100dvh',
+        minHeight: '100dvh',
         zIndex: 1060,
         background: 'rgba(0,0,0,0.45)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '20px'
+        padding: '20px',
+        boxSizing: 'border-box'
       }}
     >
       <div
@@ -197,6 +205,8 @@ const MobileLanguageModal = ({ isOpen, onClose, options, locale, onChange, t, ge
       </div>
     </div>
   );
+
+  return typeof document !== 'undefined' ? createPortal(modalContent, document.body) : null;
 };
 
 const LanguageSwitcher = ({ variant = 'dropdown', compact = false }) => {

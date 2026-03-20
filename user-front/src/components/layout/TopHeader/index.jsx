@@ -207,12 +207,8 @@ const TopHeader = () => {
           }
         }
         
-        /* iPhone SE (375px): Tema seçici gizlenir, profil her zaman görünür (tema profil menüsünden değiştirilebilir) */
+        /* iPhone SE (375px): Tema seçici her zaman görünür (misafir kullanıcılar profil menüsüne erişemez) */
         @media (max-width: 399.98px) {
-          .theme-switcher-mobile {
-            display: none !important;
-          }
-          
           .container {
             padding-left: 0.4rem !important;
             padding-right: 0.5rem !important;
