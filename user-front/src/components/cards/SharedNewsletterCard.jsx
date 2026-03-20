@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Card, CardBody, Button, Spinner, Alert, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'react-bootstrap';
-import { BsNewspaper, BsTrash, BsThreeDots, BsCalendar } from 'react-icons/bs';
+import { BsNewspaper, BsTrash, BsThreeDots, BsCalendar, BsSend } from 'react-icons/bs';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { useNotificationContext } from '@/context/useNotificationContext';
@@ -10,20 +10,28 @@ import CustomConfirmDialog from '@/components/CustomConfirmDialog';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getProfilePath } from '@/utils/profileEncoder';
+import { getUserIdFromToken } from '@/utils/auth';
+import { useAuthContext } from '@/context/useAuthContext';
 import avatar7 from '@/assets/images/avatar/07.jpg';
+import avatar12 from '@/assets/images/avatar/12.jpg';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
-const SharedNewsletterCard = ({ post, onDeletePost }) => {
+const SharedNewsletterCard = ({ post, onDeletePost, comments = [], onLoadComments, onAddComment, onDeleteComment }) => {
   const { t, locale } = useLanguage();
   const { theme } = useLayoutContext();
   const { showNotification } = useNotificationContext();
+  const { userInfo } = useAuthContext();
   const isDarkMode = theme === 'dark' || theme === 'green';
   const [newsletterData, setNewsletterData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [currentUserProfile, setCurrentUserProfile] = useState(null);
+  const [showAllComments, setShowAllComments] = useState(false);
+  const [showCommentDeleteConfirm, setShowCommentDeleteConfirm] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState(null);
 
   const getImageUrl = (photoUrl) => {
     if (!photoUrl || typeof photoUrl !== 'string' || photoUrl === 'null' || photoUrl === '' || photoUrl === 'undefined') {
@@ -72,6 +80,41 @@ const SharedNewsletterCard = ({ post, onDeletePost }) => {
     };
     getCurrentUserId();
   }, []);
+
+  useEffect(() => {
+    const fetchCurrentUserProfile = async () => {
+      if (!userInfo?.id) return;
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_BASE_URL}/users/${userInfo.id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (response.ok) {
+          const text = await response.text();
+          if (text) {
+            const data = JSON.parse(text);
+            setCurrentUserProfile(data);
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching current user profile:', err);
+      }
+    };
+    fetchCurrentUserProfile();
+  }, [userInfo?.id]);
+
+  useEffect(() => {
+    if (onLoadComments && post?.id) {
+      onLoadComments();
+    }
+  }, [post?.id]);
+
+  const getCurrentUserAvatar = () => {
+    if (currentUserProfile?.photoUrl || currentUserProfile?.photo_url) {
+      return getImageUrl(currentUserProfile.photoUrl || currentUserProfile.photo_url);
+    }
+    return typeof avatar12 === 'string' ? avatar12 : (avatar12?.src || '/images/avatar/default.jpg');
+  };
 
   useEffect(() => {
     const fetchNewsletterData = async () => {
@@ -300,6 +343,169 @@ const SharedNewsletterCard = ({ post, onDeletePost }) => {
               </div>
             </div>
           </div>
+
+          {/* Comment section */}
+          {onAddComment && (
+            <div className="comment-section shared-newsletter-comments mt-3 pt-3" style={{ borderTop: '1px solid var(--bs-border-color)' }}>
+              <div className="d-flex mb-3">
+                <div className="me-2" style={{ flexShrink: 0 }}>
+                  <Image
+                    className="rounded-circle"
+                    src={getCurrentUserAvatar()}
+                    alt={userInfo?.username || userInfo?.name || 'User'}
+                    width={36}
+                    height={36}
+                    style={{ width: '36px', height: '36px', objectFit: 'cover', cursor: 'pointer' }}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = typeof avatar12 === 'string' ? avatar12 : (avatar12?.src || '/images/avatar/default.jpg');
+                    }}
+                  />
+                </div>
+                <div className="comment-input-container flex-grow-1 position-relative">
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const commentText = e.target.comment?.value?.trim();
+                      if (commentText && onAddComment && post?.id) {
+                        const currentScrollPosition = window.scrollY;
+                        onAddComment(post.id, commentText);
+                        e.target.comment.value = '';
+                        setTimeout(() => window.scrollTo(0, currentScrollPosition), 100);
+                      }
+                    }}
+                  >
+                    <textarea
+                      name="comment"
+                      className="comment-textarea w-100"
+                      rows={1}
+                      placeholder={t('post.addCommentPlaceholder')}
+                      maxLength={500}
+                      onInput={(e) => {
+                        e.target.style.height = 'auto';
+                        e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px';
+                      }}
+                    />
+                    <button className="comment-send-button" type="submit">
+                      <span>{t('post.comment')}</span>
+                      <BsSend />
+                    </button>
+                  </form>
+                </div>
+              </div>
+
+              <div className="comments-list mt-3">
+                {comments && comments.length > 0 ? (
+                  <>
+                    {(() => {
+                      const reversedComments = [...comments].reverse();
+                      const visibleComments = showAllComments ? reversedComments : reversedComments.slice(0, 3);
+                      return (
+                        <>
+                          {visibleComments.map((comment, index) => (
+                            <div key={comment.id || index} className="comment-item d-flex align-items-start mb-3">
+                              <div className="me-2 flex-shrink-0">
+                                <Image
+                                  className="rounded-circle"
+                                  src={getImageUrl(comment.user_photo_url || comment.user_avatar || comment.avatar) || (typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg'))}
+                                  alt={comment.user_name || comment.user_username || comment.username || 'User'}
+                                  width={36}
+                                  height={36}
+                                  style={{ width: '36px', height: '36px', objectFit: 'cover' }}
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg');
+                                  }}
+                                />
+                              </div>
+                              <div className="comment-content flex-grow-1">
+                                <div
+                                  className="comment-bubble"
+                                  style={{
+                                    backgroundColor: 'var(--bs-secondary-bg)',
+                                    borderRadius: '16px',
+                                    padding: '10px 14px',
+                                    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
+                                    border: '1px solid var(--bs-border-color)'
+                                  }}
+                                >
+                                  <div className="comment-header d-flex align-items-center justify-content-between mb-1">
+                                    <div className="d-flex align-items-center flex-wrap">
+                                      <span className="fw-bold me-2" style={{ fontSize: '14px', color: 'var(--bs-body-color)' }}>
+                                        {comment.user_name || comment.user_username || comment.username || 'User'}
+                                      </span>
+                                      <small className="text-muted" style={{ fontSize: '11px' }}>
+                                        {comment.created_at ? new Date(comment.created_at).toLocaleString('tr-TR', {
+                                          year: 'numeric',
+                                          month: '2-digit',
+                                          day: '2-digit',
+                                          hour: '2-digit',
+                                          minute: '2-digit'
+                                        }) : ''}
+                                      </small>
+                                    </div>
+                                    {(() => {
+                                      const uid = getUserIdFromToken();
+                                      const isOwnComment = uid && comment.user_id && (uid.toString() === comment.user_id.toString() || uid === comment.user_id);
+                                      return isOwnComment && onDeleteComment ? (
+                                        <button
+                                          type="button"
+                                          className="btn btn-sm btn-link text-danger p-0 ms-2"
+                                          onClick={() => {
+                                            setCommentToDelete({ id: comment.id, postId: post.id });
+                                            setShowCommentDeleteConfirm(true);
+                                          }}
+                                          title={t('post.deleteCommentTitle')}
+                                          style={{ fontSize: '14px', textDecoration: 'none' }}
+                                        >
+                                          <BsTrash />
+                                        </button>
+                                      ) : null;
+                                    })()}
+                                  </div>
+                                  <div className="comment-text mt-1" style={{ fontSize: '14px', lineHeight: '1.5', wordBreak: 'break-word', color: 'var(--bs-body-color)' }}>
+                                    {comment.content}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                          {!showAllComments && comments.length > 3 && (
+                            <div className="text-center mt-2">
+                              <button
+                                type="button"
+                                className="btn btn-link p-0 text-decoration-none comment-theme-link"
+                                style={{ fontSize: '0.9rem', fontWeight: '500' }}
+                                onClick={() => setShowAllComments(true)}
+                              >
+                                {t('post.viewAllComments', { count: comments.length - 3 }) || `Tüm yorumları gör (${comments.length - 3} daha)`}
+                              </button>
+                            </div>
+                          )}
+                          {showAllComments && comments.length > 3 && (
+                            <div className="text-center mt-2">
+                              <button
+                                type="button"
+                                className="btn btn-link p-0 text-decoration-none comment-theme-link"
+                                style={{ fontSize: '0.9rem', fontWeight: '500' }}
+                                onClick={() => setShowAllComments(false)}
+                              >
+                                {t('post.hideComments') || 'Yorumları gizle'}
+                              </button>
+                            </div>
+                          )}
+                        </>
+                      );
+                    })()}
+                  </>
+                ) : (
+                  <div className="text-center text-muted py-2">
+                    <small>{t('post.noCommentsYet')}</small>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </CardBody>
       </Card>
 
@@ -311,6 +517,26 @@ const SharedNewsletterCard = ({ post, onDeletePost }) => {
         message={t('post.deletePostConfirm')}
         confirmText={t('post.deleteConfirm')}
         cancelText={t('post.deleteCancel')}
+        type="danger"
+      />
+
+      <CustomConfirmDialog
+        show={showCommentDeleteConfirm}
+        onCancel={() => {
+          setShowCommentDeleteConfirm(false);
+          setCommentToDelete(null);
+        }}
+        onConfirm={() => {
+          if (commentToDelete && onDeleteComment) {
+            onDeleteComment(commentToDelete.id, commentToDelete.postId);
+          }
+          setShowCommentDeleteConfirm(false);
+          setCommentToDelete(null);
+        }}
+        title={t('post.deleteCommentTitle')}
+        message={t('post.deleteCommentMessage')}
+        confirmText={t('post.deleteCommentConfirm')}
+        cancelText={t('post.deleteCommentCancel')}
         type="danger"
       />
     </>

@@ -1191,6 +1191,10 @@ const Feeds = ({ userId }) => {
               key={`shared-newsletter-${post.id}`}
               post={post}
               onDeletePost={handleDeleteSharedNewsletterPost}
+              comments={postComments[post.id] || []}
+              onLoadComments={() => loadComments(post.id)}
+              onAddComment={handleAddComment}
+              onDeleteComment={handleDeleteComment}
             />
           );
         }
