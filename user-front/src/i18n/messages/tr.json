@@ -125,6 +125,7 @@
     "sharedProfile": "bir profili paylaştı",
     "sharedBook": "bir kitabı paylaştı",
     "sharedArticle": "bir makaleyi paylaştı",
+    "sharedPodcast": "bir podcast paylaştı",
     "profileNotFound": "Profil bulunamadı",
     "bookNotFound": "Kitap bulunamadı",
     "articleNotFound": "Makale bulunamadı",
@@ -139,6 +140,7 @@
     "deleteShareCancel": "İptal",
     "sharedBookLoading": "Kitap yükleniyor...",
     "sharedArticleLoading": "Makale yükleniyor...",
+    "sharedPodcastLoading": "Podcast yükleniyor...",
     "bookNotFoundError": "Kitap yüklenirken bir hata oluştu",
     "articleNotFoundError": "Makale yüklenirken bir hata oluştu",
     "authorNotSpecified": "Yazar belirtilmemiş",
@@ -149,6 +151,8 @@
     "downloadPdf": "PDF İndir",
     "viewBook": "Kitabı Görüntüle",
     "viewArticle": "Makaleyi Görüntüle",
+    "viewPodcast": "Podcasti Dinle",
+    "viewAllPodcasts": "Tüm Podcastleri Gör",
     "createPost": "Gönderi Oluştur",
     "whatsOnYourMind": "Ne düşünüyorsun?",
     "post": "Paylaş",
@@ -701,7 +705,10 @@
       "gridView": "Kart Görünümü",
       "listView": "Liste Görünümü",
       "playNow": "Şimdi Dinle"
-    }
+    },
+    "share": "Podcast Paylaş",
+    "shareOnWhatsApp": "WhatsApp'ta Paylaş",
+    "shareToFeed": "Haber Akışında Paylaş"
   },
   "articles": {
     "languageSelector": {

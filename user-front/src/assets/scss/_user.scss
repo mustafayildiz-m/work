@@ -1253,6 +1253,19 @@
       content: none !important;
     }
   }
+
+  // Podcast share dropdown - remove default toggle icon (small square)
+  .podcast-share-btn {
+    &::after {
+      display: none !important;
+      content: none !important;
+    }
+
+    &::before {
+      display: none !important;
+      content: none !important;
+    }
+  }
 }
 
 // ============================================
@@ -1567,7 +1580,9 @@
 // Remove dropdown caret icon
 .dropdown-toggle-no-caret::after,
 .article-share-dropdown-toggle::after,
-.article-share-dropdown-toggle::before {
+.article-share-dropdown-toggle::before,
+.podcast-share-btn::after,
+.podcast-share-btn::before {
   display: none !important;
   content: none !important;
 }

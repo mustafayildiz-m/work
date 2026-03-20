@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardBody, CardHeader, CardTitle, Row, Col, Form, InputGroup, Button, Pagination, Spinner, Alert, Badge, Collapse } from 'react-bootstrap';
-import { BsMicFill, BsPlayFill, BsPauseFill, BsHeart, BsSearch, BsClock, BsEye, BsStarFill, BsFilter, BsArrowLeft, BsGrid3X3Gap, BsList, BsChevronDown, BsChevronUp, BsSkipBackward, BsSkipForward, BsX } from 'react-icons/bs';
+import { Card, CardBody, CardHeader, CardTitle, Row, Col, Form, InputGroup, Button, Pagination, Spinner, Alert, Badge, Collapse, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'react-bootstrap';
+import { BsMicFill, BsPlayFill, BsPauseFill, BsHeart, BsSearch, BsClock, BsEye, BsStarFill, BsFilter, BsArrowLeft, BsGrid3X3Gap, BsList, BsChevronDown, BsChevronUp, BsSkipBackward, BsSkipForward, BsX, BsShare, BsWhatsapp, BsNewspaper } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { useNotificationContext } from '@/context/useNotificationContext';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -19,6 +20,7 @@ const getAudioUrl = (audioUrl) => {
 
 export default function PodcastsListPage() {
   const { t } = useLanguage();
+  const { showNotification } = useNotificationContext();
   const searchParams = useSearchParams();
   const router = useRouter();
   const languageId = searchParams.get('languageId');
@@ -282,7 +284,116 @@ export default function PodcastsListPage() {
     return `${API_URL}${coverImage.startsWith('/') ? '' : '/'}${coverImage}`;
   };
 
+  const getPodcastDetailUrl = (podcastId) => {
+    if (typeof window === 'undefined') return '';
+    const params = new URLSearchParams();
+    if (languageId) params.set('languageId', languageId);
+    if (languageName) params.set('languageName', languageName);
+    if (languageCode) params.set('languageCode', languageCode);
+    return `${window.location.origin}/feed/podcasts/${podcastId}?${params.toString()}`;
+  };
 
+  const handleShareToFeed = async (podcast) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        showNotification({ title: 'Hata', message: 'Giriş yapmalısınız', variant: 'danger' });
+        return;
+      }
+      let userId;
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        userId = payload.id || payload.userId || payload.sub;
+      } catch {
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          try {
+            userId = JSON.parse(userData).id;
+          } catch {}
+        }
+      }
+      if (!userId) {
+        showNotification({ title: 'Hata', message: 'Kullanıcı bilgisi bulunamadı', variant: 'danger' });
+        return;
+      }
+      const formData = new FormData();
+      formData.append('user_id', userId);
+      formData.append('type', 'shared_podcast');
+      formData.append('title', '');
+      formData.append('content', `${podcast.title} podcastini paylaştı`);
+      formData.append('shared_podcast_id', podcast.id);
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user-posts`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+      if (res.ok) {
+        showNotification({ title: 'Başarılı', message: 'Podcast haber akışında paylaşıldı', variant: 'success' });
+      } else {
+        throw new Error('Paylaşım başarısız');
+      }
+    } catch (err) {
+      console.error('Error sharing to feed:', err);
+      showNotification({ title: 'Hata', message: 'Haber akışında paylaşımda bir hata oluştu', variant: 'danger' });
+    }
+  };
+
+  const ShareDropdown = ({ podcast }) => (
+    <Dropdown className="d-inline-block" onClick={(e) => e.stopPropagation()}>
+      <DropdownToggle
+        variant="outline-primary"
+        size="sm"
+        className="d-flex align-items-center podcast-share-btn"
+        style={{
+          borderRadius: '999px',
+          border: '1px solid rgba(102, 126, 234, 0.4)',
+          background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.12) 100%)',
+          color: '#667eea',
+          fontWeight: 600,
+          padding: '0.35rem 0.75rem',
+          boxShadow: '0 2px 8px rgba(102, 126, 234, 0.15)',
+          transition: 'all 0.2s ease'
+        }}
+      >
+        <BsShare size={14} className="me-1 flex-shrink-0" />
+        <span className="d-none d-sm-inline">{t('podcasts.share') || 'Podcast Paylaş'}</span>
+        <span className="d-sm-none">Paylaş</span>
+      </DropdownToggle>
+      <DropdownMenu align="end" className="shadow-lg border-0" style={{ borderRadius: '12px', padding: '0.5rem' }}>
+        <DropdownItem
+          as="button"
+          className="d-flex align-items-center py-2 px-3 rounded-2"
+          onClick={() => {
+            const url = getPodcastDetailUrl(podcast.id);
+            if (url) {
+              navigator.clipboard.writeText(url);
+              showNotification({ title: 'Başarılı', message: 'Podcast linki kopyalandı', variant: 'success' });
+            }
+          }}
+        >
+          <BsShare size={16} className="me-2 text-primary" />
+          {t('podcasts.share') || 'Podcast Paylaş'}
+        </DropdownItem>
+        <DropdownItem
+          as="button"
+          className="d-flex align-items-center py-2 px-3 rounded-2"
+          onClick={() => {
+            const url = getPodcastDetailUrl(podcast.id);
+            const msg = `${podcast.title} podcastini dinle: ${url}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+          }}
+        >
+          <BsWhatsapp size={16} className="me-2 text-success" />
+          {t('podcasts.shareOnWhatsApp') || "WhatsApp'ta Paylaş"}
+        </DropdownItem>
+        <DropdownItem as="button" className="d-flex align-items-center py-2 px-3 rounded-2" onClick={() => handleShareToFeed(podcast)}>
+          <BsNewspaper size={16} className="me-2 text-primary" />
+          {t('podcasts.shareToFeed') || 'Haber Akışında Paylaş'}
+        </DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
+  );
 
   const categories = ['Hadis', 'Fıkıh', 'Tefsir', 'Siyer', 'Akaid', 'Tasavvuf', 'Genel'];
 
@@ -684,28 +795,29 @@ export default function PodcastsListPage() {
               {podcasts.map((podcast) => (
                 <Col key={podcast.id} xs={4} sm={4} md={4} lg={3}>
                   <Card className="h-100 border-0 podcast-card" onClick={() => togglePlay(podcast)}>
-                    <div className="position-relative podcast-image-wrapper" style={{ paddingTop: '100%', overflow: 'hidden' }}>
-                      <Image
-                        src={getCoverUrl(podcast.coverImage)}
-                        alt={podcast.title}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                        className="rounded-top"
-                        onError={(e) => {
-                          e.target.src = '/images/podcast-placeholder.jpg';
-                        }}
-                      />
+                    <div className="position-relative">
+                      <div className="position-relative podcast-image-wrapper" style={{ paddingTop: '100%', overflow: 'hidden', borderRadius: '10px 10px 0 0' }}>
+                        <Image
+                          src={getCoverUrl(podcast.coverImage)}
+                          alt={podcast.title}
+                          fill
+                          style={{ objectFit: 'cover' }}
+                          className="rounded-top"
+                          onError={(e) => {
+                            e.target.src = '/images/podcast-placeholder.jpg';
+                          }}
+                        />
 
-                      {/* Featured Badge */}
-                      {podcast.isFeatured && (
-                        <div className="position-absolute top-0 end-0 m-2" style={{ zIndex: 10 }}>
-                          <Badge bg="warning" className="d-flex align-items-center gap-1">
-                            <BsStarFill size={10} /> Öne Çıkan
-                          </Badge>
-                        </div>
-                      )}
+                        {/* Featured Badge */}
+                        {podcast.isFeatured && (
+                          <div className="position-absolute top-0 end-0 m-2" style={{ zIndex: 10 }}>
+                            <Badge bg="warning" className="d-flex align-items-center gap-1">
+                              <BsStarFill size={10} /> Öne Çıkan
+                            </Badge>
+                          </div>
+                        )}
 
-                      {/* Play Button Overlay */}
+                        {/* Play Button Overlay */}
                       <div className="position-absolute opacity-0 hover-overlay" style={{
                         inset: 0,
                         background: 'rgba(0,0,0,0.6)',
@@ -746,6 +858,11 @@ export default function PodcastsListPage() {
                         </button>
                       </div>
                     </div>
+                    {/* Share Button - overflow:hidden dışında, dropdown tam görünsün */}
+                    <div className="position-absolute top-0 start-0 m-2" style={{ zIndex: 1050, overflow: 'visible' }} onClick={(e) => e.stopPropagation()}>
+                      <ShareDropdown podcast={podcast} />
+                    </div>
+                  </div>
 
                     <Card.Body className="p-1 p-sm-2 p-md-3 podcast-card-body">
                       <Card.Title className="text-center mb-1 mb-md-2 podcast-title" style={{
@@ -898,7 +1015,7 @@ export default function PodcastsListPage() {
                           </Col>
                           <Col xs={12} lg={4} className="d-flex flex-column justify-content-between align-items-end">
                             <div className="mb-3">
-                              {/* Boş alan */}
+                              <ShareDropdown podcast={podcast} />
                             </div>
                             <Button
                               variant="primary"
@@ -1005,7 +1122,7 @@ export default function PodcastsListPage() {
           animation: fadeIn 0.4s ease-out;
           cursor: pointer;
           border-radius: 10px !important;
-          overflow: hidden;
+          overflow: visible !important;
           border: 1px solid rgba(0, 0, 0, 0.06) !important;
         }
         .podcast-list-card {
@@ -1110,6 +1227,24 @@ export default function PodcastsListPage() {
         
         [data-bs-theme="dark"] .podcast-player-container .text-muted {
           color: #adb5bd !important;
+        }
+
+        /* Podcast Paylaş butonu - şık stil */
+        .podcast-share-btn:hover,
+        .podcast-share-btn:focus {
+          background: linear-gradient(135deg, rgba(102, 126, 234, 0.25) 0%, rgba(118, 75, 162, 0.25) 100%) !important;
+          border-color: rgba(102, 126, 234, 0.7) !important;
+          color: #5a67d8 !important;
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
+          transform: translateY(-1px);
+        }
+        .podcast-share-btn:active {
+          transform: translateY(0);
+        }
+        @media (max-width: 575.98px) {
+          .podcast-card .podcast-image-wrapper {
+            border-radius: 8px 8px 0 0 !important;
+          }
         }
       `}</style>
     </Col>
