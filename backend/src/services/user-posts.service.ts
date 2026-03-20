@@ -156,14 +156,21 @@ export class UserPostsService {
     this.chatGateway.broadcastToAll('postDeletedFromFeed', { postId });
   }
 
-  async getTimeline(userId: number, language: string = 'tr') {
+  async getTimeline(userId: number, language: string = 'tr', page: number = 1, limit: number = 5, bypassCache: boolean = false) {
     // Cache key oluştur - shared posts, dil ve sadece accepted takipler için v5
     const cacheKey = `user-posts:timeline:${userId}:${language}:v5`;
+
+    // refresh=true ile gelen isteklerde cache bypass - frontend ile senkron
+    if (bypassCache) {
+      await this.cacheService.del(cacheKey);
+    }
 
     // Önce cache'den kontrol et
     const cachedResult = await this.cacheService.get<any[]>(cacheKey);
     if (cachedResult) {
-      return cachedResult;
+      const start = (page - 1) * limit;
+      const posts = cachedResult.slice(start, start + limit);
+      return { posts, total: cachedResult.length };
     }
 
     // Cache'de yoksa veritabanından getir - sadece kabul edilmiş takipler (pending değil)
@@ -475,10 +482,13 @@ export class UserPostsService {
       return bDate.getTime() - aDate.getTime();
     });
 
-    // Cache'e kaydet - TTL 10 dakika (600 saniye)
+    // Cache'e kaydet - TTL 10 dakika (600 saniye) - tam liste
     await this.cacheService.set(cacheKey, allPosts, 600);
 
-    return allPosts;
+    // Sayfalama: sadece istenen aralığı döndür
+    const start = (page - 1) * limit;
+    const posts = allPosts.slice(start, start + limit);
+    return { posts, total: allPosts.length };
   }
 
   async getUserPosts(userId: number, includePending: boolean = false) {

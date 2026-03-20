@@ -283,7 +283,7 @@ export const getAllFeeds = async () => {
   return data;
 };
 
-export const getTimelinePosts = async (userId, language = 'tr') => {
+export const getTimelinePosts = async (userId, language = 'tr', page = 1, limit = 5, refresh = false) => {
   try {
     const token = localStorage.getItem('token');
 
@@ -297,10 +297,15 @@ export const getTimelinePosts = async (userId, language = 'tr') => {
       return { posts: [], total: 0 }; // Return empty structure
     }
 
-    // Dil parametresi ile API çağrısı
+    // Dil ve sayfalama parametreleri ile API çağrısı
     const url = new URL(`${process.env.NEXT_PUBLIC_API_URL}/user-posts/timeline/${userId}`);
     if (language) {
       url.searchParams.append('language', language);
+    }
+    url.searchParams.append('page', page);
+    url.searchParams.append('limit', limit);
+    if (refresh) {
+      url.searchParams.append('refresh', 'true');
     }
 
     const headers = {

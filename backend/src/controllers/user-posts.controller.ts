@@ -155,8 +155,14 @@ export class UserPostsController {
   getTimeline(
     @Param('userId', ParseIntPipe) userId: number,
     @Query('language') language?: string,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+    @Query('refresh') refresh?: string,
   ) {
-    return this.userPostsService.getTimeline(userId, language);
+    const pageNum = page ? parseInt(String(page), 10) : 1;
+    const limitNum = limit ? parseInt(String(limit), 10) : 5;
+    const bypassCache = refresh === 'true' || refresh === '1';
+    return this.userPostsService.getTimeline(userId, language, pageNum, limitNum, bypassCache);
   }
 
   @Get('shared-profile/:profileType/:profileId')

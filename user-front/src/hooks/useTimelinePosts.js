@@ -5,12 +5,17 @@ import { useLanguage } from '@/context/useLanguageContext';
 export const useTimelinePosts = (userId) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState(null);
-  const { locale } = useLanguage(); // Kullanıcının seçtiği dil
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const { locale } = useLanguage();
 
-  // Main fetch function for initial load and manual refresh
+  const LIMIT = 5;
+
+  // Main fetch function for initial load
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchInitialPosts = async () => {
       if (!userId) {
         setLoading(false);
         return;
@@ -19,69 +24,81 @@ export const useTimelinePosts = (userId) => {
       try {
         setLoading(true);
         setError(null);
-        const data = await getTimelinePosts(userId, locale);
-        setPosts(data);
+        setPage(1);
+        const response = await getTimelinePosts(userId, locale, 1, LIMIT);
+        
+        // API returns { posts, total }
+        const newPosts = Array.isArray(response) ? response : (response.posts || []);
+        const total = response?.total ?? newPosts.length;
+        setPosts(newPosts);
+        
+        // Tüm gönderiler yüklendi mi? (örn. 300 gönderi varsa 300'ü dolana kadar devam)
+        setHasMore(newPosts.length < total);
       } catch (err) {
         setError(err.message);
-        console.error('Error fetching timeline posts:', err);
+        console.error('Error fetching initial timeline posts:', err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPosts();
-  }, [userId, locale]); // locale değişince de yeniden fetch et
+    fetchInitialPosts();
+  }, [userId, locale]);
 
-  // Listen for post creation events and automatically refresh
+  // Function to load more posts
+  const loadMore = async () => {
+    if (loadingMore || !hasMore || !userId) return;
+
+    try {
+      setLoadingMore(true);
+      const nextPage = page + 1;
+      const response = await getTimelinePosts(userId, locale, nextPage, LIMIT);
+      
+      const newPosts = Array.isArray(response) ? response : (response.posts || []);
+      const total = response?.total ?? 0;
+      
+      if (newPosts.length === 0) {
+        setHasMore(false);
+      } else {
+        setPosts(prev => {
+          const updated = [...prev, ...newPosts];
+          // Tüm gönderiler (örn. 300) yüklendi mi?
+          setHasMore(updated.length < total);
+          return updated;
+        });
+        setPage(nextPage);
+      }
+    } catch (err) {
+      console.error('Error loading more posts:', err);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+
+  // Listen for post creation events and automatically add to top
   useEffect(() => {
     const handlePostCreated = async (event) => {
-      // If we have post data in the event, add it immediately for instant feedback
       if (event.detail && event.detail.post) {
         const newPost = event.detail.post;
-        const fromRealtime = event.detail.fromRealtime === true; // WebSocket'ten gelen (başkasının paylaşımı)
+        const fromRealtime = event.detail.fromRealtime === true;
 
-        // Ensure video_url is properly formatted for immediate display
-        if (newPost.video_url && newPost.video_url.startsWith('blob:')) {
-          // This is a blob URL from file selection, keep it for immediate display
-        }
-
-        // Add the new post to the beginning of the list
         setPosts(prevPosts => {
           const exists = prevPosts.some(p => p.id === newPost.id);
           if (exists) return prevPosts;
           return [newPost, ...prevPosts];
         });
 
-        // Realtime'dan geldiyse (başkası paylaştı) refetch yapma - zaten doğru veri var
         if (fromRealtime) return;
       }
 
-      // Kendi paylaşımın veya local event - sunucudan güncel veriyi al
-      if (userId) {
-        try {
-          setLoading(true);
-          setError(null);
-          const data = await getTimelinePosts(userId, locale);
-          setPosts(data);
-        } catch (err) {
-          console.error('❌ useTimelinePosts: Error refreshing timeline:', err);
-          setError(err.message);
-        } finally {
-          setLoading(false);
-        }
-      }
+      // If needed, we could re-fetch page 1, but adding the new post to top is usually enough
     };
 
-    // Add event listener for post creation
     window.addEventListener('postCreated', handlePostCreated);
-
-    // Cleanup event listener
-    return () => {
-      window.removeEventListener('postCreated', handlePostCreated);
-    };
+    return () => window.removeEventListener('postCreated', handlePostCreated);
   }, [userId, locale]);
 
-  // Listen for post deletion - remove from timeline instantly
+  // Listen for post deletion
   useEffect(() => {
     const handlePostDeleted = (event) => {
       const postId = event.detail?.postId;
@@ -94,43 +111,41 @@ export const useTimelinePosts = (userId) => {
     return () => window.removeEventListener('postDeletedFromFeed', handlePostDeleted);
   }, []);
 
-  // Listen for share/unshare changes and refresh timeline instantly
+  // Listen for share/unshare changes - cache bypass ile backend ile senkron
   useEffect(() => {
     const handleTimelineRefreshRequested = async () => {
       if (!userId) return;
       try {
         setLoading(true);
-        setError(null);
-        const data = await getTimelinePosts(userId, locale);
-        setPosts(data);
+        setPage(1);
+        const response = await getTimelinePosts(userId, locale, 1, LIMIT, true);
+        const newPosts = Array.isArray(response) ? response : (response.posts || []);
+        const total = response?.total ?? newPosts.length;
+        setPosts(newPosts);
+        setHasMore(newPosts.length < total);
       } catch (err) {
-        console.error('Error refreshing timeline after share change:', err);
+        console.error('Error refreshing timeline:', err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    window.addEventListener(
-      'timelineRefreshRequested',
-      handleTimelineRefreshRequested,
-    );
-
-    return () => {
-      window.removeEventListener(
-        'timelineRefreshRequested',
-        handleTimelineRefreshRequested,
-      );
-    };
+    window.addEventListener('timelineRefreshRequested', handleTimelineRefreshRequested);
+    return () => window.removeEventListener('timelineRefreshRequested', handleTimelineRefreshRequested);
   }, [userId, locale]);
 
   const refetch = async () => {
     if (userId) {
       setLoading(true);
       setError(null);
+      setPage(1);
       try {
-        const data = await getTimelinePosts(userId, locale);
-        setPosts(data);
+        const response = await getTimelinePosts(userId, locale, 1, LIMIT, true);
+        const newPosts = Array.isArray(response) ? response : (response.posts || []);
+        const total = response?.total ?? newPosts.length;
+        setPosts(newPosts);
+        setHasMore(newPosts.length < total);
       } catch (err) {
         setError(err.message);
         console.error('Error refetching timeline posts:', err);
@@ -148,6 +163,9 @@ export const useTimelinePosts = (userId) => {
   return {
     posts,
     loading,
+    loadingMore,
+    hasMore,
+    loadMore,
     error,
     refetch,
     removePost
