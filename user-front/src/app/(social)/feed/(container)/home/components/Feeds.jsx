@@ -16,6 +16,7 @@ import SharedProfileCard from '@/components/cards/SharedProfileCard';
 import SharedBookCard from '@/components/cards/SharedBookCard';
 import SharedArticleCard from '@/components/cards/SharedArticleCard';
 import SharedPodcastCard from '@/components/cards/SharedPodcastCard';
+import SharedStoryCard from '@/components/cards/SharedStoryCard';
 import CustomConfirmDialog from '@/components/CustomConfirmDialog';
 import EditPostModal from '@/components/EditPostModal';
 import Link from 'next/link';
@@ -438,6 +439,31 @@ const Feeds = ({ userId }) => {
       }
     } catch (error) {
       console.error('Error deleting shared book post:', error);
+    } finally {
+      setDeletingPostId(null);
+    }
+  };
+
+  // Separate handler for shared story posts - no confirmation dialog needed
+  const handleDeleteSharedStoryPost = async (postId) => {
+    try {
+      setDeletingPostId(postId);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setDeletingPostId(null);
+        return;
+      }
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/user-posts/${postId}`;
+      const response = await fetch(apiUrl, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+      });
+      if (response.ok) {
+        removePost(postId);
+        setPendingPosts(prev => prev.filter(p => p.id !== postId));
+      }
+    } catch (err) {
+      console.error('Failed to delete shared story post:', err);
     } finally {
       setDeletingPostId(null);
     }
@@ -1110,6 +1136,21 @@ const Feeds = ({ userId }) => {
               key={`shared-podcast-${post.id}`}
               post={post}
               onDeletePost={handleDeleteSharedPodcastPost}
+              comments={postComments[post.id] || []}
+              onLoadComments={() => loadComments(post.id)}
+              onAddComment={handleAddComment}
+              onDeleteComment={handleDeleteComment}
+            />
+          );
+        }
+
+        // Check if this is a shared story post
+        if (post.type === 'shared_story' && post.shared_story_id) {
+          return (
+            <SharedStoryCard
+              key={`shared-story-${post.id}`}
+              post={post}
+              onDeletePost={handleDeleteSharedStoryPost}
               comments={postComments[post.id] || []}
               onLoadComments={() => loadComments(post.id)}
               onAddComment={handleAddComment}

@@ -2,18 +2,20 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import Select from 'react-select';
-import { Card, Col, Row, Form, Button, Spinner, Alert, ButtonGroup } from 'react-bootstrap';
-import { BsCalendarDate, BsPlayCircle, BsEye, BsHeart, BsGlobe2, BsGrid3X3Gap, BsList } from 'react-icons/bs';
+import { Card, Col, Row, Form, Button, Spinner, Alert, ButtonGroup, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'react-bootstrap';
+import { BsCalendarDate, BsPlayCircle, BsEye, BsHeart, BsGlobe2, BsGrid3X3Gap, BsList, BsShare, BsNewspaper, BsWhatsapp } from 'react-icons/bs';
 import { useScholarStories } from '@/hooks/useScholarStories';
 import NewsImage from './NewsImage';
 import Link from 'next/link';
 import { useLanguage } from '@/context/useLanguageContext';
+import { toast } from 'react-toastify';
 import { getFlagImageUrl, getFlagEmojiFallback } from '@/utils/language';
 import './IslamicNews.css';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
-const StoryCard = ({ story, languages = [] }) => {
+const StoryCard = ({ story, languages = [], onShareToFeed }) => {
+  const [shareDropdownOpen, setShareDropdownOpen] = useState(false);
   const {
     id,
     title,
@@ -57,12 +59,15 @@ const StoryCard = ({ story, languages = [] }) => {
       : `${API_BASE_URL}${thumbnail_url}`;
   };
 
+  const storyUrl = typeof window !== 'undefined' ? `${window.location.origin}/blogs/story/${id}` : '';
+
   return (
-    <Link href={`/blogs/story/${id}`} className="text-decoration-none">
-      <Card className={`story-video-card border-0 shadow-sm ${is_featured ? 'border-warning border-2' : 'story-video-card-default'}`}>
-        {/* Thumbnail - 16:9 video oranı */}
-        <div className="story-video-card__thumb position-relative overflow-hidden">
-          <NewsImage
+    <div className="position-relative" style={{ overflow: 'visible' }}>
+      <Link href={`/blogs/story/${id}`} className="text-decoration-none">
+        <Card className={`story-video-card border-0 shadow-sm ${is_featured ? 'border-warning border-2' : 'story-video-card-default'}`}>
+          {/* Thumbnail - 16:9 video oranı */}
+          <div className="story-video-card__thumb position-relative overflow-hidden">
+            <NewsImage
             className="w-100 h-100"
             src={getThumbnailUrl() || '/images/book-placeholder.jpg'}
             alt={title}
@@ -118,12 +123,113 @@ const StoryCard = ({ story, languages = [] }) => {
         </Card.Body>
       </Card>
     </Link>
+      {/* Paylaş dropdown - kart dışında, overflow kesilmez, caret yok */}
+      {onShareToFeed && (
+        <div className="position-absolute top-0 end-0 m-2 blogs-share-dropdown" style={{ zIndex: 20 }} onClick={(e) => e.stopPropagation()}>
+          <Dropdown show={shareDropdownOpen} onToggle={(open) => setShareDropdownOpen(open)}>
+            <DropdownToggle
+              variant="dark"
+              size="sm"
+              className="bg-dark bg-opacity-75 border-0 d-flex align-items-center dropdown-toggle-no-caret"
+              style={{ borderRadius: '8px', padding: '0.25rem 0.5rem' }}
+            >
+              <BsShare size={14} />
+            </DropdownToggle>
+            <DropdownMenu align="end" className="shadow-lg">
+              <DropdownItem as="button" onSelect={() => { if (storyUrl) navigator.clipboard.writeText(storyUrl); setShareDropdownOpen(false); }}>
+                <BsShare size={14} className="me-2" />
+                Link Kopyala
+              </DropdownItem>
+              <DropdownItem as="button" onSelect={() => { if (storyUrl) window.open(`https://wa.me/?text=${encodeURIComponent(`${title} - ${storyUrl}`)}`, '_blank'); setShareDropdownOpen(false); }}>
+                <BsWhatsapp size={14} className="me-2 text-success" />
+                WhatsApp&apos;ta Paylaş
+              </DropdownItem>
+              <DropdownItem
+                as="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShareDropdownOpen(false);
+                  onShareToFeed(story);
+                }}
+              >
+                <BsNewspaper size={14} className="me-2 text-primary" />
+                Haber Akışında Paylaş
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+      )}
+    </div>
   );
 };
 
 const ScholarStories = () => {
   const { t } = useLanguage();
   const [localSearchQuery, setLocalSearchQuery] = useState('');
+
+  const [sharingStoryId, setSharingStoryId] = useState(null);
+  const [openShareDropdownId, setOpenShareDropdownId] = useState(null);
+
+  const handleShareToFeed = async (story) => {
+    if (!story?.id) {
+      toast.error('Hikaye bilgisi bulunamadı');
+      return;
+    }
+    setSharingStoryId(story.id);
+    const toastId = toast.loading('Paylaşılıyor...');
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        toast.update(toastId, { render: 'Giriş yapmalısınız', type: 'error', isLoading: false, autoClose: 3000 });
+        setSharingStoryId(null);
+        return;
+      }
+      let userId;
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        userId = payload.id || payload.userId || payload.sub;
+      } catch {
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          try {
+            userId = JSON.parse(userData).id;
+          } catch {}
+        }
+      }
+      if (!userId) {
+        toast.update(toastId, { render: 'Kullanıcı bilgisi bulunamadı', type: 'error', isLoading: false, autoClose: 3000 });
+        setSharingStoryId(null);
+        return;
+      }
+      const formData = new FormData();
+      formData.append('user_id', String(userId));
+      formData.append('type', 'shared_story');
+      formData.append('title', '');
+      formData.append('content', `${story?.title || 'Hikaye'} hikayesini paylaştı`);
+      formData.append('shared_story_id', String(story?.id ?? ''));
+
+      const res = await fetch(`${API_BASE_URL}/user-posts`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+      if (res.ok) {
+        toast.update(toastId, { render: 'Hikaye haber akışında paylaşıldı', type: 'success', isLoading: false, autoClose: 3000 });
+        window.dispatchEvent(new CustomEvent('timelineRefreshRequested'));
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        const errMsg = errData?.message || errData?.error || `Paylaşım başarısız (${res.status})`;
+        toast.update(toastId, { render: errMsg, type: 'error', isLoading: false, autoClose: 4000 });
+      }
+    } catch (err) {
+      console.error('Error sharing story to feed:', err);
+      toast.update(toastId, { render: err?.message || 'Haber akışında paylaşımda bir hata oluştu', type: 'error', isLoading: false, autoClose: 4000 });
+    } finally {
+      setSharingStoryId(null);
+    }
+  };
+
   const [languages, setLanguages] = useState([]);
   const [languagesLoading, setLanguagesLoading] = useState(true);
   const [viewMode, setViewMode] = useState(() => {
@@ -481,7 +587,7 @@ const ScholarStories = () => {
           {filteredStories.length > 0 ? (
             filteredStories.map((story) => (
               <Col key={story.id} xs={6} md={6} lg={4}>
-                <StoryCard story={story} languages={languages} />
+                <StoryCard story={story} languages={languages} onShareToFeed={handleShareToFeed} />
               </Col>
             ))
           ) : (
@@ -547,8 +653,11 @@ const ScholarStories = () => {
                   : `${API_BASE_URL}${thumbnail_url}`;
               };
 
+              const listStoryUrl = typeof window !== 'undefined' ? `${window.location.origin}/blogs/story/${id}` : '';
+
               return (
-                <Link key={id} href={`/blogs/story/${id}`} className="text-decoration-none">
+                <div key={id} className="position-relative" style={{ overflow: 'visible' }}>
+                <Link href={`/blogs/story/${id}`} className="text-decoration-none">
                   <Card className="mb-2 mb-md-3 shadow-sm border-0 hover-elevate transition-all blogs-list-card">
                     <Row className="g-0">
                       <Col xs={4} md={4} lg={3} className="blogs-list-cover-col">
@@ -632,6 +741,36 @@ const ScholarStories = () => {
                     </Row>
                   </Card>
                 </Link>
+                <div className="position-absolute top-0 end-0 m-2 blogs-share-dropdown" style={{ zIndex: 20 }} onClick={(e) => e.stopPropagation()}>
+                  <Dropdown show={openShareDropdownId === story.id} onToggle={(open) => setOpenShareDropdownId(open ? story.id : null)}>
+                    <DropdownToggle variant="outline-secondary" size="sm" className="d-flex align-items-center dropdown-toggle-no-caret">
+                      <BsShare size={14} />
+                    </DropdownToggle>
+                    <DropdownMenu align="end" className="shadow-lg">
+                      <DropdownItem as="button" onSelect={() => { if (listStoryUrl) navigator.clipboard.writeText(listStoryUrl); setOpenShareDropdownId(null); }}>
+                        <BsShare size={14} className="me-2" />
+                        Link Kopyala
+                      </DropdownItem>
+                      <DropdownItem as="button" onSelect={() => { if (listStoryUrl) window.open(`https://wa.me/?text=${encodeURIComponent(`${title} - ${listStoryUrl}`)}`, '_blank'); setOpenShareDropdownId(null); }}>
+                        <BsWhatsapp size={14} className="me-2 text-success" />
+                        WhatsApp&apos;ta Paylaş
+                      </DropdownItem>
+                      <DropdownItem
+                        as="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setOpenShareDropdownId(null);
+                          handleShareToFeed(story);
+                        }}
+                      >
+                        <BsNewspaper size={14} className="me-2 text-primary" />
+                        Haber Akışında Paylaş
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                </div>
+                </div>
               );
             })
           ) : (

@@ -33,6 +33,19 @@
   overflow-y: auto !important;
 }
 
+/* Paylaş dropdown - kart dışında, kesilmesin */
+.blogs-share-dropdown {
+  overflow: visible !important;
+}
+
+.blogs-grid,
+.blogs-grid .row,
+.blogs-grid .col,
+.blogs-list-view,
+.blogs-list-view .position-relative {
+  overflow: visible !important;
+}
+
 /* Video Kart Tasarımı - YouTube tarzı, tutarlı hizalama */
 .story-video-card {
   height: 100%;

@@ -42,4 +42,8 @@ export class CreateUserPostDto {
   @IsInt()
   @IsOptional()
   shared_podcast_id?: number;
+
+  @IsInt()
+  @IsOptional()
+  shared_story_id?: number;
 }

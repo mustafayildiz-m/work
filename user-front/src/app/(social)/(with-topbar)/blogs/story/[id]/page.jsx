@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, Row, Col, Badge, Spinner, Alert, Button } from 'react-bootstrap';
-import { BsCalendarDate, BsPlayCircle, BsEye, BsHeart, BsArrowLeft } from 'react-icons/bs';
+import { Card, Row, Col, Badge, Spinner, Alert, Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'react-bootstrap';
+import { BsCalendarDate, BsPlayCircle, BsEye, BsHeart, BsArrowLeft, BsShare, BsNewspaper, BsWhatsapp } from 'react-icons/bs';
 import NewsImage from '../../components/NewsImage';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'react-toastify';
 
 const StoryDetail = ({ params }) => {
   const [story, setStory] = useState(null);
@@ -186,6 +187,57 @@ const StoryDetail = ({ params }) => {
     }
   };
 
+  const handleShareToFeed = async () => {
+    if (!story) return;
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        toast.error('Giriş yapmalısınız');
+        return;
+      }
+      let userId;
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        userId = payload.id || payload.userId || payload.sub;
+      } catch {
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          try {
+            userId = JSON.parse(userData).id;
+          } catch {}
+        }
+      }
+      if (!userId) {
+        toast.error('Kullanıcı bilgisi bulunamadı');
+        return;
+      }
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+      const formData = new FormData();
+      formData.append('user_id', String(userId));
+      formData.append('type', 'shared_story');
+      formData.append('title', '');
+      formData.append('content', `${story.title} hikayesini paylaştı`);
+      formData.append('shared_story_id', String(story.id));
+
+      const res = await fetch(`${API_BASE_URL}/user-posts`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+      if (res.ok) {
+        toast.success('Hikaye haber akışında paylaşıldı');
+        window.dispatchEvent(new CustomEvent('timelineRefreshRequested'));
+        router.push('/feed/home');
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        const errMsg = errData?.message || errData?.error || `Paylaşım başarısız (${res.status})`;
+        toast.error(errMsg);
+      }
+    } catch (err) {
+      console.error('Error sharing story to feed:', err);
+      toast.error(err?.message || 'Haber akışında paylaşımda bir hata oluştu');
+    }
+  };
 
   if (loading) {
     return (
@@ -329,7 +381,7 @@ const StoryDetail = ({ params }) => {
               )}
 
               {/* Action Buttons */}
-              <div className="d-flex gap-2">
+              <div className="d-flex gap-2 flex-wrap align-items-center">
                 {story.video_url && (
                   <Button
                     variant="primary"
@@ -349,6 +401,37 @@ const StoryDetail = ({ params }) => {
                   <BsHeart className="me-2" />
                   {!isAuthenticated ? 'Giriş Yapın' : hasLiked ? 'Beğenildi' : 'Beğen'} ({story.like_count || 0})
                 </Button>
+                <Dropdown>
+                  <DropdownToggle variant="outline-primary" size="lg" className="d-flex align-items-center">
+                    <BsShare className="me-2" />
+                    Paylaş
+                  </DropdownToggle>
+                  <DropdownMenu align="end">
+                    <DropdownItem as="button" onSelect={() => {
+                      const url = typeof window !== 'undefined' ? `${window.location.origin}/blogs/story/${id}` : '';
+                      if (url) {
+                        navigator.clipboard.writeText(url);
+                        toast.success('Link kopyalandı');
+                      }
+                    }}>
+                      <BsShare size={16} className="me-2" />
+                      Link Kopyala
+                    </DropdownItem>
+                    <DropdownItem as="button" onSelect={() => {
+                      const url = typeof window !== 'undefined' ? `${window.location.origin}/blogs/story/${id}` : '';
+                      if (url) {
+                        window.open(`https://wa.me/?text=${encodeURIComponent(`${story.title} - ${url}`)}`, '_blank');
+                      }
+                    }}>
+                      <BsWhatsapp size={16} className="me-2 text-success" />
+                      WhatsApp&apos;ta Paylaş
+                    </DropdownItem>
+                    <DropdownItem as="button" onSelect={handleShareToFeed}>
+                      <BsNewspaper size={16} className="me-2 text-primary" />
+                      Haber Akışında Paylaş
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
               </div>
             </Card.Body>
           </Card>
