@@ -160,6 +160,12 @@ const ArticleDetailPage = () => {
 
   const handleReadPdf = (pdfUrl, title) => {
     const fullPdfUrl = getPdfUrl(pdfUrl);
+    if (!fullPdfUrl) return;
+    // Mobilde in-app PDF viewer cihazı zorluyor - yeni sekmede aç (Safari native viewer daha hafif)
+    if (!isDesktop) {
+      window.open(fullPdfUrl, '_blank', 'noopener,noreferrer');
+      return;
+    }
     setSelectedPdfUrl(fullPdfUrl);
     setSelectedPdfTitle(title);
     setShowPdfViewer(true);
@@ -537,11 +543,21 @@ const ArticleDetailPage = () => {
 
       // Eğer PDF varsa ve henüz yüklenmemişse yükle
       if (selectedPdfUrlForTranslate && !activePdfDoc) {
-        const loadingTask = pdfjs.getDocument(selectedPdfUrlForTranslate);
-        activePdfDoc = await loadingTask.promise;
-        setPdfDoc(activePdfDoc);
-        setTotalPages(activePdfDoc.numPages);
-        activeTotalPages = activePdfDoc.numPages;
+        try {
+          const loadingTask = pdfjs.getDocument(selectedPdfUrlForTranslate);
+          activePdfDoc = await loadingTask.promise;
+          setPdfDoc(activePdfDoc);
+          setTotalPages(activePdfDoc.numPages);
+          activeTotalPages = activePdfDoc.numPages;
+        } catch (pdfErr) {
+          // Eski Safari/Android'de PDF worker yüklenemeyebilir - içerik ile devam et
+          console.warn('PDF yükleme hatası:', pdfErr);
+          activePdfDoc = null;
+          const content = selectedTranslationForTranslate?.content || '';
+          const pages = content.match(/.{1,3000}/gs) || [content];
+          activeTotalPages = pages.length;
+          setTotalPages(pages.length);
+        }
       } else if (!selectedPdfUrlForTranslate) {
         // PDF yoksa tek sayfa olarak kabul et veya içeriği böl
         const content = selectedTranslationForTranslate.content || '';
