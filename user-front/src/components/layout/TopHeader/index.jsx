@@ -78,9 +78,11 @@ const TopHeader = () => {
             <NotificationDropdown />
           </div>
         )}
-        <div className="mobile-language-switcher flex-shrink-0">
-          <LanguageSwitcher compact />
-        </div>
+        {isGuest && (
+          <div className="mobile-language-switcher flex-shrink-0">
+            <LanguageSwitcher compact />
+          </div>
+        )}
         <div className="mobile-theme-switcher flex-shrink-0 theme-switcher-mobile">
           <ThemeSwitcher />
         </div>

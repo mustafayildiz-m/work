@@ -333,7 +333,8 @@
     "viewProfile": "Voir le profil",
     "newsletters": "Bulletins d'information",
     "papers": "Publications académiques",
-    "askAboutIslam": "Questions sur l'Islam"
+    "askAboutIslam": "Questions sur l'Islam",
+    "languageSelection": "Choix de la langue"
   },
   "theme": {
     "themeSelection": "Sélection du thème",
