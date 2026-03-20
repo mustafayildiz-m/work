@@ -101,6 +101,7 @@ export class UserPostsController {
     if (payload.user_id != null) payload.user_id = parseInt(payload.user_id, 10);
     if (payload.shared_article_id != null) payload.shared_article_id = parseInt(payload.shared_article_id, 10);
     if (payload.shared_book_id != null) payload.shared_book_id = parseInt(payload.shared_book_id, 10);
+    if (payload.shared_podcast_id != null) payload.shared_podcast_id = parseInt(payload.shared_podcast_id, 10);
     if (payload.shared_profile_id != null) payload.shared_profile_id = parseInt(payload.shared_profile_id, 10);
 
     if (file) {

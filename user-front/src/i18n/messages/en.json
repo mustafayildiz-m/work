@@ -125,6 +125,7 @@
     "sharedProfile": "shared a profile",
     "sharedBook": "shared a book",
     "sharedArticle": "shared an article",
+    "sharedPodcast": "shared a podcast",
     "profileNotFound": "Profile not found",
     "bookNotFound": "Book not found",
     "articleNotFound": "Article not found",
@@ -139,6 +140,8 @@
     "deleteCancel": "Cancel",
     "sharedBookLoading": "Loading book...",
     "sharedArticleLoading": "Loading article...",
+    "sharedPodcastLoading": "Loading podcast...",
+    "sharedPodcastLoading": "Loading podcast...",
     "bookNotFoundError": "Error occurred while loading book",
     "articleNotFoundError": "Error occurred while loading article",
     "authorNotSpecified": "Author not specified",
@@ -149,6 +152,8 @@
     "downloadPdf": "Download PDF",
     "viewBook": "View Book",
     "viewArticle": "View Article",
+    "viewPodcast": "Listen to Podcast",
+    "viewAllPodcasts": "View All Podcasts",
     "createPost": "Create Post",
     "whatsOnYourMind": "What's on your mind?",
     "post": "Post",
@@ -697,7 +702,10 @@
       "gridView": "Grid View",
       "listView": "List View",
       "playNow": "Play Now"
-    }
+    },
+    "share": "Share Podcast",
+    "shareOnWhatsApp": "Share on WhatsApp",
+    "shareToFeed": "Share to Feed"
   },
   "articles": {
     "languageSelector": {

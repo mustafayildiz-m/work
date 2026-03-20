@@ -125,6 +125,15 @@
     }
   }
 
+  // View all / hide comments links - tema uyumlu
+  .comment-theme-link {
+    color: #6c757d;
+
+    &:hover {
+      color: #495057;
+    }
+  }
+
   // Comments list styling
   .comments-list {
     border-top: 1px solid #e9ecef;
@@ -221,6 +230,88 @@
         color: #e2e8f0;
       }
     }
+  }
+
+  .comment-theme-link {
+    color: #a0aec0 !important;
+
+    &:hover {
+      color: #e2e8f0 !important;
+    }
+  }
+
+  .text-muted small {
+    color: #94a3b8 !important;
+  }
+}
+
+// Green theme support
+[data-bs-theme="green"] .comment-section {
+  .comment-input-container {
+    background: #234d2a;
+
+    &:hover {
+      background: #2d5a2d;
+      border-color: rgba(67, 160, 71, 0.4);
+    }
+
+    &:focus-within {
+      background: #1e3d20;
+      border-color: #43a047;
+      box-shadow: 0 0 0 0.2rem rgba(67, 160, 71, 0.25);
+    }
+  }
+
+  .comment-textarea {
+    color: #e0f0e0;
+
+    &::placeholder {
+      color: #a8d4a8;
+    }
+  }
+
+  .comment-send-button {
+    background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%) !important;
+    box-shadow: 0 2px 8px rgba(67, 160, 71, 0.3);
+
+    &:hover {
+      background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%) !important;
+      box-shadow: 0 4px 12px rgba(67, 160, 71, 0.4);
+    }
+  }
+
+  .avatar-xs {
+    border-color: rgba(67, 160, 71, 0.4);
+  }
+
+  .comments-list {
+    border-top-color: rgba(67, 160, 71, 0.35);
+
+    .comment-item {
+      &:hover {
+        background-color: rgba(67, 160, 71, 0.15);
+      }
+
+      .comment-header .fw-bold {
+        color: #c0e0c0;
+      }
+
+      .comment-text {
+        color: #e0f0e0;
+      }
+    }
+  }
+
+  .comment-theme-link {
+    color: #a8d4a8 !important;
+
+    &:hover {
+      color: #c0e0c0 !important;
+    }
+  }
+
+  .text-muted small {
+    color: #8bc34a !important;
   }
 }
 

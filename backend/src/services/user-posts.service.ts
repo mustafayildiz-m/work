@@ -52,10 +52,11 @@ export class UserPostsService {
       true,
     );
 
-    // Kitapçık ve kitap paylaşımları onay beklemeden doğrudan yayınlansın
+    // Kitapçık, kitap ve podcast paylaşımları onay beklemeden doğrudan yayınlansın
     const isSharedContent =
       createUserPostDto.type === 'shared_article' ||
-      createUserPostDto.type === 'shared_book';
+      createUserPostDto.type === 'shared_book' ||
+      createUserPostDto.type === 'shared_podcast';
     const shouldAutoApprove = isSharedContent || !isApprovalEnabled;
 
     const post = this.userPostRepository.create({
@@ -412,7 +413,8 @@ export class UserPostsService {
         shared_book_id: (p as any).shared_book_id || null,
         // Shared article bilgileri
         shared_article_id: (p as any).shared_article_id || null,
-        // Diğer alanlar eklenebilir
+        // Shared podcast bilgileri
+        shared_podcast_id: (p as any).shared_podcast_id || null,
       };
     });
 
@@ -618,6 +620,7 @@ export class UserPostsService {
         shared_profile_id: (post as any).shared_profile_id || null,
         shared_book_id: (post as any).shared_book_id || null,
         shared_article_id: (post as any).shared_article_id || null,
+        shared_podcast_id: (post as any).shared_podcast_id || null,
       };
     });
   }
@@ -762,6 +765,7 @@ export class UserPostsService {
       shared_profile_id: null,
       shared_book_id: null,
       shared_article_id: null,
+      shared_podcast_id: null,
     };
 
     this.chatGateway.broadcastToUsers(followerIds, 'newPostInFeed', postPayload);
