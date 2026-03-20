@@ -116,8 +116,11 @@ const RecentPost = () => {
                       className="rounded-circle"
                       style={{ objectFit: 'cover' }}
                       onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.nextSibling.style.display = 'inline';
+                        const img = e.target;
+                        if (img) img.style.display = 'none';
+                        const link = img?.closest?.('a');
+                        const fallback = link?.nextSibling ?? img?.nextSibling ?? img?.parentElement?.nextSibling;
+                        if (fallback?.style) fallback.style.display = 'inline';
                       }}
                     />
                   </Link>

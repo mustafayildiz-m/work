@@ -56,7 +56,8 @@ export class UserPostsService {
     const isSharedContent =
       createUserPostDto.type === 'shared_article' ||
       createUserPostDto.type === 'shared_book' ||
-      createUserPostDto.type === 'shared_podcast';
+      createUserPostDto.type === 'shared_podcast' ||
+      createUserPostDto.type === 'shared_story';
     const shouldAutoApprove = isSharedContent || !isApprovalEnabled;
 
     const post = this.userPostRepository.create({
@@ -415,6 +416,8 @@ export class UserPostsService {
         shared_article_id: (p as any).shared_article_id || null,
         // Shared podcast bilgileri
         shared_podcast_id: (p as any).shared_podcast_id || null,
+        // Shared story bilgileri
+        shared_story_id: (p as any).shared_story_id || null,
       };
     });
 
@@ -621,6 +624,7 @@ export class UserPostsService {
         shared_book_id: (post as any).shared_book_id || null,
         shared_article_id: (post as any).shared_article_id || null,
         shared_podcast_id: (post as any).shared_podcast_id || null,
+        shared_story_id: (post as any).shared_story_id || null,
       };
     });
   }
@@ -766,6 +770,7 @@ export class UserPostsService {
       shared_book_id: null,
       shared_article_id: null,
       shared_podcast_id: null,
+      shared_story_id: null,
     };
 
     this.chatGateway.broadcastToUsers(followerIds, 'newPostInFeed', postPayload);
