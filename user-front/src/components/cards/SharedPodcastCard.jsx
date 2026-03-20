@@ -250,10 +250,10 @@ const SharedPodcastCard = ({ post, onDeletePost, comments = [], onLoadComments, 
   return (
     <>
       <Card className="mb-3 border-0 shadow-sm" style={{ maxWidth: '100%', overflow: 'hidden' }}>
-        <CardBody className="p-4" style={{ maxWidth: '100%', overflow: 'hidden' }}>
+        <CardBody className="p-2 p-sm-3 p-md-4" style={{ maxWidth: '100%', overflow: 'hidden' }}>
           {/* Kullanıcı Bilgileri */}
-          <div className="d-flex align-items-center mb-3">
-            <div className="avatar me-3">
+          <div className="d-flex align-items-center mb-2 mb-sm-3">
+            <div className="avatar me-2 me-sm-3">
               <Image
                 className="avatar-img rounded-circle"
                 src={getImageUrl(post.user_photo_url)}
@@ -314,7 +314,7 @@ const SharedPodcastCard = ({ post, onDeletePost, comments = [], onLoadComments, 
           {/* Inline Audio Player - timeline'da dinleme */}
           {podcastData.audioUrl && (
             <div
-              className="rounded-3 p-3 mb-3 d-flex align-items-center gap-3"
+              className="rounded-3 p-2 p-sm-3 mb-2 mb-sm-3 d-flex align-items-center gap-2 gap-sm-3"
               style={{
                 background: isDarkMode ? 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)' : 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%)',
                 border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'}`
@@ -334,15 +334,16 @@ const SharedPodcastCard = ({ post, onDeletePost, comments = [], onLoadComments, 
                 variant={isPlaying ? 'primary' : 'outline-primary'}
                 size="sm"
                 className="rounded-circle p-2 flex-shrink-0"
-                style={{ width: '44px', height: '44px' }}
+                style={{ width: '44px', height: '44px', minWidth: '44px', minHeight: '44px' }}
                 onClick={togglePlay}
+                aria-label={isPlaying ? 'Duraklat' : 'Oynat'}
               >
                 {isPlaying ? <BsPauseFill size={20} /> : <BsPlayFill size={20} />}
               </Button>
               <div className="flex-grow-1" style={{ minWidth: 0 }}>
                 <div
-                  className="progress rounded-pill cursor-pointer"
-                  style={{ height: '8px', cursor: 'pointer' }}
+                  className="progress rounded-pill"
+                  style={{ height: '10px', cursor: 'pointer', minHeight: '24px', touchAction: 'manipulation' }}
                   onClick={handleSeek}
                 >
                   <div
@@ -355,8 +356,8 @@ const SharedPodcastCard = ({ post, onDeletePost, comments = [], onLoadComments, 
                   />
                 </div>
                 <div className="d-flex justify-content-between mt-1">
-                  <small className="text-muted">{formatDuration(Math.floor(audioCurrentTime))}</small>
-                  <small className="text-muted">{formatDuration(Math.floor(audioDuration))}</small>
+                  <small className="text-muted" style={{ fontSize: '0.75rem' }}>{formatDuration(Math.floor(audioCurrentTime))}</small>
+                  <small className="text-muted" style={{ fontSize: '0.75rem' }}>{formatDuration(Math.floor(audioDuration))}</small>
                 </div>
               </div>
             </div>
@@ -364,23 +365,25 @@ const SharedPodcastCard = ({ post, onDeletePost, comments = [], onLoadComments, 
 
           {/* Podcast Kartı */}
           <div
-            className="border-0 rounded-3 p-4 mb-3"
+            className="border-0 rounded-3 p-2 p-sm-3 p-md-4 mb-2 mb-sm-3"
             style={{
               background: isDarkMode ? 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)' : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
               maxWidth: '100%',
               overflow: 'hidden'
             }}
           >
-            <div className="d-flex gap-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
-              <div style={{ position: 'relative', zIndex: 10, flexShrink: 0 }}>
+            <div className="d-flex flex-column flex-sm-row gap-2 gap-sm-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
+              <div className="text-center text-sm-start" style={{ position: 'relative', zIndex: 10, flexShrink: 0 }}>
                 <div className="position-relative">
                   <img
                     src={getCoverUrl()}
                     alt={podcastData.title}
                     className="rounded-3"
                     style={{
-                      width: '100px',
-                      height: '100px',
+                      width: '80px',
+                      height: '80px',
+                      minWidth: '80px',
+                      minHeight: '80px',
                       objectFit: 'cover',
                       boxShadow: isDarkMode ? '0 10px 30px rgba(0,0,0,0.5)' : '0 10px 30px rgba(0,0,0,0.3)',
                       border: isDarkMode ? '3px solid rgba(255,255,255,0.1)' : '3px solid white'
@@ -390,8 +393,8 @@ const SharedPodcastCard = ({ post, onDeletePost, comments = [], onLoadComments, 
                 </div>
               </div>
 
-              <div className="flex-grow-1" style={{ minWidth: 0, maxWidth: 'calc(100% - 120px)' }}>
-                <h5 className="mb-2 fw-bold text-truncate" style={{ color: isDarkMode ? '#93c5fd' : '#1e3a8a', fontSize: '1.1rem' }}>
+              <div className="flex-grow-1" style={{ minWidth: 0 }}>
+                <h5 className="mb-2 fw-bold text-truncate" style={{ color: isDarkMode ? '#93c5fd' : '#1e3a8a', fontSize: 'clamp(0.95rem, 2.5vw, 1.1rem)' }}>
                   {podcastData.title}
                 </h5>
 
@@ -427,7 +430,7 @@ const SharedPodcastCard = ({ post, onDeletePost, comments = [], onLoadComments, 
                   </p>
                 )}
 
-                <div className="d-flex gap-2 flex-wrap">
+                <div className="d-flex gap-1 gap-sm-2 flex-wrap">
                   <Link href={`/feed/podcasts/${post.shared_podcast_id}?${params.toString()}`} target="_blank" rel="noopener noreferrer">
                     <Button
                       variant="primary"

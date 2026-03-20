@@ -195,10 +195,10 @@ const SharedStoryCard = ({ post, onDeletePost, comments = [], onLoadComments, on
   return (
     <>
       <Card className="mb-3 border-0 shadow-sm" style={{ maxWidth: '100%', overflow: 'hidden' }}>
-        <CardBody className="p-4" style={{ maxWidth: '100%', overflow: 'hidden' }}>
+        <CardBody className="p-2 p-sm-3 p-md-4" style={{ maxWidth: '100%', overflow: 'hidden' }}>
           {/* Kullanıcı Bilgileri */}
-          <div className="d-flex align-items-center mb-3">
-            <div className="avatar me-3">
+          <div className="d-flex align-items-center mb-2 mb-sm-3">
+            <div className="avatar me-2 me-sm-3">
               <Image
                 className="avatar-img rounded-circle"
                 src={getImageUrl(post.user_photo_url)}
@@ -258,8 +258,8 @@ const SharedStoryCard = ({ post, onDeletePost, comments = [], onLoadComments, on
 
           {/* Inline Video Player - timeline'da izleme */}
           {storyData.video_url && (
-            <div className="position-relative rounded-3 overflow-hidden mb-3" style={{ background: isDarkMode ? '#1a202c' : '#0f172a' }}>
-              <div className="ratio ratio-16x9">
+            <div className="position-relative rounded-3 overflow-hidden mb-2 mb-sm-3" style={{ background: isDarkMode ? '#1a202c' : '#0f172a' }}>
+              <div className="ratio ratio-16x9" style={{ minHeight: '180px' }}>
                 {storyData.video_url.includes('youtube.com') || storyData.video_url.includes('youtu.be') ? (
                   <iframe
                     src={storyData.video_url.includes('youtube.com')
@@ -282,8 +282,8 @@ const SharedStoryCard = ({ post, onDeletePost, comments = [], onLoadComments, on
                 )}
               </div>
               {storyData.duration && (
-                <div className="position-absolute bottom-0 end-0 m-2">
-                  <span className="badge bg-dark bg-opacity-75">{formatDuration(storyData.duration)}</span>
+                <div className="position-absolute bottom-0 end-0 m-1 m-sm-2">
+                  <span className="badge bg-dark bg-opacity-75 small">{formatDuration(storyData.duration)}</span>
                 </div>
               )}
             </div>
@@ -291,22 +291,24 @@ const SharedStoryCard = ({ post, onDeletePost, comments = [], onLoadComments, on
 
           {/* Hikaye Kartı */}
           <div
-            className="border-0 rounded-3 p-4 mb-3"
+            className="border-0 rounded-3 p-2 p-sm-3 p-md-4 mb-2 mb-sm-3"
             style={{
               background: isDarkMode ? 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)' : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
               maxWidth: '100%',
               overflow: 'hidden'
             }}
           >
-            <div className="d-flex gap-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
-              <div style={{ position: 'relative', zIndex: 10, flexShrink: 0 }}>
+            <div className="d-flex flex-column flex-sm-row gap-2 gap-sm-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
+              <div className="text-center text-sm-start" style={{ position: 'relative', zIndex: 10, flexShrink: 0 }}>
                 <img
                   src={getThumbnailUrl()}
                   alt={storyData.title}
                   className="rounded-3"
                   style={{
-                    width: '100px',
-                    height: '100px',
+                    width: '80px',
+                    height: '80px',
+                    minWidth: '80px',
+                    minHeight: '80px',
                     objectFit: 'cover',
                     boxShadow: isDarkMode ? '0 10px 30px rgba(0,0,0,0.5)' : '0 10px 30px rgba(0,0,0,0.3)',
                     border: isDarkMode ? '3px solid rgba(255,255,255,0.1)' : '3px solid white'
@@ -315,8 +317,8 @@ const SharedStoryCard = ({ post, onDeletePost, comments = [], onLoadComments, on
                 />
               </div>
 
-              <div className="flex-grow-1" style={{ minWidth: 0, maxWidth: 'calc(100% - 120px)' }}>
-                <h5 className="mb-2 fw-bold text-truncate" style={{ color: isDarkMode ? '#93c5fd' : '#1e3a8a', fontSize: '1.1rem' }}>
+              <div className="flex-grow-1" style={{ minWidth: 0 }}>
+                <h5 className="mb-2 fw-bold text-truncate" style={{ color: isDarkMode ? '#93c5fd' : '#1e3a8a', fontSize: 'clamp(0.95rem, 2.5vw, 1.1rem)' }}>
                   {storyData.title}
                 </h5>
 
@@ -352,7 +354,7 @@ const SharedStoryCard = ({ post, onDeletePost, comments = [], onLoadComments, on
                   </p>
                 )}
 
-                <div className="d-flex gap-2 flex-wrap">
+                <div className="d-flex gap-1 gap-sm-2 flex-wrap">
                   <Link href={`/blogs/story/${post.shared_story_id}`} target="_blank" rel="noopener noreferrer">
                     <Button
                       variant="primary"
