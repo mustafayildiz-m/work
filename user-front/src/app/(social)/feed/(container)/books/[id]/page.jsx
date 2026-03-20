@@ -281,6 +281,12 @@ const BookDetailPage = () => {
 
   const handleReadPdf = (pdfUrl, title) => {
     const fullPdfUrl = getPdfUrl(pdfUrl);
+    if (!fullPdfUrl) return;
+    // Mobilde in-app PDF viewer cihazı zorluyor - yeni sekmede aç (Safari native viewer daha hafif)
+    if (!isDesktop) {
+      window.open(fullPdfUrl, '_blank', 'noopener,noreferrer');
+      return;
+    }
     setSelectedPdfUrl(fullPdfUrl);
     setSelectedPdfTitle(title);
     setShowPdfViewer(true);
@@ -589,12 +595,23 @@ const BookDetailPage = () => {
 
       if (selectedPdfUrlForTranslate && !activePdfDoc) {
         if (pdfjs) {
-          showNotification({ title: 'Bilgi', message: 'Kitap hazırlanıyor...', variant: 'info' });
-          const loadingTask = pdfjs.getDocument({ url: selectedPdfUrlForTranslate, withCredentials: false });
-          activePdfDoc = await loadingTask.promise;
-          setPdfDoc(activePdfDoc);
-          setTotalPages(activePdfDoc.numPages);
-          activeTotalPages = activePdfDoc.numPages;
+          try {
+            showNotification({ title: 'Bilgi', message: 'Kitap hazırlanıyor...', variant: 'info' });
+            const loadingTask = pdfjs.getDocument({ url: selectedPdfUrlForTranslate, withCredentials: false });
+            activePdfDoc = await loadingTask.promise;
+            setPdfDoc(activePdfDoc);
+            setTotalPages(activePdfDoc.numPages);
+            activeTotalPages = activePdfDoc.numPages;
+          } catch (pdfErr) {
+            // Eski Safari/Android'de PDF worker (.mjs) yüklenemeyebilir - özet ile devam et
+            console.warn('PDF yükleme hatası, özet kullanılacak:', pdfErr);
+            activePdfDoc = null;
+            showNotification({
+              title: 'Bilgi',
+              message: 'PDF yüklenemedi, özet/açıklama metni üzerinden okuma başlatılıyor.',
+              variant: 'info'
+            });
+          }
         } else {
           showNotification({
             title: 'Bilgi',
