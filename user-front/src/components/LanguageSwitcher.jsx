@@ -3,6 +3,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import Select from 'react-select';
 import { useLanguage } from '@/context/useLanguageContext';
+import { useLayoutContext } from '@/context/useLayoutContext';
 import './LanguageSwitcher.css';
 
 const MenuList = (props) => {
@@ -17,7 +18,6 @@ const MenuList = (props) => {
         gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
         gap: '0.25rem',
         padding: '0.5rem',
-        maxHeight: 'min(460px, 78dvh)',
         overflowY: 'auto',
         overflowX: 'hidden',
         WebkitOverflowScrolling: 'touch'
@@ -28,9 +28,181 @@ const MenuList = (props) => {
   );
 };
 
+// Mobil için: Modal + basit scroll listesi (react-select yok, %100 çalışır)
+const MobileLanguageModal = ({ isOpen, onClose, options, locale, onChange, t, getFlagEmoji, getTranslatedLanguageName }) => {
+  const { theme: themeMode } = useLayoutContext();
+  const isGreen = themeMode === 'green';
+  const isDark = themeMode === 'dark' || isGreen;
+
+  // Tema renkleri
+  const theme = {
+    light: {
+      bg: '#ffffff',
+      headerBorder: 'rgba(0,0,0,0.08)',
+      text: '#1a1a1a',
+      closeBtn: '#64748b',
+      itemBg: 'rgba(0,0,0,0.04)',
+      itemText: '#334155',
+      selectedGradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      shadow: '0 8px 32px rgba(0,0,0,0.15)',
+      border: '1px solid rgba(118, 75, 162, 0.2)'
+    },
+    dark: {
+      bg: '#1a1d29',
+      headerBorder: 'rgba(255,255,255,0.1)',
+      text: '#ffffff',
+      closeBtn: '#94a3b8',
+      itemBg: 'rgba(255,255,255,0.1)',
+      itemText: '#e2e8f0',
+      selectedGradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      shadow: '0 8px 32px rgba(0,0,0,0.4)',
+      border: '1px solid rgba(255,255,255,0.1)'
+    },
+    green: {
+      bg: 'linear-gradient(180deg, #1b3d1b 0%, #1a331a 100%)',
+      headerBorder: 'rgba(181, 231, 160, 0.15)',
+      text: '#e8f5e9',
+      closeBtn: '#81c784',
+      itemBg: 'rgba(181, 231, 160, 0.08)',
+      itemText: '#c8e6c9',
+      selectedGradient: 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%)',
+      shadow: '0 8px 32px rgba(27, 94, 32, 0.35)',
+      border: '1px solid rgba(129, 199, 132, 0.25)'
+    }
+  };
+  const c = theme[isGreen ? 'green' : (isDark ? 'dark' : 'light')];
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleEscape = (e) => e.key === 'Escape' && onClose();
+    document.addEventListener('keydown', handleEscape);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = '';
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  const handleSelect = (code) => {
+    onChange(code);
+    onClose();
+  };
+
+  return (
+    <div
+      className="language-modal-overlay"
+      onClick={onClose}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 1060,
+        background: 'rgba(0,0,0,0.45)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px'
+      }}
+    >
+      <div
+        className="language-modal-content"
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: '100%',
+          maxWidth: '340px',
+          height: 'min(480px, calc(100dvh - 80px))',
+          maxHeight: 'calc(100dvh - 80px)',
+          background: c.bg,
+          borderRadius: '20px',
+          boxShadow: c.shadow,
+          border: c.border,
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden'
+        }}
+      >
+        <div style={{
+          padding: '14px 18px',
+          borderBottom: `1px solid ${c.headerBorder}`,
+          flexShrink: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}>
+          <span style={{ fontWeight: 700, fontSize: '15px', color: c.text }}>
+            {t('menu.languageSelection') || 'DİL SEÇİMİ'}
+          </span>
+          <button
+            onClick={onClose}
+            style={{
+              borderRadius: '8px',
+              padding: '6px 12px',
+              border: 'none',
+              background: 'transparent',
+              color: c.closeBtn,
+              fontSize: '13px',
+              cursor: 'pointer'
+            }}
+          >
+            {t('common.close') || 'Kapat'}
+          </button>
+        </div>
+
+        <div
+          className="language-modal-list"
+          style={{
+            flex: 1,
+            minHeight: 0,
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            WebkitOverflowScrolling: 'touch',
+            padding: '12px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '6px'
+          }}
+        >
+          {options.map((option) => {
+            const isSelected = option.value === locale;
+            return (
+              <button
+                key={option.value}
+                onClick={() => handleSelect(option.value)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '12px 14px',
+                  borderRadius: '12px',
+                  border: 'none',
+                  background: isSelected ? c.selectedGradient : c.itemBg,
+                  color: isSelected ? '#fff' : c.itemText,
+                  fontSize: '14px',
+                  fontWeight: isSelected ? 600 : 500,
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  width: '100%',
+                  flexShrink: 0
+                }}
+              >
+                <span style={{ fontSize: '1.2rem', flexShrink: 0 }}>{getFlagEmoji(option.value)}</span>
+                <span style={{ flex: 1, minWidth: 0 }}>
+                  {getTranslatedLanguageName(option.value)}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const LanguageSwitcher = ({ variant = 'dropdown', compact = false }) => {
   const { locale, changeLocale, supportedLocales, t } = useLanguage();
   const [mounted, setMounted] = useState(false);
+  const [mobileModalOpen, setMobileModalOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -259,14 +431,23 @@ const LanguageSwitcher = ({ variant = 'dropdown', compact = false }) => {
       zIndex: 9999,
       minWidth: 'min(320px, calc(100vw - 1rem))',
       maxWidth: 'calc(100vw - 1rem)',
-      backgroundColor: 'var(--bs-body-bg, #fff)'
+      backgroundColor: 'var(--bs-body-bg, #fff)',
+      overflow: 'hidden'
     }),
     menuPortal: (base) => ({
       ...base,
       zIndex: 9999
     }),
-    menuList: () => ({
-      padding: 0
+    menuList: (base) => ({
+      ...base,
+      padding: '0.5rem',
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: '0.25rem',
+      maxHeight: 'min(400px, calc(100dvh - 120px))',
+      overflowY: 'auto',
+      overflowX: 'hidden',
+      WebkitOverflowScrolling: 'touch'
     }),
     option: (base, state) => ({
       ...base,
@@ -376,12 +557,51 @@ const LanguageSwitcher = ({ variant = 'dropdown', compact = false }) => {
           menuPosition="fixed"
           menuShouldScrollIntoView={true}
           menuPlacement="bottom"
+          maxMenuHeight={800}
         />
       </div>
     );
   }
 
-  // Default dropdown variant (for main app)
+  // Mobil (compact): Modal ile basit liste - scroll %100 çalışır
+  if (compact && mounted) {
+    return (
+      <>
+        <button
+          type="button"
+          onClick={() => setMobileModalOpen(true)}
+          className="language-switcher-mobile-btn w-100 d-flex align-items-center justify-content-between border rounded-3 p-2"
+          style={{
+            background: 'rgba(118, 75, 162, 0.05)',
+            borderColor: 'rgba(118, 75, 162, 0.1) !important',
+            fontSize: '13px',
+            fontWeight: 600,
+            cursor: 'pointer'
+          }}
+        >
+          <span className="d-flex align-items-center gap-2">
+            <span style={{ fontSize: '1.1rem' }}>{getFlagEmoji(locale)}</span>
+            <span>{(locale || 'tr').toUpperCase()}</span>
+          </span>
+          <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 11L3 6h10l-5 5z" />
+          </svg>
+        </button>
+        <MobileLanguageModal
+          isOpen={mobileModalOpen}
+          onClose={() => setMobileModalOpen(false)}
+          options={languageOptions}
+          locale={locale}
+          onChange={changeLocale}
+          t={t}
+          getFlagEmoji={getFlagEmoji}
+          getTranslatedLanguageName={getTranslatedLanguageName}
+        />
+      </>
+    );
+  }
+
+  // Desktop: react-select dropdown
   if (!mounted) {
     return (
       <div className="language-switcher-select2" style={{ minWidth: '200px', maxWidth: '250px' }}>
@@ -403,7 +623,7 @@ const LanguageSwitcher = ({ variant = 'dropdown', compact = false }) => {
   }
 
   return (
-    <div className={`language-switcher-select2 ${compact ? 'language-switcher-compact' : ''}`} style={{ minWidth: compact ? '80px' : '200px', maxWidth: compact ? '120px' : '250px', position: 'relative', zIndex: 1000 }}>
+    <div className="language-switcher-select2" style={{ minWidth: '200px', maxWidth: '250px', position: 'relative', zIndex: 1000 }}>
       <Select
         value={currentOption}
         onChange={(selectedOption) => changeLocale(selectedOption.value)}
@@ -412,20 +632,19 @@ const LanguageSwitcher = ({ variant = 'dropdown', compact = false }) => {
         components={{ MenuList }}
         isSearchable={true}
         placeholder="Dil"
-        formatOptionLabel={({ flag, name, code }, { context }) => (
+        formatOptionLabel={({ flag, name }) => (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0 }}>
             <span style={{ fontSize: '1.2rem' }}>{flag}</span>
-            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {compact && context === 'value' ? (code || '').toUpperCase() : name}
-            </span>
+            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{name}</span>
           </div>
         )}
         className="language-select"
         classNamePrefix="language-select"
         menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
         menuPosition="fixed"
-        menuShouldScrollIntoView={false}
+        menuShouldScrollIntoView={true}
         menuPlacement="auto"
+        maxMenuHeight={800}
       />
     </div>
   );

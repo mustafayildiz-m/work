@@ -569,12 +569,13 @@ const ProfileDropdown = () => {
           className={`profile-dropdown-menu position-absolute top-100 mt-2 bg-body rounded-4 shadow-lg border-0 ${isRTL ? 'start-0' : 'end-0'}`}
           style={{
             width: '240px',
+            maxHeight: 'calc(100dvh - 100px)',
+            overflowY: 'auto',
             zIndex: 1050,
             transform: 'translateY(8px)',
             animation: 'slideDown 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55)',
             boxShadow: '0 10px 40px rgba(118, 75, 162, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1)',
             border: '1px solid rgba(118, 75, 162, 0.2) !important',
-            overflow: 'hidden',
             backdropFilter: 'blur(10px)'
           }}
         >
@@ -819,23 +820,6 @@ const ProfileDropdown = () => {
 
         .dropdown-language-section {
           display: none !important;
-        }
-
-        .dropdown-language-wrapper :global(.language-switcher-select2) {
-          min-width: 100% !important;
-          max-width: 100% !important;
-        }
-
-        .dropdown-language-wrapper :global(.language-select__control) {
-          border-radius: 10px !important;
-          background: rgba(118, 75, 162, 0.05) !important;
-          border-color: rgba(118, 75, 162, 0.1) !important;
-        }
-        
-        .dropdown-language-wrapper :global(.language-select__single-value) {
-          font-size: 13px !important;
-          font-weight: 500 !important;
-          color: inherit !important;
         }
 
         /* Mobile responsive styles */

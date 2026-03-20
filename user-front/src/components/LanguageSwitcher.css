@@ -74,7 +74,6 @@
 /* Ensure menu portal is visible */
 body>div[id*="react-select"] {
   z-index: 10000 !important;
-  overflow: visible !important;
 }
 
 body>div[id*="react-select"]>div {
@@ -85,6 +84,8 @@ body>div[id*="react-select"]>div {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
   gap: 0.25rem !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
 }
 
 .language-select__menu-list::-webkit-scrollbar {
@@ -229,6 +230,26 @@ body>div[id*="react-select"]>div {
   }
 }
 
+/* Mobil dil modal - ortalı, tema uyumlu */
+.language-modal-overlay {
+  animation: languageModalFadeIn 0.2s ease-out;
+}
+.language-modal-content {
+  animation: languageModalPopIn 0.25s ease-out;
+}
+.language-modal-list {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+@keyframes languageModalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes languageModalPopIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
 /* Mobile responsive grid for language menu */
 @media (max-width: 767.98px) {
   .language-select__menu {
@@ -246,11 +267,16 @@ body>div[id*="react-select"]>div {
     width: 100% !important;
   }
 
-  .language-menu-list-responsive {
-    grid-template-columns: 1fr !important;
-    max-height: calc(100dvh - 140px) !important;
-    overflow-y: auto !important;
+  /* 2 sütun, scroll için max-height - mobilde daha fazla alan */
+  .language-menu-list-responsive,
+  .language-select__menu-list {
+    grid-template-columns: 1fr 1fr !important;
+    max-height: calc(100dvh - 80px) !important;
+    overflow-y: scroll !important;
+    overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    touch-action: pan-y !important;
   }
 
   .language-select__option {
@@ -265,17 +291,18 @@ body>div[id*="react-select"]>div {
     max-width: calc(100vw - 0.8rem) !important;
   }
 
-  .language-menu-list-responsive {
-    max-height: calc(100dvh - 130px) !important;
+  .language-menu-list-responsive,
+  .language-select__menu-list {
+    grid-template-columns: 1fr 1fr !important;
+    max-height: calc(100dvh - 70px) !important;
     padding: 0.35rem !important;
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   .language-select__option {
     padding: 0.4rem 0.6rem !important;
     font-size: 0.85rem !important;
-  }
-
-  .language-select__option {
     line-height: 1.25 !important;
   }
 }
