@@ -256,6 +256,39 @@ const SharedStoryCard = ({ post, onDeletePost, comments = [], onLoadComments, on
             </div>
           </div>
 
+          {/* Inline Video Player - timeline'da izleme */}
+          {storyData.video_url && (
+            <div className="position-relative rounded-3 overflow-hidden mb-3" style={{ background: isDarkMode ? '#1a202c' : '#0f172a' }}>
+              <div className="ratio ratio-16x9">
+                {storyData.video_url.includes('youtube.com') || storyData.video_url.includes('youtu.be') ? (
+                  <iframe
+                    src={storyData.video_url.includes('youtube.com')
+                      ? storyData.video_url.replace('watch?v=', 'embed/')
+                      : `https://www.youtube.com/embed/${storyData.video_url.split('/').pop().split('?')[0]}`
+                    }
+                    title={storyData.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    style={{ border: 'none' }}
+                  />
+                ) : (
+                  <video
+                    src={storyData.video_url.startsWith('http') ? storyData.video_url : `${API_BASE_URL}${storyData.video_url.startsWith('/') ? '' : '/'}${storyData.video_url}`}
+                    controls
+                    playsInline
+                    className="w-100 h-100"
+                    style={{ objectFit: 'contain' }}
+                  />
+                )}
+              </div>
+              {storyData.duration && (
+                <div className="position-absolute bottom-0 end-0 m-2">
+                  <span className="badge bg-dark bg-opacity-75">{formatDuration(storyData.duration)}</span>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Hikaye Kartı */}
           <div
             className="border-0 rounded-3 p-4 mb-3"
@@ -320,19 +353,20 @@ const SharedStoryCard = ({ post, onDeletePost, comments = [], onLoadComments, on
                 )}
 
                 <div className="d-flex gap-2 flex-wrap">
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    className="rounded-pill px-4"
-                    style={{
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                      border: 'none'
-                    }}
-                    onClick={() => window.open(`/blogs/story/${post.shared_story_id}`, '_blank')}
-                  >
-                    <BsPlayCircle size={14} className="me-2" />
-                    {t('post.viewStory') || 'Hikayeyi İzle'}
-                  </Button>
+                  <Link href={`/blogs/story/${post.shared_story_id}`} target="_blank" rel="noopener noreferrer">
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      className="rounded-pill px-4"
+                      style={{
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        border: 'none'
+                      }}
+                    >
+                      <BsPlayCircle size={14} className="me-2" />
+                      {t('post.viewStory') || 'Hikayeyi İzle'}
+                    </Button>
+                  </Link>
                   <Link href="/blogs">
                     <Button
                       variant={isDarkMode ? 'outline-light' : 'outline-primary'}
