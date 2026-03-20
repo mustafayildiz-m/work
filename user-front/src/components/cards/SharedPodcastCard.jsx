@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardBody, Button, Spinner, Alert, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'react-bootstrap';
-import { BsMicFill, BsTrash, BsThreeDots, BsClock, BsPerson, BsPlayFill, BsCollection, BsSend } from 'react-icons/bs';
+import { BsMicFill, BsTrash, BsThreeDots, BsClock, BsPerson, BsPlayFill, BsPauseFill, BsCollection, BsSend } from 'react-icons/bs';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { useNotificationContext } from '@/context/useNotificationContext';
@@ -34,6 +34,10 @@ const SharedPodcastCard = ({ post, onDeletePost, comments = [], onLoadComments, 
   const [showAllComments, setShowAllComments] = useState(false);
   const [showCommentDeleteConfirm, setShowCommentDeleteConfirm] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioCurrentTime, setAudioCurrentTime] = useState(0);
+  const [audioDuration, setAudioDuration] = useState(0);
+  const audioRef = useRef(null);
 
   const getImageUrl = (photoUrl) => {
     if (!photoUrl || typeof photoUrl !== 'string' || photoUrl === 'null' || photoUrl === '' || photoUrl === 'undefined') {
@@ -150,6 +154,31 @@ const SharedPodcastCard = ({ post, onDeletePost, comments = [], onLoadComments, 
     };
     fetchPodcastData();
   }, [post.shared_podcast_id]);
+
+  useEffect(() => {
+    if (podcastData?.audioUrl && audioRef.current) {
+      const url = podcastData.audioUrl.startsWith('http') ? podcastData.audioUrl : `${API_BASE_URL}${podcastData.audioUrl.startsWith('/') ? '' : '/'}${podcastData.audioUrl}`;
+      audioRef.current.src = url;
+    }
+  }, [podcastData?.audioUrl]);
+
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play().catch(() => {});
+      fetch(`${API_BASE_URL}/podcasts/${post.shared_podcast_id}/listen`, { method: 'POST' }).catch(() => {});
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const handleSeek = (e) => {
+    if (!audioRef.current) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    audioRef.current.currentTime = pct * audioRef.current.duration;
+  };
 
   const getCoverUrl = () => {
     if (!podcastData) return '/images/podcast-placeholder.jpg';
@@ -282,6 +311,57 @@ const SharedPodcastCard = ({ post, onDeletePost, comments = [], onLoadComments, 
             </div>
           </div>
 
+          {/* Inline Audio Player - timeline'da dinleme */}
+          {podcastData.audioUrl && (
+            <div
+              className="rounded-3 p-3 mb-3 d-flex align-items-center gap-3"
+              style={{
+                background: isDarkMode ? 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)' : 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%)',
+                border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'}`
+              }}
+            >
+              <audio
+                ref={audioRef}
+                onTimeUpdate={(e) => setAudioCurrentTime(e.target.currentTime)}
+                onLoadedMetadata={(e) => setAudioDuration(e.target.duration)}
+                onEnded={() => setIsPlaying(false)}
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
+                onError={() => showNotification({ title: 'Hata', message: 'Ses yüklenemedi', variant: 'danger' })}
+                style={{ display: 'none' }}
+              />
+              <Button
+                variant={isPlaying ? 'primary' : 'outline-primary'}
+                size="sm"
+                className="rounded-circle p-2 flex-shrink-0"
+                style={{ width: '44px', height: '44px' }}
+                onClick={togglePlay}
+              >
+                {isPlaying ? <BsPauseFill size={20} /> : <BsPlayFill size={20} />}
+              </Button>
+              <div className="flex-grow-1" style={{ minWidth: 0 }}>
+                <div
+                  className="progress rounded-pill cursor-pointer"
+                  style={{ height: '8px', cursor: 'pointer' }}
+                  onClick={handleSeek}
+                >
+                  <div
+                    className="progress-bar"
+                    role="progressbar"
+                    style={{
+                      width: `${audioDuration > 0 ? (audioCurrentTime / audioDuration) * 100 : 0}%`,
+                      transition: 'width 0.1s linear'
+                    }}
+                  />
+                </div>
+                <div className="d-flex justify-content-between mt-1">
+                  <small className="text-muted">{formatDuration(Math.floor(audioCurrentTime))}</small>
+                  <small className="text-muted">{formatDuration(Math.floor(audioDuration))}</small>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Podcast Kartı */}
           <div
             className="border-0 rounded-3 p-4 mb-3"
@@ -348,19 +428,20 @@ const SharedPodcastCard = ({ post, onDeletePost, comments = [], onLoadComments, 
                 )}
 
                 <div className="d-flex gap-2 flex-wrap">
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    className="rounded-pill px-4"
-                    style={{
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                      border: 'none'
-                    }}
-                    onClick={() => window.open(`/feed/podcasts/${post.shared_podcast_id}?${params.toString()}`, '_blank')}
-                  >
-                    <BsPlayFill size={14} className="me-2" />
-                    {t('post.viewPodcast')}
-                  </Button>
+                  <Link href={`/feed/podcasts/${post.shared_podcast_id}?${params.toString()}`} target="_blank" rel="noopener noreferrer">
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      className="rounded-pill px-4"
+                      style={{
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        border: 'none'
+                      }}
+                    >
+                      <BsPlayFill size={14} className="me-2" />
+                      {t('post.viewPodcast')}
+                    </Button>
+                  </Link>
                   <Link href="/feed/podcasts">
                     <Button
                       variant={isDarkMode ? 'outline-light' : 'outline-primary'}
