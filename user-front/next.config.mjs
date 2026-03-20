@@ -112,6 +112,31 @@ const nextConfig = {
   },
   // NextAuth middleware konfigürasyonu - experimental middleware kaldırıldı
   // Middleware konfigürasyonu middleware.js dosyasında yapılmalı
+
+  // CSP: YouTube iframe ve üçüncü taraf embed'ler için - require-trusted-types kullanılmıyor
+  // (YouTube iframe'leri trusted-types ile uyumsuz)
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com",
+              "img-src 'self' data: blob: https: http:",
+              "frame-src 'self' https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://player.vimeo.com https://www.google.com",
+              "connect-src 'self' https: http: wss: ws:",
+              "media-src 'self' blob: https: http:",
+            ].join('; '),
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
