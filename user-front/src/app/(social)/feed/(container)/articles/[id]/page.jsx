@@ -1753,7 +1753,7 @@ const ArticleDetailPage = () => {
                         {lang.name}
                       </div>
                       <div style={{ fontSize: '1rem', lineHeight: 1, marginTop: '2px' }}>
-                        {getLanguageFlag(lang, API_BASE_URL)}
+                        {getLanguageFlag(lang)}
                       </div>
                     </Button>
                   </Col>

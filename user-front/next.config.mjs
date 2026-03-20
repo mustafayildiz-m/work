@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Transpile external packages (like leaflet) to support CSS imports
-  // transpilePackages removed
+  // Eski tarayıcılar için node_modules'dan modern syntax transpile et
+  transpilePackages: ['react-bootstrap', 'react-pdf', 'react-select', 'react-icons'],
   // Disable ESLint errors from failing production builds
   eslint: {
     ignoreDuringBuilds: true,
