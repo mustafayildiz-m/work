@@ -119,7 +119,7 @@ const SharedNewsletterCard = ({ post, onDeletePost, comments = [], onLoadComment
   useEffect(() => {
     const fetchNewsletterData = async () => {
       if (!post.shared_newsletter_id) {
-        setError('Bülten ID bulunamadı');
+        setError('Gazete ID bulunamadı');
         setLoading(false);
         return;
       }
@@ -133,9 +133,9 @@ const SharedNewsletterCard = ({ post, onDeletePost, comments = [], onLoadComment
           const data = await response.json();
           setNewsletterData(data);
         } else if (response.status === 404) {
-          setError('Bülten bulunamadı');
+          setError('Gazete bulunamadı');
         } else {
-          setError('Bülten yüklenirken bir hata oluştu');
+          setError('Gazete yüklenirken bir hata oluştu');
         }
       } catch (err) {
         setError(err.message);
@@ -178,7 +178,7 @@ const SharedNewsletterCard = ({ post, onDeletePost, comments = [], onLoadComment
       <Card className={`mb-3 border-0 shadow-sm ${isDarkMode ? 'bg-dark' : ''}`}>
         <CardBody className="text-center py-5">
           <Spinner animation="border" size="sm" variant="primary" />
-          <span className="ms-2 text-muted">{t('post.sharedNewsletterLoading') || 'Bülten yükleniyor...'}</span>
+          <span className="ms-2 text-muted">{t('post.sharedNewsletterLoading') || 'Gazete yükleniyor...'}</span>
         </CardBody>
       </Card>
     );
@@ -251,17 +251,17 @@ const SharedNewsletterCard = ({ post, onDeletePost, comments = [], onLoadComment
             </Dropdown>
           </div>
 
-          {/* Bülten Paylaşım Başlığı */}
+          {/* Gazete Paylaşım Başlığı */}
           <div className="d-flex align-items-center mb-2 mb-sm-3">
             <div className="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
               <BsNewspaper size={16} className="text-primary" />
             </div>
             <span className="fw-semibold" style={{ color: isDarkMode ? '#e9ecef' : '#212529' }}>
-              {t('post.sharedNewsletter') || 'Bülten Paylaştı'}
+              {t('post.sharedNewsletter') || 'Gazete Paylaştı'}
             </span>
           </div>
 
-          {/* Bülten Kartı */}
+          {/* Gazete Kartı */}
           <div
             className="border-0 rounded-3 p-2 p-sm-3 p-md-4 mb-2 mb-sm-3"
             style={{
@@ -318,12 +318,12 @@ const SharedNewsletterCard = ({ post, onDeletePost, comments = [], onLoadComment
                   <Link href={`/feed/newsletters/${post.shared_newsletter_id}`} target="_blank" rel="noopener noreferrer">
                     <Button variant="primary" size="sm" className="rounded-pill px-4" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}>
                       <BsNewspaper size={14} className="me-2" />
-                      {t('post.viewNewsletter') || 'Bülteni Oku'}
+                      {t('post.viewNewsletter') || 'Gazeteyi Oku'}
                     </Button>
                   </Link>
                   <Link href="/feed/newsletters">
                     <Button variant={isDarkMode ? 'outline-light' : 'outline-primary'} size="sm" className="rounded-pill px-4">
-                      {t('post.viewAllNewsletters') || 'Tüm Bültenler'}
+                      {t('post.viewAllNewsletters') || 'Tüm Gazeteler'}
                     </Button>
                   </Link>
                   <Button

@@ -83,7 +83,7 @@ export default function NewsletterContentWithTranslation({
       formData.append('user_id', String(userId));
       formData.append('type', 'shared_newsletter');
       formData.append('title', '');
-      formData.append('content', `${data?.title || 'Bülten'} bültenini paylaştı`);
+      formData.append('content', `${data?.title || 'Gazete'} gazetesini paylaştı`);
       formData.append('shared_newsletter_id', String(newsletterId));
 
       const res = await fetch(`${API_BASE_URL}/user-posts`, {
@@ -92,7 +92,7 @@ export default function NewsletterContentWithTranslation({
         body: formData
       });
       if (res.ok) {
-        showNotification({ title: 'Başarılı', message: 'Bülten haber akışında paylaşıldı', variant: 'success' });
+        showNotification({ title: 'Başarılı', message: 'Gazete haber akışında paylaşıldı', variant: 'success' });
         window.dispatchEvent(new CustomEvent('timelineRefreshRequested'));
         router.push('/feed/home');
       } else {
@@ -143,7 +143,7 @@ export default function NewsletterContentWithTranslation({
                 <BsShare size={14} className="me-2" />
                 {t('post.copyLink') || 'Link Kopyala'}
               </DropdownItem>
-              <DropdownItem as="button" onSelect={() => { if (newsletterUrl) window.open(`https://wa.me/?text=${encodeURIComponent(`${data?.title || 'Bülten'} - ${newsletterUrl}`)}`, '_blank'); setShareDropdownOpen(false); }}>
+              <DropdownItem as="button" onSelect={() => { if (newsletterUrl) window.open(`https://wa.me/?text=${encodeURIComponent(`${data?.title || 'Gazete'} - ${newsletterUrl}`)}`, '_blank'); setShareDropdownOpen(false); }}>
                 <BsWhatsapp size={14} className="me-2 text-success" />
                 WhatsApp&apos;ta Paylaş
               </DropdownItem>
