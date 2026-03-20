@@ -11,6 +11,9 @@ import CreatePostCard from '@/components/cards/CreatePostCard';
 import PostCard from '@/components/cards/PostCard';
 import SharedBookCard from '@/components/cards/SharedBookCard';
 import SharedArticleCard from '@/components/cards/SharedArticleCard';
+import SharedPodcastCard from '@/components/cards/SharedPodcastCard';
+import SharedStoryCard from '@/components/cards/SharedStoryCard';
+import SharedNewsletterCard from '@/components/cards/SharedNewsletterCard';
 import SharedProfileCard from '@/components/cards/SharedProfileCard';
 import CustomConfirmDialog from '@/components/CustomConfirmDialog';
 import EditPostModal from '@/components/EditPostModal';
@@ -678,6 +681,51 @@ const UserFeedPage = () => {
                 key={`shared-article-${post.id}`}
                 post={post}
                 onDeletePost={isCurrentUser && (post.user_id === currentUserId || post.userId === currentUserId) ? (postId) => handleDeletePost(postId) : null}
+              />
+            );
+          }
+
+          // Check if this is a shared podcast post
+          if (post.type === 'shared_podcast' && post.shared_podcast_id) {
+            return (
+              <SharedPodcastCard
+                key={`shared-podcast-${post.id}`}
+                post={post}
+                onDeletePost={isCurrentUser && (post.user_id === currentUserId || post.userId === currentUserId) ? (postId) => handleDeletePost(postId) : null}
+                comments={postComments[post.id] || []}
+                onLoadComments={() => loadComments(post.id)}
+                onAddComment={handleAddComment}
+                onDeleteComment={handleDeleteComment}
+              />
+            );
+          }
+
+          // Check if this is a shared story post
+          if (post.type === 'shared_story' && post.shared_story_id) {
+            return (
+              <SharedStoryCard
+                key={`shared-story-${post.id}`}
+                post={post}
+                onDeletePost={isCurrentUser && (post.user_id === currentUserId || post.userId === currentUserId) ? (postId) => handleDeletePost(postId) : null}
+                comments={postComments[post.id] || []}
+                onLoadComments={() => loadComments(post.id)}
+                onAddComment={handleAddComment}
+                onDeleteComment={handleDeleteComment}
+              />
+            );
+          }
+
+          // Check if this is a shared newsletter post
+          if (post.type === 'shared_newsletter' && post.shared_newsletter_id) {
+            return (
+              <SharedNewsletterCard
+                key={`shared-newsletter-${post.id}`}
+                post={post}
+                onDeletePost={isCurrentUser && (post.user_id === currentUserId || post.userId === currentUserId) ? (postId) => handleDeletePost(postId) : null}
+                comments={postComments[post.id] || []}
+                onLoadComments={() => loadComments(post.id)}
+                onAddComment={handleAddComment}
+                onDeleteComment={handleDeleteComment}
               />
             );
           }
