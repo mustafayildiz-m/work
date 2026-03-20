@@ -7,6 +7,7 @@ import { useLanguages } from '@/hooks/useLanguages';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useRouter } from 'next/navigation';
 import { useLayoutContext } from '@/context/useLayoutContext';
+import { getFlagImageUrl, getFlagEmojiFallback } from '@/utils/language';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -96,90 +97,6 @@ const LanguageSelector = () => {
     return t(`books.languages.${language.name}`) || language.name;
   };
 
-  // Dil kodlarına göre bayrak emoji'leri
-  const getFlagEmoji = (code) => {
-    const flagMap = {
-      // Yaygın Diller
-      'tr': '🇹🇷', // Türkçe
-      'en': '🇬🇧', // İngilizce
-      'ar': '🇸🇦', // Arapça
-      'fa': '🇮🇷', // Farsça
-      'ur': '🇵🇰', // Urduca
-      'de': '🇩🇪', // Almanca
-      'fr': '🇫🇷', // Fransızca
-      'es': '🇪🇸', // İspanyolca
-      'it': '🇮🇹', // İtalyanca
-      'ru': '🇷🇺', // Rusça
-      'zh': '🇨🇳', // Çince
-      'ja': '🇯🇵', // Japonca
-      'ko': '🇰🇷', // Korece
-      'nl': '🇳🇱', // Hollandaca
-      'pt': '🇵🇹', // Portekizce
-      'sv': '🇸🇪', // İsveççe
-      'no': '🇳🇴', // Norveççe
-      'da': '🇩🇰', // Danca
-      'fi': '🇫🇮', // Fince
-      'el': '🇬🇷', // Yunanca
-      'he': '🇮🇱', // İbranice
-      'hi': '🇮🇳', // Hintçe
-      'bn': '🇧🇩', // Bengalce
-      'ta': '🇱🇰', // Tamilce
-      'th': '🇹🇭', // Tayca
-      'vi': '🇻🇳', // Vietnamca
-      'id': '🇮🇩', // Endonezyaca
-      'ms': '🇲🇾', // Malayca
-      'tl': '🇵🇭', // Tagalog
-      'sw': '🇹🇿', // Swahili
-
-      // Türk Dilleri
-      'kk': '🇰🇿', // Kazakça
-      'uz': '🇺🇿', // Özbekçe
-      'ky': '🇰🇬', // Kırgızca
-      'tk': '🇹🇲', // Türkmence
-      'az': '🇦🇿', // Azerbaycan Türkçesi
-      'tt': '🇷🇺', // Tatarca
-      'ba': '🇷🇺', // Başkurtça
-      'cv': '🇷🇺', // Çuvaşça
-      'sah': '🇷🇺', // Yakutça
-      'bua': '🇷🇺', // Buryatça
-      'xal': '🇷🇺', // Kalmıkça
-      'tyv': '🇷🇺', // Tuva Türkçesi
-      'kjh': '🇷🇺', // Hakasça
-      'alt': '🇷🇺', // Altayca
-      'cjs': '🇷🇺', // Şorca
-      'dlg': '🇷🇺', // Dolganca
-      'kim': '🇷🇺', // Tofalarca
-      'gag': '🇲🇩', // Gagavuzca
-      'kdr': '🇺🇦', // Karaimce
-      'crh': '🇺🇦', // Kırım Tatar Türkçesi
-      'krc': '🇷🇺', // Karaçay-Balkarca
-      'kum': '🇷🇺', // Kumukça
-      'nog': '🇷🇺', // Nogayca
-      'kaa': '🇺🇿', // Karakalpakça
-      'chg': '🏳️', // Çağatay Türkçesi (tarihi)
-      'ota': '🇹🇷', // Osmanlı Türkçesi
-      'otk': '🏳️', // Eski Türkçe (tarihi)
-      'ug': '🇨🇳', // Uygur Türkçesi
-      'slr': '🇷🇺', // Salarca
-
-      // Diğer Diller
-      'ps': '🇦🇫', // Peştuca
-      'ha': '🇳🇬', // Hausa
-      'ig': '🇳🇬', // Igbo
-      'yo': '🇳🇬', // Yoruba
-      'lg': '🇺🇬', // Luganda
-      'rhg': '🇧🇩', // Rohingya
-      'ca': '🇪🇸', // Katalanca
-    };
-    return flagMap[code] || '🏳️';
-  };
-
-  const getFlagImageUrl = (flagUrl) => {
-    if (!flagUrl) return '';
-    if (flagUrl.startsWith('http://') || flagUrl.startsWith('https://')) return flagUrl;
-    return `${API_BASE_URL}${flagUrl.startsWith('/') ? flagUrl : `/${flagUrl}`}`;
-  };
-
   if (loading) {
     return (
       <Card className="mb-4">
@@ -260,13 +177,13 @@ const LanguageSelector = () => {
                   >
                     {language.flagUrl ? (
                       <img
-                        src={getFlagImageUrl(language.flagUrl)}
+                        src={getFlagImageUrl(language.flagUrl, API_BASE_URL)}
                         alt={`${language.name} flag`}
                         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                       />
                     ) : (
                       <div className="lang-flag-emoji" style={{ fontSize: '2rem', lineHeight: '56px', textAlign: 'center' }}>
-                        {getFlagEmoji(language.code)}
+                        {getFlagEmojiFallback(language.code)}
                       </div>
                     )}
                   </div>

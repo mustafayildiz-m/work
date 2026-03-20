@@ -12,6 +12,7 @@ import { useLanguages } from '@/hooks/useLanguages';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import { cleanTextForTTS, fetchTTSAudio, unlockAudioForPlayback, getUnlockedAudioElement } from '@/utils/textToSpeech';
 import { useLanguage } from '@/context/useLanguageContext';
+import { getLanguageFlag } from '@/utils/language';
 
 // Map loading placeholder - uses hook so must be a component
 const MapLoadingPlaceholder = () => {
@@ -31,6 +32,8 @@ const MapComponent = dynamic(() => import('@/components/MapComponent'), {
   ssr: false,
   loading: () => <MapLoadingPlaceholder />
 });
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 const ScholarProfilePage = () => {
   const { t } = useLanguage();
@@ -154,18 +157,10 @@ const ScholarProfilePage = () => {
     return tmp.textContent || tmp.innerText || '';
   };
 
-  const getLanguageFlag = (code) => {
-    const flagMap = {
-      tr: '🇹🇷', en: '🇬🇧', ar: '🇸🇦', de: '🇩🇪', fr: '🇫🇷', es: '🇪🇸',
-      it: '🇮🇹', pt: '🇵🇹', ru: '🇷🇺', ja: '🇯🇵', zh: '🇨🇳', ko: '🇰🇷',
-      nl: '🇳🇱', fa: '🇮🇷', ur: '🇵🇰', hi: '🇮🇳',
-    };
-    return flagMap[(code || '').toLowerCase()] || '🌐';
-  };
-
   const splitTextIntoChunks = (text) => {
     if (!text || !text.trim()) return [];
-    const sentences = text.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter(Boolean);
+    // Safari 15 ve öncesi lookbehind (?<=) desteklemez - alternatif kullan
+    const sentences = text.replace(/([.!?])\s+/g, '$1\n').split('\n').map((s) => s.trim()).filter(Boolean);
     if (sentences.length > 0) return sentences.slice(0, 14);
     return text.split(/\s+/).reduce((acc, word) => {
       const last = acc[acc.length - 1] || '';
@@ -794,7 +789,7 @@ const ScholarProfilePage = () => {
                         flexDirection: 'column'
                       }}
                     >
-                      <div style={{ fontSize: '1.2rem', lineHeight: 1 }}>{getLanguageFlag(lang.code)}</div>
+                      <div style={{ fontSize: '1.2rem', lineHeight: 1 }}>{getLanguageFlag(lang, API_BASE_URL)}</div>
                       <div style={{ fontSize: '0.9rem', fontWeight: '500' }}>{lang.name}</div>
                     </Button>
                   </Col>
