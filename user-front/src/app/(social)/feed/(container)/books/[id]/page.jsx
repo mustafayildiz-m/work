@@ -16,6 +16,7 @@ import { useLanguages } from '@/hooks/useLanguages';
 import useViewPort from '@/hooks/useViewPort';
 import styles from './styles.module.css';
 import { getLanguageCode, cleanTextForTTS, fetchTTSAudio, unlockAudioForPlayback, getUnlockedAudioElement } from '@/utils/textToSpeech';
+import { getLanguageFlag } from '@/utils/language';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -121,33 +122,12 @@ const BookDetailPage = () => {
     }
   };
 
-  const getLanguageFlag = (code) => {
-    const flagMap = {
-      tr: '🇹🇷',
-      en: '🇬🇧',
-      ar: '🇸🇦',
-      de: '🇩🇪',
-      fr: '🇫🇷',
-      es: '🇪🇸',
-      it: '🇮🇹',
-      pt: '🇵🇹',
-      ru: '🇷🇺',
-      ja: '🇯🇵',
-      zh: '🇨🇳',
-      ko: '🇰🇷',
-      nl: '🇳🇱',
-      fa: '🇮🇷',
-      ur: '🇵🇰',
-      hi: '🇮🇳',
-    };
-
-    return flagMap[(code || '').toLowerCase()] || '🌐';
-  };
-
   const splitTextIntoChunks = (text) => {
     if (!text || !text.trim()) return [];
+    // Safari 15 ve öncesi lookbehind (?<=) desteklemez - alternatif kullan
     const sentences = text
-      .split(/(?<=[.!?])\s+/)
+      .replace(/([.!?])\s+/g, '$1\n')
+      .split('\n')
       .map((s) => s.trim())
       .filter(Boolean);
     if (sentences.length > 0) return sentences.slice(0, 14);
@@ -1454,7 +1434,7 @@ const BookDetailPage = () => {
                         {lang.name}
                       </div>
                       <div style={{ fontSize: '1rem', lineHeight: 1, marginTop: '2px' }}>
-                        {getLanguageFlag(lang.code)}
+                        {getLanguageFlag(lang, API_BASE_URL)}
                       </div>
                     </Button>
                   </Col>

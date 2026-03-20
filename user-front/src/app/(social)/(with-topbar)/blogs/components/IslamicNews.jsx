@@ -8,6 +8,7 @@ import { useScholarStories } from '@/hooks/useScholarStories';
 import NewsImage from './NewsImage';
 import Link from 'next/link';
 import { useLanguage } from '@/context/useLanguageContext';
+import { getFlagImageUrl, getFlagEmojiFallback } from '@/utils/language';
 import './IslamicNews.css';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
@@ -230,25 +231,13 @@ const ScholarStories = () => {
     fetchLanguages();
   }, []);
 
-  // Dil kodu -> bayrak emoji (flagUrl yoksa kullanılır)
-  const languageFlagEmojis = {
-    tr: '🇹🇷', en: '🇬🇧', ar: '🇸🇦', de: '🇩🇪', fr: '🇫🇷', ja: '🇯🇵', ru: '🇷🇺', it: '🇮🇹', es: '🇪🇸',
-    zh: '🇨🇳', hi: '🇮🇳', ko: '🇰🇷', pt: '🇵🇹', nl: '🇳🇱', pl: '🇵🇱', uk: '🇺🇦', ku: '🇮🇶', ro: '🇷🇴',
-    bg: '🇧🇬', sr: '🇷🇸', hu: '🇭🇺', cs: '🇨🇿', sk: '🇸🇰', sl: '🇸🇮', mk: '🇲🇰', hy: '🇦🇲',
-    mr: '🇮🇳', te: '🇮🇳', gu: '🇮🇳', ml: '🇮🇳', kn: '🇮🇳', or: '🇮🇳', fa: '🇮🇷', ur: '🇵🇰',
-    id: '🇮🇩', ms: '🇲🇾', th: '🇹🇭', vi: '🇻🇳', bn: '🇧🇩', ta: '🇱🇰', az: '🇦🇿', kk: '🇰🇿',
-    uz: '🇺🇿', ky: '🇰🇬', tk: '🇹🇲', he: '🇮🇱', sv: '🇸🇪', no: '🇳🇴', da: '🇩🇰', fi: '🇫🇮',
-    el: '🇬🇷', ca: '🇪🇸', ps: '🇦🇫', ha: '🇳🇬', sw: '🇹🇿', am: '🇪🇹', so: '🇸🇴', mn: '🇲🇳',
-    km: '🇰🇭', lo: '🇱🇦', my: '🇲🇲', si: '🇱🇰', jv: '🇮🇩', tl: '🇵🇭', eo: '🌍', eu: '🇪🇸'
-  };
-
   const selectOptions = useMemo(() => {
     const allOption = { value: 'all', label: t('blogs.allLanguages'), flagUrl: null, flagEmoji: '🌍' };
     const langOpts = languages.map(lang => ({
       value: lang.code,
       label: lang.name,
       flagUrl: lang.flagUrl,
-      flagEmoji: languageFlagEmojis[lang.code] || '🌍'
+      flagEmoji: getFlagEmojiFallback(lang.code)
     }));
     return [allOption, ...langOpts];
   }, [languages, t]);
@@ -262,7 +251,7 @@ const ScholarStories = () => {
     <span className="d-flex align-items-center gap-2">
       {option.flagUrl ? (
         <img
-          src={option.flagUrl.startsWith('http') ? option.flagUrl : `${API_BASE_URL}${option.flagUrl}`}
+          src={getFlagImageUrl(option.flagUrl, API_BASE_URL)}
           alt=""
           className="language-flag-icon"
         />

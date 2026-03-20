@@ -60,7 +60,8 @@ const AppMenu = () => {
   const menuItems = getAppMenuItems();
   const pathname = usePathname();
   const activeMenu = useCallback(() => {
-    const trimmedURL = pathname?.replaceAll('', '');
+    // replaceAll Chrome 85+, eski Android için pathname kullan (replaceAll('','') zaten no-op)
+    const trimmedURL = pathname || '';
     const matchingMenuItem = getMenuItemFromURL(menuItems, trimmedURL);
     if (matchingMenuItem) {
       const activeMt = findMenuItem(menuItems, matchingMenuItem.key);

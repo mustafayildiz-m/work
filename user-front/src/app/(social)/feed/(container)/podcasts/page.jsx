@@ -7,6 +7,7 @@ import { useLanguages } from '@/hooks/useLanguages';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { useRouter } from 'next/navigation';
+import { getFlagImageUrl, getFlagEmojiFallback } from '@/utils/language';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -93,26 +94,6 @@ const PodcastLanguageSelector = () => {
     return t(`books.languages.${language.name}`) || language.name;
   };
 
-  const getFlagEmoji = (code) => {
-    const flagMap = {
-      'tr': '🇹🇷', 'en': '🇬🇧', 'ar': '🇸🇦', 'fa': '🇮🇷', 'ur': '🇵🇰',
-      'de': '🇩🇪', 'fr': '🇫🇷', 'es': '🇪🇸', 'it': '🇮🇹', 'ru': '🇷🇺',
-      'zh': '🇨🇳', 'ja': '🇯🇵', 'ko': '🇰🇷', 'nl': '🇳🇱', 'pt': '🇵🇹',
-      'sv': '🇸🇪', 'no': '🇳🇴', 'da': '🇩🇰', 'fi': '🇫🇮', 'el': '🇬🇷',
-      'he': '🇮🇱', 'hi': '🇮🇳', 'bn': '🇧🇩', 'ta': '🇱🇰', 'th': '🇹🇭',
-      'vi': '🇻🇳', 'id': '🇮🇩', 'ms': '🇲🇾', 'tl': '🇵🇭', 'sw': '🇹🇿',
-      'kk': '🇰🇿', 'uz': '🇺🇿', 'ky': '🇰🇬', 'tk': '🇹🇲', 'az': '🇦🇿',
-      'ps': '🇦🇫', 'ha': '🇳🇬', 'ota': '🇹🇷',
-    };
-    return flagMap[code] || '🏳️';
-  };
-
-  const getFlagImageUrl = (flagUrl) => {
-    if (!flagUrl) return '';
-    if (flagUrl.startsWith('http://') || flagUrl.startsWith('https://')) return flagUrl;
-    return `${API_URL}${flagUrl.startsWith('/') ? flagUrl : `/${flagUrl}`}`;
-  };
-
   if (loading || loadingCounts) {
     return (
       <Col lg={9}>
@@ -196,13 +177,13 @@ const PodcastLanguageSelector = () => {
                   >
                     {language.flagUrl ? (
                       <img
-                        src={getFlagImageUrl(language.flagUrl)}
+                        src={getFlagImageUrl(language.flagUrl, API_URL)}
                         alt={`${language.name} flag`}
                         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                       />
                     ) : (
                       <div className="lang-flag-emoji" style={{ fontSize: '2rem', lineHeight: '56px', textAlign: 'center' }}>
-                        {getFlagEmoji(language.code)}
+                        {getFlagEmojiFallback(language.code)}
                       </div>
                     )}
                   </div>
