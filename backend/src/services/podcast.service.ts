@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Podcast } from '../entities/podcast.entity';
 import { CreatePodcastDto } from '../dto/podcast/create-podcast.dto';
 import { UpdatePodcastDto } from '../dto/podcast/update-podcast.dto';
+import { UserPostsService } from './user-posts.service';
 
 @Injectable()
 export class PodcastService {
@@ -12,6 +13,7 @@ export class PodcastService {
   constructor(
     @InjectRepository(Podcast)
     private readonly podcastRepository: Repository<Podcast>,
+    private readonly userPostsService: UserPostsService,
   ) {}
 
   async create(
@@ -170,6 +172,7 @@ export class PodcastService {
 
   async remove(id: number): Promise<void> {
     const podcast = await this.findOne(id);
+    await this.userPostsService.removePostsBySharedPodcastId(id);
     await this.podcastRepository.remove(podcast);
   }
 

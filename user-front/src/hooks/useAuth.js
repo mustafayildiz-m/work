@@ -10,6 +10,10 @@ import {
   hasValidToken,
   getToken 
 } from '@/utils/auth';
+import {
+  dispatchThemeAfterLogin,
+  THEME_RESET_SESSION_FLAG,
+} from '@/utils/themeLogin';
 
 export const useAuth = () => {
   const { data: session, status } = useSession();
@@ -56,6 +60,18 @@ export const useAuth = () => {
       const user = getUserInfoFromToken();
       setIsAuthenticated(!!userId);
       setUserInfo(user);
+
+      // Google OAuth: giriş öncesi konan bayrak — sadece bu akışta giriş sonrası yeşil tema
+      if (typeof window !== 'undefined') {
+        try {
+          if (sessionStorage.getItem(THEME_RESET_SESSION_FLAG) === '1') {
+            sessionStorage.removeItem(THEME_RESET_SESSION_FLAG);
+            dispatchThemeAfterLogin('green');
+          }
+        } catch {
+          /* sessionStorage erişilemezse yoksay */
+        }
+      }
     }
   }, [session]);
 
@@ -73,6 +89,7 @@ export const useAuth = () => {
       });
 
       if (result?.ok) {
+        dispatchThemeAfterLogin('green');
         // Başarılı giriş - session callback'te token otomatik olarak localStorage'a yazılacak
         return { success: true };
       } else {

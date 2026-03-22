@@ -10,6 +10,7 @@ import { UploadModule } from '../upload/upload.module';
 import { TranslationModule } from '../modules/translation.module';
 import { PdfOcrService } from '../services/pdf-ocr.service';
 import { Language } from '../languages/entities/language.entity';
+import { UserPostsModule } from '../modules/user-posts.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { Language } from '../languages/entities/language.entity';
     ]),
     UploadModule,
     TranslationModule,
+    UserPostsModule,
   ],
   controllers: [ArticlesController],
   providers: [ArticlesService, PdfOcrService],

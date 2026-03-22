@@ -4,9 +4,10 @@ import { PodcastController } from '../controllers/podcast.controller';
 import { PodcastService } from '../services/podcast.service';
 import { Podcast } from '../entities/podcast.entity';
 import { UploadModule } from '../upload/upload.module';
+import { UserPostsModule } from './user-posts.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Podcast]), UploadModule],
+  imports: [TypeOrmModule.forFeature([Podcast]), UploadModule, UserPostsModule],
   controllers: [PodcastController],
   providers: [PodcastService],
   exports: [PodcastService],

@@ -9,6 +9,7 @@ import { CreateNewsletterDto } from '../dto/newsletter/create-newsletter.dto';
 import { UpdateNewsletterDto } from '../dto/newsletter/update-newsletter.dto';
 import { CacheService } from './cache.service';
 import { TranslationService } from './translation.service';
+import { UserPostsService } from './user-posts.service';
 
 const CACHE_TTL = 300; // 5 dakika
 
@@ -21,6 +22,7 @@ export class NewsletterService {
     private readonly newsletterTranslationRepo: Repository<NewsletterTranslation>,
     private readonly cacheService: CacheService,
     private readonly translationService: TranslationService,
+    private readonly userPostsService: UserPostsService,
   ) {}
 
   private extractContent(dto: { content?: string; sections?: any }): string {
@@ -312,6 +314,8 @@ export class NewsletterService {
     if (!item) {
       throw new NotFoundException(`Newsletter bulunamadi (ID: ${id})`);
     }
+
+    await this.userPostsService.removePostsBySharedNewsletterId(id);
 
     if (item.imageUrl) {
       this.removeImageFiles(item.imageUrl);

@@ -7,6 +7,7 @@ import { StoryLike } from '../entities/story-like.entity';
 import { CreateScholarStoryDto } from '../dto/scholar-story/create-scholar-story.dto';
 import { UpdateScholarStoryDto } from '../dto/scholar-story/update-scholar-story.dto';
 import { CacheService } from './cache.service';
+import { UserPostsService } from './user-posts.service';
 
 const CACHE_TTL = 300; // 5 dakika
 
@@ -22,6 +23,7 @@ export class ScholarStoryService {
     @InjectRepository(StoryLike)
     private storyLikeRepository: Repository<StoryLike>,
     private readonly cacheService: CacheService,
+    private readonly userPostsService: UserPostsService,
   ) {}
 
   async create(
@@ -204,6 +206,7 @@ export class ScholarStoryService {
   async remove(id: number): Promise<void> {
     try {
       const story = await this.findOne(id);
+      await this.userPostsService.removePostsBySharedStoryId(id);
       await this.scholarStoryRepository.remove(story);
       await this.invalidateStoriesCache();
 

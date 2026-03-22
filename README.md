@@ -32,7 +32,7 @@ docker-compose up -d --build
 
 git fetch origin
 git reset --hard origin/main
-docker compose -f docker-compose.prod.yml up -d --build user-front
+docker compose -f docker-compose.prod.yml up -d --build
 docker exec islamic_windows_nginx nginx -s reload
 
 

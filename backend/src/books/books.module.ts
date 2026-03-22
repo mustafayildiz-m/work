@@ -12,6 +12,7 @@ import { BookPageTranslation } from './entities/book-page-translation.entity';
 import { TranslationModule } from '../modules/translation.module';
 import { PdfOcrService } from '../services/pdf-ocr.service';
 import { Language } from '../languages/entities/language.entity';
+import { UserPostsModule } from '../modules/user-posts.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { Language } from '../languages/entities/language.entity';
     ]),
     UploadModule,
     TranslationModule,
+    UserPostsModule,
   ],
   controllers: [BooksController, BookCategoriesController],
   providers: [BooksService, PdfOcrService],

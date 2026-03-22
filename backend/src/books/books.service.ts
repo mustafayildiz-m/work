@@ -14,6 +14,7 @@ import { PdfOcrService } from '../services/pdf-ocr.service';
 import { BookPage } from './entities/book-page.entity';
 import { BookPageTranslation } from './entities/book-page-translation.entity';
 import { Language } from '../languages/entities/language.entity';
+import { UserPostsService } from '../services/user-posts.service';
 
 @Injectable()
 export class BooksService {
@@ -37,6 +38,7 @@ export class BooksService {
     private uploadService: UploadService,
     private translationService: TranslationService,
     private pdfOcrService: PdfOcrService,
+    private readonly userPostsService: UserPostsService,
   ) {}
 
   /**
@@ -400,6 +402,8 @@ export class BooksService {
       relations: ['translations'],
     });
     if (!book) return;
+
+    await this.userPostsService.removePostsBySharedBookId(id);
 
     // Cover image dosyasını sil
     if (book.coverImage) {

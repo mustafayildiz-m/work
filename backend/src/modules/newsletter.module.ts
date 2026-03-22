@@ -7,12 +7,14 @@ import { NewsletterController } from '../controllers/newsletter.controller';
 import { UploadModule } from '../upload/upload.module';
 import { CacheService } from '../services/cache.service';
 import { TranslationModule } from './translation.module';
+import { UserPostsModule } from './user-posts.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Newsletter, NewsletterTranslation]),
     UploadModule,
     TranslationModule,
+    UserPostsModule,
   ],
   providers: [NewsletterService, CacheService],
   controllers: [NewsletterController],
