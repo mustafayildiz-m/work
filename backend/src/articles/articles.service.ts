@@ -15,6 +15,7 @@ import { ArticlePageTranslation } from './entities/article-page-translation.enti
 import { TranslationService } from '../services/translation.service';
 import { PdfOcrService } from '../services/pdf-ocr.service';
 import { Language } from '../languages/entities/language.entity';
+import { UserPostsService } from '../services/user-posts.service';
 
 @Injectable()
 export class ArticlesService {
@@ -35,6 +36,7 @@ export class ArticlesService {
     private uploadService: UploadService,
     private translationService: TranslationService,
     private pdfOcrService: PdfOcrService,
+    private readonly userPostsService: UserPostsService,
   ) {}
 
   private async getLanguageId(langCode: string): Promise<number> {
@@ -452,6 +454,8 @@ export class ArticlesService {
     if (!article) {
       throw new NotFoundException(`Article with ID ${id} not found`);
     }
+
+    await this.userPostsService.removePostsBySharedArticleId(id);
 
     // Cover image dosyasını sil
     if (article.coverImage) {

@@ -8,6 +8,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import useQueryParams from '@/hooks/useQueryParams';
+import { dispatchThemeAfterLogin } from '@/utils/themeLogin';
 const useSignIn = () => {
   const [loading, setLoading] = useState(false);
   const {
@@ -39,6 +40,7 @@ const useSignIn = () => {
       password: values?.password
     }).then(res => {
       if (res?.ok) {
+        dispatchThemeAfterLogin('green');
         push(queryParams['redirectTo'] ?? '/feed/home');
         showNotification({
           message: 'Successfully logged in. Redirecting....',

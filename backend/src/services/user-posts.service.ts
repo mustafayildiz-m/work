@@ -149,6 +149,60 @@ export class UserPostsService {
   }
 
   /**
+   * Belirli bir alim hikayesine referans veren tüm kullanıcı gönderilerini siler
+   * (yorum, beğeni, kayıt, paylaşım ve feed bildirimi remove() ile yapılır).
+   */
+  async removePostsBySharedStoryId(sharedStoryId: number): Promise<void> {
+    const posts = await this.userPostRepository.find({
+      where: { shared_story_id: sharedStoryId },
+      select: ['id'],
+    });
+    for (const p of posts) {
+      await this.remove(p.id);
+    }
+  }
+
+  async removePostsBySharedPodcastId(podcastId: number): Promise<void> {
+    const posts = await this.userPostRepository.find({
+      where: { shared_podcast_id: podcastId },
+      select: ['id'],
+    });
+    for (const p of posts) {
+      await this.remove(p.id);
+    }
+  }
+
+  async removePostsBySharedNewsletterId(newsletterId: number): Promise<void> {
+    const posts = await this.userPostRepository.find({
+      where: { shared_newsletter_id: newsletterId },
+      select: ['id'],
+    });
+    for (const p of posts) {
+      await this.remove(p.id);
+    }
+  }
+
+  async removePostsBySharedArticleId(articleId: number): Promise<void> {
+    const posts = await this.userPostRepository.find({
+      where: { shared_article_id: articleId },
+      select: ['id'],
+    });
+    for (const p of posts) {
+      await this.remove(p.id);
+    }
+  }
+
+  async removePostsBySharedBookId(bookId: number): Promise<void> {
+    const posts = await this.userPostRepository.find({
+      where: { shared_book_id: bookId },
+      select: ['id'],
+    });
+    for (const p of posts) {
+      await this.remove(p.id);
+    }
+  }
+
+  /**
    * Silinen postu tüm bağlı istemcilere bildirir - her istemci kendi timeline'ında varsa kaldırır
    * (broadcastToUsers userId eşleşmesinde sorun olabiliyordu, bu yöntem daha güvenilir)
    */

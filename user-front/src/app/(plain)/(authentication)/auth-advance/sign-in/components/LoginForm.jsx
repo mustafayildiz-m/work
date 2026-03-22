@@ -12,6 +12,7 @@ import { useNotificationContext } from '@/context/useNotificationContext';
 import styles from '../../auth-pages.module.css';
 import { signIn } from 'next-auth/react';
 import useQueryParams from '@/hooks/useQueryParams';
+import { THEME_RESET_SESSION_FLAG } from '@/utils/themeLogin';
 import { FcGoogle } from 'react-icons/fc';
 import { BsPerson } from 'react-icons/bs';
 
@@ -178,6 +179,11 @@ const LoginForm = () => {
                   title: t('common.warning')
                 });
                 return;
+              }
+              try {
+                sessionStorage.setItem(THEME_RESET_SESSION_FLAG, '1');
+              } catch {
+                /* yoksay */
               }
               signIn('google', {
                 callbackUrl: queryParams['redirectTo'] ?? '/feed/home',
