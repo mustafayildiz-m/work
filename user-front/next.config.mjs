@@ -1,4 +1,44 @@
 /** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === 'production';
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+const getOriginFromUrl = (url) => {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+      return parsed.origin;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+};
+
+const apiOrigin = getOriginFromUrl(apiUrl);
+const frameSrcOrigins = new Set([
+  "'self'",
+  'https://www.youtube.com',
+  'https://youtube.com',
+  'https://www.youtube-nocookie.com',
+  'https://player.vimeo.com',
+  'https://www.google.com',
+]);
+
+if (isProd) {
+  frameSrcOrigins.add('https://islamicwindows.com');
+  frameSrcOrigins.add('https://www.islamicwindows.com');
+  if (apiOrigin) {
+    frameSrcOrigins.add(apiOrigin);
+  }
+} else {
+  frameSrcOrigins.add('http://localhost:3000');
+  frameSrcOrigins.add('https://localhost:3000');
+  if (apiOrigin) {
+    frameSrcOrigins.add(apiOrigin);
+  }
+}
+
 const nextConfig = {
   reactStrictMode: true,
   // Eski tarayıcılar için node_modules'dan modern syntax transpile et
@@ -128,7 +168,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: blob: https: http:",
-              "frame-src 'self' http://localhost:3000 https://localhost:3000 https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://player.vimeo.com https://www.google.com",
+              `frame-src ${Array.from(frameSrcOrigins).join(' ')}`,
               "connect-src 'self' https: http: wss: ws:",
               "media-src 'self' data: blob: https: http:",
               "worker-src 'self' blob: https://cdnjs.cloudflare.com",
