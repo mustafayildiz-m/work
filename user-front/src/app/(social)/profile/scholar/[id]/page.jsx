@@ -7,11 +7,12 @@ import { Card, CardBody, Col, Container, Row, Button, Modal, Spinner, Alert, Dro
 import Image from 'next/image';
 import avatar7 from '@/assets/images/avatar/07.jpg';
 import dynamic from 'next/dynamic';
-import { BsTranslate, BsVolumeUp, BsX, BsPause, BsPlay, BsSkipBackward, BsSkipForward } from 'react-icons/bs';
+import { BsTranslate, BsVolumeUp, BsX, BsPause, BsPlay, BsSkipBackward, BsSkipForward, BsArrowsMove } from 'react-icons/bs';
 import { useLanguages } from '@/hooks/useLanguages';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import { cleanTextForTTS, fetchTTSAudio, unlockAudioForPlayback, getUnlockedAudioElement } from '@/utils/textToSpeech';
 import { useLanguage } from '@/context/useLanguageContext';
+import { useLayoutContext } from '@/context/useLayoutContext';
 import { getLanguageFlag } from '@/utils/language';
 
 // Map loading placeholder - uses hook so must be a component
@@ -37,6 +38,8 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 const ScholarProfilePage = () => {
   const { t } = useLanguage();
+  const { theme } = useLayoutContext();
+  const isDarkMode = theme === 'dark' || theme === 'green';
   const params = useParams();
   const { profileId, isValid } = useProfileHash();
   const { showNotification } = useNotificationContext();
@@ -72,6 +75,7 @@ const ScholarProfilePage = () => {
   const queueIndexRef = useRef(0);
   const readingSessionIdRef = useRef(0);
   const currentLangCodeRef = useRef(null);
+  const isReadingRef = useRef(false);
   const originalChunksContainerRef = useRef(null);
   const translatedChunksContainerRef = useRef(null);
   const playerDragRef = useRef({
@@ -157,17 +161,90 @@ const ScholarProfilePage = () => {
     return tmp.textContent || tmp.innerText || '';
   };
 
+  // Cümle hizalaması için satır sonu/özel boşlukları normalize et
+  const normalizeTextForSentenceSync = (text) => {
+    if (!text) return '';
+    return text
+      .replace(/\u00A0/g, ' ') // NBSP
+      .replace(/[\u2000-\u200B\u202F\u205F\u3000]/g, ' ') // farklı unicode boşluklar
+      .replace(/\s*\n+\s*/g, ' ') // satır sonlarını boşluk yap
+      .replace(/\s{2,}/g, ' ') // çoklu boşluğu teke indir
+      .trim();
+  };
+
   const splitTextIntoChunks = (text) => {
-    if (!text || !text.trim()) return [];
+    const normalizedText = normalizeTextForSentenceSync(text);
+    if (!normalizedText || !normalizedText.trim()) return [];
     // Safari 15 ve öncesi lookbehind (?<=) desteklemez - alternatif kullan
-    const sentences = text.replace(/([.!?])\s+/g, '$1\n').split('\n').map((s) => s.trim()).filter(Boolean);
-    if (sentences.length > 0) return sentences.slice(0, 14);
-    return text.split(/\s+/).reduce((acc, word) => {
+    const sentences = normalizedText
+      .replace(/([.!?])\s+/g, '$1\n')
+      .split('\n')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (sentences.length > 0) return sentences;
+    return normalizedText.split(/\s+/).reduce((acc, word) => {
       const last = acc[acc.length - 1] || '';
       if (!last || last.length > 100) acc.push(word);
       else acc[acc.length - 1] = `${last} ${word}`.trim();
       return acc;
-    }, []).slice(0, 14);
+    }, []);
+  };
+
+  // Uzun biyografilerde tek istek truncation'a uğrayabildiği için metni parçalara bölerek çevir
+  const translateLongText = async (text, targetLangCode, sourceLangCode = null) => {
+    if (!text || !text.trim()) return '';
+
+    const paragraphs = text
+      .split(/\n+/)
+      .map((p) => p.trim())
+      .filter(Boolean);
+
+    // Paragraf yoksa cümle bazlı fallback
+    const baseParts = paragraphs.length > 0 ? paragraphs : splitTextIntoChunks(text);
+    const groupedParts = [];
+    let current = '';
+    const maxCharsPerRequest = 1800;
+
+    for (const part of baseParts) {
+      const candidate = current ? `${current}\n\n${part}` : part;
+      if (candidate.length <= maxCharsPerRequest) {
+        current = candidate;
+      } else {
+        if (current) groupedParts.push(current);
+        current = part;
+      }
+    }
+    if (current) groupedParts.push(current);
+
+    const translatedPieces = [];
+    for (const part of groupedParts) {
+      const translatedPart = await translateText(part, targetLangCode, sourceLangCode);
+      if (translatedPart && translatedPart.trim()) {
+        translatedPieces.push(translatedPart.trim());
+      }
+    }
+
+    return translatedPieces.join('\n\n').trim();
+  };
+
+  // Cümle sonu bazlı birebir eşleme için her chunk'ı ayrı çevir
+  const translateChunksWithAlignment = async (chunks, targetLangCode, sourceLangCode = null) => {
+    if (!Array.isArray(chunks) || chunks.length === 0) return [];
+    const translatedChunks = [];
+
+    for (const chunk of chunks) {
+      const safeChunk = (chunk || '').trim();
+      if (!safeChunk) continue;
+      try {
+        const translated = await translateText(safeChunk, targetLangCode, sourceLangCode);
+        translatedChunks.push((translated || '').trim() || safeChunk);
+      } catch {
+        // Tek bir cümle çevirisi hata verirse akışı kesmemek için orijinali kullan
+        translatedChunks.push(safeChunk);
+      }
+    }
+
+    return translatedChunks;
   };
 
   const disposeCurrentAudio = (silent = true) => {
@@ -183,14 +260,6 @@ const ScholarProfilePage = () => {
       currentAudioRef.current = null;
       if (silent) setTimeout(() => { suppressAudioErrorRef.current = false; }, 0);
     }
-  };
-
-  const releaseQueueAudioUrls = () => {
-    playbackQueueRef.current.forEach((item) => {
-      if (item?.audioUrl?.startsWith('blob:')) {
-        URL.revokeObjectURL(item.audioUrl);
-      }
-    });
   };
 
   const handlePlayerDragStart = (event) => {
@@ -275,64 +344,95 @@ const ScholarProfilePage = () => {
     setShowLanguageModal(true);
   };
 
-  const startQueuePlayback = (queueIndex, offsetSeconds = 0) => {
-    const currentSession = readingSessionIdRef.current;
-    const queue = playbackQueueRef.current;
-    if (!queue.length || queueIndex >= queue.length) {
-      setIsReading(false);
-      setIsPaused(false);
-      setPlayerStatus('ended');
-      disposeCurrentAudio(false);
-      return;
-    }
+  const startQueuePlayback = async (segmentQueue, langCode, startIndex = 0, startOffsetRatio = 0) => {
+    if (!Array.isArray(segmentQueue) || segmentQueue.length === 0) return;
+    const token = localStorage.getItem('token');
+    const sessionId = readingSessionIdRef.current;
 
-    queueIndexRef.current = queueIndex;
-    const queueItem = queue[queueIndex];
-    const audio = getUnlockedAudioElement() || new Audio();
-    audio.src = queueItem.audioUrl;
-    currentAudioRef.current = audio;
-    audio.playbackRate = playbackRate;
-    audio.currentTime = Math.max(0, offsetSeconds);
+    const playSegmentAt = async (segmentIndex, offsetRatio = 0) => {
+      if (sessionId !== readingSessionIdRef.current) return;
+      const segmentText = segmentQueue[segmentIndex];
+      if (!segmentText) return;
 
-    audio.onplay = () => {
-      if (readingSessionIdRef.current !== currentSession) return;
-      setPlayerStatus('playing');
-      setActiveChunkIndex(queueItem.chunkIndex);
-      setIsPaused(false);
+      queueIndexRef.current = segmentIndex;
+      setActiveChunkIndex(segmentIndex);
+
+      const cleanedChunk = cleanTextForTTS(segmentText);
+      if (!cleanedChunk) {
+        const nextIndex = segmentIndex + 1;
+        if (nextIndex < segmentQueue.length) {
+          await playSegmentAt(nextIndex, 0);
+          return;
+        }
+        setIsReading(false);
+        setIsPaused(false);
+        isReadingRef.current = false;
+        setAudioProgress(0);
+        setPlayerStatus('completed');
+        return;
+      }
+
+      const segmentBlob = await fetchTTSAudio(cleanedChunk, langCode, API_BASE_URL, token);
+      const segmentUrl = URL.createObjectURL(segmentBlob);
+      const audio = getUnlockedAudioElement() || new Audio();
+      audio.src = segmentUrl;
+      currentAudioRef.current = audio;
+      audio.playbackRate = playbackRate || 1.0;
+
+      audio.onplay = () => {
+        setIsReading(true);
+        isReadingRef.current = true;
+        setIsPaused(false);
+        setPlayerStatus('playing');
+      };
+
+      audio.ontimeupdate = () => {
+        if (!audio.duration) return;
+        const segmentPct = audio.currentTime / audio.duration;
+        const total = Math.max(1, segmentQueue.length);
+        const overallPct = ((segmentIndex + segmentPct) / total) * 100;
+        setAudioProgress(Math.min(100, overallPct));
+      };
+
+      audio.onerror = () => {
+        URL.revokeObjectURL(segmentUrl);
+        if (suppressAudioErrorRef.current) return;
+        setIsReading(false);
+        setIsPaused(false);
+        isReadingRef.current = false;
+        setPlayerStatus('error');
+        showNotification({
+          title: t('scholarProfile.error'),
+          message: t('scholarProfile.ttsError'),
+          variant: 'danger',
+        });
+      };
+
+      audio.onended = async () => {
+        URL.revokeObjectURL(segmentUrl);
+        if (sessionId !== readingSessionIdRef.current) return;
+
+        const nextIndex = segmentIndex + 1;
+        if (isReadingRef.current && nextIndex < segmentQueue.length) {
+          await playSegmentAt(nextIndex, 0);
+          return;
+        }
+
+        setIsReading(false);
+        setIsPaused(false);
+        isReadingRef.current = false;
+        setAudioProgress(0);
+        setPlayerStatus('completed');
+      };
+
+      isReadingRef.current = true;
+      await audio.play();
+      if (offsetRatio > 0 && audio.duration) {
+        audio.currentTime = Math.min(audio.duration - 0.05, audio.duration * offsetRatio);
+      }
     };
 
-    audio.ontimeupdate = () => {
-      if (readingSessionIdRef.current !== currentSession || isSliderSeeking) return;
-      const previousDuration = queue.slice(0, queueIndex).reduce((sum, item) => sum + (item.duration || 0), 0);
-      const totalDuration = queue.reduce((sum, item) => sum + (item.duration || 0), 0) || 1;
-      const nowElapsed = previousDuration + (audio.currentTime || 0);
-      setElapsedTime(Math.floor(nowElapsed));
-      setAudioProgress(Math.min(100, (nowElapsed / totalDuration) * 100));
-    };
-
-    audio.onended = () => {
-      if (readingSessionIdRef.current !== currentSession) return;
-      startQueuePlayback(queueIndex + 1, 0);
-    };
-
-    audio.onerror = () => {
-      if (suppressAudioErrorRef.current || readingSessionIdRef.current !== currentSession) return;
-      setIsReading(false);
-      setIsPaused(false);
-      setPlayerStatus('error');
-      showNotification({
-        title: t('scholarProfile.error'),
-        message: t('scholarProfile.ttsError'),
-        variant: 'danger',
-      });
-    };
-
-    audio.play().catch(() => {
-      if (readingSessionIdRef.current !== currentSession) return;
-      setIsReading(false);
-      setIsPaused(false);
-      setPlayerStatus('error');
-    });
+    await playSegmentAt(startIndex, startOffsetRatio);
   };
 
   const handleTranslateAndRead = async (targetLanguage) => {
@@ -343,45 +443,27 @@ const ScholarProfilePage = () => {
     setShowLanguageModal(false);
 
     try {
-      const textToRead = stripHtmlTags(scholar.biography);
+      const textToRead = normalizeTextForSentenceSync(stripHtmlTags(scholar.biography));
       if (!textToRead || textToRead.trim().length === 0) {
         showNotification({ title: t('scholarProfile.warning'), message: t('scholarProfile.noContentToRead'), variant: 'warning' });
         setTranslating(false);
         return;
       }
 
-      const translatedText = await translateText(textToRead, targetLanguage.code);
-      if (!translatedText || translatedText.trim().length === 0) {
+      const originalChunks = splitTextIntoChunks(textToRead);
+      if (!originalChunks.length) {
         showNotification({ title: t('scholarProfile.error'), message: t('scholarProfile.translationFailed'), variant: 'danger' });
         setTranslating(false);
         return;
       }
 
-      const originalChunks = splitTextIntoChunks(textToRead);
-      const translatedChunks = splitTextIntoChunks(translatedText);
+      const translatedChunks = await translateChunksWithAlignment(originalChunks, targetLanguage.code);
+      const translatedText = translatedChunks.join(' ').trim();
       const readableChunks = translatedChunks.length ? translatedChunks : splitTextIntoChunks(cleanTextForTTS(translatedText));
       if (!readableChunks.length) throw new Error('Okunabilir içerik bulunamadı');
 
-      const queue = await Promise.all(
-        readableChunks.map(async (chunkText, chunkIndex) => {
-          const token = localStorage.getItem('token');
-          const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
-          const cleanedChunk = cleanTextForTTS(chunkText);
-          if (!cleanedChunk) return null;
-          const audioBlob = await fetchTTSAudio(cleanedChunk, targetLanguage.code, apiBaseUrl, token);
-          if (!audioBlob) return null;
-          const audioUrl = URL.createObjectURL(audioBlob);
-          const estimatedDuration = Math.max(2, Math.min(30, chunkText.length / 11));
-          return { audioUrl, text: chunkText, duration: estimatedDuration, chunkIndex };
-        })
-      );
-
-      const filteredQueue = queue.filter(Boolean);
-      if (!filteredQueue.length) throw new Error('Ses oluşturulamadı');
-
       readingSessionIdRef.current += 1;
-      releaseQueueAudioUrls();
-      playbackQueueRef.current = filteredQueue;
+      playbackQueueRef.current = readableChunks;
       queueIndexRef.current = 0;
       currentLangCodeRef.current = targetLanguage.code;
       setCurrentOriginalChunks(originalChunks);
@@ -396,7 +478,7 @@ const ScholarProfilePage = () => {
       setIsPaused(false);
       setTranslating(false);
 
-      startQueuePlayback(0, 0);
+      await startQueuePlayback(readableChunks, targetLanguage.code, 0, 0);
     } catch (error) {
       console.error('Error in handleTranslateAndRead:', error);
       setTranslating(false);
@@ -412,8 +494,8 @@ const ScholarProfilePage = () => {
 
   const stopTextToSpeech = () => {
     readingSessionIdRef.current += 1;
+    isReadingRef.current = false;
     disposeCurrentAudio(true);
-    releaseQueueAudioUrls();
     playbackQueueRef.current = [];
     queueIndexRef.current = 0;
     setIsReading(false);
@@ -452,34 +534,24 @@ const ScholarProfilePage = () => {
   const seekTo = (progressPercent) => {
     const queue = playbackQueueRef.current;
     if (!queue.length) return;
-    const totalDuration = queue.reduce((sum, item) => sum + (item.duration || 0), 0) || 1;
-    const targetSeconds = Math.max(0, Math.min(totalDuration, (progressPercent / 100) * totalDuration));
+    const langCode = currentLangCodeRef.current;
+    if (!langCode) return;
+    const total = queue.length;
+    const normalized = Math.max(0, Math.min(100, progressPercent)) / 100;
+    const rawPos = normalized * total;
+    const targetIndex = Math.min(total - 1, Math.floor(rawPos));
+    const offsetRatio = Math.max(0, Math.min(0.98, rawPos - targetIndex));
 
-    let cumulative = 0;
-    let nextIndex = 0;
-    let offset = 0;
-    for (let i = 0; i < queue.length; i += 1) {
-      const duration = queue[i].duration || 0;
-      if (targetSeconds <= cumulative + duration) {
-        nextIndex = i;
-        offset = Math.max(0, targetSeconds - cumulative);
-        break;
-      }
-      cumulative += duration;
-    }
-
+    readingSessionIdRef.current += 1;
     disposeCurrentAudio(true);
-    setElapsedTime(Math.floor(targetSeconds));
-    setAudioProgress(Math.min(100, (targetSeconds / totalDuration) * 100));
-    startQueuePlayback(nextIndex, offset);
+    setActiveChunkIndex(targetIndex);
+    startQueuePlayback(queue, langCode, targetIndex, offsetRatio);
   };
 
   const skipTime = (seconds) => {
-    const queue = playbackQueueRef.current;
-    if (!queue.length) return;
-    const totalDuration = queue.reduce((sum, item) => sum + (item.duration || 0), 0) || 1;
-    const targetSeconds = Math.max(0, Math.min(totalDuration, elapsedTime + seconds));
-    seekTo((targetSeconds / totalDuration) * 100);
+    const audio = currentAudioRef.current;
+    if (!audio || !audio.duration) return;
+    audio.currentTime = Math.max(0, Math.min(audio.duration, audio.currentTime + seconds));
   };
 
   const commitSliderSeek = () => {
@@ -497,23 +569,41 @@ const ScholarProfilePage = () => {
 
   const getProgress = () => (previewProgress !== null ? previewProgress : audioProgress);
 
-  const totalQueueDuration = playbackQueueRef.current.reduce((sum, item) => sum + (item.duration || 0), 0);
+  const totalQueueDuration = audioProgress > 0 ? Math.floor(elapsedTime / Math.max(audioProgress / 100, 0.01)) : 0;
+  const translatedChunkCount = Math.max(1, currentTranslatedChunks.length);
+  const originalChunkCount = Math.max(1, currentOriginalChunks.length);
+  const originalActiveChunkIndex = Math.min(
+    originalChunkCount - 1,
+    Math.round((activeChunkIndex / Math.max(1, translatedChunkCount - 1)) * Math.max(0, originalChunkCount - 1))
+  );
 
   useEffect(() => {
     if (!showReadingAssist) return;
     const originContainer = originalChunksContainerRef.current;
     const translatedContainer = translatedChunksContainerRef.current;
-    const activeOriginal = originContainer?.querySelector(`[data-chunk-index="${activeChunkIndex}"]`);
-    const activeTranslated = translatedContainer?.querySelector(`[data-chunk-index="${activeChunkIndex}"]`);
+    const activeOriginal = originContainer?.querySelector(`[data-original-chunk-index="${originalActiveChunkIndex}"]`);
+    const activeTranslated = translatedContainer?.querySelector(`[data-translated-chunk-index="${activeChunkIndex}"]`);
     activeOriginal?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     activeTranslated?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }, [activeChunkIndex, showReadingAssist]);
+  }, [activeChunkIndex, originalActiveChunkIndex, showReadingAssist]);
+
+  useEffect(() => {
+    let interval = null;
+    if (isReading && !isPaused) {
+      interval = setInterval(() => {
+        setElapsedTime((prev) => prev + 1);
+      }, 1000);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isReading, isPaused]);
 
   useEffect(() => {
     return () => {
       readingSessionIdRef.current += 1;
+      isReadingRef.current = false;
       disposeCurrentAudio(true);
-      releaseQueueAudioUrls();
     };
   }, []);
 
@@ -818,104 +908,149 @@ const ScholarProfilePage = () => {
 
       {isPlayerOpen && (
         <div
-          className="scholar-player"
-          style={{ transform: `translate(${playerPosition.x}px, ${playerPosition.y}px)`, cursor: isDraggingPlayer ? 'grabbing' : 'grab' }}
+          className="p-3 d-flex justify-content-center reading-player-modal"
+          style={{
+            zIndex: 1080,
+            position: 'fixed',
+            left: '50%',
+            bottom: '0.5rem',
+            width: '100%',
+            maxWidth: '1160px',
+            transform: `translate(-50%, 0) translate(${playerPosition.x}px, ${playerPosition.y}px)`,
+            cursor: isDraggingPlayer ? 'grabbing' : 'grab',
+            userSelect: 'none',
+          }}
           onMouseDown={handlePlayerDragStart}
           role="presentation"
         >
-          <div className="d-flex align-items-center justify-content-between mb-3">
-            <div className="d-flex align-items-center gap-2">
-              <BsVolumeUp />
-              <strong>{t('scholarProfile.audioReading')}</strong>
-              <span className="player-page-chip">{t(`scholarProfile.status${playerStatus.charAt(0).toUpperCase() + playerStatus.slice(1)}`)}</span>
-            </div>
-            <div className="d-flex align-items-center gap-2">
-              <Dropdown>
-                <DropdownToggle className="player-pill-btn">{t('scholarProfile.speed')} {playbackRate.toFixed(2)}x</DropdownToggle>
-                <DropdownMenu>
-                  {[0.75, 1, 1.25, 1.5, 1.75].map((rate) => (
-                    <button key={rate} type="button" className="dropdown-item" onClick={() => changePlaybackRate(rate)}>
-                      {rate}x
-                    </button>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
-              <button type="button" className="player-close-btn" onClick={() => { stopTextToSpeech(); setIsPlayerOpen(false); }}>
-                <BsX />
-              </button>
-            </div>
-          </div>
-
-          <div className="mb-2">
-            <input
-              type="range"
-              className="w-100 player-slider"
-              min="0"
-              max="100"
-              step="0.1"
-              value={getProgress()}
-              onMouseDown={() => { setIsSliderSeeking(true); setPreviewProgress(getProgress()); }}
-              onTouchStart={() => { setIsSliderSeeking(true); setPreviewProgress(getProgress()); }}
-              onMouseUp={commitSliderSeek}
-              onTouchEnd={commitSliderSeek}
-              onChange={(e) => {
-                const nextValue = parseFloat(e.target.value);
-                if (isSliderSeeking) setPreviewProgress(nextValue);
-                else seekTo(nextValue);
-              }}
-            />
-            <div className="d-flex justify-content-between small opacity-75">
-              <span>{formatTime(elapsedTime)}</span>
-              <span>{formatTime(totalQueueDuration)}</span>
-            </div>
-          </div>
-
-          <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
-            <button type="button" className="player-icon-btn" onClick={() => skipTime(-8)}><BsSkipBackward /></button>
-            <button type="button" className="player-main-btn" onClick={togglePauseResume}>{isPaused ? <BsPlay /> : <BsPause />}</button>
-            <button type="button" className="player-icon-btn" onClick={() => skipTime(8)}><BsSkipForward /></button>
-          </div>
-
-          <div className="d-flex align-items-center justify-content-between mb-2">
-            <strong>{t('scholarProfile.liveTracking')}</strong>
-            <button type="button" className="player-pill-btn" onClick={() => setShowReadingAssist((v) => !v)}>
-              {showReadingAssist ? t('scholarProfile.hide') : t('scholarProfile.show')}
-            </button>
-          </div>
-
-          {showReadingAssist && (
-            <Row className="g-3">
-              <Col md={6}>
-                <div className="reading-box" ref={originalChunksContainerRef}>
-                  {currentOriginalChunks.map((chunk, idx) => (
-                    <p key={`o-${idx}-${chunk.slice(0, 24)}`} data-chunk-index={idx} className={`chunk-line ${idx === activeChunkIndex ? 'active' : ''}`}>{chunk}</p>
-                  ))}
+          <Card className="border-0 shadow-lg reading-player-card" style={{ width: '100%', maxWidth: '1000px', backgroundColor: isDarkMode ? '#1c1f2e' : '#ffffff', color: isDarkMode ? '#ffffff' : '#111b36', borderRadius: '20px', border: isDarkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)' }}>
+            <CardBody className="p-3">
+              <div className="d-flex flex-column align-items-center mb-3">
+                <div style={{ width: '44px', height: '4px', borderRadius: '4px', background: 'rgba(255,255,255,0.28)' }} />
+                <div className="d-none d-md-flex align-items-center gap-2 mt-2 drag-hint-animation" style={{ fontSize: '0.9rem', color: '#dc3545', fontWeight: 'bold', letterSpacing: '0.6px' }}>
+                  <BsArrowsMove size={16} />
+                  <span>TASIMAK ICIN SURUKLEYIN</span>
                 </div>
-              </Col>
-              <Col md={6}>
-                <div className="reading-box" ref={translatedChunksContainerRef}>
-                  {currentTranslatedChunks.map((chunk, idx) => (
-                    <p key={`t-${idx}-${chunk.slice(0, 24)}`} data-chunk-index={idx} className={`chunk-line ${idx === activeChunkIndex ? 'active' : ''}`}>{chunk}</p>
-                  ))}
+              </div>
+
+              {showReadingAssist && (
+                <div className="mb-3 p-2 rounded" style={{ background: isDarkMode ? 'rgba(13,18,34,0.92)' : 'rgba(13,110,253,0.06)', border: isDarkMode ? '1px solid rgba(138,180,255,0.32)' : '1px solid rgba(13,110,253,0.22)' }}>
+                  <div className="d-flex justify-content-between align-items-center mb-2 px-1">
+                    <small style={{ color: isDarkMode ? '#dbe9ff' : '#184b9b', fontWeight: 600 }}>Orijinal + Ceviri (Anlik)</small>
+                    <small style={{ color: '#8ab4ff' }}>{activeChunkIndex + 1}/{Math.max(currentOriginalChunks.length, currentTranslatedChunks.length)}</small>
+                  </div>
+                  <Row className="g-2">
+                    <Col md={6}>
+                      <div className="p-2 rounded" style={{ background: isDarkMode ? 'rgba(7,10,20,0.9)' : '#ffffff', border: isDarkMode ? '1px solid rgba(255,255,255,0.18)' : '1px solid rgba(0,0,0,0.15)', minHeight: '108px' }}>
+                        <small style={{ color: isDarkMode ? '#ffffff' : '#1e2a3b', display: 'block', marginBottom: '4px', fontWeight: '600' }}>Orijinal Metin</small>
+                        <div ref={originalChunksContainerRef} style={{ overflowY: 'auto', maxHeight: '140px' }}>
+                          {currentOriginalChunks.map((chunk, idx) => (
+                            <span
+                              key={`o-${idx}-${chunk.slice(0, 10)}`}
+                              data-original-chunk-index={idx}
+                              style={{
+                                display: 'inline',
+                                marginRight: '6px',
+                                padding: idx === originalActiveChunkIndex ? '2px 6px' : '1px 2px',
+                                borderRadius: '4px',
+                                background: idx === originalActiveChunkIndex ? 'rgba(255,193,7,0.5)' : 'transparent',
+                                color: idx === originalActiveChunkIndex ? '#111111' : (isDarkMode ? '#f5f8ff' : '#1e2a3b'),
+                                fontWeight: idx === originalActiveChunkIndex ? 700 : 500,
+                                lineHeight: 1.6
+                              }}
+                            >
+                              {chunk}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </Col>
+                    <Col md={6}>
+                      <div className="p-2 rounded" style={{ background: isDarkMode ? 'rgba(12,33,66,0.85)' : 'rgba(13,110,253,0.08)', border: isDarkMode ? '1px solid rgba(79,156,255,0.45)' : '1px solid rgba(13,110,253,0.3)', minHeight: '108px' }}>
+                        <small style={{ color: isDarkMode ? '#dce9ff' : '#0d4ea6', display: 'block', marginBottom: '4px', fontWeight: '600' }}>Ceviri Metni</small>
+                        <div ref={translatedChunksContainerRef} style={{ overflowY: 'auto', maxHeight: '140px' }}>
+                          {currentTranslatedChunks.map((chunk, idx) => (
+                            <span
+                              key={`t-${idx}-${chunk.slice(0, 10)}`}
+                              data-translated-chunk-index={idx}
+                              style={{
+                                display: 'inline',
+                                marginRight: '6px',
+                                padding: idx === activeChunkIndex ? '2px 6px' : '1px 2px',
+                                borderRadius: '4px',
+                                background: idx === activeChunkIndex ? 'rgba(0,123,255,0.45)' : 'transparent',
+                                color: idx === activeChunkIndex ? '#ffffff' : (isDarkMode ? '#e9f2ff' : '#12315f'),
+                                fontWeight: idx === activeChunkIndex ? 700 : 500,
+                                lineHeight: 1.6
+                              }}
+                            >
+                              {chunk}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
                 </div>
-              </Col>
-            </Row>
-          )}
+              )}
+
+              <Row className="align-items-center g-3">
+                <Col xs={12} md={3}>
+                  <div className="d-flex align-items-center gap-3">
+                    <div className="bg-primary rounded-circle d-flex align-items-center justify-content-center shadow-sm" style={{ width: '45px', height: '45px', animation: isReading && !isPaused ? 'pulse 2s infinite' : 'none' }}>
+                      <BsVolumeUp size={22} style={{ color: '#ffffff' }} />
+                    </div>
+                    <div className="overflow-hidden">
+                      <h6 className="mb-0 text-truncate" style={{ fontSize: '0.95rem', color: '#ffffff' }}>{t('scholarProfile.audioReading')}</h6>
+                      <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.65)' }}>{isPaused ? 'Duraklatildi' : (playerStatus === 'completed' ? 'Tamamlandi' : 'Okunuyor')}</span>
+                    </div>
+                  </div>
+                </Col>
+                <Col xs={12} md={4} className="d-flex flex-column align-items-center">
+                  <div className="d-flex align-items-center gap-3 player-control-cluster">
+                    <Button variant="link" className="player-icon-btn" onClick={() => skipTime(-8)}><BsSkipBackward size={20} /></Button>
+                    <Button variant="light" className="rounded-circle d-flex align-items-center justify-content-center shadow player-main-btn" onClick={togglePauseResume}>{isPaused ? <BsPlay size={28} /> : <BsPause size={28} />}</Button>
+                    <Button variant="link" className="player-icon-btn" onClick={() => skipTime(8)}><BsSkipForward size={20} /></Button>
+                  </div>
+                  <div className="w-100 px-3 mt-2">
+                    <input type="range" className="w-100 player-slider" min="0" max="100" step="0.1" value={getProgress()} onMouseDown={() => { setIsSliderSeeking(true); setPreviewProgress(getProgress()); }} onTouchStart={() => { setIsSliderSeeking(true); setPreviewProgress(getProgress()); }} onMouseUp={commitSliderSeek} onTouchEnd={commitSliderSeek} onChange={(e) => { const nextValue = parseFloat(e.target.value); if (isSliderSeeking) setPreviewProgress(nextValue); else seekTo(nextValue); }} />
+                    <div className="d-flex justify-content-between small opacity-75"><span>{formatTime(elapsedTime)}</span><span>{formatTime(totalQueueDuration)}</span></div>
+                  </div>
+                </Col>
+                <Col xs={12} md={5}>
+                  <div className="d-flex flex-column align-items-center align-items-md-end gap-2 px-2">
+                    <Dropdown drop="up" style={{ overflow: 'visible' }}>
+                      <DropdownToggle variant="outline-light" size="sm" className="rounded-pill px-3 player-pill-btn">{playbackRate}x</DropdownToggle>
+                      <DropdownMenu style={{ minWidth: '120px', backgroundColor: '#1c1f2e', border: '1px solid rgba(255,255,255,0.2)' }}>
+                        {[0.5, 0.75, 1.0, 1.25, 1.5, 2.0].map((rate) => (
+                          <button key={rate} onClick={() => changePlaybackRate(rate)} className="dropdown-item w-100 border-0 text-start" style={{ backgroundColor: playbackRate === rate ? '#0d6efd' : 'transparent', color: '#ffffff' }}>
+                            {rate === 1.0 ? 'Normal (1x)' : `${rate}x`}
+                          </button>
+                        ))}
+                      </DropdownMenu>
+                    </Dropdown>
+                    <div className="d-flex align-items-center gap-2">
+                      <Button variant="outline-light" size="sm" className="rounded-pill px-2 player-pill-btn" onClick={() => setShowReadingAssist((v) => !v)}>{showReadingAssist ? 'Vurguyu Gizle' : 'Vurguyu Goster'}</Button>
+                      <Button variant="outline-danger" size="sm" className="rounded-circle p-1 player-close-btn" onClick={() => { stopTextToSpeech(); setIsPlayerOpen(false); }} title="Kapat"><BsX size={18} /></Button>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
         </div>
       )}
 
-      <style>{`
-        .scholar-player { position: fixed; right: 20px; bottom: 20px; width: min(920px, calc(100vw - 24px)); max-height: 78vh; overflow: auto; z-index: 1080; border-radius: 22px; padding: 16px; background: linear-gradient(150deg, rgba(18,18,32,.95), rgba(8,8,20,.9)); border: 1px solid rgba(255,255,255,.16); color: #fff; box-shadow: 0 24px 70px rgba(0,0,0,.35); backdrop-filter: blur(10px); }
-        .player-slider { accent-color: #7c8cff; cursor: pointer; }
-        .player-page-chip { font-size: .7rem; border-radius: 999px; padding: 3px 10px; background: rgba(124,140,255,.22); border: 1px solid rgba(124,140,255,.45); text-transform: uppercase; }
-        .player-icon-btn, .player-main-btn, .player-pill-btn, .player-close-btn { border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.06); color: #fff; border-radius: 999px; }
-        .player-icon-btn { width: 40px; height: 40px; }
-        .player-main-btn { width: 56px; height: 56px; background: linear-gradient(135deg, #7c8cff, #5e72ff); border: none; box-shadow: 0 10px 24px rgba(92,112,255,.45); }
-        .player-pill-btn { padding: 6px 14px; }
-        .player-close-btn { width: 36px; height: 36px; }
-        .reading-box { max-height: 220px; overflow: auto; border-radius: 14px; padding: 10px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); }
-        .chunk-line { margin: 0 0 8px; padding: 6px 8px; border-radius: 8px; opacity: .85; }
-        .chunk-line.active { background: rgba(124,140,255,.22); outline: 1px solid rgba(124,140,255,.45); opacity: 1; }
+      <style jsx global>{`
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); } }
+        @keyframes dragBlink { 0% { opacity: 0.5; transform: scale(0.98); } 100% { opacity: 1; transform: scale(1.02); } }
+        .drag-hint-animation { animation: dragBlink 1s ease-in-out infinite alternate; }
+        .player-slider { accent-color: #007bff; cursor: pointer; }
+        .player-control-cluster { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; padding: 8px 12px; }
+        .player-icon-btn { width: 38px; height: 38px; border-radius: 50% !important; color: rgba(255,255,255,0.95) !important; border: 1px solid rgba(255,255,255,0.16) !important; background: rgba(255,255,255,0.07) !important; }
+        .player-main-btn { width: 56px !important; height: 56px !important; background: linear-gradient(135deg, #ffffff 0%, #e9f0ff 100%) !important; color: #111b36 !important; }
+        .player-pill-btn { border-radius: 999px; font-weight: 500; }
+        .player-close-btn { width: 36px; height: 36px; border: 1px solid rgba(255,77,77,0.7) !important; color: #ff5e5e !important; background: rgba(255,77,77,0.08) !important; }
       `}</style>
     </Container>
   );
