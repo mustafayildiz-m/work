@@ -21,6 +21,7 @@ const frameSrcOrigins = new Set([
   'https://www.youtube.com',
   'https://youtube.com',
   'https://www.youtube-nocookie.com',
+  'https://youtube-nocookie.com',
   'https://player.vimeo.com',
   'https://www.google.com',
 ]);
