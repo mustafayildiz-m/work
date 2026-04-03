@@ -45,7 +45,20 @@ const FeedLayout = ({
 
             <nav className="navbar navbar-expand-lg mx-0">
               {/* Desktop View */}
-              <div className="d-none d-lg-block px-2 px-lg-0 w-100">
+              <div 
+                className="d-none d-lg-block px-2 px-lg-0 w-100 sticky-left-panel"
+                style={{ 
+                  position: 'sticky', 
+                  top: '80px', 
+                  maxHeight: 'calc(100vh - 100px)', 
+                  overflowY: 'auto',
+                  msOverflowStyle: 'none', 
+                  scrollbarWidth: 'none' 
+                }}
+              >
+                <style dangerouslySetInnerHTML={{__html: `
+                  .sticky-left-panel::-webkit-scrollbar { display: none; }
+                `}} />
                 <ProfilePanel links={profilePanelLinksData1} />
               </div>
 

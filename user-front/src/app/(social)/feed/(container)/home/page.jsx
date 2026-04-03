@@ -46,13 +46,26 @@ const Home = () => {
     </Col>
 
     <Col lg={3} className="d-none d-lg-block">
-      <Row className="g-4">
-        <Col sm={6} lg={12}>
-          <Followers />
-        </Col>
-
-
-      </Row>
+      <div 
+        className="sticky-right-panel"
+        style={{ 
+          position: 'sticky', 
+          top: '80px', 
+          maxHeight: 'calc(100vh - 100px)', 
+          overflowY: 'auto',
+          msOverflowStyle: 'none', 
+          scrollbarWidth: 'none' 
+        }}
+      >
+        <style dangerouslySetInnerHTML={{__html: `
+          .sticky-right-panel::-webkit-scrollbar { display: none; }
+        `}} />
+        <Row className="g-4">
+          <Col sm={6} lg={12}>
+            <Followers />
+          </Col>
+        </Row>
+      </div>
     </Col>
   </>;
 };
