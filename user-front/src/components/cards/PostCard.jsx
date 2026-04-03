@@ -606,7 +606,7 @@ const PostCard = ({
   const [commentToDelete, setCommentToDelete] = useState(null);
 
   return <>
-    <Card style={{
+    <Card id={`post-${postId}`} style={{
       borderRadius: isSharedPost ? '0 0 12px 12px' : '12px',
       overflow: 'hidden'
     }}>
@@ -792,6 +792,7 @@ const PostCard = ({
           caption: caption || '',
           image: image || (photos?.[0]) || null,
           isUserPost: isUserPost,
+          authorId: socialUser?.id,
           authorName: isUserPost ? socialUser?.name : socialUser?.fullName,
           authorAvatar: isUserPost ? socialUser?.avatar : socialUser?.photoUrl
         }}
