@@ -28,8 +28,14 @@ const Followers = () => {
   const fetchScholars = async () => {
     try {
       setLoading(true);
-      const data = await getWhoToFollow('scholars', 15);
-      setWhoToFollowData(data);
+      const data = await getWhoToFollow('scholars', 50);
+      if (data && data.length > 0) {
+        // Shuffle the array and pick 15 random scholars
+        const shuffled = [...data].sort(() => 0.5 - Math.random());
+        setWhoToFollowData(shuffled.slice(0, 15));
+      } else {
+        setWhoToFollowData([]);
+      }
     } catch (error) {
       console.error('Error fetching who to follow data:', error);
     } finally {
