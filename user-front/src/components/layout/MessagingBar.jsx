@@ -1006,6 +1006,7 @@ const MessagingBar = () => {
                                                                                 post.postType === 'article' ? `/feed/articles/${post.id}` :
                                                                                 post.postType === 'podcast' ? `/feed/podcasts/${post.id}` :
                                                                                 post.postType === 'newsletter' ? `/feed/newsletters/${post.id}` :
+                                                                                post.authorId ? `${(getProfilePath(post.isUserPost ? 'user' : 'scholar', post.authorId, 'feed') || '')}#post-${post.id}` :
                                                                                 post.isUserPost ? `/feed/post/${post.id}?type=2` : `/feed/post/${post.id}?type=1`
                                                                             } className="btn btn-sm btn-primary w-100 rounded-pill" style={{fontSize: '12px'}}>
                                                                                 Gönderiyi Gör

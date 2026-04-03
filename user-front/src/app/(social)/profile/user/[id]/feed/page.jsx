@@ -166,11 +166,32 @@ const UserFeedPage = () => {
   useEffect(() => {
     if (posts && posts.length > 0) {
       posts.forEach(post => {
-        // Sadece bu kullanıcının post'ları için comment yükleme (user endpoint, timeline değil, sadece kendi post'ları, başka kullanıcıların post'ları yok, sadece kendi gönderileri, resim ve video dahil, sadece kendi paylaştığı içerikler)
         loadComments(post.id);
       });
     }
   }, [posts]);
+
+  // Scroll to anchor post after page loads (e.g. from message "Gönderiyi Gör" link)
+  useEffect(() => {
+    if (!loading && posts.length > 0 && typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith('#post-')) {
+        const postId = hash.replace('#post-', '');
+        const scrollToPost = () => {
+          const el = document.getElementById(`post-${postId}`);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el.style.transition = 'box-shadow 0.4s ease';
+            el.style.boxShadow = '0 0 0 3px rgba(67,160,71,0.5)';
+            setTimeout(() => { el.style.boxShadow = ''; }, 2000);
+          }
+        };
+        // Small delay to ensure DOM is rendered
+        setTimeout(scrollToPost, 400);
+      }
+    }
+  }, [loading, posts]);
+
 
   // Helper function to get proper image URL
   const getImageUrl = (photoUrl) => {
