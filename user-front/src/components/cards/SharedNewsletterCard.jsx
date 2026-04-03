@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { Card, CardBody, Button, Spinner, Alert, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'react-bootstrap';
-import { BsNewspaper, BsTrash, BsThreeDots, BsCalendar, BsSend } from 'react-icons/bs';
+import { BsNewspaper, BsEnvelope, BsTrash, BsThreeDots, BsCalendar, BsSend } from 'react-icons/bs';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import CustomConfirmDialog from '@/components/CustomConfirmDialog';
+import ShareViaMessageModal from '../modals/ShareViaMessageModal';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getProfilePath } from '@/utils/profileEncoder';
@@ -27,6 +28,7 @@ const SharedNewsletterCard = ({ post, onDeletePost, comments = [], onLoadComment
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showShareMessageModal, setShowShareMessageModal] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [currentUserProfile, setCurrentUserProfile] = useState(null);
   const [showAllComments, setShowAllComments] = useState(false);
@@ -236,6 +238,24 @@ const SharedNewsletterCard = ({ post, onDeletePost, comments = [], onLoadComment
                 {t('post.userRole')} • {post.timeAgo || new Date(post.created_at).toLocaleDateString()}
               </small>
             </div>
+                        <div className="d-flex align-items-center gap-1 me-2">
+              <button 
+                className="btn btn-sm rounded-circle d-flex align-items-center justify-content-center p-0"
+                style={{ width: '32px', height: '32px', transition: 'all 0.2s', border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'}`, backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'transparent' }}
+                title="Mesaj Olarak Gönder"
+                onClick={() => setShowShareMessageModal(true)}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--bs-primary)';
+                  e.currentTarget.querySelector('svg').style.color = 'white';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = isDarkMode ? 'transparent' : 'var(--bs-light)';
+                  e.currentTarget.querySelector('svg').style.color = 'var(--bs-primary)';
+                }}
+              >
+                <BsEnvelope size={15} className="text-primary" style={{ transition: 'color 0.2s' }} />
+              </button>
+            </div>
             <Dropdown>
               <DropdownToggle variant="link" size="sm" className="text-muted p-1 text-decoration-none dropdown-toggle-no-caret">
                 <BsThreeDots size={20} />
@@ -262,11 +282,9 @@ const SharedNewsletterCard = ({ post, onDeletePost, comments = [], onLoadComment
           </div>
 
           {/* Gazete Kartı */}
-          <div
-            className="border-0 rounded-3 p-2 p-sm-3 p-md-4 mb-2 mb-sm-3"
-            style={{
-              background: isDarkMode ? 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)' : 'linear-gradient(135deg, #f5f7fa 0%, #e2e8f0 100%)',
-              maxWidth: '100%',
+          <div className="border-0 rounded-3 p-4 mb-3" style={{
+            background: theme === 'green' ? 'rgba(0, 0, 0, 0.15)' : (isDarkMode ? 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)' : 'linear-gradient(135deg, #f5f7fa 0%, #e2e8f0 100%)'),
+            maxWidth: '100%',
               overflow: 'hidden'
             }}
           >
@@ -518,6 +536,20 @@ const SharedNewsletterCard = ({ post, onDeletePost, comments = [], onLoadComment
         confirmText={t('post.deleteConfirm')}
         cancelText={t('post.deleteCancel')}
         type="danger"
+      />
+
+            <ShareViaMessageModal 
+        show={showShareMessageModal} 
+        onHide={() => setShowShareMessageModal(false)}
+        postDataPayload={{
+          id: post.id || post.shared_article_id || post.shared_story_id || post.shared_podcast_id || post.shared_newsletter_id,
+          title: post.title || post.user_name || 'Paylaşım',
+          caption: post.caption || post.description || '',
+          image: post.user_photo_url,
+          isUserPost: true,
+          authorName: post.user_name,
+          authorAvatar: post.user_photo_url
+        }}
       />
 
       <CustomConfirmDialog

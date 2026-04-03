@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { Card, CardBody, Button, Spinner, Alert, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'react-bootstrap';
-import { BsFileText, BsDownload, BsTrash, BsThreeDots, BsCalendar, BsPerson, BsBook } from 'react-icons/bs';
+import { BsFileText, BsDownload, BsEnvelope, BsTrash, BsThreeDots, BsCalendar, BsPerson, BsBook } from 'react-icons/bs';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import CustomConfirmDialog from '@/components/CustomConfirmDialog';
+import ShareViaMessageModal from '../modals/ShareViaMessageModal';
 import { useLanguages } from '@/hooks/useLanguages';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -23,6 +24,7 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showShareMessageModal, setShowShareMessageModal] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
 
   // Helper function to get proper image URL
@@ -258,8 +260,26 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
                 {t('post.userRole') || 'Kullanıcı'} • {post.timeAgo || new Date(post.created_at).toLocaleDateString()}
               </small>
             </div>
+            <div className="d-flex align-items-center gap-1 me-2">
+              <button 
+                className="btn btn-sm rounded-circle d-flex align-items-center justify-content-center p-0"
+                style={{ width: '32px', height: '32px', transition: 'all 0.2s', border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'}`, backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'transparent' }}
+                title="Mesaj Olarak Gönder"
+                onClick={() => setShowShareMessageModal(true)}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--bs-primary)';
+                  e.currentTarget.querySelector('svg').style.color = 'white';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = isDarkMode ? 'transparent' : 'var(--bs-light)';
+                  e.currentTarget.querySelector('svg').style.color = 'var(--bs-primary)';
+                }}
+              >
+                <BsEnvelope size={15} className="text-primary" style={{ transition: 'color 0.2s' }} />
+              </button>
+            </div>
             <Dropdown>
-              <DropdownToggle variant="link" size="sm" className="text-muted p-1 text-decoration-none">
+              <DropdownToggle variant="link" size="sm" className="text-muted p-1 text-decoration-none dropdown-toggle-no-caret">
                 <BsThreeDots size={20} />
               </DropdownToggle>
               <DropdownMenu align="end" className="border-0 shadow">
@@ -284,7 +304,7 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
           </div>
 
           {/* Makale Kartı */}
-          <div className="border-0 rounded-3 p-4 mb-3" style={{ background: isDarkMode ? 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)' : 'linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%)', maxWidth: '100%', overflow: 'hidden' }}>
+          <div className="border-0 rounded-3 p-4 mb-3" style={{ background: theme === 'green' ? 'rgba(0, 0, 0, 0.15)' : (isDarkMode ? 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)' : 'linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%)'), maxWidth: '100%', overflow: 'hidden' }}>
             <div className="d-flex gap-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
               {/* Makale Kapağı */}
               {articleData.coverImage && (
@@ -416,7 +436,7 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
                       size="sm"
                       className="rounded-pill px-4 shadow-sm"
                       style={{
-                        background: isDarkMode ? 'linear-gradient(135deg, #0d9488 0%, #0f766e 100%)' : 'linear-gradient(135deg, #00acc1 0%, #00838f 100%)',
+                        background: theme === 'green' ? 'rgba(0, 0, 0, 0.2)' : (isDarkMode ? 'linear-gradient(135deg, #0d9488 0%, #0f766e 100%)' : 'linear-gradient(135deg, #00acc1 0%, #00838f 100%)'),
                         border: 'none',
                         color: 'white',
                         transition: 'transform 0.2s ease'

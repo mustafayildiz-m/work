@@ -21,6 +21,8 @@ import { useAuthContext } from '@/context/useAuthContext';
 import { encodePostId } from '@/utils/encoding';
 import { getProfilePath } from '@/utils/profileEncoder';
 import GuestMessagingModal from '@/components/layout/GuestMessagingModal';
+import ShareViaMessageModal from '../modals/ShareViaMessageModal';
+import { useLayoutContext } from '@/context/useLayoutContext';
 
 const ActionMenu = ({
   name,
@@ -212,6 +214,8 @@ const PostCard = ({
   const { t, locale } = useLanguage();
   const { showNotification } = useNotificationContext();
   const { userInfo } = useAuthContext();
+  const { theme } = useLayoutContext();
+  const isDarkMode = theme === 'dark' || theme === 'green';
   const [currentUserProfile, setCurrentUserProfile] = useState(null);
 
   // Aktif dili belirle - translations'dan caption'ı bul
@@ -222,6 +226,7 @@ const PostCard = ({
 
   const [showAllComments, setShowAllComments] = useState(false);
   const [showGuestModal, setShowGuestModal] = useState(false);
+  const [showShareMessageModal, setShowShareMessageModal] = useState(false);
 
   const handleGuestInteraction = (e) => {
     if (!userInfo?.id) {
@@ -613,32 +618,53 @@ const PostCard = ({
           borderTopLeftRadius: '12px',
           borderTopRightRadius: '12px'
         }}>
-          <div className="d-flex align-items-center">
-            <div className="me-3" style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #007bff 0%, #0056b3 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 2px 8px rgba(0, 123, 255, 0.3)'
-            }}>
-              <BsShare className="text-white" style={{ fontSize: '14px' }} />
+          <div className="d-flex align-items-center justify-content-between">
+            <div className="d-flex align-items-center">
+              <div className="me-3" style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #007bff 0%, #0056b3 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 2px 8px rgba(0, 123, 255, 0.3)'
+              }}>
+                <BsShare className="text-white" style={{ fontSize: '14px' }} />
+              </div>
+              <div>
+                <div className="d-flex align-items-center">
+                  <span className="fw-bold" style={{ fontSize: '14px', color: 'var(--bs-heading-color)' }}>
+                    {originalUser.firstName} {originalUser.lastName}
+                  </span>
+                  <span className="text-muted ms-2" style={{ fontSize: '13px' }}>
+                    {t('post.sharedBy')}
+                  </span>
+                </div>
+                <div className="text-muted small" style={{ fontSize: '12px', marginTop: '2px' }}>
+                  <i className="fas fa-clock me-1"></i>
+                  {createdAt ? getTimeSince(new Date(createdAt), t, locale) : t('time.justNow')}
+                </div>
+              </div>
             </div>
-            <div>
-              <div className="d-flex align-items-center">
-                <span className="fw-bold" style={{ fontSize: '14px', color: 'var(--bs-heading-color)' }}>
-                  {originalUser.firstName} {originalUser.lastName}
-                </span>
-                <span className="text-muted ms-2" style={{ fontSize: '13px' }}>
-                  {t('post.sharedBy')}
-                </span>
-              </div>
-              <div className="text-muted small" style={{ fontSize: '12px', marginTop: '2px' }}>
-                <i className="fas fa-clock me-1"></i>
-                {createdAt ? getTimeSince(new Date(createdAt), t, locale) : t('time.justNow')}
-              </div>
+            
+            <div className="d-flex align-items-center gap-2">
+              <button 
+                className="btn btn-sm rounded-circle d-flex align-items-center justify-content-center p-0" 
+                style={{ width: '32px', height: '32px', transition: 'all 0.2s', border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'}`, backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'transparent' }}
+                title="Mesaj Olarak Gönder"
+                onClick={() => setShowShareMessageModal(true)}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--bs-primary)';
+                  e.currentTarget.querySelector('svg').style.color = 'white';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = isDarkMode ? 'rgba(255,255,255,0.05)' : 'transparent';
+                  e.currentTarget.querySelector('svg').style.color = 'var(--bs-primary)';
+                }}
+              >
+                <BsEnvelope size={15} className="text-primary" style={{ transition: 'color 0.2s' }} />
+              </button>
             </div>
           </div>
         </div>
@@ -717,6 +743,22 @@ const PostCard = ({
             </div>
           </div>
           <div className="d-flex align-items-center gap-2">
+            <button 
+              className="btn btn-sm rounded-circle d-flex align-items-center justify-content-center p-0" 
+              style={{ width: '32px', height: '32px', transition: 'all 0.2s', border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'}`, backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'transparent' }}
+              title="Mesaj Olarak Gönder"
+              onClick={() => setShowShareMessageModal(true)}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'var(--bs-primary)';
+                e.currentTarget.querySelector('svg').style.color = 'white';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = isDarkMode ? 'transparent' : 'var(--bs-light)';
+                e.currentTarget.querySelector('svg').style.color = 'var(--bs-primary)';
+              }}
+            >
+              <BsEnvelope size={15} className="text-primary" style={{ transition: 'color 0.2s' }} />
+            </button>
             {!isSharedPost && (
               <ActionMenu
                 name={isUserPost ? socialUser?.name : socialUser?.fullName}
@@ -739,6 +781,20 @@ const PostCard = ({
           </div>
         </div>
       </CardHeader>
+
+      <ShareViaMessageModal 
+        show={showShareMessageModal} 
+        onHide={() => setShowShareMessageModal(false)}
+        post={{
+          postId,
+          title,
+          caption,
+          image,
+          video,
+          isUserPost,
+          socialUser
+        }}
+      />
 
       <CardBody>
         {title && (
