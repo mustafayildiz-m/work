@@ -273,7 +273,15 @@ const ConversationList = () => {
                   }}
                 >
                   <div className="fw-semibold small">{result.senderName || t('messaging.unknownUser')}</div>
-                  <div className="text-muted small text-truncate">{result.content}</div>
+                  <div className="text-muted small text-truncate">
+                    {(() => {
+                      try {
+                        const parsed = JSON.parse(result.content);
+                        if (parsed && parsed.type === 'post_share') return '📷 [Gönderi Paylaşıldı]';
+                      } catch(e) {}
+                      return result.content;
+                    })()}
+                  </div>
                   <div className="text-muted" style={{ fontSize: '12px' }}>
                     {result.timestamp ? timeSince(new Date(result.timestamp)) : ''}
                   </div>
@@ -385,7 +393,16 @@ const ConversationList = () => {
                       <div className="d-flex justify-content-between align-items-center">
                         <p className={`mb-0 small text-truncate me-2 ${hasUnread ? 'text-body-emphasis fw-medium' : 'text-muted'
                           }`}>
-                          {conversation.lastMessage || t('messaging.noMessage')}
+                          {(() => {
+                            if (!conversation.lastMessage) return t('messaging.noMessage');
+                            try {
+                              const parsed = JSON.parse(conversation.lastMessage);
+                              if (parsed && parsed.type === 'post_share') {
+                                return '📷 [Gönderi Paylaşıldı]';
+                              }
+                            } catch(e) {}
+                            return conversation.lastMessage;
+                          })()}
                         </p>
                         {hasUnread && (
                           <span className="badge bg-danger rounded-pill">

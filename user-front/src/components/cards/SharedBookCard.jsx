@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Card, CardBody, Button, Spinner, Alert, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'react-bootstrap';
-import { BsBook, BsDownload, BsTrash, BsThreeDots, BsCalendar, BsPerson } from 'react-icons/bs';
+import { BsBook, BsDownload, BsTrash, BsThreeDots, BsCalendar, BsPerson, BsEnvelope } from 'react-icons/bs';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { useNotificationContext } from '@/context/useNotificationContext';
@@ -12,6 +12,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getProfilePath } from '@/utils/profileEncoder';
 import avatar7 from '@/assets/images/avatar/07.jpg';
+import ShareViaMessageModal from '../modals/ShareViaMessageModal';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -25,6 +26,7 @@ const SharedBookCard = ({ post, onDeletePost }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showShareMessageModal, setShowShareMessageModal] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
 
   // Helper function to get proper image URL
@@ -301,8 +303,26 @@ const SharedBookCard = ({ post, onDeletePost }) => {
                 {t('post.userRole')} • {post.timeAgo || new Date(post.created_at).toLocaleDateString()}
               </small>
             </div>
+            <div className="d-flex align-items-center gap-1 me-2">
+              <button 
+                className="btn btn-sm rounded-circle d-flex align-items-center justify-content-center p-0"
+                style={{ width: '32px', height: '32px', transition: 'all 0.2s', border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'}`, backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'transparent' }}
+                title="Mesaj Olarak Gönder"
+                onClick={() => setShowShareMessageModal(true)}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--bs-primary)';
+                  e.currentTarget.querySelector('svg').style.color = 'white';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = isDarkMode ? 'transparent' : 'var(--bs-light)';
+                  e.currentTarget.querySelector('svg').style.color = 'var(--bs-primary)';
+                }}
+              >
+                <BsEnvelope size={15} className="text-primary" style={{ transition: 'color 0.2s' }} />
+              </button>
+            </div>
             <Dropdown>
-              <DropdownToggle variant="link" size="sm" className="text-muted p-1 text-decoration-none">
+              <DropdownToggle variant="link" size="sm" className="text-muted p-1 text-decoration-none dropdown-toggle-no-caret">
                 <BsThreeDots size={20} />
               </DropdownToggle>
               <DropdownMenu align="end" className="border-0 shadow">
@@ -327,12 +347,13 @@ const SharedBookCard = ({ post, onDeletePost }) => {
           </div>
 
           {/* Kitap Kartı */}
-          <div className="border-0 rounded-3 p-4 mb-3" style={{
-            background: isDarkMode ? 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)' : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-            maxWidth: '100%',
-            overflow: 'hidden'
-          }}>
-            <div className="d-flex gap-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
+            <div 
+              className="border-0 rounded-3 p-3 p-md-4 mb-3" 
+              style={{ 
+                background: theme === 'green' ? 'rgba(0, 0, 0, 0.15)' : (isDarkMode ? 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)' : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'),
+                boxShadow: isDarkMode ? 'inset 0 1px 0 rgba(255,255,255,0.05)' : 'inset 0 1px 0 rgba(255,255,255,1), 0 4px 6px rgba(0,0,0,0.02)'
+              }}
+            ><div className="d-flex gap-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
               {/* Kitap Kapağı - Improved z-index and positioning */}
               <div style={{ position: 'relative', zIndex: 10, flexShrink: 0 }}>
                 <div className="position-relative">
@@ -472,6 +493,20 @@ const SharedBookCard = ({ post, onDeletePost }) => {
           </div>
         </CardBody>
       </Card>
+
+      <ShareViaMessageModal 
+        show={showShareMessageModal} 
+        onHide={() => setShowShareMessageModal(false)}
+        postDataPayload={{
+          id: post.shared_book_id || post.id,
+          title: bookData?.title,
+          caption: bookData?.description,
+          image: getBookImage(),
+          isUserPost: true,
+          authorName: bookData?.author || post.user_name,
+          authorAvatar: post.user_photo_url
+        }}
+      />
 
       <CustomConfirmDialog
         show={showDeleteDialog}
