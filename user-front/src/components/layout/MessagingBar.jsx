@@ -750,7 +750,16 @@ const MessagingBar = () => {
                                             </span>
                                         </div>
                                         <div className="text-truncate" style={{ fontSize: '0.85rem', lineHeight: '1.4', color: (conv.unreadCount || 0) > 0 ? colors.textMain : colors.textMuted, fontWeight: (conv.unreadCount || 0) > 0 ? '700' : '400' }}>
-                                            {conv.lastMessage || getLocalized('messaging.noMessage', 'Mesaj bulunmuyor', 'No messages yet')}
+                                            {(() => {
+                                                if (!conv.lastMessage) return getLocalized('messaging.noMessage', 'Mesaj bulunmuyor', 'No messages yet');
+                                                try {
+                                                    const parsed = JSON.parse(conv.lastMessage);
+                                                    if (parsed && parsed.type === 'post_share') {
+                                                        return '📷 [Gönderi Paylaşıldı]';
+                                                    }
+                                                } catch(e) {}
+                                                return conv.lastMessage;
+                                            })()}
                                         </div>
                                     </div>
                                 </div>
@@ -944,27 +953,92 @@ const MessagingBar = () => {
                                                             </span>
                                                             <span className="text-muted flex-shrink-0" style={{ fontSize: '0.7rem' }}>• {msg.time}</span>
                                                         </div>
-                                                        <div
-                                                            style={{
-                                                                color: msg.isMe && isGreen ? '#fff' : colors.textMain,
-                                                                fontSize: '0.9rem',
-                                                                whiteSpace: 'pre-wrap',
-                                                                wordBreak: 'break-word',
-                                                                ...(msg.isMe && isGreen
-                                                                    ? { background: 'linear-gradient(135deg, #2e7d32 0%, #43a047 100%)' }
-                                                                    : {
-                                                                        backgroundColor: msg.isMe
-                                                                            ? (isDark ? '#057642' : '#e7f3ed')
-                                                                            : (isGreen ? 'rgba(45, 90, 45, 0.6)' : (isDark ? '#38434f' : '#f3f6f8'))
-                                                                      }),
-                                                                padding: '8px 12px',
-                                                                borderRadius: '12px',
-                                                                borderTopRightRadius: msg.isMe ? '2px' : '12px',
-                                                                borderTopLeftRadius: msg.isMe ? '12px' : '2px'
-                                                            }}
-                                                        >
-                                                            {msg.text}
-                                                        </div>
+                                                        {(() => {
+                                                            let parsedData = null;
+                                                            if (msg.text && typeof msg.text === 'string' && msg.text.includes('"type":"post_share"')) {
+                                                                try {
+                                                                    parsedData = JSON.parse(msg.text);
+                                                                } catch (e) {}
+                                                            }
+                                                            
+                                                            if (parsedData && parsedData.type === 'post_share') {
+                                                                const post = parsedData.postData;
+                                                                
+                                                                // Helper: extract YouTube video ID
+                                                                const getYouTubeId = (url) => {
+                                                                    if (!url) return null;
+                                                                    const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                                                                    return m ? m[1] : null;
+                                                                };
+                                                                const youtubeId = getYouTubeId(post.video_url);
+                                                                
+                                                                return (
+                                                                    <div style={{ maxWidth: '300px', borderRadius: '12px', overflow: 'hidden', border: `1px solid ${isDark || isGreen ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.1)'}`, backgroundColor: isDark ? '#1e2a32' : isGreen ? '#1a3a1e' : '#fff' }}>
+                                                                        {/* Author row */}
+                                                                        <div className="d-flex align-items-center px-2 py-2" style={{ borderBottom: `1px solid ${isDark || isGreen ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}` }}>
+                                                                            <img src={getDisplayAvatar(post.authorAvatar)} alt="author" className="rounded-circle me-2 flex-shrink-0" style={{width: 24, height: 24, objectFit: 'cover'}} />
+                                                                            <small className="fw-bold text-truncate" style={{ color: isDark || isGreen ? '#e0f0e0' : '#212529' }}>{post.authorName || 'Kullanıcı'}</small>
+                                                                        </div>
+                                                                        
+                                                                        {/* YouTube embed or image */}
+                                                                        {youtubeId ? (
+                                                                            <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
+                                                                                <iframe
+                                                                                    src={`https://www.youtube.com/embed/${youtubeId}`}
+                                                                                    title={post.title || 'Video'}
+                                                                                    frameBorder="0"
+                                                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                                    allowFullScreen
+                                                                                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                                                                                />
+                                                                            </div>
+                                                                        ) : post.image ? (
+                                                                            <img src={getDisplayAvatar(post.image)} alt="post" className="w-100" style={{maxHeight:'160px', objectFit:'cover', display:'block'}} />
+                                                                        ) : null}
+                                                                        
+                                                                        {/* Info */}
+                                                                        <div className="px-2 py-2">
+                                                                            {post.title && <h6 className="fw-bold text-truncate mb-1" style={{ fontSize: '13px', color: isDark || isGreen ? '#e0f0e0' : '#212529' }}>{post.title}</h6>}
+                                                                            {post.caption && <p className="mb-2" style={{fontSize: '11px', color: isDark || isGreen ? '#9bc99b' : '#666', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'}}>{post.caption.replace(/<[^>]+>/g, '')}</p>}
+                                                                            <Link href={
+                                                                                post.postType === 'story' ? `/blogs/story/${post.id}` :
+                                                                                post.postType === 'book' ? `/books/${post.id}` :
+                                                                                post.postType === 'article' ? `/feed/articles/${post.id}` :
+                                                                                post.postType === 'podcast' ? `/feed/podcasts/${post.id}` :
+                                                                                post.postType === 'newsletter' ? `/feed/newsletters/${post.id}` :
+                                                                                post.isUserPost ? `/post/${post.id}?type=2` : `/post/${post.id}?type=1`
+                                                                            } className="btn btn-sm btn-primary w-100 rounded-pill" style={{fontSize: '12px'}}>
+                                                                                Gönderiyi Gör
+                                                                            </Link>
+                                                                        </div>
+                                                                    </div>
+                                                                );
+                                                            }
+                                                            
+                                                            return (
+                                                                <div
+                                                                    style={{
+                                                                        color: msg.isMe && isGreen ? '#fff' : colors.textMain,
+                                                                        fontSize: '0.9rem',
+                                                                        whiteSpace: 'pre-wrap',
+                                                                        wordBreak: 'break-word',
+                                                                        ...(msg.isMe && isGreen
+                                                                            ? { background: 'linear-gradient(135deg, #2e7d32 0%, #43a047 100%)' }
+                                                                            : {
+                                                                                backgroundColor: msg.isMe
+                                                                                    ? (isDark ? '#057642' : '#e7f3ed')
+                                                                                    : (isGreen ? 'rgba(45, 90, 45, 0.6)' : (isDark ? '#38434f' : '#f3f6f8'))
+                                                                              }),
+                                                                        padding: '8px 12px',
+                                                                        borderRadius: '12px',
+                                                                        borderTopRightRadius: msg.isMe ? '2px' : '12px',
+                                                                        borderTopLeftRadius: msg.isMe ? '12px' : '2px'
+                                                                    }}
+                                                                >
+                                                                    {msg.text}
+                                                                </div>
+                                                            );
+                                                        })()}
                                                     </div>
                                                 </div>
                                             ))}

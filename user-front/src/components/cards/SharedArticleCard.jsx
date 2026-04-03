@@ -480,6 +480,21 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
         onConfirm={handleDeleteConfirm}
         variant="danger"
       />
+
+      <ShareViaMessageModal
+        show={showShareMessageModal}
+        onHide={() => setShowShareMessageModal(false)}
+        postDataPayload={{
+          id: post.shared_article_id,
+          postType: 'article',
+          title: articleTitle || 'Makale',
+          caption: articleData?.summary || articleData?.description || '',
+          image: getArticleImage(),
+          isUserPost: false,
+          authorName: articleData?.author || post.user_name,
+          authorAvatar: post.user_photo_url
+        }}
+      />
     </>
   );
 };

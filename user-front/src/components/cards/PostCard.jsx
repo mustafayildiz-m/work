@@ -785,14 +785,15 @@ const PostCard = ({
       <ShareViaMessageModal 
         show={showShareMessageModal} 
         onHide={() => setShowShareMessageModal(false)}
-        post={{
-          postId,
-          title,
-          caption,
-          image,
-          video,
-          isUserPost,
-          socialUser
+        postDataPayload={{
+          id: postId,
+          postType: 'post',
+          title: title || '',
+          caption: caption || '',
+          image: image || (photos?.[0]) || null,
+          isUserPost: isUserPost,
+          authorName: isUserPost ? socialUser?.name : socialUser?.fullName,
+          authorAvatar: isUserPost ? socialUser?.avatar : socialUser?.photoUrl
         }}
       />
 
