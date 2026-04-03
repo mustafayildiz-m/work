@@ -283,8 +283,8 @@ const SharedStoryCard = ({ post, onDeletePost, comments = [], onLoadComments, on
                 {storyData.video_url.includes('youtube.com') || storyData.video_url.includes('youtu.be') ? (
                   <iframe
                     src={storyData.video_url.includes('youtube.com')
-                      ? storyData.video_url.replace('watch?v=', 'embed/')
-                      : `https://www.youtube.com/embed/${storyData.video_url.split('/').pop().split('?')[0]}`
+                      ? storyData.video_url.replace('watch?v=', 'embed/').replace('youtube.com', 'youtube-nocookie.com')
+                      : `https://www.youtube-nocookie.com/embed/${storyData.video_url.split('/').pop().split('?')[0]}`
                     }
                     title={storyData.title}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

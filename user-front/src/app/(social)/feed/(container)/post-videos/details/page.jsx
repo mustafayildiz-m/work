@@ -14,7 +14,7 @@ const PostVideoDetails = async () => {
   return <Col md={8} lg={9} className="vstack gap-4">
       <Card>
         <CardBody>
-          <iframe className="rounded w-100" height={450} src="https://www.youtube.com/embed/n_Cn8eFo7u8" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+          <iframe className="rounded w-100" height={450} src="https://www.youtube-nocookie.com/embed/n_Cn8eFo7u8" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
           <div className="d-flex my-3">
             <div>
               <h1 className="h4"> What&apos;s it like to work at Google? </h1>

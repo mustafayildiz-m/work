@@ -179,7 +179,7 @@ export const trendingVideos = [{
   userId: '102',
   title: 'İhyâ-u Ulûmiddîn Nedir? – Kalpleri Dirilten Eser',
   isVerified: true,
-  iframe: 'https://www.youtube.com/embed/3zwRL6g1-G8',
+  iframe: 'https://www.youtube-nocookie.com/embed/3zwRL6g1-G8',
   views: '458.4K'
 }, {
   id: '503',
@@ -220,14 +220,14 @@ export const trendingVideos = [{
   id: '508',
   userId: '108',
   title: 'Gazâlî’nin Eğitim Anlayışı: İlmin Amelle Buluşması',
-  iframe: 'https://www.youtube.com/embed/9XzO1gnCvOM',
+  iframe: 'https://www.youtube-nocookie.com/embed/9XzO1gnCvOM',
   time: '10:20',
   views: '235.8K'
 }, {
   id: '509',
   userId: '109',
   title: 'Gazâlî ve Modern Zihin: Zamanlar Arası Bir Köprü',
-  iframe: 'https://www.youtube.com/embed/YLe8JdAnj1A',
+  iframe: 'https://www.youtube-nocookie.com/embed/YLe8JdAnj1A',
   time: '10:20',
   views: '785.2K'
 }];
@@ -475,7 +475,7 @@ export const postData = [{
   category: 'for-you',
 }, {
   id: '856',
-  iframe: 'https://www.youtube.com/embed/7E45f46yDFI',
+  iframe: 'https://www.youtube-nocookie.com/embed/7E45f46yDFI',
   title: 'Su gibi zaman, doğru bir şekilde değerlendirildiğinde hayatı anlamlı kılar.',
   likeCount: 68,
   comments: 56,
