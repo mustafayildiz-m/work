@@ -799,6 +799,11 @@ const PostCard = ({
           title: title || '',
           caption: caption || '',
           image: image || (photos?.[0]) || null,
+          video_url: video || (fileUrls && fileUrls.find(f => {
+            if (!f) return false;
+            const ext = f.split('/').pop().split('.').pop().toLowerCase();
+            return ['mp4', 'webm', 'ogg', 'mov', 'avi', 'wmv'].includes(ext);
+          })) || null,
           isUserPost: isUserPost,
           authorId: socialUser?.id,
           authorName: isUserPost ? socialUser?.name : socialUser?.fullName,

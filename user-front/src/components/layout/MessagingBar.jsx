@@ -992,6 +992,8 @@ const MessagingBar = () => {
                                                                                     style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
                                                                                 />
                                                                             </div>
+                                                                        ) : post.video_url ? (
+                                                                            <video src={getDisplayAvatar(post.video_url)} controls preload="metadata" className="w-100" style={{ maxHeight: '160px', objectFit: 'contain', backgroundColor: '#000', display: 'block' }} />
                                                                         ) : post.image ? (
                                                                             <img src={getDisplayAvatar(post.image)} alt="post" className="w-100" style={{maxHeight:'160px', objectFit:'cover', display:'block'}} />
                                                                         ) : null}
