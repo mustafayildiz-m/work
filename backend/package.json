@@ -36,7 +36,7 @@
     "seed:all": "npm run seed:languages && npm run seed:multilanguage-books && npm run seed:multilanguage-articles"
   },
   "dependencies": {
-    "@nestjs-modules/mailer": "^2.0.2",
+    "@nestjs-modules/mailer": "^2.3.4",
     "@nestjs/bull": "^11.0.3",
     "@nestjs/cache-manager": "^3.0.1",
     "@nestjs/common": "^11.0.1",
