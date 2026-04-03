@@ -241,7 +241,7 @@ const MessageItem = memo(({
                               post.postType === 'article' ? `/feed/articles/${post.id}` :
                               post.postType === 'podcast' ? `/feed/podcasts/${post.id}` :
                               post.postType === 'newsletter' ? `/feed/newsletters/${post.id}` :
-                              post.isUserPost ? `/post/${post.id}?type=2` : `/post/${post.id}?type=1`
+                              post.isUserPost ? `/feed/post/${post.id}?type=2` : `/feed/post/${post.id}?type=1`
                             } className="btn btn-sm btn-primary w-100 rounded-pill" style={{fontSize: '12px'}}>
                               Gönderiyi Gör
                             </Link>
