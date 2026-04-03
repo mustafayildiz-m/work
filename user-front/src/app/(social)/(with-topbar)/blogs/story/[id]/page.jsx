@@ -297,10 +297,11 @@ const StoryDetail = ({ params }) => {
                 <div className="ratio ratio-16x9">
                   <iframe
                     src={story.video_url.includes('youtube.com')
-                      ? story.video_url.replace('watch?v=', 'embed/')
+                      ? story.video_url.replace('watch?v=', 'embed/').replace('youtube.com', 'youtube-nocookie.com')
                       : story.video_url
                     }
                     title={story.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                     style={{ border: 'none' }}
                   />
