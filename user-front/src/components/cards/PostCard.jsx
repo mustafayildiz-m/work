@@ -594,6 +594,14 @@ const PostCard = ({
     return imageExtensions.includes(extension);
   };
 
+  // Helper function to check if a file is a video
+  const isVideoFile = (fileName) => {
+    if (!fileName) return false;
+    const videoExtensions = ['mp4', 'webm', 'ogg', 'mov', 'avi', 'wmv', 'mkv', 'm4v'];
+    const extension = fileName.split('.').pop().toLowerCase();
+    return videoExtensions.includes(extension);
+  };
+
   // State for image preview modal
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -814,39 +822,36 @@ const PostCard = ({
           />
         )}
 
-        {image && (
-          <Image
-            className="card-img"
-            src={getImageUrl(image)}
-            alt="Gönderi"
-            width={600}
-            height={400}
-            style={{ width: '100%', height: 'auto' }}
-            onError={(e) => {
-              if (process.env.NODE_ENV === 'development') {
-                // console.error('Post image failed to load:', e.target.src);
-              }
-            }}
-          />
+
+        {image && !video && (
+          <div className="mb-3" style={{ borderRadius: '12px', overflow: 'hidden', backgroundColor: '#f0f0f0' }}>
+            <Image
+              src={getImageUrl(image)}
+              alt="Post"
+              width={800}
+              height={600}
+              className="w-100"
+              style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '12px', cursor: 'pointer', maxHeight: '600px', objectFit: 'contain' }}
+              onClick={() => setSelectedImage(getImageUrl(image))}
+              onError={(e) => { e.target.style.display = 'none'; }}
+            />
+          </div>
         )}
 
         {video && (
-          <div className="mb-3">
+          <div className="mb-3" style={{ borderRadius: '12px', overflow: 'hidden' }}>
             <video
-              className="card-img w-100 rounded"
+              className="w-100"
               controls
               preload="metadata"
-              style={{ maxHeight: '400px', objectFit: 'cover' }}
+              style={{ maxHeight: '420px', objectFit: 'contain', display: 'block', borderRadius: '12px', backgroundColor: '#000' }}
               onError={(e) => {
-                if (process.env.NODE_ENV === 'development') {
-                  // console.error('Video failed to load:', e.target.src);
-                }
+                if (process.env.NODE_ENV === 'development') {}
               }}
             >
               <source src={getVideoUrl(video)} type="video/mp4" />
-              <source src={getVideoUrl(video)} type="video/avi" />
-              <source src={getVideoUrl(video)} type="video/mov" />
-              <source src={getVideoUrl(video)} type="video/wmv" />
+              <source src={getVideoUrl(video)} type="video/webm" />
+              <source src={getVideoUrl(video)} type="video/ogg" />
               Tarayıcınız video oynatmayı desteklemiyor.
             </video>
           </div>
@@ -854,43 +859,54 @@ const PostCard = ({
 
         {fileUrls && fileUrls.length > 0 && (
           <div className="mb-3">
-            <h6 className="mb-2">Ekli Dosyalar:</h6>
             <div className="d-flex flex-wrap gap-2">
               {fileUrls.map((fileUrl, index) => {
                 const fileName = fileUrl.split('/').pop();
                 const fileExtension = fileName.split('.').pop().toLowerCase();
                 const fullFileUrl = getImageUrl(fileUrl);
                 const isImage = isImageFile(fileName);
+                const isVid = isVideoFile(fileName);
 
                 return (
-                  <div key={index}>
-                    {isImage ? (
-                      // Image files - show only the image
-                      <div className="mb-2">
+                  <div key={index} style={{ width: '100%' }}>
+                    {isVid ? (
+                      // Video files - inline player
+                      <div className="mb-2" style={{ borderRadius: '12px', overflow: 'hidden', backgroundColor: '#000' }}>
+                        <video
+                          className="w-100"
+                          controls
+                          preload="metadata"
+                          style={{ maxHeight: '420px', objectFit: 'contain', display: 'block', borderRadius: '12px' }}
+                        >
+                          <source src={fullFileUrl} type={`video/${fileExtension === 'mov' ? 'mp4' : fileExtension}`} />
+                          <source src={fullFileUrl} type="video/mp4" />
+                          Tarayıcınız video oynatmayı desteklemiyor.
+                        </video>
+                      </div>
+                    ) : isImage ? (
+                      // Image files
+                      <div className="mb-2" style={{ borderRadius: '12px', overflow: 'hidden', backgroundColor: '#f0f0f0' }}>
                         <Image
                           src={fullFileUrl}
                           alt={fileName}
-                          width={300}
-                          height={200}
-                          className="img-fluid rounded"
+                          width={800}
+                          height={600}
+                          className="w-100"
                           style={{
                             width: '100%',
-                            maxWidth: '300px',
-                            height: '200px',
-                            objectFit: 'cover',
+                            height: 'auto',
+                            display: 'block',
+                            borderRadius: '12px',
                             cursor: 'pointer',
-                            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                            maxHeight: '600px',
+                            objectFit: 'contain'
                           }}
                           onClick={() => setSelectedImage(fullFileUrl)}
-                          onError={(e) => {
-                            if (process.env.NODE_ENV === 'development') {
-                              // console.error('File image failed to load:', e.target.src);
-                            }
-                          }}
+                          onError={(e) => { e.target.style.display = 'none'; }}
                         />
                       </div>
                     ) : (
-                      // Non-image files - show file info with buttons
+                      // Non-image/video files - download card
                       <div className="border rounded p-3 mb-2" style={{ minWidth: '200px' }}>
                         <div className="d-flex align-items-center mb-2">
                           <div className="me-2">
@@ -903,23 +919,9 @@ const PostCard = ({
                             <small className="text-muted">{fileExtension.toUpperCase()}</small>
                           </div>
                         </div>
-
                         <div className="d-flex gap-2">
-                          <a
-                            href={fullFileUrl}
-                            download
-                            className="btn btn-sm btn-primary"
-                          >
-                            İndir
-                          </a>
-                          <a
-                            href={fullFileUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn btn-sm btn-outline-secondary"
-                          >
-                            Aç
-                          </a>
+                          <a href={fullFileUrl} download className="btn btn-sm btn-primary">İndir</a>
+                          <a href={fullFileUrl} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-secondary">Aç</a>
                         </div>
                       </div>
                     )}
