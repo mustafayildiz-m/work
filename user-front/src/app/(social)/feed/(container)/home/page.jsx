@@ -45,27 +45,28 @@ const Home = () => {
       <Feeds userId={currentUserId} />
     </Col>
 
-    <Col lg={3} className="d-none d-lg-block">
-      <div 
-        className="sticky-right-panel"
-        style={{ 
-          position: 'sticky', 
-          top: '80px', 
-          maxHeight: 'calc(100vh - 100px)', 
-          overflowY: 'auto',
-          msOverflowStyle: 'none', 
-          scrollbarWidth: 'none' 
-        }}
-      >
-        <style dangerouslySetInnerHTML={{__html: `
-          .sticky-right-panel::-webkit-scrollbar { display: none; }
-        `}} />
-        <Row className="g-4">
-          <Col sm={6} lg={12}>
-            <Followers />
-          </Col>
-        </Row>
-      </div>
+    <Col 
+      lg={3} 
+      className="d-none d-lg-block sticky-right-panel"
+      style={{ 
+        position: 'sticky', 
+        top: '80px', 
+        alignSelf: 'flex-start',
+        maxHeight: 'calc(100vh - 80px)', 
+        overflowY: 'auto',
+        msOverflowStyle: 'none', 
+        scrollbarWidth: 'none',
+        zIndex: 10
+      }}
+    >
+      <style dangerouslySetInnerHTML={{__html: `
+        .sticky-right-panel::-webkit-scrollbar { display: none; }
+      `}} />
+      <Row className="g-4">
+        <Col sm={6} lg={12}>
+          <Followers />
+        </Col>
+      </Row>
     </Col>
   </>;
 };

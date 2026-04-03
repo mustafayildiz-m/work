@@ -662,8 +662,8 @@ const ProfilePanel = ({ links, onLinkClick }) => {
           className="d-block text-center text-decoration-none"
           onClick={(e) => handleLinkClick(e, '/profile/feed')}
           style={{
-            padding: '0.65rem 0.75rem',
-            marginBottom: '0.4rem',
+            padding: '0.5rem 0.75rem',
+            marginBottom: '0.2rem',
             background: isDarkMode ? 'rgba(102,187,106,0.12)' : 'rgba(102,187,106,0.09)',
             color: accentColor,
             fontWeight: 600,
@@ -684,10 +684,10 @@ const ProfilePanel = ({ links, onLinkClick }) => {
           {t('profile.viewProfile')}
         </Link>
 
-        <ul className="nav flex-column" style={{ gap: '2px', padding: 0, margin: 0, listStyle: 'none' }}>
+        <ul className="nav flex-column" style={{ gap: '0px', padding: 0, margin: 0, listStyle: 'none' }}>
           {links.map((item, idx) => {
             const linkStyle = {
-              padding: '0.65rem 0.75rem',
+              padding: '0.4rem 0.75rem',
               borderRadius: '10px',
               transition: 'background-color 0.2s ease, color 0.2s ease',
               background: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))
