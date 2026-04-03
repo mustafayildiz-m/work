@@ -308,6 +308,14 @@ const ProfileDropdown = () => {
     if (!isOpen) return;
 
     const handleClickOutside = (event) => {
+      // Portal olarak render edilen elemanları (Modal vs.) koru
+      if (
+        event.target.closest('.language-modal-overlay') ||
+        event.target.closest('.language-select__menu')
+      ) {
+        return;
+      }
+
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
       }
