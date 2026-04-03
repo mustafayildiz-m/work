@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button, Card, CardBody, CardHeader, CardTitle } from 'react-bootstrap';
-import { BsPersonCheckFill } from 'react-icons/bs';
+import { BsPersonCheckFill, BsArrowClockwise } from 'react-icons/bs';
 import { FaPlus } from 'react-icons/fa';
 import React, { useState, useEffect } from 'react';
 import { getUserIdFromToken } from '../../../../../../utils/auth';
@@ -25,19 +25,20 @@ const Followers = () => {
     return `${follower.type}-${follower.id}`;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getWhoToFollow('scholars', 15);
-        setWhoToFollowData(data);
-      } catch (error) {
-        console.error('Error fetching who to follow data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchScholars = async () => {
+    try {
+      setLoading(true);
+      const data = await getWhoToFollow('scholars', 15);
+      setWhoToFollowData(data);
+    } catch (error) {
+      console.error('Error fetching who to follow data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchData();
+  useEffect(() => {
+    fetchScholars();
   }, []);
 
   if (status !== 'authenticated') {
@@ -179,8 +180,55 @@ const Followers = () => {
     }
   };
   return <Card>
-    <CardHeader className="pb-0 border-0">
-      <CardTitle className="mb-0">{t('feed.suggestedScholars')}</CardTitle>
+    <CardHeader className="pb-0 border-0 d-flex justify-content-between align-items-center">
+      <CardTitle 
+        className="mb-0 text-truncate" 
+        style={{ fontSize: '0.95rem', fontWeight: 700, paddingRight: '10px' }}
+      >
+        {t('feed.suggestedScholars')}
+      </CardTitle>
+      <button 
+        className="btn-refresh-scholars"
+        onClick={fetchScholars}
+        disabled={loading}
+        title={t('common.refresh') || "Yenile"}
+        style={{
+          background: 'rgba(102, 187, 106, 0.1)',
+          border: '1px solid rgba(102, 187, 106, 0.25)',
+          backdropFilter: 'blur(4px)',
+          borderRadius: '50%',
+          width: '32px',
+          height: '32px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#66bb6a',
+          transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+          cursor: loading ? 'wait' : 'pointer',
+          padding: 0,
+          outline: 'none',
+          boxShadow: '0 2px 8px rgba(102, 187, 106, 0.15)'
+        }}
+      >
+        <BsArrowClockwise 
+          size={18} 
+          style={{ 
+            transition: 'transform 0.5s linear',
+            transform: loading ? 'rotate(360deg)' : 'none'
+          }} 
+        />
+      </button>
+      <style dangerouslySetInnerHTML={{__html: `
+        .btn-refresh-scholars:hover:not(:disabled) {
+          background: #66bb6a !important;
+          color: #fff !important;
+          transform: rotate(90deg) scale(1.1);
+          box-shadow: 0 4px 12px rgba(102, 187, 106, 0.4) !important;
+        }
+        .btn-refresh-scholars:active:not(:disabled) {
+          transform: rotate(180deg) scale(0.9);
+        }
+      `}} />
     </CardHeader>
 
     <CardBody>
