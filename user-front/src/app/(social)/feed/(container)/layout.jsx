@@ -21,7 +21,23 @@ const FeedLayout = ({
     <main>
       <Container>
         <Row className="g-4 feed-container-row" style={{ marginTop: '0.5rem' }}>
-          <Col lg={3}>
+          <Col 
+            lg={3} 
+            className="sticky-left-panel"
+            style={{ 
+              position: 'sticky', 
+              top: '80px', 
+              alignSelf: 'flex-start', 
+              maxHeight: 'calc(100vh - 80px)',
+              overflowY: 'auto',
+              msOverflowStyle: 'none',
+              scrollbarWidth: 'none',
+              zIndex: 10 
+            }}
+          >
+            <style dangerouslySetInnerHTML={{__html: `
+              .sticky-left-panel::-webkit-scrollbar { display: none; }
+            `}} />
             <div className="d-flex align-items-center d-lg-none profile-toggle-mobile">
               <button
                 onClick={startOffcanvas.toggle}
@@ -45,20 +61,7 @@ const FeedLayout = ({
 
             <nav className="navbar navbar-expand-lg mx-0">
               {/* Desktop View */}
-              <div 
-                className="d-none d-lg-block px-2 px-lg-0 w-100 sticky-left-panel"
-                style={{ 
-                  position: 'sticky', 
-                  top: '80px', 
-                  maxHeight: 'calc(100vh - 100px)', 
-                  overflowY: 'auto',
-                  msOverflowStyle: 'none', 
-                  scrollbarWidth: 'none' 
-                }}
-              >
-                <style dangerouslySetInnerHTML={{__html: `
-                  .sticky-left-panel::-webkit-scrollbar { display: none; }
-                `}} />
+              <div className="d-none d-lg-block px-2 px-lg-0 w-100">
                 <ProfilePanel links={profilePanelLinksData1} />
               </div>
 

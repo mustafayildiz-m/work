@@ -28,7 +28,7 @@ const Followers = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getWhoToFollow('scholars', 9);
+        const data = await getWhoToFollow('scholars', 7);
         setWhoToFollowData(data);
       } catch (error) {
         console.error('Error fetching who to follow data:', error);
