@@ -28,7 +28,7 @@ const Followers = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getWhoToFollow('scholars', 7);
+        const data = await getWhoToFollow('scholars', 15);
         setWhoToFollowData(data);
       } catch (error) {
         console.error('Error fetching who to follow data:', error);
@@ -184,108 +184,121 @@ const Followers = () => {
     </CardHeader>
 
     <CardBody>
-      {loading ? (
-        <div className="text-center py-3">
-          <div className="spinner-border spinner-border-sm text-primary" role="status">
-            <span className="visually-hidden">{t('common.loading')}</span>
-          </div>
-          <p className="text-muted mb-0 mt-2">{t('common.loading')}niyor...</p>
-        </div>
-      ) : whoToFollowData && whoToFollowData.length > 0 ? (
-        whoToFollowData.map((follower, idx) => <div className="hstack gap-2 mb-3" key={`${follower.type}-${follower.id}` || idx}>
-          <span role="button" style={{ flexShrink: 0 }}>
-            <div
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: '50%',
-                overflow: 'hidden',
-                backgroundColor: '#f8f9fa'
-              }}
-            >
-              <Image
-                className="avatar-img"
-                src={getImageUrl(follower.photoUrl)}
-                alt={follower.name || follower.fullName}
-                width={40}
-                height={40}
-                loading="eager"
-                placeholder="blur"
-                blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciPgogICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMzMzIiBvZmZzZXQ9IjIwJSIgLz4KICAgICAgPHN0b3Agc3RvcC1jb2xvcj0iIzIyMiIgb2Zmc2V0PSI1MCUiIC8+CiAgICAgIDxzdG9wIHN0b3AtY29sb3I9IiMzMzMiIG9mZnNldD0iNzAlIiAvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjMzMzIiAvPgogIDxyZWN0IGlkPSJyIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIGZpbGw9InVybCgjZykiIC8+CiAgPGFuaW1hdGUgeGxpbms6aHJlZj0iI3IiIGF0dHJpYnV0ZU5hbWU9IngiIGZyb209Ii00MCIgdG89IjQwIiBkdXI9IjFzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgIC8+Cjwvc3ZnPg=="
-                unoptimized={true}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.3s ease-in-out' }}
-                onError={(e) => {
-                  e.target.src = '/profile/profile.png';
-                }}
-              />
+      <div 
+        className="followers-scroll-container"
+        style={{ 
+          height: '640px', 
+          overflowY: 'auto', 
+          msOverflowStyle: 'none', 
+          scrollbarWidth: 'none' 
+        }}
+      >
+        <style dangerouslySetInnerHTML={{__html: `
+          .followers-scroll-container::-webkit-scrollbar { display: none; }
+        `}} />
+        {loading ? (
+          <div className="text-center py-3">
+            <div className="spinner-border spinner-border-sm text-primary" role="status">
+              <span className="visually-hidden">{t('common.loading')}</span>
             </div>
-          </span>
-
-          <div className="overflow-hidden">
-            {follower.id && follower.id !== 'undefined' ? (
-              <Link
-                className="h6 mb-0"
-                href={getProfilePath(follower.type || 'scholar', follower.id) || '#'}
-              >
-                {follower.name || follower.fullName}{' '}
-              </Link>
-            ) : (
-              <span className="h6 mb-0">
-                {follower.name || follower.fullName}{' '}
-              </span>
-            )}
-            <p className="mb-0 small text-truncate">
-              {t('feed.scholar')}
-            </p>
+            <p className="text-muted mb-0 mt-2">{t('common.loading')}niyor...</p>
           </div>
+        ) : whoToFollowData && whoToFollowData.length > 0 ? (
+          whoToFollowData.map((follower, idx) => <div className="hstack gap-2 mb-3" key={`${follower.type}-${follower.id}` || idx}>
+            <span role="button" style={{ flexShrink: 0 }}>
+              <div
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: '50%',
+                  overflow: 'hidden',
+                  backgroundColor: '#f8f9fa'
+                }}
+              >
+                <Image
+                  className="avatar-img"
+                  src={getImageUrl(follower.photoUrl)}
+                  alt={follower.name || follower.fullName}
+                  width={40}
+                  height={40}
+                  loading="eager"
+                  placeholder="blur"
+                  blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciPgogICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMzMzIiBvZmZzZXQ9IjIwJSIgLz4KICAgICAgPHN0b3Agc3RvcC1jb2xvcj0iIzIyMiIgb2Zmc2V0PSI1MCUiIC8+CiAgICAgIDxzdG9wIHN0b3AtY29sb3I9IiMzMzMiIG9mZnNldD0iNzAlIiAvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjMzMzIiAvPgogIDxyZWN0IGlkPSJyIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIGZpbGw9InVybCgjZykiIC8+CiAgPGFuaW1hdGUgeGxpbms6aHJlZj0iI3IiIGF0dHJpYnV0ZU5hbWU9IngiIGZyb209Ii00MCIgdG89IjQwIiBkdXI9IjFzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgIC8+Cjwvc3ZnPg=="
+                  unoptimized={true}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.3s ease-in-out' }}
+                  onError={(e) => {
+                    e.target.src = '/profile/profile.png';
+                  }}
+                />
+              </div>
+            </span>
 
-          {follower.isFollowing ? (
-            <Button
-              variant="outline-danger"
-              size="sm"
-              className="ms-auto px-2 py-1"
-              style={{
-                fontSize: '0.75rem',
-                minWidth: 'auto',
-                whiteSpace: 'nowrap',
-                lineHeight: '1'
-              }}
-              onClick={() => handleUnfollow(follower.id, follower.type)}
-              disabled={followLoading[getFollowerKey(follower)]}
-            >
-              {followLoading[getFollowerKey(follower)] ? (
-                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <div className="overflow-hidden">
+              {follower.id && follower.id !== 'undefined' ? (
+                <Link
+                  className="h6 mb-0"
+                  href={getProfilePath(follower.type || 'scholar', follower.id) || '#'}
+                >
+                  {follower.name || follower.fullName}{' '}
+                </Link>
               ) : (
-                t('feed.unfollow')
+                <span className="h6 mb-0">
+                  {follower.name || follower.fullName}{' '}
+                </span>
               )}
-            </Button>
-          ) : (
-            <Button
-              variant="primary-soft"
-              size="sm"
-              className="ms-auto px-2 py-1"
-              style={{
-                fontSize: '0.75rem',
-                minWidth: 'auto',
-                whiteSpace: 'nowrap',
-                lineHeight: '1'
-              }}
-              onClick={() => handleFollow(follower.id, follower.type)}
-              disabled={followLoading[getFollowerKey(follower)]}
-            >
-              {followLoading[getFollowerKey(follower)] ? (
-                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              ) : (
-                t('feed.follow')
-              )}
-            </Button>
-          )}
-        </div>)
-      ) : (
-        <div className="text-center py-3">
-          <p className="text-muted mb-0">{t('feed.noSuggestionsYet')}</p>
-        </div>
-      )}
+              <p className="mb-0 small text-truncate">
+                {t('feed.scholar')}
+              </p>
+            </div>
+
+            {follower.isFollowing ? (
+              <Button
+                variant="outline-danger"
+                size="sm"
+                className="ms-auto px-2 py-1"
+                style={{
+                  fontSize: '0.75rem',
+                  minWidth: 'auto',
+                  whiteSpace: 'nowrap',
+                  lineHeight: '1'
+                }}
+                onClick={() => handleUnfollow(follower.id, follower.type)}
+                disabled={followLoading[getFollowerKey(follower)]}
+              >
+                {followLoading[getFollowerKey(follower)] ? (
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                ) : (
+                  t('feed.unfollow')
+                )}
+              </Button>
+            ) : (
+              <Button
+                variant="primary-soft"
+                size="sm"
+                className="ms-auto px-2 py-1"
+                style={{
+                  fontSize: '0.75rem',
+                  minWidth: 'auto',
+                  whiteSpace: 'nowrap',
+                  lineHeight: '1'
+                }}
+                onClick={() => handleFollow(follower.id, follower.type)}
+                disabled={followLoading[getFollowerKey(follower)]}
+              >
+                {followLoading[getFollowerKey(follower)] ? (
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                ) : (
+                  t('feed.follow')
+                )}
+              </Button>
+            )}
+          </div>)
+        ) : (
+          <div className="text-center py-3">
+            <p className="text-muted mb-0">{t('feed.noSuggestionsYet')}</p>
+          </div>
+        )}
+      </div>
 
       <div className="d-grid mt-3">
         <Link href="/feed/scholars">
