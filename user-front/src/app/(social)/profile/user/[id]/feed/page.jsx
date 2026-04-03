@@ -752,8 +752,8 @@ const UserFeedPage = () => {
           }
 
           // Sadece bu kullanıcının post'ları (user endpoint'inden geliyor, timeline değil, sadece kendi post'ları, başka kullanıcıların post'ları yok, sadece kendi gönderileri, resim ve video dahil, sadece kendi paylaştığı içerikler, sadece kendi profilinde görünen içerikler)
-          // type: 'user' | 'text' | 'image' | 'video' - hepsi user post olarak gösterilmeli
-          const isUserPost = ['user', 'text', 'image', 'video'].includes(post.type) || !post.type;
+          // type: 'user' | 'text' | 'image' | 'video' | 'file' - hepsi user post olarak gösterilmeli
+          const isUserPost = ['user', 'text', 'image', 'video', 'file'].includes(post.type) || !post.type || (post.user_id && !post.scholar_id);
           if (isUserPost) {
             const isSharedPost = post.isShared;
 
