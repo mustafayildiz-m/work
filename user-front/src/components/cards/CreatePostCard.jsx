@@ -25,6 +25,7 @@ import avatar7 from '@/assets/images/avatar/07.jpg';
 import ChoicesFormInput from '../form/ChoicesFormInput';
 import Link from 'next/link';
 import { useLanguage } from '@/context/useLanguageContext';
+import { useLayoutContext } from '@/context/useLayoutContext';
 
 const FilePreview = ({ fileUrls, onRemove }) => {
   const { t } = useLanguage();
@@ -168,6 +169,9 @@ async function fetchUserProfileById(userId) {
 
 const CreatePostCard = () => {
   const { t } = useLanguage();
+  const { theme } = useLayoutContext();
+  const isDark = theme === 'dark';
+  const isGreen = theme === 'green';
   const guests = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7];
   const { createPost, uploadFile, loading, error } = useCreatePost();
   const { showNotification } = useNotificationContext();
@@ -629,7 +633,7 @@ const CreatePostCard = () => {
       show={isOpenPhoto}
       onHide={resetFormAndCloseModals}
       centered
-      className="modern-modal"
+      className={`modern-modal${isGreen ? ' theme-green' : isDark ? ' theme-dark' : ''}`}
       backdrop="static"
       keyboard={false}
     >
@@ -646,7 +650,7 @@ const CreatePostCard = () => {
           </div>
         </ModalHeader>
         <ModalBody className="pt-2">
-          <div className="d-flex align-items-center mb-4 p-2 bg-light bg-opacity-50 rounded-4">
+          <div className="d-flex align-items-center mb-4 p-2 rounded-4" style={isGreen ? { backgroundColor: 'rgba(67,160,71,0.15)' } : isDark ? { backgroundColor: 'rgba(255,255,255,0.05)' } : { backgroundColor: 'rgba(0,0,0,0.04)' }}>
             <div className="avatar avatar-md me-2 flex-shrink-0">
               <img
                 className="avatar-img rounded-circle"
@@ -671,7 +675,8 @@ const CreatePostCard = () => {
                 onChange={(e) => setPostContent(e.target.value)}
                 style={{
                   resize: 'none',
-                  lineHeight: '1.5'
+                  lineHeight: '1.5',
+                  color: isGreen || isDark ? '#e0f0e0' : 'inherit'
                 }}
                 autoFocus
               />
@@ -681,13 +686,14 @@ const CreatePostCard = () => {
           <div
             className="upload-section p-5 text-center"
             onClick={() => document.getElementById('photo-upload').click()}
+            style={isGreen ? { backgroundColor: 'rgba(67,160,71,0.1)', border: '2px dashed rgba(67,160,71,0.4)', borderRadius: '12px', cursor: 'pointer' } : isDark ? { backgroundColor: 'rgba(255,255,255,0.04)', border: '2px dashed rgba(255,255,255,0.15)', borderRadius: '12px', cursor: 'pointer' } : { cursor: 'pointer' }}
           >
-            <div className="icon-shape icon-xl rounded-circle bg-white shadow-sm mx-auto mb-3">
+            <div className="icon-shape icon-xl rounded-circle mx-auto mb-3" style={isGreen ? { backgroundColor: 'rgba(67,160,71,0.2)' } : isDark ? { backgroundColor: 'rgba(255,255,255,0.08)' } : { backgroundColor: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
               <BsImages size={32} className="text-success" />
             </div>
-            <h6 className="fw-bold mb-2">{t('post.uploadPhoto')}</h6>
+            <h6 className="fw-bold mb-2" style={isGreen || isDark ? { color: '#e0f0e0' } : {}}>{t('post.uploadPhoto')}</h6>
             <div className="vstack gap-1">
-              <small className="text-muted">
+              <small style={isGreen ? { color: '#9bc99b' } : { color: '#6c757d' }}>
                 {t('post.maxFileSize')}
               </small>
             </div>
@@ -703,13 +709,13 @@ const CreatePostCard = () => {
 
           {selectedFiles.length > 0 && <FilePreview fileUrls={filePreviewUrls} onRemove={removeFile} />}
         </ModalBody>
-        <ModalFooter className="pt-0">
+        <ModalFooter className="pt-0" style={isGreen ? { backgroundColor: '#1e3d22', borderTop: '1px solid rgba(67,160,71,0.2)' } : isDark ? { backgroundColor: '#1d2226', borderTop: '1px solid rgba(255,255,255,0.1)' } : {}}>
           <div className="d-flex w-100 gap-3">
             <button
               type="button"
-              className="btn btn-light flex-grow-1 py-2 fw-medium border-0"
+              className="btn flex-grow-1 py-2 fw-medium"
               onClick={resetFormAndCloseModals}
-              style={{ borderRadius: '12px' }}
+              style={{ borderRadius: '12px', backgroundColor: isGreen ? 'rgba(255,255,255,0.1)' : isDark ? 'rgba(255,255,255,0.1)' : '#f0f0f0', color: isGreen || isDark ? '#e0f0e0' : '#333', border: 'none' }}
             >
               {t('post.cancel')}
             </button>
@@ -732,24 +738,24 @@ const CreatePostCard = () => {
       show={isOpenVideo}
       onHide={resetFormAndCloseModals}
       centered
-      className="modern-modal"
+      className={`modern-modal${isGreen ? ' theme-green' : isDark ? ' theme-dark' : ''}`}
       backdrop="static"
       keyboard={false}
     >
-      <div className="modal-content">
-        <ModalHeader closeButton className="border-0 pb-0">
+      <div className="modal-content" style={isGreen ? { backgroundColor: '#1e3d22', color: '#e0f0e0', border: '1px solid rgba(67,160,71,0.3)' } : isDark ? { backgroundColor: '#1d2226', color: '#fff', border: '1px solid rgba(255,255,255,0.1)' } : {}}>
+        <ModalHeader closeButton className="border-0 pb-0" style={isGreen ? { backgroundColor: '#1e3d22', borderBottom: '1px solid rgba(67,160,71,0.2)' } : isDark ? { backgroundColor: '#1d2226' } : {}}>
           <div className="d-flex align-items-center">
             <div className="icon-shape icon-md rounded-circle bg-info bg-opacity-10 text-info me-3 shadow-sm">
               <BsCameraReelsFill size={20} />
             </div>
             <div>
-              <h5 className="modal-title mb-0 fw-bold">{t('post.addVideo')}</h5>
-              <small className="text-muted">{t('post.shareWithVideo')}</small>
+              <h5 className="modal-title mb-0 fw-bold" style={isGreen || isDark ? { color: '#e0f0e0' } : {}}>{t('post.addVideo')}</h5>
+              <small style={isGreen ? { color: '#9bc99b' } : { color: '#6c757d' }}>{t('post.shareWithVideo')}</small>
             </div>
           </div>
         </ModalHeader>
-        <ModalBody className="pt-2">
-          <div className="d-flex align-items-center mb-4 p-2 bg-light bg-opacity-50 rounded-4">
+        <ModalBody className="pt-2" style={isGreen ? { backgroundColor: '#1e3d22' } : isDark ? { backgroundColor: '#1d2226' } : {}}>
+          <div className="d-flex align-items-center mb-4 p-2 rounded-4" style={isGreen ? { backgroundColor: 'rgba(67,160,71,0.15)' } : isDark ? { backgroundColor: 'rgba(255,255,255,0.05)' } : { backgroundColor: 'rgba(0,0,0,0.04)' }}>
             <div className="avatar avatar-md me-2 flex-shrink-0">
               <img
                 className="avatar-img rounded-circle"
@@ -774,7 +780,8 @@ const CreatePostCard = () => {
                 onChange={(e) => setPostContent(e.target.value)}
                 style={{
                   resize: 'none',
-                  lineHeight: '1.5'
+                  lineHeight: '1.5',
+                  color: isGreen || isDark ? '#e0f0e0' : 'inherit'
                 }}
                 autoFocus
               />
@@ -784,13 +791,14 @@ const CreatePostCard = () => {
           <div
             className="upload-section p-5 text-center"
             onClick={() => document.getElementById('video-upload').click()}
+            style={isGreen ? { backgroundColor: 'rgba(67,160,71,0.1)', border: '2px dashed rgba(67,160,71,0.4)', borderRadius: '12px', cursor: 'pointer' } : isDark ? { backgroundColor: 'rgba(255,255,255,0.04)', border: '2px dashed rgba(255,255,255,0.15)', borderRadius: '12px', cursor: 'pointer' } : { cursor: 'pointer' }}
           >
-            <div className="icon-shape icon-xl rounded-circle bg-white shadow-sm mx-auto mb-3">
+            <div className="icon-shape icon-xl rounded-circle mx-auto mb-3" style={isGreen ? { backgroundColor: 'rgba(67,160,71,0.2)' } : isDark ? { backgroundColor: 'rgba(255,255,255,0.08)' } : { backgroundColor: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
               <BsCameraVideoFill size={32} className="text-info" />
             </div>
-            <h6 className="fw-bold mb-2">{t('post.uploadVideo')}</h6>
+            <h6 className="fw-bold mb-2" style={isGreen || isDark ? { color: '#e0f0e0' } : {}}>{t('post.uploadVideo')}</h6>
             <div className="vstack gap-1">
-              <small className="text-muted">
+              <small style={isGreen ? { color: '#9bc99b' } : { color: '#6c757d' }}>
                 {t('post.maxVideoSize')}
               </small>
             </div>
@@ -805,13 +813,13 @@ const CreatePostCard = () => {
 
           {selectedFiles.length > 0 && <FilePreview fileUrls={filePreviewUrls} onRemove={removeFile} />}
         </ModalBody>
-        <ModalFooter className="pt-0">
+        <ModalFooter className="pt-0" style={isGreen ? { backgroundColor: '#1e3d22', borderTop: '1px solid rgba(67,160,71,0.2)' } : isDark ? { backgroundColor: '#1d2226', borderTop: '1px solid rgba(255,255,255,0.1)' } : {}}>
           <div className="d-flex w-100 gap-3">
             <button
               type="button"
-              className="btn btn-light flex-grow-1 py-2 fw-medium border-0"
+              className="btn flex-grow-1 py-2 fw-medium"
               onClick={resetFormAndCloseModals}
-              style={{ borderRadius: '12px' }}
+              style={{ borderRadius: '12px', backgroundColor: isGreen ? 'rgba(255,255,255,0.1)' : isDark ? 'rgba(255,255,255,0.1)' : '#f0f0f0', color: isGreen || isDark ? '#e0f0e0' : '#333', border: 'none' }}
             >
               {t('post.cancel')}
             </button>
