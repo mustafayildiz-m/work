@@ -23,6 +23,7 @@ import EditPostModal from '@/components/EditPostModal';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/context/useLanguageContext';
+import { useNotificationContext } from '@/context/useNotificationContext';
 
 // ActionMenu is now handled by PostCard component
 
@@ -178,6 +179,7 @@ async function loadPendingPosts(userId) {
 
 const Feeds = ({ userId }) => {
   const { t, locale } = useLanguage();
+  const { showNotification } = useNotificationContext();
 
   // Always call hooks first, before any conditional returns
   const { 
