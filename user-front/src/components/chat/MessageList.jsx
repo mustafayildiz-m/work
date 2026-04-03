@@ -204,19 +204,45 @@ const MessageItem = memo(({
                     const parsed = JSON.parse(message.content);
                     if (parsed && parsed.type === 'post_share') {
                       const post = parsed.postData;
+                      
+                      const getYouTubeId = (url) => {
+                        if (!url) return null;
+                        const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                        return m ? m[1] : null;
+                      };
+                      const youtubeId = getYouTubeId(post.video_url);
+                      
                       return (
-                        <div className={`card mt-1 ${message.isOwnMessage ? 'bg-light text-dark' : 'bg-body-secondary text-body'}`} style={{ maxWidth: '250px', borderRadius: '12px', border: '1px solid var(--bs-border-color)' }}>
-                          <div className="d-flex align-items-center p-2 mb-1 border-bottom">
-                            <img src={getDisplayAvatar(post.authorAvatar)} alt="author" className="rounded-circle me-2" style={{width: 24, height: 24, objectFit: 'cover'}} />
+                        <div style={{ maxWidth: '280px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--bs-border-color)', backgroundColor: 'var(--bs-body-bg)' }}>
+                          <div className="d-flex align-items-center px-2 py-2 border-bottom">
+                            <img src={getDisplayAvatar(post.authorAvatar)} alt="author" className="rounded-circle me-2 flex-shrink-0" style={{width: 24, height: 24, objectFit: 'cover'}} />
                             <small className="fw-bold text-truncate">{post.authorName || 'Kullanıcı'}</small>
                           </div>
-                          {post.image && (
-                            <img src={getDisplayAvatar(post.image)} alt="post" className="w-100 mb-2" style={{maxHeight:'140px', objectFit:'cover'}} />
-                          )}
-                          <div className="px-2 pb-2">
-                            {post.title && <h6 className="card-title fw-bold text-truncate small mb-1">{post.title}</h6>}
-                            {post.caption && <p className="card-text small mb-2" style={{fontSize: '12px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'}}>{post.caption.replace(/<[^>]+>/g, '')}</p>}
-                            <Link href={post.isUserPost ? `/post/${post.id}?type=2` : `/post/${post.id}?type=1`} className="btn btn-sm btn-primary w-100 rounded-pill" style={{fontSize: '12px'}}>
+                          {youtubeId ? (
+                            <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
+                              <iframe
+                                src={`https://www.youtube.com/embed/${youtubeId}`}
+                                title={post.title || 'Video'}
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                              />
+                            </div>
+                          ) : post.image ? (
+                            <img src={getDisplayAvatar(post.image)} alt="post" className="w-100" style={{maxHeight:'160px', objectFit:'cover', display:'block'}} />
+                          ) : null}
+                          <div className="px-2 py-2">
+                            {post.title && <h6 className="fw-bold text-truncate mb-1" style={{fontSize: '13px'}}>{post.title}</h6>}
+                            {post.caption && <p className="text-muted mb-2" style={{fontSize: '11px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'}}>{post.caption.replace(/<[^>]+>/g, '')}</p>}
+                            <Link href={
+                              post.postType === 'story' ? `/blogs/story/${post.id}` :
+                              post.postType === 'book' ? `/books/${post.id}` :
+                              post.postType === 'article' ? `/feed/articles/${post.id}` :
+                              post.postType === 'podcast' ? `/feed/podcasts/${post.id}` :
+                              post.postType === 'newsletter' ? `/feed/newsletters/${post.id}` :
+                              post.isUserPost ? `/post/${post.id}?type=2` : `/post/${post.id}?type=1`
+                            } className="btn btn-sm btn-primary w-100 rounded-pill" style={{fontSize: '12px'}}>
                               Gönderiyi Gör
                             </Link>
                           </div>

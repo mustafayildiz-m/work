@@ -597,11 +597,13 @@ const SharedStoryCard = ({ post, onDeletePost, comments = [], onLoadComments, on
         show={showShareMessageModal} 
         onHide={() => setShowShareMessageModal(false)}
         postDataPayload={{
-          id: post.id || post.shared_article_id || post.shared_story_id || post.shared_podcast_id || post.shared_newsletter_id,
-          title: post.title || post.user_name || 'Paylaşım',
-          caption: post.caption || post.description || '',
-          image: post.user_photo_url,
-          isUserPost: true,
+          id: post.shared_story_id,
+          postType: 'story',
+          title: storyData?.title || 'Hikaye Paylaşımı',
+          caption: storyData?.description || '',
+          image: storyData?.thumbnail_url ? getThumbnailUrl() : null,
+          video_url: storyData?.video_url || null,
+          isUserPost: false,
           authorName: post.user_name,
           authorAvatar: post.user_photo_url
         }}

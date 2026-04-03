@@ -498,11 +498,12 @@ const SharedBookCard = ({ post, onDeletePost }) => {
         show={showShareMessageModal} 
         onHide={() => setShowShareMessageModal(false)}
         postDataPayload={{
-          id: post.shared_book_id || post.id,
-          title: bookData?.title,
-          caption: bookData?.description,
+          id: post.shared_book_id,
+          postType: 'book',
+          title: bookData?.title || 'Kitap',
+          caption: bookData?.description || '',
           image: getBookImage(),
-          isUserPost: true,
+          isUserPost: false,
           authorName: bookData?.author || post.user_name,
           authorAvatar: post.user_photo_url
         }}

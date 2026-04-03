@@ -671,12 +671,13 @@ const SharedPodcastCard = ({ post, onDeletePost, comments = [], onLoadComments, 
         show={showShareMessageModal} 
         onHide={() => setShowShareMessageModal(false)}
         postDataPayload={{
-          id: post.id || post.shared_article_id || post.shared_story_id || post.shared_podcast_id || post.shared_newsletter_id,
-          title: post.title || post.user_name || 'Paylaşım',
-          caption: post.caption || post.description || '',
-          image: post.user_photo_url,
-          isUserPost: true,
-          authorName: post.user_name,
+          id: post.shared_podcast_id,
+          postType: 'podcast',
+          title: podcastData?.title || 'Podcast',
+          caption: podcastData?.description || '',
+          image: getCoverUrl(),
+          isUserPost: false,
+          authorName: podcastData?.author || post.user_name,
           authorAvatar: post.user_photo_url
         }}
       />
