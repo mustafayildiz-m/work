@@ -8,7 +8,8 @@ import {
   storeToken, 
   clearToken, 
   hasValidToken,
-  getToken 
+  getToken,
+  isTokenExpired 
 } from '@/utils/auth';
 import {
   dispatchThemeAfterLogin,
@@ -51,17 +52,29 @@ export const useAuth = () => {
   }, [status, session]);
 
   // Session değiştiğinde token'ı localStorage'a yaz
+  // Backend JWT expire olduysa kullanıcıyı çıkış yaptır
   useEffect(() => {
     if (session?.access_token) {
-      storeToken(session.access_token, true); // Eski token'ı sil, yenisini yaz
+      if (isTokenExpired(session.access_token)) {
+        // Backend JWT expired ama NextAuth session hala aktif — force logout
+        clearToken();
+        setIsAuthenticated(false);
+        setUserInfo(null);
+        signOut({ redirect: false }).then(() => {
+          if (typeof window !== 'undefined') {
+            window.location.href = `${window.location.origin}/auth-advance/sign-in?message=session_expired`;
+          }
+        });
+        return;
+      }
+
+      storeToken(session.access_token, true);
       
-      // Token bilgilerini güncelle
       const userId = getUserIdFromToken();
       const user = getUserInfoFromToken();
       setIsAuthenticated(!!userId);
       setUserInfo(user);
 
-      // Google OAuth: giriş öncesi konan bayrak — sadece bu akışta giriş sonrası yeşil tema
       if (typeof window !== 'undefined') {
         try {
           if (sessionStorage.getItem(THEME_RESET_SESSION_FLAG) === '1') {
@@ -152,6 +165,26 @@ export const useAuth = () => {
       setLoading(false);
     }
   };
+
+  // Periyodik olarak backend JWT'nin geçerliliğini kontrol et
+  useEffect(() => {
+    const checkTokenValidity = () => {
+      const token = getToken(true);
+      if (status === 'authenticated' && !token) {
+        clearToken();
+        setIsAuthenticated(false);
+        setUserInfo(null);
+        signOut({ redirect: false }).then(() => {
+          if (typeof window !== 'undefined') {
+            window.location.href = `${window.location.origin}/auth-advance/sign-in?message=session_expired`;
+          }
+        });
+      }
+    };
+
+    const intervalId = setInterval(checkTokenValidity, 60000);
+    return () => clearInterval(intervalId);
+  }, [status]);
 
   const refreshAuth = () => {
     const userId = getUserIdFromToken();

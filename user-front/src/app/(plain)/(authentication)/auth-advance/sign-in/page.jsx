@@ -76,6 +76,17 @@ const SignIn = () => {
                       </div>
                     </Alert>
                   )}
+                  {message === 'session_expired' && (
+                    <Alert variant="info" className="mb-4 border-0 shadow-sm" style={{ borderRadius: '12px' }}>
+                      <div className="d-flex align-items-center">
+                        <i className="bi bi-clock-history me-2" style={{ fontSize: '1.2rem' }}></i>
+                        <div>
+                          <h6 className="mb-1 fw-bold">{t('auth.sessionExpired') || 'Oturum süresi doldu'}</h6>
+                          <p className="mb-0" style={{ fontSize: '0.85rem' }}>{t('auth.pleaseLoginAgain') || 'Lütfen tekrar giriş yapın.'}</p>
+                        </div>
+                      </div>
+                    </Alert>
+                  )}
                   <LoginForm />
 
                   <div className="text-center mt-3">

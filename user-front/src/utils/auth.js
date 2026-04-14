@@ -184,3 +184,50 @@ export const getToken = (checkExpiry = true) => {
     return null;
   }
 };
+
+let _isHandling401 = false;
+
+/**
+ * Handle 401 Unauthorized response — clear token and redirect to login.
+ * Prevents multiple concurrent redirects.
+ */
+export const handle401 = () => {
+  if (_isHandling401) return;
+  _isHandling401 = true;
+  clearToken();
+  if (typeof window !== 'undefined') {
+    const pathname = window.location.pathname;
+    const loginUrl = new URL(`${window.location.origin}/auth-advance/sign-in`);
+    loginUrl.searchParams.set('redirectTo', pathname);
+    loginUrl.searchParams.set('message', 'session_expired');
+    window.location.replace(loginUrl.toString());
+  }
+};
+
+/**
+ * Authenticated fetch wrapper.
+ * Automatically adds Authorization header and handles 401 by redirecting to login.
+ */
+export const authFetch = async (url, options = {}) => {
+  const token = getToken();
+
+  if (!token) {
+    handle401();
+    throw new Error('No valid token');
+  }
+
+  const headers = {
+    'Content-Type': 'application/json',
+    ...options.headers,
+    'Authorization': `Bearer ${token}`,
+  };
+
+  const response = await fetch(url, { ...options, headers });
+
+  if (response.status === 401) {
+    handle401();
+    throw new Error('Unauthorized');
+  }
+
+  return response;
+};
