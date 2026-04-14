@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { getToken, handle401 } from '@/utils/auth';
 
 export const useCreatePost = () => {
   const [loading, setLoading] = useState(false);
@@ -9,9 +10,10 @@ export const useCreatePost = () => {
       setLoading(true);
       setError(null);
       
-      const token = localStorage.getItem('token');
+      const token = getToken();
       
       if (!token) {
+        handle401();
         throw new Error('Kullanıcı girişi yapılmamış');
       }
 
@@ -54,15 +56,17 @@ export const useCreatePost = () => {
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          handle401();
+          throw new Error('Oturum süresi dolmuş');
+        }
         const errorData = await response.json();
-        console.error('🔧 useCreatePost: API Error response:', errorData);
         throw new Error(errorData.message || 'Gönderi oluşturulurken bir hata oluştu');
       }
 
       const result = await response.json();
       return result;
     } catch (err) {
-      console.error('🔧 useCreatePost: Error occurred:', err);
       setError(err.message);
       throw err;
     } finally {
@@ -75,8 +79,9 @@ export const useCreatePost = () => {
       setLoading(true);
       setError(null);
       
-      const token = localStorage.getItem('token');
+      const token = getToken();
       if (!token) {
+        handle401();
         throw new Error('Kullanıcı girişi yapılmamış');
       }
 
@@ -92,6 +97,10 @@ export const useCreatePost = () => {
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          handle401();
+          throw new Error('Oturum süresi dolmuş');
+        }
         const errorData = await response.json();
         throw new Error(errorData.message || 'Dosya yüklenirken bir hata oluştu');
       }

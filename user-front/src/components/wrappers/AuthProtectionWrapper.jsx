@@ -1,15 +1,16 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
-import { Suspense, useEffect } from 'react';
-import { hasValidToken } from '@/utils/auth';
+import { Suspense, useEffect, useRef } from 'react';
+import { hasValidToken, isTokenExpired } from '@/utils/auth';
 import FallbackLoading from '../FallbackLoading';
 
 const AuthProtectionWrapper = ({
   children
 }) => {
   const pathname = usePathname();
+  const isRedirecting = useRef(false);
 
   const publicPages = [
     '/auth-advance',
@@ -26,22 +27,35 @@ const AuthProtectionWrapper = ({
 
   const { status, data: session } = useSession();
 
-  const redirectToLogin = () => {
-    // Sadece bir kez redirect yapıldığından emin ol
+  const redirectToLogin = (message) => {
+    if (isRedirecting.current) return;
+    isRedirecting.current = true;
     if (typeof window !== 'undefined') {
-      const loginUrl = `${window.location.origin}/auth-advance/sign-in?redirectTo=${encodeURIComponent(pathname)}`;
-      window.location.replace(loginUrl);
+      const loginUrl = new URL(`${window.location.origin}/auth-advance/sign-in`);
+      loginUrl.searchParams.set('redirectTo', pathname);
+      if (message) loginUrl.searchParams.set('message', message);
+      window.location.replace(loginUrl.toString());
     }
+  };
+
+  const forceLogout = () => {
+    if (isRedirecting.current) return;
+    signOut({ redirect: false }).then(() => {
+      redirectToLogin('session_expired');
+    });
   };
 
   const ensureAuthenticated = () => {
     if (isPublicPage) return true;
 
-    // Eğer NextAuth authenticated ise, localStorage token'ı henüz gelmemiş olabilir.
-    // useAuth component'i bunu sync edecektir. Bu yüzden redirect yapma.
-    if (status === 'authenticated') return true;
+    if (status === 'authenticated') {
+      if (session?.access_token && isTokenExpired(session.access_token)) {
+        forceLogout();
+        return false;
+      }
+      return true;
+    }
 
-    // Eğer session yükleniyorsa, henüz karar vermek için erken.
     if (status === 'loading') return true;
 
     const hasToken = hasValidToken();
@@ -52,19 +66,27 @@ const AuthProtectionWrapper = ({
     return true;
   };
 
-  // Session + token durumunu kontrol et
   useEffect(() => {
-    // Sadece session durumu netleştiğinde kontrol yap
     if (status === 'loading') return;
+    isRedirecting.current = false;
 
     if (status === 'unauthenticated') {
       ensureAuthenticated();
     }
 
+    if (status === 'authenticated' && !isPublicPage) {
+      if (session?.access_token && isTokenExpired(session.access_token)) {
+        forceLogout();
+        return;
+      }
+    }
+
     const handleVisibilityOrFocus = () => {
-      // Sadece session unauthenticated ise veya tab değiştiğinde token kontrolü yap
       if (status === 'unauthenticated') {
         ensureAuthenticated();
+      }
+      if (status === 'authenticated' && !isPublicPage && !hasValidToken()) {
+        forceLogout();
       }
     };
 
@@ -72,9 +94,11 @@ const AuthProtectionWrapper = ({
     document.addEventListener('visibilitychange', handleVisibilityOrFocus);
 
     const intervalId = window.setInterval(() => {
-      // Periyodik kontrolü sadece session unauthenticated ise yap
       if (status === 'unauthenticated') {
         ensureAuthenticated();
+      }
+      if (status === 'authenticated' && !isPublicPage && !hasValidToken()) {
+        forceLogout();
       }
     }, 30000);
 
@@ -83,13 +107,10 @@ const AuthProtectionWrapper = ({
       document.removeEventListener('visibilitychange', handleVisibilityOrFocus);
       window.clearInterval(intervalId);
     };
-  }, [status, pathname, isPublicPage]);
+  }, [status, pathname, isPublicPage, session]);
 
-  // Loading durumunda fallback göster
-  // Ancak eğer token varsa içeriği göstermeye devam edebiliriz (agresif yaklaşım)
   if (status === 'loading') {
     if (hasValidToken()) {
-      // Token varsa loading olsa bile içeriği göster (session gelince update olur)
       return (
         <Suspense fallback={<FallbackLoading />}>
           {children}
@@ -99,12 +120,8 @@ const AuthProtectionWrapper = ({
     return <FallbackLoading />;
   }
 
-  // Unauthenticated durumunda eğer sayfa public değilse ve token da yoksa fallback göster
   if (status === 'unauthenticated' && !isPublicPage) {
     if (ensureAuthenticated()) {
-      // Token var ama status unauthenticated? 
-      // Bu genellikle NextAuth'ın token'ı henüz işlemediği/jitter durumudur.
-      // İçeriği göstermeye devam et.
       return (
         <Suspense fallback={<FallbackLoading />}>
           {children}
@@ -114,7 +131,12 @@ const AuthProtectionWrapper = ({
     return <FallbackLoading />;
   }
 
-  // Authenticated durumunda veya Public sayfada children'ı render et
+  if (status === 'authenticated' && !isPublicPage) {
+    if (session?.access_token && isTokenExpired(session.access_token)) {
+      return <FallbackLoading />;
+    }
+  }
+
   return (
     <Suspense fallback={<FallbackLoading />}>
       {children}

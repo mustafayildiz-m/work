@@ -3,6 +3,7 @@ import { notificationData } from '@/assets/data/notification';
 import { eventScheduleData, mediaData, userConnections, users } from '@/assets/data/other';
 import { blogsData, eventData, groupsData, postVideosData, socialCommentsData, socialPostsData, trendingVideos } from '@/assets/data/social';
 import { sleep } from '@/utils/promise';
+import { handle401 } from '@/utils/auth';
 export const getAllUsers = async () => {
   await sleep();
   return users;
@@ -56,9 +57,9 @@ export const getWhoToFollow = async (type = 'all', limit = 200) => {
     });
 
     if (!response.ok) {
-      // Silently handle 401 for invalid tokens
       if (response.status === 401) {
-        return users.slice(0, limit);
+        handle401();
+        return [];
       }
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -323,7 +324,8 @@ export const getTimelinePosts = async (userId, language = 'tr', page = 1, limit 
 
     if (!response.ok) {
       if (response.status === 401) {
-        throw new Error('Authentication failed. Please login again.');
+        handle401();
+        return { posts: [], total: 0 };
       } else if (response.status === 404) {
         throw new Error('Timeline not found for this user.');
       } else {

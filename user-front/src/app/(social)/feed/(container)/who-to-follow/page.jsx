@@ -5,7 +5,7 @@ import { FaPlus, FaSearch, FaUser, FaUserPlus } from 'react-icons/fa';
 import { Spinner, Button } from 'react-bootstrap';
 import Link from 'next/link';
 import './who-to-follow.css';
-import { getUserIdFromToken } from '../../../../../utils/auth';
+import { getUserIdFromToken, authFetch } from '../../../../../utils/auth';
 import { useLanguage } from '@/context/useLanguageContext';
 import { getProfilePath } from '@/utils/profileEncoder';
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
@@ -26,21 +26,13 @@ export default function WhoToFollowPage() {
   const itemsPerPage = 15;
 
   const fetchData = async () => {
-    if (isSearching) return; // Don't fetch if searching
+    if (isSearching) return;
 
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/who-to-follow?page=${currentPage}&limit=${itemsPerPage}`,
-        {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
+      const response = await authFetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/who-to-follow?page=${currentPage}&limit=${itemsPerPage}`
       );
 
       if (response.ok) {
@@ -102,16 +94,8 @@ export default function WhoToFollowPage() {
         setSearchLoading(true);
 
         try {
-          const token = localStorage.getItem('token');
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/who-to-follow/search?q=${encodeURIComponent(searchTerm)}&page=${currentPage}&limit=${itemsPerPage}`,
-            {
-              method: 'GET',
-              headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-              }
-            }
+          const response = await authFetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/who-to-follow/search?q=${encodeURIComponent(searchTerm)}&page=${currentPage}&limit=${itemsPerPage}`
           );
 
           if (response.ok) {
@@ -277,7 +261,6 @@ export default function WhoToFollowPage() {
     const followerKey = `${followerType}-${followerId}`;
     try {
       setFollowLoading(prev => ({ ...prev, [followerKey]: true }));
-      const token = localStorage.getItem('token');
       const userId = getUserIdFromToken();
 
       if (!userId) {
@@ -285,18 +268,13 @@ export default function WhoToFollowPage() {
         return;
       }
 
-      const endpoint = '/user-follow/follow';
       const requestBody = {
         follower_id: parseInt(userId),
         following_id: parseInt(followerId)
       };
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+      const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/user-follow/follow`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify(requestBody)
       });
 
@@ -327,7 +305,6 @@ export default function WhoToFollowPage() {
     const followerKey = `${followerType}-${followerId}`;
     try {
       setFollowLoading(prev => ({ ...prev, [followerKey]: true }));
-      const token = localStorage.getItem('token');
       const userId = getUserIdFromToken();
 
       if (!userId) {
@@ -335,18 +312,13 @@ export default function WhoToFollowPage() {
         return;
       }
 
-      const endpoint = '/user-follow/unfollow';
       const requestBody = {
         follower_id: parseInt(userId),
         following_id: parseInt(followerId)
       };
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+      const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/user-follow/unfollow`, {
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify(requestBody)
       });
 
@@ -376,13 +348,8 @@ export default function WhoToFollowPage() {
     const followerKey = `user-${followerId}`;
     try {
       setFollowLoading(prev => ({ ...prev, [followerKey]: true }));
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user-follow/accept-request`, {
+      const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/user-follow/accept-request`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({ follower_id: followerId })
       });
       if (response.ok) {
@@ -405,13 +372,8 @@ export default function WhoToFollowPage() {
     const followerKey = `user-${followerId}`;
     try {
       setFollowLoading(prev => ({ ...prev, [followerKey]: true }));
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user-follow/reject-request`, {
+      const response = await authFetch(`${process.env.NEXT_PUBLIC_API_URL}/user-follow/reject-request`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({ follower_id: followerId })
       });
       if (response.ok) {
