@@ -68,7 +68,7 @@ export class UserPostsService {
     const savedPost = await this.userPostRepository.save(post);
 
     // Cache'i temizle - kullanıcının kendi timeline'ı ve onu takip edenlerin timeline'ları
-    await this.clearTimelineCacheForUser(savedPost.user_id);
+    await this.invalidateTimelineCachesForUser(savedPost.user_id);
 
     // Onaylı post ise takipçilere WebSocket ile anında bildir
     if (savedPost.status === PostStatus.APPROVED) {
@@ -114,7 +114,7 @@ export class UserPostsService {
       throw new NotFoundException('Post not found after update');
 
     // Cache'i temizle
-    await this.clearTimelineCacheForUser(updatedPost.user_id);
+    await this.invalidateTimelineCachesForUser(updatedPost.user_id);
 
     return updatedPost;
   }
@@ -143,7 +143,7 @@ export class UserPostsService {
     await this.userPostRepository.remove(post);
 
     // Cache'i temizle
-    await this.clearTimelineCacheForUser(postAuthorId);
+    await this.invalidateTimelineCachesForUser(postAuthorId);
 
     return { deleted: true };
   }
@@ -763,7 +763,7 @@ export class UserPostsService {
     const updatedPost = await this.userPostRepository.save(post);
 
     // Cache'i temizle
-    await this.clearTimelineCacheForUser(updatedPost.user_id);
+    await this.invalidateTimelineCachesForUser(updatedPost.user_id);
 
     // Takipçilere WebSocket ile anında bildir
     this.broadcastNewPostToFollowers(updatedPost).catch((err) =>
@@ -782,7 +782,7 @@ export class UserPostsService {
     const updatedPost = await this.userPostRepository.save(post);
 
     // Cache'i temizle
-    await this.clearTimelineCacheForUser(updatedPost.user_id);
+    await this.invalidateTimelineCachesForUser(updatedPost.user_id);
 
     return updatedPost;
   }
@@ -848,8 +848,9 @@ export class UserPostsService {
   /**
    * Bir kullanıcı için timeline cache'ini temizler
    * Kullanıcının kendi cache'ini ve onu takip edenlerin cache'lerini temizler
+   * (Profil fotoğrafı / isim güncellemesi gibi durumlarda feed'de eski avatar kalmaması için dışarıdan da çağrılabilir.)
    */
-  private async clearTimelineCacheForUser(userId: number) {
+  async invalidateTimelineCachesForUser(userId: number) {
     // Desteklenen diller
     const languages = ['tr', 'en', 'ar'];
 

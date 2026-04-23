@@ -5,12 +5,14 @@ import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { UserFollowModule } from '../modules/user-follow.module';
 import { UserScholarFollowModule } from '../modules/user-scholar-follow.module';
+import { UserPostsModule } from '../modules/user-posts.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     UserFollowModule,
     UserScholarFollowModule,
+    UserPostsModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],
