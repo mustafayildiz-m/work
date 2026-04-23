@@ -10,12 +10,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import * as bcrypt from 'bcrypt';
+import { UserPostsService } from '../services/user-posts.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private readonly userPostsService: UserPostsService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -51,6 +53,9 @@ export class UsersService {
       updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
     }
     await this.usersRepository.update(id, updateUserDto);
+    if (Object.prototype.hasOwnProperty.call(updateUserDto, 'photoUrl')) {
+      await this.userPostsService.invalidateTimelineCachesForUser(id);
+    }
     return this.findOne(id);
   }
 
@@ -74,6 +79,9 @@ export class UsersService {
     }
 
     await this.usersRepository.update(id, updateUserDto);
+    if (Object.prototype.hasOwnProperty.call(updateUserDto, 'photoUrl')) {
+      await this.userPostsService.invalidateTimelineCachesForUser(id);
+    }
     return this.findOne(id);
   }
 
