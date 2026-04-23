@@ -382,7 +382,7 @@ export const WebSocketChatProvider = ({ children }) => {
       const socketInstance = io(getWebSocketUrl(), {
         auth: { token },
         transports: ['websocket', 'polling'],
-        timeout: 5000,
+        timeout: 20000,
         forceNew: false
       });
 
