@@ -49,7 +49,7 @@ export const getFallbackImageUrl = (fallbackPath = '/logo/logo.png') => {
  */
 export const getBookCoverUrl = (book, size = 'full', baseUrl = process.env.NEXT_PUBLIC_API_URL || '') => {
   const img = book?.coverImage || book?.coverUrl;
-  if (!img || img === 'null' || img === 'undefined') return '/images/book-placeholder.jpg';
+  if (!img || typeof img !== 'string' || img === 'null' || img === 'undefined') return '/images/book-placeholder.jpg';
   if (img.startsWith('http')) return img;
 
   const normalized = img.startsWith('/') ? img : `/${img}`;

@@ -148,7 +148,7 @@ const SharedStoryCard = ({ post, onDeletePost, comments = [], onLoadComments, on
   }, [post.shared_story_id]);
 
   const getThumbnailUrl = () => {
-    if (!storyData?.thumbnail_url) return '/images/book-placeholder.jpg';
+    if (!storyData?.thumbnail_url || typeof storyData.thumbnail_url !== 'string') return '/images/book-placeholder.jpg';
     const thumb = storyData.thumbnail_url;
     if (thumb.startsWith('http')) return thumb;
     return `${API_BASE_URL}${thumb.startsWith('/') ? '' : '/'}${thumb}`;
@@ -293,7 +293,7 @@ const SharedStoryCard = ({ post, onDeletePost, comments = [], onLoadComments, on
                   />
                 ) : (
                   <video
-                    src={storyData.video_url.startsWith('http') ? storyData.video_url : `${API_BASE_URL}${storyData.video_url.startsWith('/') ? '' : '/'}${storyData.video_url}`}
+                    src={(typeof storyData.video_url === 'string' && storyData.video_url.startsWith('http')) ? storyData.video_url : `${API_BASE_URL}${typeof storyData.video_url === 'string' && storyData.video_url.startsWith('/') ? '' : '/'}${storyData.video_url}`}
                     controls
                     playsInline
                     className="w-100 h-100"
