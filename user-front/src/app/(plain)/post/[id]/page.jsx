@@ -631,7 +631,7 @@ const PublicPostPage = () => {
   };
 
   const getImageUrl = (photoUrl) => {
-    if (!photoUrl) return avatar7.src || avatar7;
+    if (!photoUrl || typeof photoUrl !== 'string' || photoUrl === 'null') return avatar7.src || avatar7;
 
     let finalUrl;
     if (photoUrl.startsWith('/uploads/') || photoUrl.startsWith('uploads/')) {

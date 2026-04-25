@@ -195,7 +195,9 @@ const UserFeedPage = () => {
 
   // Helper function to get proper image URL
   const getImageUrl = (photoUrl) => {
-    if (!photoUrl) return avatar7.src || avatar7;
+    if (!photoUrl || typeof photoUrl !== 'string' || photoUrl === 'null' || photoUrl === 'undefined') {
+      return avatar7.src || avatar7;
+    }
     if (photoUrl.startsWith('/uploads/')) {
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
       return `${apiBaseUrl}${photoUrl}`;
@@ -205,7 +207,7 @@ const UserFeedPage = () => {
 
   // Helper function to get file URL
   const getFileUrl = (fileUrl) => {
-    if (!fileUrl) return '';
+    if (!fileUrl || typeof fileUrl !== 'string') return '';
     if (fileUrl.startsWith('http')) return fileUrl;
     return `${process.env.NEXT_PUBLIC_API_URL}${fileUrl}`;
   };
