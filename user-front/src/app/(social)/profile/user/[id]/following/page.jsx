@@ -127,7 +127,7 @@ export default function UserFollowingPage() {
   }, [searchTerm, selectedType, followingData]);
 
   const getImageUrl = (photoUrl) => {
-    if (!photoUrl) return '/profile/profile.png';
+    if (!photoUrl || typeof photoUrl !== 'string' || photoUrl === 'null') return '/profile/profile.png';
     if (photoUrl.startsWith('/uploads/')) {
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
       return `${apiBaseUrl}${photoUrl}`;

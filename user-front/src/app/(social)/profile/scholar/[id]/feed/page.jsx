@@ -101,7 +101,7 @@ const ScholarFeedPage = () => {
 
   // Helper function to get proper image URL
   const getImageUrl = (photoUrl) => {
-    if (!photoUrl) return avatar7.src || avatar7;
+    if (!photoUrl || typeof photoUrl !== 'string' || photoUrl === 'null') return avatar7.src || avatar7;
     if (photoUrl.startsWith('/uploads/') || photoUrl.startsWith('uploads/')) {
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
       // Ensure the path starts with a slash

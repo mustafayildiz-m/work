@@ -53,7 +53,7 @@ const Followers = () => {
 
   // Helper function to get proper image URL
   const getImageUrl = (photoUrl) => {
-    if (!photoUrl) return '/profile/profile.png';
+    if (!photoUrl || typeof photoUrl !== 'string' || photoUrl === 'null') return '/profile/profile.png';
     if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://')) return photoUrl;
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
     const path = photoUrl.startsWith('/') ? photoUrl : `/${photoUrl}`;
