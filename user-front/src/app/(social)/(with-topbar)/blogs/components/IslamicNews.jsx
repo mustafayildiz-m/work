@@ -53,7 +53,7 @@ const StoryCard = ({ story, languages = [], onShareToFeed }) => {
 
   // Thumbnail URL'i oluştur
   const getThumbnailUrl = () => {
-    if (!thumbnail_url) return null;
+    if (!thumbnail_url || typeof thumbnail_url !== 'string') return null;
     return thumbnail_url.startsWith('http')
       ? thumbnail_url
       : `${API_BASE_URL}${thumbnail_url}`;
@@ -647,7 +647,7 @@ const ScholarStories = () => {
               };
 
               const getThumbnailUrl = () => {
-                if (!thumbnail_url) return null;
+                if (!thumbnail_url || typeof thumbnail_url !== 'string') return null;
                 return thumbnail_url.startsWith('http')
                   ? thumbnail_url
                   : `${API_BASE_URL}${thumbnail_url}`;

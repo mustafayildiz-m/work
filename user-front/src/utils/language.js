@@ -27,7 +27,7 @@ const FALLBACK_EMOJI_MAP = {
  * @returns {string}
  */
 export const getFlagImageUrl = (flagUrl, baseUrl = API_BASE_URL) => {
-  if (!flagUrl) return '';
+  if (!flagUrl || typeof flagUrl !== 'string') return '';
   if (flagUrl.startsWith('http://') || flagUrl.startsWith('https://')) return flagUrl;
   return `${baseUrl}${flagUrl.startsWith('/') ? flagUrl : '/' + flagUrl}`;
 };

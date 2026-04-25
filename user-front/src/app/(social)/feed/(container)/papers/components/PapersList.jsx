@@ -10,7 +10,7 @@ import '../papers.css';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 const resolveImageUrl = (imageUrl) => {
-  if (!imageUrl) return '';
+  if (!imageUrl || typeof imageUrl !== 'string') return '';
   if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl;
   return `${API_BASE_URL.replace(/\/$/, '')}/${imageUrl.replace(/^\//, '')}`;
 };

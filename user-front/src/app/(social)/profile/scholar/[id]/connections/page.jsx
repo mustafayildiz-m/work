@@ -109,7 +109,7 @@ const ScholarBooksPage = () => {
 
   // Helper function to get proper image URL
   const getImageUrl = (imageUrl) => {
-    if (!imageUrl) return null;
+    if (!imageUrl || typeof imageUrl !== 'string') return null;
 
     // Eğer zaten tam URL ise (http/https ile başlıyorsa)
     if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
