@@ -725,7 +725,7 @@ export const WebSocketChatProvider = ({ children }) => {
   }, [apiCall]);
 
   const fetchMessages = useCallback(async (conversationId) => {
-    if (!conversationId || conversationId.startsWith('temp-')) {
+    if (!conversationId || String(conversationId).startsWith('temp-')) {
       setMessages([]);
       return [];
     }
