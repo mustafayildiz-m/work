@@ -148,7 +148,7 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
   const getArticleImage = () => {
     if (!articleData) return '/images/book-placeholder.jpg';
 
-    if (articleData.coverImage) {
+    if (articleData.coverImage && typeof articleData.coverImage === 'string') {
       if (articleData.coverImage.startsWith('/uploads/') || articleData.coverImage.startsWith('uploads/')) {
         const normalizedPath = articleData.coverImage.startsWith('/') ? articleData.coverImage : `/${articleData.coverImage}`;
         return `${API_BASE_URL}${normalizedPath}`;
@@ -442,7 +442,7 @@ const SharedArticleCard = ({ post, onDeletePost }) => {
                         transition: 'transform 0.2s ease'
                       }}
                       onClick={() => {
-                        const fullUrl = mainTranslation.pdfUrl.startsWith('/uploads/')
+                        const fullUrl = (typeof mainTranslation.pdfUrl === 'string' && mainTranslation.pdfUrl.startsWith('/uploads/'))
                           ? `${process.env.NEXT_PUBLIC_API_URL}${mainTranslation.pdfUrl}`
                           : mainTranslation.pdfUrl;
                         window.open(fullUrl, '_blank');

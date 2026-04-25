@@ -158,7 +158,7 @@ const SharedPodcastCard = ({ post, onDeletePost, comments = [], onLoadComments, 
   }, [post.shared_podcast_id]);
 
   useEffect(() => {
-    if (podcastData?.audioUrl && audioRef.current) {
+    if (podcastData?.audioUrl && typeof podcastData.audioUrl === 'string' && audioRef.current) {
       const url = podcastData.audioUrl.startsWith('http') ? podcastData.audioUrl : `${API_BASE_URL}${podcastData.audioUrl.startsWith('/') ? '' : '/'}${podcastData.audioUrl}`;
       audioRef.current.src = url;
     }
@@ -186,6 +186,7 @@ const SharedPodcastCard = ({ post, onDeletePost, comments = [], onLoadComments, 
     if (!podcastData) return '/images/podcast-placeholder.jpg';
     const cover = podcastData.coverImage;
     if (!cover) return '/images/podcast-placeholder.jpg';
+    if (!cover || typeof cover !== 'string') return '/images/podcast-placeholder.jpg';
     if (cover.startsWith('http')) return cover;
     return `${API_BASE_URL}${cover.startsWith('/') ? '' : '/'}${cover}`;
   };

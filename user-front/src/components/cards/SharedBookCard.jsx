@@ -150,7 +150,7 @@ const SharedBookCard = ({ post, onDeletePost }) => {
   const getBookImage = () => {
     if (!bookData) return '/images/book-placeholder.jpg';
 
-    if (bookData.coverUrl) {
+    if (bookData.coverUrl && typeof bookData.coverUrl === 'string') {
       if (bookData.coverUrl.startsWith('/uploads/') || bookData.coverUrl.startsWith('uploads/')) {
         const normalizedPath = bookData.coverUrl.startsWith('/') ? bookData.coverUrl : `/${bookData.coverUrl}`;
         return `${API_BASE_URL}${normalizedPath}`;
@@ -167,7 +167,7 @@ const SharedBookCard = ({ post, onDeletePost }) => {
   };
 
   const getPdfUrl = (pdfUrl) => {
-    if (!pdfUrl) return null;
+    if (!pdfUrl || typeof pdfUrl !== 'string') return null;
     return pdfUrl.startsWith('http') ? pdfUrl : `${API_BASE_URL}${pdfUrl}`;
   };
 
