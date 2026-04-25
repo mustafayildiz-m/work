@@ -43,10 +43,12 @@ const getWebSocketUrl = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
   if (apiUrl.includes('localhost')) {
-    return 'ws://localhost:3000/chat';
+    return 'http://localhost:3000';
   }
 
-  return apiUrl.replace(/\/api\/?$/, '').replace('https://', 'wss://').replace('http://', 'ws://') + '/chat';
+  // /api suffix'ini kaldır, sadece kök URL döndür
+  // Socket.IO kendi /socket.io/ endpoint'ini otomatik kullanır
+  return apiUrl.replace(/\/api\/?$/, '').replace('https://', 'https://').replace('http://', 'http://');
 };
 
 const normalizeOnlineUser = (userData) => {
@@ -257,7 +259,7 @@ export const WebSocketChatProvider = ({ children }) => {
   const replaceOptimisticMessage = useCallback((realMessage) => {
     setMessages(prev => {
       const optimisticIndex = prev.findIndex(msg =>
-        msg.id.startsWith('temp-') &&
+        String(msg.id).startsWith('temp-') &&
         msg.content === realMessage.content &&
         msg.senderId === realMessage.senderId
       );
