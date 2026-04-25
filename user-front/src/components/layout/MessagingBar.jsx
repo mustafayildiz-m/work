@@ -129,6 +129,8 @@ const MessagingBar = () => {
 
         if (typeof photoUrl === 'object') return photoUrl.src || defaultPlaceholder;
 
+        if (typeof photoUrl !== 'string') return defaultPlaceholder;
+
         const apiBaseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
 
         if (photoUrl.startsWith('http')) return photoUrl;
@@ -465,7 +467,7 @@ const MessagingBar = () => {
         // We need to find the conversationId first or use recipientId
         try {
             const conv = conversations.find(c => String(c.participantId) === String(normalizedUser.id));
-            if (conv && conv.id && !conv.id.startsWith('temp-')) {
+            if (conv && conv.id && !String(conv.id).startsWith('temp-')) {
                 await selectConversation(conv);
                 markConversationAsRead?.(conv.id, conv.participantId);
                 const history = await fetchMessages(conv.id);
@@ -522,7 +524,7 @@ const MessagingBar = () => {
     const loadChatHistoryForUser = async (userId) => {
         try {
             const conv = conversations.find(c => String(c.participantId) === String(userId));
-            if (!conv || !conv.id || conv.id.startsWith('temp-')) return;
+            if (!conv || !conv.id || String(conv.id).startsWith('temp-')) return;
 
             await selectConversation(conv);
             markConversationAsRead?.(conv.id, conv.participantId);

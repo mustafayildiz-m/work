@@ -20,7 +20,7 @@ const formatDate = (dateValue, locale = 'tr-TR') => {
 };
 
 const resolveImageUrl = (imageUrl) => {
-  if (!imageUrl) return '';
+  if (!imageUrl || typeof imageUrl !== 'string') return '';
   if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl;
   return `${API_BASE_URL.replace(/\/$/, '')}/${imageUrl.replace(/^\//, '')}`;
 };

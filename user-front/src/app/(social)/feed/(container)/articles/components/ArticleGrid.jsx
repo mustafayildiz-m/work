@@ -52,16 +52,16 @@ export default function ArticleGrid({
     const apiBaseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
 
     // Makale kendi coverImage'ına sahipse onu kullan
-    if (article.coverImage && article.coverImage !== 'null' && article.coverImage !== 'undefined') {
+    if (article.coverImage && typeof article.coverImage === 'string' && article.coverImage !== 'null' && article.coverImage !== 'undefined') {
       return article.coverImage.startsWith('http') ? article.coverImage : `${apiBaseUrl}${article.coverImage.startsWith('/') ? '' : '/'}${article.coverImage}`;
     }
 
     // Makale coverImage'ı yoksa, kitabın coverImage veya coverUrl'ini kullan
     if (article.book) {
-      if (article.book.coverImage && article.book.coverImage !== 'null' && article.book.coverImage !== 'undefined') {
+      if (article.book.coverImage && typeof article.book.coverImage === 'string' && article.book.coverImage !== 'null' && article.book.coverImage !== 'undefined') {
         return article.book.coverImage.startsWith('http') ? article.book.coverImage : `${apiBaseUrl}${article.book.coverImage.startsWith('/') ? '' : '/'}${article.book.coverImage}`;
       }
-      if (article.book.coverUrl && article.book.coverUrl !== 'null' && article.book.coverUrl !== 'undefined') {
+      if (article.book.coverUrl && typeof article.book.coverUrl === 'string' && article.book.coverUrl !== 'null' && article.book.coverUrl !== 'undefined') {
         return article.book.coverUrl.startsWith('http') ? article.book.coverUrl : `${apiBaseUrl}${article.book.coverUrl.startsWith('/') ? '' : '/'}${article.book.coverUrl}`;
       }
     }

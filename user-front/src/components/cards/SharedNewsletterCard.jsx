@@ -151,6 +151,7 @@ const SharedNewsletterCard = ({ post, onDeletePost, comments = [], onLoadComment
   const getNewsletterImage = () => {
     if (!newsletterData?.imageUrl) return '/images/book-placeholder.jpg';
     const img = newsletterData.imageUrl;
+    if (typeof img !== 'string') return '/images/book-placeholder.jpg';
     if (img.startsWith('http')) return img;
     return `${API_BASE_URL}${img.startsWith('/') ? '' : '/'}${img}`;
   };
