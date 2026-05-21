@@ -4,10 +4,13 @@ import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { FaTruck, FaWarehouse, FaBoxes, FaInfoCircle, FaCalendar, FaMoneyBillWave, FaArrowLeft, FaCheckCircle, FaClock, FaTimesCircle, FaExchangeAlt, FaMapMarkerAlt, FaEdit } from 'react-icons/fa';
 
+import { getLocalizedLanguageName } from '@/utils/languageUtils';
+
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function StockTransferDetail() {
   const intl = useIntl();
+  const localeTag = intl.locale === 'tr' ? 'tr-TR' : 'en-US';
   const { id } = useParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -23,13 +26,13 @@ export default function StockTransferDetail() {
       },
     })
       .then(res => {
-        if (!res.ok) throw new Error('Transfer detayı alınamadı');
+        if (!res.ok) throw new Error(intl.formatMessage({ id: 'UI.INV_ERR_T_DETAIL_THROW' }));
         return res.json();
       })
       .then(setData)
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, intl]);
 
   if (loading) {
     return (
@@ -146,7 +149,8 @@ export default function StockTransferDetail() {
               <div>
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white"><FormattedMessage id="UI.TRANSFER_ID_" />{data.id}</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  <FormattedMessage id="UI.OLUSTURULMA" /> {new Date(data.createdAt).toLocaleString('tr-TR')}
+                  <FormattedMessage id="UI.OLUSTURULMA" />{' '}
+                  {new Date(data.createdAt).toLocaleString(localeTag)}
                 </p>
               </div>
             </div>
@@ -221,20 +225,20 @@ export default function StockTransferDetail() {
                 <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                   <div className="text-xs text-gray-500 dark:text-gray-400 mb-1"><FormattedMessage id="UI.OLUSTURULMA_1" /></div>
                   <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    {new Date(data.createdAt).toLocaleDateString('tr-TR')}
+                    {new Date(data.createdAt).toLocaleDateString(localeTag)}
                   </div>
                   <div className="text-xs text-gray-400">
-                    {new Date(data.createdAt).toLocaleTimeString('tr-TR')}
+                    {new Date(data.createdAt).toLocaleTimeString(localeTag)}
                   </div>
                 </div>
 
                 <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                   <div className="text-xs text-gray-500 dark:text-gray-400 mb-1"><FormattedMessage id="UI.GUNCELLENME" /></div>
                   <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    {new Date(data.updatedAt).toLocaleDateString('tr-TR')}
+                    {new Date(data.updatedAt).toLocaleDateString(localeTag)}
                   </div>
                   <div className="text-xs text-gray-400">
-                    {new Date(data.updatedAt).toLocaleTimeString('tr-TR')}
+                    {new Date(data.updatedAt).toLocaleTimeString(localeTag)}
                   </div>
                 </div>
               </div>
@@ -269,7 +273,8 @@ export default function StockTransferDetail() {
                   </div>
                   {data.stock.language && (
                     <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      <FormattedMessage id="UI.DIL" /> {data.stock.language.name}
+                      <FormattedMessage id="UI.DIL" />{' '}
+                      {getLocalizedLanguageName(data.stock.language, intl)}
                     </div>
                   )}
                 </div>
@@ -318,11 +323,11 @@ export default function StockTransferDetail() {
                     <div className="text-xs text-green-600 dark:text-green-400 font-medium"><FormattedMessage id="UI.TAHMINI_TESLIMAT" /></div>
                   </div>
                   <div className="font-bold text-gray-900 dark:text-white">
-                    {new Date(data.estimatedDeliveryDate).toLocaleDateString('tr-TR', { 
-                      weekday: 'long', 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
+                    {new Date(data.estimatedDeliveryDate).toLocaleDateString(localeTag, {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
                     })}
                   </div>
                 </div>

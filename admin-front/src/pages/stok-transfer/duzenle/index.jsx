@@ -30,7 +30,7 @@ export default function EditStockTransferPage() {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => {
-        if (!res.ok) throw new Error('Transfer bilgisi alınamadı');
+        if (!res.ok) throw new Error(intl.formatMessage({ id: 'UI.INV_ERR_T_LOAD_THROW' }));
         return res.json();
       })
       .then(data => {
@@ -49,7 +49,7 @@ export default function EditStockTransferPage() {
         setError(err.message);
         setLoading(false);
       });
-  }, [id]);
+  }, [id, intl]);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -77,8 +77,8 @@ export default function EditStockTransferPage() {
           cargoFee: form.cargoFee ? Number(form.cargoFee) : undefined,
         }),
       });
-      if (!res.ok) throw new Error('Transfer güncellenemedi');
-      toast.success('Transfer başarıyla güncellendi!');
+      if (!res.ok) throw new Error(intl.formatMessage({ id: 'UI.INV_ERR_T_PATCH_THROW' }));
+      toast.success(intl.formatMessage({ id: 'UI.INV_OK_T_UPDATE_TOAST' }));
       setTimeout(() => navigate('/stok-transfer/liste'), 1200);
     } catch (err) {
       setError(err.message);
@@ -273,7 +273,7 @@ export default function EditStockTransferPage() {
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition resize-none"
                 rows={4}
-                placeholder="Transfer hakkında detaylı bilgi veya not ekleyebilirsiniz..."
+                placeholder={intl.formatMessage({ id: 'UI.INV_T_NOTES_PH' })}
               />
             </div>
           </div>
@@ -326,7 +326,7 @@ export default function EditStockTransferPage() {
                   value={form.trackingNumber}
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition"
-                  placeholder="Örn: 1234567890"
+                  placeholder={intl.formatMessage({ id: 'UI.INV_T_TRACK_PH' })}
                 />
               </div>
 
@@ -367,8 +367,15 @@ export default function EditStockTransferPage() {
                 <p className="text-sm text-orange-800 dark:text-orange-200 flex items-start gap-2">
                   <FaTruck className="mt-0.5 flex-shrink-0" />
                   <span>
-                    <span className="font-semibold"><FormattedMessage id="UI.KARGO_SECILDI" /></span> {form.cargoCompany} <FormattedMessage id="UI.ILE_GONDERILECEK" />
-                    {form.trackingNumber && ' Takip numarası ile sevkiyat durumunu kolayca izleyebilirsiniz.'}
+                    <span className="font-semibold"><FormattedMessage id="UI.KARGO_SECILDI" /></span>{' '}
+                    {form.cargoCompany}{' '}
+                    <FormattedMessage id="UI.ILE_GONDERILECEK" />
+                    {form.trackingNumber && (
+                      <>
+                        {' '}
+                        <FormattedMessage id="UI.INV_T_TRACK_HINT" />
+                      </>
+                    )}
                   </span>
                 </p>
               </div>

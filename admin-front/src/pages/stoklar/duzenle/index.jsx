@@ -28,7 +28,7 @@ export default function EditStockPage() {
       },
     })
       .then(res => {
-        if (!res.ok) throw new Error('Stok bilgisi alınamadı');
+        if (!res.ok) throw new Error(intl.formatMessage({ id: 'UI.INV_ERR_S_LOAD_DETAIL_THROW' }));
         return res.json();
       })
       .then(data => {
@@ -40,7 +40,7 @@ export default function EditStockPage() {
       })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, intl]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,9 +65,9 @@ export default function EditStockPage() {
           unitPrice: Number(form.unitPrice),
         }),
       });
-      if (!res.ok) throw new Error('Stok güncellenemedi');
+      if (!res.ok) throw new Error(intl.formatMessage({ id: 'UI.INV_ERR_S_PATCH_THROW' }));
       await res.json();
-      setSuccess('Stok başarıyla güncellendi!');
+      setSuccess(intl.formatMessage({ id: 'UI.INV_S_PATCH_OK_MSG' }));
     } catch (err) {
       setError(err.message);
     } finally {
@@ -115,7 +115,7 @@ export default function EditStockPage() {
               required
               min="0"
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-              placeholder="Miktar girin"
+              placeholder={intl.formatMessage({ id: 'UI.INV_S_INPUT_QTY_PH' })}
             />
           </div>
           <div>
@@ -129,7 +129,7 @@ export default function EditStockPage() {
               min="0"
               step="0.01"
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-              placeholder="Birim fiyat girin"
+              placeholder={intl.formatMessage({ id: 'UI.INV_S_INPUT_PRICE_PH' })}
             />
           </div>
           {error && <div className="text-red-500 text-sm">{error}</div>}
@@ -140,7 +140,7 @@ export default function EditStockPage() {
               className="px-4 py-2 rounded bg-blue-600 text-white font-semibold shadow border border-blue-600/20 hover:bg-blue-700 transition"
               disabled={saving}
             >
-              {saving ? 'Kaydediliyor...' : 'Kaydet'}
+              {saving ? <FormattedMessage id="UI.KAYDEDILIYOR" /> : <FormattedMessage id="UI.KAYDET" />}
             </button>
           </div>
         </form>

@@ -15,8 +15,8 @@ const BireyselKullanicilarPage = () => {
       <Container>
         <UserManagement
           role="user"
-          title="Bireysel Kullanıcılar"
-          description="Platform kullanıcılarını görüntüleyin ve yönetin"
+          title={<FormattedMessage id="UI.USER_MGMT_PAGE_USERS_TITLE" />}
+          description={<FormattedMessage id="UI.USER_MGMT_PAGE_USERS_DESC" />}
         />
       </Container>
     </>

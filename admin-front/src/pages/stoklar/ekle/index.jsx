@@ -112,10 +112,10 @@ export default function AddStockPage() {
       });
       if (res.status === 409) {
         const errData = await res.json();
-        throw new Error(errData.message || 'Bu kitap, dil ve depo kombinasyonu için zaten bir stok kaydı var.');
+        throw new Error(errData.message || intl.formatMessage({ id: 'UI.INV_S_STOCK_EXISTS' }));
       }
-      if (!res.ok) throw new Error('Stok eklenemedi');
-      setSuccess('Stok başarıyla eklendi!');
+      if (!res.ok) throw new Error(intl.formatMessage({ id: 'UI.INV_ERR_S_ADD_THROW' }));
+      setSuccess(intl.formatMessage({ id: 'UI.INV_S_ADD_SUCCESS' }));
       setForm({ bookId: '', languageId: '', warehouseId: '', quantity: '', unitPrice: '' });
     } catch (err) {
       setError(err.message);
@@ -135,7 +135,7 @@ export default function AddStockPage() {
       const selectedStock = stocks.find(s => s.id === Number(updateForm.stockId));
       
       if (!selectedStock) {
-        throw new Error('Stok bulunamadı');
+        throw new Error(intl.formatMessage({ id: 'UI.INV_ERR_S_NOT_FOUND' }));
       }
       
       const currentQuantity = Number(selectedStock.quantity);
@@ -147,7 +147,7 @@ export default function AddStockPage() {
       } else {
         newQuantity = currentQuantity - changeAmount;
         if (newQuantity < 0) {
-          throw new Error('Stok miktarı negatif olamaz!');
+          throw new Error(intl.formatMessage({ id: 'UI.INV_ERR_S_QTY_NEGATIVE' }));
         }
       }
       
@@ -162,9 +162,11 @@ export default function AddStockPage() {
         }),
       });
       
-      if (!res.ok) throw new Error('Stok güncellenemedi');
-      
-      setSuccess(`Stok başarıyla güncellendi! Yeni miktar: ${newQuantity} adet`);
+      if (!res.ok) throw new Error(intl.formatMessage({ id: 'UI.INV_ERR_S_UPDATE_THROW' }));
+
+      setSuccess(
+        intl.formatMessage({ id: 'UI.INV_S_UPDATE_SUCCESS_WITH_QTY' }, { quantity: newQuantity }),
+      );
       setUpdateForm({ stockId: '', quantity: '', operation: 'add' });
       
       // Stok listesini yenile
@@ -276,14 +278,14 @@ export default function AddStockPage() {
               name="bookId"
               options={books.map(book => ({
                 value: book.id,
-                label: book.translations?.[0]?.title || book.title || 'İsimsiz Kitap',
+                label: book.translations?.[0]?.title || book.title || intl.formatMessage({ id: 'UI.INV_BOOK_UNTITLED' }),
                 book: book // Tüm kitap bilgisini sakla
               }))}
               value={books
                 .filter(b => b.id === Number(form.bookId))
                 .map(book => ({
                   value: book.id,
-                  label: book.translations?.[0]?.title || book.title || 'İsimsiz Kitap'
+                  label: book.translations?.[0]?.title || book.title || intl.formatMessage({ id: 'UI.INV_BOOK_UNTITLED' })
                 }))[0] || null}
               onChange={(selectedOption) => {
                 if (selectedOption) {
@@ -292,7 +294,7 @@ export default function AddStockPage() {
                   setForm({ ...form, bookId: '' });
                 }
               }}
-              placeholder="Kitap arayın veya seçin..."
+              placeholder={intl.formatMessage({ id: 'UI.INV_S_SELECT_BOOK_PH' })}
               isClearable
               isSearchable
               className="react-select-container"
@@ -400,7 +402,7 @@ export default function AddStockPage() {
                 required
                 min="0"
                 className="w-full px-4 py-3 h-11 border-2 border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                placeholder="Örn: 100"
+                placeholder={intl.formatMessage({ id: 'UI.INV_S_QTY_PH' })}
               />
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                 <FormattedMessage id="UI._EKLENECEK_STOK_MIKTARI_ADET" />
@@ -420,7 +422,7 @@ export default function AddStockPage() {
                 min="0"
                 step="0.01"
                 className="w-full px-4 py-3 h-11 border-2 border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                placeholder="Örn: 45.50"
+                placeholder={intl.formatMessage({ id: 'UI.INV_S_PRICE_PH' })}
               />
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                 <FormattedMessage id="UI._BIRIM_FIYAT_TL" />
@@ -490,7 +492,7 @@ export default function AddStockPage() {
               <Select
                 name="stockId"
                 options={stocks.map(stock => {
-                  const bookTitle = stock.book?.translations?.[0]?.title || stock.book?.title || 'İsimsiz Kitap';
+                  const bookTitle = stock.book?.translations?.[0]?.title || stock.book?.title || intl.formatMessage({ id: 'UI.INV_BOOK_UNTITLED' });
                   return {
                     value: stock.id,
                     label: `${bookTitle} - ${stock.language?.name} - ${stock.warehouse?.name}`,
@@ -501,7 +503,7 @@ export default function AddStockPage() {
                 value={stocks
                   .filter(s => s.id === Number(updateForm.stockId))
                   .map(stock => {
-                    const bookTitle = stock.book?.translations?.[0]?.title || stock.book?.title || 'İsimsiz Kitap';
+                    const bookTitle = stock.book?.translations?.[0]?.title || stock.book?.title || intl.formatMessage({ id: 'UI.INV_BOOK_UNTITLED' });
                     return {
                       value: stock.id,
                       label: `${bookTitle} - ${stock.language?.name} - ${stock.warehouse?.name}`,
@@ -515,7 +517,7 @@ export default function AddStockPage() {
                     setUpdateForm({ ...updateForm, stockId: '' });
                   }
                 }}
-                placeholder="Stok arayın veya seçin..."
+                placeholder={intl.formatMessage({ id: 'UI.INV_S_SELECT_STOCK_PH' })}
                 isClearable
                 isSearchable
                 formatOptionLabel={(option) => (
@@ -619,7 +621,12 @@ export default function AddStockPage() {
             <div>
               <label className="flex items-center gap-2 font-bold mb-3 text-base">
                 <FaHashtag className={updateForm.operation === 'add' ? 'text-green-500' : 'text-red-500'} />
-                {updateForm.operation === 'add' ? 'Eklenecek' : 'Çıkarılacak'} <FormattedMessage id="UI.MIKTAR" />
+                {updateForm.operation === 'add' ? (
+                  <FormattedMessage id="UI.INV_S_QTY_LABEL_ADD" />
+                ) : (
+                  <FormattedMessage id="UI.INV_S_QTY_LABEL_SUBTRACT" />
+                )}{' '}
+                <FormattedMessage id="UI.MIKTAR" />
               </label>
               <input
                 type="number"
@@ -630,7 +637,7 @@ export default function AddStockPage() {
                 min="1"
                 max={updateForm.operation === 'subtract' ? selectedStock?.quantity : undefined}
                 className="w-full px-4 py-3 h-11 border-2 border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                placeholder="Miktar girin"
+                placeholder={intl.formatMessage({ id: 'UI.INV_S_INPUT_QTY_PH' })}
               />
               {updateForm.operation === 'subtract' && selectedStock && Number(updateForm.quantity) > Number(selectedStock.quantity) && (
                 <div className="mt-2 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
@@ -696,7 +703,11 @@ export default function AddStockPage() {
                 ) : (
                   <>
                     {updateForm.operation === 'add' ? <FaPlus /> : <FaMinus />}
-                    {updateForm.operation === 'add' ? 'Stok Ekle' : 'Stok Çıkar'}
+                    {updateForm.operation === 'add' ? (
+                      <FormattedMessage id="UI.INV_S_BTN_OPERATION_ADD" />
+                    ) : (
+                      <FormattedMessage id="UI.INV_S_BTN_OPERATION_SUB" />
+                    )}
                   </>
                 )}
               </button>

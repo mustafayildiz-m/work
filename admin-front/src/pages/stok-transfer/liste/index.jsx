@@ -16,6 +16,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function StockTransferList() {
   const intl = useIntl();
+  const localeTag = intl.locale === 'tr' ? 'tr-TR' : 'en-US';
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -82,16 +83,16 @@ export default function StockTransferList() {
         headers: { Authorization: `Bearer ${token}` },
       });
       
-      if (!res.ok) throw new Error('Transferler alınamadı');
+      if (!res.ok) throw new Error(intl.formatMessage({ id: 'UI.INV_ERR_T_LIST_THROW' }));
       const result = await res.json();
       setData(Array.isArray(result) ? result : []);
     } catch (err) {
       setError(err.message);
-      toast.error('Transferler yüklenirken hata oluştu');
+      toast.error(intl.formatMessage({ id: 'UI.INV_T_LIST_LOAD_TOAST_FAIL' }));
     } finally {
       setLoading(false);
     }
-  }, [filters]);
+  }, [filters, intl]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -104,27 +105,27 @@ export default function StockTransferList() {
   const columns = useMemo(() => [
     {
       accessorKey: 'id',
-      header: 'Transfer ID',
+      header: intl.formatMessage({ id: 'UI.INV_T_COL_ID' }),
       cell: info => <span className="font-semibold">{info.getValue()}</span>,
     },
     {
       accessorKey: 'fromWarehouse.name',
-      header: 'Kaynak Depo',
+      header: intl.formatMessage({ id: 'UI.KAYNAK_DEPO' }),
       cell: info => info.getValue(),
     },
     {
       accessorKey: 'toWarehouse.name',
-      header: 'Hedef Depo',
+      header: intl.formatMessage({ id: 'UI.HEDEF_DEPO' }),
       cell: info => info.getValue(),
     },
     {
       accessorKey: 'quantity',
-      header: 'Miktar',
+      header: intl.formatMessage({ id: 'UI.MIKTAR' }),
       cell: info => info.getValue(),
     },
     {
       accessorKey: 'cargoCompany',
-      header: 'Kargo',
+      header: intl.formatMessage({ id: 'UI.KARGO_SIRKETI' }),
       cell: info => {
         const transfer = info.row.original;
         if (!transfer.cargoCompany) return <span className="text-gray-400 text-xs">-</span>;
@@ -145,7 +146,7 @@ export default function StockTransferList() {
     },
     {
       accessorKey: 'status',
-      header: 'Durum',
+      header: intl.formatMessage({ id: 'UI.DURUM' }),
       cell: info => {
         const status = info.getValue();
         let color, icon, label;
@@ -153,17 +154,17 @@ export default function StockTransferList() {
           case 'pending':
             color = 'bg-yellow-500';
             icon = <FaClock className="inline mr-1" />;
-            label = 'Beklemede';
+            label = intl.formatMessage({ id: 'UI.BEKLEMEDE' });
             break;
           case 'completed':
             color = 'bg-green-500';
             icon = <FaCheckCircle className="inline mr-1" />;
-            label = 'Tamamlandı';
+            label = intl.formatMessage({ id: 'UI.TAMAMLANDI' });
             break;
           case 'cancelled':
             color = 'bg-red-500';
             icon = <FaTimesCircle className="inline mr-1" />;
-            label = 'İptal Edildi';
+            label = intl.formatMessage({ id: 'UI.IPTAL_EDILDI' });
             break;
           default:
             color = 'bg-gray-500';
@@ -180,8 +181,8 @@ export default function StockTransferList() {
     },
     {
       accessorKey: 'createdAt',
-      header: 'Oluşturulma Tarihi',
-      cell: info => new Date(info.getValue()).toLocaleDateString(),
+      header: intl.formatMessage({ id: 'UI.INV_T_COL_CREATED' }),
+      cell: info => new Date(info.getValue()).toLocaleDateString(localeTag),
     },
     {
       id: 'actions',
@@ -221,7 +222,7 @@ export default function StockTransferList() {
       enableColumnFilter: false,
       size: 100,
     },
-  ], []);
+  ], [intl, localeTag]);
 
   const table = useReactTable({
     data,
@@ -258,8 +259,18 @@ export default function StockTransferList() {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (!res.ok) throw new Error(type === 'complete' ? 'Transfer tamamlanamadı' : 'Transfer iptal edilemedi');
-      toast.success(type === 'complete' ? 'Transfer başarıyla tamamlandı!' : 'Transfer başarıyla iptal edildi!');
+      if (!res.ok) {
+        throw new Error(
+          intl.formatMessage({
+            id: type === 'complete' ? 'UI.INV_ERR_T_COMPLETE_THROW' : 'UI.INV_ERR_T_CANCEL_THROW',
+          }),
+        );
+      }
+      toast.success(
+        intl.formatMessage({
+          id: type === 'complete' ? 'UI.INV_OK_T_COMPLETE_TOAST' : 'UI.INV_OK_T_CANCEL_TOAST',
+        }),
+      );
       
       // Update both data and allData
       await fetchTransfers();
@@ -395,7 +406,7 @@ export default function StockTransferList() {
               </label>
               <input
                 type="text"
-                placeholder="Kargo ara..."
+                placeholder={intl.formatMessage({ id: 'UI.INV_SEARCH_CARGO_PH' })}
                 value={filters.cargoCompany}
                 onChange={e => setFilters(prev => ({ ...prev, cargoCompany: e.target.value }))}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm transition"
@@ -480,9 +491,12 @@ export default function StockTransferList() {
                     <td colSpan={columns.length} className="py-20 text-center bg-gray-50 dark:bg-gray-800/50">
                       <div className="text-6xl mb-4">📦</div>
                       <p className="text-gray-500 dark:text-gray-400 text-lg font-medium">
-                        {(filters.fromWarehouseId !== 'all' || filters.toWarehouseId !== 'all' || filters.cargoCompany || filters.status !== 'all')
-                          ? 'Filtreleme sonucu bulunamadı'
-                          : 'Henüz transfer eklenmemiş'}
+                        {(filters.fromWarehouseId !== 'all' ||
+                          filters.toWarehouseId !== 'all' ||
+                          filters.cargoCompany ||
+                          filters.status !== 'all')
+                          ? intl.formatMessage({ id: 'UI.INV_EMPTY_TRANSFER_FILTER' })
+                          : intl.formatMessage({ id: 'UI.INV_EMPTY_TRANSFER_NONE' })}
                       </p>
                       {!(filters.fromWarehouseId !== 'all' || filters.toWarehouseId !== 'all' || filters.cargoCompany || filters.status !== 'all') && (
                         <Link 

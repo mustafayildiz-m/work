@@ -15,8 +15,8 @@ const YoneticilerPage = () => {
       <Container>
         <UserManagement
           role="admin"
-          title="Yöneticiler"
-          description="Sistem yöneticilerini görüntüleyin ve yönetin"
+          title={<FormattedMessage id="UI.USER_MGMT_PAGE_ADMINS_TITLE" />}
+          description={<FormattedMessage id="UI.USER_MGMT_PAGE_ADMINS_DESC" />}
         />
       </Container>
     </>

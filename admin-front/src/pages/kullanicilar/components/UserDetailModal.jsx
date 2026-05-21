@@ -1,10 +1,20 @@
-import { FormattedMessage } from "react-intl";
-import { X, Mail, Phone, MapPin, Calendar, User, Shield, CheckCircle, XCircle } from 'lucide-react';
+import { FormattedMessage, useIntl } from "react-intl";
+import { X, Mail, Phone, MapPin, Calendar, Shield, CheckCircle, XCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const UserDetailModal = ({ user, isOpen, onClose }) => {
+  const intl = useIntl();
+  const localeTag = (intl.locale || 'en').replace('_', '-');
+  const dateTimeOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  };
+
   const getImageUrl = (photoUrl) => {
     if (!photoUrl) return null;
     if (photoUrl.startsWith('http')) return photoUrl;
@@ -80,7 +90,14 @@ const UserDetailModal = ({ user, isOpen, onClose }) => {
                       : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
                   }`}>
                     <Shield className="w-3 h-3" />
-                    {user.role === 'admin' ? 'Yönetici' : user.role === 'editor' ? 'Editör' : 'Kullanıcı'}
+                    {intl.formatMessage({
+                      id:
+                        user.role === 'admin'
+                          ? 'UI.YONETICI'
+                          : user.role === 'editor'
+                            ? 'UI.EDITOR'
+                            : 'UI.KULLANICI',
+                    })}
                   </span>
                   <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${
                     user.isActive
@@ -88,7 +105,11 @@ const UserDetailModal = ({ user, isOpen, onClose }) => {
                       : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300'
                   }`}>
                     {user.isActive ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
-                    {user.isActive ? 'Aktif' : 'Pasif'}
+                    {user.isActive ? (
+                      <FormattedMessage id="UI.AKTIF" />
+                    ) : (
+                      <FormattedMessage id="UI.PASIF" />
+                    )}
                   </span>
                 </div>
               </div>
@@ -152,7 +173,7 @@ const UserDetailModal = ({ user, isOpen, onClose }) => {
                     <div className="flex-1 min-w-0">
                       <p className="text-xs text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.DOGUM_TARIHI" /></p>
                       <p className="text-sm font-medium text-gray-900 dark:text-white">
-                        {new Date(user.birthDate).toLocaleDateString('tr-TR')}
+                        {new Date(user.birthDate).toLocaleDateString(localeTag)}
                       </p>
                     </div>
                   </div>
@@ -169,26 +190,14 @@ const UserDetailModal = ({ user, isOpen, onClose }) => {
                 <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
                   <p className="text-xs text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.KAYIT_TARIHI" /></p>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {new Date(user.createdAt).toLocaleDateString('tr-TR', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
+                    {new Date(user.createdAt).toLocaleDateString(localeTag, dateTimeOptions)}
                   </p>
                 </div>
 
                 <div className="p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
                   <p className="text-xs text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.SON_GUNCELLEME" /></p>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {new Date(user.updatedAt).toLocaleDateString('tr-TR', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
+                    {new Date(user.updatedAt).toLocaleDateString(localeTag, dateTimeOptions)}
                   </p>
                 </div>
               </div>

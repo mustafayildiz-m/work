@@ -31,7 +31,7 @@ export default function EditStorePage() {
       },
     })
       .then(res => {
-        if (!res.ok) throw new Error('Depo bilgisi alınamadı');
+        if (!res.ok) throw new Error(intl.formatMessage({ id: 'UI.INV_ERR_W_LOAD_THROW' }));
         return res.json();
       })
       .then(data => {
@@ -44,7 +44,7 @@ export default function EditStorePage() {
       })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, intl]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -67,12 +67,12 @@ export default function EditStorePage() {
         },
         body: JSON.stringify(form),
       });
-      if (!res.ok) throw new Error('Depo güncellenemedi');
+      if (!res.ok) throw new Error(intl.formatMessage({ id: 'UI.INV_ERR_W_UPDATE_THROW' }));
       await res.json();
-      toast.success('Depo başarıyla güncellendi!');
+      toast.success(intl.formatMessage({ id: 'UI.INV_OK_W_UPDATE_TOAST' }));
       setTimeout(() => navigate('/depolar/liste'), 1000);
     } catch (err) {
-      toast.error(err.message || 'Depo güncellenirken hata oluştu');
+      toast.error(err.message || intl.formatMessage({ id: 'UI.INV_ERR_W_UPDATE_TOAST' }));
     } finally {
       setSaving(false);
     }
@@ -163,7 +163,7 @@ export default function EditStorePage() {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                placeholder="Örn: İstanbul Merkez Depo"
+                placeholder={intl.formatMessage({ id: 'UI.INV_W_PH_NAME_EX' })}
               />
             </div>
 
@@ -181,7 +181,7 @@ export default function EditStorePage() {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                placeholder="Örn: İstanbul, Kadıköy"
+                placeholder={intl.formatMessage({ id: 'UI.INV_W_PH_LOCATION_EX' })}
               />
             </div>
 
@@ -197,7 +197,7 @@ export default function EditStorePage() {
                 onChange={handleChange}
                 rows={4}
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-none"
-                placeholder="Depo hakkında detaylı bilgi girin..."
+                placeholder={intl.formatMessage({ id: 'UI.INV_W_PH_DESCRIPTION' })}
               />
             </div>
 

@@ -1,4 +1,4 @@
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useState, useEffect } from 'react';
 import { X, Save, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const UserEditModal = ({ user, isOpen, onClose, onSuccess }) => {
+  const intl = useIntl();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -54,13 +55,13 @@ const UserEditModal = ({ user, isOpen, onClose, onSuccess }) => {
       const responseText = await response.text();
       
       if (responseText.trim().startsWith('<!') || responseText.trim().startsWith('<html')) {
-        toast.error('API endpoint bulunamadı. Lütfen backend\'in çalıştığından emin olun.');
+        toast.error(intl.formatMessage({ id: 'UI.USER_MGMT_API_HTML_RESPONSE' }));
         setLoading(false);
         return;
       }
 
       if (!response.ok) {
-        let errorMessage = 'Bir hata oluştu';
+        let errorMessage = intl.formatMessage({ id: 'UI.USER_MGMT_ERROR_GENERIC' });
         try {
           const errorJson = JSON.parse(responseText);
           errorMessage = errorJson.message || errorJson.error || errorMessage;
@@ -72,12 +73,12 @@ const UserEditModal = ({ user, isOpen, onClose, onSuccess }) => {
         return;
       }
 
-      toast.success('Kullanıcı başarıyla güncellendi');
+      toast.success(intl.formatMessage({ id: 'UI.USER_MGMT_UPDATE_SUCCESS' }));
       onSuccess();
       onClose();
     } catch (error) {
       console.error('❌ Kullanıcı güncellenirken hata:', error);
-      toast.error('Bir hata oluştu');
+      toast.error(intl.formatMessage({ id: 'UI.USER_MGMT_ERROR_GENERIC' }));
     } finally {
       setLoading(false);
     }
@@ -244,7 +245,11 @@ const UserEditModal = ({ user, isOpen, onClose, onSuccess }) => {
                 className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Save className="w-5 h-5" />
-                {loading ? 'Kaydediliyor...' : 'Kaydet'}
+                {loading ? (
+                  <FormattedMessage id="UI.KAYDEDILIYOR" />
+                ) : (
+                  <FormattedMessage id="UI.KAYDET" />
+                )}
               </button>
               <button
                 type="button"
