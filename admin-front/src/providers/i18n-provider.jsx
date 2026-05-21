@@ -5,6 +5,7 @@ import {
   I18N_DEFAULT_LANGUAGE,
   I18N_LANGUAGES,
 } from '@/i18n/config';
+import { ADMIN_I18N_RESET_TO_DEFAULT_EVENT } from '@/i18n/reset-admin-language';
 import { DirectionProvider as RadixDirectionProvider } from '@radix-ui/react-direction';
 import { IntlProvider } from 'react-intl';
 import { getData, setData } from '@/lib/storage';
@@ -70,6 +71,24 @@ const I18nProvider = ({ children }) => {
   useEffect(() => {
     document.documentElement.setAttribute('dir', currenLanguage.direction);
   }, [currenLanguage]);
+
+  useEffect(() => {
+    const onResetToDefault = () => {
+      setData(I18N_CONFIG_KEY, I18N_DEFAULT_LANGUAGE);
+      setCurrenLanguage(I18N_DEFAULT_LANGUAGE);
+    };
+
+    window.addEventListener(
+      ADMIN_I18N_RESET_TO_DEFAULT_EVENT,
+      onResetToDefault,
+    );
+    return () => {
+      window.removeEventListener(
+        ADMIN_I18N_RESET_TO_DEFAULT_EVENT,
+        onResetToDefault,
+      );
+    };
+  }, []);
 
   return (
     <TranslationsContext.Provider
