@@ -1,5 +1,6 @@
 import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
+import { getLocalizedLanguageName } from '@/utils/languageUtils';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
@@ -280,7 +281,7 @@ export default function EditPodcast() {
                     className="w-full px-4 py-3 h-11 border-2 border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all cursor-pointer"
                   >
                     {languages.map(lang => (
-                      <option key={lang.id} value={lang.code}>{lang.name}</option>
+                      <option key={lang.id} value={lang.code}>{getLocalizedLanguageName(lang, intl)}</option>
                     ))}
                   </select>
                 </div>

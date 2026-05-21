@@ -1,6 +1,7 @@
 import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
+import { getLocalizedLanguageName } from '@/utils/languageUtils';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
 import Select from 'react-select';
@@ -491,10 +492,10 @@ function EditBook() {
                       <span className="text-red-500">*</span>
                     </label>
                     <Select
-                      options={availableLanguages.map(l => ({ value: l.id, label: l.name }))}
+                      options={availableLanguages.map(l => ({ value: l.id, label: getLocalizedLanguageName(l, intl) }))}
                       value={availableLanguages
                         .filter(l => l.id === translation.language)
-                        .map(l => ({ value: l.id, label: l.name }))[0]}
+                        .map(l => ({ value: l.id, label: getLocalizedLanguageName(l, intl) }))[0]}
                       onChange={option => handleTranslationChange(idx, 'language', option.value)}
                       isLoading={loadingLanguages}
                       placeholder="Dil seçin..."

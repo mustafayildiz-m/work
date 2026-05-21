@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import Select from 'react-select';
 import { getSelectStyles, getTheme } from '@/styles/select-styles';
 import { createSlug, createUniqueSlug } from '@/utils/slug-utils';
+import { getLocalizedLanguageName } from '@/utils/languageUtils';
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 const API_URL = BASE_URL + '/articles';
@@ -250,7 +251,7 @@ function EditArticle() {
         if (!response.ok) {
           const errorData = await response.json();
           if (errorData.message === 'PDF_INVALID_CONFIRM_NEEDED') {
-            if (window.confirm('⚠️ UYARI: PDF Metin İçeriği Bozuk!\n\nBu PDF dosyasının metni okunamıyor. Otomatik çeviri yapılamayacak.\n\nYine de yüklemek istiyor musunuz?')) {
+            if (window.confirm(intl.formatMessage({ id: 'UI.PDF_BOZUK_UYARI' }))) {
               return submitData(true);
             }
             setLoading(false);
@@ -271,14 +272,18 @@ function EditArticle() {
     }
   };
 
-  const bookOptions = availableBooks.map(book => ({
-    value: book.id,
-    label: `${book.translations?.[0]?.title || 'İsimsiz'} - ${book.author || 'Bilinmeyen Yazar'}`
-  }));
+  const bookOptions = React.useMemo(
+    () =>
+      availableBooks.map(book => ({
+        value: book.id,
+        label: `${book.translations?.[0]?.title || intl.formatMessage({ id: 'UI.ISIMSIZ_KITAP' })} - ${book.author || intl.formatMessage({ id: 'UI.BILINMEYEN_YAZAR' })}`,
+      })),
+    [availableBooks, intl],
+  );
 
   const languageOptions = availableLanguages.map(lang => ({
     value: lang.id,
-    label: lang.name
+    label: getLocalizedLanguageName(lang, intl)
   }));
 
   if (fetchingArticle) {
@@ -309,7 +314,7 @@ function EditArticle() {
               options={bookOptions}
               value={bookOptions.find(opt => opt.value === form.bookId)}
               onChange={(option) => setForm({ ...form, bookId: option?.value || null })}
-              placeholder="Kitap seçin..."
+              placeholder={intl.formatMessage({ id: 'UI.KITAP_SECIN' })}
               className="react-select-container"
               classNamePrefix="react-select"
               styles={getSelectStyles(currentTheme)}
@@ -329,7 +334,7 @@ function EditArticle() {
               value={form.author}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
-              placeholder="Dr. Mehmet Yılmaz"
+              placeholder={intl.formatMessage({ id: 'UI.MAKALE_YAZARI_PLACEHOLDER' })}
             />
           </div>
 
@@ -377,7 +382,7 @@ function EditArticle() {
               <div className="mt-3">
                 <img
                   src={preview}
-                  alt="Önizleme"
+                  alt={intl.formatMessage({ id: 'UI.ONIZLEME' })}
                   className="w-32 h-32 object-cover rounded-lg border"
                 />
               </div>
@@ -407,7 +412,7 @@ function EditArticle() {
               >
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="font-semibold text-gray-900 dark:text-gray-100">
-                    <FormattedMessage id="UI.CEVIRI" /> {idx + 1}
+                    {intl.formatMessage({ id: 'UI.CEVIRI_NUMARALI' }, { n: idx + 1 })}
                   </h3>
                   {form.translations.length > 1 && (
                     <button
@@ -432,7 +437,7 @@ function EditArticle() {
                       onChange={(option) =>
                         handleTranslationChange(idx, 'languageId', option?.value || '')
                       }
-                      placeholder="Dil seçin..."
+                      placeholder={intl.formatMessage({ id: 'UI.DIL_SECIN_PLACEHOLDER' })}
                       className="react-select-container"
                       classNamePrefix="react-select"
                       styles={getSelectStyles(currentTheme)}
@@ -486,7 +491,7 @@ function EditArticle() {
                       }
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
                       rows="3"
-                      placeholder="Kısa özet..."
+                      placeholder={intl.formatMessage({ id: 'UI.KISA_OZET_PLACEHOLDER' })}
                     />
                   </div>
 
@@ -541,7 +546,13 @@ function EditArticle() {
               disabled={loading || !form.bookId}
               className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Güncelleniyor...' : 'Güncelle'}
+              {loading ? (
+                <>
+                  <FormattedMessage id="UI.GUNCELLENIYOR" />
+                </>
+              ) : (
+                <FormattedMessage id="UI.GUNCELLE" />
+              )}
             </button>
           </div>
         </form>

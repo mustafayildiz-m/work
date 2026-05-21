@@ -1,8 +1,10 @@
 import React, { useRef, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { FaArrowLeft, FaSave } from 'react-icons/fa';
+import { getLocalizedLanguageName } from '@/utils/languageUtils';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
@@ -10,6 +12,7 @@ const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/pa
 const getTodayDate = () => new Date().toISOString().split('T')[0];
 
 function AddPaper() {
+  const intl = useIntl();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const [loading, setLoading] = useState(false);
@@ -129,16 +132,16 @@ function AddPaper() {
                 disabled={languagesLoading}
               >
                 {languagesLoading ? (
-                  <option value="tr">Diller yukleniyor...</option>
+                  <option value="tr">{intl.formatMessage({ id: 'UI.YUKLENIYOR' })}</option>
                 ) : languages.length === 0 ? (
-                  <option value="tr">Dil bulunamadi</option>
+                  <option value="tr">{intl.formatMessage({ id: 'UI.DIL_BULUNAMADI' })}</option>
                 ) : (
                   languages
                     .filter((l) => l.isActive !== false)
-                    .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+                    .sort((a, b) => getLocalizedLanguageName(a, intl).localeCompare(getLocalizedLanguageName(b, intl)))
                     .map((l) => (
                       <option key={l.id} value={l.code}>
-                        {l.name}
+                        {getLocalizedLanguageName(l, intl)}
                       </option>
                     ))
                 )}

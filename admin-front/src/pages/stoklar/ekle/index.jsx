@@ -1,6 +1,7 @@
 import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { getLocalizedLanguageName } from '@/utils/languageUtils';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
 import Select from 'react-select';
@@ -356,7 +357,7 @@ export default function AddStockPage() {
                 <option value=""><FormattedMessage id="UI.SECINIZ" /></option>
               )}
               {languages.map(lang => (
-                <option key={lang.id} value={lang.id}>{lang.name}</option>
+                <option key={lang.id} value={lang.id}>{getLocalizedLanguageName(lang, intl)}</option>
               ))}
             </select>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
