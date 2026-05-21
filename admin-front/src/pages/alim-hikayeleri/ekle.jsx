@@ -1,5 +1,5 @@
 import { FormattedMessage, useIntl } from "react-intl";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -20,26 +20,56 @@ import AsyncSelect from 'react-select/async';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 
-// Validation Schema
-const schema = yup.object({
-  title: yup.string().required('Başlık zorunludur').min(3, 'Başlık en az 3 karakter olmalıdır'),
-  description: yup.string().required('Açıklama zorunludur').min(10, 'Açıklama en az 10 karakter olmalıdır'),
-  video_url: yup.string().url('Geçerli bir video URL\'i giriniz'),
-  duration: yup.number().positive('Süre pozitif bir sayı olmalıdır'),
-  language: yup.string().required('Dil seçimi zorunludur'),
-  scholar_id: yup.number().transform((value, originalValue) => {
-    return originalValue === '' || originalValue === null || originalValue === undefined ? undefined : value;
-  }).optional().positive('Geçerli bir alim seçiniz'),
-  is_active: yup.boolean(),
-  is_featured: yup.boolean(),
-});
+import { getLocalizedLanguageName } from '@/utils/languageUtils';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function AlimHikayesiEkle() {
   const intl = useIntl();
-  const optionalLabel = intl.locale?.startsWith('tr') ? 'Zorunlu degil' : 'Optional';
+  const optionalLabel = intl.formatMessage({ id: 'UI.FIELD_OPTIONAL_PARENS' });
   const navigate = useNavigate();
+
+  const schema = useMemo(
+    () =>
+      yup.object({
+        title: yup
+          .string()
+          .required(intl.formatMessage({ id: 'UI.SCHOLAR_STORY_VALIDATION_TITLE_REQUIRED' }))
+          .min(3, intl.formatMessage({ id: 'UI.SCHOLAR_STORY_VALIDATION_TITLE_MIN' })),
+        description: yup
+          .string()
+          .required(intl.formatMessage({ id: 'UI.SCHOLAR_STORY_VALIDATION_DESCRIPTION_REQUIRED' }))
+          .min(10, intl.formatMessage({ id: 'UI.SCHOLAR_STORY_VALIDATION_DESCRIPTION_MIN' })),
+        video_url: yup
+          .string()
+          .transform((curr, orig) => (orig === '' || orig === null ? null : curr))
+          .nullable()
+          .url(intl.formatMessage({ id: 'UI.SCHOLAR_STORY_VALIDATION_VIDEO_URL' })),
+        duration: yup
+          .number()
+          .transform((value, originalValue) => {
+            const empty =
+              originalValue === '' ||
+              originalValue === null ||
+              originalValue === undefined ||
+              Number.isNaN(Number(originalValue));
+            return empty ? undefined : value;
+          })
+          .optional()
+          .positive(intl.formatMessage({ id: 'UI.SCHOLAR_STORY_VALIDATION_DURATION_POSITIVE' })),
+        language: yup.string().required(intl.formatMessage({ id: 'UI.SCHOLAR_STORY_VALIDATION_LANGUAGE_REQUIRED' })),
+        scholar_id: yup
+          .number()
+          .transform((value, originalValue) => {
+            return originalValue === '' || originalValue === null || originalValue === undefined ? undefined : value;
+          })
+          .optional()
+          .positive(intl.formatMessage({ id: 'UI.SCHOLAR_STORY_VALIDATION_SCHOLAR' })),
+        is_active: yup.boolean(),
+        is_featured: yup.boolean(),
+      }),
+    [intl],
+  );
   const [selectedScholar, setSelectedScholar] = useState(null);
   const [loading, setLoading] = useState(false);
   const [languages, setLanguages] = useState([]);
@@ -92,7 +122,7 @@ export default function AlimHikayesiEkle() {
             <img
               src={thumbnailUrl}
               className="w-full h-full object-cover absolute inset-0"
-              alt="Youtube Thumbnail"
+              alt={intl.formatMessage({ id: 'UI.SCHOLAR_STORY_YOUTUBE_ALT' })}
             />
           </div>
           <div className="flex-1 p-4">
@@ -110,7 +140,7 @@ export default function AlimHikayesiEkle() {
                   setYoutubeThumbnail(thumbnailUrl);
                   setThumbnailFile(null); // Clear file input if any
                   toast.dismiss(id);
-                  toast.success('YouTube kapak resmi seçildi');
+                  toast.success(intl.formatMessage({ id: 'UI.SCHOLAR_STORY_YOUTUBE_THUMB_SELECTED' }));
                 }}
                 className="bg-indigo-600 text-white text-xs px-3 py-2 rounded-md font-medium hover:bg-indigo-700 transition shadow-sm"
               >
@@ -127,7 +157,7 @@ export default function AlimHikayesiEkle() {
         </div>
       ), { duration: 8000, id: `youtube-prompt-${videoId}` });
     }
-  }, [videoUrl]);
+  }, [videoUrl, intl]);
 
   // Dilleri yükle
   useEffect(() => {
@@ -142,7 +172,7 @@ export default function AlimHikayesiEkle() {
 
         setLanguages(response.data || []);
       } catch (error) {
-        toast.error('Diller yüklenirken bir hata oluştu');
+        toast.error(intl.formatMessage({ id: 'UI.SCHOLAR_STORY_LANGUAGES_LOAD_FAILED' }));
         setLanguages([]);
       } finally {
         setLanguagesLoading(false);
@@ -150,7 +180,7 @@ export default function AlimHikayesiEkle() {
     };
 
     fetchLanguages();
-  }, []);
+  }, [intl]);
 
   // Thumbnail preview oluştur
   useEffect(() => {
@@ -165,8 +195,8 @@ export default function AlimHikayesiEkle() {
     }
   }, [thumbnailFile]);
 
-  // Backend'den arama yaparak alim getir
-  const loadScholars = async (inputValue) => {
+  // Backend'den arama yaparak âlim getir
+  const loadScholars = useCallback(async (inputValue) => {
     try {
       const response = await axios.get(`${API_BASE_URL}/scholars`, {
         params: {
@@ -184,18 +214,18 @@ export default function AlimHikayesiEkle() {
         (Array.isArray(response.data) ? response.data : []);
 
       // ReactSelect için options formatına çevir
-      const options = scholarsData.map(scholar => ({
+      const options = scholarsData.map((scholar) => ({
         value: scholar.id,
         label: scholar.fullName,
-        scholar: scholar
+        scholar: scholar,
       }));
 
       return options;
-    } catch (error) {
-      toast.error('Alimler aranırken bir hata oluştu');
+    } catch (_) {
+      toast.error(intl.formatMessage({ id: 'UI.SCHOLAR_STORY_SCHOLARS_SEARCH_FAILED' }));
       return [];
     }
-  };
+  }, [intl]);
 
   const onSubmit = async (data) => {
     try {
@@ -235,10 +265,10 @@ export default function AlimHikayesiEkle() {
         }
       });
 
-      toast.success('Video başarıyla eklendi!');
+      toast.success(intl.formatMessage({ id: 'UI.SCHOLAR_STORY_ADD_SUCCESS' }));
       navigate('/alim-hikayeleri/liste');
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Video eklenirken bir hata oluştu');
+      toast.error(error.response?.data?.message || intl.formatMessage({ id: 'UI.SCHOLAR_STORY_ADD_FAILED' }));
     } finally {
       setLoading(false);
     }
@@ -306,7 +336,7 @@ export default function AlimHikayesiEkle() {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form key={intl.locale} onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Temel Bilgiler */}
           <Card className="border-2 border-purple-100 dark:border-purple-900 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950 dark:to-pink-950">
@@ -330,7 +360,7 @@ export default function AlimHikayesiEkle() {
                   <Input
                     id="title"
                     {...register('title')}
-                    placeholder="Örn: İmam Gazali Hayatı"
+                    placeholder={intl.formatMessage({ id: 'UI.SCHOLAR_STORY_TITLE_PLACEHOLDER' })}
                     className={`h-11 ${errors.title ? 'border-red-500 focus-visible:ring-red-500' : 'focus-visible:ring-purple-500'}`}
                   />
                   {errors.title && (
@@ -357,11 +387,11 @@ export default function AlimHikayesiEkle() {
                       setSelectedScholar(selectedOption);
                       setValue('scholar_id', selectedOption ? selectedOption.value : '');
                     }}
-                    placeholder="Âlim arayın ve seçin..."
+                    placeholder={intl.formatMessage({ id: 'UI.SCHOLAR_STORY_SEARCH_SCHOLAR_PLACEHOLDER' })}
                     isSearchable={true}
                     isClearable={true}
-                    noOptionsMessage={() => "Âlim bulunamadı"}
-                    loadingMessage={() => "Aranıyor..."}
+                    noOptionsMessage={() => intl.formatMessage({ id: 'UI.SCHOLAR_STORY_ASYNC_NO_RESULTS' })}
+                    loadingMessage={() => intl.formatMessage({ id: 'UI.SCHOLAR_STORY_ASYNC_SEARCHING' })}
                     className={errors.scholar_id ? 'react-select-error' : 'react-select-container'}
                     styles={{
                       control: (base) => ({
@@ -445,7 +475,7 @@ export default function AlimHikayesiEkle() {
                 <Textarea
                   id="description"
                   {...register('description')}
-                  placeholder="Videonun detaylı açıklamasını yazın..."
+                  placeholder={intl.formatMessage({ id: 'UI.SCHOLAR_STORY_DESCRIPTION_PLACEHOLDER' })}
                   rows={5}
                   className={`resize-none ${errors.description ? 'border-red-500 focus-visible:ring-red-500' : 'focus-visible:ring-purple-500'}`}
                 />
@@ -471,17 +501,28 @@ export default function AlimHikayesiEkle() {
                     disabled={languagesLoading}
                   >
                     <SelectTrigger className="h-11">
-                      <SelectValue placeholder={languagesLoading ? "Diller yükleniyor..." : "Dil seçiniz"} />
+                      <SelectValue
+                        placeholder={
+                          languagesLoading
+                            ? intl.formatMessage({ id: 'UI.SCHOLAR_STORY_LANGUAGES_LOADING' })
+                            : intl.formatMessage({ id: 'UI.SCHOLAR_STORY_LANGUAGE_PLACEHOLDER' })
+                        }
+                      />
                     </SelectTrigger>
                     <SelectContent>
                       {languages.length === 0 && !languagesLoading ? (
                         <SelectItem value="" disabled><FormattedMessage id="UI.DIL_BULUNAMADI" /></SelectItem>
                       ) : (
-                        languages.map((language) => (
-                          <SelectItem key={language.id} value={language.code}>
-                            {language.name}
-                          </SelectItem>
-                        ))
+                        languages
+                          .filter((language) => language.isActive !== false)
+                          .sort((a, b) =>
+                            getLocalizedLanguageName(a, intl).localeCompare(getLocalizedLanguageName(b, intl)),
+                          )
+                          .map((language) => (
+                            <SelectItem key={language.id} value={language.code}>
+                              {getLocalizedLanguageName(language, intl)}
+                            </SelectItem>
+                          ))
                       )}
                     </SelectContent>
                   </Select>
@@ -520,7 +561,7 @@ export default function AlimHikayesiEkle() {
                     />
                   </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    Dakika:saniye formatinda girin (ornek: 10:20).
+                    {intl.formatMessage({ id: 'UI.SCHOLAR_STORY_DURATION_FORMAT_HINT' })}
                   </p>
                 </div>
               </div>
@@ -575,7 +616,7 @@ export default function AlimHikayesiEkle() {
                       <div className="w-48 h-48 border-2 border-dashed border-green-300 dark:border-green-700 rounded-xl overflow-hidden shadow-lg">
                         <img
                           src={thumbnailPreview}
-                          alt="Kapak önizleme"
+                          alt={intl.formatMessage({ id: 'UI.SCHOLAR_STORY_COVER_PREVIEW_ALT' })}
                           className="w-full h-full object-cover"
                         />
                       </div>
@@ -587,7 +628,7 @@ export default function AlimHikayesiEkle() {
                           setYoutubeThumbnail(null); // Reset youtube thumbnail selection
                         }}
                         className="absolute -top-2 -right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all shadow-lg"
-                        title="Resmi Kaldır"
+                        title={intl.formatMessage({ id: 'UI.SCHOLAR_STORY_REMOVE_IMAGE_TITLE' })}
                       >
                         <FaTrash className="text-sm" />
                       </button>

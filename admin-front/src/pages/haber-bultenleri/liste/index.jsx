@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -8,11 +9,14 @@ const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/ne
 const PUBLIC_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 function NewsletterList() {
+  const intl = useIntl();
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchItems = async () => {
+  const localeTag = intl.locale === 'tr' ? 'tr-TR' : 'en-US';
+
+  const fetchItems = useCallback(async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('access_token');
@@ -21,26 +25,26 @@ function NewsletterList() {
       });
       const text = await response.text();
       if (!response.ok) {
-        throw new Error(`Hata: ${response.status}`);
+        throw new Error(intl.formatMessage({ id: 'UI.ERROR_HTTP_STATUS' }, { status: response.status }));
       }
       const parsed = JSON.parse(text);
       setItems(parsed.data || parsed || []);
     } catch (error) {
-      toast.error(error.message || 'Bultenler yuklenemedi');
+      toast.error(error.message || intl.formatMessage({ id: 'UI.NEWSLETTER_LIST_LOAD_FAILED' }));
     } finally {
       setLoading(false);
     }
-  };
+  }, [intl]);
 
   useEffect(() => {
     fetchItems();
-  }, []);
+  }, [fetchItems]);
 
   const formatDate = (value) => {
     if (!value) return '-';
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return '-';
-    return date.toLocaleDateString('tr-TR');
+    return date.toLocaleDateString(localeTag);
   };
 
   const resolveImageUrl = (imageUrl) => {
@@ -60,7 +64,13 @@ function NewsletterList() {
   };
 
   const handleDelete = async (item) => {
-    if (!window.confirm(`"${item.title}" bultenini silmek istediginize emin misiniz?`)) return;
+    const title = item.title || '';
+    if (
+      !window.confirm(
+        intl.formatMessage({ id: 'UI.NEWSLETTER_DELETE_CONFIRM' }, { title }),
+      )
+    )
+      return;
 
     try {
       const token = localStorage.getItem('access_token');
@@ -68,55 +78,74 @@ function NewsletterList() {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
-      if (!response.ok) throw new Error('Silme islemi basarisiz');
-      toast.success('Bulten silindi');
+      if (!response.ok)
+        throw new Error(intl.formatMessage({ id: 'UI.NEWSLETTER_DELETE_REQUEST_FAILED' }));
+      toast.success(intl.formatMessage({ id: 'UI.NEWSLETTER_DELETE_SUCCESS' }));
       setItems((prev) => prev.filter((x) => x.id !== item.id));
     } catch (error) {
-      toast.error(error.message || 'Bulten silinemedi');
+      toast.error(error.message || intl.formatMessage({ id: 'UI.NEWSLETTER_DELETE_FAILED' }));
     }
   };
 
   return (
     <>
       <Helmet>
-        <title>Haber Bultenleri</title>
+        <title>{intl.formatMessage({ id: 'UI.NEWSLETTER_LIST_HELMET' })}</title>
       </Helmet>
 
       <div className="p-6 max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Haber Bultenleri</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Admin panelinden yayimlanan tum bultenler.</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              <FormattedMessage id="UI.NEWSLETTER_LIST_HEADING" />
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              <FormattedMessage id="UI.NEWSLETTER_LIST_SUBTITLE" />
+            </p>
           </div>
           <Link
             to="/haber-bultenleri/ekle"
             className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition flex items-center gap-2"
           >
             <FaPlus />
-            Bulten Ekle
+            <FormattedMessage id="MENU.BULTEN_EKLE" />
           </Link>
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-x-auto">
           {loading ? (
-            <div className="p-10 text-center text-gray-500 dark:text-gray-400">Yukleniyor...</div>
+            <div className="p-10 text-center text-gray-500 dark:text-gray-400">
+              <FormattedMessage id="UI.YUKLENIYOR" />
+            </div>
           ) : (
             <table className="w-full min-w-[980px]">
               <thead className="bg-gray-50 dark:bg-gray-700">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">Kapak</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">Baslik & Intro</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">Icerik Ozeti</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">Yayin Tarihi</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">Olusturma / Guncelleme</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">Islemler</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">
+                    <FormattedMessage id="UI.KAPAK" />
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">
+                    <FormattedMessage id="UI.NEWSLETTER_TABLE_TITLE_INTRO" />
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">
+                    <FormattedMessage id="UI.NEWSLETTER_TABLE_CONTENT_SUMMARY" />
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">
+                    <FormattedMessage id="UI.YAYIN_TARIHI" />
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">
+                    <FormattedMessage id="UI.NEWSLETTER_TABLE_CREATED_UPDATED" />
+                  </th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300">
+                    <FormattedMessage id="UI.TABLE_ACTIONS" />
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {items.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="px-4 py-12 text-center text-gray-500 dark:text-gray-400">
-                      Kayitli bulten bulunamadi.
+                      <FormattedMessage id="UI.NEWSLETTER_EMPTY" />
                     </td>
                   </tr>
                 ) : (
@@ -126,12 +155,12 @@ function NewsletterList() {
                         {item.imageUrl ? (
                           <img
                             src={resolveImageUrl(item.imageUrl)}
-                            alt={item.title || 'Kapak'}
+                            alt={item.title || intl.formatMessage({ id: 'UI.KAPAK' })}
                             className="w-16 h-16 object-cover rounded-lg border border-gray-200 dark:border-gray-700"
                           />
                         ) : (
                           <div className="w-16 h-16 rounded-lg border border-dashed border-gray-300 dark:border-gray-600 text-xs text-gray-400 dark:text-gray-500 flex items-center justify-center">
-                            Yok
+                            <FormattedMessage id="UI.NEWSLETTER_NO_COVER" />
                           </div>
                         )}
                       </td>
@@ -146,22 +175,30 @@ function NewsletterList() {
                         {formatDate(item.publishDate)}
                       </td>
                       <td className="px-4 py-3 text-xs text-gray-600 dark:text-gray-400">
-                        <div>Olusturma: {formatDate(item.createdAt)}</div>
-                        <div className="mt-1">Guncelleme: {formatDate(item.updatedAt)}</div>
+                        <div>
+                          <FormattedMessage id="UI.NEWSLETTER_CREATED_PREFIX" />{' '}
+                          {formatDate(item.createdAt)}
+                        </div>
+                        <div className="mt-1">
+                          <FormattedMessage id="UI.NEWSLETTER_UPDATED_PREFIX" />{' '}
+                          {formatDate(item.updatedAt)}
+                        </div>
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex gap-2">
                           <button
+                            type="button"
                             className="p-2 rounded bg-yellow-500 text-white hover:bg-yellow-600"
                             onClick={() => navigate(`/haber-bultenleri/duzenle/${item.id}`)}
-                            title="Duzenle"
+                            title={intl.formatMessage({ id: 'UI.DUZENLE' })}
                           >
                             <FaEdit />
                           </button>
                           <button
+                            type="button"
                             className="p-2 rounded bg-red-500 text-white hover:bg-red-600"
                             onClick={() => handleDelete(item)}
-                            title="Sil"
+                            title={intl.formatMessage({ id: 'UI.SIL' })}
                           >
                             <FaTrash />
                           </button>

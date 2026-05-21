@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -61,7 +61,10 @@ function AddNewsletter() {
       formData.append('intro', form.intro);
       formData.append('sourceLanguage', form.sourceLanguage || 'tr');
       if (imageFile) formData.append('imageFile', imageFile);
-      formData.append('sections', JSON.stringify([{ title: 'Detay', content: form.content }]));
+      formData.append(
+        'sections',
+        JSON.stringify([{ title: intl.formatMessage({ id: 'UI.DETAY' }), content: form.content }]),
+      );
 
       const response = await fetch(API_URL, {
         method: 'POST',
@@ -73,7 +76,7 @@ function AddNewsletter() {
 
       const text = await response.text();
       if (!response.ok) {
-        let message = `Hata: ${response.status}`;
+        let message = intl.formatMessage({ id: 'UI.ERROR_HTTP_STATUS' }, { status: response.status });
         try {
           const parsed = JSON.parse(text);
           message = parsed.message || message;
@@ -81,45 +84,67 @@ function AddNewsletter() {
         throw new Error(message);
       }
 
-      toast.success('Haber bulteni basariyla eklendi');
+      toast.success(intl.formatMessage({ id: 'UI.NEWSLETTER_ADD_SUCCESS' }));
       navigate('/haber-bultenleri/liste');
     } catch (error) {
-      toast.error(error.message || 'Bulten eklenirken hata olustu');
+      toast.error(error.message || intl.formatMessage({ id: 'UI.NEWSLETTER_ADD_FAILED' }));
     } finally {
       setLoading(false);
     }
   };
 
+  const ckPlaceholder = intl.formatMessage({ id: 'UI.NEWSLETTER_DETAIL_PLACEHOLDER' });
+
   return (
     <>
       <Helmet>
-        <title>Yeni Haber Bulteni Ekle</title>
+        <title>{intl.formatMessage({ id: 'UI.NEWSLETTER_ADD_HELMET' })}</title>
       </Helmet>
 
       <div className="p-6 max-w-5xl mx-auto">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Yeni Haber Bulteni</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Bu icerik kullanici tarafinda dogrudan goruntulenir.</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              <FormattedMessage id="UI.NEWSLETTER_ADD_HEADING" />
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              <FormattedMessage id="UI.NEWSLETTER_ADD_SUBTITLE" />
+            </p>
           </div>
           <Link
             to="/haber-bultenleri/liste"
             className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-all flex items-center gap-2"
           >
             <FaArrowLeft size={14} />
-            Listeye Don
+            <FormattedMessage id="UI.LISTEYE_DON" />
           </Link>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Temel ve Gorsel Bilgiler</h3>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+              <FormattedMessage id="UI.NEWSLETTER_BASIC_IMAGE_SECTION" />
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <input className="input-style" placeholder="Baslik *" value={form.title} onChange={(e) => updateField('title', e.target.value)} required />
-              <input type="date" className="input-style" value={form.publishDate} onChange={(e) => updateField('publishDate', e.target.value)} required />
+              <input
+                className="input-style"
+                placeholder={intl.formatMessage({ id: 'UI.NEWSLETTER_TITLE_PLACEHOLDER' })}
+                value={form.title}
+                onChange={(e) => updateField('title', e.target.value)}
+                required
+              />
+              <input
+                type="date"
+                className="input-style"
+                value={form.publishDate}
+                onChange={(e) => updateField('publishDate', e.target.value)}
+                required
+              />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Kaynak dil (icerigin yazildigi dil)</label>
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
+                <FormattedMessage id="UI.NEWSLETTER_SOURCE_LANGUAGE_LABEL" />
+              </label>
               <select
                 className="input-style"
                 value={form.sourceLanguage}
@@ -139,24 +164,28 @@ function AddNewsletter() {
                     ))
                 )}
               </select>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Kullanici farkli dil kullaniyorsa icerik bu dile cevrilir.</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <FormattedMessage id="UI.NEWSLETTER_SOURCE_LANGUAGE_HINT" />
+              </p>
             </div>
             <textarea
               className="input-style mb-4 min-h-24"
-              placeholder="Giris metni (intro) *"
+              placeholder={intl.formatMessage({ id: 'UI.NEWSLETTER_INTRO_PLACEHOLDER' })}
               value={form.intro}
               onChange={(e) => updateField('intro', e.target.value)}
               required
             />
             <div className="grid grid-cols-1 gap-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Image URL *</label>
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
+                  <FormattedMessage id="UI.NEWSLETTER_COVER_LABEL" />
+                </label>
                 <button
                   type="button"
                   className="input-style text-left cursor-pointer"
                   onClick={() => fileInputRef.current?.click()}
                 >
-                  {imageFile?.name || 'Kapak resmi secmek icin tiklayin'}
+                  {imageFile?.name || intl.formatMessage({ id: 'UI.NEWSLETTER_COVER_CLICK_TO_SELECT' })}
                 </button>
                 <input
                   ref={fileInputRef}
@@ -170,7 +199,7 @@ function AddNewsletter() {
               {imagePreview && (
                 <img
                   src={imagePreview}
-                  alt="Gorsel onizleme"
+                  alt={intl.formatMessage({ id: 'UI.NEWSLETTER_IMAGE_PREVIEW_ALT' })}
                   className="w-full max-w-md rounded-lg border border-gray-200 dark:border-gray-700"
                 />
               )}
@@ -178,14 +207,16 @@ function AddNewsletter() {
           </div>
 
           <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Bulten Icerigi</h3>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+              <FormattedMessage id="UI.NEWSLETTER_CONTENT_HEADING" />
+            </h3>
             <div className="ck-wrapper">
               <CKEditor
                 editor={ClassicEditor}
                 data={form.content}
                 onChange={(_, editor) => updateField('content', editor.getData())}
                 config={{
-                  placeholder: 'Bultenin detay metnini buraya yazin...'
+                  placeholder: ckPlaceholder
                 }}
               />
             </div>
@@ -193,7 +224,7 @@ function AddNewsletter() {
 
           <div className="flex justify-end gap-3">
             <Link to="/haber-bultenleri/liste" className="px-6 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold">
-              Iptal
+              <FormattedMessage id="UI.IPTAL" />
             </Link>
             <button
               type="submit"
@@ -201,7 +232,11 @@ function AddNewsletter() {
               className="px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition disabled:opacity-50 flex items-center gap-2"
             >
               <FaSave />
-              {loading ? 'Kaydediliyor...' : 'Bulteni Kaydet'}
+              {loading ? (
+                <FormattedMessage id="UI.NEWSLETTER_SAVING" />
+              ) : (
+                <FormattedMessage id="UI.NEWSLETTER_SAVE" />
+              )}
             </button>
           </div>
         </form>
