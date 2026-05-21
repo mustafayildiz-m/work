@@ -1,10 +1,12 @@
 import { toAbsoluteUrl } from '@/lib/helpers';
 import enMessages from './messages/en.json';
 import trMessages from './messages/tr.json';
+import kyMessages from './messages/ky.json';
 
 const I18N_MESSAGES = {
   en: enMessages,
   tr: trMessages,
+  ky: kyMessages,
 };
 
 const I18N_CONFIG_KEY = 'i18nConfig';
@@ -23,6 +25,13 @@ const I18N_LANGUAGES = [
     direction: 'ltr',
     flag: toAbsoluteUrl('/media/flags/turkey.svg'),
     messages: I18N_MESSAGES.tr,
+  },
+  {
+    label: 'Кыргызча',
+    code: 'ky',
+    direction: 'ltr',
+    flag: toAbsoluteUrl('/media/flags/kyrgyzstan.svg'),
+    messages: I18N_MESSAGES.ky,
   },
 ];
 
