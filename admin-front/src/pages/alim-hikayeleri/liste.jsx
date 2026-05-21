@@ -1,5 +1,5 @@
 import { FormattedMessage, useIntl } from "react-intl";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
@@ -41,11 +41,14 @@ import {
   Play
 } from 'lucide-react';
 
+import { getLocalizedLanguageName } from '@/utils/languageUtils';
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function AlimHikayeleriListe() {
   const intl = useIntl();
   const navigate = useNavigate();
+  const localeTag = intl.locale === 'tr' ? 'tr-TR' : 'en-US';
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -79,53 +82,54 @@ export default function AlimHikayeleriListe() {
   }, []);
 
   // Fetch stories
-  const fetchStories = async (page = 1, search = '', language = 'all', status = 'all') => {
-    try {
-      setLoading(true);
+  const fetchStories = useCallback(
+    async (page = 1, search = '', language = 'all', status = 'all') => {
+      try {
+        setLoading(true);
 
-      let url = `${API_BASE_URL}/scholar-stories?page=${page}&limit=20`;
+        let url = `${API_BASE_URL}/scholar-stories?page=${page}&limit=20`;
 
-      if (search) {
-        url = `${API_BASE_URL}/scholar-stories/search?q=${encodeURIComponent(search)}&page=${page}&limit=20`;
-      } else {
-        // Sadece "all" değilse filtre ekle
-        if (language && language !== 'all') {
-          url += `&language=${language}`;
-        }
-        if (status && status !== 'all') {
-          url += `&isActive=${status === 'active'}`;
+        if (search) {
+          url = `${API_BASE_URL}/scholar-stories/search?q=${encodeURIComponent(search)}&page=${page}&limit=20`;
         } else {
-          // Admin panelde tüm hikayeleri görmek için 'all' gönder
-          url += `&isActive=all`;
+          if (language && language !== 'all') {
+            url += `&language=${language}`;
+          }
+          if (status && status !== 'all') {
+            url += `&isActive=${status === 'active'}`;
+          } else {
+            url += `&isActive=all`;
+          }
         }
+
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          },
+        });
+
+        const storiesData =
+          response.data.stories || response.data.data || (Array.isArray(response.data) ? response.data : []);
+
+        setStories(storiesData);
+        setPagination({
+          page: response.data.page || response.data.currentPage || 1,
+          limit: response.data.limit || 20,
+          total: response.data.total || response.data.totalCount || storiesData.length,
+          totalPages: response.data.totalPages || Math.ceil((response.data.total || storiesData.length) / 20),
+        });
+      } catch (_) {
+        toast.error(intl.formatMessage({ id: 'UI.SCHOLAR_STORY_LIST_LOAD_FAILED' }));
+      } finally {
+        setLoading(false);
       }
-
-      const response = await axios.get(url, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-        }
-      });
-
-      // API response formatını kontrol et
-      const storiesData = response.data.stories || response.data.data || (Array.isArray(response.data) ? response.data : []);
-
-      setStories(storiesData);
-      setPagination({
-        page: response.data.page || response.data.currentPage || 1,
-        limit: response.data.limit || 20,
-        total: response.data.total || response.data.totalCount || storiesData.length,
-        totalPages: response.data.totalPages || Math.ceil((response.data.total || storiesData.length) / 20)
-      });
-    } catch (error) {
-      toast.error('Videolar yüklenirken bir hata oluştu');
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [intl],
+  );
 
   useEffect(() => {
     fetchStories(1, searchQuery, languageFilter, statusFilter);
-  }, [searchQuery, languageFilter, statusFilter]);
+  }, [fetchStories, searchQuery, languageFilter, statusFilter]);
 
   // Delete story
   const handleDelete = async (storyId) => {
@@ -136,12 +140,12 @@ export default function AlimHikayeleriListe() {
         }
       });
 
-      toast.success('Video başarıyla silindi!');
+      toast.success(intl.formatMessage({ id: 'UI.SCHOLAR_STORY_DELETE_SUCCESS' }));
       setDeleteDialogOpen(false);
       setStoryToDelete(null);
       fetchStories(pagination.page, searchQuery, languageFilter, statusFilter);
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Video silinirken bir hata oluştu');
+      toast.error(error.response?.data?.message || intl.formatMessage({ id: 'UI.SCHOLAR_STORY_DELETE_FAILED' }));
     }
   };
 
@@ -155,19 +159,19 @@ export default function AlimHikayeleriListe() {
 
   // Format date
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('tr-TR', {
+    return new Date(dateString).toLocaleDateString(localeTag, {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
-  // Get language label
   const getLanguageLabel = (languageCode) => {
-    const language = languages.find(lang => lang.code === languageCode);
-    return language ? language.name : languageCode;
+    const language = languages.find((lang) => lang.code === languageCode);
+    if (!language) return languageCode;
+    return getLocalizedLanguageName(language, intl);
   };
 
   return (
@@ -204,7 +208,7 @@ export default function AlimHikayeleriListe() {
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    placeholder="Video başlığı veya açıklama..."
+                    placeholder={intl.formatMessage({ id: 'UI.SCHOLAR_STORY_SEARCH_PLACEHOLDER' })}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10"
@@ -216,15 +220,20 @@ export default function AlimHikayeleriListe() {
                 <label className="text-sm font-medium"><FormattedMessage id="USER.MENU.LANGUAGE" /></label>
                 <Select value={languageFilter} onValueChange={setLanguageFilter}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Dil seçiniz" />
+                    <SelectValue placeholder={intl.formatMessage({ id: 'UI.SCHOLAR_STORY_FILTER_LANGUAGE_PLACEHOLDER' })} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all"><FormattedMessage id="UI.TUM_DILLER" /></SelectItem>
-                    {languages.map((language) => (
-                      <SelectItem key={language.id} value={language.code}>
-                        {language.name}
-                      </SelectItem>
-                    ))}
+                    {languages
+                      .filter((language) => language.isActive !== false)
+                      .sort((a, b) =>
+                        getLocalizedLanguageName(a, intl).localeCompare(getLocalizedLanguageName(b, intl)),
+                      )
+                      .map((language) => (
+                        <SelectItem key={language.id} value={language.code}>
+                          {getLocalizedLanguageName(language, intl)}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -233,7 +242,7 @@ export default function AlimHikayeleriListe() {
                 <label className="text-sm font-medium"><FormattedMessage id="UI.DURUM" /></label>
                 <Select value={statusFilter} onValueChange={setStatusFilter}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Durum seçiniz" />
+                    <SelectValue placeholder={intl.formatMessage({ id: 'UI.SCHOLAR_STORY_FILTER_STATUS_PLACEHOLDER' })} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all"><FormattedMessage id="UI.TUM_DURUMLAR" /></SelectItem>
@@ -343,7 +352,11 @@ export default function AlimHikayeleriListe() {
                         </TableCell>
                         <TableCell>
                           <Badge variant={story.is_active ? "default" : "secondary"}>
-                            {story.is_active ? 'Aktif' : 'Pasif'}
+                            {story.is_active ? (
+                              <FormattedMessage id="UI.AKTIF" />
+                            ) : (
+                              <FormattedMessage id="UI.PASIF" />
+                            )}
                           </Badge>
                         </TableCell>
                         <TableCell>
@@ -401,7 +414,14 @@ export default function AlimHikayeleriListe() {
         {pagination.totalPages > 1 && (
           <div className="flex items-center justify-between mt-6">
             <div className="text-sm text-muted-foreground">
-              <FormattedMessage id="UI.SAYFA" /> {pagination.page}/ {pagination.totalPages}({pagination.total} <FormattedMessage id="UI.TOPLAM_VIDEO" />
+              {intl.formatMessage(
+                { id: 'UI.SCHOLAR_STORY_PAGINATION_SUMMARY' },
+                {
+                  page: pagination.page,
+                  totalPages: pagination.totalPages,
+                  total: pagination.total,
+                },
+              )}
             </div>
             <div className="flex gap-2">
               <Button
@@ -428,8 +448,13 @@ export default function AlimHikayeleriListe() {
         <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle><FormattedMessage id="UI.VIDEOYU_SIL" /></AlertDialogTitle>
-              <AlertDialogDescription>"{storyToDelete?.title}<FormattedMessage id="UI._BASLIKLI_VIDEOYU_SILMEK_ISTEDIGINIZDEN_" />
+              <AlertDialogTitle>
+                <FormattedMessage id="UI.VIDEOYU_SIL" />
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                {storyToDelete
+                  ? intl.formatMessage({ id: 'UI.SCHOLAR_STORY_DELETE_CONFIRM' }, { title: storyToDelete.title || '—' })
+                  : ''}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
