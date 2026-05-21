@@ -63,6 +63,8 @@
     "loginError": "Email or password incorrect!",
     "accountDisabled": "Your account has been disabled. Please contact the administrator.",
     "invalidCredentials": "Invalid email or password",
+    "sessionExpired": "Session expired",
+    "pleaseLoginAgain": "Please sign in again to continue.",
     "registerSuccess": "Registration successful! Redirecting to login page...",
     "registerError": "Registration failed!",
     "loggingIn": "Logging in...",
