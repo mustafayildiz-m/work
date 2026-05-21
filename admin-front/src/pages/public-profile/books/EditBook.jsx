@@ -192,7 +192,10 @@ function EditBook() {
 
       // Temel bilgileri ekle
       formData.append('author', form.author);
-      formData.append('publishDate', form.publishDate);
+      // publishDate opsiyonel: boş alan göndermek MySQL DATE kolonunu kırıyor
+      if (form.publishDate) {
+        formData.append('publishDate', form.publishDate);
+      }
 
       // Kategorileri ekle
       form.categories.forEach(cat => {

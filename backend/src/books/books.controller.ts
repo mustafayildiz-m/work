@@ -22,6 +22,26 @@ import { AuthGuard } from '@nestjs/passport';
 import * as fs from 'fs';
 import * as path from 'path';
 
+/**
+ * multipart/form-data tüm alanları string olarak gönderir; boş bırakılan
+ * tarih alanı '' olarak gelir ve MySQL DATE kolonunda
+ * ER_TRUNCATED_WRONG_VALUE hatasına yol açar. Boş / geçersiz değerleri
+ * null'a normalize ediyoruz ki entity nullable: true sözleşmesine uysun.
+ */
+function normalizeDate(value: unknown): Date | null {
+  if (value === undefined || value === null) return null;
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (!trimmed) return null;
+    const parsed = new Date(trimmed);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  }
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? null : value;
+  }
+  return null;
+}
+
 @Controller('books')
 export class BooksController {
   constructor(
@@ -80,6 +100,12 @@ export class BooksController {
     @Body() createBookDto: CreateBookDto,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
+    // multipart/form-data boş alanları '' olarak gönderir; MySQL DATE kolonu
+    // boş stringi reddeder. Boş ya da geçersiz tarihleri null'a normalleştir.
+    (createBookDto as any).publishDate = normalizeDate(
+      (createBookDto as any).publishDate,
+    );
+
     // Cover image işle
     const coverImageFile = files.find((f) => f.fieldname === 'coverImage');
     if (coverImageFile) {
@@ -151,6 +177,10 @@ export class BooksController {
     const book = await this.booksService.findOne(id);
     if (!book) {
       throw new NotFoundException(`Book with ID ${id} not found`);
+    }
+
+    if (Object.prototype.hasOwnProperty.call(updateBookDto, 'publishDate')) {
+      updateBookDto.publishDate = normalizeDate(updateBookDto.publishDate);
     }
 
     // 📷 Cover image işlemi
