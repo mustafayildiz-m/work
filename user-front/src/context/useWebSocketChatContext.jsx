@@ -42,13 +42,19 @@ const parseTimestamp = (timestamp, fallbackDate = new Date()) => {
 const getWebSocketUrl = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
+  // ÖNEMLİ: ChatGateway backend'de `namespace: '/chat'` olarak tanımlı.
+  // socket.io-client'ta `io(url + '/chat', ...)` URL'in path'ini değil,
+  // namespace'ini ayarlar (path her zaman /socket.io/ kalır).
+  // /chat eklenmezse client default namespace'e bağlanır ve hiçbir event
+  // (sendMessage, newFollowRequest, newNotification, vb.) tetiklenmez.
+
   if (apiUrl.includes('localhost')) {
-    return 'http://localhost:3000';
+    return 'http://localhost:3000/chat';
   }
 
-  // /api suffix'ini kaldır, sadece kök URL döndür
-  // Socket.IO kendi /socket.io/ endpoint'ini otomatik kullanır
-  return apiUrl.replace(/\/api\/?$/, '').replace('https://', 'https://').replace('http://', 'http://');
+  // /api suffix'ini kaldır ve /chat namespace'ini ekle
+  const baseUrl = apiUrl.replace(/\/api\/?$/, '');
+  return `${baseUrl}/chat`;
 };
 
 const normalizeOnlineUser = (userData) => {
