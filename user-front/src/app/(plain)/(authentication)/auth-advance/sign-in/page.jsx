@@ -81,8 +81,8 @@ const SignIn = () => {
                       <div className="d-flex align-items-center">
                         <i className="bi bi-clock-history me-2" style={{ fontSize: '1.2rem' }}></i>
                         <div>
-                          <h6 className="mb-1 fw-bold">{t('auth.sessionExpired') || 'Oturum süresi doldu'}</h6>
-                          <p className="mb-0" style={{ fontSize: '0.85rem' }}>{t('auth.pleaseLoginAgain') || 'Lütfen tekrar giriş yapın.'}</p>
+                          <h6 className="mb-1 fw-bold">{t('auth.sessionExpired')}</h6>
+                          <p className="mb-0" style={{ fontSize: '0.85rem' }}>{t('auth.pleaseLoginAgain')}</p>
                         </div>
                       </div>
                     </Alert>

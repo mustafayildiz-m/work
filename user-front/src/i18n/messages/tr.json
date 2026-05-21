@@ -63,6 +63,8 @@
     "loginError": "E-posta veya şifre hatalı!",
     "accountDisabled": "Hesabınız devre dışı bırakılmış. Lütfen yönetici ile iletişime geçin.",
     "invalidCredentials": "Geçersiz email veya şifre",
+    "sessionExpired": "Oturum süreniz doldu",
+    "pleaseLoginAgain": "Lütfen tekrar giriş yapın.",
     "registerSuccess": "Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...",
     "registerError": "Kayıt başarısız!",
     "loggingIn": "Giriş yapılıyor...",
