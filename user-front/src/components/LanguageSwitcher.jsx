@@ -5,6 +5,8 @@ import { createPortal } from 'react-dom';
 import Select from 'react-select';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
+import { useLanguages } from '@/hooks/useLanguages';
+import { getFlagImageUrl } from '@/utils/language';
 import './LanguageSwitcher.css';
 
 const MenuList = (props) => {
@@ -30,7 +32,7 @@ const MenuList = (props) => {
 };
 
 // Mobil için: Modal + basit scroll listesi (react-select yok, %100 çalışır)
-const MobileLanguageModal = ({ isOpen, onClose, options, locale, onChange, t, getFlagEmoji, getTranslatedLanguageName }) => {
+const MobileLanguageModal = ({ isOpen, onClose, options, locale, onChange, t, renderFlag, getTranslatedLanguageName }) => {
   const { theme: themeMode } = useLayoutContext();
   const isGreen = themeMode === 'green';
   const isDark = themeMode === 'dark' || isGreen;
@@ -194,7 +196,7 @@ const MobileLanguageModal = ({ isOpen, onClose, options, locale, onChange, t, ge
                   flexShrink: 0
                 }}
               >
-                <span style={{ fontSize: '1.2rem', flexShrink: 0 }}>{getFlagEmoji(option.value)}</span>
+                <span style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center' }}>{renderFlag(option.value)}</span>
                 <span style={{ flex: 1, minWidth: 0 }}>
                   {getTranslatedLanguageName(option.value)}
                 </span>
@@ -211,6 +213,7 @@ const MobileLanguageModal = ({ isOpen, onClose, options, locale, onChange, t, ge
 
 const LanguageSwitcher = ({ variant = 'dropdown', compact = false }) => {
   const { locale, changeLocale, supportedLocales, t } = useLanguage();
+  const { languages: apiLanguages } = useLanguages();
   const [mounted, setMounted] = useState(false);
   const [mobileModalOpen, setMobileModalOpen] = useState(false);
 
@@ -218,7 +221,19 @@ const LanguageSwitcher = ({ variant = 'dropdown', compact = false }) => {
     setMounted(true);
   }, []);
 
-  // Dil kodlarına göre bayrak emoji'leri
+  // API'den gelen dillerin code -> flagUrl haritası
+  const flagUrlMap = useMemo(() => {
+    const map = {};
+    if (apiLanguages?.length) {
+      apiLanguages.forEach(lang => {
+        if (lang.code && lang.flagUrl) {
+          map[lang.code.toLowerCase()] = lang.flagUrl;
+        }
+      });
+    }
+    return map;
+  }, [apiLanguages]);
+
   const getFlagEmoji = (code) => {
     const flagMap = {
       'tr': '🇹🇷', 'en': '🇬🇧', 'ar': '🇸🇦', 'de': '🇩🇪', 'fr': '🇫🇷', 'ja': '🇯🇵',
@@ -228,6 +243,29 @@ const LanguageSwitcher = ({ variant = 'dropdown', compact = false }) => {
       'mr': '🇮🇳', 'te': '🇮🇳', 'gu': '🇮🇳', 'ml': '🇮🇳', 'kn': '🇮🇳', 'or': '🇮🇳'
     };
     return flagMap[code] || '🌍';
+  };
+
+  // flagUrl varsa <img>, yoksa emoji fallback
+  const renderFlag = (code, size = 20) => {
+    const flagUrl = flagUrlMap[(code || '').toLowerCase()];
+    if (flagUrl) {
+      return (
+        <img
+          src={getFlagImageUrl(flagUrl)}
+          alt={code}
+          style={{
+            width: size,
+            height: Math.round(size * 0.75),
+            objectFit: 'cover',
+            borderRadius: 2,
+            flexShrink: 0,
+            display: 'inline-block',
+            verticalAlign: 'middle'
+          }}
+        />
+      );
+    }
+    return <span style={{ fontSize: `${size}px`, lineHeight: 1 }}>{getFlagEmoji(code)}</span>;
   };
 
   // Dil kodundan Türkçe ismini döndür (backend'deki isim)
@@ -281,12 +319,12 @@ const LanguageSwitcher = ({ variant = 'dropdown', compact = false }) => {
   const languageOptions = useMemo(() => {
     return supportedLocales.map(code => ({
       value: code,
-      label: `${getFlagEmoji(code)} ${getTranslatedLanguageName(code)}`,
+      label: getTranslatedLanguageName(code),
       code,
-      flag: getFlagEmoji(code),
+      flag: renderFlag(code),
       name: getTranslatedLanguageName(code)
     }));
-  }, [supportedLocales, locale, t]);
+  }, [supportedLocales, locale, t, flagUrlMap]);
 
   const currentOption = languageOptions.find(opt => opt.value === locale) || languageOptions[0];
 
@@ -323,7 +361,7 @@ const LanguageSwitcher = ({ variant = 'dropdown', compact = false }) => {
               flexShrink: 0
             }}
           >
-            {opt.flag} {opt.code.toUpperCase()}
+            <span style={{ display: 'inline-flex', alignItems: 'center', marginRight: 4 }}>{opt.flag}</span> {opt.code.toUpperCase()}
           </button>
         ))}
       </div>
@@ -550,7 +588,7 @@ const LanguageSwitcher = ({ variant = 'dropdown', compact = false }) => {
               color: context === 'menu' ? 'inherit' : '#334155',
               overflow: 'hidden'
             }}>
-              <span style={{ fontSize: '1.2rem', minWidth: '1.5rem' }}>{flag}</span>
+              <span style={{ minWidth: '1.5rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{flag}</span>
               <span style={{
                 fontWeight: '600',
                 whiteSpace: 'nowrap',
@@ -590,7 +628,7 @@ const LanguageSwitcher = ({ variant = 'dropdown', compact = false }) => {
           }}
         >
           <span className="d-flex align-items-center gap-2">
-            <span style={{ fontSize: '1.1rem' }}>{getFlagEmoji(locale)}</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center' }}>{renderFlag(locale, 18)}</span>
             <span>{(locale || 'tr').toUpperCase()}</span>
           </span>
           <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
@@ -604,7 +642,7 @@ const LanguageSwitcher = ({ variant = 'dropdown', compact = false }) => {
           locale={locale}
           onChange={changeLocale}
           t={t}
-          getFlagEmoji={getFlagEmoji}
+          renderFlag={renderFlag}
           getTranslatedLanguageName={getTranslatedLanguageName}
         />
       </>
@@ -644,7 +682,7 @@ const LanguageSwitcher = ({ variant = 'dropdown', compact = false }) => {
         placeholder="Dil"
         formatOptionLabel={({ flag, name }) => (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0 }}>
-            <span style={{ fontSize: '1.2rem' }}>{flag}</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: '1.5rem' }}>{flag}</span>
             <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{name}</span>
           </div>
         )}
