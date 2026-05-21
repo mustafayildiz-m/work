@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { SupabaseAdapter } from '@/auth/adapters/supabase-adapter';
 import { AuthContext } from '@/auth/context/auth-context';
 import * as authHelper from '@/auth/lib/helpers';
+import { resetAdminUiLanguageToDefault } from '@/i18n/reset-admin-language';
 
 // Define the Supabase Auth Provider
 export function AuthProvider({ children }) {
@@ -112,6 +113,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     saveAuth(undefined);
     setCurrentUser(undefined);
+    resetAdminUiLanguageToDefault();
   };
 
   return (
