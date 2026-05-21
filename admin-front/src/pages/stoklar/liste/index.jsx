@@ -12,10 +12,13 @@ import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
 import { FaTruck, FaClock, FaBoxes, FaWarehouse, FaMoneyBillWave, FaExchangeAlt, FaBook, FaGlobe, FaEdit, FaTrash, FaFilter, FaExclamationTriangle, FaTimesCircle } from 'react-icons/fa';
 
+import { getLocalizedLanguageName } from '@/utils/languageUtils';
+
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function StockList() {
   const intl = useIntl();
+  const localeTag = intl.locale === 'tr' ? 'tr-TR' : 'en-US';
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -40,7 +43,7 @@ export default function StockList() {
   const columns = useMemo(() => [
     {
       accessorKey: 'book.title',
-      header: 'Kitap Adı',
+      header: intl.formatMessage({ id: 'UI.KITAP_ADI' }),
       cell: info => {
         const book = info.row.original.book;
         const title = book?.translations?.[0]?.title || book?.title || '-';
@@ -54,20 +57,23 @@ export default function StockList() {
     },
     {
       accessorKey: 'language.name',
-      header: 'Dil',
+      header: intl.formatMessage({ id: 'USER.MENU.LANGUAGE' }),
       cell: info => {
-        const langName = info.row.original.language?.name || '-';
+        const lang = info.row.original.language;
+        const langLabel = lang
+          ? getLocalizedLanguageName(lang, intl)
+          : '-';
         return (
           <div className="flex items-center gap-2">
             <FaGlobe className="text-green-500 flex-shrink-0" />
-            <span className="text-gray-700 dark:text-gray-300">{langName}</span>
+            <span className="text-gray-700 dark:text-gray-300">{langLabel}</span>
           </div>
         );
       },
     },
     {
       accessorKey: 'warehouse.name',
-      header: 'Depo',
+      header: intl.formatMessage({ id: 'UI.DEPO' }),
       cell: info => {
         const warehouseName = info.row.original.warehouse?.name || '-';
         return (
@@ -80,7 +86,7 @@ export default function StockList() {
     },
     {
       accessorKey: 'quantity',
-      header: 'Stok Miktarı',
+      header: intl.formatMessage({ id: 'UI.MIKTAR' }),
       cell: info => {
         const qty = info.getValue();
         const isLow = qty < 10;
@@ -100,7 +106,7 @@ export default function StockList() {
     },
     {
       accessorKey: 'unitPrice',
-      header: 'Birim Fiyat',
+      header: intl.formatMessage({ id: 'UI.BIRIM_FIYAT' }),
       cell: info => {
         const price = info.getValue();
         return price ? (
@@ -112,7 +118,7 @@ export default function StockList() {
     },
     {
       accessorKey: 'pendingTransfers',
-      header: 'Transfer Durumu',
+      header: intl.formatMessage({ id: 'UI.TRANSFER_DURUMU' }),
       cell: info => {
         const pendingTransfers = info.getValue();
         if (!pendingTransfers || pendingTransfers.length === 0) {
@@ -129,7 +135,7 @@ export default function StockList() {
                   e.stopPropagation();
                   setTransferPopup({ transfer });
                 }}
-                title="Detaylar için tıklayın"
+                title={intl.formatMessage({ id: 'UI.DETAY' })}
               >
                 <FaTruck className="text-yellow-600 dark:text-yellow-400 animate-pulse" />
                 <div className="flex flex-col">
@@ -149,13 +155,13 @@ export default function StockList() {
     },
     {
       id: 'actions',
-      header: 'İşlemler',
+      header: intl.formatMessage({ id: 'UI.TABLE_ACTIONS' }),
       cell: ({ row }) => (
         <div className="flex gap-2 items-center justify-end">
           <Link
             to={`/stoklar/duzenle/${row.original.id}`}
             className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200 flex items-center gap-1.5"
-            title="Düzenle"
+            title={intl.formatMessage({ id: 'UI.DUZENLE' })}
           >
             <FaEdit size={16} />
             <span className="text-xs font-medium hidden lg:inline"><FormattedMessage id="UI.DUZENLE" /></span>
@@ -169,21 +175,28 @@ export default function StockList() {
               const hasPendingTransfers = row.original.pendingTransfers && row.original.pendingTransfers.length > 0;
               
               if (hasPendingTransfers) {
-                toast.error('Transfer işlemi devam eden stoklar silinemez!', {
-                  description: `Bu stok için ${row.original.pendingTransfers.length} adet bekleyen transfer var. Önce transferleri tamamlayın veya iptal edin.`,
+                toast.error(intl.formatMessage({ id: 'UI.INV_S_DELETE_BLOCKED' }), {
+                  description: intl.formatMessage(
+                    { id: 'UI.INV_S_DELETE_BLOCKED_DETAIL' },
+                    { count: row.original.pendingTransfers.length },
+                  ),
                   duration: 5000,
                 });
                 return;
               }
               
               const book = row.original.book;
-              const bookTitle = book?.translations?.[0]?.title || book?.title || 'Bu stok';
+              const bookTitle = book?.translations?.[0]?.title || book?.title || intl.formatMessage({ id: 'UI.INV_BOOK_UNTITLED' });
               setDeleteModal({
                 id: row.original.id,
                 name: `${bookTitle} (${row.original.language?.name} - ${row.original.warehouse?.name})`
               });
             }}
-            title={row.original.pendingTransfers?.length > 0 ? "Transfer devam ediyor, silinemez" : "Sil"}
+            title={
+              row.original.pendingTransfers?.length > 0
+                ? intl.formatMessage({ id: 'UI.INV_S_DELETE_BLOCKED_TITLE_BTN' })
+                : intl.formatMessage({ id: 'UI.SIL' })
+            }
             disabled={row.original.pendingTransfers?.length > 0}
           >
             <FaTrash size={16} />
@@ -194,7 +207,7 @@ export default function StockList() {
       enableSorting: false,
       size: 150,
     },
-  ], []);
+  ], [intl]);
 
   // İstatistikler - tüm veriden hesapla
   const stats = React.useMemo(() => {
@@ -223,15 +236,14 @@ export default function StockList() {
         },
       });
       
-      if (!res.ok) throw new Error('Stok silinemedi');
-      
-      // Listeden kaldır (hem filtered hem all data)
+      if (!res.ok) throw new Error(intl.formatMessage({ id: 'UI.INV_ERR_S_DELETE_THROW' }));
+
       setData(prevData => prevData.filter(s => s.id !== deleteModal.id));
       setAllData(prevData => prevData.filter(s => s.id !== deleteModal.id));
-      toast.success('Stok başarıyla silindi!');
+      toast.success(intl.formatMessage({ id: 'UI.INV_S_DELETE_OK_TOAST' }));
       setDeleteModal(null);
     } catch (err) {
-      toast.error(err.message || 'Silme işlemi başarısız');
+      toast.error(err.message || intl.formatMessage({ id: 'UI.INV_ERR_S_DELETE_GENERIC' }));
     }
   };
 
@@ -271,16 +283,16 @@ export default function StockList() {
         headers: { Authorization: `Bearer ${token}` },
       });
       
-      if (!res.ok) throw new Error('Stoklar alınamadı');
+      if (!res.ok) throw new Error(intl.formatMessage({ id: 'UI.INV_ERR_S_FETCH_THROW' }));
       const result = await res.json();
       setData(Array.isArray(result) ? result : []);
     } catch (err) {
       setError(err.message);
-      toast.error('Stoklar yüklenirken hata oluştu');
+      toast.error(intl.formatMessage({ id: 'UI.INV_S_LOAD_TOAST_ERR' }));
     } finally {
       setLoading(false);
     }
-  }, [filters]);
+  }, [filters, intl]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -336,7 +348,7 @@ export default function StockList() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-green-100 text-sm font-medium"><FormattedMessage id="UI.TOPLAM_DEGER" /></p>
-                <p className="text-3xl font-bold mt-1">{stats.totalValue.toLocaleString('tr-TR', { maximumFractionDigits: 0 })} ₺</p>
+                <p className="text-3xl font-bold mt-1">{stats.totalValue.toLocaleString(localeTag, { maximumFractionDigits: 0 })} ₺</p>
                 <p className="text-green-100 text-xs mt-1"><FormattedMessage id="UI.STOK_DEGERI" /></p>
               </div>
               <FaMoneyBillWave className="text-5xl text-green-200 opacity-30" />
@@ -384,7 +396,7 @@ export default function StockList() {
               </label>
               <input
                 type="text"
-                placeholder="Kitap ara..."
+                placeholder={intl.formatMessage({ id: 'UI.INV_BOOK_SEARCH_PH' })}
                 value={filters.bookName}
                 onChange={e => setFilters(prev => ({ ...prev, bookName: e.target.value }))}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm transition"
@@ -403,9 +415,14 @@ export default function StockList() {
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm transition cursor-pointer"
               >
                 <option value="all"><FormattedMessage id="UI.TUM_DILLER" /></option>
-                {languages.map(lang => (
-                  <option key={lang.id} value={lang.id}>{lang.name}</option>
-                ))}
+                {languages
+                  .filter((lang) => lang.isActive !== false)
+                  .sort((a, b) =>
+                    getLocalizedLanguageName(a, intl).localeCompare(getLocalizedLanguageName(b, intl)),
+                  )
+                  .map((lang) => (
+                  <option key={lang.id} value={lang.id}>{getLocalizedLanguageName(lang, intl)}</option>
+                  ))}
               </select>
             </div>
 
@@ -510,9 +527,9 @@ export default function StockList() {
                   <td colSpan={columns.length} className="py-20 text-center bg-gray-50 dark:bg-gray-800/50">
                     <div className="text-6xl mb-4">📦</div>
                     <p className="text-gray-500 dark:text-gray-400 text-lg font-medium">
-                      {(filters.bookName || filters.languageId !== 'all' || filters.warehouseId !== 'all' || filters.lowStock) 
-                        ? 'Filtreleme sonucu bulunamadı' 
-                        : 'Henüz stok eklenmemiş'}
+                      {(filters.bookName || filters.languageId !== 'all' || filters.warehouseId !== 'all' || filters.lowStock)
+                        ? intl.formatMessage({ id: 'UI.INV_STOCK_EMPTY_FILTER' })
+                        : intl.formatMessage({ id: 'UI.INV_STOCK_EMPTY_NONE' })}
                     </p>
                     {!(filters.bookName || filters.languageId !== 'all' || filters.warehouseId !== 'all' || filters.lowStock) && (
                       <Link 
@@ -651,7 +668,7 @@ export default function StockList() {
                 <div className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
                   <span className="text-sm text-gray-600 dark:text-gray-400"><FormattedMessage id="UI.TAHMINI_TESLIMAT" /></span>
                   <span className="font-semibold text-gray-900 dark:text-white">
-                    {new Date(transferPopup.transfer.estimatedDeliveryDate).toLocaleDateString('tr-TR')}
+                    {new Date(transferPopup.transfer.estimatedDeliveryDate).toLocaleDateString(localeTag)}
                   </span>
                 </div>
               )}

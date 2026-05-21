@@ -15,8 +15,8 @@ const EditorlerPage = () => {
       <Container>
         <UserManagement
           role="editor"
-          title="Editörler"
-          description="İçerik editörlerini görüntüleyin ve yönetin"
+          title={<FormattedMessage id="UI.USER_MGMT_PAGE_EDITORS_TITLE" />}
+          description={<FormattedMessage id="UI.USER_MGMT_PAGE_EDITORS_DESC" />}
         />
       </Container>
     </>

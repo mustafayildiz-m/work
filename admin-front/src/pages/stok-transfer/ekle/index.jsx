@@ -5,6 +5,8 @@ import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
 import { FaBoxes, FaWarehouse, FaExchangeAlt, FaTruck, FaCalendar, FaMoneyBillWave, FaArrowLeft, FaCheckCircle, FaInfoCircle, FaExclamationTriangle } from 'react-icons/fa';
 
+import { getLocalizedLanguageName } from '@/utils/languageUtils';
+
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function StockTransferAdd() {
@@ -74,11 +76,11 @@ export default function StockTransferAdd() {
           cargoFee: form.cargoFee ? Number(form.cargoFee) : undefined,
         }),
       });
-      if (!res.ok) throw new Error('Transfer eklenemedi');
-      toast.success('Transfer başarıyla eklendi!');
+      if (!res.ok) throw new Error(intl.formatMessage({ id: 'UI.INV_ERR_T_POST_THROW' }));
+      toast.success(intl.formatMessage({ id: 'UI.INV_T_ADD_OK_TOAST' }));
       setTimeout(() => navigate('/stok-transfer/liste'), 1000);
     } catch (err) {
-      toast.error(err.message || 'Transfer eklenirken hata oluştu');
+      toast.error(err.message || intl.formatMessage({ id: 'UI.INV_ERR_T_ADD_TOAST' }));
     } finally {
       setLoading(false);
     }
@@ -153,14 +155,21 @@ export default function StockTransferAdd() {
                 required
               >
                 <option value=""><FormattedMessage id="UI.TRANSFER_EDILECEK_STOGU_SECIN" /></option>
-                {stocks.map(stock => {
-                  const bookTitle = stock.book?.translations?.[0]?.title || stock.book?.title || `Stok #${stock.id}`;
+                {stocks.map((stock) => {
+                  const bookTitle =
+                    stock.book?.translations?.[0]?.title ||
+                    stock.book?.title ||
+                    intl.formatMessage({ id: 'UI.INV_STOCK_FALLBACK_LABEL' }, { id: stock.id });
+                  const qtySuffix =
+                    typeof stock.quantity !== 'undefined'
+                      ? intl.formatMessage({ id: 'UI.INV_OPTION_QTY_UNITS' }, { qty: stock.quantity })
+                      : '';
                   return (
                     <option key={stock.id} value={stock.id}>
                       {bookTitle}
-                      {stock.language ? ` (${stock.language.name})` : ''}
+                      {stock.language ? ` (${getLocalizedLanguageName(stock.language, intl)})` : ''}
                       {stock.warehouse ? ` - ${stock.warehouse.name}` : ''}
-                      {typeof stock.quantity !== 'undefined' ? ` [${stock.quantity} adet]` : ''}
+                      {qtySuffix ? ` ${qtySuffix}` : ''}
                     </option>
                   );
                 })}
@@ -268,7 +277,7 @@ export default function StockTransferAdd() {
                     ? 'border-red-500 focus:ring-red-500' 
                     : 'border-gray-300 dark:border-gray-600 focus:ring-blue-500'
                 }`}
-                placeholder="Transfer edilecek adet"
+                placeholder={intl.formatMessage({ id: 'UI.INV_T_TRANSFER_QTY_PH' })}
                 required
               />
               {quantityError && (
@@ -301,7 +310,7 @@ export default function StockTransferAdd() {
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition resize-none"
                 rows={4}
-                placeholder="Transfer hakkında detaylı bilgi veya not ekleyebilirsiniz..."
+                placeholder={intl.formatMessage({ id: 'UI.INV_T_NOTES_PH' })}
               />
             </div>
           </div>
@@ -354,7 +363,7 @@ export default function StockTransferAdd() {
                   value={form.trackingNumber}
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition"
-                  placeholder="Örn: 1234567890"
+                  placeholder={intl.formatMessage({ id: 'UI.INV_T_TRACK_PH' })}
                 />
               </div>
 
@@ -395,8 +404,15 @@ export default function StockTransferAdd() {
                 <p className="text-sm text-orange-800 dark:text-orange-200 flex items-start gap-2">
                   <FaTruck className="mt-0.5 flex-shrink-0" />
                   <span>
-                    <span className="font-semibold"><FormattedMessage id="UI.KARGO_SECILDI" /></span> {form.cargoCompany} <FormattedMessage id="UI.ILE_GONDERILECEK" />
-                    {form.trackingNumber && ' Takip numarası ile sevkiyat durumunu kolayca izleyebilirsiniz.'}
+                    <span className="font-semibold"><FormattedMessage id="UI.KARGO_SECILDI" /></span>{' '}
+                    {form.cargoCompany}{' '}
+                    <FormattedMessage id="UI.ILE_GONDERILECEK" />
+                    {form.trackingNumber && (
+                      <>
+                        {' '}
+                        <FormattedMessage id="UI.INV_T_TRACK_HINT" />
+                      </>
+                    )}
                   </span>
                 </p>
               </div>

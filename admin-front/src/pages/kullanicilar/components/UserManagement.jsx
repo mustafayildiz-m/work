@@ -1,6 +1,6 @@
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useState, useEffect } from 'react';
-import { Search, RefreshCw, Users as UsersIcon, Filter, X } from 'lucide-react';
+import { Search, RefreshCw, Users as UsersIcon, X } from 'lucide-react';
 import { toast } from 'sonner';
 import UserTable from './UserTable';
 import UserDetailModal from './UserDetailModal';
@@ -10,6 +10,7 @@ import { Card } from '@/components/ui/card';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const UserManagement = ({ role, title, description }) => {
+  const intl = useIntl();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -40,23 +41,25 @@ const UserManagement = ({ role, title, description }) => {
       });
 
       const responseText = await response.text();
-      
+
       if (responseText.trim().startsWith('<!') || responseText.trim().startsWith('<html')) {
         console.error('❌ HTML response alındı - API endpoint bulunamadı:', `${API_URL}/admin/users?${params}`);
-        toast.error('API endpoint bulunamadı. Lütfen backend\'in çalıştığından emin olun.');
+        toast.error(intl.formatMessage({ id: 'UI.USER_MGMT_API_HTML_RESPONSE' }));
         setLoading(false);
         return;
       }
 
       if (!response.ok) {
-        let errorMessage = `Hata: ${response.status} ${response.statusText}`;
+        let errorMessage = `${response.status} ${response.statusText}`;
         try {
           const errorJson = JSON.parse(responseText);
           errorMessage = errorJson.message || errorJson.error || errorMessage;
         } catch {
           errorMessage = responseText.substring(0, 200) || errorMessage;
         }
-        toast.error(`Kullanıcılar yüklenirken hata: ${errorMessage}`);
+        toast.error(
+          intl.formatMessage({ id: 'UI.USER_MGMT_USERS_LOAD_ERROR' }, { message: errorMessage })
+        );
         console.error('❌ API hatası:', errorMessage);
         setLoading(false);
         return;
@@ -67,17 +70,21 @@ const UserManagement = ({ role, title, description }) => {
         data = JSON.parse(responseText);
       } catch (parseError) {
         console.error('❌ JSON parse hatası:', parseError);
-        toast.error('API\'den geçersiz yanıt alındı');
+        toast.error(intl.formatMessage({ id: 'UI.USER_MGMT_INVALID_RESPONSE' }));
         setLoading(false);
         return;
       }
 
       setUsers(data.users || []);
       setStats({ total: data.total || 0 });
-      setPagination({ ...pagination, hasMore: data.hasMore || false, offset: resetPagination ? 0 : pagination.offset });
+      setPagination({
+        ...pagination,
+        hasMore: data.hasMore || false,
+        offset: resetPagination ? 0 : pagination.offset,
+      });
     } catch (error) {
       console.error('❌ Kullanıcılar yüklenirken hata:', error);
-      toast.error('Kullanıcılar yüklenirken hata oluştu');
+      toast.error(intl.formatMessage({ id: 'UI.USER_MGMT_LOAD_FAILED' }));
     } finally {
       setLoading(false);
     }
@@ -91,7 +98,7 @@ const UserManagement = ({ role, title, description }) => {
     fetchUsers(true);
   };
 
-  const handleSearchKeyPress = (e) => {
+  const handleSearchKeyDown = (e) => {
     if (e.key === 'Enter') {
       handleSearch();
     }
@@ -120,14 +127,14 @@ const UserManagement = ({ role, title, description }) => {
       });
 
       const responseText = await response.text();
-      
+
       if (responseText.trim().startsWith('<!') || responseText.trim().startsWith('<html')) {
-        toast.error('API endpoint bulunamadı. Lütfen backend\'in çalıştığından emin olun.');
+        toast.error(intl.formatMessage({ id: 'UI.USER_MGMT_API_HTML_RESPONSE' }));
         return;
       }
 
       if (!response.ok) {
-        let errorMessage = `Hata: ${response.status} ${response.statusText}`;
+        let errorMessage = `${response.status} ${response.statusText}`;
         try {
           const errorJson = JSON.parse(responseText);
           errorMessage = errorJson.message || errorJson.error || errorMessage;
@@ -138,16 +145,32 @@ const UserManagement = ({ role, title, description }) => {
         return;
       }
 
-      toast.success(user.isActive ? 'Kullanıcı devre dışı bırakıldı' : 'Kullanıcı aktifleştirildi');
+      toast.success(
+        intl.formatMessage({
+          id: user.isActive
+            ? 'UI.USER_MGMT_USER_DEACTIVATED'
+            : 'UI.USER_MGMT_USER_ACTIVATED',
+        })
+      );
       fetchUsers();
     } catch (error) {
       console.error('❌ Kullanıcı durumu değiştirilirken hata:', error);
-      toast.error('Bir hata oluştu');
+      toast.error(intl.formatMessage({ id: 'UI.USER_MGMT_ERROR_GENERIC' }));
     }
   };
 
   const handleDelete = async (user) => {
-    if (!confirm(`${user.firstName} ${user.lastName} kullanıcısını silmek istediğinizden emin misiniz?`)) {
+    const name =
+      [user.firstName, user.lastName].filter(Boolean).join(' ').trim() ||
+      user.username ||
+      user.email ||
+      '';
+
+    if (
+      !window.confirm(
+        intl.formatMessage({ id: 'UI.USER_MGMT_DELETE_CONFIRM' }, { name })
+      )
+    ) {
       return;
     }
 
@@ -161,14 +184,14 @@ const UserManagement = ({ role, title, description }) => {
       });
 
       const responseText = await response.text();
-      
+
       if (responseText.trim().startsWith('<!') || responseText.trim().startsWith('<html')) {
-        toast.error('API endpoint bulunamadı. Lütfen backend\'in çalıştığından emin olun.');
+        toast.error(intl.formatMessage({ id: 'UI.USER_MGMT_API_HTML_RESPONSE' }));
         return;
       }
 
       if (!response.ok) {
-        let errorMessage = `Hata: ${response.status} ${response.statusText}`;
+        let errorMessage = `${response.status} ${response.statusText}`;
         try {
           const errorJson = JSON.parse(responseText);
           errorMessage = errorJson.message || errorJson.error || errorMessage;
@@ -179,11 +202,11 @@ const UserManagement = ({ role, title, description }) => {
         return;
       }
 
-      toast.success('Kullanıcı silindi');
+      toast.success(intl.formatMessage({ id: 'UI.USER_MGMT_DELETE_SUCCESS' }));
       fetchUsers();
     } catch (error) {
       console.error('❌ Kullanıcı silinirken hata:', error);
-      toast.error('Bir hata oluştu');
+      toast.error(intl.formatMessage({ id: 'UI.USER_MGMT_ERROR_GENERIC' }));
     }
   };
 
@@ -218,10 +241,10 @@ const UserManagement = ({ role, title, description }) => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="text"
-              placeholder="İsim, email veya kullanıcı adı ile ara..."
+              placeholder={intl.formatMessage({ id: 'UI.USER_MGMT_SEARCH_PLACEHOLDER' })}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              onKeyPress={handleSearchKeyPress}
+              onKeyDown={handleSearchKeyDown}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
             />
           </div>
@@ -249,14 +272,14 @@ const UserManagement = ({ role, title, description }) => {
                 fetchUsers(true);
               }}
               className="p-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              title="Filtreleri Temizle"
+              title={intl.formatMessage({ id: 'UI.FILTRELERI_TEMIZLE' })}
             >
               <X className="w-5 h-5" />
             </button>
             <button
               onClick={() => fetchUsers(true)}
               className="p-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              title="Yenile"
+              title={intl.formatMessage({ id: 'UI.YENILE' })}
             >
               <RefreshCw className="w-5 h-5" />
             </button>
@@ -306,4 +329,3 @@ const UserManagement = ({ role, title, description }) => {
 };
 
 export default UserManagement;
-

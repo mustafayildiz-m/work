@@ -74,7 +74,7 @@ export default function StoreList() {
         },
       });
       
-      if (!res.ok) throw new Error('Depolar alınamadı');
+      if (!res.ok) throw new Error(intl.formatMessage({ id: 'UI.INV_W_FETCH_ERR' }));
       const result = await res.json();
       setData(result);
     } catch (err) {
@@ -82,7 +82,7 @@ export default function StoreList() {
     } finally {
       setLoading(false);
     }
-  }, [filters]);
+  }, [filters, intl]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -101,18 +101,18 @@ export default function StoreList() {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (!res.ok) throw new Error('Depo silinemedi');
+      if (!res.ok) throw new Error(intl.formatMessage({ id: 'UI.INV_W_DELETE_ERR' }));
       setData(prev => prev.filter(d => d.id !== id));
-      toast.success('Depo başarıyla silindi!');
+      toast.success(intl.formatMessage({ id: 'UI.INV_W_DELETE_OK' }));
     } catch (err) {
-      toast.error(err.message || 'Depo silinirken hata oluştu');
+      toast.error(err.message || intl.formatMessage({ id: 'UI.INV_W_DELETE_ERR' }));
     }
   };
 
   const columns = useMemo(() => [
     {
       accessorKey: 'name',
-      header: 'Depo Adı',
+      header: intl.formatMessage({ id: 'UI.DEPO_ADI' }),
       cell: info => (
         <div className="flex items-center gap-2">
           <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
@@ -124,7 +124,7 @@ export default function StoreList() {
     },
     {
       accessorKey: 'location',
-      header: 'Konum',
+      header: intl.formatMessage({ id: 'UI.KONUM' }),
       cell: info => (
         <div className="flex items-center gap-2">
           <FaMapMarkerAlt className="text-red-500 flex-shrink-0" />
@@ -134,7 +134,7 @@ export default function StoreList() {
     },
     {
       accessorKey: 'description',
-      header: 'Açıklama',
+      header: intl.formatMessage({ id: 'UI.ACIKLAMA' }),
       cell: info => (
         <span className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
           {info.getValue() || '-'}
@@ -143,7 +143,7 @@ export default function StoreList() {
     },
     {
       accessorKey: 'isActive',
-      header: 'Durum',
+      header: intl.formatMessage({ id: 'UI.DURUM' }),
       cell: info => {
         const isActive = info.getValue();
         return (
@@ -153,20 +153,24 @@ export default function StoreList() {
               : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-400'
           }`}>
             {isActive ? <FaCheckCircle /> : <FaTimesCircle />}
-            {isActive ? 'Aktif' : 'Pasif'}
+            {isActive ? (
+              <FormattedMessage id="UI.AKTIF" />
+            ) : (
+              <FormattedMessage id="UI.PASIF" />
+            )}
           </span>
         );
       },
     },
     {
       id: 'actions',
-      header: 'İşlemler',
+      header: intl.formatMessage({ id: 'UI.TABLE_ACTIONS' }),
       cell: ({ row }) => (
         <div className="flex gap-2 items-center justify-end">
           <Link
             to={`/depolar/duzenle/${row.original.id}`}
             className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200 flex items-center gap-1.5"
-            title="Düzenle"
+            title={intl.formatMessage({ id: 'UI.DUZENLE' })}
           >
             <FaEdit size={16} />
             <span className="text-xs font-medium hidden lg:inline"><FormattedMessage id="UI.DUZENLE" /></span>
@@ -177,7 +181,7 @@ export default function StoreList() {
               setWarehouseToDelete(row.original);
               setDeleteModalOpen(true);
             }}
-            title="Sil"
+            title={intl.formatMessage({ id: 'UI.SIL' })}
           >
             <FaTrash size={16} />
             <span className="text-xs font-medium hidden lg:inline"><FormattedMessage id="UI.SIL" /></span>
@@ -187,7 +191,7 @@ export default function StoreList() {
       enableSorting: false,
       size: 150,
     },
-  ], []);
+  ], [intl]);
 
   const table = useReactTable({
     data,
@@ -272,7 +276,7 @@ export default function StoreList() {
               </label>
               <input
                 type="text"
-                placeholder="Depo adı ara..."
+                placeholder={intl.formatMessage({ id: 'UI.INV_W_SEARCH_NAME' })}
                 value={filters.name}
                 onChange={e => setFilters(prev => ({ ...prev, name: e.target.value }))}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm transition"
@@ -287,7 +291,7 @@ export default function StoreList() {
               </label>
               <input
                 type="text"
-                placeholder="Konum ara..."
+                placeholder={intl.formatMessage({ id: 'UI.INV_W_SEARCH_LOCATION' })}
                 value={filters.location}
                 onChange={e => setFilters(prev => ({ ...prev, location: e.target.value }))}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm transition"
@@ -377,9 +381,9 @@ export default function StoreList() {
                     <td colSpan={columns.length} className="py-20 text-center bg-gray-50 dark:bg-gray-800/50">
                       <div className="text-6xl mb-4">🏢</div>
                       <p className="text-gray-500 dark:text-gray-400 text-lg font-medium">
-                        {(filters.name || filters.location || filters.isActive !== 'all') 
-                          ? 'Filtreleme sonucu bulunamadı' 
-                          : 'Henüz depo eklenmemiş'}
+                        {(filters.name || filters.location || filters.isActive !== 'all')
+                          ? intl.formatMessage({ id: 'UI.INV_EMPTY_FILTER_RESULT' })
+                          : intl.formatMessage({ id: 'UI.INV_EMPTY_WAREHOUSE' })}
                       </p>
                       {!(filters.name || filters.location || filters.isActive !== 'all') && (
                         <Link 

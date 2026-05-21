@@ -39,12 +39,12 @@ export default function AddStorePage() {
         },
         body: JSON.stringify(form),
       });
-      if (!res.ok) throw new Error('Depo eklenemedi');
+      if (!res.ok) throw new Error(intl.formatMessage({ id: 'UI.INV_ERR_W_ADD_THROW' }));
       await res.json();
-      toast.success('Depo başarıyla eklendi!');
+      toast.success(intl.formatMessage({ id: 'UI.INV_OK_W_ADD_TOAST' }));
       setTimeout(() => navigate('/depolar/liste'), 1000);
     } catch (err) {
-      toast.error(err.message || 'Depo eklenirken hata oluştu');
+      toast.error(err.message || intl.formatMessage({ id: 'UI.INV_ERR_W_ADD_TOAST' }));
     } finally {
       setLoading(false);
     }
@@ -91,7 +91,7 @@ export default function AddStorePage() {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                placeholder="Örn: İstanbul Merkez Depo"
+                placeholder={intl.formatMessage({ id: 'UI.INV_W_PH_NAME_EX' })}
               />
             </div>
 
@@ -109,7 +109,7 @@ export default function AddStorePage() {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                placeholder="Örn: İstanbul, Kadıköy"
+                placeholder={intl.formatMessage({ id: 'UI.INV_W_PH_LOCATION_EX' })}
               />
             </div>
 
@@ -125,7 +125,7 @@ export default function AddStorePage() {
                 onChange={handleChange}
                 rows={4}
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-none"
-                placeholder="Depo hakkında detaylı bilgi girin..."
+                placeholder={intl.formatMessage({ id: 'UI.INV_W_PH_DESCRIPTION' })}
               />
             </div>
 

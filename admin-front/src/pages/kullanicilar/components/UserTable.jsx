@@ -1,5 +1,4 @@
-import { FormattedMessage } from "react-intl";
-import { useState } from 'react';
+import { FormattedMessage, useIntl } from "react-intl";
 import { motion } from 'framer-motion';
 import { 
   Edit, 
@@ -15,42 +14,44 @@ import {
   Calendar
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
-import { Avatar } from '@/components/ui/avatar';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const UserTable = ({ users, onEdit, onDelete, onViewDetails, onToggleStatus, loading }) => {
+  const intl = useIntl();
+  const localeTag = (intl.locale || 'en').replace('_', '-');
+
   const getImageUrl = (photoUrl) => {
     if (!photoUrl) return null;
     if (photoUrl.startsWith('http')) return photoUrl;
     return `${API_URL}${photoUrl}`;
   };
-  const getRoleBadge = (role) => {
+  const getRoleBadge = (userRole) => {
     const roleConfig = {
-      admin: { 
-        label: 'Yönetici', 
+      admin: {
+        labelId: 'UI.YONETICI',
         color: 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
-        icon: Shield 
+        icon: Shield,
       },
-      editor: { 
-        label: 'Editör', 
+      editor: {
+        labelId: 'UI.EDITOR',
         color: 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300',
-        icon: ShieldAlert 
+        icon: ShieldAlert,
       },
-      user: { 
-        label: 'Kullanıcı', 
+      user: {
+        labelId: 'UI.KULLANICI',
         color: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300',
-        icon: UserCheck 
+        icon: UserCheck,
       },
     };
 
-    const config = roleConfig[role] || roleConfig.user;
+    const config = roleConfig[userRole] || roleConfig.user;
     const Icon = config.icon;
 
     return (
       <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${config.color}`}>
         <Icon className="w-3 h-3" />
-        {config.label}
+        {intl.formatMessage({ id: config.labelId })}
       </span>
     );
   };
@@ -172,7 +173,7 @@ const UserTable = ({ users, onEdit, onDelete, onViewDetails, onToggleStatus, loa
                   <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                     <Calendar className="w-4 h-4" />
                     <span>
-                      {new Date(user.createdAt).toLocaleDateString('tr-TR')}
+                      {new Date(user.createdAt).toLocaleDateString(localeTag)}
                     </span>
                   </div>
                 </div>
