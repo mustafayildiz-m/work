@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import Select from 'react-select';
 import { getSelectStyles, getTheme } from '@/styles/select-styles';
 import { createSlug, createUniqueSlug } from '@/utils/slug-utils';
+import { getLocalizedLanguageName } from '@/utils/languageUtils';
 import { FaBook, FaUser, FaCalendar, FaGlobe, FaFilePdf, FaImage, FaArrowLeft, FaSave, FaPlus, FaTrash, FaInfoCircle, FaNewspaper, FaSortNumericUp, FaFileAlt } from 'react-icons/fa';
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/articles';
@@ -76,13 +77,13 @@ function AddArticle() {
           setAvailableBooks(books);
         }
       } catch (error) {
-        toast.error('Veriler yüklenirken bir hata oluştu');
+        toast.error(intl.formatMessage({ id: 'UI.VERILER_YUKLENIRKEN_HATA' }));
       } finally {
         setLoadingData(false);
       }
     };
     fetchData();
-  }, []);
+  }, [intl]);
 
   useEffect(() => {
     if (coverImage) {
@@ -198,7 +199,7 @@ function AddArticle() {
         if (!response.ok) {
           const errorData = await response.json();
           if (errorData.message === 'PDF_INVALID_CONFIRM_NEEDED') {
-            if (window.confirm('⚠️ UYARI: PDF Metin İçeriği Bozuk!\n\nBu PDF dosyasının metni okunamıyor. Otomatik çeviri yapılamayacak.\n\nYine de yüklemek istiyor musunuz?')) {
+            if (window.confirm(intl.formatMessage({ id: 'UI.PDF_BOZUK_UYARI' }))) {
               return submitData(true);
             }
             setLoading(false);
@@ -220,14 +221,18 @@ function AddArticle() {
     }
   };
 
-  const bookOptions = availableBooks.map(book => ({
-    value: book.id,
-    label: `${book.translations?.[0]?.title || 'İsimsiz'} - ${book.author || 'Bilinmeyen Yazar'}`
-  }));
+  const bookOptions = React.useMemo(
+    () =>
+      availableBooks.map(book => ({
+        value: book.id,
+        label: `${book.translations?.[0]?.title || intl.formatMessage({ id: 'UI.ISIMSIZ_KITAP' })} - ${book.author || intl.formatMessage({ id: 'UI.BILINMEYEN_YAZAR' })}`,
+      })),
+    [availableBooks, intl],
+  );
 
   const languageOptions = availableLanguages.map(lang => ({
     value: lang.id,
-    label: lang.name
+    label: getLocalizedLanguageName(lang, intl)
   }));
 
   return (
@@ -309,7 +314,7 @@ function AddArticle() {
                       value={form.author}
                       onChange={handleChange}
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition"
-                      placeholder="Dr. Mehmet Yılmaz"
+                      placeholder={intl.formatMessage({ id: 'UI.MAKALE_YAZARI_PLACEHOLDER' })}
                     />
                   </div>
 
@@ -355,7 +360,7 @@ function AddArticle() {
                   <div className="flex items-start gap-4">
                     <div className="w-40 h-56 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center bg-gray-50 dark:bg-gray-800">
                       {preview ? (
-                        <img src={preview} alt="Kapak önizleme" className="w-full h-full object-cover rounded-lg" />
+                        <img src={preview} alt={intl.formatMessage({ id: 'UI.KAPAK_ONIZLEME' })} className="w-full h-full object-cover rounded-lg" />
                       ) : (
                         <div className="text-center p-4">
                           <FaImage className="text-4xl text-gray-400 mx-auto mb-2" />
@@ -407,8 +412,11 @@ function AddArticle() {
                       </div>
                       <h4 className="font-bold text-gray-900 dark:text-white">
                         {trans.languageId
-                          ? availableLanguages.find(l => l.id === trans.languageId)?.name || `Çeviri ${idx + 1}`
-                          : `Çeviri ${idx + 1}`}
+                          ? getLocalizedLanguageName(
+                              availableLanguages.find(l => String(l.id) === String(trans.languageId)),
+                              intl,
+                            ) || intl.formatMessage({ id: 'UI.CEVIRI_NUMARALI' }, { n: idx + 1 })
+                          : intl.formatMessage({ id: 'UI.CEVIRI_NUMARALI' }, { n: idx + 1 })}
                       </h4>
                     </div>
                     {form.translations.length > 1 && (
@@ -437,7 +445,7 @@ function AddArticle() {
                         onChange={(option) =>
                           handleTranslationChange(idx, 'languageId', option?.value || '')
                         }
-                        placeholder="Dil seçin..."
+                        placeholder={intl.formatMessage({ id: 'UI.DIL_SECIN_PLACEHOLDER' })}
                         className="react-select-container"
                         classNamePrefix="react-select"
                         styles={getSelectStyles(currentTheme)}
@@ -496,7 +504,7 @@ function AddArticle() {
                         }
                         className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition resize-none"
                         rows="3"
-                        placeholder="Kısa özet..."
+                        placeholder={intl.formatMessage({ id: 'UI.KISA_OZET_PLACEHOLDER' })}
                       />
                     </div>
 

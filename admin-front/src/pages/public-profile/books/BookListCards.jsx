@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
+import { getLocalizedLanguageName } from '@/utils/languageUtils';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 const API_URL = API_BASE_URL + '/books';
@@ -49,7 +50,7 @@ const BookDetailModal = ({ book, onClose }) => {
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-red-500 text-2xl font-bold z-10"
-          aria-label="Kapat"
+          aria-label={intl.formatMessage({ id: 'UI.KAPAT' })}
         >
           ×
         </button>
@@ -82,7 +83,7 @@ const BookDetailModal = ({ book, onClose }) => {
               {/* Author */}
               <div>
                 <span className="text-sm font-semibold text-gray-700 dark:text-gray-300"><FormattedMessage id="UI.YAZAR_1" /></span>
-                <p className="text-base text-gray-900 dark:text-white">{book.author || 'Bilinmeyen'}</p>
+                <p className="text-base text-gray-900 dark:text-white">{book.author || intl.formatMessage({ id: 'UI.BILINMEYEN_YAZAR' })}</p>
               </div>
 
               {/* Categories */}
@@ -154,7 +155,7 @@ const BookDetailModal = ({ book, onClose }) => {
                         <div className="flex items-start justify-between gap-2 mb-2">
                           <div className="flex-1">
                             <div className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                              🌍 {trans.language?.name || 'N/A'}
+                              🌍 {trans.language ? getLocalizedLanguageName(trans.language, intl) : 'N/A'}
                             </div>
                             <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
                               {trans.title}
@@ -306,7 +307,7 @@ const BookListCards = () => {
         },
       });
 
-      if (!response.ok) throw new Error('Kitaplar alınamadı');
+      if (!response.ok) throw new Error(intl.formatMessage({ id: 'UI.KITAPLAR_YUKLENIRKEN_HATA_OLUSTU' }));
 
       const result = await response.json();
       let booksData = Array.isArray(result) ? result : (result?.data || []);
@@ -356,7 +357,7 @@ const BookListCards = () => {
       // Transform books - title'ı translations'dan al
       const transformedBooks = booksData.map(book => ({
         ...book,
-        title: book.translations?.[0]?.title || book.author || 'Başlıksız',
+        title: book.translations?.[0]?.title || book.author || intl.formatMessage({ id: 'UI.ISIMSIZ_KITAP' }),
         description: book.translations?.[0]?.description || '',
         summary: book.translations?.[0]?.summary || '',
       }));
@@ -369,14 +370,14 @@ const BookListCards = () => {
       setBooks(pagedBooks);
     } catch (err) {
       setError(err.message);
-      toast.error('Kitaplar yüklenirken hata oluştu');
+      toast.error(intl.formatMessage({ id: 'UI.KITAPLAR_YUKLENIRKEN_HATA_OLUSTU' }));
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Bu kitabı silmek istediğinize emin misiniz?')) return;
+    if (!confirm(intl.formatMessage({ id: 'UI.BU_KITABI_SILMEK_EMIN_MISINIZ' }))) return;
 
     try {
       const token = localStorage.getItem('access_token');
@@ -387,10 +388,10 @@ const BookListCards = () => {
         },
       });
 
-      if (!response.ok) throw new Error('Kitap silinemedi');
+      if (!response.ok) throw new Error(intl.formatMessage({ id: 'UI.KITAP_SILINEMEDI' }));
 
       setBooks(prev => prev.filter(book => book.id !== id));
-      toast.success('Kitap başarıyla silindi');
+      toast.success(intl.formatMessage({ id: 'UI.KITAP_BASARIYLA_SILINDI' }));
     } catch (err) {
       toast.error(err.message);
     }
@@ -470,7 +471,7 @@ const BookListCards = () => {
                   ? 'bg-white dark:bg-gray-700 text-blue-600 shadow'
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                   }`}
-                title="Kart Görünümü"
+                title={intl.formatMessage({ id: 'UI.KART_GORUNUMU' })}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -482,7 +483,7 @@ const BookListCards = () => {
                   ? 'bg-white dark:bg-gray-700 text-blue-600 shadow'
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
                   }`}
-                title="Liste Görünümü"
+                title={intl.formatMessage({ id: 'UI.LISTE_GORUNUMU' })}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -504,14 +505,14 @@ const BookListCards = () => {
           {selectedLanguageId && selectedLanguageName && (
             <div className="flex items-center justify-between gap-3 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm text-blue-900 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-100">
               <span>
-                Dil filtresi aktif: <strong>{selectedLanguageName}</strong>
+                <FormattedMessage id="UI.DIL_FILTRESI_AKTIF" /> <strong>{selectedLanguageName}</strong>
               </span>
               <button
                 type="button"
                 onClick={clearLanguageFilter}
                 className="rounded bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-700"
               >
-                Filtreyi temizle
+                <FormattedMessage id="UI.FILTREYI_TEMIZLE" />
               </button>
             </div>
           )}
@@ -519,7 +520,7 @@ const BookListCards = () => {
           <div>
             <input
               type="text"
-              placeholder="Kitap ara... (başlık, yazar, açıklama)"
+              placeholder={intl.formatMessage({ id: 'UI.KITAP_ARA_PLACEHOLDER' })}
               value={searchQuery}
               onChange={e => handleSearchChange(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
@@ -534,17 +535,17 @@ const BookListCards = () => {
           {/* Language Filter */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
             <label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-white">
-              Dile Göre Filtrele
+              <FormattedMessage id="UI.DILE_GORE_FILTRELE" />
             </label>
             <select
               value={selectedLanguageId}
               onChange={(e) => handleLanguageChange(e.target.value)}
               className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
             >
-              <option value="">Tüm Diller</option>
+              <option value="">{intl.formatMessage({ id: 'UI.TUM_DILLER' })}</option>
               {languages.map((language) => (
                 <option key={language.id} value={language.id}>
-                  {language.name}
+                  {getLocalizedLanguageName(language, intl)}
                 </option>
               ))}
             </select>
@@ -654,8 +655,8 @@ const BookListCards = () => {
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-8 text-center">
             <p className="text-blue-800 dark:text-blue-200 text-lg">
               {selectedLanguageId
-                ? `${selectedLanguageName || 'Seçilen dil'} için kitap bulunamadı`
-                : (searchQuery || selectedCategory ? 'Arama kriterlerine uygun kitap bulunamadı' : 'Henüz kitap eklenmemiş')}
+                ? intl.formatMessage({ id: 'UI.SECILEN_DIL_ICIN_KITAP_BULUNAMADI' })
+                : (searchQuery || selectedCategory ? intl.formatMessage({ id: 'UI.ARAMA_SONUCU_BULUNAMADI' }) : intl.formatMessage({ id: 'UI.HENUZ_KITAP_EKLENMEMIS' }))}
             </p>
           </div>
         )}
@@ -722,7 +723,7 @@ const BookListCards = () => {
                     {book.title}
                   </h3>
                   <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
-                    {book.author || 'Bilinmeyen Yazar'}
+                    {book.author || intl.formatMessage({ id: 'UI.BILINMEYEN_YAZAR' })}
                   </p>
 
                   {/* Categories */}
@@ -753,9 +754,9 @@ const BookListCards = () => {
                           ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
                           : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
                           }`}
-                        title={`${trans.title} ${trans.pdfUrl || trans.pdfFile ? '(PDF mevcut)' : '(PDF yok)'}`}
+                        title={`${trans.title} ${trans.pdfUrl || trans.pdfFile ? `(${intl.formatMessage({ id: 'UI.PDF_MEVCUT' })})` : `(${intl.formatMessage({ id: 'UI._PDF_YOK' })})`}`}
                       >
-                        {trans.language?.name || trans.language?.code || 'N/A'}
+                        {trans.language ? getLocalizedLanguageName(trans.language, intl) : (trans.language?.code || 'N/A')}
                         {(trans.pdfUrl || trans.pdfFile) && <span className="text-[10px]">📄</span>}
                       </span>
                     ))}
@@ -808,7 +809,7 @@ const BookListCards = () => {
                     </div>
 
                     <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                      👤 {book.author || 'Bilinmeyen Yazar'}
+                      👤 {book.author || intl.formatMessage({ id: 'UI.BILINMEYEN_YAZAR' })}
                     </p>
 
                     <div className="flex flex-wrap items-center gap-2 mb-2">
@@ -845,7 +846,7 @@ const BookListCards = () => {
                         {book.translations.map((trans, idx) => (
                           <div key={idx} className="inline-flex items-center gap-1">
                             <span className="px-2 py-0.5 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded text-xs">
-                              {trans.language?.name || trans.language?.code || 'N/A'}
+                              {trans.language ? getLocalizedLanguageName(trans.language, intl) : (trans.language?.code || 'N/A')}
                             </span>
                             {(trans.pdfUrl || trans.pdfFile) && (
                               <a
@@ -854,7 +855,7 @@ const BookListCards = () => {
                                 rel="noopener noreferrer"
                                 onClick={(e) => e.stopPropagation()}
                                 className="px-2 py-0.5 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition"
-                                title={`${trans.language?.name} PDF'i aç`}
+                                title={`${trans.language ? getLocalizedLanguageName(trans.language, intl) : ''} - ${intl.formatMessage({ id: 'UI.PDF_AC' })}`}
                               >
                                 📄
                               </a>

@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { FaNewspaper, FaBook, FaGlobe, FaFilter, FaEdit, FaTrash, FaTimesCircle, FaPlus, FaImage, FaUser, FaCalendar } from 'react-icons/fa';
+import { getLocalizedLanguageName } from '@/utils/languageUtils';
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/articles';
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -28,82 +29,6 @@ function getCoverUrl(coverImage) {
   }
   return BASE_URL.replace(/\/$/, '') + (coverImage.startsWith('/') ? coverImage : '/' + coverImage);
 }
-
-const columns = [
-  {
-    accessorKey: 'coverImage',
-    header: 'Kapak',
-    cell: info => {
-      const coverUrl = getCoverUrl(info.getValue());
-      return coverUrl ? (
-        <img
-          src={coverUrl}
-          alt="Kapak"
-          className="w-14 h-14 object-cover rounded shadow border border-gray-200 dark:border-gray-700"
-        />
-      ) : null;
-    },
-    enableSorting: false,
-    enableColumnFilter: false,
-    size: 80,
-  },
-  {
-    accessorKey: 'title',
-    header: 'Başlık',
-    cell: info => (
-      <div className="flex items-center gap-2">
-        <FaNewspaper className="text-blue-500 flex-shrink-0" />
-        <span className="font-semibold text-gray-900 dark:text-gray-100">{info.getValue()}</span>
-      </div>
-    ),
-  },
-  {
-    accessorKey: 'author',
-    header: 'Yazar',
-    cell: info => (
-      <div className="flex items-center gap-2">
-        <FaUser className="text-green-500 flex-shrink-0" />
-        <span className="text-gray-700 dark:text-gray-300">{info.getValue() || '-'}</span>
-      </div>
-    ),
-  },
-  {
-    accessorKey: 'bookTitle',
-    header: 'Kitap',
-    cell: info => (
-      <div className="flex items-center gap-2">
-        <FaBook className="text-purple-500 flex-shrink-0" />
-        <span className="text-gray-700 dark:text-gray-300">{info.getValue()}</span>
-      </div>
-    ),
-  },
-  {
-    accessorKey: 'translations',
-    header: 'Diller',
-    cell: info => (
-      <div className="flex flex-wrap gap-1">
-        {(info.getValue() || []).map(trans => (
-          <span
-            key={trans.languageId}
-            className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded"
-          >
-            {trans.language?.name || trans.language?.code}
-          </span>
-        ))}
-      </div>
-    ),
-    enableSorting: false,
-    enableColumnFilter: false,
-  },
-  {
-    accessorKey: 'publishDate',
-    header: 'Yayın Tarihi',
-    cell: info => {
-      const date = info.getValue();
-      return date ? new Date(date).toLocaleDateString('tr-TR') : '-';
-    },
-  },
-];
 
 function ArticleList() {
   const intl = useIntl();
@@ -128,6 +53,87 @@ function ArticleList() {
 
   // All data for statistics
   const [allData, setAllData] = useState([]);
+
+  const dateLocaleTag = intl.locale === 'tr' ? 'tr-TR' : 'en-US';
+
+  const columns = React.useMemo(
+    () => [
+      {
+        accessorKey: 'coverImage',
+        header: intl.formatMessage({ id: 'UI.KAPAK' }),
+        cell: info => {
+          const coverUrl = getCoverUrl(info.getValue());
+          return coverUrl ? (
+            <img
+              src={coverUrl}
+              alt={intl.formatMessage({ id: 'UI.KAPAK' })}
+              className="w-14 h-14 object-cover rounded shadow border border-gray-200 dark:border-gray-700"
+            />
+          ) : null;
+        },
+        enableSorting: false,
+        enableColumnFilter: false,
+        size: 80,
+      },
+      {
+        accessorKey: 'title',
+        header: intl.formatMessage({ id: 'UI.BASLIK' }),
+        cell: info => (
+          <div className="flex items-center gap-2">
+            <FaNewspaper className="text-blue-500 flex-shrink-0" />
+            <span className="font-semibold text-gray-900 dark:text-gray-100">{info.getValue()}</span>
+          </div>
+        ),
+      },
+      {
+        accessorKey: 'author',
+        header: intl.formatMessage({ id: 'UI.YAZAR' }),
+        cell: info => (
+          <div className="flex items-center gap-2">
+            <FaUser className="text-green-500 flex-shrink-0" />
+            <span className="text-gray-700 dark:text-gray-300">{info.getValue() || '-'}</span>
+          </div>
+        ),
+      },
+      {
+        accessorKey: 'bookTitle',
+        header: intl.formatMessage({ id: 'UI.KITAP' }),
+        cell: info => (
+          <div className="flex items-center gap-2">
+            <FaBook className="text-purple-500 flex-shrink-0" />
+            <span className="text-gray-700 dark:text-gray-300">{info.getValue()}</span>
+          </div>
+        ),
+      },
+      {
+        accessorKey: 'translations',
+        header: intl.formatMessage({ id: 'UI.DILLER' }),
+        cell: info => (
+          <div className="flex flex-wrap gap-1">
+            {(info.getValue() || []).map(trans => (
+              <span
+                key={trans.languageId}
+                className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded"
+              >
+                {getLocalizedLanguageName(trans.language, intl)}
+              </span>
+            ))}
+          </div>
+        ),
+        enableSorting: false,
+        enableColumnFilter: false,
+      },
+      {
+        accessorKey: 'publishDate',
+        header: intl.formatMessage({ id: 'UI.YAYIN_TARIHI' }),
+        cell: info => {
+          const date = info.getValue();
+          return date ? new Date(date).toLocaleDateString(dateLocaleTag) : '-';
+        },
+      },
+    ],
+    [intl, dateLocaleTag],
+  );
 
   // İstatistikler
   const stats = React.useMemo(() => {
@@ -217,11 +223,13 @@ function ArticleList() {
       const responseText = await response.text();
       
       if (responseText.trim().startsWith('<!') || responseText.trim().startsWith('<html')) {
-        throw new Error(`API endpoint bulunamadı. Lütfen backend'in çalıştığından emin olun. (${url})`);
+        throw new Error(
+          `${intl.formatMessage({ id: 'UI.API_ENDPOINT_BULUNAMADI' })} (${url})`,
+        );
       }
 
       if (!response.ok) {
-        let errorMessage = `Hata: ${response.status} ${response.statusText}`;
+        let errorMessage = `${intl.formatMessage({ id: 'UI.HATA' })} ${response.status} ${response.statusText}`;
         try {
           const errorJson = JSON.parse(responseText);
           errorMessage = errorJson.message || errorJson.error || errorMessage;
@@ -234,8 +242,8 @@ function ArticleList() {
       let result;
       try {
         result = JSON.parse(responseText);
-      } catch (parseError) {
-        throw new Error(`API'den geçersiz JSON yanıtı alındı`);
+      } catch {
+        throw new Error(intl.formatMessage({ id: 'UI.GECERSIZ_JSON_YANITI' }));
       }
       
       const articles = result.data || [];
@@ -291,11 +299,11 @@ function ArticleList() {
       const responseText = await response.text();
       
       if (responseText.trim().startsWith('<!') || responseText.trim().startsWith('<html')) {
-        throw new Error('API endpoint bulunamadı. Lütfen backend\'in çalıştığından emin olun.');
+        throw new Error(intl.formatMessage({ id: 'UI.API_ENDPOINT_BULUNAMADI' }));
       }
 
       if (!response.ok) {
-        let errorMessage = `Hata: ${response.status} ${response.statusText}`;
+        let errorMessage = `${intl.formatMessage({ id: 'UI.HATA' })} ${response.status} ${response.statusText}`;
         try {
           const errorJson = JSON.parse(responseText);
           errorMessage = errorJson.message || errorJson.error || errorMessage;
@@ -407,7 +415,7 @@ function ArticleList() {
               </label>
               <input
                 type="text"
-                placeholder="Başlık ara..."
+                placeholder={intl.formatMessage({ id: 'UI.KITAPCIK_BASLIGI_ARA_PLACEHOLDER' })}
                 value={filters.search}
                 onChange={e => setFilters(prev => ({ ...prev, search: e.target.value }))}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm transition"
@@ -427,7 +435,7 @@ function ArticleList() {
               >
                 <option value="all"><FormattedMessage id="UI.TUM_DILLER" /></option>
                 {languages.map(lang => (
-                  <option key={lang.id} value={lang.id}>{lang.name}</option>
+                  <option key={lang.id} value={lang.id}>{getLocalizedLanguageName(lang, intl)}</option>
                 ))}
               </select>
             </div>
@@ -446,7 +454,9 @@ function ArticleList() {
                 <option value="all"><FormattedMessage id="UI.TUM_KITAPLAR" /></option>
                 {books.map(book => (
                   <option key={book.id} value={book.id}>
-                    {book.translations?.[0]?.title || book.author || `Kitap #${book.id}`}
+                    {book.translations?.[0]?.title ||
+                      book.author ||
+                      intl.formatMessage({ id: 'UI.KITAP_NUMARALI' }, { id: book.id })}
                   </option>
                 ))}
               </select>
@@ -571,21 +581,21 @@ function ArticleList() {
                             <button
                               onClick={() => openPreviewModal(row.original)}
                               className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-200 hover:shadow-lg"
-                              title="Önizleme"
+                              title={intl.formatMessage({ id: 'UI.ONIZLEME' })}
                             >
                               <FaNewspaper />
                             </button>
                             <button
                               onClick={() => handleEdit(row.original)}
                               className="p-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-all duration-200 hover:shadow-lg"
-                              title="Düzenle"
+                              title={intl.formatMessage({ id: 'UI.DUZENLE' })}
                             >
                               <FaEdit />
                             </button>
                             <button
                               onClick={() => openDeleteModal(row.original)}
                               className="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-200 hover:shadow-lg"
-                              title="Sil"
+                              title={intl.formatMessage({ id: 'UI.SIL' })}
                             >
                               <FaTrash />
                             </button>
@@ -603,25 +613,25 @@ function ArticleList() {
           {table.getPageCount() > 1 && (
             <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
               <div className="text-sm text-gray-700 dark:text-gray-300 font-medium">
-                <FormattedMessage id="UI.TOPLAM" /> <span className="font-bold text-blue-600 dark:text-blue-400">{data.length}</span> <FormattedMessage id="UI.MAKALE_ICINDEN" />{' '}
-                <span className="font-bold">
-                  {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}
-                </span>
-                {' '}-{' '}
-                <span className="font-bold">
-                  {Math.min(
-                    (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
-                    data.length
-                  )}
-                </span>
-                {' '}<FormattedMessage id="UI.ARASI_GOSTERILIYOR" />
+                {intl.formatMessage(
+                  { id: 'UI.MAKALE_LISTE_PAGINATION' },
+                  {
+                    total: data.length,
+                    start: table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1,
+                    end: Math.min(
+                      (table.getState().pagination.pageIndex + 1) *
+                        table.getState().pagination.pageSize,
+                      data.length,
+                    ),
+                  },
+                )}
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => table.setPageIndex(0)}
                   disabled={!table.getCanPreviousPage()}
                   className="px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg disabled:opacity-50 hover:bg-gray-100 dark:hover:bg-gray-600 transition-all disabled:cursor-not-allowed shadow-sm"
-                  title="İlk Sayfa"
+                  title={intl.formatMessage({ id: 'UI.ILK_SAYFA' })}
                 >
                   «
                 </button>
@@ -646,7 +656,7 @@ function ArticleList() {
                   onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                   disabled={!table.getCanNextPage()}
                   className="px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg disabled:opacity-50 hover:bg-gray-100 dark:hover:bg-gray-600 transition-all disabled:cursor-not-allowed shadow-sm"
-                  title="Son Sayfa"
+                  title={intl.formatMessage({ id: 'UI.SON_SAYFA' })}
                 >
                   »
                 </button>
@@ -685,7 +695,7 @@ function ArticleList() {
                         {selectedArticle.publishDate && (
                           <div className="flex items-center gap-1">
                             <FaCalendar className="text-white/70" />
-                            <span>{new Date(selectedArticle.publishDate).toLocaleDateString('tr-TR')}</span>
+                            <span>{new Date(selectedArticle.publishDate).toLocaleDateString(dateLocaleTag)}</span>
                           </div>
                         )}
                         <div className="flex items-center gap-1">
@@ -732,7 +742,7 @@ function ArticleList() {
                           <div className="flex items-center justify-between mb-3">
                             <div className="flex items-center gap-2">
                               <span className="px-3 py-1 bg-blue-600 text-white text-sm font-semibold rounded-full">
-                                {trans.language?.name || trans.language?.code}
+                                {getLocalizedLanguageName(trans.language, intl)}
                               </span>
                               <h4 className="font-bold text-gray-900 dark:text-white">
                                 {trans.title}

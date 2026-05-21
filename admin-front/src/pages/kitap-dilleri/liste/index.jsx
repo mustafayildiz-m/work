@@ -1,4 +1,4 @@
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import React, { useMemo, useState, useEffect } from 'react';
 import {
   useReactTable,
@@ -9,15 +9,17 @@ import {
   getPaginationRowModel,
 } from '@tanstack/react-table';
 import { useNavigate } from 'react-router-dom';
+import { getLocalizedLanguageName } from '@/utils/languageUtils';
 
 function DefaultColumnFilter({ column }) {
+  const intl = useIntl();
   const columnFilterValue = column.getFilterValue() || '';
   return (
     <input
       type="text"
       value={columnFilterValue}
       onChange={e => column.setFilterValue(e.target.value)}
-      placeholder="Filtrele..."
+      placeholder={intl.formatMessage({ id: 'UI.DILE_GORE_FILTRELE_PLACEHOLDER' })}
       className="w-full px-2 py-1 border border-gray-300 dark:border-gray-700 rounded text-xs bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
     />
   );
@@ -63,6 +65,7 @@ function getMediaUrl(filePath) {
 }
 
 function AddLanguageModal({ open, onClose, onAdded }) {
+  const intl = useIntl();
   const [form, setForm] = useState({ name: '', code: '', flagFile: null });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -93,11 +96,11 @@ function AddLanguageModal({ open, onClose, onAdded }) {
       const responseText = await res.text();
       
       if (responseText.trim().startsWith('<!') || responseText.trim().startsWith('<html')) {
-        throw new Error('API endpoint bulunamadı. Lütfen backend\'in çalıştığından emin olun.');
+        throw new Error(intl.formatMessage({ id: 'UI.API_ENDPOINT_BULUNAMADI' }));
       }
       
       if (!res.ok) {
-        let errorMessage = `Hata: ${res.status} ${res.statusText}`;
+        let errorMessage = `${intl.formatMessage({ id: 'UI.HATA' })} ${res.status} ${res.statusText}`;
         try {
           const errorJson = JSON.parse(responseText);
           errorMessage = errorJson.message || errorJson.error || errorMessage;
@@ -111,7 +114,7 @@ function AddLanguageModal({ open, onClose, onAdded }) {
       try {
         newLang = JSON.parse(responseText);
       } catch (parseError) {
-        throw new Error(`API'den geçersiz JSON yanıtı alındı`);
+        throw new Error(intl.formatMessage({ id: 'UI.GECERSIZ_JSON_YANITI' }));
       }
       onAdded(newLang);
       onClose();
@@ -150,20 +153,20 @@ function AddLanguageModal({ open, onClose, onAdded }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Bayrak Görseli</label>
+            <label className="block text-sm font-medium mb-1"><FormattedMessage id="UI.BAYRAK_GORSELI" /></label>
             <input
               type="file"
               accept="image/*"
               onChange={e => setForm(prev => ({ ...prev, flagFile: e.target.files?.[0] || null }))}
               className="w-full text-sm text-gray-900 dark:text-gray-100 file:mr-3 file:rounded file:border-0 file:bg-blue-600 file:px-3 file:py-1.5 file:text-white hover:file:bg-blue-700"
             />
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Opsiyonel - JPG, PNG, SVG vb.</p>
+            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.OPSIYONEL_GORSEL_FORMATLARI" /></p>
           </div>
           {error && <div className="text-red-500 text-sm">{error}</div>}
           <div className="flex justify-end gap-2">
             <button type="button" onClick={onClose} className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100"><FormattedMessage id="UI.IPTAL" /></button>
             <button type="submit" disabled={loading} className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
-              {loading ? 'Ekleniyor...' : 'Ekle'}
+              {loading ? <FormattedMessage id="UI.EKLENIYOR" /> : <FormattedMessage id="UI.EKLE" />}
             </button>
           </div>
         </form>
@@ -173,6 +176,7 @@ function AddLanguageModal({ open, onClose, onAdded }) {
 }
 
 function EditLanguageModal({ open, onClose, language, onUpdated }) {
+  const intl = useIntl();
   const [form, setForm] = useState(language || { name: '', code: '', flagFile: null });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -208,11 +212,11 @@ function EditLanguageModal({ open, onClose, language, onUpdated }) {
       const responseText = await res.text();
       
       if (responseText.trim().startsWith('<!') || responseText.trim().startsWith('<html')) {
-        throw new Error('API endpoint bulunamadı. Lütfen backend\'in çalıştığından emin olun.');
+        throw new Error(intl.formatMessage({ id: 'UI.API_ENDPOINT_BULUNAMADI' }));
       }
       
       if (!res.ok) {
-        let errorMessage = `Hata: ${res.status} ${res.statusText}`;
+        let errorMessage = `${intl.formatMessage({ id: 'UI.HATA' })} ${res.status} ${res.statusText}`;
         try {
           const errorJson = JSON.parse(responseText);
           errorMessage = errorJson.message || errorJson.error || errorMessage;
@@ -226,7 +230,7 @@ function EditLanguageModal({ open, onClose, language, onUpdated }) {
       try {
         updatedLang = JSON.parse(responseText);
       } catch (parseError) {
-        throw new Error(`API'den geçersiz JSON yanıtı alındı`);
+        throw new Error(intl.formatMessage({ id: 'UI.GECERSIZ_JSON_YANITI' }));
       }
       onUpdated(updatedLang);
       onClose();
@@ -264,11 +268,11 @@ function EditLanguageModal({ open, onClose, language, onUpdated }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Bayrak Görseli</label>
+            <label className="block text-sm font-medium mb-1"><FormattedMessage id="UI.BAYRAK_GORSELI" /></label>
             {form.flagUrl && !form.flagFile ? (
               <img
                 src={getMediaUrl(form.flagUrl)}
-                alt={`${form.name} bayrağı`}
+                alt={form.name}
                 className="mb-2 h-10 w-14 rounded object-cover border border-gray-200 dark:border-gray-700"
               />
             ) : null}
@@ -278,13 +282,13 @@ function EditLanguageModal({ open, onClose, language, onUpdated }) {
               onChange={e => setForm(prev => ({ ...prev, flagFile: e.target.files?.[0] || null }))}
               className="w-full text-sm text-gray-900 dark:text-gray-100 file:mr-3 file:rounded file:border-0 file:bg-blue-600 file:px-3 file:py-1.5 file:text-white hover:file:bg-blue-700"
             />
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Seçerseniz mevcut bayrak görseli güncellenir.</p>
+            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.BAYRAK_GUNCELLEME_NOTU" /></p>
           </div>
           {error && <div className="text-red-500 text-sm">{error}</div>}
           <div className="flex justify-end gap-2">
             <button type="button" onClick={onClose} className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100"><FormattedMessage id="UI.IPTAL" /></button>
             <button type="submit" disabled={loading} className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
-              {loading ? 'Kaydediliyor...' : 'Kaydet'}
+              {loading ? <FormattedMessage id="UI.KAYDEDILIYOR" /> : <FormattedMessage id="UI.KAYDET" />}
             </button>
           </div>
         </form>
@@ -294,6 +298,7 @@ function EditLanguageModal({ open, onClose, language, onUpdated }) {
 }
 
 const LanguageList = () => {
+  const intl = useIntl();
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [languageBooks, setLanguageBooks] = useState({});
@@ -309,10 +314,8 @@ const LanguageList = () => {
     const fetchLanguages = async () => {
       setLoading(true);
       setError(null);
-      console.log('🔍 API URL:', API_URL);
       try {
         const token = localStorage.getItem('access_token');
-        console.log('🔑 Token durumu:', token ? 'Mevcut' : 'Bulunamadı');
         
         const res = await fetch(API_URL, {
           headers: {
@@ -321,45 +324,31 @@ const LanguageList = () => {
           },
         });
         
-        console.log('📡 Response status:', res.status, res.statusText);
-        console.log('📡 Response headers:', Object.fromEntries(res.headers.entries()));
-        
         const responseText = await res.text();
-        console.log('📄 Response text (ilk 200 karakter):', responseText.substring(0, 200));
-        
-        // Eğer response HTML ise (örn: 404 sayfası)
         if (responseText.trim().startsWith('<!') || responseText.trim().startsWith('<html')) {
-          console.error('❌ HTML response alındı - API endpoint bulunamadı');
-          throw new Error(`API endpoint bulunamadı. Lütfen backend'in çalıştığından ve URL'nin doğru olduğundan emin olun. (${API_URL})`);
+          throw new Error(intl.formatMessage({ id: 'UI.API_ENDPOINT_BULUNAMADI' }));
         }
         
         if (!res.ok) {
-          let errorMessage = `Hata: ${res.status} ${res.statusText}`;
+          let errorMessage = `${intl.formatMessage({ id: 'UI.HATA' })} ${res.status} ${res.statusText}`;
           try {
             const errorJson = JSON.parse(responseText);
             errorMessage = errorJson.message || errorJson.error || errorMessage;
           } catch {
-            // JSON parse edilemediyse, text'i göster
             errorMessage = responseText.substring(0, 200) || errorMessage;
           }
-          console.error('❌ API hatası:', errorMessage);
           throw new Error(errorMessage);
         }
 
-        // JSON parse et
         let langs;
         try {
           langs = JSON.parse(responseText);
-          console.log('✅ Diller başarıyla alındı:', langs.length, 'dil');
         } catch (parseError) {
-          console.error('❌ JSON parse hatası:', parseError);
-          throw new Error(`API'den geçersiz JSON yanıtı alındı: ${responseText.substring(0, 100)}`);
+          throw new Error(intl.formatMessage({ id: 'UI.GECERSIZ_JSON_YANITI' }));
         }
         
         setData(langs);
       } catch (err) {
-        console.error('❌ Diller yüklenirken hata:', err);
-        console.error('📍 API URL:', API_URL);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -390,7 +379,7 @@ const LanguageList = () => {
             if (langId && !map[langId]) {
               map[langId] = {
                 id: book.id,
-                title: translation?.title || book.author || 'Kitap',
+                title: translation?.title || book.author || '',
                 coverImage: book.coverImage || book.coverUrl || '',
                 hasPdf: Boolean(translation?.pdfUrl || translation?.pdfFile),
               };
@@ -412,7 +401,7 @@ const LanguageList = () => {
   const handleDeleted = id => setData(prev => prev.filter(l => l.id !== id));
 
   const handleDelete = async (lang) => {
-    if (!window.confirm(`'${lang.name}' dilini silmek istediğinize emin misiniz?`)) return;
+    if (!window.confirm(intl.formatMessage({ id: 'UI.DILI_SILMEK_EMIN_MISINIZ' }))) return;
     try {
       const token = localStorage.getItem('access_token');
       const res = await fetch(`${API_URL}/${lang.id}`, {
@@ -426,11 +415,11 @@ const LanguageList = () => {
       const responseText = await res.text();
       
       if (responseText.trim().startsWith('<!') || responseText.trim().startsWith('<html')) {
-        throw new Error('API endpoint bulunamadı. Lütfen backend\'in çalıştığından emin olun.');
+        throw new Error(intl.formatMessage({ id: 'UI.API_ENDPOINT_BULUNAMADI' }));
       }
       
       if (!res.ok) {
-        let errorMessage = `Hata: ${res.status} ${res.statusText}`;
+        let errorMessage = `${intl.formatMessage({ id: 'UI.HATA' })} ${res.status} ${res.statusText}`;
         try {
           const errorJson = JSON.parse(responseText);
           errorMessage = errorJson.message || errorJson.error || errorMessage;
@@ -442,7 +431,7 @@ const LanguageList = () => {
       
       handleDeleted(lang.id);
     } catch (err) {
-      alert('Hata: ' + err.message);
+      alert(`${intl.formatMessage({ id: 'UI.HATA' })} ${err.message}`);
     }
   };
 
@@ -450,7 +439,7 @@ const LanguageList = () => {
     () => [
       {
         id: 'flag',
-        header: 'Bayrak',
+        header: intl.formatMessage({ id: 'UI.BAYRAK' }),
         cell: ({ row }) => {
           const code = row.original?.code || '';
           const flagUrl = row.original?.flagUrl;
@@ -459,7 +448,7 @@ const LanguageList = () => {
             return (
               <img
                 src={getMediaUrl(flagUrl)}
-                alt={`${row.original?.name || code} bayrağı`}
+                alt={row.original?.name || code}
                 className="h-8 w-12 rounded-sm object-cover border border-gray-200 dark:border-gray-700"
                 loading="lazy"
                 decoding="async"
@@ -478,13 +467,13 @@ const LanguageList = () => {
       },
       {
         accessorKey: 'name',
-        header: 'Dil Adı',
+        header: intl.formatMessage({ id: 'UI.DIL_ADI' }),
         filterFn: 'includesString',
         Filter: DefaultColumnFilter,
       },
       {
         accessorKey: 'code',
-        header: 'Dil Kodu',
+        header: intl.formatMessage({ id: 'UI.DIL_KODU' }),
         cell: ({ row }) => {
           const code = row.original?.code || '';
           const flagUrl = row.original?.flagUrl;
@@ -493,7 +482,7 @@ const LanguageList = () => {
               {flagUrl ? (
                 <img
                   src={getMediaUrl(flagUrl)}
-                  alt={`${row.original?.name || code} bayrağı`}
+                  alt={row.original?.name || code}
                   className="h-7 w-10 rounded-sm object-cover border border-gray-200 dark:border-gray-700"
                   loading="lazy"
                   decoding="async"
@@ -514,7 +503,7 @@ const LanguageList = () => {
       },
       {
         id: 'previewBook',
-        header: 'Dil Kitabı',
+        header: intl.formatMessage({ id: 'UI.DIL_KITABI' }),
         cell: ({ row }) => {
           const language = row.original;
           const previewBook = languageBooks[language.id];
@@ -522,7 +511,7 @@ const LanguageList = () => {
           if (!previewBook) {
             return (
               <span className="text-xs text-gray-500 dark:text-gray-400">
-                Bu dilde kitap yok
+                {intl.formatMessage({ id: 'UI.BU_DILDE_KITAP_YOK' })}
               </span>
             );
           }
@@ -532,7 +521,7 @@ const LanguageList = () => {
               type="button"
               onClick={() => navigate(`/kitaplar/liste?languageId=${language.id}&languageName=${encodeURIComponent(language.name)}`)}
               className="group flex items-center gap-3 rounded-lg border border-gray-200 bg-gray-50 p-2 text-left transition hover:border-blue-300 hover:bg-blue-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-700 dark:hover:bg-gray-700"
-              title={`${language.name} kitaplarını görüntüle`}
+              title={intl.formatMessage({ id: 'UI.KITAPLARI_GORUNTULE' })}
             >
               <img
                 src={getCoverUrl(previewBook.coverImage)}
@@ -546,7 +535,7 @@ const LanguageList = () => {
                   {previewBook.title}
                 </div>
                 <div className="text-[11px] text-gray-500 dark:text-gray-400">
-                  {previewBook.hasPdf ? 'PDF mevcut' : 'PDF yok'}
+                  {previewBook.hasPdf ? intl.formatMessage({ id: 'UI.PDF_MEVCUT' }) : intl.formatMessage({ id: 'UI._PDF_YOK' })}
                 </div>
               </div>
             </button>
@@ -621,7 +610,7 @@ const LanguageList = () => {
           type="text"
           value={globalFilter ?? ''}
           onChange={e => setGlobalFilter(e.target.value)}
-          placeholder="Dil ara..."
+          placeholder={intl.formatMessage({ id: 'UI.DIL_ARA_PLACEHOLDER' })}
           className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
         />
       </div>
@@ -666,28 +655,28 @@ const LanguageList = () => {
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
           >
-            {'İlk'}
+            <FormattedMessage id="UI.ILK_SAYFA" />
           </button>
           <button
             className="px-3 py-1 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            {'Önceki'}
+            <FormattedMessage id="UI.ONCEKI_SAYFA" />
           </button>
           <button
             className="px-3 py-1 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            {'Sonraki'}
+            <FormattedMessage id="UI.SONRAKI_SAYFA" />
           </button>
           <button
             className="px-3 py-1 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >
-            {'Son'}
+            <FormattedMessage id="UI.SON_SAYFA" />
           </button>
         </div>
         <span className="text-sm text-gray-700 dark:text-gray-300">

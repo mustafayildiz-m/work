@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { FaArrowLeft, FaSave } from 'react-icons/fa';
+import { getLocalizedLanguageName } from '@/utils/languageUtils';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/newsletters';
 const PUBLIC_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 function EditNewsletter() {
+  const intl = useIntl();
   const navigate = useNavigate();
   const { id } = useParams();
   const fileInputRef = useRef(null);
@@ -156,7 +159,7 @@ function EditNewsletter() {
                           <option value={form.sourceLanguage}>Kaynak: {form.sourceLanguage}</option>
                         )}
                         {activeLangs.map((l) => (
-                          <option key={l.id} value={l.code}>{l.name}</option>
+                          <option key={l.id} value={l.code}>{getLocalizedLanguageName(l, intl)}</option>
                         ))}
                       </>
                     );

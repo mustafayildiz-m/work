@@ -1,5 +1,6 @@
 import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
+import { getLocalizedLanguageName } from '@/utils/languageUtils';
 import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
@@ -96,12 +97,12 @@ export default function AddPodcast() {
         body: formData,
       });
 
-      if (!response.ok) throw new Error('Podcast eklenemedi');
+      if (!response.ok) throw new Error(intl.formatMessage({ id: 'UI.PODCAST_EKLE' }));
 
-      toast.success('Podcast başarıyla eklendi!');
+      toast.success(intl.formatMessage({ id: 'UI.PODCAST_BASARIYLA_EKLENDI' }));
       navigate('/podcast/liste');
     } catch (error) {
-      toast.error(error.message || 'Podcast eklenirken bir hata oluştu');
+      toast.error(error.message || intl.formatMessage({ id: 'UI.PODCAST_EKLENIRKEN_HATA' }));
     } finally {
       setLoading(false);
     }
@@ -239,7 +240,7 @@ export default function AddPodcast() {
                     className="w-full px-4 py-3 h-11 border-2 border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all cursor-pointer"
                   >
                     {languages.map(lang => (
-                      <option key={lang.id} value={lang.code}>{lang.name}</option>
+                      <option key={lang.id} value={lang.code}>{getLocalizedLanguageName(lang, intl)}</option>
                     ))}
                   </select>
                 </div>
@@ -376,7 +377,7 @@ export default function AddPodcast() {
                       <div className="w-48 h-48 border-2 border-dashed border-green-300 dark:border-green-700 rounded-xl overflow-hidden shadow-lg">
                         <img
                           src={coverPreview}
-                          alt="Kapak önizleme"
+                          alt={intl.formatMessage({ id: 'UI.KAPAK_ONIZLEME' })}
                           className="w-full h-full object-cover"
                         />
                       </div>

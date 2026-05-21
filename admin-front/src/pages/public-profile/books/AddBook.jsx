@@ -1,4 +1,5 @@
 import { FormattedMessage, useIntl } from "react-intl";
+import { getLocalizedLanguageName } from '@/utils/languageUtils';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -29,7 +30,6 @@ function AddBook() {
   const [loadingLanguages, setLoadingLanguages] = useState(false);
   const [currentTheme, setCurrentTheme] = useState(getTheme());
 
-  // Tema değişikliğini izle
   useEffect(() => {
     const observer = new MutationObserver(() => {
       setCurrentTheme(getTheme());
@@ -54,11 +54,11 @@ function AddBook() {
             'Content-Type': 'application/json',
           },
         });
-        if (!response.ok) throw new Error('Diller yüklenirken bir hata oluştu');
+        if (!response.ok) throw new Error(intl.formatMessage({ id: 'UI.DILLER_YUKLENIRKEN_HATA' }));
         const data = await response.json();
         setAvailableLanguages(data);
       } catch (error) {
-        toast.error('Diller yüklenirken bir hata oluştu');
+        toast.error(intl.formatMessage({ id: 'UI.DILLER_YUKLENIRKEN_HATA' }));
       } finally {
         setLoadingLanguages(false);
       }
@@ -135,30 +135,25 @@ function AddBook() {
       const token = localStorage.getItem('access_token');
       const formData = new FormData();
 
-      // Temel bilgileri ekle
       formData.append('author', form.author);
-      // publishDate opsiyonel: boş alan göndermek MySQL DATE kolonunu kırıyor
       if (form.publishDate) {
         formData.append('publishDate', form.publishDate);
       }
 
-      // Kategorileri ekle
       form.categories.forEach(cat => {
         formData.append('category[]', cat);
       });
 
-      // Kapak resmi ekle
       if (file) {
         formData.append('coverImage', file);
       }
 
-      // Translations (çeviriler) ekle - Her dil için title, description, summary ve PDF
       form.translations.forEach((translation, index) => {
         if (!translation.language) {
-          throw new Error('Lütfen tüm diller için bir dil seçin');
+          throw new Error(intl.formatMessage({ id: 'UI.LUTFEN_TUM_DILLER_ICIN_DIL_SECIN' }));
         }
         if (!translation.title) {
-          throw new Error('Lütfen tüm diller için başlık girin');
+          throw new Error(intl.formatMessage({ id: 'UI.LUTFEN_TUM_DILLER_ICIN_BASLIK' }));
         }
 
         formData.append(`translations[${index}][languageId]`, translation.language);
@@ -169,7 +164,7 @@ function AddBook() {
         if (translation.file) {
           formData.append(`translations[${index}][pdfFile]`, translation.file);
         } else {
-          throw new Error('Lütfen tüm diller için bir PDF dosyası ekleyin');
+          throw new Error(intl.formatMessage({ id: 'UI.LUTFEN_TUM_DILLER_ICIN_PDF' }));
         }
       });
 
@@ -189,26 +184,25 @@ function AddBook() {
           const errorData = await response.json();
 
           if (errorData.message === 'PDF_INVALID_CONFIRM_NEEDED') {
-            if (window.confirm('⚠️ UYARI: PDF Metin İçeriği Bozuk!\n\nBu PDF dosyasının metni okunamıyor. Otomatik çeviri yapılamayacak ve kullanıcılar metni seçemeyecek (sadece resim olarak görüntüleyebilecek).\n\nYine de yüklemek istiyor musunuz?')) {
+            if (window.confirm(intl.formatMessage({ id: 'UI.PDF_BOZUK_UYARI' }))) {
               return submitData(true);
             }
-            // İptal edilirse
             setLoading(false);
             return;
           }
 
-          throw new Error(errorData.message || 'Kitap eklenirken bir hata oluştu');
+          throw new Error(errorData.message || intl.formatMessage({ id: 'UI.KITAP_EKLENIRKEN_HATA' }));
         }
 
         const data = await response.json();
-        toast.success('Kitap başarıyla eklendi');
+        toast.success(intl.formatMessage({ id: 'UI.KITAP_BASARIYLA_EKLENDI' }));
         navigate('/kitaplar/liste');
       };
 
       await submitData();
     } catch (err) {
       setError(err.message);
-      toast.error(err.message || 'Kitap eklenirken bir hata oluştu');
+      toast.error(err.message || intl.formatMessage({ id: 'UI.KITAP_EKLENIRKEN_HATA' }));
     } finally {
       setLoading(false);
     }
@@ -260,7 +254,7 @@ function AddBook() {
                 <div className="flex items-start gap-4">
                   <div className="w-40 h-56 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center bg-gray-50 dark:bg-gray-800">
                     {preview ? (
-                      <img src={preview} alt="Kapak önizleme" className="w-full h-full object-cover rounded-lg" />
+                      <img src={preview} alt={intl.formatMessage({ id: 'UI.KAPAK_ONIZLEME' })} className="w-full h-full object-cover rounded-lg" />
                     ) : (
                       <div className="text-center p-4">
                         <FaImage className="text-4xl text-gray-400 mx-auto mb-2" />
@@ -296,7 +290,7 @@ function AddBook() {
                   value={form.author}
                   onChange={handleChange}
                   required
-                  placeholder="Kitabın yazarını girin"
+                  placeholder={intl.formatMessage({ id: 'UI.KITABIN_YAZARINI_GIRIN' })}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition"
                 />
               </div>
@@ -348,7 +342,7 @@ function AddBook() {
                   value={categoryInput}
                   onChange={handleCategoryInput}
                   onKeyDown={handleCategoryKeyDown}
-                  placeholder="Kategori adı yazın ve Enter/Tab ile ekleyin..."
+                  placeholder={intl.formatMessage({ id: 'UI.KATEGORI_EKLEMEK_ICIN_YAZIP_ENTER_VEYA_T' })}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition"
                 />
                 <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
@@ -383,8 +377,8 @@ function AddBook() {
                     </div>
                     <h4 className="font-bold text-gray-900 dark:text-white">
                       {translation.language
-                        ? availableLanguages.find(l => l.id === translation.language)?.name || `Çeviri ${idx + 1}`
-                        : `Çeviri ${idx + 1}`}
+                        ? availableLanguages.find(l => l.id === translation.language)?.name || `${intl.formatMessage({ id: 'UI.CEVIRI' })} ${idx + 1}`
+                        : `${intl.formatMessage({ id: 'UI.CEVIRI' })} ${idx + 1}`}
                     </h4>
                   </div>
                   {form.translations.length > 1 && (
@@ -408,13 +402,13 @@ function AddBook() {
                       <span className="text-red-500">*</span>
                     </label>
                     <Select
-                      options={availableLanguages.map(l => ({ value: l.id, label: l.name }))}
+                      options={availableLanguages.map(l => ({ value: l.id, label: getLocalizedLanguageName(l, intl) }))}
                       value={availableLanguages
                         .filter(l => l.id === translation.language)
-                        .map(l => ({ value: l.id, label: l.name }))[0]}
+                        .map(l => ({ value: l.id, label: getLocalizedLanguageName(l, intl) }))[0]}
                       onChange={option => handleTranslationChange(idx, 'language', option.value)}
                       isLoading={loadingLanguages}
-                      placeholder="Dil seçin..."
+                      placeholder={intl.formatMessage({ id: 'UI.DIL_SECIN_PLACEHOLDER' })}
                       styles={getSelectStyles(currentTheme)}
                     />
                   </div>
@@ -431,7 +425,7 @@ function AddBook() {
                       value={translation.title}
                       onChange={e => handleTranslationChange(idx, 'title', e.target.value)}
                       required
-                      placeholder="Bu dil için kitap başlığı"
+                      placeholder={intl.formatMessage({ id: 'UI.BU_DIL_ICIN_KITAP_BASLIGI' })}
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition"
                     />
                   </div>
@@ -446,7 +440,7 @@ function AddBook() {
                       value={translation.description}
                       onChange={e => handleTranslationChange(idx, 'description', e.target.value)}
                       rows="3"
-                      placeholder="Bu dil için detaylı açıklama..."
+                      placeholder={intl.formatMessage({ id: 'UI.BU_DIL_ICIN_ACIKLAMA' })}
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition resize-none"
                     />
                   </div>
@@ -461,7 +455,7 @@ function AddBook() {
                       value={translation.summary}
                       onChange={e => handleTranslationChange(idx, 'summary', e.target.value)}
                       rows="3"
-                      placeholder="Bu dil için kısa özet..."
+                      placeholder={intl.formatMessage({ id: 'UI.BU_DIL_ICIN_OZET' })}
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition resize-none"
                     />
                   </div>
