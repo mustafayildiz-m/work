@@ -700,6 +700,23 @@ const ProfilePanel = ({ links, onLinkClick }) => {
               fontSize: '0.9rem'
             };
             const isActive = pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link));
+            const iconFilter = item.preserveIconColor
+              ? 'none'
+              : (isActive
+                ? 'brightness(0) invert(1)'
+                : (isDarkMode ? 'invert(1)' : 'none'));
+            const iconStyle = item.preserveIconColor
+              ? {
+                  marginRight: '12px',
+                  borderRadius: '4px',
+                  objectFit: 'cover',
+                  flexShrink: 0
+                }
+              : {
+                  marginRight: '12px',
+                  opacity: isActive ? 1 : 0.85,
+                  filter: iconFilter
+                };
             const content = (
               <>
                 <img
@@ -707,13 +724,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                   alt="icon"
                   height={18}
                   width={18}
-                  style={{
-                    marginRight: '12px',
-                    opacity: isActive ? 1 : 0.85,
-                    filter: isActive
-                      ? 'brightness(0) invert(1)'
-                      : (isDarkMode ? 'invert(1)' : 'none')
-                  }}
+                  style={iconStyle}
                 />
                 <span>{item.name || t(item.nameKey)}</span>
               </>
