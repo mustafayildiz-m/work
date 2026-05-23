@@ -62,6 +62,20 @@ Migration'lar **otomatik olarak** çalışacaktır. Backend container başlarken
 - **User Frontend**: http://localhost:3001
 - **MySQL**: localhost:3315
 
+### Makefile (yerel özet komutlar)
+
+Proje kökünde:
+
+```bash
+make up      # docker compose up -d --build
+make down    # docker compose down
+make logs    # tüm loglar (follow)
+make help    # diğer hedefler
+
+# Varsayılan dışında compose dosyası:
+make up COMPOSE_FILE=docker-compose.prod.yml
+```
+
 ### Temel Komutlar
 
 ```bash

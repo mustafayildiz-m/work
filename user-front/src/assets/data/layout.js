@@ -20,6 +20,8 @@ import microphoneImg from '@/assets/images/icon/chat-alt-outline-filled.svg'; //
 import myNetworkImg from '@/assets/images/icon/my-network-outline-filled.svg';
 import newspaperSmallImg from '@/assets/images/icon/newspaper-small.svg';
 import bulbImg from '@/assets/images/icon/bulb-outline-filled.svg';
+import askAboutIslamImg from '@/assets/images/logo/askaboutislam.png';
+import askMariamImg from '@/assets/images/logo/askmariam.png';
 
 export const profilePanelLinksData1 = [{
   image: typeof homeImg === 'string' ? homeImg : homeImg.src,
@@ -66,10 +68,17 @@ export const profilePanelLinksData1 = [{
   nameKey: 'menu.papers',
   link: '/feed/papers'
 }, {
-  image: typeof bulbImg === 'string' ? bulbImg : bulbImg.src,
+  image: typeof askAboutIslamImg === 'string' ? askAboutIslamImg : askAboutIslamImg.src,
   nameKey: 'menu.askAboutIslam',
   link: 'https://www.askaboutislam.ai/',
-  external: true
+  external: true,
+  preserveIconColor: true
+}, {
+  image: typeof askMariamImg === 'string' ? askMariamImg : askMariamImg.src,
+  nameKey: 'menu.askMariam',
+  link: 'https://www.askmariam.com/',
+  external: true,
+  preserveIconColor: true
 }];
 
 export const profilePanelLinksData2 = [{
