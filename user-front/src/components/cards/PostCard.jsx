@@ -682,35 +682,61 @@ const PostCard = ({
         <div className="d-flex align-items-center justify-content-between">
           <div className="d-flex align-items-center">
             <div className="me-3" style={{ flexShrink: 0 }}>
-              <span role="button">
-                <img
-                  className="rounded-circle"
-                  src={getImageUrl(isUserPost ? socialUser?.avatar : socialUser?.photoUrl)}
-                  alt={isUserPost ? (socialUser?.name || 'User') : (socialUser?.fullName || 'Scholar')}
-                  style={{
-                    width: '44px',
-                    height: '44px',
-                    objectFit: 'cover',
-                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    cursor: 'pointer'
-                  }}
+              {socialUser?.id ? (
+                <Link
+                  href={getProfilePath(isUserPost ? 'user' : 'scholar', socialUser?.id) || '#'}
+                  className="d-inline-block rounded-circle text-decoration-none"
+                  aria-label={isUserPost ? (socialUser?.name || t('post.userRole')) : (socialUser?.fullName || t('post.scholarRole'))}
                   onClick={(e) => handleGuestInteraction(e)}
-                  onError={(e) => {
-                    if (process.env.NODE_ENV === 'development') {
-                      // console.error('Avatar failed to load:', e.target.src);
-                    }
-                    e.target.src = typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg');
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.08)';
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(181, 231, 160, 0.3)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                />
-              </span>
+                >
+                  <img
+                    className="rounded-circle"
+                    src={getImageUrl(isUserPost ? socialUser?.avatar : socialUser?.photoUrl)}
+                    alt={isUserPost ? (socialUser?.name || 'User') : (socialUser?.fullName || 'Scholar')}
+                    style={{
+                      width: '44px',
+                      height: '44px',
+                      objectFit: 'cover',
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      cursor: 'pointer',
+                      display: 'block'
+                    }}
+                    onError={(e) => {
+                      if (process.env.NODE_ENV === 'development') {
+                        // console.error('Avatar failed to load:', e.target.src);
+                      }
+                      e.target.src = typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg');
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'scale(1.08)';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(181, 231, 160, 0.3)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'scale(1)';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  />
+                </Link>
+              ) : (
+                <span role="presentation">
+                  <img
+                    className="rounded-circle"
+                    src={getImageUrl(isUserPost ? socialUser?.avatar : socialUser?.photoUrl)}
+                    alt={isUserPost ? (socialUser?.name || 'User') : (socialUser?.fullName || 'Scholar')}
+                    style={{
+                      width: '44px',
+                      height: '44px',
+                      objectFit: 'cover',
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      cursor: 'default',
+                      display: 'block'
+                    }}
+                    onError={(e) => {
+                      e.target.src = typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg');
+                    }}
+                  />
+                </span>
+              )}
             </div>
 
             <div>
@@ -1162,32 +1188,62 @@ const PostCard = ({
                         {visibleComments.map((comment, index) => (
                           <div key={comment.id || index} className="comment-item d-flex align-items-start mb-3">
                             <div className="me-2 flex-shrink-0">
-                              <Image
-                                className="rounded-circle"
-                                src={getImageUrl(comment.user_photo_url || comment.user_avatar || comment.avatar) || (typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg'))}
-                                alt={comment.user_name || comment.user_username || comment.username || 'User'}
-                                width={36}
-                                height={36}
-                                style={{
-                                  width: '36px',
-                                  height: '36px',
-                                  objectFit: 'cover',
-                                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                  cursor: 'pointer'
-                                }}
-                                onError={(e) => {
-                                  e.target.onerror = null;
-                                  e.target.src = typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg');
-                                }}
-                                onMouseEnter={(e) => {
-                                  e.currentTarget.style.transform = 'scale(1.08)';
-                                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(181, 231, 160, 0.2)';
-                                }}
-                                onMouseLeave={(e) => {
-                                  e.currentTarget.style.transform = 'scale(1)';
-                                  e.currentTarget.style.boxShadow = 'none';
-                                }}
-                              />
+                              {comment.user_id ? (
+                                <Link
+                                  href={getProfilePath('user', comment.user_id) || '#'}
+                                  className="d-inline-block text-decoration-none rounded-circle"
+                                  aria-label={comment.user_name || comment.user_username || comment.username || 'User'}
+                                  onClick={(e) => handleGuestInteraction(e)}
+                                >
+                                  <Image
+                                    className="rounded-circle"
+                                    src={getImageUrl(comment.user_photo_url || comment.user_avatar || comment.avatar) || (typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg'))}
+                                    alt={comment.user_name || comment.user_username || comment.username || 'User'}
+                                    width={36}
+                                    height={36}
+                                    style={{
+                                      width: '36px',
+                                      height: '36px',
+                                      objectFit: 'cover',
+                                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                      cursor: 'pointer',
+                                      display: 'block'
+                                    }}
+                                    onError={(e) => {
+                                      e.target.onerror = null;
+                                      e.target.src = typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg');
+                                    }}
+                                    onMouseEnter={(e) => {
+                                      e.currentTarget.style.transform = 'scale(1.08)';
+                                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(181, 231, 160, 0.2)';
+                                    }}
+                                    onMouseLeave={(e) => {
+                                      e.currentTarget.style.transform = 'scale(1)';
+                                      e.currentTarget.style.boxShadow = 'none';
+                                    }}
+                                  />
+                                </Link>
+                              ) : (
+                                <Image
+                                  className="rounded-circle"
+                                  src={getImageUrl(comment.user_photo_url || comment.user_avatar || comment.avatar) || (typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg'))}
+                                  alt={comment.user_name || comment.user_username || comment.username || 'User'}
+                                  width={36}
+                                  height={36}
+                                  style={{
+                                    width: '36px',
+                                    height: '36px',
+                                    objectFit: 'cover',
+                                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                    cursor: 'default',
+                                    display: 'block'
+                                  }}
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg');
+                                  }}
+                                />
+                              )}
                             </div>
                             <div className="comment-content flex-grow-1">
                               <div
@@ -1212,9 +1268,20 @@ const PostCard = ({
                               >
                                 <div className="comment-header d-flex align-items-center justify-content-between mb-1">
                                   <div className="d-flex align-items-center flex-wrap">
-                                    <span className="fw-bold me-2" style={{ fontSize: '14px' }}>
-                                      {comment.user_name || comment.user_username || comment.username || 'User'}
-                                    </span>
+                                    {comment.user_id ? (
+                                      <Link
+                                        href={getProfilePath('user', comment.user_id) || '#'}
+                                        className="fw-bold me-2 text-decoration-none"
+                                        style={{ fontSize: '14px', color: 'var(--bs-body-color)' }}
+                                        onClick={(e) => handleGuestInteraction(e)}
+                                      >
+                                        {comment.user_name || comment.user_username || comment.username || 'User'}
+                                      </Link>
+                                    ) : (
+                                      <span className="fw-bold me-2" style={{ fontSize: '14px' }}>
+                                        {comment.user_name || comment.user_username || comment.username || 'User'}
+                                      </span>
+                                    )}
                                     <small className="text-muted" style={{ fontSize: '11px' }}>
                                       {comment.created_at ? new Date(comment.created_at).toLocaleString('tr-TR', {
                                         year: 'numeric',

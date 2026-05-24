@@ -1,5 +1,6 @@
 import LoadContentButton from '@/components/LoadContentButton';
 import { timeSinceTurkish } from '@/utils/date';
+import { getProfilePath } from '@/utils/profileEncoder';
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,22 +13,34 @@ const CommentItem = ({
   createdAt,
   image
 }) => {
+  const profileHref = socialUser?.id ? getProfilePath('user', socialUser.id) : null;
+
   return <li className="comment-item">
       {socialUser && <>
           <div className="d-flex position-relative">
             <div className={clsx('avatar avatar-xs', {
           'avatar-story': socialUser.isStory
         })}>
-              <span role="button">
-                <Image className="avatar-img rounded-circle" src={socialUser.avatar} alt={socialUser.name + '-avatar'} />
-              </span>
+              {profileHref ? (
+                <Link href={profileHref} className="d-inline-block text-decoration-none rounded-circle">
+                  <Image className="avatar-img rounded-circle" src={socialUser.avatar} alt={socialUser.name + '-avatar'} style={{ display: 'block' }} width={48} height={48} />
+                </Link>
+              ) : (
+                <span role="presentation">
+                  <Image className="avatar-img rounded-circle" src={socialUser.avatar} alt={socialUser.name + '-avatar'} width={48} height={48} />
+                </span>
+              )}
             </div>
             <div className="ms-2">
               <div className="bg-light rounded-start-top-0 p-3 rounded">
                 <div className="d-flex justify-content-between">
                   <h6 className="mb-1">
                     {' '}
-                    <Link href=""> {socialUser.name} </Link>
+                    {profileHref ? (
+                      <Link href={profileHref} className="text-decoration-none">{socialUser.name}</Link>
+                    ) : (
+                      <span>{socialUser.name}</span>
+                    )}
                   </h6>
                   <small className="ms-2">{timeSinceTurkish(createdAt)}</small>
                 </div>
