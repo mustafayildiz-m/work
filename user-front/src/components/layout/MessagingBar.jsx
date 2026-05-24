@@ -94,24 +94,34 @@ const MessagingBar = () => {
     }, [userInfo?.id, session?.user?.id, status]);
 
     // Fetch connections for New Message suggestions
-    useEffect(() => {
-        const fetchConnections = async () => {
-            const token = localStorage.getItem('token');
-            if (!token) return;
-            const apiBaseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
-            try {
-                const response = await fetch(`${apiBaseUrl}/user-follow/connections`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    setConnections(data);
-                }
-            } catch (error) {
-                console.error('Error fetching connections:', error);
+    const fetchConnections = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+        const apiBaseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
+        try {
+            const response = await fetch(`${apiBaseUrl}/user-follow/connections`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setConnections(data);
             }
-        };
+        } catch (error) {
+            console.error('Error fetching connections:', error);
+        }
+    };
+
+    useEffect(() => {
         if (status === 'authenticated') fetchConnections();
+    }, [status]);
+
+    // Refresh connections when a follow request is accepted/changed
+    useEffect(() => {
+        const handleFollowChange = () => {
+            if (status === 'authenticated') fetchConnections();
+        };
+        window.addEventListener('followStatusChanged', handleFollowChange);
+        return () => window.removeEventListener('followStatusChanged', handleFollowChange);
     }, [status]);
 
     const getLocalized = (key, trValue, enValue) => {
