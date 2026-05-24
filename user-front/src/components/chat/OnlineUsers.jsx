@@ -148,6 +148,15 @@ const useUsersAPI = () => {
     };
   }, [fetchUsers]);
 
+  // Refresh user list immediately when a follow request is accepted/changed
+  useEffect(() => {
+    const handleFollowChange = () => {
+      fetchUsers();
+    };
+    window.addEventListener('followStatusChanged', handleFollowChange);
+    return () => window.removeEventListener('followStatusChanged', handleFollowChange);
+  }, [fetchUsers]);
+
   return {
     allUsers,
     onlineUsersList: onlineUsers,
