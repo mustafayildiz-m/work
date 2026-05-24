@@ -12,6 +12,7 @@ import ConditionalWebSocketProvider from '@/components/wrappers/ConditionalWebSo
 import { SearchProvider } from '@/context/useSearchContext';
 import { LanguageProvider } from '@/context/useLanguageContext';
 import TabTitleUpdater from '@/components/TabTitleUpdater';
+import MessageEnvelopeNotification from '@/components/chat/MessageEnvelopeNotification';
 
 const LayoutProvider = dynamic(() => import('@/context/useLayoutContext').then(mod => mod.LayoutProvider), {
   ssr: false
@@ -62,6 +63,7 @@ const AppProvidersWrapper = ({
               <ChatProvider>
                 <ConditionalWebSocketProvider>
                   <TabTitleUpdater />
+                  <MessageEnvelopeNotification />
                   <LayoutProvider>
                     {children}
                     <ToastContainer
