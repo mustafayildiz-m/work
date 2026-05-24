@@ -2994,6 +2994,274 @@
       height: 72px !important;
       max-height: 72px !important;
     }
+
+    // Dropdown menus should render outside header
+    .dropdown,
+    .nav-item.dropdown {
+      position: static !important;
+    }
+
+    .dropdown-menu {
+      position: fixed !important;
+      z-index: 10000 !important;
+      margin-top: 0.5rem !important;
+    }
+  }
+
+  // Mobile responsive header styles - green theme
+  @media (max-width: 991.98px) {
+
+    header.navbar-light,
+    header.header-static {
+      padding: 0 !important;
+      height: 56px !important;
+      min-height: 56px !important;
+      max-height: 56px !important;
+
+      .container {
+        padding-left: 0 !important;
+        padding-right: 0.75rem !important;
+        height: 56px !important;
+        min-height: 56px !important;
+        max-height: 56px !important;
+        overflow: visible !important;
+      }
+
+      .navbar {
+        height: 56px !important;
+        min-height: 56px !important;
+        max-height: 56px !important;
+      }
+
+      .nav {
+        max-height: 56px !important;
+      }
+
+      .search-container {
+        max-height: 44px !important;
+
+        .nav-item {
+          max-height: 44px !important;
+        }
+
+        .search-input {
+          height: 38px !important;
+          max-height: 38px !important;
+        }
+      }
+
+      .search-results,
+      [class*="search-result"] {
+        top: 56px !important;
+      }
+    }
+
+    // Icon buttons - compact size
+    .icon-md {
+      width: 32px !important;
+      height: 32px !important;
+      min-width: 32px !important;
+      min-height: 32px !important;
+      font-size: 0.85rem !important;
+
+      svg,
+      i {
+        font-size: 13px !important;
+      }
+    }
+
+    // Language switcher responsive
+    .language-switcher-select2 {
+      min-width: 110px !important;
+      max-width: 120px !important;
+    }
+
+    // Main content spacing after fixed header
+    header.fixed-top+main {
+      padding-top: calc(56px + 1rem) !important;
+    }
+
+    // Offcanvas - header altında başlasın
+    .offcanvas.offcanvas-start.show {
+      top: 56px !important;
+      height: calc(100vh - 56px) !important;
+    }
+  }
+
+  // Extra small devices (phones, less than 576px)
+  @media (max-width: 575.98px) {
+
+    header.navbar-light,
+    header.header-static {
+      padding: 0 !important;
+      height: 52px !important;
+      min-height: 52px !important;
+      max-height: 52px !important;
+
+      .container {
+        padding-left: 0 !important;
+        padding-right: 0.5rem !important;
+        height: 52px !important;
+        min-height: 52px !important;
+        max-height: 52px !important;
+        overflow: visible !important;
+      }
+
+      .navbar-brand {
+        padding-left: 0 !important;
+      }
+
+      .navbar {
+        height: 52px !important;
+        min-height: 52px !important;
+        max-height: 52px !important;
+      }
+
+      .nav {
+        max-height: 52px !important;
+      }
+
+      .search-container {
+        max-height: 40px !important;
+
+        .nav-item {
+          max-height: 40px !important;
+        }
+
+        .search-input {
+          height: 36px !important;
+          max-height: 36px !important;
+        }
+      }
+
+      .search-results,
+      [class*="search-result"] {
+        top: 52px !important;
+      }
+    }
+
+    // Icon buttons - smaller
+    .icon-md {
+      width: 30px !important;
+      height: 30px !important;
+      min-width: 30px !important;
+      min-height: 30px !important;
+      font-size: 0.8rem !important;
+
+      svg,
+      i {
+        font-size: 12px !important;
+      }
+    }
+
+    // Language switcher even more compact
+    .language-switcher-select2 {
+      min-width: 90px !important;
+      max-width: 100px !important;
+    }
+
+    // Main content spacing
+    header.fixed-top+main {
+      padding-top: calc(52px + 0.75rem) !important;
+    }
+
+    // Offcanvas - header (52px) altında başlasın
+    .offcanvas.offcanvas-start.show {
+      top: 52px !important;
+      height: calc(100vh - 52px) !important;
+    }
+  }
+
+  // Very small devices (phones in portrait, less than 375px)
+  @media (max-width: 374.98px) {
+
+    header.navbar-light,
+    header.header-static {
+      padding: 0 !important;
+      height: 48px !important;
+      min-height: 48px !important;
+      max-height: 48px !important;
+
+      .container {
+        padding-left: 0 !important;
+        padding-right: 0.4rem !important;
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+        overflow: visible !important;
+      }
+
+      .navbar {
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+      }
+
+      .nav {
+        max-height: 48px !important;
+      }
+
+      .search-container {
+        max-height: 36px !important;
+
+        .nav-item {
+          max-height: 36px !important;
+        }
+
+        .search-input {
+          height: 32px !important;
+          max-height: 32px !important;
+        }
+      }
+
+      .search-results,
+      [class*="search-result"] {
+        top: 48px !important;
+      }
+    }
+
+    // Icon buttons - ultra compact
+    .icon-md {
+      width: 28px !important;
+      height: 28px !important;
+      min-width: 28px !important;
+      min-height: 28px !important;
+      font-size: 0.75rem !important;
+
+      svg,
+      i {
+        font-size: 11px !important;
+      }
+    }
+
+    // Language switcher ultra compact
+    .language-switcher-select2 {
+      min-width: 75px !important;
+      max-width: 80px !important;
+    }
+  }
+
+  // Icon buttons in header - general style
+  .icon-md {
+    background: rgba(46, 125, 50, 0.45) !important;
+    color: #e8f5e9 !important;
+    border: 1px solid rgba(67, 160, 71, 0.5) !important;
+
+    svg,
+    i {
+      color: inherit !important;
+    }
+
+    &:hover {
+      background: rgba(67, 160, 71, 0.6) !important;
+      color: #ffffff !important;
+      border-color: rgba(67, 160, 71, 0.7) !important;
+    }
+  }
+
+  // Main content spacing after fixed header - desktop
+  header.fixed-top+main {
+    padding-top: calc(80px + 1.5rem) !important;
   }
 
   // Dropdown
@@ -3001,6 +3269,10 @@
     background: #234d2a !important;
     border: 1px solid rgba(67, 160, 71, 0.4) !important;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+    z-index: 10000 !important;
+    border-radius: 12px !important;
+    overflow: visible !important;
+    min-width: 200px !important;
 
     .dropdown-item {
       color: #c0e0c0 !important;
