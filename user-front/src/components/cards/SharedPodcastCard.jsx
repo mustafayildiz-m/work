@@ -257,15 +257,33 @@ const SharedPodcastCard = ({ post, onDeletePost, comments = [], onLoadComments, 
           {/* Kullanıcı Bilgileri */}
           <div className="d-flex align-items-center mb-2 mb-sm-3">
             <div className="avatar me-2 me-sm-3">
-              <Image
-                className="avatar-img rounded-circle"
-                src={getImageUrl(post.user_photo_url)}
-                alt={post.user_name || 'User'}
-                width={40}
-                height={40}
-                style={{ objectFit: 'cover' }}
-                onError={(e) => { e.target.src = avatar7.src; }}
-              />
+              {post.user_id ? (
+                <Link
+                  href={getProfilePath('user', post.user_id) || '#'}
+                  className="d-inline-block text-decoration-none rounded-circle"
+                  aria-label={post.user_name || 'User'}
+                >
+                  <Image
+                    className="avatar-img rounded-circle"
+                    src={getImageUrl(post.user_photo_url)}
+                    alt={post.user_name || 'User'}
+                    width={40}
+                    height={40}
+                    style={{ objectFit: 'cover', display: 'block' }}
+                    onError={(e) => { e.target.src = avatar7.src; }}
+                  />
+                </Link>
+              ) : (
+                <Image
+                  className="avatar-img rounded-circle"
+                  src={getImageUrl(post.user_photo_url)}
+                  alt={post.user_name || 'User'}
+                  width={40}
+                  height={40}
+                  style={{ objectFit: 'cover' }}
+                  onError={(e) => { e.target.src = avatar7.src; }}
+                />
+              )}
             </div>
             <div className="flex-grow-1">
               <h6 className="mb-0" style={{ color: isDarkMode ? '#e9ecef' : '#2c3e50' }}>
@@ -554,18 +572,39 @@ const SharedPodcastCard = ({ post, onDeletePost, comments = [], onLoadComments, 
                           {visibleComments.map((comment, index) => (
                             <div key={comment.id || index} className="comment-item d-flex align-items-start mb-3">
                               <div className="me-2 flex-shrink-0">
-                                <Image
-                                  className="rounded-circle"
-                                  src={getImageUrl(comment.user_photo_url || comment.user_avatar || comment.avatar) || (typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg'))}
-                                  alt={comment.user_name || comment.user_username || comment.username || 'User'}
-                                  width={36}
-                                  height={36}
-                                  style={{ width: '36px', height: '36px', objectFit: 'cover' }}
-                                  onError={(e) => {
-                                    e.target.onerror = null;
-                                    e.target.src = typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg');
-                                  }}
-                                />
+                                {comment.user_id ? (
+                                  <Link
+                                    href={getProfilePath('user', comment.user_id) || '#'}
+                                    className="d-inline-block text-decoration-none rounded-circle"
+                                    aria-label={comment.user_name || comment.user_username || comment.username || 'User'}
+                                  >
+                                    <Image
+                                      className="rounded-circle"
+                                      src={getImageUrl(comment.user_photo_url || comment.user_avatar || comment.avatar) || (typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg'))}
+                                      alt={comment.user_name || comment.user_username || comment.username || 'User'}
+                                      width={36}
+                                      height={36}
+                                      style={{ width: '36px', height: '36px', objectFit: 'cover', display: 'block' }}
+                                      onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg');
+                                      }}
+                                    />
+                                  </Link>
+                                ) : (
+                                  <Image
+                                    className="rounded-circle"
+                                    src={getImageUrl(comment.user_photo_url || comment.user_avatar || comment.avatar) || (typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg'))}
+                                    alt={comment.user_name || comment.user_username || comment.username || 'User'}
+                                    width={36}
+                                    height={36}
+                                    style={{ width: '36px', height: '36px', objectFit: 'cover' }}
+                                    onError={(e) => {
+                                      e.target.onerror = null;
+                                      e.target.src = typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg');
+                                    }}
+                                  />
+                                )}
                               </div>
                               <div className="comment-content flex-grow-1">
                                 <div
@@ -580,9 +619,19 @@ const SharedPodcastCard = ({ post, onDeletePost, comments = [], onLoadComments, 
                                 >
                                   <div className="comment-header d-flex align-items-center justify-content-between mb-1">
                                     <div className="d-flex align-items-center flex-wrap">
-                                      <span className="fw-bold me-2" style={{ fontSize: '14px', color: 'var(--bs-body-color)' }}>
-                                        {comment.user_name || comment.user_username || comment.username || 'User'}
-                                      </span>
+                                      {comment.user_id ? (
+                                        <Link
+                                          href={getProfilePath('user', comment.user_id) || '#'}
+                                          className="fw-bold me-2 text-decoration-none"
+                                          style={{ fontSize: '14px', color: 'var(--bs-body-color)' }}
+                                        >
+                                          {comment.user_name || comment.user_username || comment.username || 'User'}
+                                        </Link>
+                                      ) : (
+                                        <span className="fw-bold me-2" style={{ fontSize: '14px', color: 'var(--bs-body-color)' }}>
+                                          {comment.user_name || comment.user_username || comment.username || 'User'}
+                                        </span>
+                                      )}
                                       <small className="text-muted" style={{ fontSize: '11px' }}>
                                         {comment.created_at ? new Date(comment.created_at).toLocaleString('tr-TR', {
                                           year: 'numeric',

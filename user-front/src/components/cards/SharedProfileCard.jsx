@@ -118,13 +118,18 @@ const SharedProfileCard = ({
           <div className="d-flex align-items-center">
             <div className="avatar avatar-story me-2">
               {userId ? (
-                <Link href={getProfilePath('user', userId) || '#'}>
+                <Link
+                  href={getProfilePath('user', userId) || '#'}
+                  className="d-inline-block text-decoration-none rounded-circle"
+                  aria-label={userName}
+                >
                   <Image
                     className="avatar-img rounded-circle"
                     src={getImageUrl(userAvatar)}
                     alt={userName}
                     width={48}
                     height={48}
+                    style={{ display: 'block' }}
                     onError={(e) => {
                       e.target.src = avatar7.src;
                     }}

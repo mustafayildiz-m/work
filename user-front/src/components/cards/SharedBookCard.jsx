@@ -271,17 +271,37 @@ const SharedBookCard = ({ post, onDeletePost }) => {
           {/* Kullanıcı Bilgileri */}
           <div className="d-flex align-items-center mb-3">
             <div className="avatar me-3">
-              <Image
-                className="avatar-img rounded-circle"
-                src={getImageUrl(post.user_photo_url)}
-                alt={post.user_name || 'User'}
-                width={40}
-                height={40}
-                style={{ objectFit: 'cover' }}
-                onError={(e) => {
-                  e.target.src = avatar7.src;
-                }}
-              />
+              {post.user_id ? (
+                <Link
+                  href={getProfilePath('user', post.user_id) || '#'}
+                  className="d-inline-block text-decoration-none rounded-circle"
+                  aria-label={post.user_name || 'User'}
+                >
+                  <Image
+                    className="avatar-img rounded-circle"
+                    src={getImageUrl(post.user_photo_url)}
+                    alt={post.user_name || 'User'}
+                    width={40}
+                    height={40}
+                    style={{ objectFit: 'cover', display: 'block' }}
+                    onError={(e) => {
+                      e.target.src = avatar7.src;
+                    }}
+                  />
+                </Link>
+              ) : (
+                <Image
+                  className="avatar-img rounded-circle"
+                  src={getImageUrl(post.user_photo_url)}
+                  alt={post.user_name || 'User'}
+                  width={40}
+                  height={40}
+                  style={{ objectFit: 'cover' }}
+                  onError={(e) => {
+                    e.target.src = avatar7.src;
+                  }}
+                />
+              )}
             </div>
             <div className="flex-grow-1">
               <h6 className="mb-0" style={{ color: isDarkMode ? '#e9ecef' : '#2c3e50' }}>
