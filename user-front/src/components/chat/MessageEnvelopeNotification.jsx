@@ -37,16 +37,37 @@ const MessageEnvelopeNotification = () => {
       delete timeoutsRef.current[notification.id];
     }
     removeNotification(notification.id);
-    router.push('/messaging');
+
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 992;
+    if (isMobile) {
+      const params = new URLSearchParams({
+        userId: notification.senderId,
+        userName: notification.senderName || '',
+        ...(notification.senderAvatar && { userAvatar: notification.senderAvatar })
+      });
+      router.push(`/messaging?${params.toString()}`);
+    } else {
+      window.dispatchEvent(new CustomEvent('openMessagingWithUser', {
+        detail: {
+          user: {
+            id: notification.senderId,
+            firstName: notification.senderName?.split(' ')[0] || '',
+            lastName: notification.senderName?.split(' ').slice(1).join(' ') || '',
+            photoUrl: notification.senderAvatar
+          }
+        }
+      }));
+    }
   }, [router, removeNotification]);
 
   useEffect(() => {
     const handleNewMessageNotification = (event) => {
-      const { senderName, senderAvatar, content, messageId } = event.detail;
+      const { senderId, senderName, senderAvatar, content, messageId } = event.detail;
 
       const id = `msg-notif-${messageId || Date.now()}-${Math.random()}`;
       const notification = {
         id,
+        senderId,
         senderName,
         senderAvatar,
         content,

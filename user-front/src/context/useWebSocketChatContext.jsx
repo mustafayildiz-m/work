@@ -436,6 +436,7 @@ export const WebSocketChatProvider = ({ children }) => {
           if (!isOnMessagingPage || !isActiveConv) {
             window.dispatchEvent(new CustomEvent('newMessageEnvelopeNotification', {
               detail: {
+                senderId: message.senderId,
                 senderName: message.senderName || formattedMessage.senderName || 'Birisi',
                 senderAvatar: message.senderAvatar || formattedMessage.senderAvatar,
                 content: message.content || '',
