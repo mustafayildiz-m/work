@@ -15,7 +15,6 @@ import { FaArrowLeft, FaUser, FaBook, FaMapMarkedAlt, FaImage, FaLink, FaSave, F
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 const API_URL = `${BASE_URL}/scholars`;
 const BOOKS_URL = `${BASE_URL}/books`;
-const AUTH_TOKEN = localStorage.getItem('access_token');
 
 function getImageUrl(url) {
   if (!url) return '';
@@ -37,13 +36,13 @@ const AddScholarPage = () => {
     longitude: '',
     locationName: '',
     locationDescription: '',
-    ownBooks: [{ title: '', description: '', coverUrl: '', pdfUrl: '' }],
+    ownBooks: [],
     sources: [{ content: '', url: '' }],
     relatedBooks: [],
   };
   const [form, setForm] = useState(initialForm);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [submitError, setSubmitError] = useState(null);
   const [books, setBooks] = useState([]);
   const [portraitFile, setPortraitFile] = useState(null);
   const [portraitPreview, setPortraitPreview] = useState('');
@@ -204,7 +203,7 @@ const AddScholarPage = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
+    setSubmitError(null);
 
     const token = localStorage.getItem('access_token');
     if (!token) {
@@ -262,17 +261,20 @@ const AddScholarPage = () => {
       toast.success(intl.formatMessage({ id: "UI.ALIM_BASARIYLA_EKLENDI" }));
       navigate('/alimler/liste');
     } catch (err) {
-      setError(err.message);
+      setSubmitError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
-  // Kaydet butonunu aktif/pasif yapmak için validasyon
+  // Backend ownBooks opsiyonel; boş liste geçerlidir. Varsa her kitaba başlık gerekir.
+  const biographyPlain =
+    typeof form.biography === 'string'
+      ? form.biography.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/gi, ' ').trim()
+      : '';
   const isFormValid =
     form.fullName.trim() !== '' &&
-    form.biography.trim() !== '' &&
-    form.ownBooks.length > 0 &&
+    biographyPlain !== '' &&
     form.ownBooks.every(b => b.title.trim() !== '');
 
   return (
@@ -428,7 +430,7 @@ const AddScholarPage = () => {
                   {(ownBookPreviews[idx] || (book.coverUrl && book.coverUrl.trim() !== '')) ? (
                     <img src={ownBookPreviews[idx] || getImageUrl(book.coverUrl)} alt="Kapak" className="w-10 h-10 object-cover rounded border" />
                   ) : null}
-                  {form.ownBooks.length > 1 && (
+                  {form.ownBooks.length > 0 && (
                     <button type="button" onClick={() => removeOwnBook(idx)} className="text-red-500 text-xs"><FormattedMessage id="UI.SIL" /></button>
                   )}
                 </div>
@@ -635,10 +637,15 @@ const AddScholarPage = () => {
               </div>
             </div>
           </div>
-          {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+          {submitError && <div className="text-red-500 text-sm mt-2">{submitError}</div>}
+          {!isFormValid && !loading && (
+            <div className="text-amber-600 dark:text-amber-400 text-sm mt-3">
+              <FormattedMessage id="UI.ALIM_EKLE_KAYDET_UYARI" />
+            </div>
+          )}
           <div className="flex justify-end gap-2 mt-6">
             <button type="button" onClick={() => navigate('/alimler/liste')} className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"><FormattedMessage id="UI.IPTAL" /></button>
-            <button type="submit" className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors" disabled={loading || !isFormValid}>
+            <button type="submit" className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled={loading || !isFormValid} title={!isFormValid && !loading ? intl.formatMessage({ id: "UI.ALIM_EKLE_KAYDET_UYARI" }) : undefined}>
               {loading ? <FormattedMessage id="UI.KAYDEDILIYOR" /> : <FormattedMessage id="UI.KAYDET" />}
             </button>
           </div>
