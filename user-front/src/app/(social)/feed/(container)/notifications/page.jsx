@@ -4,6 +4,7 @@ import { getAllNotifications } from '@/helpers/data';
 import { timeSince } from '@/utils/date';
 import clsx from 'clsx';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState, useMemo } from 'react';
 import { Button, Card, CardBody, CardFooter, CardHeader, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Row } from 'react-bootstrap';
 import { BsBellFill, BsCheckLg, BsThreeDots, BsTrash, BsChatLeftText, BsBoxArrowUpRight } from 'react-icons/bs';
@@ -17,6 +18,7 @@ import { getProfilePath } from '@/utils/profileEncoder';
 const NotificationsPage = () => {
   const { theme } = useLayoutContext();
   const { t } = useLanguage();
+  const router = useRouter();
   const isDark = theme === 'dark' || theme === 'green';
   const { notifications: realTimeNotifications, setNotifications } = useWebSocketChatContext();
   const [staticNotifications, setStaticNotifications] = useState([]);
@@ -211,21 +213,32 @@ const NotificationsPage = () => {
     const targetUserId = notification.relatedUserId || notification.related_user_id;
     if (!targetUserId) return;
 
-    window.dispatchEvent(
-      new CustomEvent('openMessagingWithUser', {
-        detail: {
-          user: {
-            id: targetUserId,
-            firstName: notification.related_user?.firstName || '',
-            lastName: notification.related_user?.lastName || '',
-            username: notification.related_user?.username || '',
-            role: notification.related_user?.role || '',
-            tagline: notification.related_user?.tagline || '',
-            photoUrl: notification.avatar || null
-          }
-        }
-      })
-    );
+    const targetUser = {
+      id: targetUserId,
+      firstName: notification.related_user?.firstName || '',
+      lastName: notification.related_user?.lastName || '',
+      username: notification.related_user?.username || '',
+      role: notification.related_user?.role || '',
+      tagline: notification.related_user?.tagline || '',
+      photoUrl: notification.avatar || null
+    };
+
+    const isMobile = window.innerWidth < 992;
+    if (isMobile) {
+      const params = new URLSearchParams({
+        userId: targetUser.id,
+        userName: `${targetUser.firstName} ${targetUser.lastName}`.trim() || targetUser.username,
+        ...(targetUser.username && { userUsername: targetUser.username }),
+        ...(targetUser.photoUrl && { userAvatar: targetUser.photoUrl })
+      });
+      router.push(`/messaging?${params.toString()}`);
+    } else {
+      window.dispatchEvent(
+        new CustomEvent('openMessagingWithUser', {
+          detail: { user: targetUser }
+        })
+      );
+    }
   };
 
   return (

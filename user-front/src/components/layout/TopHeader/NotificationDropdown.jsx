@@ -10,10 +10,12 @@ import { useLayoutContext } from '@/context/useLayoutContext';
 import { getImageUrl } from '@/utils/image';
 import { useLanguage } from '@/context/useLanguageContext';
 import { getProfilePath } from '@/utils/profileEncoder';
+import { useRouter } from 'next/navigation';
 
 const NotificationDropdown = () => {
   const { theme } = useLayoutContext();
   const { t } = useLanguage();
+  const router = useRouter();
   const isDark = theme === 'dark' || theme === 'green';
   const { notifications: realTimeNotifications, setNotifications } = useWebSocketChatContext();
   const [staticNotifications, setStaticNotifications] = useState([]);
@@ -261,21 +263,33 @@ const NotificationDropdown = () => {
     const targetUserId = notification.relatedUserId || notification.related_user_id;
     if (!targetUserId) return;
 
-    window.dispatchEvent(
-      new CustomEvent('openMessagingWithUser', {
-        detail: {
-          user: {
-            id: targetUserId,
-            firstName: notification.related_user?.firstName || '',
-            lastName: notification.related_user?.lastName || '',
-            username: notification.related_user?.username || '',
-            role: notification.related_user?.role || '',
-            tagline: notification.related_user?.tagline || '',
-            photoUrl: notification.avatar || null
-          }
-        }
-      })
-    );
+    const targetUser = {
+      id: targetUserId,
+      firstName: notification.related_user?.firstName || '',
+      lastName: notification.related_user?.lastName || '',
+      username: notification.related_user?.username || '',
+      role: notification.related_user?.role || '',
+      tagline: notification.related_user?.tagline || '',
+      photoUrl: notification.avatar || null
+    };
+
+    const isMobile = window.innerWidth < 992;
+    if (isMobile) {
+      const params = new URLSearchParams({
+        userId: targetUser.id,
+        userName: `${targetUser.firstName} ${targetUser.lastName}`.trim() || targetUser.username,
+        ...(targetUser.username && { userUsername: targetUser.username }),
+        ...(targetUser.photoUrl && { userAvatar: targetUser.photoUrl })
+      });
+      setIsOpen(false);
+      router.push(`/messaging?${params.toString()}`);
+    } else {
+      window.dispatchEvent(
+        new CustomEvent('openMessagingWithUser', {
+          detail: { user: targetUser }
+        })
+      );
+    }
   };
 
   const handleNotificationClick = (notification) => {
