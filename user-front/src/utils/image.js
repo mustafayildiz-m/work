@@ -25,6 +25,11 @@ export const getImageUrl = (imageUrl, baseUrl = process.env.NEXT_PUBLIC_API_URL 
     return `${baseUrl}${imageUrl}`;
   }
 
+  // If it already starts with uploads/, just prepend the base URL
+  if (imageUrl.startsWith('uploads/')) {
+    return `${baseUrl}/${imageUrl}`;
+  }
+
   // If it's just a filename, prepend the base URL and uploads path
   return `${baseUrl}/uploads/${imageUrl}`;
 };
