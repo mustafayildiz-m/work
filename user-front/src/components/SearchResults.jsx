@@ -24,7 +24,7 @@ const SafeImage = ({ src, alt, width, height, isScholar, isFollower }) => {
     setErrorSrc(src);
   };
 
-  const borderColor = isScholar ? '#198754' : (isFollower ? '#0dcaf0' : 'rgba(0,0,0,0.1)');
+  const borderColor = isScholar ? '#198754' : (isFollower ? '#0dcaf0' : 'var(--bs-border-color)');
 
   return (
     <div style={{
@@ -49,7 +49,7 @@ const SafeImage = ({ src, alt, width, height, isScholar, isFollower }) => {
   );
 };
 
-const SearchResults = () => {
+const SearchResults = ({ embedded = false }) => {
   const {
     searchQuery,
     searchResults,
@@ -96,9 +96,11 @@ const SearchResults = () => {
     }
   }, [performSearch, clearSearch]);
 
-  // Close on outside click
+  // Close on outside click (skip when embedded or mobile overlay is active)
   useEffect(() => {
-    if (!showResults) return;
+    if (!showResults || embedded) return;
+    const mobileOverlay = document.querySelector('.mobile-search-overlay');
+    if (mobileOverlay) return;
     const handleClickOutside = (event) => {
       if (resultsRef.current && !resultsRef.current.contains(event.target)) {
         clearSearch();
@@ -115,7 +117,7 @@ const SearchResults = () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscape);
     };
-  }, [showResults, clearSearch]);
+  }, [showResults, clearSearch, embedded]);
 
   const totalResults = useMemo(() =>
     searchResults.users.length +
@@ -140,8 +142,8 @@ const SearchResults = () => {
     gap: '12px',
     padding: '12px 20px',
     textDecoration: 'none',
-    color: '#212529', // Bootstrap dark text
-    borderBottom: '1px solid rgba(0,0,0,0.05)',
+    color: 'var(--bs-body-color)',
+    borderBottom: '1px solid var(--bs-border-color)',
     backgroundColor: 'transparent',
     transition: 'background-color 0.2s'
   };
@@ -149,7 +151,7 @@ const SearchResults = () => {
   const nameStyle = {
     fontSize: '14px',
     fontWeight: '600',
-    color: '#212529',
+    color: 'var(--bs-body-color)',
     marginBottom: '2px',
     display: 'flex',
     alignItems: 'center',
@@ -158,7 +160,7 @@ const SearchResults = () => {
 
   const usernameStyle = {
     fontSize: '13px',
-    color: '#6c757d'
+    color: 'var(--bs-secondary-color)'
   };
 
   // Render Functions
@@ -169,7 +171,7 @@ const SearchResults = () => {
         href={getProfilePath('user', user.id) || '#'}
         style={linkStyle}
         onClick={clearSearch}
-        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.02)'}
+        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bs-tertiary-bg)'}
         onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
       >
         <SafeImage src={user.profilePicture} alt={user.name} width={40} height={40} />
@@ -187,7 +189,7 @@ const SearchResults = () => {
         href={getProfilePath('scholar', scholar.id) || '#'}
         style={linkStyle}
         onClick={clearSearch}
-        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.02)'}
+        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bs-tertiary-bg)'}
         onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
       >
         <SafeImage src={scholar.profilePicture} alt={scholar.name} width={40} height={40} isScholar={true} />
@@ -215,7 +217,7 @@ const SearchResults = () => {
         href={getProfilePath('user', follower.id) || '#'}
         style={linkStyle}
         onClick={clearSearch}
-        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.02)'}
+        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bs-tertiary-bg)'}
         onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
       >
         <SafeImage src={follower.profilePicture} alt={follower.name} width={40} height={40} isFollower={true} />
@@ -236,7 +238,96 @@ const SearchResults = () => {
     ) : null
   ), [clearSearch]);
 
-  if (!showResults) return null;
+  // Embedded mode: parent overlay controls visibility, skip showResults check
+  if (embedded) {
+    return (
+      <div ref={resultsRef} style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+        {/* Result count */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid var(--bs-border-color)', flexShrink: 0 }}>
+          <div style={{ fontWeight: '600', fontSize: '14px', color: 'var(--bs-body-color)' }}>
+            {isSearching ? t('search.searching') : `${totalResults} ${t('search.results')}`}
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div style={{ display: 'flex', gap: '8px', padding: '10px 16px', borderBottom: '1px solid var(--bs-border-color)', flexShrink: 0, overflowX: 'auto' }}>
+          {TABS.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              style={{
+                background: activeTab === tab.id ? 'var(--bs-primary)' : 'transparent',
+                color: activeTab === tab.id ? 'white' : 'var(--bs-body-color)',
+                border: '1px solid var(--bs-border-color)',
+                padding: '6px 16px',
+                borderRadius: '20px',
+                fontSize: '13px',
+                fontWeight: '500',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              {t(tab.labelKey)}
+              {tab.id !== 'all' && (
+                <span style={{
+                  background: activeTab === tab.id ? 'rgba(255,255,255,0.2)' : 'rgba(128,128,128,0.15)',
+                  padding: '2px 6px',
+                  borderRadius: '10px',
+                  fontSize: '11px'
+                }}>
+                  {getTabCount(tab.id)}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* Results List */}
+        <div style={{ flex: 1, overflowY: 'auto', paddingBottom: '10px' }}>
+          {activeTab === 'all' && (
+            <>
+              {searchResults.users.length > 0 && (
+                <div>
+                  <div style={{ padding: '12px 16px 4px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: 'var(--bs-secondary-color)', letterSpacing: '0.5px' }}>{t('search.users')}</div>
+                  {searchResults.users.slice(0, 5).map(renderUserItem)}
+                </div>
+              )}
+              {searchResults.scholars.length > 0 && (
+                <div>
+                  <div style={{ padding: '12px 16px 4px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: 'var(--bs-secondary-color)', letterSpacing: '0.5px' }}>{t('search.scholars')}</div>
+                  {searchResults.scholars.slice(0, 5).map(renderScholarItem)}
+                </div>
+              )}
+              {searchResults.followers.length > 0 && (
+                <div>
+                  <div style={{ padding: '12px 16px 4px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: 'var(--bs-secondary-color)', letterSpacing: '0.5px' }}>{t('search.followers')}</div>
+                  {searchResults.followers.slice(0, 5).map(renderFollowerItem)}
+                </div>
+              )}
+            </>
+          )}
+
+          {activeTab === 'users' && searchResults.users.map(renderUserItem)}
+          {activeTab === 'scholars' && searchResults.scholars.map(renderScholarItem)}
+          {activeTab === 'followers' && searchResults.followers.map(renderFollowerItem)}
+
+          {totalResults === 0 && !isSearching && (
+            <div style={{ padding: '40px', textAlign: 'center', color: 'var(--bs-secondary-color)' }}>
+              <div style={{ fontSize: '32px', marginBottom: '8px' }}>🔍</div>
+              <div>{t('search.noResults')}</div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Non-embedded: skip rendering entirely when mobile search overlay is active
+  const mobileOverlayActive = typeof document !== 'undefined' && !!document.querySelector('.mobile-search-overlay');
+  if (!showResults || mobileOverlayActive) return null;
 
   return (
     <>
@@ -259,7 +350,7 @@ const SearchResults = () => {
             backgroundColor: 'var(--bs-body-bg)',
             borderRadius: '16px',
             boxShadow: '0 10px 40px rgba(0,0,0,0.15)',
-            border: '1px solid rgba(0,0,0,0.08)',
+            border: '1px solid var(--bs-border-color)',
             overflow: 'hidden'
           }),
           display: 'flex',
@@ -268,32 +359,32 @@ const SearchResults = () => {
       >
         {/* Mobile Header */}
         {isMobile && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '16px', borderBottom: '1px solid rgba(0,0,0,0.06)', flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '16px', borderBottom: '1px solid var(--bs-border-color)', flexShrink: 0 }}>
             <button onClick={clearSearch} style={{ background: 'none', border: 'none', padding: '8px' }}>←</button>
-            <input type="text" value={searchQuery} onChange={handleMobileInputChange} style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', border: '1px solid #ddd' }} />
+            <input type="text" value={searchQuery} onChange={handleMobileInputChange} style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--bs-border-color)', backgroundColor: 'var(--bs-body-bg)', color: 'var(--bs-body-color)' }} />
           </div>
         )}
 
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid rgba(0,0,0,0.06)', flexShrink: 0 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid var(--bs-border-color)', flexShrink: 0 }}>
           <div style={{ fontWeight: '600', fontSize: '14px' }}>
             {isSearching ? 'Aranıyor...' : `${totalResults} sonuç`}
           </div>
           {!isMobile && (
-            <button onClick={clearSearch} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', color: '#666' }}>✕</button>
+            <button onClick={clearSearch} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', color: 'var(--bs-secondary-color)' }}>✕</button>
           )}
         </div>
 
         {/* Tabs */}
-        <div style={{ display: 'flex', gap: '8px', padding: '12px 20px', borderBottom: '1px solid rgba(0,0,0,0.06)', flexShrink: 0, overflowX: 'auto' }}>
+        <div style={{ display: 'flex', gap: '8px', padding: '12px 20px', borderBottom: '1px solid var(--bs-border-color)', flexShrink: 0, overflowX: 'auto' }}>
           {TABS.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               style={{
-                background: activeTab === tab.id ? '#0d6efd' : 'transparent',
-                color: activeTab === tab.id ? 'white' : 'inherit',
-                border: '1px solid rgba(0,0,0,0.1)',
+                background: activeTab === tab.id ? 'var(--bs-primary)' : 'transparent',
+                color: activeTab === tab.id ? 'white' : 'var(--bs-body-color)',
+                border: '1px solid var(--bs-border-color)',
                 padding: '6px 16px',
                 borderRadius: '20px',
                 fontSize: '13px',
@@ -308,7 +399,7 @@ const SearchResults = () => {
               {t(tab.labelKey)}
               {tab.id !== 'all' && (
                 <span style={{
-                  background: activeTab === tab.id ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)',
+                  background: activeTab === tab.id ? 'rgba(255,255,255,0.2)' : 'rgba(128,128,128,0.15)',
                   padding: '2px 6px',
                   borderRadius: '10px',
                   fontSize: '11px'
@@ -326,19 +417,19 @@ const SearchResults = () => {
             <>
               {searchResults.users.length > 0 && (
                 <div>
-                  <div style={{ padding: '12px 20px 4px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: '#6c757d', letterSpacing: '0.5px' }}>Kullanıcılar</div>
+                  <div style={{ padding: '12px 20px 4px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: 'var(--bs-secondary-color)', letterSpacing: '0.5px' }}>Kullanıcılar</div>
                   {searchResults.users.slice(0, 3).map(renderUserItem)}
                 </div>
               )}
               {searchResults.scholars.length > 0 && (
                 <div>
-                  <div style={{ padding: '12px 20px 4px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: '#6c757d', letterSpacing: '0.5px' }}>Alimler</div>
+                  <div style={{ padding: '12px 20px 4px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: 'var(--bs-secondary-color)', letterSpacing: '0.5px' }}>Alimler</div>
                   {searchResults.scholars.slice(0, 3).map(renderScholarItem)}
                 </div>
               )}
               {searchResults.followers.length > 0 && (
                 <div>
-                  <div style={{ padding: '12px 20px 4px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: '#6c757d', letterSpacing: '0.5px' }}>Takipçiler</div>
+                  <div style={{ padding: '12px 20px 4px', fontSize: '11px', fontWeight: '700', textTransform: 'uppercase', color: 'var(--bs-secondary-color)', letterSpacing: '0.5px' }}>Takipçiler</div>
                   {searchResults.followers.slice(0, 3).map(renderFollowerItem)}
                 </div>
               )}
@@ -350,7 +441,7 @@ const SearchResults = () => {
           {activeTab === 'followers' && searchResults.followers.map(renderFollowerItem)}
 
           {totalResults === 0 && !isSearching && (
-            <div style={{ padding: '40px', textAlign: 'center', color: '#6c757d' }}>
+            <div style={{ padding: '40px', textAlign: 'center', color: 'var(--bs-secondary-color)' }}>
               <div style={{ fontSize: '32px', marginBottom: '8px' }}>🔍</div>
               <div>{t('search.noResults')}</div>
             </div>

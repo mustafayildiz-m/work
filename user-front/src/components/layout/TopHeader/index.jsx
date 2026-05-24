@@ -1,10 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { BsChatLeftTextFill, BsGearFill } from 'react-icons/bs';
+import { BsChatLeftTextFill, BsGearFill, BsSearch } from 'react-icons/bs';
 import LogoBox from '@/components/LogoBox';
 import CollapseMenu from './CollapseMenu';
 import MobileMenuToggle from './MobileMenuToggle';
+import MobileSearchOverlay from './MobileSearchOverlay';
 import ProfileDropdown from './ProfileDropdown';
 import StyledHeader from './StyledHeader';
 import MessageIconWithBadge from './MessageIconWithBadge';
@@ -13,10 +14,12 @@ import ThemeSwitcher from './ThemeSwitcher';
 import NotificationDropdown from './NotificationDropdown';
 import FollowRequestsDropdown from './FollowRequestsDropdown';
 import { useSession } from 'next-auth/react';
+import { useState } from 'react';
 
 const TopHeader = () => {
   const { status } = useSession();
   const isGuest = status === 'unauthenticated';
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   return <StyledHeader>
     <div className="container top-header-inner position-relative d-flex align-items-center justify-content-between flex-nowrap" style={{
@@ -64,15 +67,31 @@ const TopHeader = () => {
       </ul>
 
       {/* Mobile navigation - profil butonu ekranda kalacak şekilde */}
-      <div className="d-flex align-items-center d-lg-none flex-nowrap mobile-header-actions overflow-visible" style={{
-        gap: '0.5rem',
+      <div className="d-flex align-items-center d-lg-none flex-nowrap mobile-header-actions" style={{
+        gap: '0.35rem',
         flex: '1 1 auto',
         justifyContent: 'flex-end',
         minWidth: 0,
-        flexShrink: 0
+        maxWidth: 'calc(100vw - 80px)',
+        overflow: 'visible'
       }}>
+        {/* Mobile search icon */}
+        <button
+          className="btn btn-secondary-soft-hover rounded-circle d-flex align-items-center justify-content-center p-0 mobile-search-btn flex-shrink-0"
+          onClick={() => setMobileSearchOpen(true)}
+          aria-label="Ara"
+          style={{
+            width: '32px',
+            height: '32px',
+            border: 'none',
+            color: 'var(--bs-body-color)',
+          }}
+        >
+          <BsSearch size={15} />
+        </button>
+
         {!isGuest && (
-          <div className="d-flex align-items-center flex-nowrap mobile-icons-group" style={{ gap: '0.35rem' }}>
+          <div className="d-flex align-items-center flex-nowrap mobile-icons-group" style={{ gap: '0.2rem', flexShrink: 0 }}>
             <MessageIconWithBadge />
             <FollowRequestsDropdown />
             <NotificationDropdown />
@@ -113,7 +132,7 @@ const TopHeader = () => {
           .mobile-header-actions {
             gap: 0.25rem !important;
             min-width: 0;
-            flex-shrink: 0;
+            flex-shrink: 1;
             overflow: visible !important;
           }
           
@@ -207,24 +226,53 @@ const TopHeader = () => {
           }
         }
         
-        /* iPhone SE (375px): Tema seçici her zaman görünür (misafir kullanıcılar profil menüsüne erişemez) */
+        /* iPhone SE (375px) */
         @media (max-width: 399.98px) {
           .container {
-            padding-left: 0.4rem !important;
-            padding-right: 0.5rem !important;
-            gap: 0.5rem !important;
+            padding-left: 0.25rem !important;
+            padding-right: 0.25rem !important;
+            gap: 0.25rem !important;
           }
           
           .mobile-header-actions {
-            gap: 0.2rem !important;
+            gap: 0.1rem !important;
+            max-width: calc(100vw - 70px) !important;
           }
           
           .mobile-icons-group {
-            gap: 0.2rem !important;
+            gap: 0 !important;
+          }
+
+          .mobile-search-btn {
+            width: 28px !important;
+            height: 28px !important;
+            min-width: 28px !important;
+          }
+          
+          .mobile-icons-group :global(.nav-link),
+          .mobile-icons-group :global(.btn) {
+            padding: 0.15rem 0.25rem !important;
+            font-size: 0.75rem !important;
+          }
+          
+          .mobile-theme-switcher :global(.btn),
+          .mobile-theme-switcher :global(.nav-link) {
+            padding: 0.15rem 0.25rem !important;
+          }
+
+          .mobile-profile :global(.profile-avatar-container) {
+            width: 30px !important;
+            height: 30px !important;
+            padding: 1px !important;
+          }
+
+          .mobile-profile :global(.profile-avatar-img) {
+            width: 26px !important;
+            height: 26px !important;
           }
           
           .logo-container {
-            max-width: 75px !important;
+            max-width: 60px !important;
             margin-left: 0 !important;
           }
           
@@ -262,6 +310,12 @@ const TopHeader = () => {
           }
         }
       `}</style>
+
+    {/* Mobile search full-screen overlay */}
+    <MobileSearchOverlay
+      isOpen={mobileSearchOpen}
+      onClose={() => setMobileSearchOpen(false)}
+    />
   </StyledHeader>;
 };
 export default TopHeader;
