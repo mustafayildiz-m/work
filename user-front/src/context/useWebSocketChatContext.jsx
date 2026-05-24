@@ -425,6 +425,26 @@ export const WebSocketChatProvider = ({ children }) => {
         addOrUpdateMessage(formattedMessage);
         // Refresh conversation metadata (name/avatar) for newly created chats
         fetchConversations().catch(() => {});
+
+        // Animated envelope notification for incoming messages
+        const currentUser = getCurrentUserInfo();
+        if (currentUser && String(message.senderId) !== String(currentUser.id)) {
+          const isOnMessagingPage = typeof window !== 'undefined' && window.location.pathname === '/messaging';
+          const isActiveConv = activeConversation?.participantId && 
+            String(activeConversation.participantId) === String(message.senderId);
+
+          if (!isOnMessagingPage || !isActiveConv) {
+            window.dispatchEvent(new CustomEvent('newMessageEnvelopeNotification', {
+              detail: {
+                senderName: message.senderName || formattedMessage.senderName || 'Birisi',
+                senderAvatar: message.senderAvatar || formattedMessage.senderAvatar,
+                content: message.content || '',
+                messageId: message.id
+              }
+            }));
+            playNotificationSound();
+          }
+        }
       });
 
       socketInstance.on('messageSent', (message) => {
