@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { BsSearch, BsArrowLeft, BsXLg } from 'react-icons/bs';
 import { useSearchContext } from '@/context/useSearchContext';
 import { useLanguage } from '@/context/useLanguageContext';
@@ -79,7 +80,7 @@ const MobileSearchOverlay = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  return (
+  const overlayContent = (
     <div
       className="mobile-search-overlay"
       style={{
@@ -206,6 +207,9 @@ const MobileSearchOverlay = ({ isOpen, onClose }) => {
       </div>
     </div>
   );
+
+  if (typeof document === 'undefined') return null;
+  return createPortal(overlayContent, document.body);
 };
 
 export default MobileSearchOverlay;
