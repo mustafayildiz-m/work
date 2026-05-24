@@ -5,7 +5,7 @@ import { useFetchData } from '@/hooks/useFetchData';
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Button, Card, CardBody, CardFooter, CardHeader, CardTitle, Col, Container, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Row, Modal, ModalHeader, ModalBody, ModalFooter } from 'react-bootstrap';
 import { BsBookmark, BsBriefcase, BsCalendarDate, BsChatLeftText, BsGear, BsGeoAlt, BsPatchCheckFill, BsPencilFill, BsPersonX, BsThreeDots, BsCamera, BsCheckCircleFill, BsEye, BsImage, BsShare, BsWhatsapp, BsNewspaper } from 'react-icons/bs';
 import { FaPlus } from 'react-icons/fa6';
@@ -114,6 +114,7 @@ const ProfileLayout = ({
 }) => {
   const pathName = usePathname();
   const params = useParams();
+  const router = useRouter();
   const { profileId: resolvedProfileId, isValid } = useProfileHash();
   const { data: session, update } = useSession();
   const { t, locale } = useLanguage();
@@ -1303,11 +1304,22 @@ const ProfileLayout = ({
                                   photoUrl: profileData?.photoUrl || profileData?.photo_url || null
                                 };
 
-                                window.dispatchEvent(
-                                  new CustomEvent('openMessagingWithUser', {
-                                    detail: { user: targetUser }
-                                  })
-                                );
+                                const isMobile = window.innerWidth < 992;
+                                if (isMobile) {
+                                  const params = new URLSearchParams({
+                                    userId: targetUser.id,
+                                    userName: `${targetUser.firstName} ${targetUser.lastName}`.trim() || targetUser.username,
+                                    ...(targetUser.username && { userUsername: targetUser.username }),
+                                    ...(targetUser.photoUrl && { userAvatar: targetUser.photoUrl })
+                                  });
+                                  router.push(`/messaging?${params.toString()}`);
+                                } else {
+                                  window.dispatchEvent(
+                                    new CustomEvent('openMessagingWithUser', {
+                                      detail: { user: targetUser }
+                                    })
+                                  );
+                                }
                               }}
                               style={{
                                 borderRadius: '50px',
