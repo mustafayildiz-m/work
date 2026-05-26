@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import { Inter } from 'next/font/google';
+import { Inter, Cinzel } from 'next/font/google';
 import Image from 'next/image';
 import NextTopLoader from 'nextjs-toploader';
 import { DEFAULT_PAGE_TITLE } from '@/context/constants';
@@ -10,6 +10,14 @@ const inter = Inter({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
   display: 'swap'
+});
+
+// Logo (marka) için klasik serif font — CSS değişkeni olarak globale aktarılır
+const cinzel = Cinzel({
+  subsets: ['latin'],
+  weight: ['600', '700', '800'],
+  display: 'swap',
+  variable: '--font-logo'
 });
 export const metadata = {
   title: {
@@ -55,7 +63,7 @@ const splashScreenStyles = `
 const RootLayout = ({
   children
 }) => {
-  return <html lang="en">
+  return <html lang="en" className={cinzel.variable}>
     <head>
       <style>{splashScreenStyles}</style>
       <script
