@@ -13,6 +13,12 @@ import './LanguageSelector.css';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
+const getHiResFlag = (url) => {
+  if (!url) return '';
+  const resolved = getFlagImageUrl(url, API_BASE_URL);
+  return resolved.replace('/w80/', '/w320/');
+};
+
 const LanguageSelector = () => {
   const { countries, loading, error } = useCountries();
   const { t, locale } = useLanguage();
@@ -93,7 +99,7 @@ const LanguageSelector = () => {
           </div>
           <p className="cs-header__subtitle">{t('books.languageSelector.subtitle')}</p>
         </div>
-        <div className="cs-header__badge">{countries.length}</div>
+        <div className="cs-header__badge">{t('common.countrySelector.totalCountries', { count: countries.length })}</div>
       </div>
 
       {/* Search */}
@@ -154,7 +160,7 @@ const LanguageSelector = () => {
                   <div className="cs-country__flag">
                     {country.flagUrl ? (
                       <img
-                        src={getFlagImageUrl(country.flagUrl, API_BASE_URL)}
+                        src={getHiResFlag(country.flagUrl)}
                         alt={t('common.countrySelector.flagAlt', { country: countryLabel(country) })}
                         loading="lazy"
                       />
