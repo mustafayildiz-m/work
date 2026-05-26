@@ -24,7 +24,12 @@
       "tooltipNoLanguage": "{country} — 아직 언어가 지정되지 않았습니다",
       "noLanguageShort": "—",
       "flagAlt": "{country} 국기",
-      "totalCountries": "{count}개 국가"
+      "totalCountries": "{count}개 국가",
+      "searchPlaceholder": "국가 검색...",
+      "noResults": "국가를 찾을 수 없습니다",
+      "noResultsDesc": "다른 검색어를 시도해 보세요",
+      "showingFiltered": "{total}개국 중 {filtered}개국",
+      "clearSearch": "검색 지우기"
     }
   },
   "tabTitle": {

@@ -24,7 +24,12 @@
       "tooltipNoLanguage": "{country} — încă nu este atribuită o limbă",
       "noLanguageShort": "—",
       "flagAlt": "Steagul {country}",
-      "totalCountries": "{count} țări"
+      "totalCountries": "{count} țări",
+      "searchPlaceholder": "Search countries...",
+      "noResults": "No countries found",
+      "noResultsDesc": "Try a different search term",
+      "showingFiltered": "Showing {filtered} of {total} countries",
+      "clearSearch": "Clear search"
     }
   },
   "tabTitle": {

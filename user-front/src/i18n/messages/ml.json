@@ -25,7 +25,12 @@
       "tooltipNoLanguage": "{country} — ഭാഷ ഇതുവരെ നിയോഗിച്ചിട്ടില്ല",
       "noLanguageShort": "—",
       "flagAlt": "{country} പതാക",
-      "totalCountries": "{count} രാജ്യങ്ങൾ"
+      "totalCountries": "{count} രാജ്യങ്ങൾ",
+      "searchPlaceholder": "Search countries...",
+      "noResults": "No countries found",
+      "noResultsDesc": "Try a different search term",
+      "showingFiltered": "Showing {filtered} of {total} countries",
+      "clearSearch": "Clear search"
     }
   },
   "tabTitle": {

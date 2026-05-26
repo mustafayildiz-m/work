@@ -24,7 +24,12 @@
       "tooltipNoLanguage": "{country} — még nincs nyelv hozzárendelve",
       "noLanguageShort": "—",
       "flagAlt": "{country} zászlaja",
-      "totalCountries": "{count} ország"
+      "totalCountries": "{count} ország",
+      "searchPlaceholder": "Országok keresése...",
+      "noResults": "Nem található ország",
+      "noResultsDesc": "Próbáljon meg másik keresési kifejezést",
+      "showingFiltered": "{filtered} / {total} ország",
+      "clearSearch": "Keresés törlése"
     }
   },
   "tabTitle": {

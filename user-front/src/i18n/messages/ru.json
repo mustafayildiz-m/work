@@ -24,7 +24,12 @@
       "tooltipNoLanguage": "{country} — язык пока не назначен",
       "noLanguageShort": "—",
       "flagAlt": "Флаг {country}",
-      "totalCountries": "{count} стран"
+      "totalCountries": "{count} стран",
+      "searchPlaceholder": "Поиск стран...",
+      "noResults": "Страны не найдены",
+      "noResultsDesc": "Попробуйте другой поисковый запрос",
+      "showingFiltered": "{filtered} из {total} стран",
+      "clearSearch": "Очистить поиск"
     }
   },
   "tabTitle": {

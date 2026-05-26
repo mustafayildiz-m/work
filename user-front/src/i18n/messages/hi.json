@@ -25,7 +25,12 @@
       "tooltipNoLanguage": "{country} — अभी तक कोई भाषा असाइन नहीं है",
       "noLanguageShort": "—",
       "flagAlt": "{country} का झंडा",
-      "totalCountries": "{count} देश"
+      "totalCountries": "{count} देश",
+      "searchPlaceholder": "देश खोजें...",
+      "noResults": "कोई देश नहीं मिला",
+      "noResultsDesc": "कोई अलग खोज शब्द आज़माएं",
+      "showingFiltered": "{total} में से {filtered} देश",
+      "clearSearch": "खोज साफ़ करें"
     }
   },
   "tabTitle": {

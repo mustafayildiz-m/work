@@ -24,7 +24,12 @@
       "tooltipNoLanguage": "{country} — zatím není přiřazen jazyk",
       "noLanguageShort": "—",
       "flagAlt": "Vlajka {country}",
-      "totalCountries": "{count} zemí"
+      "totalCountries": "{count} zemí",
+      "searchPlaceholder": "Hledat země...",
+      "noResults": "Žádné země nenalezeny",
+      "noResultsDesc": "Zkuste jiný hledaný výraz",
+      "showingFiltered": "{filtered} z {total} zemí",
+      "clearSearch": "Vymazat hledání"
     }
   },
   "tabTitle": {

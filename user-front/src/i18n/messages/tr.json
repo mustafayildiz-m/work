@@ -25,7 +25,12 @@
       "tooltipNoLanguage": "{country} — dil eşleşmesi yok",
       "noLanguageShort": "—",
       "flagAlt": "{country} bayrağı",
-      "totalCountries": "{count} ülke"
+      "totalCountries": "{count} ülke",
+      "searchPlaceholder": "Ülke ara...",
+      "noResults": "Ülke bulunamadı",
+      "noResultsDesc": "Farklı bir arama terimi deneyin",
+      "showingFiltered": "{total} ülkeden {filtered} gösteriliyor",
+      "clearSearch": "Aramayı temizle"
     }
   },
   "tabTitle": {

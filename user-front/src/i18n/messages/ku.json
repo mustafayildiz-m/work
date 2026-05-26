@@ -25,7 +25,12 @@
       "tooltipNoLanguage": "{country} — hîna ziman ne hatiye girêdan",
       "noLanguageShort": "—",
       "flagAlt": "Alaya {country}",
-      "totalCountries": "{count} welat"
+      "totalCountries": "{count} welat",
+      "searchPlaceholder": "Welatan bigere...",
+      "noResults": "Welat nehate dîtin",
+      "noResultsDesc": "Peyveke din a lêgerînê biceribîne",
+      "showingFiltered": "Ji {total} welatan {filtered}",
+      "clearSearch": "Lêgerînê paqij bike"
     }
   },
   "tabTitle": {
