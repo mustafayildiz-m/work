@@ -8,6 +8,7 @@ import { useLanguage } from '@/context/useLanguageContext';
 import { useRouter } from 'next/navigation';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { getFlagImageUrl, getFlagEmojiFallback } from '@/utils/language';
+import { getCountryDisplayName, getLocalizedLanguageName as langDisplayName } from '@/utils/countryLanguageDisplay';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -78,18 +79,8 @@ const LanguageSelector = () => {
     router.push(`/feed/articles/list?${params.toString()}`);
   };
 
-  const getCountryDisplayName = (country) => {
-    if (!country) return '';
-    if (locale && locale.toLowerCase().startsWith('tr') && country.nameTr) {
-      return country.nameTr;
-    }
-    return country.name;
-  };
-
-  const getLocalizedLanguageName = (language) => {
-    if (!language) return '';
-    return t(`books.languages.${language.name}`) || language.name;
-  };
+  const countryLabel = (c) => getCountryDisplayName(c, locale);
+  const langLabel = (lng) => langDisplayName(lng, t);
 
   if (loading) {
     return (
@@ -163,7 +154,13 @@ const LanguageSelector = () => {
                       e.currentTarget.style.boxShadow = 'none';
                     }
                   }}
-                  title={hasLang ? getCountryDisplayName(country) : `${getCountryDisplayName(country)} — dil eşleşmesi yok`}
+                  title={
+                    hasLang
+                      ? countryLabel(country)
+                      : t('common.countrySelector.tooltipNoLanguage', {
+                          country: countryLabel(country),
+                        })
+                  }
                 >
                   <div
                     className="w-100 lang-flag-area"
@@ -178,7 +175,9 @@ const LanguageSelector = () => {
                     {country.flagUrl ? (
                       <img
                         src={getFlagImageUrl(country.flagUrl, API_BASE_URL)}
-                        alt={`${getCountryDisplayName(country)} flag`}
+                        alt={t('common.countrySelector.flagAlt', {
+                          country: countryLabel(country),
+                        })}
                         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                       />
                     ) : (
@@ -191,13 +190,13 @@ const LanguageSelector = () => {
                     className="fw-bold text-center mb-1 mt-2 px-2 lang-text"
                     style={{ fontSize: '0.85rem', lineHeight: '1.1' }}
                   >
-                    {getCountryDisplayName(country)}
+                    {countryLabel(country)}
                   </div>
                   <div
                     className="text-center lang-sublabel px-2"
                     style={{ fontSize: '0.7rem', opacity: 0.85, marginTop: '0.15rem' }}
                   >
-                    {hasLang ? getLocalizedLanguageName(lang) : '—'}
+                    {hasLang ? langLabel(lang) : t('common.countrySelector.noLanguageShort')}
                   </div>
                   {!countsLoading && (
                     <Badge
@@ -206,7 +205,9 @@ const LanguageSelector = () => {
                       className="mt-1 lang-badge align-self-center"
                       style={{ fontSize: '0.7rem', padding: '4px 8px' }}
                     >
-                      {count} {t('articles.languageSelector.articleCount')}
+                      {t('articles.countrySelector.itemsCountPhrase', {
+                        count: String(count),
+                      })}
                     </Badge>
                   )}
                   {isSelected && (
@@ -249,7 +250,9 @@ const LanguageSelector = () => {
               onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
             >
               <BsCheckLg className="me-2" />
-              {getLocalizedLanguageName(selectedCountry.primaryLanguage)} {t('articles.languageSelector.continue')}
+              {t('articles.countrySelector.buttonLabel', {
+                language: langLabel(selectedCountry.primaryLanguage),
+              })}
               <BsArrowRight className="ms-2" />
             </Button>
           </div>

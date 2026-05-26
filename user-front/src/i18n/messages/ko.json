@@ -19,7 +19,12 @@
     "monthsAgo": "개월 전 {count}",
     "yearsAgo": "년 전 {count}",
     "required": "필수",
-    "or": "또는"
+    "or": "또는",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — 아직 언어가 지정되지 않았습니다",
+      "noLanguageShort": "—",
+      "flagAlt": "{country} 국기"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "새 메시지 1개",
@@ -629,6 +634,11 @@
       "gridView": "그리드 보기",
       "listView": "목록 보기",
       "playNow": "지금 플레이"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count}개 팟캐스트",
+      "buttonLabel": "{language} — 팟캐스트 듣기",
+      "availableLine": "이용 가능한 팟캐스트 {count}개"
     }
   },
   "articles": {
@@ -686,7 +696,11 @@
     },
     "share": "공유",
     "shareOnWhatsApp": "WhatsApp에서 공유",
-    "shareToFeed": "피드에 공유"
+    "shareToFeed": "피드에 공유",
+    "countrySelector": {
+      "itemsCountPhrase": "{count}개 글",
+      "buttonLabel": "{language} — 글 보기"
+    }
   },
   "books": {
     "languageSelector": {
@@ -876,7 +890,8 @@
     "sharedToFeed": "뉴스 피드에 공유된 책",
     "sharedToFeedDesc": "뉴스 피드에서 예약 공유 성공",
     "shareError": "공유 오류",
-    "shareErrorDesc": "책을 공유하는 동안 오류가 발생했습니다."
+    "shareErrorDesc": "책을 공유하는 동안 오류가 발생했습니다.",
+    "untitledBook": "제목 없는 도서"
   },
   "scholarProfile": {
     "biography": "Biography",

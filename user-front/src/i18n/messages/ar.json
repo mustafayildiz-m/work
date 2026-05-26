@@ -19,7 +19,12 @@
     "monthsAgo": "منذ {count} شهر",
     "yearsAgo": "منذ {count} سنة",
     "required": "مطلوب",
-    "or": "أو"
+    "or": "أو",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — لم يُعيَّن لغة بعد",
+      "noLanguageShort": "—",
+      "flagAlt": "علم {country}"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "رسالة جديدة واحدة",
@@ -632,6 +637,11 @@
       "gridView": "عرض الشبكة",
       "listView": "عرض القائمة",
       "playNow": "استمع الآن"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} بودكاست",
+      "buttonLabel": "{language} — الاستماع إلى البودكاست",
+      "availableLine": "{count} بودكاست متوفرة"
     }
   },
   "articles": {
@@ -689,7 +699,11 @@
     },
     "share": "مشاركة",
     "shareOnWhatsApp": "مشاركة على واتساب",
-    "shareToFeed": "مشاركة في الأخبار"
+    "shareToFeed": "مشاركة في الأخبار",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} مقال",
+      "buttonLabel": "{language} — عرض المقالات"
+    }
   },
   "books": {
     "languageSelector": {
@@ -879,7 +893,8 @@
     "sharedToFeed": "تم مشاركة الكتاب في الخلاصة",
     "sharedToFeedDesc": "تم مشاركة الكتاب بنجاح في الخلاصة",
     "shareError": "خطأ في المشاركة",
-    "shareErrorDesc": "حدث خطأ أثناء مشاركة الكتاب"
+    "shareErrorDesc": "حدث خطأ أثناء مشاركة الكتاب",
+    "untitledBook": "كتاب بلا عنوان"
   },
   "scholarProfile": {
     "biography": "سيرة شخصية",

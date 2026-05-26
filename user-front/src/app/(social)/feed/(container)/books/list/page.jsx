@@ -134,7 +134,7 @@ const BooksListPage = () => {
 
         return {
           ...book,
-          title: translation?.title || book.author || 'Başlıksız Kitap',
+          title: translation?.title || book.author || t('books.untitledBook'),
           description: translation?.description || '',
           summary: translation?.summary || '',
         };

@@ -20,7 +20,12 @@
     "monthsAgo": "{count} ամիս առաջ",
     "yearsAgo": "{count} տարի առաջ",
     "required": "Պահանջվում է",
-    "or": "կամ"
+    "or": "կամ",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — լեզու դեռ չի նշված",
+      "noLanguageShort": "—",
+      "flagAlt": "{country} դրոշ"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 նոր հաղորդագրություն",
@@ -701,6 +706,11 @@
       "gridView": "Ցանցային տեսք",
       "listView": "Ցուցակի տեսք",
       "playNow": "Խաղալ հիմա"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} փոդքասթ",
+      "buttonLabel": "{language} — լսել փոդքասթները",
+      "availableLine": "Հասանելի է {count} փոդքասթ"
     }
   },
   "articles": {
@@ -758,7 +768,11 @@
     },
     "share": "Կիսվել",
     "shareOnWhatsApp": "Կիսվեք WhatsApp-ով",
-    "shareToFeed": "Կիսվել Feed-ում"
+    "shareToFeed": "Կիսվել Feed-ում",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} հոդված",
+      "buttonLabel": "{language} — դիտել հոդվածները"
+    }
   },
   "books": {
     "languageSelector": {
@@ -948,7 +962,8 @@
     "sharedToFeed": "Գիրքը տարածված է նորությունների հոսքում",
     "sharedToFeedDesc": "Գիրքը հաջողությամբ համօգտագործվեց նորությունների հոսքում",
     "shareError": "Համօգտագործման սխալ",
-    "shareErrorDesc": "Գիրքը համօգտագործելիս սխալ տեղի ունեցավ"
+    "shareErrorDesc": "Գիրքը համօգտագործելիս սխալ տեղի ունեցավ",
+    "untitledBook": "Անանուն գիրք"
   },
   "scholarProfile": {
     "biography": "Կենսագրություն",

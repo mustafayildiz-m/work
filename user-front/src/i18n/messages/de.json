@@ -19,7 +19,12 @@
     "monthsAgo": "vor {count} Monaten",
     "yearsAgo": "vor {count} Jahren",
     "required": "Erforderlich",
-    "or": "oder"
+    "or": "oder",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — noch keine Sprache zugewiesen",
+      "noLanguageShort": "—",
+      "flagAlt": "Flagge {country}"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 neue Nachricht",
@@ -628,6 +633,11 @@
       "gridView": "Rasteransicht",
       "listView": "Listenansicht",
       "playNow": "Jetzt abspielen"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} Podcasts",
+      "buttonLabel": "{language} — Podcasts anhören",
+      "availableLine": "{count} Podcasts verfügbar"
     }
   },
   "articles": {
@@ -685,7 +695,11 @@
     },
     "share": "Teilen",
     "shareOnWhatsApp": "Auf WhatsApp teilen",
-    "shareToFeed": "Im Feed teilen"
+    "shareToFeed": "Im Feed teilen",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} Artikel",
+      "buttonLabel": "{language} — Artikel anzeigen"
+    }
   },
   "books": {
     "languageSelector": {
@@ -875,7 +889,8 @@
     "sharedToFeed": "Buch im Feed geteilt",
     "sharedToFeedDesc": "Buch erfolgreich im Feed geteilt",
     "shareError": "Teilen fehlgeschlagen",
-    "shareErrorDesc": "Beim Teilen des Buches ist ein Fehler aufgetreten"
+    "shareErrorDesc": "Beim Teilen des Buches ist ein Fehler aufgetreten",
+    "untitledBook": "Buch ohne Titel"
   },
   "scholarProfile": {
     "biography": "Biografie",

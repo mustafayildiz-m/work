@@ -8,6 +8,7 @@ import { useLanguage } from '@/context/useLanguageContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { useRouter } from 'next/navigation';
 import { getFlagImageUrl, getFlagEmojiFallback } from '@/utils/language';
+import { getCountryDisplayName, getLocalizedLanguageName as langDisplayName } from '@/utils/countryLanguageDisplay';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -29,7 +30,7 @@ const PodcastLanguageSelector = () => {
       const counts = {};
       try {
         const response = await fetch(`${API_URL}/podcasts?isActive=true&limit=1000`);
-        if (!response.ok) throw new Error('Podcastler yüklenemedi');
+        if (!response.ok) throw new Error('podcasts_http_error');
         const data = await response.json();
         const allPodcasts = data.podcasts || [];
         allPodcasts.forEach((podcast) => {
@@ -76,18 +77,8 @@ const PodcastLanguageSelector = () => {
     router.push(`/feed/podcasts/list?${params.toString()}`);
   };
 
-  const getCountryDisplayName = (country) => {
-    if (!country) return '';
-    if (locale && locale.toLowerCase().startsWith('tr') && country.nameTr) {
-      return country.nameTr;
-    }
-    return country.name;
-  };
-
-  const getLocalizedLanguageName = (language) => {
-    if (!language) return '';
-    return t(`books.languages.${language.name}`) || language.name;
-  };
+  const countryLabel = (c) => getCountryDisplayName(c, locale);
+  const langLabel = (lng) => langDisplayName(lng, t);
 
   if (loading || loadingCounts) {
     return (
@@ -166,7 +157,13 @@ const PodcastLanguageSelector = () => {
                         e.currentTarget.style.boxShadow = 'none';
                       }
                     }}
-                    title={hasLang ? getCountryDisplayName(country) : `${getCountryDisplayName(country)} — dil eşleşmesi yok`}
+                    title={
+                      hasLang
+                        ? countryLabel(country)
+                        : t('common.countrySelector.tooltipNoLanguage', {
+                            country: countryLabel(country),
+                          })
+                    }
                   >
                     <div
                       className="w-100 lang-flag-area"
@@ -181,7 +178,9 @@ const PodcastLanguageSelector = () => {
                       {country.flagUrl ? (
                         <img
                           src={getFlagImageUrl(country.flagUrl, API_URL)}
-                          alt={`${getCountryDisplayName(country)} flag`}
+                          alt={t('common.countrySelector.flagAlt', {
+                            country: countryLabel(country),
+                          })}
                           style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                         />
                       ) : (
@@ -194,19 +193,21 @@ const PodcastLanguageSelector = () => {
                       className="fw-bold text-center lang-text mt-2 px-2"
                       style={{ fontSize: '0.85rem', lineHeight: '1.1' }}
                     >
-                      {getCountryDisplayName(country)}
+                      {countryLabel(country)}
                     </div>
                     <div
                       className="text-center lang-sublabel px-2"
                       style={{ fontSize: '0.7rem', opacity: 0.85, marginTop: '0.15rem' }}
                     >
-                      {hasLang ? getLocalizedLanguageName(lang) : '—'}
+                      {hasLang ? langLabel(lang) : t('common.countrySelector.noLanguageShort')}
                     </div>
                     <div
                       className="mt-1 mb-2 px-2 py-1 rounded-pill lang-badge align-self-center"
                       style={{ fontSize: '0.7rem', fontWeight: '600' }}
                     >
-                      {count} {t('podcasts.languageSelector.podcastCount')}
+                      {t('podcasts.countrySelector.itemsCountPhrase', {
+                        count: String(count),
+                      })}
                     </div>
                     {isSelected && (
                       <div
@@ -248,11 +249,15 @@ const PodcastLanguageSelector = () => {
                 onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
               >
                 <BsCheckLg className="me-2" />
-                {getLocalizedLanguageName(selectedCountry.primaryLanguage)} {t('podcasts.languageSelector.continue')}
+                {t('podcasts.countrySelector.buttonLabel', {
+                  language: langLabel(selectedCountry.primaryLanguage),
+                })}
                 <BsArrowRight className="ms-2" />
               </Button>
               <div className="mt-2 text-muted small">
-                {podcastCounts[selectedCountry.primaryLanguage.code] || 0} {t('podcasts.languageSelector.podcastCount')} {t('books.languageSelector.available')}
+                {t('podcasts.countrySelector.availableLine', {
+                  count: String(podcastCounts[selectedCountry.primaryLanguage.code] || 0),
+                })}
               </div>
             </div>
           )}

@@ -19,7 +19,12 @@
     "monthsAgo": "{count} meses atrás",
     "yearsAgo": "{count} anos atrás",
     "required": "Necessário",
-    "or": "ou"
+    "or": "ou",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — ainda sem idioma atribuído",
+      "noLanguageShort": "—",
+      "flagAlt": "Bandeira {country}"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 nova mensagem",
@@ -629,6 +634,11 @@
       "gridView": "Vista da grelha",
       "listView": "Vista de lista",
       "playNow": "Reproduzir agora"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} podcasts",
+      "buttonLabel": "{language} — ouvir podcasts",
+      "availableLine": "{count} podcasts disponíveis"
     }
   },
   "articles": {
@@ -686,7 +696,11 @@
     },
     "share": "Partilhar",
     "shareOnWhatsApp": "Partilhar no WhatsApp",
-    "shareToFeed": "Partilhar para alimentar"
+    "shareToFeed": "Partilhar para alimentar",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} artigos",
+      "buttonLabel": "{language} — ver artigos"
+    }
   },
   "books": {
     "languageSelector": {
@@ -876,7 +890,8 @@
     "sharedToFeed": "Livro partilhado no feed de notícias",
     "sharedToFeedDesc": "Livro partilhado com sucesso no feed de notícias",
     "shareError": "Partilhar o erro",
-    "shareErrorDesc": "Ocorreu um erro ao partilhar o livro"
+    "shareErrorDesc": "Ocorreu um erro ao partilhar o livro",
+    "untitledBook": "Livro sem título"
   },
   "scholarProfile": {
     "biography": "Biography",

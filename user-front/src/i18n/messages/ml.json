@@ -20,7 +20,12 @@
     "monthsAgo": "{count} മാസം മുമ്പ്",
     "yearsAgo": "{count} വർഷം മുമ്പ്",
     "required": "ആവശ്യമാണ്",
-    "or": "അല്ലെങ്കിൽ"
+    "or": "അല്ലെങ്കിൽ",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — ഭാഷ ഇതുവരെ നിയോഗിച്ചിട്ടില്ല",
+      "noLanguageShort": "—",
+      "flagAlt": "{country} പതാക"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "ഒരു പുതിയ സന്ദേശം",
@@ -701,6 +706,11 @@
       "gridView": "ഗ്രിഡ് കാഴ്ച",
       "listView": "ലിസ്റ്റ് കാഴ്ച",
       "playNow": "ഇപ്പോൾ കളിക്കുക"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} പോഡ്‌ക്കാസ്റ്റുകൾ",
+      "buttonLabel": "{language} — പോഡ്‌ക്കാസ്റ്റുകൾ കേൾക്കുക",
+      "availableLine": "{count} പോഡ്‌ക്കാസ്റ്റുകൾ ലഭ്യമാണ്"
     }
   },
   "articles": {
@@ -758,7 +768,11 @@
     },
     "share": "പങ്കിടുക",
     "shareOnWhatsApp": "WhatsApp-ൽ പങ്കിടുക",
-    "shareToFeed": "ഫീഡിലേക്ക് പങ്കിടുക"
+    "shareToFeed": "ഫീഡിലേക്ക് പങ്കിടുക",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} ലേഖനങ്ങൾ",
+      "buttonLabel": "{language} — ലേഖനങ്ങൾ കാണുക"
+    }
   },
   "books": {
     "languageSelector": {
@@ -948,7 +962,8 @@
     "sharedToFeed": "ന്യൂസ് ഫീഡിൽ പുസ്തകം പങ്കിട്ടു",
     "sharedToFeedDesc": "ന്യൂസ് ഫീഡിൽ ബുക്ക് വിജയകരമായി പങ്കിട്ടു",
     "shareError": "പങ്കിടൽ പിശക്",
-    "shareErrorDesc": "പുസ്തകം പങ്കിടുമ്പോൾ ഒരു പിശക് സംഭവിച്ചു"
+    "shareErrorDesc": "പുസ്തകം പങ്കിടുമ്പോൾ ഒരു പിശക് സംഭവിച്ചു",
+    "untitledBook": "ശീർഷകമില്ലാത്ത പുസ്തകം"
   },
   "scholarProfile": {
     "biography": "ജീവചരിത്രം",

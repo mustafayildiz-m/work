@@ -19,7 +19,12 @@
     "monthsAgo": "{Місяці тому",
     "yearsAgo": "{count} років тому",
     "required": "Потрібно",
-    "or": "або"
+    "or": "або",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — мову ще не призначено",
+      "noLanguageShort": "—",
+      "flagAlt": "Прапор {country}"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 нове повідомлення",
@@ -617,6 +622,11 @@
       "gridView": "Вигляд у вигляді сітки",
       "listView": "Перегляд списку",
       "playNow": "Відтворити зараз"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} подкастів",
+      "buttonLabel": "{language} — слухати подкасти",
+      "availableLine": "Доступно подкастів: {count}"
     }
   },
   "articles": {
@@ -674,7 +684,11 @@
     },
     "share": "Поділіться",
     "shareOnWhatsApp": "Поділіться на WhatsApp",
-    "shareToFeed": "Поділитися, щоб нагодувати"
+    "shareToFeed": "Поділитися, щоб нагодувати",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} статей",
+      "buttonLabel": "{language} — переглянути статті"
+    }
   },
   "books": {
     "languageSelector": {
@@ -864,7 +878,8 @@
     "sharedToFeed": "Поділіться книгою у стрічці новин",
     "sharedToFeedDesc": "Книгою успішно поділилися в стрічці новин",
     "shareError": "Помилка обміну",
-    "shareErrorDesc": "Виникла помилка під час надання доступу до книги"
+    "shareErrorDesc": "Виникла помилка під час надання доступу до книги",
+    "untitledBook": "Без назви"
   },
   "scholarProfile": {
     "biography": "Biography",

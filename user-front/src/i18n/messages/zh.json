@@ -19,7 +19,12 @@
     "monthsAgo": "{几个月前",
     "yearsAgo": "{count}年前",
     "required": "需要",
-    "or": "或"
+    "or": "或",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — 尚未分配语言",
+      "noLanguageShort": "—",
+      "flagAlt": "{country}国旗"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 条新消息",
@@ -629,6 +634,11 @@
       "gridView": "网格视图",
       "listView": "列表查看",
       "playNow": "立即播放"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} 个播客",
+      "buttonLabel": "{language} — 收听播客",
+      "availableLine": "有 {count} 个播客可用"
     }
   },
   "articles": {
@@ -686,7 +696,11 @@
     },
     "share": "分享",
     "shareOnWhatsApp": "在 WhatsApp 上分享",
-    "shareToFeed": "分享到供稿"
+    "shareToFeed": "分享到供稿",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} 篇文章",
+      "buttonLabel": "{language} — 查看文章"
+    }
   },
   "books": {
     "languageSelector": {
@@ -876,7 +890,8 @@
     "sharedToFeed": "在新闻联播中分享图书",
     "sharedToFeedDesc": "在新闻联播中成功分享书籍",
     "shareError": "共享错误",
-    "shareErrorDesc": "共享图书时发生错误"
+    "shareErrorDesc": "共享图书时发生错误",
+    "untitledBook": "无标题图书"
   },
   "scholarProfile": {
     "biography": "Biography",

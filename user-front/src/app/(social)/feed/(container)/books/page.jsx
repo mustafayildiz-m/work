@@ -63,7 +63,7 @@ const BooksPage = () => {
           return {
             ...book,
             _matchedTranslation: trans,
-            title: trans?.title || book.author || 'Başlıksız Kitap',
+            title: trans?.title || book.author || t('books.untitledBook'),
             author: book.author,
             languageName: lang?.name,
             languageFlagUrl: lang?.flagUrl,
@@ -75,7 +75,7 @@ const BooksPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [pickBestTranslation]);
+  }, [pickBestTranslation, t]);
 
   useEffect(() => {
     fetchBooks(debouncedQuery);

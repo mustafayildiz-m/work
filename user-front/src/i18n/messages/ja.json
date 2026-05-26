@@ -19,7 +19,12 @@
     "monthsAgo": "{count}ヶ月前",
     "yearsAgo": "{count}年前",
     "required": "必須",
-    "or": "または"
+    "or": "または",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — 言語がまだ設定されていません",
+      "noLanguageShort": "—",
+      "flagAlt": "{country}の国旗"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1件の新しいメッセージ",
@@ -628,6 +633,11 @@
       "gridView": "グリッド表示",
       "listView": "リスト表示",
       "playNow": "今すぐ聴く"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} 件のポッドキャスト",
+      "buttonLabel": "{language} — ポッドキャストを聴く",
+      "availableLine": "利用可能：{count} 件のポッドキャスト"
     }
   },
   "articles": {
@@ -685,7 +695,11 @@
     },
     "share": "共有",
     "shareOnWhatsApp": "WhatsAppで共有",
-    "shareToFeed": "フィードで共有"
+    "shareToFeed": "フィードで共有",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} 件の記事",
+      "buttonLabel": "{language} — 記事を見る"
+    }
   },
   "books": {
     "languageSelector": {
@@ -875,7 +889,8 @@
     "sharedToFeed": "ニュースフィードで本を共有",
     "sharedToFeedDesc": "本をニュースフィードで正常に共有しました",
     "shareError": "共有エラー",
-    "shareErrorDesc": "本の共有中にエラーが発生しました"
+    "shareErrorDesc": "本の共有中にエラーが発生しました",
+    "untitledBook": "タイトルなし"
   },
   "scholarProfile": {
     "biography": "バイオグラフィー",

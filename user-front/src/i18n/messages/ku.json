@@ -20,7 +20,12 @@
     "monthsAgo": "{count} mehan berê",
     "yearsAgo": "{count} salan berê",
     "required": "Pêwîst",
-    "or": "an"
+    "or": "an",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — hîna ziman ne hatiye girêdan",
+      "noLanguageShort": "—",
+      "flagAlt": "Alaya {country}"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 peyama nû",
@@ -700,6 +705,11 @@
       "gridView": "Dîtina Gridê",
       "listView": "Dîtina Lîsteyê",
       "playNow": "Niha Lîste"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} podcast",
+      "buttonLabel": "{language} — podcastan guh bide",
+      "availableLine": "{count} podcast hene"
     }
   },
   "articles": {
@@ -757,7 +767,11 @@
     },
     "share": "Parve bike",
     "shareOnWhatsApp": "Li ser WhatsApp parve bike",
-    "shareToFeed": "Ber bi Xwarinê parve bike"
+    "shareToFeed": "Ber bi Xwarinê parve bike",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} gotar",
+      "buttonLabel": "{language} — gotaran bibîne"
+    }
   },
   "books": {
     "languageSelector": {
@@ -947,7 +961,8 @@
     "sharedToFeed": "Pirtûk ber bi xwarina nûçeyan hate parve kirin",
     "sharedToFeedDesc": "Pirtûk bi serketî ber bi xwarina nûçeyan hate parve kirin",
     "shareError": "Çewtiya parvekirinê",
-    "shareErrorDesc": "Dema parvekirina pirtûkê çewtî çêbû"
+    "shareErrorDesc": "Dema parvekirina pirtûkê çewtî çêbû",
+    "untitledBook": "Pirtûkê bê sernav"
   },
   "scholarProfile": {
     "biography": "Biyografî",

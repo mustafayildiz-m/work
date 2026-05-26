@@ -20,7 +20,12 @@
     "monthsAgo": "{count} months ago",
     "yearsAgo": "{count} years ago",
     "required": "Required",
-    "or": "or"
+    "or": "or",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — no language assigned yet",
+      "noLanguageShort": "—",
+      "flagAlt": "{country} flag"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 new message",
@@ -686,6 +691,11 @@
       "error": "Error!",
       "podcastCount": "podcast"
     },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} podcasts",
+      "buttonLabel": "{language} — listen to podcasts",
+      "availableLine": "{count} podcasts available"
+    },
     "list": {
       "loadingPodcasts": "Loading podcasts...",
       "error": "Error!",
@@ -725,6 +735,10 @@
       "loadingLanguages": "Loading languages...",
       "error": "Error!",
       "articleCount": "Articles"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} articles",
+      "buttonLabel": "{language} — view articles"
     },
     "list": {
       "loadingArticles": "Loading articles...",
@@ -786,6 +800,7 @@
       "viewBooks": "View {language} Books",
       "booksAvailable": "{count} books available in this language"
     },
+    "untitledBook": "Untitled book",
     "globalSearchPlaceholder": "Search books by title...",
     "globalSearchButton": "Search",
     "noResults": "No results found",
@@ -931,7 +946,25 @@
       "Fon": "Fon",
       "Esperanto": "Esperanto",
       "Baskça": "Basque",
-      "divehice": "Dhivehi"
+      "Arnavutça": "Albanian",
+      "Belarusça": "Belarusian",
+      "Boşnakça": "Bosnian",
+      "Dzongkha": "Dzongkha",
+      "Hırvatça": "Croatian",
+      "Tigrinya": "Tigrinya",
+      "Estonyaca": "Estonian",
+      "Faroe Dili": "Faroese",
+      "Gürcüce": "Georgian",
+      "Grönlandca": "Greenlandic",
+      "İzlandaca": "Icelandic",
+      "Letonca": "Latvian",
+      "Litvanca": "Lithuanian",
+      "Malgaşça": "Malagasy",
+      "Maltaca": "Maltese",
+      "Nepalce": "Nepali",
+      "Kinyarwanda": "Kinyarwanda",
+      "Tacikçe": "Tajik",
+      "Dhivehi": "Dhivehi"
     },
     "detail": {
       "loadingBook": "Loading book...",

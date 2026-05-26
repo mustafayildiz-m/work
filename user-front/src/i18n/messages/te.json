@@ -20,7 +20,12 @@
     "monthsAgo": "{count} నెలల క్రితం",
     "yearsAgo": "{count} సంవత్సరాల క్రితం",
     "required": "అవసరం",
-    "or": "లేదా"
+    "or": "లేదా",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — ఇంకా భాష కేటాయించబడలేదు",
+      "noLanguageShort": "—",
+      "flagAlt": "{country} జండా"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 కొత్త సందేశం",
@@ -701,6 +706,11 @@
       "gridView": "గ్రిడ్ వీక్షణ",
       "listView": "జాబితా వీక్షణ",
       "playNow": "ఇప్పుడే ఆడండి"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} పాడ్‌కాస్ట్‌లు",
+      "buttonLabel": "{language} — పాడ్‌కాస్ట్‌లు వినండి",
+      "availableLine": "{count} పాడ్‌కాస్ట్‌లు అందుబాటులో ఉన్నాయి"
     }
   },
   "articles": {
@@ -758,7 +768,11 @@
     },
     "share": "షేర్ చేయండి",
     "shareOnWhatsApp": "WhatsAppలో భాగస్వామ్యం చేయండి",
-    "shareToFeed": "ఫీడ్‌కి భాగస్వామ్యం చేయండి"
+    "shareToFeed": "ఫీడ్‌కి భాగస్వామ్యం చేయండి",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} వ్యాసాలు",
+      "buttonLabel": "{language} — వ్యాసాలను చూడండి"
+    }
   },
   "books": {
     "languageSelector": {
@@ -948,7 +962,8 @@
     "sharedToFeed": "న్యూస్ ఫీడ్‌లో బుక్ షేర్ చేయబడింది",
     "sharedToFeedDesc": "వార్తల ఫీడ్‌లో బుక్ విజయవంతంగా భాగస్వామ్యం చేయబడింది",
     "shareError": "భాగస్వామ్యం లోపం",
-    "shareErrorDesc": "పుస్తకాన్ని భాగస్వామ్యం చేస్తున్నప్పుడు లోపం సంభవించింది"
+    "shareErrorDesc": "పుస్తకాన్ని భాగస్వామ్యం చేస్తున్నప్పుడు లోపం సంభవించింది",
+    "untitledBook": "శీర్షిక లేని పుస్తకం"
   },
   "scholarProfile": {
     "biography": "జీవిత చరిత్ర",

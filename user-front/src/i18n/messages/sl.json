@@ -19,7 +19,12 @@
     "monthsAgo": "pred {count} meseci",
     "yearsAgo": "pred {count} leti",
     "required": "Zahtevano",
-    "or": "ali"
+    "or": "ali",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — jezik še ni dodeljen",
+      "noLanguageShort": "—",
+      "flagAlt": "Zastava {country}"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 novo sporočilo",
@@ -617,6 +622,11 @@
       "gridView": "Pogled na mrežo",
       "listView": "Pogled na seznam",
       "playNow": "Igrajte zdaj"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} podcastov",
+      "buttonLabel": "{language} — poslušaj podcaste",
+      "availableLine": "Na voljo podcastov: {count}"
     }
   },
   "articles": {
@@ -674,7 +684,11 @@
     },
     "share": "Delite",
     "shareOnWhatsApp": "Delite na WhatsApp",
-    "shareToFeed": "Delite s feedom"
+    "shareToFeed": "Delite s feedom",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} člankov",
+      "buttonLabel": "{language} — ogled člankov"
+    }
   },
   "books": {
     "languageSelector": {
@@ -864,7 +878,8 @@
     "sharedToFeed": "Knjiga v skupni rabi na kanalu novic",
     "sharedToFeedDesc": "Knjiga je bila uspešno deljena na kanalu novic",
     "shareError": "Napaka pri deljenju",
-    "shareErrorDesc": "Med deljenjem knjige je prišlo do napake"
+    "shareErrorDesc": "Med deljenjem knjige je prišlo do napake",
+    "untitledBook": "Brez naslova"
   },
   "scholarProfile": {
     "biography": "Biography",

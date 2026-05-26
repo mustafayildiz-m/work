@@ -20,7 +20,12 @@
     "monthsAgo": "{count} ay önce",
     "yearsAgo": "{count} yıl önce",
     "required": "Zorunlu",
-    "or": "veya"
+    "or": "veya",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — dil eşleşmesi yok",
+      "noLanguageShort": "—",
+      "flagAlt": "{country} bayrağı"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 yeni mesaj",
@@ -690,6 +695,11 @@
       "error": "Hata!",
       "podcastCount": "podcast"
     },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} podcast",
+      "buttonLabel": "{language} — podcastleri dinle",
+      "availableLine": "{count} podcast mevcut"
+    },
     "list": {
       "loadingPodcasts": "Podcastler yükleniyor...",
       "error": "Hata!",
@@ -729,6 +739,10 @@
       "loadingLanguages": "Diller yükleniyor...",
       "error": "Hata!",
       "articleCount": "Makale"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} makale",
+      "buttonLabel": "{language} — makaleleri görüntüle"
     },
     "list": {
       "loadingArticles": "Makaleler yükleniyor...",
@@ -790,6 +804,7 @@
       "viewBooks": "{language} Kitaplarını Görüntüle",
       "booksAvailable": "{count} kitap bu dilde mevcut"
     },
+    "untitledBook": "Başlıksız kitap",
     "globalSearchPlaceholder": "Kitap adına göre ara...",
     "globalSearchButton": "Ara",
     "noResults": "Sonuç bulunamadı",
