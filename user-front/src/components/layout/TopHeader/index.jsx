@@ -121,7 +121,7 @@ const TopHeader = () => {
           }
           
           .logo-container {
-            max-width: 110px !important;
+            max-width: 160px !important;
             margin-right: 0.35rem !important;
             margin-left: 0 !important;
             padding-left: 0 !important;
@@ -192,7 +192,7 @@ const TopHeader = () => {
           }
           
           .logo-container {
-            max-width: 90px !important;
+            max-width: 150px !important;
             margin-left: 0 !important;
             padding-left: 0 !important;
           }
@@ -272,7 +272,7 @@ const TopHeader = () => {
           }
           
           .logo-container {
-            max-width: 60px !important;
+            max-width: 120px !important;
             margin-left: 0 !important;
           }
           
