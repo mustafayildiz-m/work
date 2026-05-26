@@ -6,8 +6,9 @@ import { toast } from 'sonner';
 import Select from 'react-select';
 import { getSelectStyles, getTheme } from '@/styles/select-styles';
 import { createSlug, createUniqueSlug } from '@/utils/slug-utils';
-import { getLocalizedLanguageName } from '@/utils/languageUtils';
-import { FaBook, FaUser, FaCalendar, FaGlobe, FaFilePdf, FaImage, FaArrowLeft, FaSave, FaPlus, FaTrash, FaInfoCircle, FaNewspaper, FaSortNumericUp, FaFileAlt } from 'react-icons/fa';
+
+import { getCountryOptionLabel, getLocalizedLanguageName } from '@/utils/languageUtils';
+import { FaBook, FaUser, FaCalendar, FaGlobe, FaFilePdf, FaImage, FaArrowLeft, FaSave, FaPlus, FaTrash, FaInfoCircle, FaNewspaper, FaSortNumericUp, FaFileAlt, FaFlag } from 'react-icons/fa';
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/articles';
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -21,13 +22,13 @@ function AddArticle() {
     publishDate: '',
     orderIndex: 0,
     translations: [
-      { languageId: '', title: '', content: '', summary: '', slug: '', pdfFile: null }
+      { languageId: '', countryId: '', title: '', content: '', summary: '', slug: '', pdfFile: null }
     ],
   });
   const [coverImage, setCoverImage] = useState(null);
   const [preview, setPreview] = useState('');
   const [loading, setLoading] = useState(false);
-  const [availableLanguages, setAvailableLanguages] = useState([]);
+  const [countries, setCountries] = useState([]);
   const [availableBooks, setAvailableBooks] = useState([]);
   const [loadingData, setLoadingData] = useState(false);
   const [currentTheme, setCurrentTheme] = useState(getTheme());
@@ -52,16 +53,16 @@ function AddArticle() {
       try {
         const token = localStorage.getItem('access_token');
 
-        // Dilleri çek
-        const langResponse = await fetch(`${BASE_URL}/languages`, {
+        // Ülkeleri çek
+        const countryResponse = await fetch(`${BASE_URL}/countries`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         });
-        if (langResponse.ok) {
-          const languages = await langResponse.json();
-          setAvailableLanguages(languages);
+        if (countryResponse.ok) {
+          const countryData = await countryResponse.json();
+          setCountries(Array.isArray(countryData) ? countryData : []);
         }
 
         // Kitapları çek
@@ -101,17 +102,19 @@ function AddArticle() {
 
   const handleTranslationChange = (idx, field, value) => {
     const newTranslations = form.translations.map((trans, i) => {
-      if (i === idx) {
-        const updatedTrans = { ...trans, [field]: value };
+      if (i !== idx) return trans;
+      const updatedTrans = { ...trans, [field]: value };
 
-        // Eğer başlık değişiyorsa, slug'ı otomatik oluştur
-        if (field === 'title' && value) {
-          updatedTrans.slug = createSlug(value);
-        }
-
-        return updatedTrans;
+      if (field === 'countryId') {
+        const country = countries.find(c => c.id === value);
+        updatedTrans.languageId = country?.primaryLanguage?.id || '';
       }
-      return trans;
+
+      if (field === 'title' && value) {
+        updatedTrans.slug = createSlug(value);
+      }
+
+      return updatedTrans;
     });
     setForm({ ...form, translations: newTranslations });
   };
@@ -129,7 +132,7 @@ function AddArticle() {
         ...form,
         translations: [
           ...form.translations,
-          { languageId: '', title: '', content: '', summary: '', slug: '', pdfFile: null }
+          { languageId: '', countryId: '', title: '', content: '', summary: '', slug: '', pdfFile: null }
         ]
       });
     }
@@ -230,10 +233,12 @@ function AddArticle() {
     [availableBooks, intl],
   );
 
-  const languageOptions = availableLanguages.map(lang => ({
-    value: lang.id,
-    label: getLocalizedLanguageName(lang, intl)
-  }));
+  const countryOptions = countries
+    .filter(c => c.primaryLanguage)
+    .map(c => ({
+      value: c.id,
+      label: getCountryOptionLabel(c, intl)
+    }));
 
   return (
     <>
@@ -411,11 +416,8 @@ function AddArticle() {
                         {idx + 1}
                       </div>
                       <h4 className="font-bold text-gray-900 dark:text-white">
-                        {trans.languageId
-                          ? getLocalizedLanguageName(
-                              availableLanguages.find(l => String(l.id) === String(trans.languageId)),
-                              intl,
-                            ) || intl.formatMessage({ id: 'UI.CEVIRI_NUMARALI' }, { n: idx + 1 })
+                        {trans.countryId
+                          ? (() => { const c = countries.find(ct => ct.id === trans.countryId); return c ? getCountryOptionLabel(c, intl) : intl.formatMessage({ id: 'UI.CEVIRI_NUMARALI' }, { n: idx + 1 }); })()
                           : intl.formatMessage({ id: 'UI.CEVIRI_NUMARALI' }, { n: idx + 1 })}
                       </h4>
                     </div>
@@ -432,25 +434,34 @@ function AddArticle() {
                   </div>
 
                   <div className="space-y-4">
-                    {/* Dil Seçimi */}
+                    {/* Ülke Seçimi */}
                     <div>
                       <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
-                        <FaGlobe className="text-green-600" />
-                        <FormattedMessage id="USER.MENU.LANGUAGE" />
+                        <FaFlag className="text-green-600" />
+                        <FormattedMessage id="UI.ULKE" />
                         <span className="text-red-500">*</span>
                       </label>
                       <Select
-                        options={languageOptions}
-                        value={languageOptions.find(opt => opt.value === trans.languageId)}
+                        options={countryOptions}
+                        value={countryOptions.find(opt => opt.value === trans.countryId) || null}
                         onChange={(option) =>
-                          handleTranslationChange(idx, 'languageId', option?.value || '')
+                          handleTranslationChange(idx, 'countryId', option?.value || '')
                         }
-                        placeholder={intl.formatMessage({ id: 'UI.DIL_SECIN_PLACEHOLDER' })}
+                        placeholder={intl.formatMessage({ id: 'UI.ULKE_SECIN_PLACEHOLDER' })}
                         className="react-select-container"
                         classNamePrefix="react-select"
                         styles={getSelectStyles(currentTheme)}
                         isClearable
                       />
+                      {trans.languageId && (
+                        <p className="mt-2 text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
+                          <FaGlobe />
+                          <span>
+                            <FormattedMessage id="UI.OTOMATIK_DIL" />:{' '}
+                            <strong>{getLocalizedLanguageName(countries.find(c => c.id === trans.countryId)?.primaryLanguage, intl)}</strong>
+                          </span>
+                        </p>
+                      )}
                     </div>
 
                     {/* Başlık */}

@@ -1,10 +1,12 @@
 import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
-import { getLocalizedLanguageName } from '@/utils/languageUtils';
+import { getCountryOptionLabel, getLocalizedLanguageName } from '@/utils/languageUtils';
 import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
-import { FaArrowLeft, FaSave, FaMicrophone, FaImage, FaMusic, FaUser, FaClock, FaGlobe, FaUpload, FaEye, FaStar, FaTrash, FaList } from 'react-icons/fa';
+import Select from 'react-select';
+import { getSelectStyles, getTheme } from '@/styles/select-styles';
+import { FaArrowLeft, FaSave, FaMicrophone, FaImage, FaMusic, FaUser, FaClock, FaGlobe, FaUpload, FaEye, FaStar, FaTrash, FaList, FaFlag } from 'react-icons/fa';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -12,15 +14,18 @@ export default function AddPodcast() {
   const intl = useIntl();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [languages, setLanguages] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [loadingCountries, setLoadingCountries] = useState(false);
   const [audioFile, setAudioFile] = useState(null);
   const [coverFile, setCoverFile] = useState(null);
   const [coverPreview, setCoverPreview] = useState('');
+  const [currentTheme, setCurrentTheme] = useState(getTheme());
   const [form, setForm] = useState({
     title: '',
     description: '',
     author: '',
-    language: 'tr',
+    language: '',
+    countryId: '',
     category: '',
     durationMinutes: '',
     durationSeconds: '',
@@ -30,13 +35,30 @@ export default function AddPodcast() {
   });
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    fetch(`${API_URL}/languages`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(r => r.json())
-      .then(data => setLanguages(Array.isArray(data) ? data : []))
-      .catch(() => setLanguages([]));
+    const observer = new MutationObserver(() => setCurrentTheme(getTheme()));
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const fetchCountries = async () => {
+      setLoadingCountries(true);
+      try {
+        const token = localStorage.getItem('access_token');
+        const response = await fetch(`${API_URL}/countries`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!response.ok) throw new Error();
+        const data = await response.json();
+        setCountries(Array.isArray(data) ? data : []);
+      } catch {
+        setCountries([]);
+        toast.error(intl.formatMessage({ id: 'UI.ULKELER_YUKLENIRKEN_HATA' }));
+      } finally {
+        setLoadingCountries(false);
+      }
+    };
+    fetchCountries();
   }, []);
 
   useEffect(() => {
@@ -56,6 +78,26 @@ export default function AddPodcast() {
       [name]: type === 'checkbox' ? checked : value
     }));
   };
+
+  const handleCountryChange = (option) => {
+    if (!option) {
+      setForm(prev => ({ ...prev, countryId: '', language: '' }));
+      return;
+    }
+    const country = countries.find(c => c.id === option.value);
+    setForm(prev => ({
+      ...prev,
+      countryId: option.value,
+      language: country?.primaryLanguage?.code || '',
+    }));
+  };
+
+  const countryOptions = countries
+    .filter(c => c.primaryLanguage)
+    .map(c => ({
+      value: c.id,
+      label: getCountryOptionLabel(c, intl)
+    }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -230,19 +272,27 @@ export default function AddPodcast() {
 
                 <div>
                   <label className="flex items-center gap-2 font-bold mb-3 text-base">
-                    <FaGlobe className="text-indigo-500" />
-                    <FormattedMessage id="USER.MENU.LANGUAGE" />
+                    <FaFlag className="text-indigo-500" />
+                    <FormattedMessage id="UI.ULKE" />
                   </label>
-                  <select
-                    name="language"
-                    value={form.language}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 h-11 border-2 border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all cursor-pointer"
-                  >
-                    {languages.map(lang => (
-                      <option key={lang.id} value={lang.code}>{getLocalizedLanguageName(lang, intl)}</option>
-                    ))}
-                  </select>
+                  <Select
+                    options={countryOptions}
+                    value={countryOptions.find(opt => opt.value === form.countryId) || null}
+                    onChange={handleCountryChange}
+                    isLoading={loadingCountries}
+                    placeholder={intl.formatMessage({ id: 'UI.ULKE_SECIN_PLACEHOLDER' })}
+                    styles={getSelectStyles(currentTheme)}
+                    isClearable
+                  />
+                  {form.language && (
+                    <p className="mt-2 text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
+                      <FaGlobe />
+                      <span>
+                        <FormattedMessage id="UI.OTOMATIK_DIL" />:{' '}
+                        <strong>{getLocalizedLanguageName(countries.find(c => c.id === form.countryId)?.primaryLanguage, intl)}</strong>
+                      </span>
+                    </p>
+                  )}
                 </div>
 
                 <div>
