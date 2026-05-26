@@ -91,7 +91,7 @@ services:
     container_name: islamic_windows_admin_front
     environment:
       NODE_ENV: development
-      VITE_API_URL: https://islamicwindows.com/api
+      VITE_API_URL: http://localhost:3000
       USE_PRODUCTION_HMR: "false"
       WATCHPACK_POLLING: "true"
       CHOKIDAR_USEPOLLING: "true"

@@ -1,12 +1,12 @@
 import { FormattedMessage, useIntl } from "react-intl";
-import { getLocalizedLanguageName } from '@/utils/languageUtils';
+import { getCountryOptionLabel, getLocalizedLanguageName } from '@/utils/languageUtils';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
 import Select from 'react-select';
 import { getSelectStyles, getTheme } from '@/styles/select-styles';
-import { FaBook, FaUser, FaTags, FaCalendar, FaGlobe, FaFilePdf, FaImage, FaArrowLeft, FaSave, FaPlus, FaTrash, FaInfoCircle } from 'react-icons/fa';
+import { FaBook, FaUser, FaTags, FaCalendar, FaGlobe, FaFilePdf, FaImage, FaArrowLeft, FaSave, FaPlus, FaTrash, FaInfoCircle, FaFlag } from 'react-icons/fa';
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/books';
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -18,7 +18,7 @@ function AddBook() {
     author: '',
     categories: [],
     publishDate: '',
-    translations: [{ language: '', title: '', description: '', summary: '', file: null }],
+    translations: [{ language: '', countryId: '', title: '', description: '', summary: '', file: null }],
     coverImage: '',
   });
   const [file, setFile] = useState(null);
@@ -26,8 +26,8 @@ function AddBook() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [categoryInput, setCategoryInput] = useState('');
-  const [availableLanguages, setAvailableLanguages] = useState([]);
-  const [loadingLanguages, setLoadingLanguages] = useState(false);
+  const [countries, setCountries] = useState([]);
+  const [loadingCountries, setLoadingCountries] = useState(false);
   const [currentTheme, setCurrentTheme] = useState(getTheme());
 
   useEffect(() => {
@@ -44,26 +44,26 @@ function AddBook() {
   }, []);
 
   useEffect(() => {
-    const fetchLanguages = async () => {
-      setLoadingLanguages(true);
+    const fetchCountries = async () => {
+      setLoadingCountries(true);
       try {
         const token = localStorage.getItem('access_token');
-        const response = await fetch(`${BASE_URL}/languages`, {
+        const response = await fetch(`${BASE_URL}/countries`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         });
-        if (!response.ok) throw new Error(intl.formatMessage({ id: 'UI.DILLER_YUKLENIRKEN_HATA' }));
+        if (!response.ok) throw new Error(intl.formatMessage({ id: 'UI.ULKELER_YUKLENIRKEN_HATA' }));
         const data = await response.json();
-        setAvailableLanguages(data);
+        setCountries(Array.isArray(data) ? data : []);
       } catch (error) {
-        toast.error(intl.formatMessage({ id: 'UI.DILLER_YUKLENIRKEN_HATA' }));
+        toast.error(intl.formatMessage({ id: 'UI.ULKELER_YUKLENIRKEN_HATA' }));
       } finally {
-        setLoadingLanguages(false);
+        setLoadingCountries(false);
       }
     };
-    fetchLanguages();
+    fetchCountries();
   }, []);
 
   useEffect(() => {
@@ -79,9 +79,15 @@ function AddBook() {
   };
 
   const handleTranslationChange = (idx, field, value) => {
-    const newTranslations = form.translations.map((t, i) =>
-      i === idx ? { ...t, [field]: value } : t
-    );
+    const newTranslations = form.translations.map((t, i) => {
+      if (i !== idx) return t;
+      const updated = { ...t, [field]: value };
+      if (field === 'countryId') {
+        const country = countries.find(c => c.id === value);
+        updated.language = country?.primaryLanguage?.id || '';
+      }
+      return updated;
+    });
     setForm({ ...form, translations: newTranslations });
   };
 
@@ -94,7 +100,7 @@ function AddBook() {
 
   const addTranslation = () => {
     if (form.translations.length < 10) {
-      setForm({ ...form, translations: [...form.translations, { language: '', title: '', description: '', summary: '', file: null }] });
+      setForm({ ...form, translations: [...form.translations, { language: '', countryId: '', title: '', description: '', summary: '', file: null }] });
     }
   };
 
@@ -376,8 +382,8 @@ function AddBook() {
                       {idx + 1}
                     </div>
                     <h4 className="font-bold text-gray-900 dark:text-white">
-                      {translation.language
-                        ? availableLanguages.find(l => l.id === translation.language)?.name || `${intl.formatMessage({ id: 'UI.CEVIRI' })} ${idx + 1}`
+                      {translation.countryId
+                        ? (() => { const c = countries.find(ct => ct.id === translation.countryId); return c ? getCountryOptionLabel(c, intl) : `${intl.formatMessage({ id: 'UI.CEVIRI' })} ${idx + 1}`; })()
                         : `${intl.formatMessage({ id: 'UI.CEVIRI' })} ${idx + 1}`}
                     </h4>
                   </div>
@@ -394,23 +400,39 @@ function AddBook() {
                 </div>
 
                 <div className="space-y-4">
-                  {/* Dil Seçimi */}
+                  {/* Ülke Seçimi */}
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
-                      <FaGlobe className="text-green-600" />
-                      <FormattedMessage id="USER.MENU.LANGUAGE" />
+                      <FaFlag className="text-green-600" />
+                      <FormattedMessage id="UI.ULKE" />
                       <span className="text-red-500">*</span>
                     </label>
                     <Select
-                      options={availableLanguages.map(l => ({ value: l.id, label: getLocalizedLanguageName(l, intl) }))}
-                      value={availableLanguages
-                        .filter(l => l.id === translation.language)
-                        .map(l => ({ value: l.id, label: getLocalizedLanguageName(l, intl) }))[0]}
-                      onChange={option => handleTranslationChange(idx, 'language', option.value)}
-                      isLoading={loadingLanguages}
-                      placeholder={intl.formatMessage({ id: 'UI.DIL_SECIN_PLACEHOLDER' })}
+                      options={countries.filter(c => c.primaryLanguage).map(c => ({
+                        value: c.id,
+                        label: getCountryOptionLabel(c, intl)
+                      }))}
+                      value={countries
+                        .filter(c => c.id === translation.countryId)
+                        .map(c => ({
+                          value: c.id,
+                          label: getCountryOptionLabel(c, intl)
+                        }))[0] || null}
+                      onChange={option => handleTranslationChange(idx, 'countryId', option?.value || '')}
+                      isLoading={loadingCountries}
+                      placeholder={intl.formatMessage({ id: 'UI.ULKE_SECIN_PLACEHOLDER' })}
                       styles={getSelectStyles(currentTheme)}
+                      isClearable
                     />
+                    {translation.language && (
+                      <p className="mt-2 text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
+                        <FaGlobe />
+                        <span>
+                          <FormattedMessage id="UI.OTOMATIK_DIL" />:{' '}
+                          <strong>{getLocalizedLanguageName(countries.find(c => c.id === translation.countryId)?.primaryLanguage, intl)}</strong>
+                        </span>
+                      </p>
+                    )}
                   </div>
 
                   {/* Başlık */}
