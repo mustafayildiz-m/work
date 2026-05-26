@@ -24,7 +24,12 @@
       "tooltipNoLanguage": "{country} — لم يُعيَّن لغة بعد",
       "noLanguageShort": "—",
       "flagAlt": "علم {country}",
-      "totalCountries": "{count} دولة"
+      "totalCountries": "{count} دولة",
+      "searchPlaceholder": "البحث عن الدول...",
+      "noResults": "لم يتم العثور على دول",
+      "noResultsDesc": "جرّب مصطلح بحث مختلف",
+      "showingFiltered": "{filtered} من {total} دولة",
+      "clearSearch": "مسح البحث"
     }
   },
   "tabTitle": {

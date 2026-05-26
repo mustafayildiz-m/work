@@ -24,7 +24,12 @@
       "tooltipNoLanguage": "{country} — все още няма зададен език",
       "noLanguageShort": "—",
       "flagAlt": "Флаг на {country}",
-      "totalCountries": "{count} държави"
+      "totalCountries": "{count} държави",
+      "searchPlaceholder": "Търсене на държави...",
+      "noResults": "Няма намерени държави",
+      "noResultsDesc": "Опитайте друго търсене",
+      "showingFiltered": "{filtered} от {total} държави",
+      "clearSearch": "Изчистване на търсенето"
     }
   },
   "tabTitle": {

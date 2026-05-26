@@ -24,7 +24,12 @@
       "tooltipNoLanguage": "{country} — мову ще не призначено",
       "noLanguageShort": "—",
       "flagAlt": "Прапор {country}",
-      "totalCountries": "{count} країн"
+      "totalCountries": "{count} країн",
+      "searchPlaceholder": "Пошук країн...",
+      "noResults": "Країни не знайдено",
+      "noResultsDesc": "Спробуйте інший пошуковий запит",
+      "showingFiltered": "{filtered} з {total} країн",
+      "clearSearch": "Очистити пошук"
     }
   },
   "tabTitle": {

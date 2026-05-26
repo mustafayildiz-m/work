@@ -25,7 +25,12 @@
       "tooltipNoLanguage": "{country} — լեզու դեռ չի նշված",
       "noLanguageShort": "—",
       "flagAlt": "{country} դրոշ",
-      "totalCountries": "{count} երկիր"
+      "totalCountries": "{count} երկիր",
+      "searchPlaceholder": "Search countries...",
+      "noResults": "No countries found",
+      "noResultsDesc": "Try a different search term",
+      "showingFiltered": "Showing {filtered} of {total} countries",
+      "clearSearch": "Clear search"
     }
   },
   "tabTitle": {

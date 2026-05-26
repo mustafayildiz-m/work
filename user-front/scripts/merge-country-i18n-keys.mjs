@@ -723,6 +723,31 @@ function ensureCountrySelectorTotalCountries(data, code) {
   cs.totalCountries = COMMON_TOTAL_COUNTRIES[code] ?? '{count} countries';
 }
 
+const SEARCH_I18N = {
+  de: { searchPlaceholder: 'Länder suchen...', noResults: 'Keine Länder gefunden', noResultsDesc: 'Versuchen Sie einen anderen Suchbegriff', showingFiltered: '{filtered} von {total} Ländern', clearSearch: 'Suche löschen' },
+  fr: { searchPlaceholder: 'Rechercher des pays...', noResults: 'Aucun pays trouvé', noResultsDesc: 'Essayez un autre terme de recherche', showingFiltered: '{filtered} sur {total} pays', clearSearch: 'Effacer la recherche' },
+  es: { searchPlaceholder: 'Buscar países...', noResults: 'No se encontraron países', noResultsDesc: 'Intente con otro término de búsqueda', showingFiltered: '{filtered} de {total} países', clearSearch: 'Borrar búsqueda' },
+  it: { searchPlaceholder: 'Cerca paesi...', noResults: 'Nessun paese trovato', noResultsDesc: 'Prova un termine di ricerca diverso', showingFiltered: '{filtered} di {total} paesi', clearSearch: 'Cancella ricerca' },
+  pt: { searchPlaceholder: 'Pesquisar países...', noResults: 'Nenhum país encontrado', noResultsDesc: 'Tente um termo de pesquisa diferente', showingFiltered: '{filtered} de {total} países', clearSearch: 'Limpar pesquisa' },
+  ar: { searchPlaceholder: 'البحث عن الدول...', noResults: 'لم يتم العثور على دول', noResultsDesc: 'جرّب مصطلح بحث مختلف', showingFiltered: '{filtered} من {total} دولة', clearSearch: 'مسح البحث' },
+  ru: { searchPlaceholder: 'Поиск стран...', noResults: 'Страны не найдены', noResultsDesc: 'Попробуйте другой поисковый запрос', showingFiltered: '{filtered} из {total} стран', clearSearch: 'Очистить поиск' },
+  uk: { searchPlaceholder: 'Пошук країн...', noResults: 'Країни не знайдено', noResultsDesc: 'Спробуйте інший пошуковий запит', showingFiltered: '{filtered} з {total} країн', clearSearch: 'Очистити пошук' },
+  pl: { searchPlaceholder: 'Szukaj krajów...', noResults: 'Nie znaleziono krajów', noResultsDesc: 'Spróbuj innego wyszukiwania', showingFiltered: '{filtered} z {total} krajów', clearSearch: 'Wyczyść wyszukiwanie' },
+  ja: { searchPlaceholder: '国を検索...', noResults: '国が見つかりません', noResultsDesc: '別の検索語をお試しください', showingFiltered: '{total}か国中{filtered}か国', clearSearch: '検索をクリア' },
+  ko: { searchPlaceholder: '국가 검색...', noResults: '국가를 찾을 수 없습니다', noResultsDesc: '다른 검색어를 시도해 보세요', showingFiltered: '{total}개국 중 {filtered}개국', clearSearch: '검색 지우기' },
+  zh: { searchPlaceholder: '搜索国家...', noResults: '未找到国家', noResultsDesc: '请尝试其他搜索词', showingFiltered: '共 {total} 个国家，显示 {filtered} 个', clearSearch: '清除搜索' },
+  hi: { searchPlaceholder: 'देश खोजें...', noResults: 'कोई देश नहीं मिला', noResultsDesc: 'कोई अलग खोज शब्द आज़माएं', showingFiltered: '{total} में से {filtered} देश', clearSearch: 'खोज साफ़ करें' },
+  ku: { searchPlaceholder: 'Welatan bigere...', noResults: 'Welat nehate dîtin', noResultsDesc: 'Peyveke din a lêgerînê biceribîne', showingFiltered: 'Ji {total} welatan {filtered}', clearSearch: 'Lêgerînê paqij bike' },
+  cs: { searchPlaceholder: 'Hledat země...', noResults: 'Žádné země nenalezeny', noResultsDesc: 'Zkuste jiný hledaný výraz', showingFiltered: '{filtered} z {total} zemí', clearSearch: 'Vymazat hledání' },
+  sk: { searchPlaceholder: 'Hľadať krajiny...', noResults: 'Žiadne krajiny nenájdené', noResultsDesc: 'Skúste iný hľadaný výraz', showingFiltered: '{filtered} z {total} krajín', clearSearch: 'Vymazať hľadanie' },
+  sl: { searchPlaceholder: 'Iskanje držav...', noResults: 'Nobena država ni bila najdena', noResultsDesc: 'Poskusite z drugim iskalnim izrazom', showingFiltered: '{filtered} od {total} držav', clearSearch: 'Počisti iskanje' },
+  hu: { searchPlaceholder: 'Országok keresése...', noResults: 'Nem található ország', noResultsDesc: 'Próbáljon meg másik keresési kifejezést', showingFiltered: '{filtered} / {total} ország', clearSearch: 'Keresés törlése' },
+  bg: { searchPlaceholder: 'Търсене на държави...', noResults: 'Няма намерени държави', noResultsDesc: 'Опитайте друго търсене', showingFiltered: '{filtered} от {total} държави', clearSearch: 'Изчистване на търсенето' },
+  sr: { searchPlaceholder: 'Претражи државе...', noResults: 'Нису пронађене државе', noResultsDesc: 'Покушајте с другим појмом за претрагу', showingFiltered: '{filtered} од {total} држава', clearSearch: 'Обриши претрагу' },
+  mk: { searchPlaceholder: 'Пребарувај држави...', noResults: 'Не се пронајдени држави', noResultsDesc: 'Обидете се со друг термин за пребарување', showingFiltered: '{filtered} од {total} држави', clearSearch: 'Избриши пребарување' },
+  hy: { searchPlaceholder: 'Search countries...', noResults: 'No countries found', noResultsDesc: 'Try a different search term', showingFiltered: 'Showing {filtered} of {total} countries', clearSearch: 'Clear search' },
+};
+
 const EN_FALLBACK = {
   common: {
     countrySelector: {
@@ -730,6 +755,11 @@ const EN_FALLBACK = {
       noLanguageShort: '—',
       flagAlt: '{country} flag',
       totalCountries: '{count} countries',
+      searchPlaceholder: 'Search countries...',
+      noResults: 'No countries found',
+      noResultsDesc: 'Try a different search term',
+      showingFiltered: 'Showing {filtered} of {total} countries',
+      clearSearch: 'Clear search',
     },
   },
   books: { untitledBook: 'Untitled book' },
@@ -788,6 +818,19 @@ for (const file of files) {
   const before = JSON.stringify(data);
   mergeMissing(data, patch);
   ensureCountrySelectorTotalCountries(data, code);
+
+  // Merge search-related keys
+  const searchKeys = SEARCH_I18N[code] || {
+    searchPlaceholder: 'Search countries...',
+    noResults: 'No countries found',
+    noResultsDesc: 'Try a different search term',
+    showingFiltered: 'Showing {filtered} of {total} countries',
+    clearSearch: 'Clear search',
+  };
+  if (data.common?.countrySelector) {
+    mergeMissing(data.common.countrySelector, searchKeys);
+  }
+
   if (JSON.stringify(data) !== before) {
     fs.writeFileSync(full, JSON.stringify(data, null, 2) + '\n', 'utf8');
     updated++;

@@ -25,7 +25,12 @@
       "tooltipNoLanguage": "{country} — ఇంకా భాష కేటాయించబడలేదు",
       "noLanguageShort": "—",
       "flagAlt": "{country} జండా",
-      "totalCountries": "{count} దేశాలు"
+      "totalCountries": "{count} దేశాలు",
+      "searchPlaceholder": "Search countries...",
+      "noResults": "No countries found",
+      "noResultsDesc": "Try a different search term",
+      "showingFiltered": "Showing {filtered} of {total} countries",
+      "clearSearch": "Clear search"
     }
   },
   "tabTitle": {

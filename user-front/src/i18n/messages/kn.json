@@ -25,7 +25,12 @@
       "tooltipNoLanguage": "{country} — ಇನ್ನೂ ಭಾಷೆಯನ್ನು ನಿಯೋಜಿಸಲಾಗಿಲ್ಲ",
       "noLanguageShort": "—",
       "flagAlt": "{country} ಧ್ವಜ",
-      "totalCountries": "{count} ರಾಷ್ಟ್ರಗಳು"
+      "totalCountries": "{count} ರಾಷ್ಟ್ರಗಳು",
+      "searchPlaceholder": "Search countries...",
+      "noResults": "No countries found",
+      "noResultsDesc": "Try a different search term",
+      "showingFiltered": "Showing {filtered} of {total} countries",
+      "clearSearch": "Clear search"
     }
   },
   "tabTitle": {

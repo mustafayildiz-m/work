@@ -24,7 +24,12 @@
       "tooltipNoLanguage": "{country} — jezik še ni dodeljen",
       "noLanguageShort": "—",
       "flagAlt": "Zastava {country}",
-      "totalCountries": "{count} držav"
+      "totalCountries": "{count} držav",
+      "searchPlaceholder": "Iskanje držav...",
+      "noResults": "Nobena država ni bila najdena",
+      "noResultsDesc": "Poskusite z drugim iskalnim izrazom",
+      "showingFiltered": "{filtered} od {total} držav",
+      "clearSearch": "Počisti iskanje"
     }
   },
   "tabTitle": {

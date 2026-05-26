@@ -24,7 +24,12 @@
       "tooltipNoLanguage": "{country} — 尚未分配语言",
       "noLanguageShort": "—",
       "flagAlt": "{country}国旗",
-      "totalCountries": "{count} 个国家"
+      "totalCountries": "{count} 个国家",
+      "searchPlaceholder": "搜索国家...",
+      "noResults": "未找到国家",
+      "noResultsDesc": "请尝试其他搜索词",
+      "showingFiltered": "共 {total} 个国家，显示 {filtered} 个",
+      "clearSearch": "清除搜索"
     }
   },
   "tabTitle": {

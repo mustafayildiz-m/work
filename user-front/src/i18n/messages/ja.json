@@ -24,7 +24,12 @@
       "tooltipNoLanguage": "{country} — 言語がまだ設定されていません",
       "noLanguageShort": "—",
       "flagAlt": "{country}の国旗",
-      "totalCountries": "{count} か国"
+      "totalCountries": "{count} か国",
+      "searchPlaceholder": "国を検索...",
+      "noResults": "国が見つかりません",
+      "noResultsDesc": "別の検索語をお試しください",
+      "showingFiltered": "{total}か国中{filtered}か国",
+      "clearSearch": "検索をクリア"
     }
   },
   "tabTitle": {

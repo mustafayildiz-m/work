@@ -25,7 +25,12 @@
       "tooltipNoLanguage": "{country} — હજુ સુધી ભાષા સોંપાઈ નથી",
       "noLanguageShort": "—",
       "flagAlt": "{country} નો ધ્વજ",
-      "totalCountries": "{count} દેશો"
+      "totalCountries": "{count} દેશો",
+      "searchPlaceholder": "Search countries...",
+      "noResults": "No countries found",
+      "noResultsDesc": "Try a different search term",
+      "showingFiltered": "Showing {filtered} of {total} countries",
+      "clearSearch": "Clear search"
     }
   },
   "tabTitle": {

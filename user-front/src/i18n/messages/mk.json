@@ -24,7 +24,12 @@
       "tooltipNoLanguage": "{country} — сè уште нема доделен јазик",
       "noLanguageShort": "—",
       "flagAlt": "Знаме на {country}",
-      "totalCountries": "{count} држави"
+      "totalCountries": "{count} држави",
+      "searchPlaceholder": "Пребарувај држави...",
+      "noResults": "Не се пронајдени држави",
+      "noResultsDesc": "Обидете се со друг термин за пребарување",
+      "showingFiltered": "{filtered} од {total} држави",
+      "clearSearch": "Избриши пребарување"
     }
   },
   "tabTitle": {

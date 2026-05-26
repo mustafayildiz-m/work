@@ -24,7 +24,12 @@
       "tooltipNoLanguage": "{country} — nessuna lingua assegnata",
       "noLanguageShort": "—",
       "flagAlt": "Bandiera {country}",
-      "totalCountries": "{count} paesi"
+      "totalCountries": "{count} paesi",
+      "searchPlaceholder": "Cerca paesi...",
+      "noResults": "Nessun paese trovato",
+      "noResultsDesc": "Prova un termine di ricerca diverso",
+      "showingFiltered": "{filtered} di {total} paesi",
+      "clearSearch": "Cancella ricerca"
     }
   },
   "tabTitle": {
