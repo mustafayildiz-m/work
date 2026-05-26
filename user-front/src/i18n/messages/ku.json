@@ -24,7 +24,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — hîna ziman ne hatiye girêdan",
       "noLanguageShort": "—",
-      "flagAlt": "Alaya {country}"
+      "flagAlt": "Alaya {country}",
+      "totalCountries": "{count} welat"
     }
   },
   "tabTitle": {

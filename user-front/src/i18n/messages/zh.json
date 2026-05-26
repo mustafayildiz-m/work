@@ -23,7 +23,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — 尚未分配语言",
       "noLanguageShort": "—",
-      "flagAlt": "{country}国旗"
+      "flagAlt": "{country}国旗",
+      "totalCountries": "{count} 个国家"
     }
   },
   "tabTitle": {

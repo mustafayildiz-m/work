@@ -23,7 +23,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — jezik še ni dodeljen",
       "noLanguageShort": "—",
-      "flagAlt": "Zastava {country}"
+      "flagAlt": "Zastava {country}",
+      "totalCountries": "{count} držav"
     }
   },
   "tabTitle": {

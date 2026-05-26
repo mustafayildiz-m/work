@@ -23,7 +23,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — 아직 언어가 지정되지 않았습니다",
       "noLanguageShort": "—",
-      "flagAlt": "{country} 국기"
+      "flagAlt": "{country} 국기",
+      "totalCountries": "{count}개 국가"
     }
   },
   "tabTitle": {

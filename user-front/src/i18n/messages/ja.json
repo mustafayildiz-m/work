@@ -23,7 +23,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — 言語がまだ設定されていません",
       "noLanguageShort": "—",
-      "flagAlt": "{country}の国旗"
+      "flagAlt": "{country}の国旗",
+      "totalCountries": "{count} か国"
     }
   },
   "tabTitle": {

@@ -23,7 +23,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — язык пока не назначен",
       "noLanguageShort": "—",
-      "flagAlt": "Флаг {country}"
+      "flagAlt": "Флаг {country}",
+      "totalCountries": "{count} стран"
     }
   },
   "tabTitle": {

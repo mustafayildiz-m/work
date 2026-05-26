@@ -23,7 +23,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — сè уште нема доделен јазик",
       "noLanguageShort": "—",
-      "flagAlt": "Знаме на {country}"
+      "flagAlt": "Знаме на {country}",
+      "totalCountries": "{count} држави"
     }
   },
   "tabTitle": {

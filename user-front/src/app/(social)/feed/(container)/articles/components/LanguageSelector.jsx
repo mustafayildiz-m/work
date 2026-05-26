@@ -111,13 +111,26 @@ const LanguageSelector = () => {
       <CardHeader className="bg-gradient text-white border-0 py-2 py-md-3" style={{
         background: 'linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)'
       }}>
-        <CardTitle className="mb-0 d-flex align-items-center" style={{ fontSize: 'clamp(1rem, 4vw, 1.25rem)' }}>
-          <BsFileText className="me-2" size={24} />
-          {t('articles.languageSelector.title')}
-        </CardTitle>
-        <p className="mb-0 mt-1 mt-md-2 opacity-90 small" style={{ fontSize: '0.8rem' }}>
-          {t('articles.languageSelector.subtitle')}
-        </p>
+        <div className="d-flex justify-content-between align-items-start gap-2">
+          <div className="min-w-0 flex-grow-1">
+            <CardTitle className="mb-0 d-flex align-items-center" style={{ fontSize: 'clamp(1rem, 4vw, 1.25rem)' }}>
+              <BsFileText className="me-2" size={24} />
+              {t('articles.languageSelector.title')}
+            </CardTitle>
+            <p className="mb-0 mt-1 mt-md-2 opacity-90 small" style={{ fontSize: '0.8rem' }}>
+              {t('articles.languageSelector.subtitle')}
+            </p>
+          </div>
+          <Badge
+            pill
+            bg="light"
+            text="dark"
+            className="align-self-center flex-shrink-0 opacity-90"
+            style={{ fontSize: '0.75rem' }}
+          >
+            {t('common.countrySelector.totalCountries', { count: countries.length })}
+          </Badge>
+        </div>
       </CardHeader>
       <CardBody className="p-2 p-sm-3 p-md-4">
         <Row className="g-2 g-sm-3">

@@ -682,12 +682,54 @@ const BY_LOCALE = {
   },
 };
 
+/** Shown in books / articles / podcasts country grid header (total API countries). */
+const COMMON_TOTAL_COUNTRIES = {
+  de: '{count} Länder',
+  fr: '{count} pays',
+  es: '{count} países',
+  it: '{count} paesi',
+  pt: '{count} países',
+  ar: '{count} دولة',
+  ru: '{count} стран',
+  uk: '{count} країн',
+  pl: '{count} krajów',
+  cs: '{count} zemí',
+  sk: '{count} krajín',
+  sl: '{count} držav',
+  hu: '{count} ország',
+  ro: '{count} țări',
+  bg: '{count} държави',
+  sr: '{count} država',
+  mk: '{count} држави',
+  hy: '{count} երկիր',
+  ku: '{count} welat',
+  zh: '{count} 个国家',
+  ja: '{count} か国',
+  ko: '{count}개 국가',
+  hi: '{count} देश',
+  te: '{count} దేశాలు',
+  kn: '{count} ರಾಷ್ಟ್ರಗಳು',
+  ml: '{count} രാജ്യങ്ങൾ',
+  mr: '{count} दেশ',
+  gu: '{count} દેશો',
+  or: '{count} ଦେଶ',
+};
+
+function ensureCountrySelectorTotalCountries(data, code) {
+  const cs = data.common?.countrySelector;
+  if (!cs || typeof cs !== 'object') return;
+  const current = cs.totalCountries;
+  if (current != null && String(current).trim() !== '') return;
+  cs.totalCountries = COMMON_TOTAL_COUNTRIES[code] ?? '{count} countries';
+}
+
 const EN_FALLBACK = {
   common: {
     countrySelector: {
       tooltipNoLanguage: '{country} — no language assigned yet',
       noLanguageShort: '—',
       flagAlt: '{country} flag',
+      totalCountries: '{count} countries',
     },
   },
   books: { untitledBook: 'Untitled book' },
@@ -745,6 +787,7 @@ for (const file of files) {
 
   const before = JSON.stringify(data);
   mergeMissing(data, patch);
+  ensureCountrySelectorTotalCountries(data, code);
   if (JSON.stringify(data) !== before) {
     fs.writeFileSync(full, JSON.stringify(data, null, 2) + '\n', 'utf8');
     updated++;

@@ -24,7 +24,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — dil eşleşmesi yok",
       "noLanguageShort": "—",
-      "flagAlt": "{country} bayrağı"
+      "flagAlt": "{country} bayrağı",
+      "totalCountries": "{count} ülke"
     }
   },
   "tabTitle": {

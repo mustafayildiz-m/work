@@ -24,7 +24,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — अद्याप भाषा नियुक्त केलेली नाही",
       "noLanguageShort": "—",
-      "flagAlt": "{country} ध्वज"
+      "flagAlt": "{country} ध्वज",
+      "totalCountries": "{count} दেশ"
     }
   },
   "tabTitle": {

@@ -23,7 +23,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — jeszcze nie przypisano języka",
       "noLanguageShort": "—",
-      "flagAlt": "Flaga {country}"
+      "flagAlt": "Flaga {country}",
+      "totalCountries": "{count} krajów"
     }
   },
   "tabTitle": {

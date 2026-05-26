@@ -23,7 +23,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — még nincs nyelv hozzárendelve",
       "noLanguageShort": "—",
-      "flagAlt": "{country} zászlaja"
+      "flagAlt": "{country} zászlaja",
+      "totalCountries": "{count} ország"
     }
   },
   "tabTitle": {

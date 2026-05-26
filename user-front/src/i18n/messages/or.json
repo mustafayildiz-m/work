@@ -24,7 +24,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — ଏ ପର୍ଯ୍ୟନ୍ତ ଭାଷା ନିର୍ଦ୍ଧିଷ୍ଟ ହୋଇନାହିଁ",
       "noLanguageShort": "—",
-      "flagAlt": "{country}ର ପତାକା"
+      "flagAlt": "{country}ର ପତାକା",
+      "totalCountries": "{count} ଦେଶ"
     }
   },
   "tabTitle": {

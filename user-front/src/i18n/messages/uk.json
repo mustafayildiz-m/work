@@ -23,7 +23,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — мову ще не призначено",
       "noLanguageShort": "—",
-      "flagAlt": "Прапор {country}"
+      "flagAlt": "Прапор {country}",
+      "totalCountries": "{count} країн"
     }
   },
   "tabTitle": {
