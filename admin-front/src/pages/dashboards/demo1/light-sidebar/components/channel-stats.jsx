@@ -15,6 +15,7 @@ const ChannelStats = () => {
     books: 0,
     posts: 0,
     languages: 0,
+    countries: 0,
   });
 
   useEffect(() => {
@@ -72,15 +73,23 @@ const ChannelStats = () => {
       trendText: intl.formatMessage({ id: 'UI.SON_AY' })
     },
     {
-      logo: 'language.svg',
-      info: stats.languages,
-      desc: intl.formatMessage({ id: 'UI.CEVIRI_DILLERI' }),
-      progress: true,
-      total: 200,
-      percentage: (stats.languages / 200) * 100,
+      logo: 'country.svg',
+      info: stats.countries,
+      desc: intl.formatMessage({ id: 'UI.KAYITLI_ULKELER' }),
       color: 'from-amber-500 to-amber-600',
       bgColor: 'bg-amber-50 dark:bg-amber-950',
       iconBg: 'bg-amber-100 dark:bg-amber-900',
+      trend: 'up',
+      trendValue: '+5%',
+      trendText: intl.formatMessage({ id: 'UI.SON_AY' })
+    },
+    {
+      logo: 'language.svg',
+      info: stats.languages,
+      desc: intl.formatMessage({ id: 'UI.CEVIRI_DILLERI' }),
+      color: 'from-rose-500 to-rose-600',
+      bgColor: 'bg-rose-50 dark:bg-rose-950',
+      iconBg: 'bg-rose-100 dark:bg-rose-900',
       trend: 'up',
       trendValue: '+5%',
       trendText: intl.formatMessage({ id: 'UI.SON_AY' })
@@ -170,7 +179,7 @@ const ChannelStats = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
       {items.map((item, index) => renderItem(item, index))}
     </div>
   );

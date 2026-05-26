@@ -12,6 +12,7 @@ import { Article } from './articles/entities/article.entity';
 import { ScholarStory } from './entities/scholar-story.entity';
 import { Podcast } from './entities/podcast.entity';
 import { IslamicNews } from './entities/islamic-news.entity';
+import { Country } from './countries/entities/country.entity';
 
 @Controller()
 export class AppController {
@@ -34,6 +35,8 @@ export class AppController {
     private readonly podcastRepository: Repository<Podcast>,
     @InjectRepository(IslamicNews)
     private readonly islamicNewsRepository: Repository<IslamicNews>,
+    @InjectRepository(Country)
+    private readonly countryRepository: Repository<Country>,
   ) {}
 
   @Get('statistics/counts')
@@ -43,7 +46,8 @@ export class AppController {
     const books = await this.bookRepository.count();
     const posts = await this.scholarPostRepository.count();
     const languages = await this.languageRepository.count();
-    return { scholars, books, posts, languages };
+    const countries = await this.countryRepository.count();
+    return { scholars, books, posts, languages, countries };
   }
 
   @Get('statistics/monthly')
