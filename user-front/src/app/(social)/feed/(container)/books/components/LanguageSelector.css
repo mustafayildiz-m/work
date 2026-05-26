@@ -78,18 +78,18 @@
   line-height: 1.3;
 }
 .cs-header__badge {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
+  padding: 6px 14px;
+  border-radius: 20px;
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-weight: 800;
-  font-size: 1rem;
+  font-weight: 600;
+  font-size: 0.78rem;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 /* Search */
@@ -256,7 +256,7 @@
 /* Flag */
 .cs-country__flag {
   width: 100%;
-  height: 52px;
+  aspect-ratio: 3 / 2;
   overflow: hidden;
   position: relative;
   background: #f3f4f6;
@@ -264,12 +264,14 @@
 .cs-country__flag img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
   transition: transform 0.3s ease;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 .cs-country:hover:not(.cs-country--disabled) .cs-country__flag img {
-  transform: scale(1.08);
+  transform: scale(1.05);
 }
 .cs-country__flag-emoji {
   display: flex;
@@ -585,7 +587,7 @@
     border-radius: 10px;
   }
   .cs-country__flag {
-    height: 40px;
+    aspect-ratio: 3 / 2;
   }
   .cs-country__info {
     padding: 5px 5px 1px;
@@ -625,7 +627,7 @@
     max-height: 380px;
   }
   .cs-country__flag {
-    height: 34px;
+    aspect-ratio: 3 / 2;
   }
   .cs-country__name {
     font-size: 0.62rem;
