@@ -20,7 +20,12 @@
     "monthsAgo": "{count} ತಿಂಗಳ ಹಿಂದೆ",
     "yearsAgo": "{count} ವರ್ಷಗಳ ಹಿಂದೆ",
     "required": "ಅಗತ್ಯವಿದೆ",
-    "or": "ಅಥವಾ"
+    "or": "ಅಥವಾ",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — ಇನ್ನೂ ಭಾಷೆಯನ್ನು ನಿಯೋಜಿಸಲಾಗಿಲ್ಲ",
+      "noLanguageShort": "—",
+      "flagAlt": "{country} ಧ್ವಜ"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 ಹೊಸ ಸಂದೇಶ",
@@ -701,6 +706,11 @@
       "gridView": "ಗ್ರಿಡ್ ವೀಕ್ಷಣೆ",
       "listView": "ಪಟ್ಟಿ ವೀಕ್ಷಣೆ",
       "playNow": "ಈಗ ಪ್ಲೇ ಮಾಡಿ"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} ಪಾಡ್ಕಾಸ್ಟ್‌ಗಳು",
+      "buttonLabel": "{language} — ಪಾಡ್ಕಾಸ್ಟ್‌ಗಳನ್ನು ಕೇಳಿ",
+      "availableLine": "{count} ಪಾಡ್ಕಾಸ್ಟ್‌ಗಳು ಲಭ್ಯವಿದೆ"
     }
   },
   "articles": {
@@ -758,7 +768,11 @@
     },
     "share": "ಹಂಚಿಕೊಳ್ಳಿ",
     "shareOnWhatsApp": "WhatsApp ನಲ್ಲಿ ಹಂಚಿಕೊಳ್ಳಿ",
-    "shareToFeed": "ಫೀಡ್‌ಗೆ ಹಂಚಿಕೊಳ್ಳಿ"
+    "shareToFeed": "ಫೀಡ್‌ಗೆ ಹಂಚಿಕೊಳ್ಳಿ",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} ಲೇಖನಗಳು",
+      "buttonLabel": "{language} — ಲೇಖನಗಳನ್ನು ನೋಡಿ"
+    }
   },
   "books": {
     "languageSelector": {
@@ -948,7 +962,8 @@
     "sharedToFeed": "ಸುದ್ದಿ ಫೀಡ್‌ನಲ್ಲಿ ಪುಸ್ತಕವನ್ನು ಹಂಚಿಕೊಳ್ಳಲಾಗಿದೆ",
     "sharedToFeedDesc": "ಸುದ್ದಿ ಫೀಡ್‌ನಲ್ಲಿ ಪುಸ್ತಕವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಹಂಚಿಕೊಳ್ಳಲಾಗಿದೆ",
     "shareError": "ಹಂಚಿಕೆ ದೋಷ",
-    "shareErrorDesc": "ಪುಸ್ತಕವನ್ನು ಹಂಚಿಕೊಳ್ಳುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ"
+    "shareErrorDesc": "ಪುಸ್ತಕವನ್ನು ಹಂಚಿಕೊಳ್ಳುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ",
+    "untitledBook": "ಶೀರ್ಷಿಕೆ ರಹಿತ ಪುಸ್ತಕ"
   },
   "scholarProfile": {
     "biography": "ಜೀವನಚರಿತ್ರೆ",

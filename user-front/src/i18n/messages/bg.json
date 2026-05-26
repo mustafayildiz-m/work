@@ -19,7 +19,12 @@
     "monthsAgo": "преди {count} месеца",
     "yearsAgo": "преди {count} години",
     "required": "Изисква се",
-    "or": "или"
+    "or": "или",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — все още няма зададен език",
+      "noLanguageShort": "—",
+      "flagAlt": "Флаг на {country}"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 ново съобщение",
@@ -617,6 +622,11 @@
       "gridView": "Преглед на мрежата",
       "listView": "Преглед на списъка",
       "playNow": "Играйте сега"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} подкаста",
+      "buttonLabel": "{language} — слушай подкасти",
+      "availableLine": "Налични подкасти: {count}"
     }
   },
   "articles": {
@@ -674,7 +684,11 @@
     },
     "share": "Споделете",
     "shareOnWhatsApp": "Споделяне на WhatsApp",
-    "shareToFeed": "Споделяне за хранене"
+    "shareToFeed": "Споделяне за хранене",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} статии",
+      "buttonLabel": "{language} — виж статии"
+    }
   },
   "books": {
     "languageSelector": {
@@ -864,7 +878,8 @@
     "sharedToFeed": "Споделена книга в новинарския поток",
     "sharedToFeedDesc": "Книгата е успешно споделена в новинарския поток",
     "shareError": "Споделяне на грешка",
-    "shareErrorDesc": "Възникна грешка при споделянето на книгата"
+    "shareErrorDesc": "Възникна грешка при споделянето на книгата",
+    "untitledBook": "Книга без заглавие"
   },
   "scholarProfile": {
     "biography": "Biography",

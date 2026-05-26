@@ -19,7 +19,12 @@
     "monthsAgo": "{count} luni în urmă",
     "yearsAgo": "{count} ani în urmă",
     "required": "Necesar",
-    "or": "sau"
+    "or": "sau",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — încă nu este atribuită o limbă",
+      "noLanguageShort": "—",
+      "flagAlt": "Steagul {country}"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 mesaj nou",
@@ -617,6 +622,11 @@
       "gridView": "Vizualizare grilă",
       "listView": "Vizualizare listă",
       "playNow": "Joacă acum"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} podcasturi",
+      "buttonLabel": "{language} — ascultă podcasturi",
+      "availableLine": "{count} podcasturi disponibile"
     }
   },
   "articles": {
@@ -674,7 +684,11 @@
     },
     "share": "Share",
     "shareOnWhatsApp": "Distribuie pe WhatsApp",
-    "shareToFeed": "Share to Feed"
+    "shareToFeed": "Share to Feed",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} articole",
+      "buttonLabel": "{language} — vezi articolele"
+    }
   },
   "books": {
     "languageSelector": {
@@ -864,7 +878,8 @@
     "sharedToFeed": "Carte partajată pe fluxul de știri",
     "sharedToFeedDesc": "Carte partajată cu succes pe fluxul de știri",
     "shareError": "Partajați eroarea",
-    "shareErrorDesc": "A apărut o eroare în timpul partajării cărții"
+    "shareErrorDesc": "A apărut o eroare în timpul partajării cărții",
+    "untitledBook": "Carte fără titlu"
   },
   "scholarProfile": {
     "biography": "Biography",

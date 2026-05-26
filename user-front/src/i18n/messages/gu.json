@@ -20,7 +20,12 @@
     "monthsAgo": "{count} મહિના પહેલા",
     "yearsAgo": "{count} વર્ષ પહેલાં",
     "required": "જરૂરી છે",
-    "or": "અથવા"
+    "or": "અથવા",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — હજુ સુધી ભાષા સોંપાઈ નથી",
+      "noLanguageShort": "—",
+      "flagAlt": "{country} નો ધ્વજ"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 નવો સંદેશ",
@@ -701,6 +706,11 @@
       "gridView": "ગ્રીડ વ્યૂ",
       "listView": "સૂચિ દૃશ્ય",
       "playNow": "હમણાં રમો"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} પોડકાસ્ટ",
+      "buttonLabel": "{language} — પોડકાસ્ટ સાંભળો",
+      "availableLine": "{count} પોડકાસ્ટ ઉપલબ્ધ છે"
     }
   },
   "articles": {
@@ -758,7 +768,11 @@
     },
     "share": "શેર કરો",
     "shareOnWhatsApp": "વોટ્સએપ પર શેર કરો",
-    "shareToFeed": "ફીડ પર શેર કરો"
+    "shareToFeed": "ફીડ પર શેર કરો",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} લેખો",
+      "buttonLabel": "{language} — લેખ જુઓ"
+    }
   },
   "books": {
     "languageSelector": {
@@ -948,7 +962,8 @@
     "sharedToFeed": "ન્યૂઝ ફીડ પર પુસ્તક શેર કર્યું",
     "sharedToFeedDesc": "સમાચાર ફીડ પર પુસ્તક સફળતાપૂર્વક શેર કરવામાં આવ્યું",
     "shareError": "શેર ભૂલ",
-    "shareErrorDesc": "પુસ્તક શેર કરતી વખતે એક ભૂલ આવી"
+    "shareErrorDesc": "પુસ્તક શેર કરતી વખતે એક ભૂલ આવી",
+    "untitledBook": "શીર્ષક વગરનું પુસ્તક"
   },
   "scholarProfile": {
     "biography": "જીવનચરિત્ર",

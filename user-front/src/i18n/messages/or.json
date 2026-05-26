@@ -20,7 +20,12 @@
     "monthsAgo": "{count} ମାସ ପୂର୍ବରୁ |",
     "yearsAgo": "{count} ବର୍ଷ ପୂର୍ବେ |",
     "required": "ଆବଶ୍ୟକ",
-    "or": "କିମ୍ବା"
+    "or": "କିମ୍ବା",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — ଏ ପର୍ଯ୍ୟନ୍ତ ଭାଷା ନିର୍ଦ୍ଧିଷ୍ଟ ହୋଇନାହିଁ",
+      "noLanguageShort": "—",
+      "flagAlt": "{country}ର ପତାକା"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 ନୂତନ ବାର୍ତ୍ତା |",
@@ -701,6 +706,11 @@
       "gridView": "ଗ୍ରୀଡ୍ ଭ୍ୟୁ",
       "listView": "ତାଲିକା ଦର୍ଶନ",
       "playNow": "ବର୍ତ୍ତମାନ ଖେଳନ୍ତୁ |"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} ପଡ୍‌କାଷ୍ଟ",
+      "buttonLabel": "{language} — ପଡ୍‌କାଷ୍ଟ ଶୁଣନ୍ତୁ",
+      "availableLine": "{count} ପଡ୍‌କାଷ୍ଟ ଉପଲବ୍ଧ ଅଛି"
     }
   },
   "articles": {
@@ -758,7 +768,11 @@
     },
     "share": "ଅଂଶୀଦାର କରନ୍ତୁ |",
     "shareOnWhatsApp": "ହ୍ ats ାଟସ୍ ଆପ୍ରେ ସେୟାର କରନ୍ତୁ |",
-    "shareToFeed": "ଫିଡ୍ ରେ ଅଂଶୀଦାର କରନ୍ତୁ |"
+    "shareToFeed": "ଫିଡ୍ ରେ ଅଂଶୀଦାର କରନ୍ତୁ |",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} ପ୍ରବନ୍ଧ",
+      "buttonLabel": "{language} — ପ୍ରବନ୍ଧ ଦେଖନ୍ତୁ"
+    }
   },
   "books": {
     "languageSelector": {
@@ -948,7 +962,8 @@
     "sharedToFeed": "ନ୍ୟୁଜ୍ ଫିଡରେ ବୁକ୍ ଅଂଶୀଦାର |",
     "sharedToFeedDesc": "ନ୍ୟୁଜ୍ ଫିଡରେ ବୁକ୍ ସଫଳତାର ସହ ଅଂଶୀଦାର ହୋଇଛି |",
     "shareError": "ତ୍ରୁଟି ଅଂଶୀଦାର କରନ୍ତୁ |",
-    "shareErrorDesc": "ପୁସ୍ତକ ଅଂଶୀଦାର କରିବା ସମୟରେ ଏକ ତ୍ରୁଟି ଘଟିଗଲା |"
+    "shareErrorDesc": "ପୁସ୍ତକ ଅଂଶୀଦାର କରିବା ସମୟରେ ଏକ ତ୍ରୁଟି ଘଟିଗଲା |",
+    "untitledBook": "ଶିରୋନାମାହିନ ବହି"
   },
   "scholarProfile": {
     "biography": "ଜୀବନୀ",

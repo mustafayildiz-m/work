@@ -19,7 +19,12 @@
     "monthsAgo": "před {count} měsíci",
     "yearsAgo": "{count} před lety",
     "required": "Požadované",
-    "or": "nebo"
+    "or": "nebo",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — zatím není přiřazen jazyk",
+      "noLanguageShort": "—",
+      "flagAlt": "Vlajka {country}"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 nová zpráva",
@@ -617,6 +622,11 @@
       "gridView": "Zobrazení mřížky",
       "listView": "Zobrazení seznamu",
       "playNow": "Hrát nyní"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} podcastů",
+      "buttonLabel": "{language} — poslouchat podcasty",
+      "availableLine": "K dispozici podcastů: {count}"
     }
   },
   "articles": {
@@ -674,7 +684,11 @@
     },
     "share": "Sdílet",
     "shareOnWhatsApp": "Sdílet na WhatsApp",
-    "shareToFeed": "Sdílet do krmiva"
+    "shareToFeed": "Sdílet do krmiva",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} článků",
+      "buttonLabel": "{language} — zobrazit články"
+    }
   },
   "books": {
     "languageSelector": {
@@ -864,7 +878,8 @@
     "sharedToFeed": "Kniha sdílená v kanálu novinek",
     "sharedToFeedDesc": "Kniha byla úspěšně sdílena v kanálu novinek",
     "shareError": "Sdílet chybu",
-    "shareErrorDesc": "Při sdílení knihy došlo k chybě"
+    "shareErrorDesc": "Při sdílení knihy došlo k chybě",
+    "untitledBook": "Bez názvu"
   },
   "scholarProfile": {
     "biography": "Biography",

@@ -19,7 +19,12 @@
     "monthsAgo": "{count} hónappal ezelőtt",
     "yearsAgo": "{count} évekkel ezelőtt",
     "required": "Kötelező",
-    "or": "vagy"
+    "or": "vagy",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — még nincs nyelv hozzárendelve",
+      "noLanguageShort": "—",
+      "flagAlt": "{country} zászlaja"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 új üzenet",
@@ -617,6 +622,11 @@
       "gridView": "Rácsnézet",
       "listView": "Lista nézet",
       "playNow": "Játsszon most"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} podcast",
+      "buttonLabel": "{language} — podcastok hallgatása",
+      "availableLine": "{count} podcast érhető el"
     }
   },
   "articles": {
@@ -674,7 +684,11 @@
     },
     "share": "Megosztás",
     "shareOnWhatsApp": "Megosztás WhatsAppon",
-    "shareToFeed": "Megosztás a takarmányhoz"
+    "shareToFeed": "Megosztás a takarmányhoz",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} cikk",
+      "buttonLabel": "{language} — cikkek megtekintése"
+    }
   },
   "books": {
     "languageSelector": {
@@ -864,7 +878,8 @@
     "sharedToFeed": "Könyv megosztva a hírfolyamban",
     "sharedToFeedDesc": "A könyv sikeresen megosztott a hírfolyamban",
     "shareError": "Megosztási hiba",
-    "shareErrorDesc": "Hiba történt a könyv megosztása közben"
+    "shareErrorDesc": "Hiba történt a könyv megosztása közben",
+    "untitledBook": "Cím nélküli könyv"
   },
   "scholarProfile": {
     "biography": "Biography",

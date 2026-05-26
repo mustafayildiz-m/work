@@ -19,7 +19,12 @@
     "monthsAgo": "{count} месяцев назад",
     "yearsAgo": "{count} лет назад",
     "required": "Требуется",
-    "or": "или"
+    "or": "или",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — язык пока не назначен",
+      "noLanguageShort": "—",
+      "flagAlt": "Флаг {country}"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 новое сообщение",
@@ -629,6 +634,11 @@
       "gridView": "Вид на сетку",
       "listView": "Просмотр списка",
       "playNow": "Играть сейчас"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} подкастов",
+      "buttonLabel": "{language} — слушать подкасты",
+      "availableLine": "Доступно подкастов: {count}"
     }
   },
   "articles": {
@@ -686,7 +696,11 @@
     },
     "share": "Поделиться",
     "shareOnWhatsApp": "Поделиться в WhatsApp",
-    "shareToFeed": "Поделиться в корзину"
+    "shareToFeed": "Поделиться в корзину",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} статей",
+      "buttonLabel": "{language} — смотреть статьи"
+    }
   },
   "books": {
     "languageSelector": {
@@ -876,7 +890,8 @@
     "sharedToFeed": "Поделиться книгой в ленте новостей",
     "sharedToFeedDesc": "Книгой успешно поделились в ленте новостей",
     "shareError": "Ошибка доли",
-    "shareErrorDesc": "При передаче книги произошла ошибка"
+    "shareErrorDesc": "При передаче книги произошла ошибка",
+    "untitledBook": "Без названия"
   },
   "scholarProfile": {
     "biography": "Биография",

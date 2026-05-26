@@ -20,7 +20,12 @@
     "monthsAgo": "пре __ПЛАЦЕХОЛДЕР_0__ месеци",
     "yearsAgo": "пре __ПЛАЦЕХОЛДЕР_0__ година",
     "required": "Обавезно",
-    "or": "или"
+    "or": "или",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — jezik još nije dodeljen",
+      "noLanguageShort": "—",
+      "flagAlt": "Zastava {country}"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 нова порука",
@@ -701,6 +706,11 @@
       "gridView": "Грид Виев",
       "listView": "Лист Виев",
       "playNow": "Играј сада"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} podkasta",
+      "buttonLabel": "{language} — slušaj podkaste",
+      "availableLine": "Dostupno podkasta: {count}"
     }
   },
   "articles": {
@@ -758,7 +768,11 @@
     },
     "share": "Схаре",
     "shareOnWhatsApp": "Делите на ВхатсАпп-у",
-    "shareToFeed": "Делите у фиду"
+    "shareToFeed": "Делите у фиду",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} članaka",
+      "buttonLabel": "{language} — pogledaj članke"
+    }
   },
   "books": {
     "languageSelector": {
@@ -948,7 +962,8 @@
     "sharedToFeed": "Књига се дели на вести",
     "sharedToFeedDesc": "Књига је успешно подељена на вести",
     "shareError": "Грешка дељења",
-    "shareErrorDesc": "Дошло је до грешке при дељењу књиге"
+    "shareErrorDesc": "Дошло је до грешке при дељењу књиге",
+    "untitledBook": "Knjiga bez naslova"
   },
   "scholarProfile": {
     "biography": "Биографија",

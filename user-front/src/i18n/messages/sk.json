@@ -19,7 +19,12 @@
     "monthsAgo": "pred {count} mesiacmi",
     "yearsAgo": "pred {count} rokmi",
     "required": "Požadované",
-    "or": "alebo"
+    "or": "alebo",
+    "countrySelector": {
+      "tooltipNoLanguage": "{country} — zatiaľ nie je priradený jazyk",
+      "noLanguageShort": "—",
+      "flagAlt": "Vlajka {country}"
+    }
   },
   "tabTitle": {
     "oneNewMessage": "1 nová správa",
@@ -617,6 +622,11 @@
       "gridView": "Zobrazenie mriežky",
       "listView": "Zobrazenie zoznamu",
       "playNow": "Hrať teraz"
+    },
+    "countrySelector": {
+      "itemsCountPhrase": "{count} podcastov",
+      "buttonLabel": "{language} — počúvať podcasty",
+      "availableLine": "K dispozícii podcastov: {count}"
     }
   },
   "articles": {
@@ -674,7 +684,11 @@
     },
     "share": "Zdieľať",
     "shareOnWhatsApp": "Zdieľať na WhatsApp",
-    "shareToFeed": "Zdieľať na Feed"
+    "shareToFeed": "Zdieľať na Feed",
+    "countrySelector": {
+      "itemsCountPhrase": "{count} článkov",
+      "buttonLabel": "{language} — zobraziť články"
+    }
   },
   "books": {
     "languageSelector": {
@@ -864,7 +878,8 @@
     "sharedToFeed": "Kniha zdieľaná v kanáli správ",
     "sharedToFeedDesc": "Kniha bola úspešne zdieľaná v kanáli správ",
     "shareError": "Zdieľanie chyby",
-    "shareErrorDesc": "Pri zdieľaní knihy došlo k chybe"
+    "shareErrorDesc": "Pri zdieľaní knihy došlo k chybe",
+    "untitledBook": "Bez názvu"
   },
   "scholarProfile": {
     "biography": "Biography",
