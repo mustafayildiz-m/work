@@ -23,7 +23,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — لم يُعيَّن لغة بعد",
       "noLanguageShort": "—",
-      "flagAlt": "علم {country}"
+      "flagAlt": "علم {country}",
+      "totalCountries": "{count} دولة"
     }
   },
   "tabTitle": {

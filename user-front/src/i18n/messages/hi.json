@@ -24,7 +24,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — अभी तक कोई भाषा असाइन नहीं है",
       "noLanguageShort": "—",
-      "flagAlt": "{country} का झंडा"
+      "flagAlt": "{country} का झंडा",
+      "totalCountries": "{count} देश"
     }
   },
   "tabTitle": {

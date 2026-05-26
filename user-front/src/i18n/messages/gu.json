@@ -24,7 +24,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — હજુ સુધી ભાષા સોંપાઈ નથી",
       "noLanguageShort": "—",
-      "flagAlt": "{country} નો ધ્વજ"
+      "flagAlt": "{country} નો ધ્વજ",
+      "totalCountries": "{count} દેશો"
     }
   },
   "tabTitle": {

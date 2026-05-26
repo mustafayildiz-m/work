@@ -23,7 +23,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — aucune langue attribuée pour le moment",
       "noLanguageShort": "—",
-      "flagAlt": "Drapeau {country}"
+      "flagAlt": "Drapeau {country}",
+      "totalCountries": "{count} pays"
     }
   },
   "tabTitle": {

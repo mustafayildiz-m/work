@@ -23,7 +23,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — încă nu este atribuită o limbă",
       "noLanguageShort": "—",
-      "flagAlt": "Steagul {country}"
+      "flagAlt": "Steagul {country}",
+      "totalCountries": "{count} țări"
     }
   },
   "tabTitle": {

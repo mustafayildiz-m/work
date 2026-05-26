@@ -24,7 +24,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — լեզու դեռ չի նշված",
       "noLanguageShort": "—",
-      "flagAlt": "{country} դրոշ"
+      "flagAlt": "{country} դրոշ",
+      "totalCountries": "{count} երկիր"
     }
   },
   "tabTitle": {

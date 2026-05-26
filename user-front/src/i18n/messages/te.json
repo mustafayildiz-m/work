@@ -24,7 +24,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — ఇంకా భాష కేటాయించబడలేదు",
       "noLanguageShort": "—",
-      "flagAlt": "{country} జండా"
+      "flagAlt": "{country} జండా",
+      "totalCountries": "{count} దేశాలు"
     }
   },
   "tabTitle": {

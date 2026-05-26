@@ -24,7 +24,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — ഭാഷ ഇതുവരെ നിയോഗിച്ചിട്ടില്ല",
       "noLanguageShort": "—",
-      "flagAlt": "{country} പതാക"
+      "flagAlt": "{country} പതാക",
+      "totalCountries": "{count} രാജ്യങ്ങൾ"
     }
   },
   "tabTitle": {

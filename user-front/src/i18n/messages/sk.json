@@ -23,7 +23,8 @@
     "countrySelector": {
       "tooltipNoLanguage": "{country} — zatiaľ nie je priradený jazyk",
       "noLanguageShort": "—",
-      "flagAlt": "Vlajka {country}"
+      "flagAlt": "Vlajka {country}",
+      "totalCountries": "{count} krajín"
     }
   },
   "tabTitle": {
