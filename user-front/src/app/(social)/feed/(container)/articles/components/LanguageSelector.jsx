@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Card, CardBody, CardHeader, CardTitle, Row, Col, Button, Spinner, Alert, Badge } from 'react-bootstrap';
-import { BsGlobe, BsCheckLg, BsArrowRight, BsFileText } from 'react-icons/bs';
-import { useLanguages } from '@/hooks/useLanguages';
+import { BsCheckLg, BsArrowRight, BsFileText } from 'react-icons/bs';
+import { useCountries } from '@/hooks/useCountries';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useRouter } from 'next/navigation';
 import { useLayoutContext } from '@/context/useLayoutContext';
@@ -12,46 +12,32 @@ import { getFlagImageUrl, getFlagEmojiFallback } from '@/utils/language';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 const LanguageSelector = () => {
-  const { languages, loading, error } = useLanguages();
+  const { countries, loading, error } = useCountries();
   const { t, locale } = useLanguage();
   const { theme } = useLayoutContext();
   const router = useRouter();
-  const [selectedLanguage, setSelectedLanguage] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const isDark = theme === 'dark' || theme === 'green';
   const continueButtonRef = useRef(null);
   const [articleCounts, setArticleCounts] = useState({});
   const [countsLoading, setCountsLoading] = useState(true);
 
-  // Makale sayılarını çek
   useEffect(() => {
     const fetchArticleCounts = async () => {
       try {
         setCountsLoading(true);
-        const token = localStorage.getItem('token');
-        const headers = {
-          'Content-Type': 'application/json'
-        };
-        if (token) {
-          headers['Authorization'] = `Bearer ${token}`;
-        }
+        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers.Authorization = `Bearer ${token}`;
 
-        const response = await fetch(`${API_BASE_URL}/languages/article-counts`, {
-          headers: headers
-        });
-
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        const response = await fetch(`${API_BASE_URL}/languages/article-counts`, { headers });
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
         const data = await response.json();
-
-        // Array'i object'e çevir (languageId -> articleCount mapping)
         const countsMap = {};
-        data.forEach(item => {
+        data.forEach((item) => {
           countsMap[item.languageId] = item.articleCount;
         });
-
         setArticleCounts(countsMap);
       } catch (err) {
         console.error('Error fetching article counts:', err);
@@ -63,37 +49,45 @@ const LanguageSelector = () => {
     fetchArticleCounts();
   }, []);
 
-  // Dil seçildiğinde state'e kaydet ve butona scroll et
-  const handleLanguageSelect = (language) => {
-    setSelectedLanguage(language);
+  const handleCountrySelect = (country) => {
+    if (!country?.primaryLanguage) return;
+    setSelectedCountry(country);
 
-    // Dil seçildikten sonra "Görüntüle" butonuna scroll yap
     setTimeout(() => {
       if (continueButtonRef.current) {
         continueButtonRef.current.scrollIntoView({
           behavior: 'smooth',
           block: 'center',
-          inline: 'nearest'
+          inline: 'nearest',
         });
       }
     }, 100);
   };
 
-  // Devam et butonuna tıklandığında yeni sayfaya git
   const handleContinue = () => {
-    if (!selectedLanguage) return;
+    const lang = selectedCountry?.primaryLanguage;
+    if (!selectedCountry || !lang) return;
 
     const params = new URLSearchParams({
-      languageId: selectedLanguage.id.toString(),
-      languageName: selectedLanguage.name,
-      languageCode: selectedLanguage.code
+      languageId: String(lang.id),
+      languageName: lang.name || '',
+      languageCode: lang.code || '',
+      countryAlpha2: selectedCountry.alpha2 || '',
     });
 
     router.push(`/feed/articles/list?${params.toString()}`);
   };
 
-  // Dil adını mevcut i18n sistemi ile çeviren fonksiyon
+  const getCountryDisplayName = (country) => {
+    if (!country) return '';
+    if (locale && locale.toLowerCase().startsWith('tr') && country.nameTr) {
+      return country.nameTr;
+    }
+    return country.name;
+  };
+
   const getLocalizedLanguageName = (language) => {
+    if (!language) return '';
     return t(`books.languages.${language.name}`) || language.name;
   };
 
@@ -136,22 +130,27 @@ const LanguageSelector = () => {
       </CardHeader>
       <CardBody className="p-2 p-sm-3 p-md-4">
         <Row className="g-2 g-sm-3">
-          {languages.map((language) => {
-            const count = articleCounts[language.id] || 0;
+          {countries.map((country) => {
+            const lang = country.primaryLanguage;
+            const hasLang = !!lang;
+            const isSelected = selectedCountry?.id === country.id;
+            const count = hasLang ? (articleCounts[lang.id] || 0) : 0;
             return (
-              <Col key={language.id} xs={4} sm={4} md={3} lg={2}>
+              <Col key={country.id} xs={4} sm={4} md={3} lg={2}>
                 <Button
-                  variant={selectedLanguage?.id === language.id ? "primary" : "outline-primary"}
-                  className={`w-100 p-0 h-100 d-flex flex-column align-items-stretch justify-content-start position-relative lang-box ${selectedLanguage?.id === language.id ? 'active shadow' : ''
-                    }`}
+                  variant={isSelected ? 'primary' : 'outline-primary'}
+                  className={`w-100 p-0 h-100 d-flex flex-column align-items-stretch justify-content-start position-relative lang-box ${isSelected ? 'active shadow' : ''}`}
                   style={{
-                    minHeight: '120px',
+                    minHeight: '140px',
                     borderRadius: '15px',
                     transition: 'all 0.3s ease',
+                    opacity: hasLang ? 1 : 0.55,
+                    cursor: hasLang ? 'pointer' : 'not-allowed',
                   }}
-                  onClick={() => handleLanguageSelect(language)}
+                  onClick={() => handleCountrySelect(country)}
+                  disabled={!hasLang}
                   onMouseEnter={(e) => {
-                    if (selectedLanguage?.id !== language.id) {
+                    if (!isSelected && hasLang) {
                       e.currentTarget.style.transform = 'translateY(-2px)';
                       e.currentTarget.style.boxShadow = isDark
                         ? '0 8px 25px rgba(0, 0, 0, 0.5)'
@@ -159,11 +158,12 @@ const LanguageSelector = () => {
                     }
                   }}
                   onMouseLeave={(e) => {
-                    if (selectedLanguage?.id !== language.id) {
+                    if (!isSelected) {
                       e.currentTarget.style.transform = 'translateY(0)';
                       e.currentTarget.style.boxShadow = 'none';
                     }
                   }}
+                  title={hasLang ? getCountryDisplayName(country) : `${getCountryDisplayName(country)} — dil eşleşmesi yok`}
                 >
                   <div
                     className="w-100 lang-flag-area"
@@ -172,43 +172,44 @@ const LanguageSelector = () => {
                       overflow: 'hidden',
                       borderTopLeftRadius: '13px',
                       borderTopRightRadius: '13px',
-                      filter: selectedLanguage?.id === language.id ? 'none' : 'grayscale(0.3)'
+                      filter: isSelected ? 'none' : 'grayscale(0.3)'
                     }}
                   >
-                    {language.flagUrl ? (
+                    {country.flagUrl ? (
                       <img
-                        src={getFlagImageUrl(language.flagUrl, API_BASE_URL)}
-                        alt={`${language.name} flag`}
+                        src={getFlagImageUrl(country.flagUrl, API_BASE_URL)}
+                        alt={`${getCountryDisplayName(country)} flag`}
                         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                       />
                     ) : (
                       <div className="lang-flag-emoji" style={{ fontSize: '2rem', lineHeight: '56px', textAlign: 'center' }}>
-                        {getFlagEmojiFallback(language.code)}
+                        {getFlagEmojiFallback(country.alpha2?.toLowerCase())}
                       </div>
                     )}
                   </div>
                   <div
                     className="fw-bold text-center mb-1 mt-2 px-2 lang-text"
-                    style={{
-                      fontSize: '0.85rem',
-                    }}
+                    style={{ fontSize: '0.85rem', lineHeight: '1.1' }}
                   >
-                    {getLocalizedLanguageName(language)}
+                    {getCountryDisplayName(country)}
+                  </div>
+                  <div
+                    className="text-center lang-sublabel px-2"
+                    style={{ fontSize: '0.7rem', opacity: 0.85, marginTop: '0.15rem' }}
+                  >
+                    {hasLang ? getLocalizedLanguageName(lang) : '—'}
                   </div>
                   {!countsLoading && (
                     <Badge
-                      bg={selectedLanguage?.id === language.id ? "light" : "primary"}
-                      text={selectedLanguage?.id === language.id ? "dark" : "white"}
-                      className="mt-1 lang-badge"
-                      style={{
-                        fontSize: '0.7rem',
-                        padding: '4px 8px'
-                      }}
+                      bg={isSelected ? 'light' : 'primary'}
+                      text={isSelected ? 'dark' : 'white'}
+                      className="mt-1 lang-badge align-self-center"
+                      style={{ fontSize: '0.7rem', padding: '4px 8px' }}
                     >
                       {count} {t('articles.languageSelector.articleCount')}
                     </Badge>
                   )}
-                  {selectedLanguage?.id === language.id && (
+                  {isSelected && (
                     <div
                       className="position-absolute top-0 end-0 lang-check-badge"
                       style={{
@@ -230,7 +231,7 @@ const LanguageSelector = () => {
           })}
         </Row>
 
-        {selectedLanguage && (
+        {selectedCountry && selectedCountry.primaryLanguage && (
           <div ref={continueButtonRef} className="text-center mt-3 mt-md-4 animate-fade-in">
             <Button
               variant="success"
@@ -244,15 +245,11 @@ const LanguageSelector = () => {
                 fontWeight: '600',
                 transition: 'all 0.3s ease'
               }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = 'scale(1.05)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = 'scale(1)';
-              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
             >
               <BsCheckLg className="me-2" />
-              {getLocalizedLanguageName(selectedLanguage)} {t('articles.languageSelector.continue')}
+              {getLocalizedLanguageName(selectedCountry.primaryLanguage)} {t('articles.languageSelector.continue')}
               <BsArrowRight className="ms-2" />
             </Button>
           </div>
@@ -275,7 +272,11 @@ const LanguageSelector = () => {
         .lang-text {
           color: #495057 !important;
         }
-        .lang-box.active .lang-text {
+        .lang-sublabel {
+          color: #6c757d !important;
+        }
+        .lang-box.active .lang-text,
+        .lang-box.active .lang-sublabel {
           color: #ffffff !important;
         }
         .lang-badge {
@@ -300,14 +301,17 @@ const LanguageSelector = () => {
         [data-bs-theme="dark"] .lang-text {
           color: #dee2e6 !important;
         }
+        [data-bs-theme="dark"] .lang-sublabel {
+          color: #adb5bd !important;
+        }
         [data-bs-theme="dark"] .lang-badge {
           background-color: #3d4246 !important;
           color: #adb5bd !important;
           border-color: #495057 !important;
         }
-        
-        /* Dark Mode Active State stays the same (gradient) */
+
         [data-bs-theme="dark"] .lang-box.active .lang-text,
+        [data-bs-theme="dark"] .lang-box.active .lang-sublabel,
         [data-bs-theme="dark"] .lang-box.active .lang-badge {
           color: #ffffff !important;
         }
@@ -316,20 +320,13 @@ const LanguageSelector = () => {
           animation: fadeIn 0.5s ease-out;
         }
         @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-        
-        /* Mobile - compact language cards */
+
         @media (max-width: 767.98px) {
           .language-selector-container .lang-box {
-            min-height: 88px !important;
+            min-height: 108px !important;
             border-radius: 10px !important;
           }
           .language-selector-container .lang-flag-area {
@@ -345,6 +342,9 @@ const LanguageSelector = () => {
             font-size: 0.7rem !important;
             margin-top: 0.25rem !important;
             padding: 0 0.25rem !important;
+          }
+          .language-selector-container .lang-sublabel {
+            font-size: 0.6rem !important;
           }
           .language-selector-container .lang-badge {
             font-size: 0.6rem !important;
@@ -363,7 +363,7 @@ const LanguageSelector = () => {
         }
         @media (max-width: 399.98px) {
           .language-selector-container .lang-box {
-            min-height: 80px !important;
+            min-height: 96px !important;
             border-radius: 8px !important;
           }
           .language-selector-container .lang-flag-area {
@@ -376,6 +376,9 @@ const LanguageSelector = () => {
           .language-selector-container .lang-text {
             font-size: 0.65rem !important;
           }
+          .language-selector-container .lang-sublabel {
+            font-size: 0.55rem !important;
+          }
         }
       `}</style>
     </Card>
@@ -383,4 +386,3 @@ const LanguageSelector = () => {
 };
 
 export default LanguageSelector;
-

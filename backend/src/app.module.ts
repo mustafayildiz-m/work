@@ -8,6 +8,7 @@ import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { ScholarsModule } from './scholars/scholars.module';
 import { LanguageModule } from './modules/language.module';
+import { CountryModule } from './modules/country.module';
 import { ArticlesModule } from './articles/articles.module';
 import { Scholar } from './scholars/entities/scholar.entity';
 import { Book } from './books/entities/book.entity';
@@ -17,6 +18,7 @@ import { Article } from './articles/entities/article.entity';
 import { ArticleTranslation } from './articles/entities/article-translation.entity';
 import { ScholarPost } from './scholars/entities/scholar-post.entity';
 import { Language } from './languages/entities/language.entity';
+import { Country } from './countries/entities/country.entity';
 import { IslamicNews } from './entities/islamic-news.entity';
 import { User } from './users/entities/user.entity';
 import { ScholarStory } from './entities/scholar-story.entity';
@@ -41,6 +43,8 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { cacheConfig } from './config/cache.config';
 import { LanguagesSeeder } from './seeders/languages-seeder';
 import { LanguageFlagsSeeder } from './seeders/language-flags-seeder';
+import { CountriesSeeder } from './seeders/countries-seeder';
+import { BackfillCountryLanguagesSeeder } from './seeders/backfill-country-languages-seeder';
 import { RegionalBooksSeeder } from './seeders/regional-books-seeder';
 import { ReligiousBooksSeeder } from './seeders/religious-books-seeder';
 import { MultiLanguageBooksSeeder } from './seeders/multilanguage-books-seeder';
@@ -87,6 +91,7 @@ import { PaperModule } from './modules/paper.module';
       Book,
       ScholarPost,
       Language,
+      Country,
       IslamicNews,
       ScholarStory,
       StoryView,
@@ -108,6 +113,7 @@ import { PaperModule } from './modules/paper.module';
     AuthModule,
     ScholarsModule,
     LanguageModule,
+    CountryModule,
     WarehousesModule,
     StocksModule,
     StockTransfersModule,
@@ -138,6 +144,8 @@ import { PaperModule } from './modules/paper.module';
     CronService,
     LanguagesSeeder,
     LanguageFlagsSeeder,
+    CountriesSeeder,
+    BackfillCountryLanguagesSeeder,
     RegionalBooksSeeder,
     ReligiousBooksSeeder,
     MultiLanguageBooksSeeder,

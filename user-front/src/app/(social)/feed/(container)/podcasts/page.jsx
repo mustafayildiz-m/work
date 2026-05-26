@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Card, CardBody, CardHeader, CardTitle, Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
 import { BsMicFill, BsCheckLg, BsArrowRight } from 'react-icons/bs';
-import { useLanguages } from '@/hooks/useLanguages';
+import { useCountries } from '@/hooks/useCountries';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { useRouter } from 'next/navigation';
@@ -12,60 +12,44 @@ import { getFlagImageUrl, getFlagEmojiFallback } from '@/utils/language';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 const PodcastLanguageSelector = () => {
-  const { languages, loading, error } = useLanguages();
-  const { t } = useLanguage();
+  const { countries, loading, error } = useCountries();
+  const { t, locale } = useLanguage();
   const { theme } = useLayoutContext();
   const router = useRouter();
-  const [selectedLanguage, setSelectedLanguage] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const isDark = theme === 'dark' || theme === 'green';
   const [podcastCounts, setPodcastCounts] = useState({});
   const [loadingCounts, setLoadingCounts] = useState(true);
   const continueButtonRef = useRef(null);
 
-  // Tüm podcastleri çek ve dillere göre say
+  // Tüm aktif podcastleri çek ve dil koduna göre say
   useEffect(() => {
     const fetchPodcastCounts = async () => {
       setLoadingCounts(true);
       const counts = {};
-
       try {
-        // Tüm aktif podcastleri bir kerede çek
         const response = await fetch(`${API_URL}/podcasts?isActive=true&limit=1000`);
         if (!response.ok) throw new Error('Podcastler yüklenemedi');
-
         const data = await response.json();
         const allPodcasts = data.podcasts || [];
-
-        // Her dil için sıfırdan başlat
-        languages.forEach(language => {
-          counts[language.code] = 0;
-        });
-
-        // Podcastleri dillere göre say
-        allPodcasts.forEach(podcast => {
-          if (podcast.language && counts.hasOwnProperty(podcast.language)) {
-            counts[podcast.language]++;
+        allPodcasts.forEach((podcast) => {
+          if (podcast.language) {
+            counts[podcast.language] = (counts[podcast.language] || 0) + 1;
           }
         });
-
       } catch (err) {
         console.error('Error fetching podcast counts:', err);
-        languages.forEach(language => {
-          counts[language.code] = 0;
-        });
       }
-
       setPodcastCounts(counts);
       setLoadingCounts(false);
     };
 
-    if (languages.length > 0) {
-      fetchPodcastCounts();
-    }
-  }, [languages]);
+    fetchPodcastCounts();
+  }, []);
 
-  const handleLanguageSelect = (language) => {
-    setSelectedLanguage(language);
+  const handleCountrySelect = (country) => {
+    if (!country?.primaryLanguage) return;
+    setSelectedCountry(country);
 
     setTimeout(() => {
       if (continueButtonRef.current) {
@@ -79,18 +63,29 @@ const PodcastLanguageSelector = () => {
   };
 
   const handleContinue = () => {
-    if (!selectedLanguage) return;
+    const lang = selectedCountry?.primaryLanguage;
+    if (!selectedCountry || !lang) return;
 
     const params = new URLSearchParams({
-      languageId: selectedLanguage.id.toString(),
-      languageName: selectedLanguage.name,
-      languageCode: selectedLanguage.code
+      languageId: String(lang.id),
+      languageName: lang.name || '',
+      languageCode: lang.code || '',
+      countryAlpha2: selectedCountry.alpha2 || '',
     });
 
     router.push(`/feed/podcasts/list?${params.toString()}`);
   };
 
+  const getCountryDisplayName = (country) => {
+    if (!country) return '';
+    if (locale && locale.toLowerCase().startsWith('tr') && country.nameTr) {
+      return country.nameTr;
+    }
+    return country.name;
+  };
+
   const getLocalizedLanguageName = (language) => {
+    if (!language) return '';
     return t(`books.languages.${language.name}`) || language.name;
   };
 
@@ -138,95 +133,104 @@ const PodcastLanguageSelector = () => {
         </CardHeader>
         <CardBody className="p-2 p-sm-3 p-md-4">
           <Row className="g-2 g-sm-3">
-            {languages.map((language) => (
-              <Col key={language.id} xs={4} sm={4} md={3} lg={2}>
-                <Button
-                  variant={selectedLanguage?.id === language.id ? "primary" : "outline-primary"}
-                  className={`w-100 p-0 h-100 d-flex flex-column align-items-stretch justify-content-start position-relative lang-box ${selectedLanguage?.id === language.id ? 'active shadow' : ''
-                    }`}
-                  style={{
-                    minHeight: '120px',
-                    borderRadius: '15px',
-                    transition: 'all 0.3s ease',
-                  }}
-                  onClick={() => handleLanguageSelect(language)}
-                  onMouseEnter={(e) => {
-                    if (selectedLanguage?.id !== language.id) {
-                      e.target.style.transform = 'translateY(-2px)';
-                      e.target.style.boxShadow = isDark
-                        ? '0 8px 25px rgba(0, 0, 0, 0.5)'
-                        : '0 8px 25px rgba(102, 126, 234, 0.3)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (selectedLanguage?.id !== language.id) {
-                      e.target.style.transform = 'translateY(0)';
-                      e.target.style.boxShadow = 'none';
-                    }
-                  }}
-                >
-                  <div
-                    className="w-100 lang-flag-area"
+            {countries.map((country) => {
+              const lang = country.primaryLanguage;
+              const hasLang = !!lang;
+              const isSelected = selectedCountry?.id === country.id;
+              const count = hasLang ? (podcastCounts[lang.code] || 0) : 0;
+              return (
+                <Col key={country.id} xs={4} sm={4} md={3} lg={2}>
+                  <Button
+                    variant={isSelected ? 'primary' : 'outline-primary'}
+                    className={`w-100 p-0 h-100 d-flex flex-column align-items-stretch justify-content-start position-relative lang-box ${isSelected ? 'active shadow' : ''}`}
                     style={{
-                      height: '56px',
-                      overflow: 'hidden',
-                      borderTopLeftRadius: '13px',
-                      borderTopRightRadius: '13px',
-                      filter: selectedLanguage?.id === language.id ? 'none' : 'grayscale(0.3)'
+                      minHeight: '140px',
+                      borderRadius: '15px',
+                      transition: 'all 0.3s ease',
+                      opacity: hasLang ? 1 : 0.55,
+                      cursor: hasLang ? 'pointer' : 'not-allowed',
                     }}
-                  >
-                    {language.flagUrl ? (
-                      <img
-                        src={getFlagImageUrl(language.flagUrl, API_URL)}
-                        alt={`${language.name} flag`}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                      />
-                    ) : (
-                      <div className="lang-flag-emoji" style={{ fontSize: '2rem', lineHeight: '56px', textAlign: 'center' }}>
-                        {getFlagEmojiFallback(language.code)}
-                      </div>
-                    )}
-                  </div>
-                  <div
-                    className="fw-bold text-center lang-text mt-2 px-2"
-                    style={{
-                      fontSize: '0.85rem',
+                    onClick={() => handleCountrySelect(country)}
+                    disabled={!hasLang}
+                    onMouseEnter={(e) => {
+                      if (!isSelected && hasLang) {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = isDark
+                          ? '0 8px 25px rgba(0, 0, 0, 0.5)'
+                          : '0 8px 25px rgba(102, 126, 234, 0.3)';
+                      }
                     }}
-                  >
-                    {getLocalizedLanguageName(language)}
-                  </div>
-                  {/* Podcast sayısı badge'i */}
-                  <div
-                    className="mt-1 mb-2 px-2 py-1 rounded-pill lang-badge align-self-center"
-                    style={{
-                      fontSize: '0.7rem',
-                      fontWeight: '600',
+                    onMouseLeave={(e) => {
+                      if (!isSelected) {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }
                     }}
+                    title={hasLang ? getCountryDisplayName(country) : `${getCountryDisplayName(country)} — dil eşleşmesi yok`}
                   >
-                    {podcastCounts[language.code] || 0} {t('podcasts.languageSelector.podcastCount')}
-                  </div>
-                  {selectedLanguage?.id === language.id && (
                     <div
-                      className="position-absolute top-0 end-0 lang-check-badge"
+                      className="w-100 lang-flag-area"
                       style={{
-                        width: '24px',
-                        height: '24px',
-                        borderRadius: '50%',
-                        backgroundColor: '#28a745',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
+                        height: '56px',
+                        overflow: 'hidden',
+                        borderTopLeftRadius: '13px',
+                        borderTopRightRadius: '13px',
+                        filter: isSelected ? 'none' : 'grayscale(0.3)'
                       }}
                     >
-                      <BsCheckLg size={12} color="white" />
+                      {country.flagUrl ? (
+                        <img
+                          src={getFlagImageUrl(country.flagUrl, API_URL)}
+                          alt={`${getCountryDisplayName(country)} flag`}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        />
+                      ) : (
+                        <div className="lang-flag-emoji" style={{ fontSize: '2rem', lineHeight: '56px', textAlign: 'center' }}>
+                          {getFlagEmojiFallback(country.alpha2?.toLowerCase())}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </Button>
-              </Col>
-            ))}
+                    <div
+                      className="fw-bold text-center lang-text mt-2 px-2"
+                      style={{ fontSize: '0.85rem', lineHeight: '1.1' }}
+                    >
+                      {getCountryDisplayName(country)}
+                    </div>
+                    <div
+                      className="text-center lang-sublabel px-2"
+                      style={{ fontSize: '0.7rem', opacity: 0.85, marginTop: '0.15rem' }}
+                    >
+                      {hasLang ? getLocalizedLanguageName(lang) : '—'}
+                    </div>
+                    <div
+                      className="mt-1 mb-2 px-2 py-1 rounded-pill lang-badge align-self-center"
+                      style={{ fontSize: '0.7rem', fontWeight: '600' }}
+                    >
+                      {count} {t('podcasts.languageSelector.podcastCount')}
+                    </div>
+                    {isSelected && (
+                      <div
+                        className="position-absolute top-0 end-0 lang-check-badge"
+                        style={{
+                          width: '24px',
+                          height: '24px',
+                          borderRadius: '50%',
+                          backgroundColor: '#28a745',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
+                      >
+                        <BsCheckLg size={12} color="white" />
+                      </div>
+                    )}
+                  </Button>
+                </Col>
+              );
+            })}
           </Row>
 
-          {selectedLanguage && (
+          {selectedCountry && selectedCountry.primaryLanguage && (
             <div ref={continueButtonRef} className="text-center mt-3 mt-md-4 animate-fade-in">
               <Button
                 variant="success"
@@ -240,19 +244,15 @@ const PodcastLanguageSelector = () => {
                   fontWeight: '600',
                   transition: 'all 0.3s ease'
                 }}
-                onMouseEnter={(e) => {
-                  e.target.style.transform = 'scale(1.05)';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.transform = 'scale(1)';
-                }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
               >
                 <BsCheckLg className="me-2" />
-                {getLocalizedLanguageName(selectedLanguage)} {t('podcasts.languageSelector.continue')}
+                {getLocalizedLanguageName(selectedCountry.primaryLanguage)} {t('podcasts.languageSelector.continue')}
                 <BsArrowRight className="ms-2" />
               </Button>
               <div className="mt-2 text-muted small">
-                {podcastCounts[selectedLanguage.code] || 0} {t('podcasts.languageSelector.podcastCount')} {t('books.languageSelector.available')}
+                {podcastCounts[selectedCountry.primaryLanguage.code] || 0} {t('podcasts.languageSelector.podcastCount')} {t('books.languageSelector.available')}
               </div>
             </div>
           )}
@@ -276,7 +276,11 @@ const PodcastLanguageSelector = () => {
         .lang-text {
           color: #495057 !important;
         }
-        .lang-box.active .lang-text {
+        .lang-sublabel {
+          color: #6c757d !important;
+        }
+        .lang-box.active .lang-text,
+        .lang-box.active .lang-sublabel {
           color: #ffffff !important;
         }
         .lang-badge {
@@ -301,6 +305,9 @@ const PodcastLanguageSelector = () => {
         [data-bs-theme="dark"] .lang-text {
           color: #dee2e6 !important;
         }
+        [data-bs-theme="dark"] .lang-sublabel {
+          color: #adb5bd !important;
+        }
         [data-bs-theme="dark"] .lang-badge {
           background-color: #3d4246 !important;
           color: #adb5bd !important;
@@ -309,6 +316,7 @@ const PodcastLanguageSelector = () => {
         
         /* Dark Mode Active State stays the same (gradient) */
         [data-bs-theme="dark"] .lang-box.active .lang-text,
+        [data-bs-theme="dark"] .lang-box.active .lang-sublabel,
         [data-bs-theme="dark"] .lang-box.active .lang-badge {
           color: #ffffff !important;
         }
