@@ -341,7 +341,7 @@ const BookListCards = () => {
       }
 
       // Pagination bilgisini kaydet
-      if (result?.pagination && !selectedLanguageId) {
+      if (result?.pagination) {
         setPagination(result.pagination);
       } else {
         const totalCount = booksData.length;

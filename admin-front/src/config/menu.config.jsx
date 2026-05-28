@@ -89,11 +89,6 @@ export const MENU_SIDEBAR = [
             title: 'Tüm Kitaplar',
             path: '/kitaplar/liste',
             status: 'done'
-          },
-          {
-            title: 'Çeviri Dilleri',
-            path: '/kitap-dilleri/liste',
-            status: 'done'
           }
         ]
       },
@@ -169,6 +164,13 @@ export const MENU_SIDEBAR = [
         children: [
           { title: 'Video Ekle', path: '/alim-hikayeleri/ekle', status: 'done' },
           { title: 'Tüm Videolar', path: '/alim-hikayeleri/liste', status: 'done' },
+        ],
+      },
+      {
+        title: 'Genel Tanımlar',
+        children: [
+          { title: 'Diller', path: '/diller/liste', status: 'done' },
+          { title: 'Ülkeler', path: '/ulkeler/liste', status: 'done' },
         ],
       },
 
