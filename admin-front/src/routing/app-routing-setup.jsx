@@ -56,7 +56,8 @@ import {
   ProjectColumn2Page,
   ProjectColumn3Page,
 } from '@/pages/alimler/public-profile';
-import KitapDilleriList from '@/pages/kitap-dilleri/liste';
+import DillerList from '@/pages/diller/liste';
+import UlkelerList from '@/pages/ulkeler/liste';
 import AlimHikayesiEkle from '@/pages/alim-hikayeleri/ekle';
 import AlimHikayeleriListe from '@/pages/alim-hikayeleri/liste';
 import AlimHikayesiDuzenle from '@/pages/alim-hikayeleri/duzenle';
@@ -75,7 +76,9 @@ export function AppRoutingSetup() {
           <Route path="/alimler/ekle" element={<AddScholarPage />} />
           <Route path="/alimler/duzenle/:id" element={<EditScholarPage />} />
           <Route path="/alimler/profile/:id" element={<ProfileDefaultPage />} />
-          <Route path="/kitap-dilleri/liste" element={<KitapDilleriList />} />
+          <Route path="/diller/liste" element={<DillerList />} />
+          <Route path="/ulkeler/liste" element={<UlkelerList />} />
+          <Route path="/kitap-dilleri/liste" element={<Navigate to="/diller/liste" />} />
           <Route path="/depolar/liste" element={<StoreList />} />
           <Route path="/depolar/ekle" element={<AddStorePage />} />
           <Route path="/depolar/duzenle/:id" element={<EditStorePage />} />

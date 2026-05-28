@@ -9,7 +9,6 @@ import {
   getPaginationRowModel,
 } from '@tanstack/react-table';
 import { useNavigate } from 'react-router-dom';
-import { getLocalizedLanguageName } from '@/utils/languageUtils';
 
 function DefaultColumnFilter({ column }) {
   const intl = useIntl();
@@ -26,14 +25,7 @@ function DefaultColumnFilter({ column }) {
 }
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/languages';
-const BOOKS_API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/books';
-
-function getCoverUrl(coverImage) {
-  if (!coverImage) return `${import.meta.env.BASE_URL}media/images/book-placeholder.jpg`;
-  if (coverImage.startsWith('http://') || coverImage.startsWith('https://')) return coverImage;
-  const baseUrl = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/\/$/, '');
-  return `${baseUrl}${coverImage.startsWith('/') ? coverImage : `/${coverImage}`}`;
-}
+const PODCAST_API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/podcasts';
 
 function getFlagByLanguageCode(code) {
   if (!code) return '🏳️';
@@ -301,7 +293,9 @@ const LanguageList = () => {
   const intl = useIntl();
   const navigate = useNavigate();
   const [data, setData] = useState([]);
-  const [languageBooks, setLanguageBooks] = useState({});
+  const [bookCounts, setBookCounts] = useState({});
+  const [articleCounts, setArticleCounts] = useState({});
+  const [podcastCounts, setPodcastCounts] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sorting, setSorting] = useState([]);
@@ -358,42 +352,38 @@ const LanguageList = () => {
   }, []);
 
   useEffect(() => {
-    const fetchBooksForLanguages = async () => {
+    const fetchCounts = async () => {
       try {
         const token = localStorage.getItem('access_token');
-        const res = await fetch(`${BOOKS_API_URL}?page=1&limit=300`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
+        const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
+
+        const [bookRes, articleRes, podcastRes] = await Promise.all([
+          fetch(`${API_URL}/book-counts`, { headers }).then(r => r.ok ? r.json() : []),
+          fetch(`${API_URL}/article-counts`, { headers }).then(r => r.ok ? r.json() : []),
+          fetch(`${PODCAST_API_URL}?page=1&limit=9999`, { headers }).then(r => r.ok ? r.json() : {}),
+        ]);
+
+        const bMap = {};
+        (Array.isArray(bookRes) ? bookRes : []).forEach(r => { bMap[r.languageId] = Number(r.bookCount || r.count || 0); });
+        setBookCounts(bMap);
+
+        const aMap = {};
+        (Array.isArray(articleRes) ? articleRes : []).forEach(r => { aMap[r.languageId] = Number(r.articleCount || r.count || 0); });
+        setArticleCounts(aMap);
+
+        const pMap = {};
+        const podcasts = Array.isArray(podcastRes) ? podcastRes : (podcastRes?.podcasts || podcastRes?.data || []);
+        podcasts.forEach(p => {
+          const code = (p.language || '').toLowerCase();
+          if (code) pMap[code] = (pMap[code] || 0) + 1;
         });
-
-        if (!res.ok) return;
-        const result = await res.json();
-        const books = Array.isArray(result) ? result : (result?.data || []);
-        const map = {};
-
-        books.forEach((book) => {
-          (book.translations || []).forEach((translation) => {
-            const langId = translation?.language?.id || translation?.languageId;
-            if (langId && !map[langId]) {
-              map[langId] = {
-                id: book.id,
-                title: translation?.title || book.author || '',
-                coverImage: book.coverImage || book.coverUrl || '',
-                hasPdf: Boolean(translation?.pdfUrl || translation?.pdfFile),
-              };
-            }
-          });
-        });
-
-        setLanguageBooks(map);
+        setPodcastCounts(pMap);
       } catch {
-        // Keep language list usable even if preview books fail
+        // Keep language list usable even if counts fail
       }
     };
 
-    fetchBooksForLanguages();
+    fetchCounts();
   }, []);
 
   const handleAdded = lang => setData(prev => [...prev, lang]);
@@ -502,43 +492,39 @@ const LanguageList = () => {
         Filter: DefaultColumnFilter,
       },
       {
-        id: 'previewBook',
-        header: intl.formatMessage({ id: 'UI.DIL_KITABI' }),
+        id: 'usageStats',
+        header: intl.formatMessage({ id: 'UI.KULLANIM_ALANI' }),
         cell: ({ row }) => {
           const language = row.original;
-          const previewBook = languageBooks[language.id];
-
-          if (!previewBook) {
-            return (
-              <span className="text-xs text-gray-500 dark:text-gray-400">
-                {intl.formatMessage({ id: 'UI.BU_DILDE_KITAP_YOK' })}
-              </span>
-            );
-          }
+          const bCount = bookCounts[language.id] || 0;
+          const aCount = articleCounts[language.id] || 0;
+          const pCount = podcastCounts[(language.code || '').toLowerCase()] || 0;
 
           return (
-            <button
-              type="button"
-              onClick={() => navigate(`/kitaplar/liste?languageId=${language.id}&languageName=${encodeURIComponent(language.name)}`)}
-              className="group flex items-center gap-3 rounded-lg border border-gray-200 bg-gray-50 p-2 text-left transition hover:border-blue-300 hover:bg-blue-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-700 dark:hover:bg-gray-700"
-              title={intl.formatMessage({ id: 'UI.KITAPLARI_GORUNTULE' })}
-            >
-              <img
-                src={getCoverUrl(previewBook.coverImage)}
-                alt={previewBook.title}
-                className="h-12 w-9 rounded object-cover shadow-sm"
-                loading="lazy"
-                decoding="async"
-              />
-              <div className="min-w-0">
-                <div className="truncate text-xs font-semibold text-gray-800 group-hover:text-blue-700 dark:text-gray-100 dark:group-hover:text-blue-300">
-                  {previewBook.title}
-                </div>
-                <div className="text-[11px] text-gray-500 dark:text-gray-400">
-                  {previewBook.hasPdf ? intl.formatMessage({ id: 'UI.PDF_MEVCUT' }) : intl.formatMessage({ id: 'UI._PDF_YOK' })}
-                </div>
-              </div>
-            </button>
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                type="button"
+                onClick={() => navigate(`/kitaplar/liste?languageId=${language.id}&languageName=${encodeURIComponent(language.name)}`)}
+                className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 transition hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50"
+                title={intl.formatMessage({ id: 'UI.KITAPLARI_GORUNTULE' })}
+              >
+                <span>📚</span> {bCount} {intl.formatMessage({ id: 'UI.KITAP_2' })}
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate(`/makaleler/liste?languageId=${language.id}`)}
+                className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700 transition hover:bg-green-100 dark:bg-green-900/30 dark:text-green-300 dark:hover:bg-green-900/50"
+              >
+                <span>📄</span> {aCount} {intl.formatMessage({ id: 'UI.MAKALE' })}
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate(`/podcast/liste?language=${(language.code || '').toLowerCase()}`)}
+                className="inline-flex items-center gap-1.5 rounded-full bg-orange-50 px-2.5 py-1 text-xs font-medium text-orange-700 transition hover:bg-orange-100 dark:bg-orange-900/30 dark:text-orange-300 dark:hover:bg-orange-900/50"
+              >
+                <span>🎙️</span> {pCount} {intl.formatMessage({ id: 'UI.PODCAST' })}
+              </button>
+            </div>
           );
         },
         enableSorting: false,
@@ -568,7 +554,7 @@ const LanguageList = () => {
         ),
       },
     ],
-    [languageBooks, navigate]
+    [bookCounts, articleCounts, podcastCounts, navigate]
   );
 
   const table = useReactTable({
@@ -590,7 +576,7 @@ const LanguageList = () => {
   if (error) return <div className="p-6 text-red-500"><FormattedMessage id="UI.HATA" /> {error}</div>;
 
   return (
-    <div className="p-6">
+    <div className="p-6 max-w-7xl mx-auto">
       <AddLanguageModal open={addOpen} onClose={() => setAddOpen(false)} onAdded={handleAdded} />
       <EditLanguageModal open={editOpen} onClose={() => setEditOpen(false)} language={editLanguage} onUpdated={handleUpdated} />
       <div className="mb-6 flex items-center justify-between">
@@ -604,6 +590,15 @@ const LanguageList = () => {
         >
           <FormattedMessage id="UI._DIL_EKLE" />
         </button>
+      </div>
+      <div className="mb-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-lg">🌐</div>
+          <div>
+            <p className="text-xs text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.TOPLAM_DIL" /></p>
+            <p className="text-xl font-bold text-gray-900 dark:text-white">{data.length}</p>
+          </div>
+        </div>
       </div>
       <div className="mb-4">
         <input

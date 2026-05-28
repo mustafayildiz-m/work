@@ -10,7 +10,7 @@ import {
 import { Dialog } from '@headlessui/react';
 import { Fragment } from 'react';
 import { toast } from 'sonner';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { FaNewspaper, FaBook, FaGlobe, FaFilter, FaEdit, FaTrash, FaTimesCircle, FaPlus, FaImage, FaUser, FaCalendar } from 'react-icons/fa';
 import { getLocalizedLanguageName } from '@/utils/languageUtils';
@@ -40,10 +40,10 @@ function ArticleList() {
   const [previewModalOpen, setPreviewModalOpen] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(null);
 
-  // Filter states
+  const [searchParams] = useSearchParams();
   const [filters, setFilters] = useState({
     search: '',
-    languageId: 'all',
+    languageId: searchParams.get('languageId') || 'all',
     bookId: 'all',
   });
 
@@ -135,18 +135,21 @@ function ArticleList() {
     [intl, dateLocaleTag],
   );
 
-  // İstatistikler
+  // İstatistikler - filtre aktifse filtrelenmiş veriden, değilse tüm veriden hesapla
   const stats = React.useMemo(() => {
-    if (!allData || allData.length === 0) return { total: 0, totalBooks: 0, totalLanguages: 0 };
+    const hasActiveFilter = filters.search || filters.languageId !== 'all' || filters.bookId !== 'all';
+    const source = hasActiveFilter ? data : allData;
+
+    if (!source || source.length === 0) return { total: 0, totalBooks: 0, totalLanguages: 0 };
     
-    const total = allData.length;
-    const totalBooks = new Set(allData.map(a => a.bookId).filter(Boolean)).size;
+    const total = source.length;
+    const totalBooks = new Set(source.map(a => a.bookId).filter(Boolean)).size;
     const totalLanguages = new Set(
-      allData.flatMap(a => a.translations?.map(t => t.languageId) || [])
+      source.flatMap(a => a.translations?.map(t => t.languageId) || [])
     ).size;
     
     return { total, totalBooks, totalLanguages };
-  }, [allData]);
+  }, [allData, data, filters]);
 
   // Fetch languages, books and all data for stats on mount
   useEffect(() => {

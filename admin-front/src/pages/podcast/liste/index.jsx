@@ -1,6 +1,6 @@
 import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
 import { FaMicrophone, FaPlus, FaEdit, FaTrash, FaFilter, FaTimesCircle, FaPlay, FaPause, FaEye, FaHeart, FaClock, FaStar, FaTh, FaList, FaGlobe } from 'react-icons/fa';
@@ -33,11 +33,12 @@ export default function PodcastList() {
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
   const [audioRef, setAudioRef] = useState(null);
   const [imageErrors, setImageErrors] = useState({}); // Track failed images
+  const [searchParams] = useSearchParams();
   const [filters, setFilters] = useState({
     search: '',
     category: 'all',
     isActive: 'all',
-    language: 'all',
+    language: searchParams.get('language') || 'all',
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState({
@@ -58,17 +59,32 @@ export default function PodcastList() {
     setImageErrors(prev => ({ ...prev, [podcastId]: true }));
   };
 
-  // İstatistikler
+  // İstatistikler - filtre aktifse allData'yı client-side filtreleyerek hesapla
   const stats = React.useMemo(() => {
-    if (!allData || allData.length === 0) return { total: 0, active: 0, featured: 0, totalListens: 0 };
+    const isFiltered = filters.language !== 'all' || filters.category !== 'all' || filters.isActive !== 'all' || filters.search;
+    let source = allData || [];
 
-    const total = allData.length;
-    const active = allData.filter(p => p.isActive).length;
-    const featured = allData.filter(p => p.isFeatured).length;
-    const totalListens = allData.reduce((sum, p) => sum + (p.listenCount || 0), 0);
+    if (isFiltered) {
+      source = source.filter(p => {
+        if (filters.language !== 'all' && (p.language || '').toLowerCase() !== filters.language.toLowerCase()) return false;
+        if (filters.category !== 'all' && p.category !== filters.category) return false;
+        if (filters.isActive === 'true' && !p.isActive) return false;
+        if (filters.isActive === 'false' && p.isActive) return false;
+        if (filters.search) {
+          const q = filters.search.toLowerCase();
+          if (!(p.title || '').toLowerCase().includes(q) && !(p.author || '').toLowerCase().includes(q)) return false;
+        }
+        return true;
+      });
+    }
 
-    return { total, active, featured, totalListens };
-  }, [allData]);
+    return {
+      total: source.length,
+      active: source.filter(p => p.isActive).length,
+      featured: source.filter(p => p.isFeatured).length,
+      totalListens: source.reduce((sum, p) => sum + (p.listenCount || 0), 0),
+    };
+  }, [allData, filters]);
 
   // Podcastlerde bulunan dilleri filtrelemek için
   const availableLanguages = React.useMemo(() => {
