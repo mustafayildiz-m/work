@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic';
 import { Inter, Cinzel } from 'next/font/google';
 import Image from 'next/image';
 import NextTopLoader from 'nextjs-toploader';
-import { DEFAULT_PAGE_TITLE } from '@/context/constants';
+import { DEFAULT_PAGE_TITLE, SITE_META_DESCRIPTION } from '@/context/constants';
 import '@/assets/scss/style.scss';
 import 'leaflet/dist/leaflet.css';
 const AppProvidersWrapper = dynamic(() => import('@/components/wrappers/AppProvidersWrapper'));
@@ -21,10 +21,10 @@ const cinzel = Cinzel({
 });
 export const metadata = {
   title: {
-    template: '%s | Social Nextjs - Network, Community and Event Theme',
+    template: '%s | Islamic Windows',
     default: DEFAULT_PAGE_TITLE
   },
-  description: 'Bootstrap 5 based Social Media Network and Community Theme',
+  description: SITE_META_DESCRIPTION,
   icons: {
     icon: '/favicon.ico',
   }
