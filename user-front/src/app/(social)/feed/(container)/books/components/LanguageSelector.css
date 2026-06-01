@@ -640,6 +640,115 @@
   }
 }
 
+@media (min-width: 992px) {
+  .feed-main-col {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    height: var(--feed-sidebar-height, auto);
+    max-height: var(--feed-sidebar-height, none);
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .feed-main-col--stacked .feed-main-col__above {
+    flex-shrink: 0;
+  }
+
+  .feed-main-col--stacked .feed-main-col__fill {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .cs-card--full-height {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
+    margin-bottom: 0;
+  }
+
+  .cs-card--full-height .cs-header,
+  .cs-card--full-height .cs-search {
+    flex-shrink: 0;
+  }
+
+  .cs-card--full-height .cs-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .cs-card--full-height .cs-grid-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin: 0 -2px;
+    padding: 0 2px;
+  }
+
+  .cs-card--full-height .cs-grid {
+    max-height: none;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .cs-card--full-height .cs-grid-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .cs-card--full-height .cs-grid-scroll::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 3px;
+  }
+
+  [data-bs-theme='green'] .cs-card--full-height .cs-grid-scroll::-webkit-scrollbar-thumb {
+    background: #4caf50;
+  }
+
+  .cs-card--full-height .cs-action {
+    flex-shrink: 0;
+  }
+
+  .cs-card--full-height .cs-empty {
+    flex: 1 1 auto;
+    min-height: 200px;
+  }
+}
+
+/* Articles kitapçık selector — header rengi */
+.cs-card--articles .cs-header {
+  background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+}
+[data-bs-theme="green"] .cs-card--articles .cs-header {
+  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+}
+
+/* Books selector — yeşil header */
+.cs-card--books .cs-header {
+  background: linear-gradient(135deg, #2e7d32 0%, #43a047 50%, #66bb6a 100%);
+}
+[data-bs-theme="green"] .cs-card--books .cs-header {
+  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+}
+
+/* Podcasts selector — mor header */
+.cs-card--podcasts .cs-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+[data-bs-theme="green"] .cs-card--podcasts .cs-header {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+}
+
 @media (min-width: 1200px) {
   .cs-grid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));

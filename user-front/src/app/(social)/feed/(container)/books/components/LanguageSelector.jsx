@@ -66,7 +66,7 @@ const LanguageSelector = () => {
 
   if (loading) {
     return (
-      <Card className="cs-card">
+      <Card className="cs-card cs-card--full-height">
         <CardBody className="text-center py-5">
           <Spinner animation="border" variant="primary" />
           <p className="mt-3 text-muted">{t('books.languageSelector.loading')}</p>
@@ -77,7 +77,7 @@ const LanguageSelector = () => {
 
   if (error) {
     return (
-      <Card className="cs-card">
+      <Card className="cs-card cs-card--full-height">
         <CardBody>
           <Alert variant="danger">
             <Alert.Heading>{t('books.languageSelector.errorTitle')}</Alert.Heading>
@@ -89,7 +89,7 @@ const LanguageSelector = () => {
   }
 
   return (
-    <Card className="cs-card">
+    <Card className="cs-card cs-card--full-height cs-card--books">
       {/* Header */}
       <div className="cs-header">
         <div className="cs-header__content">
@@ -143,7 +143,8 @@ const LanguageSelector = () => {
             <p className="cs-empty__desc">{t('common.countrySelector.noResultsDesc')}</p>
           </div>
         ) : (
-          <div className="cs-grid">
+          <div className="cs-grid-scroll">
+            <div className="cs-grid">
             {filteredCountries.map((country) => {
               const lang = country.primaryLanguage;
               const hasLang = !!lang;
@@ -187,6 +188,7 @@ const LanguageSelector = () => {
                 </button>
               );
             })}
+            </div>
           </div>
         )}
 

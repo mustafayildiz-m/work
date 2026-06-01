@@ -648,32 +648,32 @@
   },
   "articles": {
     "languageSelector": {
-      "title": "Artikel durchsuchen",
-      "subtitle": "Entdecken Sie Artikel in verschiedenen Sprachen",
-      "continue": "Artikel anzeigen",
+      "title": "Broschüren durchsuchen",
+      "subtitle": "Entdecken Sie Broschüren in verschiedenen Sprachen",
+      "continue": "Broschüren anzeigen",
       "loadingLanguages": "Sprachen werden geladen...",
       "error": "Fehler!",
-      "articleCount": "Artikel"
+      "articleCount": "Broschüren"
     },
     "list": {
-      "loadingArticles": "Artikel werden geladen...",
+      "loadingArticles": "Broschüren werden geladen...",
       "error": "Fehler!",
-      "noArticles": "Keine Artikel gefunden",
-      "noSearchResults": "Keine Artikel für die Suche gefunden.",
-      "noLanguageArticles": "In dieser Sprache wurden noch keine Artikel hinzugefügt.",
-      "totalArticles": "Artikel insgesamt",
+      "noArticles": "Keine Broschüren gefunden",
+      "noSearchResults": "Keine Broschüren für die Suche gefunden.",
+      "noLanguageArticles": "In dieser Sprache wurden noch keine Broschüren hinzugefügt.",
+      "totalArticles": "Broschüren insgesamt",
       "currentPage": "Aktuelle Seite",
       "totalPages": "Seiten insgesamt",
       "onThisPage": "Auf dieser Seite",
       "backToLanguages": "Sprachauswahl",
-      "articlesTitle": "Artikel",
-      "searchPlaceholder": "Artikeltitel suchen...",
+      "articlesTitle": "Broschüren",
+      "searchPlaceholder": "Broschürentitel suchen...",
       "filterByBook": "Nach Buch filtern",
       "booksSelected": "Bücher ausgewählt",
       "allBooksShowing": "Alle Bücher anzeigen",
       "selectBooks": "Bücher auswählen...",
-      "noBooksWithArticles": "Keine Bücher mit Artikeln gefunden",
-      "articleCountInBook": "Artikel",
+      "noBooksWithArticles": "Keine Bücher mit Broschüren gefunden",
+      "articleCountInBook": "Broschüren",
       "author": "Autor",
       "book": "Buch",
       "publishDate": "Veröffentlichungsdatum",
@@ -682,12 +682,12 @@
       "viewDetails": "Details anzeigen"
     },
     "detail": {
-      "loadingArticle": "Artikel wird geladen...",
+      "loadingArticle": "Broschüre wird geladen...",
       "error": "Fehler!",
-      "notFound": "Artikel nicht gefunden",
-      "notAvailable": "Dieser Artikel ist nicht verfügbar.",
+      "notFound": "Broschüre nicht gefunden",
+      "notAvailable": "Diese Broschüre ist nicht verfügbar.",
       "backToList": "Zurück zur Liste",
-      "backToLanguageArticles": "Zurück zu Artikeln",
+      "backToLanguageArticles": "Zurück zu Broschüren",
       "author": "Autor:",
       "publishDate": "Veröffentlichungsdatum:",
       "book": "Buch:",
@@ -697,14 +697,14 @@
       "downloadPdf": "PDF herunterladen",
       "summary": "Zusammenfassung:",
       "content": "Inhalt:",
-      "title": "Artikel"
+      "title": "Broschüre"
     },
     "share": "Teilen",
     "shareOnWhatsApp": "Auf WhatsApp teilen",
     "shareToFeed": "Im Feed teilen",
     "countrySelector": {
-      "itemsCountPhrase": "{count} Artikel",
-      "buttonLabel": "{language} — Artikel anzeigen"
+      "itemsCountPhrase": "{count} Broschüren",
+      "buttonLabel": "{language} — Broschüren anzeigen"
     }
   },
   "books": {

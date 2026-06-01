@@ -129,6 +129,25 @@ export class ArticlesService {
     return translations.map((t) => t.slug);
   }
 
+  /** Kitapçık kapağı yoksa bağlı kitabın kapağını kullan (API yanıtı). */
+  private resolveCoverImage(article: Article): Article {
+    const missingCover =
+      !article.coverImage ||
+      article.coverImage === 'null' ||
+      article.coverImage === 'undefined';
+
+    if (missingCover && article.book) {
+      article.coverImage =
+        article.book.coverImage || article.book.coverUrl || article.coverImage;
+    }
+
+    return article;
+  }
+
+  private resolveCoverImages(articles: Article[]): Article[] {
+    return articles.map((article) => this.resolveCoverImage(article));
+  }
+
   async create(createArticleDto: CreateArticleDto): Promise<Article> {
     const { translations, ...articleData } = createArticleDto;
 
@@ -236,7 +255,7 @@ export class ArticlesService {
 
     // Pagination bilgilerini döndür
     return {
-      data: articles,
+      data: this.resolveCoverImages(articles),
       pagination: {
         currentPage: page,
         limit: limit,
@@ -303,7 +322,7 @@ export class ArticlesService {
       .getMany();
 
     return {
-      data: articles,
+      data: this.resolveCoverImages(articles),
       pagination: {
         currentPage: page,
         limit: limit,
@@ -330,7 +349,44 @@ export class ArticlesService {
       throw new NotFoundException(`Article with ID ${id} not found`);
     }
 
-    return article;
+    return this.resolveCoverImage(article);
+  }
+
+  /** Kapaksız kitapçıklara bağlı kitabın kapağını kalıcı olarak yazar. */
+  async backfillCoverImagesFromBooks(): Promise<{
+    updated: number;
+    skipped: number;
+  }> {
+    const articles = await this.articleRepository.find({
+      relations: ['book'],
+    });
+
+    let updated = 0;
+    let skipped = 0;
+
+    for (const article of articles) {
+      const missingCover =
+        !article.coverImage ||
+        article.coverImage === 'null' ||
+        article.coverImage === 'undefined';
+
+      if (!missingCover) {
+        skipped++;
+        continue;
+      }
+
+      const cover = article.book?.coverImage || article.book?.coverUrl;
+      if (!cover || cover === 'null' || cover === 'undefined') {
+        skipped++;
+        continue;
+      }
+
+      article.coverImage = cover;
+      await this.articleRepository.save(article);
+      updated++;
+    }
+
+    return { updated, skipped };
   }
 
   async update(

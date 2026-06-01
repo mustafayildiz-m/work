@@ -24,6 +24,7 @@ const ArticlesListPage = () => {
   const [selectedBooks, setSelectedBooks] = useState([]);
   const [books, setBooks] = useState([]);
   const [loadingBooks, setLoadingBooks] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState(() => {
     // localStorage'dan görünüm modunu güvenli şekilde oku
@@ -37,7 +38,7 @@ const ArticlesListPage = () => {
     } catch (error) {
       console.error('localStorage okuma hatası:', error);
     }
-    return 'grid';
+    return 'list';
   }); // 'grid' veya 'list'
   const [showBookFilter, setShowBookFilter] = useState(() => {
     // localStorage'dan kitap filtre durumunu güvenli şekilde oku
@@ -51,6 +52,10 @@ const ArticlesListPage = () => {
     }
     return false;
   });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Sadece makalesi olan kitapları fetch et
   const fetchBooksWithArticles = useCallback(async () => {
@@ -169,27 +174,61 @@ const ArticlesListPage = () => {
     control: (provided, state) => ({
       ...provided,
       minHeight: '38px',
-      borderColor: state.isFocused ? '#0d6efd' : '#dee2e6',
-      boxShadow: state.isFocused ? '0 0 0 0.25rem rgba(13, 110, 253, 0.25)' : 'none',
+      backgroundColor: '#fff',
+      borderColor: state.isFocused ? '#2193b0' : '#dee2e6',
+      boxShadow: state.isFocused ? '0 0 0 0.25rem rgba(33, 147, 176, 0.25)' : 'none',
       '&:hover': {
-        borderColor: '#0d6efd'
-      }
+        borderColor: '#2193b0',
+      },
+    }),
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 9999,
+      backgroundColor: '#fff',
+      border: '1px solid #dee2e6',
+      boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)',
+    }),
+    menuPortal: (provided) => ({
+      ...provided,
+      zIndex: 9999,
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      color: state.isSelected ? '#fff' : '#212529',
+      backgroundColor: state.isSelected
+        ? '#2193b0'
+        : state.isFocused
+          ? '#e8f4f8'
+          : '#fff',
+      cursor: 'pointer',
     }),
     multiValue: (provided) => ({
       ...provided,
-      backgroundColor: '#0d6efd',
+      backgroundColor: '#2193b0',
     }),
     multiValueLabel: (provided) => ({
       ...provided,
-      color: 'white',
+      color: '#fff',
     }),
     multiValueRemove: (provided) => ({
       ...provided,
-      color: 'white',
+      color: '#fff',
       ':hover': {
-        backgroundColor: '#0b5ed7',
-        color: 'white',
+        backgroundColor: '#1a7a94',
+        color: '#fff',
       },
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: '#6c757d',
+    }),
+    input: (provided) => ({
+      ...provided,
+      color: '#212529',
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: '#212529',
     }),
   };
 
@@ -302,6 +341,9 @@ const ArticlesListPage = () => {
                   styles={customSelectStyles}
                   className="basic-multi-select"
                   classNamePrefix="select"
+                  menuPortalTarget={mounted ? document.body : null}
+                  menuPosition="fixed"
+                  menuPlacement="auto"
                 />
               </div>
             </Collapse>

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardBody, CardHeader, CardTitle, Row, Col, Button, Badge, Spinner, Alert, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Modal, ProgressBar } from 'react-bootstrap';
-import { BsDownload, BsCalendar, BsPerson, BsFileText, BsArrowLeft, BsEyeFill, BsBook, BsShare, BsWhatsapp, BsNewspaper, BsX, BsVolumeUp, BsTranslate, BsPause, BsPlay, BsSkipBackward, BsSkipForward, BsArrowsMove } from 'react-icons/bs';
+import { BsDownload, BsCalendar, BsPerson, BsFileText, BsArrowLeft, BsEyeFill, BsBook, BsShare, BsWhatsapp, BsNewspaper, BsX, BsVolumeUp, BsTranslate, BsPause, BsPlay, BsSkipBackward, BsSkipForward, BsArrowsMove, BsBoxArrowUpRight } from 'react-icons/bs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLanguage } from '@/context/useLanguageContext';
@@ -15,14 +15,8 @@ import dynamic from 'next/dynamic';
 import styles from './styles.module.css';
 
 const PdfViewer = dynamic(() => import('@/components/PdfViewer'), { ssr: false });
-import { pdfjs } from 'react-pdf';
 import { getLanguageCode, cleanTextForTTS, fetchTTSAudio, unlockAudioForPlayback, getUnlockedAudioElement } from '@/utils/textToSpeech';
 import { getLanguageFlag } from '@/utils/language';
-
-// PDF.js worker'ı yapılandır
-if (typeof window !== 'undefined') {
-  pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
-}
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -84,6 +78,24 @@ const ArticleDetailPage = () => {
     originX: 0,
     originY: 0,
   });
+  const pdfjsRef = useRef(null);
+
+  const getPdfjs = async () => {
+    if (typeof window === 'undefined') return null;
+    if (pdfjsRef.current) return pdfjsRef.current;
+
+    try {
+      const reactPdfModule = await import('react-pdf');
+      const pdfjs = reactPdfModule?.pdfjs;
+      if (!pdfjs) return null;
+
+      pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
+      pdfjsRef.current = pdfjs;
+      return pdfjs;
+    } catch {
+      return null;
+    }
+  };
 
   // URL'den dil bilgilerini al
   const languageId = searchParams ? searchParams.get('languageId') : null;
@@ -197,7 +209,8 @@ const ArticleDetailPage = () => {
   // PDF'den text çıkarma fonksiyonu
   const extractTextFromPdf = async (pdfUrl) => {
     try {
-      if (typeof window === 'undefined' || !pdfjs) {
+      const pdfjs = await getPdfjs();
+      if (!pdfjs) {
         return null;
       }
 
@@ -544,6 +557,8 @@ const ArticleDetailPage = () => {
       // Eğer PDF varsa ve henüz yüklenmemişse yükle
       if (selectedPdfUrlForTranslate && !activePdfDoc) {
         try {
+          const pdfjs = await getPdfjs();
+          if (!pdfjs) throw new Error('PDF.js unavailable');
           const loadingTask = pdfjs.getDocument(selectedPdfUrlForTranslate);
           activePdfDoc = await loadingTask.promise;
           setPdfDoc(activePdfDoc);
@@ -743,6 +758,28 @@ const ArticleDetailPage = () => {
       return `/feed/articles/list?${params.toString()}`;
     }
     return '/feed/articles';
+  };
+
+  const getBookTitle = (book) => {
+    if (!book) return '';
+    if (languageId) {
+      const langId = parseInt(languageId, 10);
+      const match = book.translations?.find((tr) => tr.languageId === langId);
+      if (match?.title) return match.title;
+    }
+    return book.translations?.[0]?.title || book.author || '';
+  };
+
+  const getBookUrl = (bookId) => {
+    if (languageId && languageName && languageCode) {
+      const params = new URLSearchParams({
+        languageId,
+        languageName,
+        languageCode,
+      });
+      return `/feed/books/${bookId}?${params.toString()}`;
+    }
+    return `/feed/books/${bookId}`;
   };
 
   // Mevcut sayfa URL'sini döndür (dil parametreleri dahil)
@@ -1034,16 +1071,9 @@ const ArticleDetailPage = () => {
       </Card>
 
       {/* Makale Detayları */}
-      <Card className="border-0 shadow-sm" style={{ position: 'relative' }}>
-        {/* Dropdown Button - Sağ Üst Köşe */}
-        <div style={{
-          position: 'absolute',
-          top: '1rem',
-          right: '1rem',
-          zIndex: 9999,
-          overflow: 'visible'
-        }}>
-          <Dropdown className="d-inline-block" style={{ position: 'static' }}>
+      <Card className="border-0 shadow-sm">
+        <CardHeader className="bg-white border-0 pb-0 pt-3 px-3 px-sm-4 d-flex justify-content-end align-items-center">
+          <Dropdown className="d-inline-block">
             <DropdownToggle
               variant={isDarkMode ? 'outline-light' : 'light'}
               size="sm"
@@ -1092,10 +1122,6 @@ const ArticleDetailPage = () => {
               style={{
                 zIndex: 10000,
                 minWidth: '200px',
-                position: 'absolute',
-                top: '100%',
-                right: 0,
-                left: 'auto'
               }}
             >
               <DropdownItem as="button" onClick={handleShareArticle}>
@@ -1112,8 +1138,8 @@ const ArticleDetailPage = () => {
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-        </div>
-        <CardBody>
+        </CardHeader>
+        <CardBody className="pt-2 px-3 px-sm-4">
           {/* Makale Kapağı */}
           {article.coverImage && (
             <div className="text-center mb-4">
@@ -1150,10 +1176,63 @@ const ArticleDetailPage = () => {
             )}
 
             {article.book && (
-              <div className="d-flex align-items-center mb-3">
-                <BsBook className="me-2 text-primary" size={20} />
-                <strong>{translate('articles.detail.book')}</strong>
-                <span className="ms-2">{article.book.translations?.[0]?.title || article.book.author}</span>
+              <div
+                className="mb-3 p-3 rounded-3"
+                style={{
+                  background: isDarkMode
+                    ? 'linear-gradient(135deg, rgba(33, 147, 176, 0.12) 0%, rgba(109, 213, 237, 0.08) 100%)'
+                    : 'linear-gradient(135deg, rgba(33, 147, 176, 0.06) 0%, rgba(109, 213, 237, 0.1) 100%)',
+                  border: isDarkMode
+                    ? '1px solid rgba(109, 213, 237, 0.25)'
+                    : '1px solid rgba(33, 147, 176, 0.18)',
+                  overflow: 'hidden',
+                  maxWidth: '100%',
+                }}
+              >
+                <div className="d-flex align-items-center justify-content-between gap-3 flex-wrap">
+                  <div
+                    className="d-flex align-items-center min-w-0"
+                    style={{ flex: '1 1 180px', minWidth: 0 }}
+                  >
+                    <BsBook className="me-2 text-primary flex-shrink-0" size={20} />
+                    <div className="min-w-0">
+                      <strong>{translate('articles.detail.book')}</strong>{' '}
+                      <span className="text-break">{getBookTitle(article.book)}</span>
+                    </div>
+                  </div>
+                  <Link
+                    href={getBookUrl(article.book.id)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-decoration-none flex-shrink-0"
+                    style={{ flex: '0 0 auto' }}
+                  >
+                    <Button
+                      size="sm"
+                      className="d-inline-flex align-items-center justify-content-center px-3 py-2 border-0 text-white fw-semibold"
+                      style={{
+                        background: 'linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)',
+                        boxShadow: '0 2px 10px rgba(33, 147, 176, 0.35)',
+                        transition: 'box-shadow 0.2s ease, opacity 0.2s ease',
+                        whiteSpace: 'nowrap',
+                        width: 'auto',
+                        maxWidth: '100%',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.boxShadow = '0 4px 14px rgba(33, 147, 176, 0.45)';
+                        e.currentTarget.style.opacity = '0.95';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.boxShadow = '0 2px 10px rgba(33, 147, 176, 0.35)';
+                        e.currentTarget.style.opacity = '1';
+                      }}
+                    >
+                      <BsBook className="me-2 flex-shrink-0" />
+                      {translate('articles.detail.viewBook', 'Kitabı Gör')}
+                      <BsBoxArrowUpRight className="ms-2 flex-shrink-0" size={13} />
+                    </Button>
+                  </Link>
+                </div>
               </div>
             )}
           </div>
@@ -1229,121 +1308,6 @@ const ArticleDetailPage = () => {
                                 </Button>
                               </>
                             )}
-                            <Dropdown className="d-inline-block">
-                              <DropdownToggle
-                                variant="outline-secondary"
-                                size="sm"
-                                className="d-flex align-items-center article-translation-share-toggle"
-                              >
-                                <BsShare className="me-1" />
-                                {translate('articles.share') || 'Paylaş'}
-                              </DropdownToggle>
-                              <DropdownMenu align="end">
-                                <DropdownItem
-                                  as="button"
-                                  onClick={() => {
-                                    const articleUrl = getArticleUrl();
-                                    if (articleUrl) {
-                                      navigator.clipboard.writeText(articleUrl);
-                                      showNotification({
-                                        title: 'Başarılı',
-                                        message: 'Kitapçık linki kopyalandı',
-                                        variant: 'success'
-                                      });
-                                    }
-                                  }}
-                                >
-                                  <BsShare size={16} className="me-2" />
-                                  {t('articles.share') || 'Paylaş'}
-                                </DropdownItem>
-                                <DropdownItem
-                                  as="button"
-                                  onClick={() => {
-                                    const articleUrl = getArticleUrl();
-                                    const message = `${translation.title} kitapçığını görüntüle: ${articleUrl}`;
-                                    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-                                    window.open(whatsappUrl, '_blank');
-                                  }}
-                                >
-                                  <BsWhatsapp size={16} className="me-2 text-success" />
-                                  {t('articles.shareOnWhatsApp') || 'WhatsApp\'ta Paylaş'}
-                                </DropdownItem>
-                                <DropdownItem
-                                  as="button"
-                                  onClick={async () => {
-                                    try {
-                                      const token = localStorage.getItem('token');
-                                      if (!token) {
-                                        showNotification({
-                                          title: 'Hata',
-                                          message: 'Giriş yapmalısınız',
-                                          variant: 'danger'
-                                        });
-                                        return;
-                                      }
-
-                                      let userId;
-                                      try {
-                                        const payload = JSON.parse(atob(token.split('.')[1]));
-                                        userId = payload.id || payload.userId || payload.sub;
-                                      } catch (err) {
-                                        const userData = localStorage.getItem('user');
-                                        if (userData) {
-                                          try {
-                                            userId = JSON.parse(userData).id;
-                                          } catch (parseErr) {
-                                          }
-                                        }
-                                      }
-
-                                      if (!userId) {
-                                        showNotification({
-                                          title: 'Hata',
-                                          message: 'Kullanıcı bilgisi bulunamadı',
-                                          variant: 'danger'
-                                        });
-                                        return;
-                                      }
-
-                                      const formData = new FormData();
-                                      formData.append('user_id', userId);
-                                      formData.append('type', 'shared_article');
-                                      formData.append('title', '');
-                                      formData.append('content', `${translation.title} kitapçığını paylaştı`);
-                                      formData.append('shared_article_id', params.id);
-
-                                      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user-posts`, {
-                                        method: 'POST',
-                                        headers: { 'Authorization': `Bearer ${token}` },
-                                        body: formData
-                                      });
-
-                                      if (response.ok) {
-                                        showNotification({
-                                          title: 'Başarılı',
-                                          message: 'Kitapçık haber akışında paylaşıldı',
-                                          variant: 'success'
-                                        });
-                                        window.dispatchEvent(new CustomEvent('timelineRefreshRequested'));
-                                        router.push('/feed/home');
-                                      } else {
-                                        throw new Error('Paylaşım başarısız');
-                                      }
-                                    } catch (error) {
-                                      console.error('Error sharing to feed:', error);
-                                      showNotification({
-                                        title: 'Hata',
-                                        message: 'Haber akışında paylaşımda bir hata oluştu',
-                                        variant: 'danger'
-                                      });
-                                    }
-                                  }}
-                                >
-                                  <BsNewspaper size={16} className="me-2 text-primary" />
-                                  {t('articles.shareToFeed') || 'Haber Akışında Paylaş'}
-                                </DropdownItem>
-                              </DropdownMenu>
-                            </Dropdown>
                           </div>
                         </div>
 
