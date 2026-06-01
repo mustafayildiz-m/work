@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { io } from 'socket.io-client';
-import { getToken } from '@/utils/auth';
+import { getToken, clearToken } from '@/utils/auth';
 import placeholderImg from '@/assets/images/avatar/placeholder.jpg';
 import { useOptionalNotificationContext } from './useNotificationContext';
 
@@ -212,6 +212,9 @@ export const WebSocketChatProvider = ({ children }) => {
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        clearToken();
+      }
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 

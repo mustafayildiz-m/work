@@ -13,6 +13,7 @@ import placeholderImg from '@/assets/images/avatar/placeholder.jpg';
 import { useSession } from 'next-auth/react';
 import { useState, useMemo, useEffect, useRef } from 'react';
 import clsx from 'clsx';
+import { hasValidToken } from '@/utils/auth';
 import SimplebarReactClient from '@/components/wrappers/SimplebarReactClient';
 
 const MessagingBar = () => {
@@ -640,6 +641,9 @@ const MessagingBar = () => {
             }
         }
     };
+
+    if (status === 'loading') return null;
+    if (status !== 'authenticated' || !hasValidToken()) return null;
 
     return (
         <div

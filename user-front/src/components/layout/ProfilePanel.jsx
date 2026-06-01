@@ -11,6 +11,7 @@ import { useLanguage } from '@/context/useLanguageContext';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { getProfilePath } from '@/utils/profileEncoder';
+import { getToken } from '@/utils/auth';
 import { BsCamera, BsCheckCircleFill, BsEye, BsImage, BsShieldLock } from 'react-icons/bs';
 
 
@@ -55,7 +56,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
 
       const fetchUserProfile = async () => {
         try {
-          const token = localStorage.getItem('token');
+          const token = getToken();
           if (!token || !session.user.id) return;
 
           const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${session.user.id}`, {
@@ -105,7 +106,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
 
   const fetchFollowStats = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = getToken();
       if (!token) return;
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/following/stats`, {
@@ -135,8 +136,9 @@ const ProfilePanel = ({ links, onLinkClick }) => {
   };
 
   useEffect(() => {
+    if (status !== 'authenticated') return;
     fetchFollowStats();
-  }, []);
+  }, [status]);
 
   useEffect(() => {
     window.addEventListener('followStatusChanged', fetchFollowStats);

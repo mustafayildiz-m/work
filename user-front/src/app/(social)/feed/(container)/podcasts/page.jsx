@@ -89,8 +89,8 @@ const PodcastLanguageSelector = () => {
 
   if (loading || loadingCounts) {
     return (
-      <Col lg={9}>
-        <Card className="cs-card">
+      <Col lg={9} className="feed-main-col">
+        <Card className="cs-card cs-card--full-height">
           <CardBody className="text-center py-5">
             <Spinner animation="border" variant="primary" />
             <p className="mt-3 text-muted">{t('podcasts.languageSelector.loadingLanguages')}</p>
@@ -102,8 +102,8 @@ const PodcastLanguageSelector = () => {
 
   if (error) {
     return (
-      <Col lg={9}>
-        <Card className="cs-card">
+      <Col lg={9} className="feed-main-col">
+        <Card className="cs-card cs-card--full-height">
           <CardBody>
             <Alert variant="danger">
               <Alert.Heading>{t('podcasts.languageSelector.error')}</Alert.Heading>
@@ -116,8 +116,8 @@ const PodcastLanguageSelector = () => {
   }
 
   return (
-    <Col lg={9}>
-      <Card className="cs-card">
+    <Col lg={9} className="feed-main-col">
+      <Card className="cs-card cs-card--full-height cs-card--podcasts">
         {/* Header */}
         <div className="cs-header">
           <div className="cs-header__content">
@@ -171,7 +171,8 @@ const PodcastLanguageSelector = () => {
               <p className="cs-empty__desc">{t('common.countrySelector.noResultsDesc')}</p>
             </div>
           ) : (
-            <div className="cs-grid">
+            <div className="cs-grid-scroll">
+              <div className="cs-grid">
               {filteredCountries.map((country) => {
                 const lang = country.primaryLanguage;
                 const hasLang = !!lang;
@@ -216,6 +217,7 @@ const PodcastLanguageSelector = () => {
                   </button>
                 );
               })}
+              </div>
             </div>
           )}
 

@@ -6,6 +6,7 @@ import { FaSlidersH } from 'react-icons/fa';
 import ProfilePanel from '@/components/layout/ProfilePanel';
 import { profilePanelLinksData1 } from '@/assets/data/layout';
 import MessagingBar from '@/components/layout/MessagingBar';
+import { useEffect, useRef } from 'react';
 
 import { useLanguage } from '@/context/useLanguageContext';
 
@@ -16,11 +17,38 @@ const FeedLayout = ({
   const {
     startOffcanvas
   } = useLayoutContext();
+  const sidebarContentRef = useRef(null);
+  const feedRowRef = useRef(null);
+
+  useEffect(() => {
+    const sidebarEl = sidebarContentRef.current;
+    const rowEl = feedRowRef.current;
+    if (!sidebarEl || !rowEl) return;
+
+    const syncSidebarHeight = () => {
+      if (window.innerWidth < 992) {
+        rowEl.style.removeProperty('--feed-sidebar-height');
+        return;
+      }
+      rowEl.style.setProperty('--feed-sidebar-height', `${sidebarEl.offsetHeight}px`);
+    };
+
+    syncSidebarHeight();
+
+    const resizeObserver = new ResizeObserver(syncSidebarHeight);
+    resizeObserver.observe(sidebarEl);
+    window.addEventListener('resize', syncSidebarHeight);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', syncSidebarHeight);
+    };
+  }, []);
 
   return <>
     <main>
       <Container>
-        <Row className="g-4 feed-container-row" style={{ marginTop: '0.5rem' }}>
+        <Row ref={feedRowRef} className="g-4 feed-container-row align-items-start" style={{ marginTop: '0.5rem' }}>
           <Col 
             lg={3} 
             className="sticky-left-panel"
@@ -61,7 +89,7 @@ const FeedLayout = ({
 
             <nav className="navbar navbar-expand-lg mx-0">
               {/* Desktop View */}
-              <div className="d-none d-lg-block px-2 px-lg-0 w-100">
+              <div ref={sidebarContentRef} className="d-none d-lg-block px-2 px-lg-0 w-100">
                 <ProfilePanel links={profilePanelLinksData1} />
               </div>
 

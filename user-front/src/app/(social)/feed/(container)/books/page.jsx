@@ -97,9 +97,9 @@ const BooksPage = () => {
   const showResults = debouncedQuery.length >= 2;
 
   return (
-    <Col lg={9}>
+    <Col lg={9} className="feed-main-col feed-main-col--stacked">
       {/* Live arama - buton yok, yazdıkça listele */}
-      <div className="mb-4">
+      <div className="feed-main-col__above mb-4">
         <div
           className="position-relative rounded-4 overflow-hidden books-search-banner"
           style={{
@@ -203,7 +203,9 @@ const BooksPage = () => {
         )}
       </div>
 
-      <LanguageSelector />
+      <div className="feed-main-col__fill">
+        <LanguageSelector />
+      </div>
 
       <style jsx global>{`
         .book-search-grid {

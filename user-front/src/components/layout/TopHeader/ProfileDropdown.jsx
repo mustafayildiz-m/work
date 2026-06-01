@@ -8,6 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { useLanguage } from '@/context/useLanguageContext';
 import { getProfilePath } from '@/utils/profileEncoder';
+import { getToken } from '@/utils/auth';
 import avatar7 from '@/assets/images/avatar/07.jpg';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { BsCheckLg } from 'react-icons/bs';
@@ -145,6 +146,8 @@ const ProfileDropdown = () => {
 
   // Get user ID from various sources
   const getUserId = useCallback(() => {
+    if (status !== 'authenticated') return null;
+
     // Try to get from userData first
     if (userData?.id) return userData.id;
     if (userData?.sub) return userData.sub;
@@ -153,22 +156,19 @@ const ProfileDropdown = () => {
     if (session?.user?.id) return session.user.id;
     if (session?.user?.sub) return session.user.sub;
 
-    // Try to get from localStorage token
-    if (typeof window !== 'undefined') {
+    const token = getToken();
+    if (token) {
       try {
-        const token = localStorage.getItem('token');
-        if (token) {
-          const payload = token.split('.')[1];
-          const decodedPayload = JSON.parse(atob(payload));
-          return decodedPayload.sub || decodedPayload.id;
-        }
+        const payload = token.split('.')[1];
+        const decodedPayload = JSON.parse(atob(payload));
+        return decodedPayload.sub || decodedPayload.id;
       } catch (error) {
         console.error('Error decoding token:', error);
       }
     }
 
     return null;
-  }, [userData, session?.user]);
+  }, [userData, session?.user, status]);
 
   // Dynamic menu items with user ID
   const dynamicMenuItems = useMemo(() => {
@@ -184,10 +184,12 @@ const ProfileDropdown = () => {
   // Fetch fresh user data on mount
   useEffect(() => {
     const fetchFreshUserData = async () => {
+      if (status !== 'authenticated') return;
+
       const userId = getUserId();
       if (userId) {
         try {
-          const token = localStorage.getItem('token');
+          const token = getToken();
           if (!token) return;
 
           const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/users/${userId}`;
@@ -229,7 +231,7 @@ const ProfileDropdown = () => {
     };
 
     fetchFreshUserData();
-  }, [getUserId]); // Only run on mount
+  }, [getUserId, status]); // Only run when auth state changes
 
   // Initial data loading
   useEffect(() => {
@@ -241,10 +243,13 @@ const ProfileDropdown = () => {
   // Listen for profile photo updates
   useEffect(() => {
     const handleProfileUpdate = async () => {
+      if (status !== 'authenticated') return;
+
       const userId = getUserId();
       if (userId) {
         try {
-          const token = localStorage.getItem('token');
+          const token = getToken();
+          if (!token) return;
           const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/users/${userId}`;
           const response = await fetch(fetchUrl, {
             headers: {

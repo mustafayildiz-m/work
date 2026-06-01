@@ -5,7 +5,7 @@ import LanguageSelector from './components/LanguageSelector';
 
 const ArticlesPage = () => {
   return (
-    <Col lg={9}>
+    <Col lg={9} className="feed-main-col">
       <LanguageSelector />
     </Col>
   );

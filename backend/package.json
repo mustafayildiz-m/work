@@ -35,6 +35,7 @@
     "seed:scholar-alim-images": "ts-node scripts/seed-scholar-alim-images.ts",
     "seed:book-covers": "ts-node scripts/seed-book-covers.ts",
     "report:book-covers": "ts-node scripts/report-book-covers.ts",
+    "import:kitapciklar": "ts-node scripts/import-kitapciklar.ts",
     "seed:all": "npm run seed:languages && npm run seed:countries && npm run seed:backfill-country-languages && npm run seed:multilanguage-books && npm run seed:multilanguage-articles"
   },
   "dependencies": {

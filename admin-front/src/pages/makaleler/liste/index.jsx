@@ -108,9 +108,16 @@ function ArticleList() {
       {
         accessorKey: 'translations',
         header: intl.formatMessage({ id: 'UI.DILLER' }),
-        cell: info => (
+        cell: info => {
+          const seen = new Set();
+          const unique = (info.getValue() || []).filter((trans) => {
+            if (!trans?.languageId || seen.has(trans.languageId)) return false;
+            seen.add(trans.languageId);
+            return true;
+          });
+          return (
           <div className="flex flex-wrap gap-1">
-            {(info.getValue() || []).map(trans => (
+            {unique.map(trans => (
               <span
                 key={trans.languageId}
                 className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded"
@@ -119,7 +126,8 @@ function ArticleList() {
               </span>
             ))}
           </div>
-        ),
+          );
+        },
         enableSorting: false,
         enableColumnFilter: false,
       },
