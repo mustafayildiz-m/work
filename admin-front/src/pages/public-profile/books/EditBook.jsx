@@ -11,6 +11,8 @@ import { FaBook, FaUser, FaTags, FaCalendar, FaGlobe, FaFilePdf, FaImage, FaArro
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/books';
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
+const matchLanguageId = (left, right) => String(left) === String(right);
+
 function EditBook() {
   const intl = useIntl();
   const { id } = useParams();
@@ -380,7 +382,7 @@ function EditBook() {
                   value={form.author}
                   onChange={handleChange}
                   required
-                  placeholder="Kitabın yazarını girin"
+                  placeholder={intl.formatMessage({ id: 'UI.KITABIN_YAZARINI_GIRIN' })}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition"
                 />
               </div>
@@ -432,7 +434,7 @@ function EditBook() {
                   value={categoryInput}
                   onChange={handleCategoryInput}
                   onKeyDown={handleCategoryKeyDown}
-                  placeholder="Kategori adı yazın ve Enter/Tab ile ekleyin..."
+                  placeholder={intl.formatMessage({ id: 'UI.KATEGORI_EKLEMEK_ICIN_YAZIP_ENTER_VEYA_T' })}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition"
                 />
                 <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
@@ -467,8 +469,11 @@ function EditBook() {
                     </div>
                     <h4 className="font-bold text-gray-900 dark:text-white">
                       {translation.language
-                        ? availableLanguages.find(l => l.id === translation.language)?.name || `Çeviri ${idx + 1}`
-                        : `Çeviri ${idx + 1}`}
+                        ? getLocalizedLanguageName(
+                            availableLanguages.find(l => matchLanguageId(l.id, translation.language)),
+                            intl,
+                          ) || intl.formatMessage({ id: 'UI.CEVIRI_NUMARALI' }, { n: idx + 1 })
+                        : intl.formatMessage({ id: 'UI.CEVIRI_NUMARALI' }, { n: idx + 1 })}
                     </h4>
                   </div>
                   {form.translations.length > 1 && (
@@ -494,11 +499,11 @@ function EditBook() {
                     <Select
                       options={availableLanguages.map(l => ({ value: l.id, label: getLocalizedLanguageName(l, intl) }))}
                       value={availableLanguages
-                        .filter(l => l.id === translation.language)
-                        .map(l => ({ value: l.id, label: getLocalizedLanguageName(l, intl) }))[0]}
-                      onChange={option => handleTranslationChange(idx, 'language', option.value)}
+                        .filter(l => matchLanguageId(l.id, translation.language))
+                        .map(l => ({ value: l.id, label: getLocalizedLanguageName(l, intl) }))[0] || null}
+                      onChange={option => handleTranslationChange(idx, 'language', option?.value || '')}
                       isLoading={loadingLanguages}
-                      placeholder="Dil seçin..."
+                      placeholder={intl.formatMessage({ id: 'UI.DIL_SECIN_PLACEHOLDER' })}
                       styles={getSelectStyles(currentTheme)}
                     />
                   </div>
@@ -515,7 +520,7 @@ function EditBook() {
                       value={translation.title}
                       onChange={e => handleTranslationChange(idx, 'title', e.target.value)}
                       required
-                      placeholder="Bu dil için kitap başlığı"
+                      placeholder={intl.formatMessage({ id: 'UI.BU_DIL_ICIN_KITAP_BASLIGI' })}
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition"
                     />
                   </div>
@@ -530,7 +535,7 @@ function EditBook() {
                       value={translation.description}
                       onChange={e => handleTranslationChange(idx, 'description', e.target.value)}
                       rows="3"
-                      placeholder="Bu dil için detaylı açıklama..."
+                      placeholder={intl.formatMessage({ id: 'UI.BU_DIL_ICIN_ACIKLAMA' })}
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition resize-none"
                     />
                   </div>
@@ -545,7 +550,7 @@ function EditBook() {
                       value={translation.summary}
                       onChange={e => handleTranslationChange(idx, 'summary', e.target.value)}
                       rows="3"
-                      placeholder="Bu dil için kısa özet..."
+                      placeholder={intl.formatMessage({ id: 'UI.BU_DIL_ICIN_OZET' })}
                       className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition resize-none"
                     />
                   </div>
