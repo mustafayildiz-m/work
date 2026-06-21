@@ -63,6 +63,20 @@ import {
   UserCog,
   FileText as NoteIcon,
   Package,
+  Plus,
+  Newspaper,
+  GraduationCap,
+  Mic,
+  Video,
+  Globe,
+  Warehouse,
+  ArrowLeftRight,
+  PenLine,
+  ClipboardCheck,
+  ListVideo,
+  UserPlus,
+  Boxes,
+  LayoutList,
 } from 'lucide-react';
 
 export const MENU_SIDEBAR = [
@@ -79,98 +93,116 @@ export const MENU_SIDEBAR = [
     children: [
       {
         title: 'Kitaplar',
+        icon: Book,
         children: [
           {
             title: 'Kitap Ekle',
             path: '/kitaplar/ekle',
+            icon: Plus,
             status: 'done'
           },
           {
             title: 'Tüm Kitaplar',
             path: '/kitaplar/liste',
+            icon: LayoutList,
             status: 'done'
           }
         ]
       },
       {
         title: 'Kitapçık',
+        icon: ScrollText,
         children: [
           {
             title: 'Kitapçık Ekle',
             path: '/makaleler/ekle',
+            icon: Plus,
             status: 'done'
           },
           {
             title: 'Tüm Kitapçıklar',
             path: '/makaleler/liste',
+            icon: LayoutList,
             status: 'done'
           }
         ]
       },
       {
         title: 'Haber Bültenleri',
+        icon: Newspaper,
         children: [
           {
             title: 'Bülten Ekle',
             path: '/haber-bultenleri/ekle',
+            icon: Plus,
             status: 'done'
           },
           {
             title: 'Tüm Bültenler',
             path: '/haber-bultenleri/liste',
+            icon: LayoutList,
             status: 'done'
           }
         ]
       },
       {
         title: 'Akademik Yayınlar',
+        icon: GraduationCap,
         children: [
           {
             title: 'Yayın Ekle',
             path: '/akademik-yayinlar/ekle',
+            icon: Plus,
             status: 'done'
           },
           {
             title: 'Tüm Yayınlar',
             path: '/akademik-yayinlar/liste',
+            icon: LayoutList,
             status: 'done'
           }
         ]
       },
       {
         title: 'Podcast',
+        icon: Mic,
         children: [
           {
             title: 'Podcast Ekle',
             path: '/podcast/ekle',
+            icon: Plus,
             status: 'done'
           },
           {
             title: 'Tüm Podcast\'ler',
             path: '/podcast/liste',
+            icon: LayoutList,
             status: 'done'
           }
         ]
       },
       {
         title: 'Alimler',
+        icon: UserCircle,
         children: [
-          { title: 'Alim Ekle', path: '/alimler/ekle', status: 'done' },
-          { title: 'Tüm Alimler', path: '/alimler/liste', status: 'done' },
+          { title: 'Alim Ekle', path: '/alimler/ekle', icon: UserPlus, status: 'done' },
+          { title: 'Tüm Alimler', path: '/alimler/liste', icon: Users, status: 'done' },
         ],
       },
       {
         title: 'Hikayeler',
+        icon: Video,
         children: [
-          { title: 'Video Ekle', path: '/alim-hikayeleri/ekle', status: 'done' },
-          { title: 'Tüm Videolar', path: '/alim-hikayeleri/liste', status: 'done' },
+          { title: 'Video Ekle', path: '/alim-hikayeleri/ekle', icon: Plus, status: 'done' },
+          { title: 'Tüm Videolar', path: '/alim-hikayeleri/liste', icon: ListVideo, status: 'done' },
         ],
       },
       {
         title: 'Genel Tanımlar',
+        icon: Settings,
         children: [
-          { title: 'Diller', path: '/diller/liste', status: 'done' },
-          { title: 'Ülkeler', path: '/ulkeler/liste', status: 'done' },
+          { title: 'Diller', path: '/diller/liste', icon: Languages, status: 'done' },
+          { title: 'Ülkeler', path: '/ulkeler/liste', icon: Globe, status: 'done' },
         ],
       },
 
@@ -183,23 +215,26 @@ export const MENU_SIDEBAR = [
     children: [
       {
         title: 'Depolar',
+        icon: Warehouse,
         children: [
-          { title: 'Depo Ekle', path: '/depolar/ekle', status: 'done' },
-          { title: 'Tüm Depolar', path: '/depolar/liste', status: 'done' },
+          { title: 'Depo Ekle', path: '/depolar/ekle', icon: Plus, status: 'done' },
+          { title: 'Tüm Depolar', path: '/depolar/liste', icon: LayoutList, status: 'done' },
         ],
       },
       {
         title: 'Stoklar',
+        icon: Boxes,
         children: [
-          { title: 'Stok Ekle', path: '/stoklar/ekle', status: 'done' },
-          { title: 'Tüm Stoklar', path: '/stoklar/liste', status: 'done' },
+          { title: 'Stok Ekle', path: '/stoklar/ekle', icon: Plus, status: 'done' },
+          { title: 'Tüm Stoklar', path: '/stoklar/liste', icon: LayoutList, status: 'done' },
         ],
       },
       {
         title: 'Stok Transferleri',
+        icon: ArrowLeftRight,
         children: [
-          { title: 'Stok Transferi Ekle', path: '/stok-transfer/ekle', status: 'done' },
-          { title: 'Tüm Transferler', path: '/stok-transfer/liste', status: 'done' },
+          { title: 'Stok Transferi Ekle', path: '/stok-transfer/ekle', icon: Plus, status: 'done' },
+          { title: 'Tüm Transferler', path: '/stok-transfer/liste', icon: LayoutList, status: 'done' },
         ],
       },
     ],
@@ -209,9 +244,9 @@ export const MENU_SIDEBAR = [
     icon: UserCog,
     status: 'done',
     children: [
-      { title: 'Yöneticiler', path: '/kullanicilar/yoneticiler', status: 'done' },
-      { title: 'Editörler', path: '/kullanicilar/editorler', status: 'done' },
-      { title: 'Bireysel Kullanıcılar', path: '/kullanicilar/bireysel', status: 'done' },
+      { title: 'Yöneticiler', path: '/kullanicilar/yoneticiler', icon: ShieldUser, status: 'done' },
+      { title: 'Editörler', path: '/kullanicilar/editorler', icon: PenLine, status: 'done' },
+      { title: 'Bireysel Kullanıcılar', path: '/kullanicilar/bireysel', icon: Users, status: 'done' },
     ],
   },
   {
@@ -219,7 +254,7 @@ export const MENU_SIDEBAR = [
     icon: Shield,
     status: 'done',
     children: [
-      { title: 'Onay Bekleyen Postlar', path: '/kullanicilar/post-onaylama', status: 'done' },
+      { title: 'Onay Bekleyen Postlar', path: '/kullanicilar/post-onaylama', icon: ClipboardCheck, status: 'done' },
     ],
   },
   /*

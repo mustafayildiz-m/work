@@ -305,7 +305,7 @@ export default function AlimHikayesiEkle() {
           id: "UI.YENI_VIDEO_EKLE__ISLAMIC_WINDOWS_ADMIN"
         })}</title>
       </Helmet>
-      <div className="p-6 max-w-5xl mx-auto">
+      <div className="p-6 max-w-6xl mx-auto">
         {/* Modern Header with Gradient */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">

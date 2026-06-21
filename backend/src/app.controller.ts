@@ -44,10 +44,11 @@ export class AppController {
   async getCounts() {
     const scholars = await this.scholarRepository.count();
     const books = await this.bookRepository.count();
+    const articles = await this.articleRepository.count();
     const posts = await this.scholarPostRepository.count();
     const languages = await this.languageRepository.count();
     const countries = await this.countryRepository.count();
-    return { scholars, books, posts, languages, countries };
+    return { scholars, books, articles, posts, languages, countries };
   }
 
   @Get('statistics/monthly')

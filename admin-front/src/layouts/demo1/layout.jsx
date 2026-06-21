@@ -5,9 +5,9 @@ import { MENU_SIDEBAR } from '@/config/menu.config';
 import { useMenu } from '@/hooks/use-menu';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useSettings } from '@/providers/settings-provider';
-import { Footer } from './components/footer';
 import { Header } from './components/header';
 import { Sidebar } from './components/sidebar';
+import { SidebarToggle } from './components/sidebar-toggle';
 
 export function Demo1Layout() {
   const isMobile = useIsMobile();
@@ -61,15 +61,14 @@ export function Demo1Layout() {
       </Helmet>
 
       {!isMobile && <Sidebar />}
+      {!isMobile && <SidebarToggle />}
 
       <div className="wrapper flex grow flex-col">
         <Header />
 
-        <main className="grow pt-5" role="content">
+        <main className="grow pt-6 pb-8" role="content">
           <Outlet />
         </main>
-
-        <Footer />
       </div>
     </>
   );

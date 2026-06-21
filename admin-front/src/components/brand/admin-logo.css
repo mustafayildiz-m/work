@@ -1,0 +1,117 @@
+@layer components {
+  .iw-admin-logo {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+    min-width: 0;
+    text-decoration: none;
+  }
+
+  .iw-admin-logo-full {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-width: 0;
+  }
+
+  .iw-admin-logo-icon-only {
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .iw-admin-logo-icon {
+    display: inline-block;
+    width: 44px;
+    height: 60px;
+    background-repeat: no-repeat;
+    background-size: 197px auto;
+    background-position: -76px -16px;
+    flex-shrink: 0;
+  }
+
+  .iw-admin-logo-dark .iw-admin-logo-icon {
+    background-image: url('/logo/logo-on-dark.png');
+  }
+
+  .iw-admin-logo-light .iw-admin-logo-icon {
+    background-image: url('/logo/logo.png');
+  }
+
+  .iw-admin-logo-wordmark {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.05;
+    white-space: nowrap;
+    min-width: 0;
+  }
+
+  .iw-admin-logo-dark .iw-admin-logo-wordmark {
+    color: #ffffff;
+  }
+
+  .iw-admin-logo-light .iw-admin-logo-wordmark {
+    color: #1f3a63;
+  }
+
+  .iw-admin-logo-word {
+    font-size: 1.05rem;
+    display: block;
+  }
+
+  /* Sidebar header */
+  .demo1 .sidebar-brand .iw-admin-logo-icon {
+    width: 40px;
+    height: 54px;
+    background-size: 179px auto;
+    background-position: -69px -14px;
+  }
+
+  .demo1 .sidebar-brand .iw-admin-logo-word {
+    font-size: 0.95rem;
+  }
+
+  /* Mobile header — kompakt */
+  .iw-admin-logo.iw-admin-logo-compact .iw-admin-logo-icon {
+    width: 34px;
+    height: 46px;
+    background-size: 152px auto;
+    background-position: -59px -12px;
+  }
+
+  .iw-admin-logo.iw-admin-logo-compact .iw-admin-logo-word {
+    font-size: 0.82rem;
+  }
+
+  .iw-admin-logo.iw-admin-logo-compact .iw-admin-logo-full {
+    gap: 0.4rem;
+  }
+
+  /* Collapsed sidebar — sadece simge */
+  .demo1.sidebar-collapse .sidebar:not(:hover) .iw-admin-logo-icon-only .iw-admin-logo-icon {
+    width: 36px;
+    height: 48px;
+    background-size: 161px auto;
+    background-position: -62px -13px;
+  }
+
+  /* Auth login panel — büyük logo */
+  .iw-admin-logo.iw-admin-logo-auth .iw-admin-logo-icon {
+    width: 56px;
+    height: 76px;
+    background-size: 251px auto;
+    background-position: -97px -20px;
+  }
+
+  .iw-admin-logo.iw-admin-logo-auth .iw-admin-logo-word {
+    font-size: 1.5rem;
+  }
+
+  .iw-admin-logo.iw-admin-logo-auth .iw-admin-logo-full {
+    gap: 0.7rem;
+  }
+}

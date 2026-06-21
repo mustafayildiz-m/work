@@ -21,6 +21,31 @@ const statusColor = {
   pending: ""
 };
 
+const renderMenuIcon = (Icon, className = '', size = 'default') => {
+  if (!Icon) return null;
+  return (
+    <span
+      className={cn(
+        'sidebar-menu-icon shrink-0',
+        size === 'sm' && 'sidebar-menu-icon-sm',
+        size === 'xs' && 'sidebar-menu-icon-xs',
+      )}
+    >
+      <Icon data-slot="accordion-menu-icon" className={className} />
+    </span>
+  );
+};
+
+const renderNavBadge = (count) => (
+  <Badge
+    variant="danger"
+    size="sm"
+    className="sidebar-nav-badge ms-auto rounded-full px-1.5 h-5 min-w-5 flex items-center justify-center border-none text-[10px]"
+  >
+    {count}
+  </Badge>
+);
+
 const getMenuKey = (text) => {
   let slug = text.trim().replace(/[\s\n\r]+/g, '_').toUpperCase();
   const trMap = {
@@ -79,19 +104,17 @@ export function SidebarMenu() {
     [pathname],
   );
 
-  // Global classNames for consistent styling
+  // Global classNames — visual styling in admin-premium.css
   const classNames = {
-    root: 'lg:ps-1 space-y-3 px-2',
-    group: 'gap-1',
-    label:
-      'uppercase text-[11px] font-semibold text-muted-foreground/60 tracking-wider pt-4 pb-1 px-3',
-    separator: 'h-px bg-border/50 my-2',
-    item: 'group h-11 px-3 mb-1.5 rounded-xl text-[14px] font-medium text-muted-foreground transition-all duration-300 hover:bg-accent hover:text-foreground data-[selected=true]:bg-primary data-[selected=true]:text-primary-foreground data-[selected=true]:shadow-lg data-[selected=true]:shadow-primary/30',
-    sub: 'mt-1',
-    subTrigger:
-      'group h-11 px-3 mb-1.5 rounded-xl text-[14px] font-medium text-muted-foreground transition-all duration-300 hover:bg-accent hover:text-foreground data-[selected=true]:bg-primary/10 data-[selected=true]:text-primary',
-    subContent: 'py-1 mr-2',
-    indicator: 'transition-transform duration-300 opacity-60 group-hover:opacity-100 group-data-[selected=true]:opacity-100',
+    root: 'sidebar-nav-root space-y-1 px-1',
+    group: 'sidebar-nav-group gap-0.5',
+    label: 'sidebar-nav-label',
+    separator: 'sidebar-nav-separator h-px bg-white/[0.06] my-2',
+    item: 'sidebar-nav-link h-11 px-3',
+    sub: 'sidebar-nav-sub mt-0.5',
+    subTrigger: 'sidebar-nav-link sidebar-nav-parent h-11 px-3',
+    subContent: 'sidebar-nav-subcontent',
+    indicator: 'sidebar-nav-indicator',
   };
 
   const buildMenu = (items) => {
@@ -136,16 +159,12 @@ export function SidebarMenu() {
     if (item.children) {
       return (
         <AccordionMenuSub key={index} value={item.path || `root-${index}`}>
-          <AccordionMenuSubTrigger className={`text-sm font-medium ${colorClass} flex items-center justify-between grow gap-2 w-full`}>
-            <div className="flex items-center gap-2">
-              {item.icon && <item.icon data-slot="accordion-menu-icon" className={colorClass} />}
+          <AccordionMenuSubTrigger className={`${colorClass} flex items-center justify-between gap-2 w-full`}>
+            <div className="flex flex-1 items-center gap-3 min-w-0">
+              {renderMenuIcon(item.icon, colorClass)}
               <span data-slot="accordion-menu-title"><FormattedMessage id={`MENU.${getMenuKey(item.title)}`} defaultMessage={item.title} /></span>
             </div>
-            {item.badge !== undefined && (
-              <Badge variant="danger" size="sm" className="ms-auto rounded-full px-1.5 h-5 min-w-5 flex items-center justify-center bg-red-500 text-white border-none text-[10px]">
-                {item.badge}
-              </Badge>
-            )}
+            {item.badge !== undefined && renderNavBadge(item.badge)}
           </AccordionMenuSubTrigger>
           <AccordionMenuSubContent
             type="single"
@@ -165,20 +184,17 @@ export function SidebarMenu() {
           key={index}
           value={item.path || ''}
           className={`text-sm font-medium ${colorClass}`}
+          asChild
         >
           <Link
             to={item.path || '#'}
-            className="flex items-center justify-between grow gap-2 w-full"
+            className="flex items-center justify-between gap-2 w-full h-11"
           >
-            <div className="flex items-center gap-2">
-              {item.icon && <item.icon data-slot="accordion-menu-icon" className={colorClass} />}
+            <div className="flex flex-1 items-center gap-3 min-w-0">
+              {renderMenuIcon(item.icon, colorClass)}
               <span data-slot="accordion-menu-title"><FormattedMessage id={`MENU.${getMenuKey(item.title)}`} defaultMessage={item.title} /></span>
             </div>
-            {item.badge !== undefined && (
-              <Badge variant="danger" size="sm" className="ms-auto rounded-full px-1.5 h-5 min-w-5 flex items-center justify-center bg-red-500 text-white border-none">
-                {item.badge}
-              </Badge>
-            )}
+            {item.badge !== undefined && renderNavBadge(item.badge)}
           </Link>
         </AccordionMenuItem>
       );
@@ -192,7 +208,7 @@ export function SidebarMenu() {
         value={`disabled-${index}`}
         className="text-sm font-medium"
       >
-        {item.icon && <item.icon data-slot="accordion-menu-icon" />}
+        {item.icon && renderMenuIcon(item.icon)}
         <span data-slot="accordion-menu-title"><FormattedMessage id={`MENU.${getMenuKey(item.title)}`} defaultMessage={item.title} /></span>
         {item.disabled && (
           <Badge variant="secondary" size="sm" className="ms-auto me-[-10px]">
@@ -221,19 +237,24 @@ export function SidebarMenu() {
           key={index}
           value={item.path || `child-${level}-${index}`}
         >
-          <AccordionMenuSubTrigger className={`text-[13px] ${colorClass}`}>
-            {item.collapse ? (
-              <span className="text-muted-foreground">
-                <span className="hidden [[data-state=open]>span>&]:inline">
-                  {item.collapseTitle}
+          <AccordionMenuSubTrigger className={`${colorClass} flex items-center justify-between gap-2 w-full min-h-10`}>
+            <div className="flex flex-1 items-center gap-2.5 min-w-0">
+              {renderMenuIcon(item.icon, colorClass, 'sm')}
+              {item.collapse ? (
+                <span className="text-muted-foreground">
+                  <span className="hidden [[data-state=open]>span>&]:inline">
+                    {item.collapseTitle}
+                  </span>
+                  <span className="inline [[data-state=open]>span>&]:hidden">
+                    {item.expandTitle}
+                  </span>
                 </span>
-                <span className="inline [[data-state=open]>span>&]:hidden">
-                  {item.expandTitle}
+              ) : (
+                <span data-slot="accordion-menu-title">
+                  <FormattedMessage id={`MENU.${getMenuKey(item.title)}`} defaultMessage={item.title} />
                 </span>
-              </span>
-            ) : (
-              <FormattedMessage id={`MENU.${getMenuKey(item.title)}`} defaultMessage={item.title} />
-            )}
+              )}
+            </div>
           </AccordionMenuSubTrigger>
           <AccordionMenuSubContent
             type="single"
@@ -260,17 +281,19 @@ export function SidebarMenu() {
           key={index}
           value={item.path || ''}
           className={`text-[13px] ${colorClass}`}
+          asChild
         >
           <Link
             to={item.path || '#'}
-            className="flex items-center justify-between grow gap-2 w-full"
+            className="sidebar-nav-child-link flex items-center justify-between gap-2 w-full min-h-9 px-2"
           >
-            <span><FormattedMessage id={`MENU.${getMenuKey(item.title)}`} defaultMessage={item.title} /></span>
-            {item.badge !== undefined && (
-              <Badge variant="danger" size="sm" className="ms-auto rounded-full px-1.5 h-5 min-w-5 flex items-center justify-center bg-red-500 text-white border-none text-[10px]">
-                {item.badge}
-              </Badge>
-            )}
+            <div className="flex flex-1 items-center gap-2.5 min-w-0">
+              {renderMenuIcon(item.icon, colorClass, 'xs')}
+              <span className="flex-1" data-slot="accordion-menu-title">
+                <FormattedMessage id={`MENU.${getMenuKey(item.title)}`} defaultMessage={item.title} />
+              </span>
+            </div>
+            {item.badge !== undefined && renderNavBadge(item.badge)}
           </Link>
         </AccordionMenuItem>
       );
@@ -284,6 +307,7 @@ export function SidebarMenu() {
         value={`disabled-child-${level}-${index}`}
         className="text-[13px]"
       >
+        {renderMenuIcon(item.icon, '', 'xs')}
         <span data-slot="accordion-menu-title"><FormattedMessage id={`MENU.${getMenuKey(item.title)}`} defaultMessage={item.title} /></span>
         {item.disabled && (
           <Badge variant="secondary" size="sm" className="ms-auto me-[-10px]">
@@ -299,7 +323,7 @@ export function SidebarMenu() {
   };
 
   return (
-    <div className="kt-scrollable-y-hover flex grow shrink-0 py-5 px-5 lg:max-h-[calc(100vh-5.5rem)]">
+    <div className="sidebar-nav-scroll kt-scrollable-y-hover flex-1 min-h-0 overflow-y-auto py-4 px-3">
       <AccordionMenu
         selectedValue={pathname}
         matchPath={matchPath}

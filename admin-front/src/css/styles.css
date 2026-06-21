@@ -10,6 +10,11 @@
     @apply border-border;
   }
 
+  body {
+    @apply antialiased;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
   *:focus-visible {
     @apply outline-ring rounded-xs shadow-none outline-2 outline-offset-3 transition-none!;
   }
@@ -25,6 +30,8 @@
 
 /* Demos */
 @import './demos/demo1.css';
+@import './demos/admin-premium.css';
+@import '../components/brand/admin-logo.css';
 
 /** Dark/Light Theme Variant **/
 @custom-variant dark (&:is(.dark *));

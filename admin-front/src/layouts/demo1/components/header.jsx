@@ -4,8 +4,7 @@ import { StoreClientTopbar } from '@/pages/store-client/components/common/topbar
 import { UserDropdownMenu } from '@/partials/topbar/user-dropdown-menu';
 import { Menu, SquareChevronRight } from 'lucide-react';
 import { useLocation } from 'react-router';
-import { Link } from 'react-router-dom';
-import { getAvatarUrl, toAbsoluteUrl } from '@/lib/helpers';
+import { getAvatarUrl } from '@/lib/helpers';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useScrollPosition } from '@/hooks/use-scroll-position';
@@ -22,6 +21,7 @@ import { Breadcrumb } from './breadcrumb';
 import { MegaMenu } from './mega-menu';
 import { MegaMenuMobile } from './mega-menu-mobile';
 import { SidebarMenu } from './sidebar-menu';
+import { AdminLogo } from '@/components/brand/AdminLogo';
 
 export function Header() {
   const [isSidebarSheetOpen, setIsSidebarSheetOpen] = useState(false);
@@ -43,20 +43,14 @@ export function Header() {
   return (
     <header
       className={cn(
-        'header fixed top-0 z-10 start-0 flex items-stretch shrink-0 border-b border-transparent bg-background end-0 pe-[var(--removed-body-scroll-bar-size,0px)]',
+        'header fixed top-0 z-10 start-0 flex items-stretch shrink-0 border-b border-transparent end-0 pe-[var(--removed-body-scroll-bar-size,0px)] transition-shadow duration-300',
         headerSticky && 'border-b border-border',
       )}
     >
       <Container className="flex justify-between items-stretch lg:gap-4">
         {/* HeaderLogo */}
         <div className="flex gap-1 lg:hidden items-center gap-2.5">
-          <Link to="/" className="shrink-0">
-            <img
-              src={toAbsoluteUrl('/media/app/logo.png')}
-              className="h-[25px] w-full"
-              alt="mini-logo"
-            />
-          </Link>
+          <AdminLogo to="/" variant="light" className="iw-admin-logo-compact shrink-0" />
           <div className="flex items-center">
             {mobileMode && (
               <Sheet
@@ -123,7 +117,7 @@ export function Header() {
               <UserDropdownMenu
                 trigger={
                   <img
-                    className="size-9 rounded-full border-2 border-success shrink-0 cursor-pointer"
+                    className="size-9 rounded-full ring-2 ring-primary/20 ring-offset-2 ring-offset-background shrink-0 cursor-pointer transition-shadow hover:ring-primary/40"
                     src={getAvatarUrl(user)}
                     alt="User Avatar"
                   />

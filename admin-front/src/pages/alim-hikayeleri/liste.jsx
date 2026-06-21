@@ -181,7 +181,7 @@ export default function AlimHikayeleriListe() {
           id: "UI.ISLAMLA_SEREFLENENLER__ISLAMIC_WINDOWS_A"
         })}</title>
       </Helmet>
-      <div className="container mx-auto p-6">
+      <div className="p-6 max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
