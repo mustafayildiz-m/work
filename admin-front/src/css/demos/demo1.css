@@ -4,7 +4,7 @@
     --sidebar-transition-duration: 0.3s;
     --sidebar-transition-timing: ease;
     --sidebar-width: 280px;
-    --sidebar-width-collapse: 80px;
+    --sidebar-width-collapse: 0px;
     --sidebar-default-width: 280px;
     --header-height: 70px;
   }
@@ -32,21 +32,14 @@
   /* Desktop mode */
   @media (min-width: theme(--breakpoint-lg)) {
     .demo1 .sidebar {
-      width: var(--sidebar-width);
-      transition: width var(--sidebar-transition-duration)
-        var(--sidebar-transition-timing);
+      width: var(--sidebar-default-width);
+      transition:
+        transform var(--sidebar-transition-duration) var(--sidebar-transition-timing),
+        box-shadow var(--sidebar-transition-duration) var(--sidebar-transition-timing);
     }
 
     .demo1 .sidebar .sidebar-header {
       height: var(--header-height);
-    }
-
-    .demo1 .sidebar .sidebar-wrapper {
-      width: var(--sidebar-default-width);
-    }
-
-    .demo1 .sidebar .sidebar-logo {
-      width: var(--sidebar-default-width);
     }
 
     .demo1 .sidebar .small-logo {
@@ -66,68 +59,13 @@
     }
 
     .demo1.sidebar-collapse {
-      --sidebar-width: var(--sidebar-width-collapse);
+      --sidebar-width: 0px;
     }
 
     .demo1.sidebar-collapse .sidebar {
-      transition: width var(--sidebar-transition-duration)
-        var(--sidebar-transition-timing);
-    }
-
-    .demo1.sidebar-collapse .sidebar:hover {
-      width: var(--sidebar-default-width);
-    }
-
-    .demo1.sidebar-collapse .sidebar:not(:hover) .default-logo {
-      display: none;
-    }
-
-    .demo1.sidebar-collapse .sidebar:not(:hover) .small-logo {
-      display: flex;
-    }
-
-    .demo1.sidebar-collapse
-      .sidebar:not(:hover)
-      [data-slot='accordion-menu-title'],
-    .demo1.sidebar-collapse .sidebar:not(:hover) [data-slot='badge'],
-    .demo1.sidebar-collapse
-      .sidebar:not(:hover)
-      [data-slot='accordion-menu-sub-indicator'] {
-      display: none !important;
-      transition: none !important;
-      animation: none !important;
-    }
-
-    .demo1.sidebar-collapse
-      .sidebar:not(:hover)
-      [data-slot='accordion-menu-sub-content'] {
-      visibility: hidden;
-      position: absolute;
-      height: 0;
-      width: 0;
-    }
-
-    .demo1.sidebar-collapse
-      .sidebar:not(:hover)
-      [data-slot='accordion-menu-label'] {
-      visibility: hidden;
-      position: relative;
-    }
-
-    .demo1.sidebar-collapse
-      .sidebar:not(:hover)
-      [data-slot='accordion-menu-label']::before {
-      content: '...';
-      color: currentColor;
-      font-size: inherit;
-      position: absolute;
-      visibility: visible;
-      display: inline-block;
-      bottom: 50%;
-      inset-inline-start: 0;
-      margin-inline-start: -0.15rem;
-      top: 0.25rem;
-      transform: translateX(100%);
+      transform: translateX(-100%);
+      box-shadow: none;
+      pointer-events: none;
     }
   }
 
@@ -139,5 +77,11 @@
   .demo1.layout-initialized .header {
     transition: inset-inline-start var(--sidebar-transition-duration)
       var(--sidebar-transition-timing);
+  }
+
+  .demo1.layout-initialized .sidebar {
+    transition:
+      transform var(--sidebar-transition-duration) var(--sidebar-transition-timing),
+      box-shadow var(--sidebar-transition-duration) var(--sidebar-transition-timing);
   }
 }

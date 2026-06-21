@@ -1,7 +1,7 @@
-import { Link, Outlet } from 'react-router-dom';
-import { toAbsoluteUrl } from '@/lib/helpers';
+import { Outlet } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { useIntl } from 'react-intl';
+import { AdminLogo } from '@/components/brand/AdminLogo';
 
 export function BrandedLayout() {
   const intl = useIntl();
@@ -119,13 +119,7 @@ export function BrandedLayout() {
 
         <div className="lg:rounded-xl lg:border lg:border-border lg:m-5 order-1 lg:order-2 bg-top xxl:bg-center xl:bg-cover bg-no-repeat branded-bg">
           <div className="flex flex-col p-8 lg:p-16 gap-6">
-            <Link to="/">
-              <img
-                src={toAbsoluteUrl('/media/app/logo.png')}
-                className="h-[96px] max-w-none mb-6"
-                alt="Islamic Windows Admin"
-              />
-            </Link>
+            <AdminLogo to="/" variant="dark" className="mb-6 iw-admin-logo-auth" />
 
             <div className="flex flex-col gap-4">
               <h3 className="text-3xl font-semibold text-mono">

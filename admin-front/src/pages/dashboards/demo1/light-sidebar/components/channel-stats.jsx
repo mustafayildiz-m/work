@@ -1,9 +1,9 @@
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toAbsoluteUrl } from '@/lib/helpers';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { motion } from 'framer-motion';
-import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, ScrollText } from 'lucide-react';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 import { useIntl } from 'react-intl';
@@ -13,6 +13,7 @@ const ChannelStats = () => {
   const [stats, setStats] = useState({
     scholars: 0,
     books: 0,
+    articles: 0,
     posts: 0,
     languages: 0,
     countries: 0,
@@ -59,6 +60,17 @@ const ChannelStats = () => {
       iconBg: 'bg-blue-100 dark:bg-blue-900',
       trend: 'up',
       trendValue: '+8%',
+      trendText: intl.formatMessage({ id: 'UI.SON_AY' })
+    },
+    {
+      lucideIcon: ScrollText,
+      info: stats.articles,
+      desc: intl.formatMessage({ id: 'UI.KAYITLI_MAKALE' }),
+      color: 'from-orange-500 to-orange-600',
+      bgColor: 'bg-orange-50 dark:bg-orange-950',
+      iconBg: 'bg-orange-100 dark:bg-orange-900',
+      trend: 'up',
+      trendValue: '+6%',
       trendText: intl.formatMessage({ id: 'UI.SON_AY' })
     },
     {
@@ -122,11 +134,15 @@ const ChannelStats = () => {
             <div className="flex items-start justify-between mb-4">
               <div className={`w-14 h-14 rounded-2xl ${item.iconBg} flex items-center justify-center shadow-sm`}>
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center`}>
-                  <img
-                    src={toAbsoluteUrl(`/media/brand-logos/${item.logo}`)}
-                    className="w-7"
-                    alt="icon"
-                  />
+                  {item.lucideIcon ? (
+                    <item.lucideIcon className="w-7 h-7 text-white" strokeWidth={2} />
+                  ) : (
+                    <img
+                      src={toAbsoluteUrl(`/media/brand-logos/${item.logo}`)}
+                      className="w-7"
+                      alt="icon"
+                    />
+                  )}
                 </div>
               </div>
               <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${getTrendColor(item.trend)}`}>
@@ -179,7 +195,7 @@ const ChannelStats = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {items.map((item, index) => renderItem(item, index))}
     </div>
   );

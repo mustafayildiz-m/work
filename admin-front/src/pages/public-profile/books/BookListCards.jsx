@@ -457,7 +457,7 @@ const BookListCards = () => {
           id: "UI.KITAP_LISTESI__ISLAMIC_WINDOWS_ADMIN"
         })}</title>
       </Helmet>
-      <div className="p-6 max-w-full mx-auto">
+      <div className="p-6 max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">

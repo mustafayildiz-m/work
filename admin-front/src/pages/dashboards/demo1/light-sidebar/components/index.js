@@ -7,3 +7,4 @@ export * from './teams';
 export * from './quick-actions';
 export * from './activity-feed';
 export * from './stats-chart';
+export * from './prayer-times-banner';

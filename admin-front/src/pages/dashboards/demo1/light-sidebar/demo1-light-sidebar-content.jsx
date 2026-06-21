@@ -1,30 +1,10 @@
 import { FormattedMessage } from "react-intl";
-import { ChannelStats, QuickActions, ActivityFeed, StatsChart } from './components';
+import { ChannelStats, QuickActions, ActivityFeed, StatsChart, PrayerTimesBanner } from './components';
 
 export function Demo1LightSidebarContent() {
   return (
     <div className="w-full space-y-8">
-      {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white shadow-xl">
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          <div>
-            <h2 className="text-3xl font-bold mb-2"><FormattedMessage id="UI.HOS_GELDINIZ_" /></h2>
-            <p className="text-blue-100 text-lg">
-              <FormattedMessage id="UI.ISLAMIC_WINDOWS_YONETIM_PANELINIZE_HOS_G" />
-            </p>
-          </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl px-6 py-3 border border-white/20">
-            <p className="text-sm text-blue-100 mb-1"><FormattedMessage id="UI.BUGUNKU_TARIH" /></p>
-            <p className="text-xl font-semibold">
-              {new Date().toLocaleDateString('tr-TR', { 
-                day: 'numeric', 
-                month: 'long', 
-                year: 'numeric' 
-              })}
-            </p>
-          </div>
-        </div>
-      </div>
+      <PrayerTimesBanner />
       {/* Stats Cards */}
       <div>
         <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
