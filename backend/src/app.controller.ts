@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between } from 'typeorm';
+import { Repository, LessThanOrEqual } from 'typeorm';
 import { Scholar } from './scholars/entities/scholar.entity';
 import { Book } from './books/entities/book.entity';
 import { ScholarPost } from './scholars/entities/scholar-post.entity';
@@ -13,6 +13,9 @@ import { ScholarStory } from './entities/scholar-story.entity';
 import { Podcast } from './entities/podcast.entity';
 import { IslamicNews } from './entities/islamic-news.entity';
 import { Country } from './countries/entities/country.entity';
+import { UserPost, PostStatus } from './entities/user-post.entity';
+import { BookTranslation } from './books/entities/book-translation.entity';
+import { ArticleTranslation } from './articles/entities/article-translation.entity';
 
 @Controller()
 export class AppController {
@@ -37,6 +40,12 @@ export class AppController {
     private readonly islamicNewsRepository: Repository<IslamicNews>,
     @InjectRepository(Country)
     private readonly countryRepository: Repository<Country>,
+    @InjectRepository(UserPost)
+    private readonly userPostRepository: Repository<UserPost>,
+    @InjectRepository(BookTranslation)
+    private readonly bookTranslationRepository: Repository<BookTranslation>,
+    @InjectRepository(ArticleTranslation)
+    private readonly articleTranslationRepository: Repository<ArticleTranslation>,
   ) {}
 
   @Get('statistics/counts')
@@ -73,47 +82,247 @@ export class AppController {
 
     const monthlyData: Array<{
       name: string;
-      kitaplar: number;
       alimler: number;
+      kitaplar: number;
+      kitapciklar: number;
+      gonderiler: number;
+      ulkeler: number;
+      diller: number;
       kullanicilar: number;
     }> = [];
 
-    // Son 6 ayın verilerini al
+    // Son 6 ay — her ay sonu itibarıyla kümülatif toplam kayıt sayısı
     for (let i = 5; i >= 0; i--) {
       const month = now.getMonth() - i;
       const year = month < 0 ? currentYear - 1 : currentYear;
       const adjustedMonth = month < 0 ? 12 + month : month;
 
-      const startDate = new Date(year, adjustedMonth, 1);
-      const endDate = new Date(year, adjustedMonth + 1, 0, 23, 59, 59);
+      const isCurrentMonth =
+        year === now.getFullYear() && adjustedMonth === now.getMonth();
+      const endDate = isCurrentMonth
+        ? now
+        : new Date(year, adjustedMonth + 1, 0, 23, 59, 59, 999);
 
-      const [booksCount, scholarsCount, usersCount] = await Promise.all([
-        this.bookRepository.count({
-          where: {
-            createdAt: Between(startDate, endDate),
-          },
-        }),
-        this.scholarRepository.count({
-          where: {
-            createdAt: Between(startDate, endDate),
-          },
-        }),
-        this.userRepository.count({
-          where: {
-            createdAt: Between(startDate, endDate),
-          },
-        }),
+      const [
+        scholarsCount,
+        booksCount,
+        articlesCount,
+        postsCount,
+        countriesCount,
+        languagesCount,
+        usersCount,
+      ] = await Promise.all([
+        this.countUntil(this.scholarRepository, endDate),
+        this.countUntilWithPublishDate(this.bookRepository, 'book', endDate),
+        this.countUntilWithPublishDate(this.articleRepository, 'article', endDate),
+        this.countUntil(this.scholarPostRepository, endDate),
+        this.countUntil(this.countryRepository, endDate),
+        this.countUntil(this.languageRepository, endDate),
+        this.countUntil(this.userRepository, endDate),
       ]);
 
       monthlyData.push({
         name: monthNames[adjustedMonth],
-        kitaplar: booksCount,
         alimler: scholarsCount,
+        kitaplar: booksCount,
+        kitapciklar: articlesCount,
+        gonderiler: postsCount,
+        ulkeler: countriesCount,
+        diller: languagesCount,
         kullanicilar: usersCount,
       });
     }
 
     return monthlyData;
+  }
+
+  /** Kayıt tarihine göre belirli bir ana kadar toplam sayı */
+  private countUntil<T extends { createdAt: Date }>(
+    repository: Repository<T>,
+    endDate: Date,
+  ): Promise<number> {
+    return repository.count({
+      where: {
+        createdAt: LessThanOrEqual(endDate),
+      } as never,
+    });
+  }
+
+  /** Yayın tarihi varsa onu, yoksa oluşturulma tarihini baz al */
+  private countUntilWithPublishDate(
+    repository: Repository<Book | Article>,
+    alias: string,
+    endDate: Date,
+  ): Promise<number> {
+    return repository
+      .createQueryBuilder(alias)
+      .where(
+        `COALESCE(${alias}.publishDate, ${alias}.createdAt) <= :endDate`,
+        { endDate },
+      )
+      .getCount();
+  }
+
+  @Get('statistics/pending-tasks')
+  @UseGuards(JwtAuthGuard)
+  async getPendingTasks() {
+    const [
+      pendingPosts,
+      articlesWithoutPdf,
+      articlesWithoutCover,
+      booksWithoutPdf,
+      scholarsWithoutPhoto,
+    ] = await Promise.all([
+      this.userPostRepository.count({
+        where: { status: PostStatus.PENDING },
+      }),
+      this.countArticlesWithoutPdf(),
+      this.articleRepository
+        .createQueryBuilder('article')
+        .where('article.coverImage IS NULL OR article.coverImage = :empty', {
+          empty: '',
+        })
+        .getCount(),
+      this.countBooksWithoutPdf(),
+      this.scholarRepository
+        .createQueryBuilder('scholar')
+        .where('scholar.photoUrl IS NULL OR scholar.photoUrl = :empty', {
+          empty: '',
+        })
+        .getCount(),
+    ]);
+
+    const tasks = [
+      {
+        id: 'pending_posts',
+        count: pendingPosts,
+        path: '/kullanicilar/post-onaylama',
+        priority: 'high',
+      },
+      {
+        id: 'articles_no_pdf',
+        count: articlesWithoutPdf,
+        path: '/makaleler/liste',
+        priority: 'medium',
+      },
+      {
+        id: 'articles_no_cover',
+        count: articlesWithoutCover,
+        path: '/makaleler/liste',
+        priority: 'medium',
+      },
+      {
+        id: 'books_no_pdf',
+        count: booksWithoutPdf,
+        path: '/kitaplar/liste',
+        priority: 'medium',
+      },
+      {
+        id: 'scholars_no_photo',
+        count: scholarsWithoutPhoto,
+        path: '/alimler/liste',
+        priority: 'low',
+      },
+    ].filter((task) => task.count > 0);
+
+    return {
+      tasks,
+      total: tasks.reduce((sum, task) => sum + task.count, 0),
+    };
+  }
+
+  @Get('statistics/language-distribution')
+  @UseGuards(JwtAuthGuard)
+  async getLanguageDistribution() {
+    const bookRows = await this.bookTranslationRepository
+      .createQueryBuilder('bt')
+      .select('bt.languageId', 'languageId')
+      .addSelect('COUNT(DISTINCT bt.bookId)', 'books')
+      .groupBy('bt.languageId')
+      .getRawMany<{ languageId: string; books: string }>();
+
+    const articleRows = await this.articleTranslationRepository
+      .createQueryBuilder('at')
+      .select('at.languageId', 'languageId')
+      .addSelect('COUNT(DISTINCT at.articleId)', 'articles')
+      .groupBy('at.languageId')
+      .getRawMany<{ languageId: string; articles: string }>();
+
+    const languages = await this.languageRepository.find({
+      where: { isActive: true },
+      order: { name: 'ASC' },
+    });
+
+    const countMap = new Map<
+      number,
+      { books: number; articles: number }
+    >();
+
+    for (const row of bookRows) {
+      const languageId = Number(row.languageId);
+      const current = countMap.get(languageId) || { books: 0, articles: 0 };
+      current.books = Number(row.books) || 0;
+      countMap.set(languageId, current);
+    }
+
+    for (const row of articleRows) {
+      const languageId = Number(row.languageId);
+      const current = countMap.get(languageId) || { books: 0, articles: 0 };
+      current.articles = Number(row.articles) || 0;
+      countMap.set(languageId, current);
+    }
+
+    const distribution = languages
+      .map((language) => {
+        const counts = countMap.get(language.id) || { books: 0, articles: 0 };
+        const total = counts.books + counts.articles;
+        return {
+          languageId: language.id,
+          code: language.code,
+          name: language.name,
+          flagUrl: language.flagUrl,
+          books: counts.books,
+          articles: counts.articles,
+          total,
+        };
+      })
+      .filter((item) => item.total > 0)
+      .sort((a, b) => b.total - a.total);
+
+    const grandTotal = distribution.reduce((sum, item) => sum + item.total, 0);
+
+    return {
+      items: distribution.map((item) => ({
+        ...item,
+        percentage:
+          grandTotal > 0
+            ? Math.round((item.total / grandTotal) * 1000) / 10
+            : 0,
+      })),
+      grandTotal,
+    };
+  }
+
+  private countArticlesWithoutPdf(): Promise<number> {
+    return this.articleRepository
+      .createQueryBuilder('article')
+      .leftJoin('article.translations', 'translation')
+      .groupBy('article.id')
+      .having(
+        `SUM(CASE WHEN translation.pdfUrl IS NOT NULL AND translation.pdfUrl != '' THEN 1 ELSE 0 END) = 0`,
+      )
+      .getCount();
+  }
+
+  private countBooksWithoutPdf(): Promise<number> {
+    return this.bookRepository
+      .createQueryBuilder('book')
+      .leftJoin('book.translations', 'translation')
+      .groupBy('book.id')
+      .having(
+        `SUM(CASE WHEN translation.pdfUrl IS NOT NULL AND translation.pdfUrl != '' THEN 1 ELSE 0 END) = 0`,
+      )
+      .getCount();
   }
 
   @Get('statistics/recent-activities')

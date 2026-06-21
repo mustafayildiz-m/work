@@ -1,31 +1,37 @@
 import { FormattedMessage } from "react-intl";
-import { ChannelStats, QuickActions, ActivityFeed, StatsChart, PrayerTimesBanner } from './components';
+import {
+  ChannelStats,
+  QuickActions,
+  ActivityFeed,
+  StatsChart,
+  PrayerTimesBanner,
+  PendingTasks,
+  LanguageDistributionChart,
+} from './components';
 
 export function Demo1LightSidebarContent() {
   return (
-    <div className="w-full space-y-8">
+    <div className="dashboard-home w-full min-w-0 space-y-5 sm:space-y-6 lg:space-y-8">
       <PrayerTimesBanner />
-      {/* Stats Cards */}
       <div>
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+        <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6">
           <FormattedMessage id="UI.GENEL_ISTATISTIKLER" />
         </h3>
         <ChannelStats />
       </div>
-      {/* Charts and Quick Actions Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Chart - Takes 2 columns */}
-        <div className="lg:col-span-2">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
+        <PendingTasks />
+        <LanguageDistributionChart />
+      </div>
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6">
+        <div className="xl:col-span-2 min-w-0">
           <StatsChart />
         </div>
-        
-        {/* Quick Actions - Takes 1 column */}
-        <div className="lg:col-span-1">
+        <div className="xl:col-span-1 min-w-0">
           <QuickActions />
         </div>
       </div>
-      {/* Activity Feed */}
-      <div>
+      <div className="min-w-0">
         <ActivityFeed />
       </div>
     </div>

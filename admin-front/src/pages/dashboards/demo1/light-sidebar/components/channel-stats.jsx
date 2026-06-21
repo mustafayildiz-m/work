@@ -129,11 +129,10 @@ const ChannelStats = () => {
         transition={{ duration: 0.5, delay: index * 0.1 }}
       >
         <Card className={`overflow-hidden hover:shadow-2xl transition-all duration-300 h-full border-0 ${item.bgColor}`}>
-          <CardContent className="p-6 h-full flex flex-col">
-            {/* Header with icon and trend */}
-            <div className="flex items-start justify-between mb-4">
-              <div className={`w-14 h-14 rounded-2xl ${item.iconBg} flex items-center justify-center shadow-sm`}>
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center`}>
+          <CardContent className="p-4 sm:p-6 h-full flex flex-col">
+            <div className="flex items-start justify-between mb-3 sm:mb-4">
+              <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl ${item.iconBg} flex items-center justify-center shadow-sm shrink-0`}>
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center`}>
                   {item.lucideIcon ? (
                     <item.lucideIcon className="w-7 h-7 text-white" strokeWidth={2} />
                   ) : (
@@ -154,14 +153,14 @@ const ChannelStats = () => {
             {/* Stats number */}
             <div className="flex-1">
               <motion.div
-                className="text-4xl font-bold text-gray-900 dark:text-white mb-2"
+                className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-1 sm:mb-2"
                 initial={{ scale: 0.5 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.5 }}
               >
                 {item.info.toLocaleString(intl.locale === 'tr' ? 'tr-TR' : 'en-US')}
               </motion.div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+              <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 leading-snug">
                 {item.desc}
               </p>
             </div>
@@ -195,7 +194,7 @@ const ChannelStats = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
       {items.map((item, index) => renderItem(item, index))}
     </div>
   );

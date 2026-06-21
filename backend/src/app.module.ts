@@ -68,11 +68,14 @@ import { Newsletter } from './entities/newsletter.entity';
 import { NewsletterModule } from './modules/newsletter.module';
 import { Paper } from './entities/paper.entity';
 import { PaperModule } from './modules/paper.module';
+import { UserPost } from './entities/user-post.entity';
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    ScheduleModule.forRoot(),
+    ...(isProduction ? [ScheduleModule.forRoot()] : []),
     CacheModule.register(cacheConfig),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -106,6 +109,7 @@ import { PaperModule } from './modules/paper.module';
       Notification,
       Newsletter,
       Paper,
+      UserPost,
     ]),
     BooksModule,
     ArticlesModule,
@@ -141,7 +145,7 @@ import { PaperModule } from './modules/paper.module';
   ],
   controllers: [AppController],
   providers: [
-    CronService,
+    ...(isProduction ? [CronService] : []),
     LanguagesSeeder,
     LanguageFlagsSeeder,
     CountriesSeeder,

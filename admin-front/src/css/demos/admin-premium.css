@@ -289,6 +289,22 @@
     min-height: calc(100vh - var(--header-height));
   }
 
+  /* ── Dashboard home responsive ─────────────────────────────── */
+  .demo1 .dashboard-home {
+    min-width: 0;
+  }
+
+  .demo1 .stats-chart-wrap,
+  .demo1 .language-distribution-chart-wrap {
+    position: relative;
+    overflow: visible;
+  }
+
+  .demo1 .stats-chart-wrap .recharts-responsive-container,
+  .demo1 .language-distribution-chart-wrap .recharts-responsive-container {
+    width: 100% !important;
+  }
+
   /* ── Cards & content blocks ─────────────────────────────────── */
   .demo1 [data-slot='card'] {
     border-color: color-mix(in oklch, var(--border) 75%, transparent);
