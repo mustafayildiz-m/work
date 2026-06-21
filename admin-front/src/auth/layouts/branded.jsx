@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { useIntl } from 'react-intl';
 import { AdminLogo } from '@/components/brand/AdminLogo';
+import { toAbsoluteUrl } from '@/lib/helpers';
 
 export function BrandedLayout() {
   const intl = useIntl();

@@ -60,15 +60,15 @@ const QuickActions = () => {
   ];
 
   return (
-    <Card className="shadow-lg hover:shadow-xl transition-all duration-300">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Plus className="w-5 h-5" />
+    <Card className="shadow-lg hover:shadow-xl transition-all duration-300 min-w-0 h-full">
+      <CardHeader className="pb-2">
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+          <Plus className="w-5 h-5 shrink-0" />
           <FormattedMessage id="UI.HIZLI_ISLEMLER" />
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
           {actions.map((action, index) => {
             const Icon = action.icon;
             return (
@@ -80,12 +80,12 @@ const QuickActions = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate(action.path)}
-                className={`${action.bgColor} ${action.hoverColor} rounded-xl p-4 transition-all duration-300 cursor-pointer group`}
+                className={`${action.bgColor} ${action.hoverColor} rounded-xl p-3 sm:p-4 transition-all duration-300 cursor-pointer group min-w-0`}
               >
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center mb-2 mx-auto group-hover:scale-110 transition-transform`}>
-                  <Icon className="w-6 h-6 text-white" />
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center mb-2 mx-auto group-hover:scale-110 transition-transform`}>
+                  <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
-                <p className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center">
+                <p className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 text-center leading-snug line-clamp-2">
                   {action.title}
                 </p>
               </motion.button>

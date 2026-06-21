@@ -89,6 +89,36 @@ function parsePrayerTime(timeStr) {
   return date;
 }
 
+function stripPrayerTimezone(timeStr) {
+  return timeStr.split(' ')[0];
+}
+
+function getNextPrayerTarget(timings, now) {
+  for (const key of PRAYER_KEYS) {
+    const prayerDate = parsePrayerTime(stripPrayerTimezone(timings[key]));
+    if (prayerDate > now) {
+      return { key, time: stripPrayerTimezone(timings[key]), target: prayerDate };
+    }
+  }
+
+  const tomorrowFajr = parsePrayerTime(stripPrayerTimezone(timings.Fajr));
+  tomorrowFajr.setDate(tomorrowFajr.getDate() + 1);
+  return {
+    key: 'Fajr',
+    time: stripPrayerTimezone(timings.Fajr),
+    target: tomorrowFajr,
+    tomorrow: true,
+  };
+}
+
+function formatCountdownParts(diffMs) {
+  const totalSeconds = Math.max(0, Math.floor(diffMs / 1000));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return { hours, minutes, seconds };
+}
+
 function PrayerTimesBanner() {
   const intl = useIntl();
   const [loading, setLoading] = useState(true);
@@ -143,29 +173,41 @@ function PrayerTimesBanner() {
   }, [loadPrayerTimes]);
 
   useEffect(() => {
-    const timer = setInterval(() => setNow(new Date()), 60000);
+    const timer = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
   const nextPrayer = useMemo(() => {
     if (!timings) return null;
-
-    for (const key of PRAYER_KEYS) {
-      const prayerDate = parsePrayerTime(timings[key]);
-      if (prayerDate > now) {
-        return { key, time: timings[key] };
-      }
-    }
-
-    return { key: 'Fajr', time: timings.Fajr, tomorrow: true };
+    return getNextPrayerTarget(timings, now);
   }, [timings, now]);
+
+  const countdown = useMemo(() => {
+    if (!nextPrayer?.target) return null;
+    return formatCountdownParts(nextPrayer.target - now);
+  }, [nextPrayer, now]);
+
+  const countdownLabel = useMemo(() => {
+    if (!countdown) return '';
+    const { hours, minutes, seconds } = countdown;
+    if (hours > 0) {
+      return intl.formatMessage(
+        { id: 'UI.PRAYER_COUNTDOWN_HMS' },
+        { hours, minutes, seconds: String(seconds).padStart(2, '0') },
+      );
+    }
+    return intl.formatMessage(
+      { id: 'UI.PRAYER_COUNTDOWN_MS' },
+      { minutes, seconds: String(seconds).padStart(2, '0') },
+    );
+  }, [countdown, intl]);
 
   const currentPrayerKey = useMemo(() => {
     if (!timings) return null;
 
     let active = PRAYER_KEYS[0];
     for (const key of PRAYER_KEYS) {
-      if (parsePrayerTime(timings[key]) <= now) active = key;
+      if (parsePrayerTime(stripPrayerTimezone(timings[key])) <= now) active = key;
     }
     return active;
   }, [timings, now]);
@@ -179,20 +221,20 @@ function PrayerTimesBanner() {
   });
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 p-6 md:p-8 text-white shadow-xl">
+    <div className="relative overflow-hidden rounded-xl sm:rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 p-4 sm:p-6 md:p-8 text-white shadow-xl">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.18),transparent_45%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(59,130,246,0.12),transparent_40%)]" />
 
-      <div className="relative z-10 space-y-6">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="space-y-2">
+      <div className="relative z-10 space-y-4 sm:space-y-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
+          <div className="space-y-1.5 sm:space-y-2 min-w-0">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-100">
               <Clock className="size-3.5" />
               <FormattedMessage id="UI.PRAYER_TIMES_TITLE" />
             </div>
-            <div className="flex items-center gap-2 text-lg font-semibold md:text-xl">
-              <MapPin className="size-5 text-emerald-300 shrink-0" />
-              <span>
+            <div className="flex items-start gap-2 text-base sm:text-lg font-semibold md:text-xl">
+              <MapPin className="size-5 text-emerald-300 shrink-0 mt-0.5" />
+              <span className="break-words">
                 {loading
                   ? intl.formatMessage({ id: 'UI.PRAYER_LOCATION_LOADING' })
                   : `${location?.city || DEFAULT_LOCATION.city}, ${location?.country || DEFAULT_LOCATION.country}`}
@@ -206,13 +248,13 @@ function PrayerTimesBanner() {
             )}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-stretch sm:items-center gap-2 w-full sm:w-auto">
             {nextPrayer && !loading && (
-              <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
+              <div className="flex-1 sm:flex-none rounded-xl border border-white/10 bg-white/5 px-3 sm:px-4 py-3 backdrop-blur-sm min-w-0">
                 <p className="text-xs text-emerald-100/70">
                   <FormattedMessage id="UI.PRAYER_NEXT" />
                 </p>
-                <p className="text-lg font-bold">
+                <p className="text-base sm:text-lg font-bold break-words">
                   {SABAH_PRAYER_KEYS.has(nextPrayer.key) && (
                     <>
                       {intl.formatMessage({ id: 'UI.PRAYER_SABAH' })} ·{' '}
@@ -220,6 +262,11 @@ function PrayerTimesBanner() {
                   )}
                   {prayerLabels[nextPrayer.key]} · {nextPrayer.time}
                 </p>
+                {countdownLabel && (
+                  <p className="mt-1 text-xs sm:text-sm font-mono text-emerald-200 tabular-nums break-all">
+                    <FormattedMessage id="UI.PRAYER_COUNTDOWN" />: {countdownLabel}
+                  </p>
+                )}
               </div>
             )}
             <Button
@@ -229,7 +276,7 @@ function PrayerTimesBanner() {
               variant="outline"
               onClick={() => loadPrayerTimes(true)}
               disabled={loading || refreshing}
-              className="border-white/15 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+              className="shrink-0 border-white/15 bg-white/5 text-white hover:bg-white/10 hover:text-white"
               aria-label={intl.formatMessage({ id: 'UI.PRAYER_REFRESH' })}
             >
               {refreshing ? <Loader2 className="size-4 animate-spin" /> : <RefreshCw className="size-4" />}
@@ -249,7 +296,7 @@ function PrayerTimesBanner() {
             {error}
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-3">
             {PRAYER_KEYS.map((key) => {
               const isCurrent = currentPrayerKey === key;
               const isNext = nextPrayer?.key === key;
@@ -258,7 +305,7 @@ function PrayerTimesBanner() {
               return (
                 <div
                   key={key}
-                  className={`rounded-xl border px-4 py-4 transition-all ${
+                  className={`rounded-lg sm:rounded-xl border px-2.5 py-3 sm:px-4 sm:py-4 transition-all ${
                     isNext
                       ? 'border-emerald-400/40 bg-emerald-500/20 shadow-lg shadow-emerald-500/10'
                       : isCurrent
@@ -276,7 +323,7 @@ function PrayerTimesBanner() {
                   <p className="text-xs font-medium uppercase tracking-wide text-emerald-100/70">
                     {prayerLabels[key]}
                   </p>
-                  <p className="mt-2 text-2xl font-bold">{timings?.[key]}</p>
+                  <p className="mt-1.5 sm:mt-2 text-lg sm:text-2xl font-bold tabular-nums">{stripPrayerTimezone(timings?.[key])}</p>
                   {isSabah && (
                     <p className="mt-1 text-[11px] text-amber-100/80">
                       <FormattedMessage
@@ -295,7 +342,7 @@ function PrayerTimesBanner() {
           </div>
         )}
 
-        <p className="text-xs text-emerald-100/50">
+        <p className="hidden sm:block text-xs text-emerald-100/50">
           <FormattedMessage id="UI.PRAYER_TIMES_NOTE" />
         </p>
       </div>

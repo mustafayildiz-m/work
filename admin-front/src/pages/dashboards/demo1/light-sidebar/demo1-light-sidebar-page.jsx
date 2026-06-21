@@ -12,7 +12,7 @@ export function Demo1LightSidebarPage() {
           id: "UI.DASHBOARD__ISLAMIC_WINDOWS_ADMIN"
         })}</title>
       </Helmet>
-      <Container>
+      <Container className="min-w-0 max-w-full overflow-x-hidden">
         <Demo1LightSidebarContent />
       </Container>
     </>

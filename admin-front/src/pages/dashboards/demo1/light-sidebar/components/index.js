@@ -8,3 +8,5 @@ export * from './quick-actions';
 export * from './activity-feed';
 export * from './stats-chart';
 export * from './prayer-times-banner';
+export * from './pending-tasks';
+export * from './language-distribution-chart';

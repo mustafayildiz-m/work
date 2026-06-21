@@ -147,14 +147,14 @@ const ActivityFeed = () => {
   };
 
   return (
-    <Card className="shadow-lg hover:shadow-xl transition-all duration-300">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Clock className="w-5 h-5" />
+    <Card className="shadow-lg hover:shadow-xl transition-all duration-300 min-w-0">
+      <CardHeader className="pb-2">
+        <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+          <Clock className="w-5 h-5 shrink-0" />
           <FormattedMessage id="UI.SON_AKTIVITELER" />
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="min-w-0">
         <div className="space-y-4">
           {activities.map((activity, index) => {
             const Icon = activity.icon;
