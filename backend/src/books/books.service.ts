@@ -509,32 +509,22 @@ export class BooksService {
     }
 
     // ── 2. Metin kalitesi kontrolü → Gerekirse OCR ──────────────────────
-    const textToTranslate = originalText;
+    let textToTranslate = originalText;
 
-    if (this.pdfOcrService.isGarbageText(originalText)) {
-      this.logger.warn(
-        `Kitap ${bookId} sayfa ${pageNumber}: Metin bozuk. Çeviri reddedildi.`,
-      );
-      throw new BadRequestException('PDF_CONTENT_INVALID');
-    }
-    /* Eski OCR Kodları (Devre Dışı)
     if (this.pdfOcrService.isGarbageText(originalText)) {
       this.logger.warn(
         `Kitap ${bookId} sayfa ${pageNumber}: originalText kontrol karakterleri içeriyor. OCR başlatılıyor...`,
       );
 
-      // Kitabın orijinal dil translation'ını bul (pdfUrl için)
-      // Arapça kitaplar için languageId=3 (ar), yoksa ilk translation
       const bookWithTranslations = await this.bookRepository.findOne({
         where: { id: bookId },
-        relations: ['translations'],
+        relations: ['translations', 'translations.language'],
       });
 
       if (!bookWithTranslations) {
-        throw new Error(`Kitap bulunamadı: ${bookId}`);
+        throw new BadRequestException('PDF_CONTENT_INVALID');
       }
 
-      // Arapça translation öncelikli, yoksa ilk translation
       const arabicTrans = bookWithTranslations.translations?.find(
         (t) => t.languageId === 3,
       );
@@ -542,68 +532,57 @@ export class BooksService {
         arabicTrans || bookWithTranslations.translations?.[0];
 
       if (!sourceTrans?.pdfUrl) {
-        throw new Error(
-          `Kitap ${bookId} için PDF bulunamadı, OCR yapılamıyor.`,
-        );
+        throw new BadRequestException('PDF_CONTENT_INVALID');
       }
 
-      // pdfUrl genellikle "/uploads/pdfs/dosya.pdf" formatında geliyor
       const pdfAbsPath = path.join(process.cwd(), sourceTrans.pdfUrl);
       this.logger.log(`OCR için PDF yolu: ${pdfAbsPath}`);
 
-      // Orijinal kitabın kaynak dil kodu (varsayılan: Arapça → 'ar')
-      const sourceBookLangCode = arabicTrans ? 'ar' : 'ar';
+      const sourceBookLangCode = sourceTrans.language?.code || 'ar';
       const tesseractLang =
         this.pdfOcrService.getTesseractLang(sourceBookLangCode);
 
-      textToTranslate = await this.pdfOcrService.extractTextViaOcr(
+      const ocrText = await this.pdfOcrService.extractTextViaOcr(
         pdfAbsPath,
         pageNumber,
         tesseractLang,
       );
 
-      // ── OCR çıktısını temizle ──────────────────────────────────────────
-      // Tesseract Arapça için bazen Latin gürültüsü (ssss..., 1111...) üretir.
-      // Ancak "Baskı: ..." gibi geçerli Türkçe/Latin satırları da olabilir.
-      // Sadece bariz gürültüyü (tekrarlayan karakterler) filtreleyelim.
-      textToTranslate = textToTranslate
+      textToTranslate = ocrText
         .split('\n')
         .filter((line) => {
           const trimmed = line.trim();
           if (!trimmed) return false;
-
-          // 1. Arapça içeriyorsa Koru
           if (/[\u0600-\u06FF]/.test(trimmed)) return true;
 
-          // 2. Arapça yoksa Gürültü Kontrolü yap
-          // Tekrarlayan karakter analizi (örn: "sssss", ".....", "1111")
           const maxRepeat = (trimmed.match(/(.)\1{3,}/g) || []).length;
-          if (maxRepeat > 0) return false; // 4+ kez tekrarlayan karakter varsa at
+          if (maxRepeat > 0) return false;
 
-          // Çok uzun kelime kontrolü (boşluksuz 30+ karakter gürültü işaretidir)
-          const hasLongWord = trimmed.split(/\s+/).some(w => w.length > 30);
+          const hasLongWord = trimmed.split(/\s+/).some((w) => w.length > 30);
           if (hasLongWord) return false;
 
-          // Kabul et
           return true;
         })
         .join('\n')
         .trim();
 
-      // Eğer filtreleme sonucu her şey silindiyse (ama OCR boş değilse),
-      // en azından gürültülü de olsa orijinali döndür ki sayfa atlanmasın
-      if (!textToTranslate && originalText) {
-        // Orijinal text'e (OCR çıktısının ham haline) dönmek gerekir ama burada scope'ta yok.
-        // Bu durumda "Metin okunamadı" döndürmek yerine boş dönüp atlamasına izin vermek
-        // yerine kullanıcıya bilgi verelim.
-        textToTranslate = " [Bu sayfanın metni otomatik olarak çıkarılamadı] ";
+      if (!textToTranslate) {
+        textToTranslate =
+          ocrText.trim() ||
+          '[Bu sayfanın metni otomatik olarak çıkarılamadı]';
       }
 
       this.logger.log(
         `OCR tamamlandı. Temizlenmiş metin uzunluğu: ${textToTranslate.length}`,
       );
+
+      if (this.pdfOcrService.isGarbageText(textToTranslate)) {
+        this.logger.warn(
+          `Kitap ${bookId} sayfa ${pageNumber}: OCR sonrası metin hâlâ geçersiz.`,
+        );
+        throw new BadRequestException('PDF_CONTENT_INVALID');
+      }
     }
-    */
 
     // ── 3. Sayfa kaydını oluştur / güncelle ────────────────────────────
     let page = existingPage;
