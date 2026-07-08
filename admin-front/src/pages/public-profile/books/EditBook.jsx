@@ -10,6 +10,7 @@ import { FaBook, FaUser, FaTags, FaCalendar, FaGlobe, FaFilePdf, FaImage, FaArro
 
 const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000') + '/books';
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const MAX_UPLOAD_SIZE_BYTES = 200 * 1024 * 1024;
 
 const matchLanguageId = (left, right) => String(left) === String(right);
 
@@ -143,9 +144,13 @@ function EditBook() {
     setForm({ ...form, translations: newTranslations });
   };
 
-  const handleTranslationFileChange = (idx, file) => {
+  const handleTranslationFileChange = (idx, selectedFile) => {
+    if (selectedFile && selectedFile.size > MAX_UPLOAD_SIZE_BYTES) {
+      toast.error(intl.formatMessage({ id: 'UI.PDF_TOPLAM_BOYUT_ASIMI' }));
+      return;
+    }
     const newTranslations = form.translations.map((t, i) =>
-      i === idx ? { ...t, file } : t
+      i === idx ? { ...t, file: selectedFile } : t
     );
     setForm({ ...form, translations: newTranslations });
   };
@@ -163,7 +168,13 @@ function EditBook() {
   };
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    if (selectedFile && selectedFile.size > MAX_UPLOAD_SIZE_BYTES) {
+      toast.error(intl.formatMessage({ id: 'UI.PDF_TOPLAM_BOYUT_ASIMI' }));
+      e.target.value = '';
+      return;
+    }
+    setFile(selectedFile);
   };
 
   const handleCategoryInput = (e) => {
@@ -191,6 +202,14 @@ function EditBook() {
 
     try {
       const token = localStorage.getItem('access_token');
+      const totalUploadSize =
+        (file?.size || 0) +
+        form.translations.reduce((sum, translation) => sum + (translation.file?.size || 0), 0);
+
+      if (totalUploadSize > MAX_UPLOAD_SIZE_BYTES) {
+        throw new Error(intl.formatMessage({ id: 'UI.PDF_TOPLAM_BOYUT_ASIMI' }));
+      }
+
       const formData = new FormData();
 
       // Temel bilgileri ekle
@@ -562,6 +581,12 @@ function EditBook() {
                       <FormattedMessage id="UI.PDF_DOSYASI" />
                       {!translation.pdfUrl && <span className="text-red-500">*</span>}
                     </label>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                      <FormattedMessage id="UI.PDF_MAX_200MB" />
+                    </p>
+                    <p className="text-xs text-amber-600 dark:text-amber-400 mb-2">
+                      <FormattedMessage id="UI.PDF_TOPLAM_BOYUT_UYARI" />
+                    </p>
                     <input
                       type="file"
                       accept=".pdf"
