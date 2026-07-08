@@ -25,16 +25,16 @@ export class PdfOcrService {
     // Replacement Character (%99 bozuk PDF belirtisi) - Varsa direkt reddet
     if (text.includes('\uFFFD')) return true;
 
-    // Encoding Hataları (‹, ›) ve Kontrol Karakterleri
-    const controlChars = (
-      text.match(/[\x00-\x1F\uE000-\uF8FF\u2039\u203A]/g) || []
-    ).length;
-    const totalChars = text.replace(/\s/g, '').length;
+    const normalized = text.replace(/\s/g, '');
+    if (normalized.length === 0) return true;
 
-    if (totalChars === 0) return true;
+    // Encoding hataları ve kontrol karakterleri (whitespace hariç)
+    const controlChars = (
+      normalized.match(/[\x00-\x1F\uE000-\uF8FF\u2039\u203A]/g) || []
+    ).length;
 
     // Çok düşük eşik (%1) - Metnin %1'i bile bozuksa reddet
-    return controlChars / totalChars > 0.01;
+    return controlChars / normalized.length > 0.01;
   }
 
   /**
