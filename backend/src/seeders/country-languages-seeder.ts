@@ -164,7 +164,9 @@ export class CountryLanguagesSeeder {
       });
 
       const existingLangIds = new Set(existingRows.map((r) => r.languageId));
-      const desiredLangIds = new Set(desiredRows.map((r) => r.languageId));
+      const desiredLangIds = new Set(
+        desiredRows.map((r) => r.languageId).filter((id): id is number => id !== undefined),
+      );
 
       const alreadyCorrect =
         existingLangIds.size === desiredLangIds.size &&
