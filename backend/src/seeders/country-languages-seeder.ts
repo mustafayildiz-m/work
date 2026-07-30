@@ -81,7 +81,7 @@ const MULTILINGUAL_COUNTRIES: Record<string, string[]> = {
 
   // ── Africa ──
   CM: ['en'],                    // Cameroon: fr + en
-  NG: ['ha', 'ig', 'yo'],        // Nigeria: en + Hausa, Igbo, Yoruba
+  NG: ['ha', 'ig', 'yo', 'pcm'],  // Nigeria: en + Hausa, Igbo, Yoruba, Pidgin
   KE: ['en'],                    // Kenya: sw + en
   TZ: ['en'],                    // Tanzania: sw + en
   UG: ['sw', 'lg'],              // Uganda: en + sw, Luganda
