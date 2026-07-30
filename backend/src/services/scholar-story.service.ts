@@ -8,6 +8,11 @@ import { CreateScholarStoryDto } from '../dto/scholar-story/create-scholar-story
 import { UpdateScholarStoryDto } from '../dto/scholar-story/update-scholar-story.dto';
 import { CacheService } from './cache.service';
 import { UserPostsService } from './user-posts.service';
+import {
+  fetchInstagramThumbnail,
+  getYouTubeThumbnail,
+  isInstagramUrl,
+} from '../utils/video-thumbnail.util';
 
 const CACHE_TTL = 300; // 5 dakika
 
@@ -305,6 +310,33 @@ export class ScholarStoryService {
       );
       throw error;
     }
+  }
+
+  async resolveThumbnail(
+    url: string,
+  ): Promise<{ thumbnail_url: string | null; provider: string | null }> {
+    if (!url) {
+      return { thumbnail_url: null, provider: null };
+    }
+
+    const youtubeThumbnail = getYouTubeThumbnail(url);
+    if (youtubeThumbnail) {
+      return { thumbnail_url: youtubeThumbnail, provider: 'youtube' };
+    }
+
+    if (isInstagramUrl(url)) {
+      try {
+        const thumbnail = await fetchInstagramThumbnail(url);
+        return { thumbnail_url: thumbnail, provider: 'instagram' };
+      } catch (error) {
+        this.logger.warn(
+          `Instagram thumbnail fetch failed for ${url}: ${error.message}`,
+        );
+        return { thumbnail_url: null, provider: 'instagram' };
+      }
+    }
+
+    return { thumbnail_url: null, provider: null };
   }
 
   async searchStories(

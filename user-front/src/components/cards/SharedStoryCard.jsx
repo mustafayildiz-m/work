@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Card, CardBody, Button, Spinner, Alert, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'react-bootstrap';
-import { BsPlayCircle, BsEnvelope, BsTrash, BsThreeDots, BsClock, BsPerson, BsCollection, BsSend } from 'react-icons/bs';
+import { BsPlayCircle, BsEnvelope, BsTrash, BsThreeDots, BsPerson, BsCollection, BsSend } from 'react-icons/bs';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { useNotificationContext } from '@/context/useNotificationContext';
@@ -15,6 +15,9 @@ import { getUserIdFromToken } from '@/utils/auth';
 import { useAuthContext } from '@/context/useAuthContext';
 import avatar7 from '@/assets/images/avatar/07.jpg';
 import avatar12 from '@/assets/images/avatar/12.jpg';
+import StoryThumbnail from '@/app/(social)/(with-topbar)/blogs/components/StoryThumbnail';
+import { getThumbnailImageUrl, isInstagramUrl } from '@/utils/videoThumbnail';
+import './SharedStoryCard.css';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -148,10 +151,15 @@ const SharedStoryCard = ({ post, onDeletePost, comments = [], onLoadComments, on
   }, [post.shared_story_id]);
 
   const getThumbnailUrl = () => {
-    if (!storyData?.thumbnail_url || typeof storyData.thumbnail_url !== 'string') return '/images/book-placeholder.jpg';
-    const thumb = storyData.thumbnail_url;
-    if (thumb.startsWith('http')) return thumb;
-    return `${API_BASE_URL}${thumb.startsWith('/') ? '' : '/'}${thumb}`;
+    if (storyData?.thumbnail_url && typeof storyData.thumbnail_url === 'string') {
+      const thumb = storyData.thumbnail_url;
+      if (thumb.startsWith('http')) return thumb;
+      return `${API_BASE_URL}${thumb.startsWith('/') ? '' : '/'}${thumb}`;
+    }
+    if (storyData?.video_url && isInstagramUrl(storyData.video_url)) {
+      return getThumbnailImageUrl(storyData.video_url);
+    }
+    return null;
   };
 
   const formatDuration = (seconds) => {
@@ -294,146 +302,59 @@ const SharedStoryCard = ({ post, onDeletePost, comments = [], onLoadComments, on
             </div>
           </div>
 
-          {/* Inline Video Player - timeline'da izleme */}
-          {storyData.video_url && (
-            <div className="position-relative rounded-3 overflow-hidden mb-2 mb-sm-3" style={{ background: isDarkMode ? '#1a202c' : '#0f172a' }}>
-              <div className="ratio ratio-16x9" style={{ minHeight: '180px' }}>
-                {storyData.video_url.includes('youtube.com') || storyData.video_url.includes('youtu.be') ? (
-                  <iframe
-                    src={storyData.video_url.includes('youtube.com')
-                      ? storyData.video_url.replace('watch?v=', 'embed/').replace('youtube.com', 'youtube-nocookie.com')
-                      : `https://www.youtube-nocookie.com/embed/${storyData.video_url.split('/').pop().split('?')[0]}`
-                    }
-                    title={storyData.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    style={{ border: 'none' }}
-                  />
-                ) : (
-                  <video
-                    src={(typeof storyData.video_url === 'string' && storyData.video_url.startsWith('http')) ? storyData.video_url : `${API_BASE_URL}${typeof storyData.video_url === 'string' && storyData.video_url.startsWith('/') ? '' : '/'}${storyData.video_url}`}
-                    controls
-                    playsInline
-                    className="w-100 h-100"
-                    style={{ objectFit: 'contain' }}
-                  />
-                )}
+          {/* Hikaye Önizleme - dikey kart, iframe yok */}
+          <Link href={`/blogs/story/${post.shared_story_id}`} className="text-decoration-none d-block">
+            <div className="shared-story-card__preview">
+              <StoryThumbnail story={storyData} alt={storyData.title} className="shared-story-card__thumb" />
+              <div className="shared-story-card__gradient" />
+              <div className="shared-story-card__play">
+                <BsPlayCircle size={28} />
               </div>
-              {storyData.duration && (
-                <div className="position-absolute bottom-0 end-0 m-1 m-sm-2">
-                  <span className="badge bg-dark bg-opacity-75 small">{formatDuration(storyData.duration)}</span>
-                </div>
+              {storyData.duration > 0 && (
+                <span className="shared-story-card__duration">{formatDuration(storyData.duration)}</span>
               )}
-            </div>
-          )}
-
-          {/* Hikaye Kartı */}
-          <div
-            className="border-0 rounded-3 p-2 p-sm-3 p-md-4 mb-2 mb-sm-3"
-            style={{
-              background: theme === 'green' ? 'rgba(0, 0, 0, 0.15)' : (isDarkMode ? 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)' : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'),
-              maxWidth: '100%',
-              overflow: 'hidden'
-            }}
-          >
-            <div className="d-flex flex-column flex-sm-row gap-2 gap-sm-3" style={{ maxWidth: '100%', overflow: 'hidden' }}>
-              <div className="text-center text-sm-start" style={{ position: 'relative', zIndex: 10, flexShrink: 0 }}>
-                <img
-                  src={getThumbnailUrl()}
-                  alt={storyData.title}
-                  className="rounded-3"
-                  style={{
-                    width: '80px',
-                    height: '80px',
-                    minWidth: '80px',
-                    minHeight: '80px',
-                    objectFit: 'cover',
-                    boxShadow: isDarkMode ? '0 10px 30px rgba(0,0,0,0.5)' : '0 10px 30px rgba(0,0,0,0.3)',
-                    border: isDarkMode ? '3px solid rgba(255,255,255,0.1)' : '3px solid white'
-                  }}
-                  onError={(e) => { e.target.src = '/images/book-placeholder.jpg'; }}
-                />
-              </div>
-
-              <div className="flex-grow-1" style={{ minWidth: 0 }}>
-                <h5 className="mb-2 fw-bold text-truncate" style={{ color: isDarkMode ? '#93c5fd' : '#1e3a8a', fontSize: 'clamp(0.95rem, 2.5vw, 1.1rem)' }}>
-                  {storyData.title}
-                </h5>
-
-                <div className="mb-2">
-                  {storyData.scholar && (
-                    <div className="d-flex align-items-center mb-1">
-                      <BsPerson size={14} className="me-2 text-primary flex-shrink-0" />
-                      <span className="small text-truncate" style={{ color: isDarkMode ? '#e2e8f0' : '#212529' }}>
-                        {storyData.scholar.fullName}
-                      </span>
-                    </div>
-                  )}
-                  {storyData.duration && (
-                    <div className="d-flex align-items-center">
-                      <BsClock size={14} className="me-2 text-primary flex-shrink-0" />
-                      <span className="small" style={{ color: isDarkMode ? '#e2e8f0' : '#212529' }}>
-                        {formatDuration(storyData.duration)}
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {storyData.description && (
-                  <p className="small mb-2" style={{
-                    lineHeight: '1.5',
-                    color: isDarkMode ? '#94a3b8' : '#6c757d',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden'
-                  }}>
-                    {storyData.description}
-                  </p>
+              <div className="shared-story-card__info">
+                <h6 className="shared-story-card__title">{storyData.title}</h6>
+                {storyData.scholar && (
+                  <div className="shared-story-card__meta">
+                    <BsPerson size={12} />
+                    <span>{storyData.scholar.fullName}</span>
+                  </div>
                 )}
-
-                <div className="d-flex gap-1 gap-sm-2 flex-wrap">
-                  <Link href={`/blogs/story/${post.shared_story_id}`} target="_blank" rel="noopener noreferrer">
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      className="rounded-pill px-4"
-                      style={{
-                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                        border: 'none'
-                      }}
-                    >
-                      <BsPlayCircle size={14} className="me-2" />
-                      {t('post.viewStory') || 'Hikayeyi İzle'}
-                    </Button>
-                  </Link>
-                  <Link href="/blogs">
-                    <Button
-                      variant={isDarkMode ? 'outline-light' : 'outline-primary'}
-                      size="sm"
-                      className="rounded-pill px-4"
-                    >
-                      <BsCollection size={14} className="me-2" />
-                      {t('post.viewAllStories') || 'Tüm Hikayeleri Gör'}
-                    </Button>
-                  </Link>
-                  <Button
-                    variant={isDarkMode ? 'outline-light' : 'outline-primary'}
-                    size="sm"
-                    className="rounded-pill px-3"
-                    onClick={() => {
-                      if (storyUrl) {
-                        navigator.clipboard.writeText(storyUrl);
-                        showNotification({ title: 'Başarılı', message: 'Link kopyalandı', variant: 'success' });
-                      }
-                    }}
-                  >
-                    {t('post.copy')}
-                  </Button>
-                </div>
               </div>
             </div>
+          </Link>
+
+          {/* Aksiyon butonları */}
+          <div className="shared-story-card__actions mb-3">
+            <Link href={`/blogs/story/${post.shared_story_id}`}>
+              <Button variant="primary" size="sm" className="rounded-pill px-4">
+                <BsPlayCircle size={14} className="me-2" />
+                {t('post.viewStory') || 'Hikayeyi İzle'}
+              </Button>
+            </Link>
+            <Link href="/blogs">
+              <Button variant={isDarkMode ? 'outline-light' : 'outline-primary'} size="sm" className="rounded-pill px-3">
+                <BsCollection size={14} className="me-2" />
+                {t('post.viewAllStories') || 'Tüm Hikayeleri Gör'}
+              </Button>
+            </Link>
+            <Button
+              variant={isDarkMode ? 'outline-light' : 'outline-secondary'}
+              size="sm"
+              className="rounded-pill px-3"
+              onClick={() => {
+                if (storyUrl) {
+                  navigator.clipboard.writeText(storyUrl);
+                  showNotification({ title: 'Başarılı', message: 'Link kopyalandı', variant: 'success' });
+                }
+              }}
+            >
+              {t('post.copy') || 'Kopyala'}
+            </Button>
           </div>
+
+          {/* Eski inline iframe ve büyük kart kaldırıldı */}
 
           {/* Comment section */}
           {onAddComment && (
@@ -650,7 +571,7 @@ const SharedStoryCard = ({ post, onDeletePost, comments = [], onLoadComments, on
           postType: 'story',
           title: storyData?.title || 'Hikaye Paylaşımı',
           caption: storyData?.description || '',
-          image: storyData?.thumbnail_url ? getThumbnailUrl() : null,
+          image: getThumbnailUrl(),
           video_url: storyData?.video_url || null,
           isUserPost: false,
           authorName: post.user_name,
