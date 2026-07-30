@@ -78,6 +78,7 @@ export class CountryController {
       createCountryDto.flagUrl = `/uploads/country_flags/${flag.filename}`;
     }
     const languageIds = this.parseLangIds(rawLangIds);
+    this.stripNonEntityFields(createCountryDto);
     return this.countryService.create(createCountryDto, languageIds);
   }
 
@@ -96,7 +97,13 @@ export class CountryController {
     const languageIds = rawLangIds !== undefined
       ? this.parseLangIds(rawLangIds)
       : undefined;
+    this.stripNonEntityFields(updateCountryDto);
     return this.countryService.update(id, updateCountryDto, languageIds);
+  }
+
+  /** multipart/form-data sends extra fields that are not Country columns */
+  private stripNonEntityFields(dto: CreateCountryDto | UpdateCountryDto): void {
+    delete (dto as Record<string, unknown>).languageIds;
   }
 
   private parseLangIds(raw: string | string[] | undefined): number[] {

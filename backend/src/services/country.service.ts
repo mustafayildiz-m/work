@@ -24,11 +24,30 @@ export class CountryService {
     return value.toUpperCase().slice(0, 2);
   }
 
+  /** Coerce multipart/form-data string values before DB writes */
+  private normalizeFormFields(dto: CreateCountryDto | UpdateCountryDto): void {
+    const raw = dto as Record<string, unknown>;
+
+    if (raw.primaryLanguageId !== undefined && raw.primaryLanguageId !== '') {
+      dto.primaryLanguageId = Number(raw.primaryLanguageId);
+    }
+    if (raw.displayOrder !== undefined && raw.displayOrder !== '') {
+      dto.displayOrder = Number(raw.displayOrder);
+    }
+    if (raw.isActive !== undefined) {
+      dto.isActive =
+        raw.isActive === true ||
+        raw.isActive === 'true' ||
+        raw.isActive === '1';
+    }
+  }
+
   async create(
     createCountryDto: CreateCountryDto,
     languageIds?: number[],
   ): Promise<Country> {
     try {
+      this.normalizeFormFields(createCountryDto);
       if (createCountryDto.alpha2) {
         createCountryDto.alpha2 = this.normalizeAlpha2(createCountryDto.alpha2)!;
       }
@@ -42,7 +61,7 @@ export class CountryService {
         await this.syncCountryLanguages(
           saved.id,
           languageIds,
-          createCountryDto.primaryLanguageId,
+          Number(createCountryDto.primaryLanguageId) || undefined,
         );
       }
 
@@ -83,6 +102,7 @@ export class CountryService {
   ): Promise<Country> {
     try {
       await this.findOne(id);
+      this.normalizeFormFields(updateCountryDto);
 
       if (updateCountryDto.alpha2) {
         updateCountryDto.alpha2 = this.normalizeAlpha2(updateCountryDto.alpha2)!;
@@ -106,7 +126,7 @@ export class CountryService {
         await this.syncCountryLanguages(
           id,
           languageIds,
-          updateCountryDto.primaryLanguageId,
+          Number(updateCountryDto.primaryLanguageId) || undefined,
         );
       }
 
