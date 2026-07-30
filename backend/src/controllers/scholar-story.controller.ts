@@ -13,7 +13,9 @@ import {
   Request,
   UseInterceptors,
   UploadedFile,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ScholarStoryService } from '../services/scholar-story.service';
 import { CreateScholarStoryDto } from '../dto/scholar-story/create-scholar-story.dto';
@@ -128,6 +130,46 @@ export class ScholarStoryController {
     @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
   ) {
     return this.scholarStoryService.findByScholarId(scholarId, page, limit);
+  }
+
+  @Get('resolve-thumbnail')
+  resolveThumbnail(@Query('url') url: string) {
+    return this.scholarStoryService.resolveThumbnail(url || '');
+  }
+
+  @Get('thumbnail-image')
+  async getThumbnailImage(@Query('url') url: string, @Res() res: Response) {
+    if (!url) {
+      return res.status(400).send('URL required');
+    }
+
+    try {
+      const { thumbnail_url } = await this.scholarStoryService.resolveThumbnail(url);
+      if (!thumbnail_url) {
+        return res.status(404).send('Thumbnail not found');
+      }
+
+      const imageRes = await fetch(thumbnail_url, {
+        headers: {
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          Referer: 'https://www.instagram.com/',
+        },
+      });
+
+      if (!imageRes.ok) {
+        return res.status(502).send('Failed to fetch thumbnail');
+      }
+
+      const contentType = imageRes.headers.get('content-type') || 'image/jpeg';
+      const buffer = Buffer.from(await imageRes.arrayBuffer());
+      res.set('Content-Type', contentType);
+      res.set('Cache-Control', 'public, max-age=86400');
+      return res.send(buffer);
+    } catch (error) {
+      console.error('Thumbnail proxy error:', error);
+      return res.status(500).send('Thumbnail proxy failed');
+    }
   }
 
   @Get(':id')

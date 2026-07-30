@@ -2,14 +2,15 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import Select from 'react-select';
-import { Card, Row, Col, Form, Button, Spinner, Alert, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'react-bootstrap';
-import { BsCalendarDate, BsPlayFill, BsEye, BsHeart, BsGlobe2, BsGrid3X3Gap, BsList, BsShare, BsNewspaper, BsWhatsapp, BsSearch, BsXCircleFill } from 'react-icons/bs';
+import { Form, Button, Spinner, Alert, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'react-bootstrap';
+import { BsCalendarDate, BsPlayFill, BsEye, BsHeart, BsGrid3X3Gap, BsList, BsShare, BsNewspaper, BsWhatsapp, BsXCircleFill, BsInstagram, BsYoutube } from 'react-icons/bs';
 import { useScholarStories } from '@/hooks/useScholarStories';
-import NewsImage from './NewsImage';
+import StoryThumbnail from './StoryThumbnail';
 import Link from 'next/link';
 import { useLanguage } from '@/context/useLanguageContext';
 import { toast } from 'react-toastify';
 import { getFlagImageUrl, getFlagEmojiFallback } from '@/utils/language';
+import { isInstagramUrl, isYouTubeUrl } from '@/utils/videoThumbnail';
 import './IslamicNews.css';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
@@ -26,60 +27,48 @@ const formatDuration = (seconds) => {
   return `${m}:${s.toString().padStart(2, '0')}`;
 };
 
-const getThumbnailUrl = (url) => {
-  if (!url || typeof url !== 'string') return null;
-  return url.startsWith('http') ? url : `${API_BASE_URL}${url}`;
-};
-
-/* ═══════════════════════════════════════════════
-   Story Card (Instagram-style 9:16 portrait)
-   ═══════════════════════════════════════════════ */
 const StoryCard = ({ story, languages = [], onShareToFeed }) => {
   const [shareOpen, setShareOpen] = useState(false);
-  const { id, title, thumbnail_url, video_url, duration, view_count, like_count, scholar, language, is_featured } = story;
+  const { id, title, video_url, duration, view_count, like_count, scholar, language, is_featured } = story;
 
   const langLabel = (code) => {
     const l = languages.find((x) => x.code === code);
     return l ? l.name : code;
   };
 
-  const thumb = getThumbnailUrl(thumbnail_url) || '/images/book-placeholder.jpg';
   const storyUrl = typeof window !== 'undefined' ? `${window.location.origin}/blogs/story/${id}` : '';
+  const platform = isInstagramUrl(video_url) ? 'instagram' : isYouTubeUrl(video_url) ? 'youtube' : 'video';
 
   return (
-    <div className="position-relative" style={{ overflow: 'visible' }}>
+    <div className="story-card-wrap">
       <Link href={`/blogs/story/${id}`} className="text-decoration-none">
-        <div className="story-card">
-          <NewsImage
-            src={thumb}
-            alt={title}
-            width={400}
-            height={620}
-            className="story-card__image"
-            style={{ objectFit: 'cover' }}
-          />
+        <article className={`story-card ${is_featured ? 'story-card--featured' : ''} story-card--${platform}`}>
+          <StoryThumbnail story={story} alt={title} className="story-card__image" />
 
           <div className="story-card__gradient" />
 
           {video_url && (
             <div className="story-card__play">
-              <BsPlayFill size={26} />
+              <BsPlayFill size={24} />
             </div>
           )}
 
           <div className="story-card__top">
-            <span className="story-card__lang-badge">{langLabel(language)}</span>
+            <span className="story-card__platform">
+              {platform === 'instagram' ? <BsInstagram size={12} /> : platform === 'youtube' ? <BsYoutube size={12} /> : null}
+              {langLabel(language)}
+            </span>
             {is_featured && <span className="story-card__featured-badge">⭐ Öne Çıkan</span>}
           </div>
 
-          {duration && <span className="story-card__duration">{formatDuration(duration)}</span>}
+          {duration ? <span className="story-card__duration">{formatDuration(duration)}</span> : null}
 
           <div className="story-card__bottom">
             {scholar && (
               <div className="story-card__scholar">
-                {scholar.profileImage && (
+                {scholar.photoUrl && (
                   <img
-                    src={scholar.profileImage.startsWith('http') ? scholar.profileImage : `${API_BASE_URL}${scholar.profileImage}`}
+                    src={scholar.photoUrl.startsWith('http') ? scholar.photoUrl : `${API_BASE_URL}${scholar.photoUrl}`}
                     alt={scholar.fullName}
                     className="story-card__scholar-avatar"
                   />
@@ -93,16 +82,16 @@ const StoryCard = ({ story, languages = [], onShareToFeed }) => {
               <span className="story-card__stat"><BsHeart size={10} /> {like_count || 0}</span>
             </div>
           </div>
-        </div>
+        </article>
       </Link>
 
       {onShareToFeed && (
         <div className="story-card__share" onClick={(e) => e.stopPropagation()}>
-          <Dropdown show={shareOpen} onToggle={(open) => setShareOpen(open)}>
+          <Dropdown show={shareOpen} onToggle={setShareOpen}>
             <DropdownToggle as="button" className="story-card__share-btn dropdown-toggle-no-caret">
               <BsShare size={13} />
             </DropdownToggle>
-            <DropdownMenu align="end" className="shadow-lg border-0" style={{ borderRadius: '12px', minWidth: '200px' }}>
+            <DropdownMenu align="end" className="story-share-menu shadow-lg border-0">
               <DropdownItem as="button" onClick={() => { if (storyUrl) { navigator.clipboard.writeText(storyUrl); toast.success('Link kopyalandı'); } setShareOpen(false); }}>
                 <BsShare size={14} className="me-2" /> Link Kopyala
               </DropdownItem>
@@ -120,9 +109,6 @@ const StoryCard = ({ story, languages = [], onShareToFeed }) => {
   );
 };
 
-/* ═══════════════════════════════════════════════
-   Main Component
-   ═══════════════════════════════════════════════ */
 const ScholarStories = () => {
   const { t } = useLanguage();
   const [localSearchQuery, setLocalSearchQuery] = useState('');
@@ -257,39 +243,37 @@ const ScholarStories = () => {
   }
 
   return (
-    <div className="bg-mode p-2 p-sm-3 p-md-4">
-      {/* ── Featured Stories Ring ── */}
+    <div className="blogs-stories-page">
       {featuredStories.length > 0 && !searchQuery && (
-        <div className="stories-ring-bar">
-          {featuredStories.map((s) => (
-            <Link key={s.id} href={`/blogs/story/${s.id}`} className="story-ring-item">
-              <div className="story-ring-avatar">
-                <img
-                  src={getThumbnailUrl(s.thumbnail_url) || '/images/book-placeholder.jpg'}
-                  alt={s.title}
-                />
-              </div>
-              <span className="story-ring-name">{s.scholar?.fullName || s.title}</span>
-            </Link>
-          ))}
+        <div className="stories-ring-section">
+          <div className="stories-ring-label">Öne Çıkan Hikayeler</div>
+          <div className="stories-ring-bar">
+            {featuredStories.map((s) => (
+              <Link key={s.id} href={`/blogs/story/${s.id}`} className="story-ring-item">
+                <div className="story-ring-avatar">
+                  <StoryThumbnail story={s} alt={s.title} className="story-ring-avatar__img" />
+                </div>
+                <span className="story-ring-name">{s.scholar?.fullName || s.title}</span>
+              </Link>
+            ))}
+          </div>
         </div>
       )}
 
-      {/* ── Header ── */}
       <div className="stories-header">
-        <h1 className="stories-header__title">
-          {t('blogs.title')}
-          <span className="stories-header__badge">{pagination.total}</span>
-        </h1>
-        <div className="d-flex align-items-center gap-2">
-          <div className="btn-group" role="group">
+        <div>
+          <h1 className="stories-header__title">{t('blogs.title')}</h1>
+          <p className="stories-header__subtitle">Instagram tarzı dikey hikayeler ve kısa videolar</p>
+        </div>
+        <div className="stories-header__actions">
+          <span className="stories-header__badge">{pagination.total} hikaye</span>
+          <div className="btn-group stories-view-toggle" role="group">
             <Button variant={viewMode === 'grid' ? 'primary' : 'outline-primary'} size="sm" onClick={() => setViewMode('grid')} title={t('blogs.gridView')}><BsGrid3X3Gap size={16} /></Button>
             <Button variant={viewMode === 'list' ? 'primary' : 'outline-primary'} size="sm" onClick={() => setViewMode('list')} title={t('blogs.listView')}><BsList size={20} /></Button>
           </div>
         </div>
       </div>
 
-      {/* ── Filter Bar ── */}
       <Form onSubmit={handleSearch} className="stories-filter-bar">
         <Select
           value={selectedOption}
@@ -304,11 +288,12 @@ const ScholarStories = () => {
           maxMenuHeight={280}
           noOptionsMessage={() => 'Sonuç bulunamadı'}
           styles={{
-            control: (base) => ({ ...base, minHeight: 38, borderColor: 'var(--bs-border-color)' }),
-            menu: (base) => ({ ...base, zIndex: 1060, borderRadius: '12px' }),
+            control: (base) => ({ ...base, minHeight: 42, borderColor: 'rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.06)', color: '#fff' }),
+            singleValue: (base) => ({ ...base, color: '#fff' }),
+            menu: (base) => ({ ...base, zIndex: 1060, borderRadius: '14px' }),
           }}
         />
-        <div className="position-relative" style={{ flex: 1, minWidth: 160 }}>
+        <div className="stories-search-wrap">
           <Form.Control
             type="text"
             className="stories-search-input"
@@ -317,104 +302,83 @@ const ScholarStories = () => {
             onChange={(e) => setLocalSearchQuery(e.target.value)}
           />
           {localSearchQuery && (
-            <button
-              type="button"
-              onClick={handleClearSearch}
-              className="position-absolute border-0 bg-transparent text-muted"
-              style={{ right: 12, top: '50%', transform: 'translateY(-50%)' }}
-            >
+            <button type="button" onClick={handleClearSearch} className="stories-search-clear">
               <BsXCircleFill size={16} />
             </button>
           )}
         </div>
       </Form>
 
-      {/* ── Loading ── */}
       {loading && stories.length === 0 && (
-        <div className="text-center py-5">
-          <Spinner animation="border" variant="primary" />
-          <p className="mt-3 text-muted">{t('common.loading')}</p>
+        <div className="stories-loading">
+          <Spinner animation="border" variant="light" />
+          <p>{t('common.loading')}</p>
         </div>
       )}
 
-      {/* ── Grid View ── */}
       {viewMode === 'grid' ? (
         <div className="stories-grid">
           {stories.length > 0 ? (
             stories.map((story) => <StoryCard key={story.id} story={story} languages={languages} onShareToFeed={handleShareToFeed} />)
           ) : (
             !loading && (
-              <div className="text-center py-5" style={{ gridColumn: '1 / -1' }}>
+              <div className="stories-empty">
                 {searchQuery ? (
                   <>
-                    <h5 className="text-muted mb-3">&ldquo;{searchQuery}&rdquo; {t('blogs.noResults')}</h5>
-                    <Button variant="outline-primary" onClick={handleClearSearch}>{t('blogs.showAll')}</Button>
+                    <h5>&ldquo;{searchQuery}&rdquo; {t('blogs.noResults')}</h5>
+                    <Button variant="outline-light" onClick={handleClearSearch}>{t('blogs.showAll')}</Button>
                   </>
                 ) : (
-                  <h5 className="text-muted">{t('blogs.noStories')}</h5>
+                  <h5>{t('blogs.noStories')}</h5>
                 )}
               </div>
             )
           )}
         </div>
       ) : (
-        /* ── List View ── */
         <div className="blogs-list-view">
           {stories.length > 0 ? (
             stories.map((story) => {
-              const { id, title, description, thumbnail_url, video_url, duration, view_count, like_count, scholar, created_at, language, is_featured } = story;
+              const { id, title, description, video_url, duration, view_count, like_count, scholar, created_at, language, is_featured } = story;
               const langLabel = (code) => { const l = languages.find((x) => x.code === code); return l ? l.name : code; };
-              const thumb = getThumbnailUrl(thumbnail_url) || '/images/book-placeholder.jpg';
               const listStoryUrl = typeof window !== 'undefined' ? `${window.location.origin}/blogs/story/${id}` : '';
+              const platform = isInstagramUrl(video_url) ? 'instagram' : isYouTubeUrl(video_url) ? 'youtube' : 'video';
 
               return (
-                <div key={id} className="position-relative mb-2 mb-md-3" style={{ overflow: 'visible' }}>
+                <div key={id} className="stories-list-item">
                   <Link href={`/blogs/story/${id}`} className="text-decoration-none">
-                    <Card className="stories-list-card shadow-sm border-0">
-                      <Row className="g-0">
-                        <Col xs={4} md={3}>
-                          <div className="stories-list-thumb">
-                            <NewsImage src={thumb} alt={title} width={300} height={200} className="w-100 h-100" style={{ objectFit: 'cover' }} />
-                            {video_url && (
-                              <div className="position-absolute top-50 start-50 translate-middle">
-                                <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                  <BsPlayFill size={20} className="text-white" />
-                                </div>
-                              </div>
-                            )}
-                            {is_featured && (
-                              <span className="position-absolute top-0 end-0 m-1 badge" style={{ background: 'linear-gradient(135deg, #f7971e, #ffd200)', color: '#1a1a2e', fontSize: '0.6rem' }}>⭐</span>
-                            )}
+                    <article className={`stories-list-card stories-list-card--${platform}`}>
+                      <div className="stories-list-thumb">
+                        <StoryThumbnail story={story} alt={title} className="stories-list-thumb__img" />
+                        {video_url && (
+                          <div className="stories-list-thumb__play">
+                            <BsPlayFill size={18} className="text-white" />
                           </div>
-                        </Col>
-                        <Col xs={8} md={9}>
-                          <Card.Body className="p-2 p-md-3">
-                            <div className="d-flex justify-content-between align-items-start mb-1">
-                              <h6 className="mb-0 text-reset fw-semibold" style={{ fontSize: '0.9rem' }}>{title}</h6>
-                              <span className="story-card__lang-badge ms-2 flex-shrink-0">{langLabel(language)}</span>
-                            </div>
-                            {scholar && <p className="text-primary small mb-1 fw-medium" style={{ fontSize: '0.78rem' }}>{scholar.fullName}</p>}
-                            {description && (
-                              <p className="text-muted mb-2" style={{ fontSize: '0.78rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: 1.5 }}>{description}</p>
-                            )}
-                            <div className="d-flex align-items-center gap-2 flex-wrap" style={{ fontSize: '0.72rem' }}>
-                              <small className="text-muted d-flex align-items-center gap-1"><BsCalendarDate size={11} /> {formatDate(created_at)}</small>
-                              {duration && <><span className="text-muted">•</span><small className="text-muted">{formatDuration(duration)}</small></>}
-                              <span className="text-muted">•</span>
-                              <small className="text-muted d-flex align-items-center gap-1"><BsEye size={11} /> {view_count || 0}</small>
-                              <small className="text-muted d-flex align-items-center gap-1"><BsHeart size={10} /> {like_count || 0}</small>
-                            </div>
-                          </Card.Body>
-                        </Col>
-                      </Row>
-                    </Card>
+                        )}
+                        {is_featured && <span className="stories-list-thumb__featured">⭐</span>}
+                      </div>
+                      <div className="stories-list-body">
+                        <div className="stories-list-body__top">
+                          <h6>{title}</h6>
+                          <span className="story-card__platform">{langLabel(language)}</span>
+                        </div>
+                        {scholar && <p className="stories-list-scholar">{scholar.fullName}</p>}
+                        {description && <p className="stories-list-desc">{description}</p>}
+                        <div className="stories-list-meta">
+                          <span><BsCalendarDate size={11} /> {formatDate(created_at)}</span>
+                          {duration && <span>{formatDuration(duration)}</span>}
+                          <span><BsEye size={11} /> {view_count || 0}</span>
+                          <span><BsHeart size={10} /> {like_count || 0}</span>
+                        </div>
+                      </div>
+                    </article>
                   </Link>
-                  <div className="position-absolute top-0 end-0 m-2" style={{ zIndex: 20 }} onClick={(e) => e.stopPropagation()}>
+                  <div className="stories-list-share" onClick={(e) => e.stopPropagation()}>
                     <Dropdown show={openShareDropdownId === id} onToggle={(open) => setOpenShareDropdownId(open ? id : null)}>
-                      <DropdownToggle variant="outline-secondary" size="sm" className="d-flex align-items-center dropdown-toggle-no-caret" style={{ borderRadius: '50%', width: 30, height: 30, padding: 0, justifyContent: 'center' }}>
+                      <DropdownToggle as="button" className="story-card__share-btn dropdown-toggle-no-caret">
                         <BsShare size={12} />
                       </DropdownToggle>
-                      <DropdownMenu align="end" className="shadow-lg border-0" style={{ borderRadius: '12px' }}>
+                      <DropdownMenu align="end" className="story-share-menu shadow-lg border-0">
                         <DropdownItem as="button" onClick={() => { if (listStoryUrl) { navigator.clipboard.writeText(listStoryUrl); toast.success('Link kopyalandı'); } setOpenShareDropdownId(null); }}>
                           <BsShare size={14} className="me-2" /> Link Kopyala
                         </DropdownItem>
@@ -432,14 +396,14 @@ const ScholarStories = () => {
             })
           ) : (
             !loading && (
-              <div className="text-center py-5">
+              <div className="stories-empty">
                 {searchQuery ? (
                   <>
-                    <h5 className="text-muted mb-3">&ldquo;{searchQuery}&rdquo; {t('blogs.noResults')}</h5>
-                    <Button variant="outline-primary" onClick={handleClearSearch}>{t('blogs.showAll')}</Button>
+                    <h5>&ldquo;{searchQuery}&rdquo; {t('blogs.noResults')}</h5>
+                    <Button variant="outline-light" onClick={handleClearSearch}>{t('blogs.showAll')}</Button>
                   </>
                 ) : (
-                  <h5 className="text-muted">{t('blogs.noStories')}</h5>
+                  <h5>{t('blogs.noStories')}</h5>
                 )}
               </div>
             )
@@ -447,16 +411,15 @@ const ScholarStories = () => {
         </div>
       )}
 
-      {/* ── Pagination ── */}
       {stories.length > 0 && pagination.totalPages > 1 && (
-        <nav className="mt-3">
+        <nav className="mt-2">
           <ul className="stories-pagination">{genPaginationItems()}</ul>
         </nav>
       )}
 
       {stories.length > 0 && (
-        <div className="text-center mt-2 mb-3">
-          <small className="text-muted">
+        <div className="stories-footer-meta">
+          <small>
             {searchQuery
               ? `"${searchQuery}" ${t('blogs.searchResults')} ${stories.length} ${t('blogs.storiesFound')}`
               : `${(pagination.page - 1) * pagination.limit + 1} - ${Math.min(pagination.page * pagination.limit, pagination.total)} / ${pagination.total} ${t('blogs.storiesCount')}`}

@@ -24,6 +24,8 @@ const frameSrcOrigins = new Set([
   'https://youtube-nocookie.com',
   'https://player.vimeo.com',
   'https://www.google.com',
+  'https://www.instagram.com',
+  'https://instagram.com',
 ]);
 
 if (isProd) {
