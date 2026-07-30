@@ -805,7 +805,9 @@
       "loading": "Loading languages...",
       "errorTitle": "Error!",
       "viewBooks": "View {language} Books",
-      "booksAvailable": "{count} books available in this language"
+      "booksAvailable": "{count} books available in this language",
+      "backToCountries": "Back to countries",
+      "chooseLanguage": "Choose a language"
     },
     "untitledBook": "Untitled book",
     "globalSearchPlaceholder": "Search books by title...",

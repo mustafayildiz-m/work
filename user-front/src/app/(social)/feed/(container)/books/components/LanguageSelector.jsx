@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useRef } from 'react';
 import { Card, CardBody, Spinner, Alert } from 'react-bootstrap';
-import { BsGlobe, BsCheckLg, BsArrowRight, BsSearch, BsXCircleFill } from 'react-icons/bs';
+import { BsGlobe, BsCheckLg, BsArrowRight, BsSearch, BsXCircleFill, BsArrowLeft } from 'react-icons/bs';
 import { useCountries } from '@/hooks/useCountries';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useBookCounts } from '@/hooks/useBookCounts';
@@ -19,12 +19,30 @@ const getHiResFlag = (url) => {
   return resolved.replace('/w80/', '/w320/');
 };
 
+function getCountryLanguages(country) {
+  const cl = country.countryLanguages;
+  if (cl && cl.length > 0) {
+    return cl
+      .filter((entry) => entry.language)
+      .sort((a, b) => {
+        if (a.isPrimary && !b.isPrimary) return -1;
+        if (!a.isPrimary && b.isPrimary) return 1;
+        return a.displayOrder - b.displayOrder;
+      })
+      .map((entry) => entry.language);
+  }
+  if (country.primaryLanguage) return [country.primaryLanguage];
+  return [];
+}
+
 const LanguageSelector = () => {
   const { countries, loading, error } = useCountries();
   const { t, locale } = useLanguage();
   const { getBookCount } = useBookCounts();
   const router = useRouter();
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [selectedLanguage, setSelectedLanguage] = useState(null);
+  const [showLangPicker, setShowLangPicker] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const continueButtonRef = useRef(null);
   const searchInputRef = useRef(null);
@@ -47,18 +65,41 @@ const LanguageSelector = () => {
   const handleCountrySelect = (country) => {
     if (!country?.primaryLanguage) return;
     setSelectedCountry(country);
+
+    const langs = getCountryLanguages(country);
+
+    if (langs.length <= 1) {
+      setSelectedLanguage(langs[0] || country.primaryLanguage);
+      setShowLangPicker(false);
+    } else {
+      setSelectedLanguage(null);
+      setShowLangPicker(true);
+    }
+
     setTimeout(() => {
       continueButtonRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 100);
   };
 
+  const handleLanguagePick = (lang) => {
+    setSelectedLanguage(lang);
+    setTimeout(() => {
+      continueButtonRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  };
+
+  const handleBackToCountries = () => {
+    setSelectedCountry(null);
+    setSelectedLanguage(null);
+    setShowLangPicker(false);
+  };
+
   const handleContinue = () => {
-    const lang = selectedCountry?.primaryLanguage;
-    if (!selectedCountry || !lang) return;
+    if (!selectedCountry || !selectedLanguage) return;
     const params = new URLSearchParams({
-      languageId: String(lang.id),
-      languageName: lang.name || '',
-      languageCode: lang.code || '',
+      languageId: String(selectedLanguage.id),
+      languageName: selectedLanguage.name || '',
+      languageCode: selectedLanguage.code || '',
       countryAlpha2: selectedCountry.alpha2 || '',
     });
     router.push(`/feed/books/list?${params.toString()}`);
@@ -102,111 +143,186 @@ const LanguageSelector = () => {
         <div className="cs-header__badge">{t('common.countrySelector.totalCountries', { count: countries.length })}</div>
       </div>
 
-      {/* Search */}
-      <div className="cs-search">
-        <div className="cs-search__wrapper">
-          <BsSearch className="cs-search__icon" />
-          <input
-            ref={searchInputRef}
-            type="text"
-            className="cs-search__input"
-            placeholder={t('common.countrySelector.searchPlaceholder')}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+      {/* Search — hidden during language sub-picker */}
+      {!showLangPicker && (
+        <div className="cs-search">
+          <div className="cs-search__wrapper">
+            <BsSearch className="cs-search__icon" />
+            <input
+              ref={searchInputRef}
+              type="text"
+              className="cs-search__input"
+              placeholder={t('common.countrySelector.searchPlaceholder')}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {searchQuery && (
+              <button
+                className="cs-search__clear"
+                onClick={() => { setSearchQuery(''); searchInputRef.current?.focus(); }}
+                aria-label={t('common.countrySelector.clearSearch')}
+              >
+                <BsXCircleFill size={16} />
+              </button>
+            )}
+          </div>
           {searchQuery && (
-            <button
-              className="cs-search__clear"
-              onClick={() => { setSearchQuery(''); searchInputRef.current?.focus(); }}
-              aria-label={t('common.countrySelector.clearSearch')}
-            >
-              <BsXCircleFill size={16} />
-            </button>
+            <span className="cs-search__count">
+              {t('common.countrySelector.showingFiltered', {
+                filtered: filteredCountries.length,
+                total: countries.length,
+              })}
+            </span>
           )}
         </div>
-        {searchQuery && (
-          <span className="cs-search__count">
-            {t('common.countrySelector.showingFiltered', {
-              filtered: filteredCountries.length,
-              total: countries.length,
-            })}
-          </span>
-        )}
-      </div>
+      )}
 
       {/* Grid */}
       <CardBody className="cs-body">
-        {filteredCountries.length === 0 ? (
-          <div className="cs-empty">
-            <BsSearch size={48} className="cs-empty__icon" />
-            <h6 className="cs-empty__title">{t('common.countrySelector.noResults')}</h6>
-            <p className="cs-empty__desc">{t('common.countrySelector.noResultsDesc')}</p>
-          </div>
-        ) : (
-          <div className="cs-grid-scroll">
+        {/* Language sub-picker for multilingual countries */}
+        {showLangPicker && selectedCountry ? (
+          <div>
+            <button
+              type="button"
+              className="cs-action__btn mb-3"
+              onClick={handleBackToCountries}
+              style={{ background: 'transparent', color: 'var(--cs-text)', border: 'none', padding: '8px 0', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}
+            >
+              <BsArrowLeft size={16} />
+              <span>{t('books.languageSelector.backToCountries')}</span>
+            </button>
+
+            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+              {selectedCountry.flagUrl && (
+                <img
+                  src={getHiResFlag(selectedCountry.flagUrl)}
+                  alt={countryLabel(selectedCountry)}
+                  style={{ height: '80px', borderRadius: '8px', margin: '0 auto 12px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', display: 'block' }}
+                />
+              )}
+              <h6 style={{ margin: 0, fontWeight: 600, fontSize: '1.1rem' }}>{countryLabel(selectedCountry)}</h6>
+              <p className="text-muted" style={{ fontSize: '0.85rem', margin: '4px 0 0' }}>
+                {t('books.languageSelector.chooseLanguage')}
+              </p>
+            </div>
+
             <div className="cs-grid">
-            {filteredCountries.map((country) => {
-              const lang = country.primaryLanguage;
-              const hasLang = !!lang;
-              const isSelected = selectedCountry?.id === country.id;
-              return (
-                <button
-                  key={country.id}
-                  type="button"
-                  className={`cs-country ${isSelected ? 'cs-country--selected' : ''} ${!hasLang ? 'cs-country--disabled' : ''}`}
-                  onClick={() => handleCountrySelect(country)}
-                  disabled={!hasLang}
-                  title={hasLang ? countryLabel(country) : t('common.countrySelector.tooltipNoLanguage', { country: countryLabel(country) })}
-                >
-                  <div className="cs-country__flag">
-                    {country.flagUrl ? (
-                      <img
-                        src={getHiResFlag(country.flagUrl)}
-                        alt={t('common.countrySelector.flagAlt', { country: countryLabel(country) })}
-                        loading="lazy"
-                      />
-                    ) : (
-                      <span className="cs-country__flag-emoji">
-                        {getFlagEmojiFallback(country.alpha2?.toLowerCase())}
-                      </span>
+              {getCountryLanguages(selectedCountry).map((lang) => {
+                const isLangSelected = selectedLanguage?.id === lang.id;
+                return (
+                  <button
+                    key={lang.id}
+                    type="button"
+                    className={`cs-country ${isLangSelected ? 'cs-country--selected' : ''}`}
+                    onClick={() => handleLanguagePick(lang)}
+                  >
+                    {lang.flagUrl && (
+                      <div style={{ width: '28px', height: '20px', borderRadius: '3px', overflow: 'hidden', flexShrink: 0 }}>
+                        <img
+                          src={getFlagImageUrl(lang.flagUrl, API_BASE_URL)}
+                          alt={langLabel(lang)}
+                          loading="lazy"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                      </div>
                     )}
-                  </div>
-                  <div className="cs-country__info">
-                    <span className="cs-country__name">{countryLabel(country)}</span>
-                    <span className="cs-country__lang">
-                      {hasLang ? langLabel(lang) : t('common.countrySelector.noLanguageShort')}
-                    </span>
-                  </div>
-                  <div className="cs-country__count">
-                    {hasLang ? getBookCount(lang.code) : 0} {t('books.page.bookCount')}
-                  </div>
-                  {isSelected && (
-                    <div className="cs-country__check">
-                      <BsCheckLg size={10} />
+                    <div className="cs-country__info" style={{ flex: 1 }}>
+                      <span className="cs-country__name">{langLabel(lang)}</span>
+                      <span className="cs-country__lang">{lang.code}</span>
                     </div>
-                  )}
-                </button>
-              );
-            })}
+                    <div className="cs-country__count">
+                      {getBookCount(lang.code)} {t('books.page.bookCount')}
+                    </div>
+                    {isLangSelected && (
+                      <div className="cs-country__check">
+                        <BsCheckLg size={10} />
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
+        ) : (
+          <>
+            {filteredCountries.length === 0 ? (
+              <div className="cs-empty">
+                <BsSearch size={48} className="cs-empty__icon" />
+                <h6 className="cs-empty__title">{t('common.countrySelector.noResults')}</h6>
+                <p className="cs-empty__desc">{t('common.countrySelector.noResultsDesc')}</p>
+              </div>
+            ) : (
+              <div className="cs-grid-scroll">
+                <div className="cs-grid">
+                {filteredCountries.map((country) => {
+                  const lang = country.primaryLanguage;
+                  const hasLang = !!lang;
+                  const isSelected = selectedCountry?.id === country.id;
+                  const langs = getCountryLanguages(country);
+                  const extraCount = langs.length > 1 ? langs.length : 0;
+                  return (
+                    <button
+                      key={country.id}
+                      type="button"
+                      className={`cs-country ${isSelected ? 'cs-country--selected' : ''} ${!hasLang ? 'cs-country--disabled' : ''}`}
+                      onClick={() => handleCountrySelect(country)}
+                      disabled={!hasLang}
+                      title={hasLang ? countryLabel(country) : t('common.countrySelector.tooltipNoLanguage', { country: countryLabel(country) })}
+                    >
+                      <div className="cs-country__flag">
+                        {country.flagUrl ? (
+                          <img
+                            src={getHiResFlag(country.flagUrl)}
+                            alt={t('common.countrySelector.flagAlt', { country: countryLabel(country) })}
+                            loading="lazy"
+                          />
+                        ) : (
+                          <span className="cs-country__flag-emoji">
+                            {getFlagEmojiFallback(country.alpha2?.toLowerCase())}
+                          </span>
+                        )}
+                      </div>
+                      <div className="cs-country__info">
+                        <span className="cs-country__name">{countryLabel(country)}</span>
+                        <span className="cs-country__lang">
+                          {hasLang ? langLabel(lang) : t('common.countrySelector.noLanguageShort')}
+                          {extraCount > 0 && (
+                            <span style={{ marginLeft: '4px', opacity: 0.7 }}>+{extraCount - 1}</span>
+                          )}
+                        </span>
+                      </div>
+                      <div className="cs-country__count">
+                        {hasLang ? getBookCount(lang.code) : 0} {t('books.page.bookCount')}
+                      </div>
+                      {isSelected && (
+                        <div className="cs-country__check">
+                          <BsCheckLg size={10} />
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+                </div>
+              </div>
+            )}
+          </>
         )}
 
         {/* Continue */}
-        {selectedCountry?.primaryLanguage && (
+        {selectedLanguage && (
           <div ref={continueButtonRef} className="cs-action">
             <button type="button" className="cs-action__btn" onClick={handleContinue}>
               <BsCheckLg className="cs-action__btn-icon" />
               <span>
                 {t('books.languageSelector.viewBooks', {
-                  language: langLabel(selectedCountry.primaryLanguage),
+                  language: langLabel(selectedLanguage),
                 })}
               </span>
               <BsArrowRight className="cs-action__btn-arrow" />
             </button>
             <p className="cs-action__meta">
               {t('books.languageSelector.booksAvailable', {
-                count: getBookCount(selectedCountry.primaryLanguage.code),
+                count: getBookCount(selectedLanguage.code),
               })}
             </p>
           </div>

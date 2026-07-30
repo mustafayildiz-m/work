@@ -809,7 +809,9 @@
       "loading": "Diller yükleniyor...",
       "errorTitle": "Hata!",
       "viewBooks": "{language} Kitaplarını Görüntüle",
-      "booksAvailable": "{count} kitap bu dilde mevcut"
+      "booksAvailable": "{count} kitap bu dilde mevcut",
+      "backToCountries": "Ülkelere dön",
+      "chooseLanguage": "Bir dil seçin"
     },
     "untitledBook": "Başlıksız kitap",
     "globalSearchPlaceholder": "Kitap adına göre ara...",

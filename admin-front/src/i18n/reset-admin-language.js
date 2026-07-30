@@ -1,5 +1,5 @@
 /**
- * Fired during logout so the panel returns to Kyrgyz (I18N_DEFAULT_LANGUAGE)
+ * Fired during logout so the panel returns to English (I18N_DEFAULT_LANGUAGE)
  * and clears the previous session UI language when the next session starts.
  */
 export const ADMIN_I18N_RESET_TO_DEFAULT_EVENT =
