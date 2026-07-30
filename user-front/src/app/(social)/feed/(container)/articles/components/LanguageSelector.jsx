@@ -6,7 +6,7 @@ import { BsCheckLg, BsArrowRight, BsFileText, BsSearch, BsXCircleFill, BsArrowLe
 import { useCountries } from '@/hooks/useCountries';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useRouter } from 'next/navigation';
-import { getFlagImageUrl, getFlagEmojiFallback } from '@/utils/language';
+import { getFlagImageUrl, getFlagEmojiFallback, getLanguageFlagEmoji } from '@/utils/language';
 import { getCountryDisplayName, getLocalizedLanguageName as langDisplayName } from '@/utils/countryLanguageDisplay';
 import '../../books/components/LanguageSelector.css';
 
@@ -238,7 +238,7 @@ const LanguageSelector = () => {
                     className={`cs-country ${isLangSelected ? 'cs-country--selected' : ''}`}
                     onClick={() => handleLanguagePick(lang)}
                   >
-                    {lang.flagUrl && (
+                    {lang.flagUrl ? (
                       <div style={{ width: '28px', height: '20px', borderRadius: '3px', overflow: 'hidden', flexShrink: 0 }}>
                         <img
                           src={getFlagImageUrl(lang.flagUrl, API_BASE_URL)}
@@ -247,6 +247,10 @@ const LanguageSelector = () => {
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                       </div>
+                    ) : (
+                      <span className="cs-country__flag-emoji" style={{ fontSize: '1.25rem', lineHeight: 1 }}>
+                        {getLanguageFlagEmoji(lang, selectedCountry.alpha2)}
+                      </span>
                     )}
                     <div className="cs-country__info" style={{ flex: 1 }}>
                       <span className="cs-country__name">{langLabel(lang)}</span>
