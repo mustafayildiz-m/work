@@ -281,29 +281,14 @@ export class BooksService {
       return null;
     }
 
-    // Find the best translation based on language preference
     let selectedTranslation: any = null;
 
     if (lang && book.translations) {
-      // Map language codes to language IDs (you might need to adjust these)
-      const langMap = {
-        tr: 1, // Turkish
-        en: 2, // English
-        ar: 3, // Arabic
-        de: 4, // German
-        fr: 5, // French
-        ja: 6, // Japanese
-      };
-
-      const targetLangId = langMap[lang];
-
-      // Try to find translation in requested language
       selectedTranslation = book.translations.find(
-        (t) => t.languageId === targetLangId,
+        (t) => t.language?.code === lang,
       );
     }
 
-    // Fallback to first translation if no specific language found
     if (!selectedTranslation && book.translations?.length > 0) {
       selectedTranslation = book.translations[0];
     }

@@ -36,7 +36,7 @@ const I18N_LANGUAGES = [
 ];
 
 const I18N_DEFAULT_LANGUAGE =
-  I18N_LANGUAGES.find((lang) => lang.code === 'ky') ?? I18N_LANGUAGES[0];
+  I18N_LANGUAGES.find((lang) => lang.code === 'en') ?? I18N_LANGUAGES[0];
 
 export {
   I18N_CONFIG_KEY,

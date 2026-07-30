@@ -71,12 +71,14 @@ export class CountryController {
   @UseInterceptors(FileInterceptor('flag', flagUploadOptions))
   create(
     @Body() createCountryDto: CreateCountryDto,
+    @Body('languageIds') rawLangIds: string | string[] | undefined,
     @UploadedFile() flag?: Express.Multer.File,
   ) {
     if (flag) {
       createCountryDto.flagUrl = `/uploads/country_flags/${flag.filename}`;
     }
-    return this.countryService.create(createCountryDto);
+    const languageIds = this.parseLangIds(rawLangIds);
+    return this.countryService.create(createCountryDto, languageIds);
   }
 
   @Patch(':id')
@@ -85,12 +87,28 @@ export class CountryController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCountryDto: UpdateCountryDto,
+    @Body('languageIds') rawLangIds: string | string[] | undefined,
     @UploadedFile() flag?: Express.Multer.File,
   ) {
     if (flag) {
       updateCountryDto.flagUrl = `/uploads/country_flags/${flag.filename}`;
     }
-    return this.countryService.update(id, updateCountryDto);
+    const languageIds = rawLangIds !== undefined
+      ? this.parseLangIds(rawLangIds)
+      : undefined;
+    return this.countryService.update(id, updateCountryDto, languageIds);
+  }
+
+  private parseLangIds(raw: string | string[] | undefined): number[] {
+    if (!raw) return [];
+    if (typeof raw === 'string') {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed.map(Number).filter(Boolean);
+      } catch {}
+      return raw.split(',').map(Number).filter(Boolean);
+    }
+    return raw.map(Number).filter(Boolean);
   }
 
   @Delete(':id')

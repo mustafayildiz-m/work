@@ -19,6 +19,7 @@ import { ArticleTranslation } from './articles/entities/article-translation.enti
 import { ScholarPost } from './scholars/entities/scholar-post.entity';
 import { Language } from './languages/entities/language.entity';
 import { Country } from './countries/entities/country.entity';
+import { CountryLanguage } from './countries/entities/country-language.entity';
 import { IslamicNews } from './entities/islamic-news.entity';
 import { User } from './users/entities/user.entity';
 import { ScholarStory } from './entities/scholar-story.entity';
@@ -45,6 +46,7 @@ import { LanguagesSeeder } from './seeders/languages-seeder';
 import { LanguageFlagsSeeder } from './seeders/language-flags-seeder';
 import { CountriesSeeder } from './seeders/countries-seeder';
 import { BackfillCountryLanguagesSeeder } from './seeders/backfill-country-languages-seeder';
+import { CountryLanguagesSeeder } from './seeders/country-languages-seeder';
 import { RegionalBooksSeeder } from './seeders/regional-books-seeder';
 import { ReligiousBooksSeeder } from './seeders/religious-books-seeder';
 import { MultiLanguageBooksSeeder } from './seeders/multilanguage-books-seeder';
@@ -95,6 +97,7 @@ const isProduction = process.env.NODE_ENV === 'production';
       ScholarPost,
       Language,
       Country,
+      CountryLanguage,
       IslamicNews,
       ScholarStory,
       StoryView,
@@ -150,6 +153,7 @@ const isProduction = process.env.NODE_ENV === 'production';
     LanguageFlagsSeeder,
     CountriesSeeder,
     BackfillCountryLanguagesSeeder,
+    CountryLanguagesSeeder,
     RegionalBooksSeeder,
     ReligiousBooksSeeder,
     MultiLanguageBooksSeeder,

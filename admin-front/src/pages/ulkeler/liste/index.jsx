@@ -53,10 +53,77 @@ function LanguageSelect({ value, onChange, languages, intl }) {
   );
 }
 
+function LanguageMultiSelect({ selected, onChange, languages, intl }) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
+
+  const filtered = languages.filter(l => {
+    if (!search.trim()) return true;
+    const q = search.toLowerCase();
+    return l.name.toLowerCase().includes(q) || l.code.toLowerCase().includes(q);
+  });
+
+  const toggle = (langId) => {
+    const id = Number(langId);
+    if (selected.includes(id)) {
+      onChange(selected.filter(x => x !== id));
+    } else {
+      onChange([...selected, id]);
+    }
+  };
+
+  const selectedNames = languages
+    .filter(l => selected.includes(l.id))
+    .map(l => `${l.name} (${l.code})`)
+    .join(', ');
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-left text-sm"
+      >
+        {selected.length > 0
+          ? `${selected.length} ${intl.formatMessage({ id: 'UI.DIL_SECILI' })} — ${selectedNames}`
+          : intl.formatMessage({ id: 'UI.EK_DILLER_SEC' })}
+      </button>
+      {open && (
+        <div className="absolute z-20 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded shadow-lg max-h-60 overflow-y-auto">
+          <div className="p-2 sticky top-0 bg-white dark:bg-gray-800">
+            <input
+              type="text"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder={intl.formatMessage({ id: 'UI.DIL_ARA' })}
+              className="w-full px-2 py-1 text-sm border border-gray-200 dark:border-gray-600 rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            />
+          </div>
+          {filtered.map(l => (
+            <label
+              key={l.id}
+              className="flex items-center gap-2 px-3 py-1.5 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer text-sm"
+            >
+              <input
+                type="checkbox"
+                checked={selected.includes(l.id)}
+                onChange={() => toggle(l.id)}
+                className="w-4 h-4 rounded border-gray-300"
+              />
+              <span className="text-gray-900 dark:text-gray-100">{l.name} ({l.code})</span>
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function AddCountryModal({ open, onClose, onAdded, languages }) {
   const intl = useIntl();
   const initial = { name: '', nameTr: '', alpha2: '', alpha3: '', primaryLanguageId: '', displayOrder: '0', isActive: true };
   const [form, setForm] = useState(initial);
+  const [additionalLangIds, setAdditionalLangIds] = useState([]);
   const [flagFile, setFlagFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -81,10 +148,18 @@ function AddCountryModal({ open, onClose, onAdded, languages }) {
       fd.append('isActive', String(form.isActive));
       if (flagFile) fd.append('flag', flagFile);
 
+      const allLangIds = form.primaryLanguageId
+        ? [Number(form.primaryLanguageId), ...additionalLangIds.filter(id => id !== Number(form.primaryLanguageId))]
+        : additionalLangIds;
+      if (allLangIds.length > 0) {
+        fd.append('languageIds', JSON.stringify(allLangIds));
+      }
+
       const created = await apiFetch(API_URL, { method: 'POST', body: fd, headers: {} });
       onAdded(created);
       onClose();
       setForm(initial);
+      setAdditionalLangIds([]);
       setFlagFile(null);
     } catch (err) {
       setError(err.message);
@@ -127,6 +202,16 @@ function AddCountryModal({ open, onClose, onAdded, languages }) {
             <label className="block text-sm font-medium mb-1"><FormattedMessage id="UI.BIRINCIL_DIL" /></label>
             <LanguageSelect value={form.primaryLanguageId} onChange={handleChange} languages={languages} intl={intl} />
           </div>
+          <div>
+            <label className="block text-sm font-medium mb-1"><FormattedMessage id="UI.EK_DILLER" /></label>
+            <LanguageMultiSelect
+              selected={additionalLangIds}
+              onChange={setAdditionalLangIds}
+              languages={languages.filter(l => String(l.id) !== String(form.primaryLanguageId))}
+              intl={intl}
+            />
+            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.EK_DILLER_ACIKLAMA" /></p>
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1"><FormattedMessage id="UI.SIRALAMA" /></label>
@@ -165,21 +250,27 @@ function AddCountryModal({ open, onClose, onAdded, languages }) {
 function EditCountryModal({ open, onClose, country, onUpdated, languages }) {
   const intl = useIntl();
   const [form, setForm] = useState({});
+  const [additionalLangIds, setAdditionalLangIds] = useState([]);
   const [flagFile, setFlagFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (country) {
+      const primaryId = country.primaryLanguageId || country.primaryLanguage?.id || '';
       setForm({
         name: country.name || '',
         nameTr: country.nameTr || '',
         alpha2: country.alpha2 || '',
         alpha3: country.alpha3 || '',
-        primaryLanguageId: country.primaryLanguageId || country.primaryLanguage?.id || '',
+        primaryLanguageId: primaryId,
         displayOrder: country.displayOrder ?? 0,
         isActive: country.isActive ?? true,
       });
+      const extras = (country.countryLanguages || [])
+        .filter(cl => !cl.isPrimary && cl.languageId !== Number(primaryId))
+        .map(cl => cl.languageId);
+      setAdditionalLangIds(extras);
     }
     setFlagFile(null);
     setError(null);
@@ -204,6 +295,11 @@ function EditCountryModal({ open, onClose, country, onUpdated, languages }) {
       fd.append('displayOrder', String(form.displayOrder || 0));
       fd.append('isActive', String(form.isActive));
       if (flagFile) fd.append('flag', flagFile);
+
+      const allLangIds = form.primaryLanguageId
+        ? [Number(form.primaryLanguageId), ...additionalLangIds.filter(id => id !== Number(form.primaryLanguageId))]
+        : additionalLangIds;
+      fd.append('languageIds', JSON.stringify(allLangIds));
 
       const updated = await apiFetch(`${API_URL}/${country.id}`, { method: 'PATCH', body: fd, headers: {} });
       onUpdated(updated);
@@ -248,6 +344,16 @@ function EditCountryModal({ open, onClose, country, onUpdated, languages }) {
           <div>
             <label className="block text-sm font-medium mb-1"><FormattedMessage id="UI.BIRINCIL_DIL" /></label>
             <LanguageSelect value={form.primaryLanguageId} onChange={handleChange} languages={languages} intl={intl} />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1"><FormattedMessage id="UI.EK_DILLER" /></label>
+            <LanguageMultiSelect
+              selected={additionalLangIds}
+              onChange={setAdditionalLangIds}
+              languages={languages.filter(l => String(l.id) !== String(form.primaryLanguageId))}
+              intl={intl}
+            />
+            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400"><FormattedMessage id="UI.EK_DILLER_ACIKLAMA" /></p>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -382,16 +488,27 @@ const CountryList = () => {
     },
     {
       id: 'primaryLanguage',
-      header: intl.formatMessage({ id: 'UI.BIRINCIL_DIL' }),
+      header: intl.formatMessage({ id: 'UI.DILLER' }),
       cell: ({ row }) => {
         const lang = row.original.primaryLanguage;
+        const extras = (row.original.countryLanguages || []).filter(cl => !cl.isPrimary);
         if (!lang) {
           return <span className="text-xs text-gray-400">{intl.formatMessage({ id: 'UI.ULKE_DILI_YOK' })}</span>;
         }
         return (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-purple-50 px-2.5 py-1 text-xs font-medium text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
-            {lang.name} ({lang.code})
-          </span>
+          <div className="flex flex-wrap items-center gap-1">
+            <span className="inline-flex items-center gap-1 rounded-full bg-purple-50 px-2.5 py-1 text-xs font-medium text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
+              {lang.name} ({lang.code})
+            </span>
+            {extras.length > 0 && (
+              <span
+                className="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 cursor-help"
+                title={extras.map(cl => cl.language ? `${cl.language.name} (${cl.language.code})` : '').filter(Boolean).join(', ')}
+              >
+                +{extras.length}
+              </span>
+            )}
+          </div>
         );
       },
       enableSorting: false,

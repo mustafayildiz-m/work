@@ -11,7 +11,7 @@ import {
 import { Warehouse } from './warehouse.entity';
 import { StockTransfer } from '../stock-transfers/entities/stock-transfer.entity';
 import { Book } from '../books/entities/book.entity';
-import { Language } from './language.entity';
+import { Language } from '../languages/entities/language.entity';
 
 @Entity('stocks')
 export class Stock {

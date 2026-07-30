@@ -5,9 +5,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
   JoinColumn,
 } from 'typeorm';
 import { Language } from '../../languages/entities/language.entity';
+import { CountryLanguage } from './country-language.entity';
 
 @Entity('countries')
 export class Country {
@@ -35,6 +37,9 @@ export class Country {
   @ManyToOne(() => Language, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'primaryLanguageId' })
   primaryLanguage: Language | null;
+
+  @OneToMany(() => CountryLanguage, (cl) => cl.country)
+  countryLanguages: CountryLanguage[];
 
   @Column({ type: 'int', default: 0, name: 'displayOrder' })
   displayOrder: number;

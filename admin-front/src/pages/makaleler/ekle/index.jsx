@@ -107,7 +107,14 @@ function AddArticle() {
 
       if (field === 'countryId') {
         const country = countries.find(c => c.id === value);
-        updatedTrans.languageId = country?.primaryLanguage?.id || '';
+        const langs = country?.countryLanguages?.filter(cl => cl.language) || [];
+        if (langs.length > 1) {
+          updatedTrans.languageId = '';
+          updatedTrans._countryLangs = langs;
+        } else {
+          updatedTrans.languageId = country?.primaryLanguage?.id || '';
+          updatedTrans._countryLangs = null;
+        }
       }
 
       if (field === 'title' && value) {
@@ -453,7 +460,29 @@ function AddArticle() {
                         styles={getSelectStyles(currentTheme)}
                         isClearable
                       />
-                      {trans.languageId && (
+                      {trans._countryLangs && trans._countryLangs.length > 1 ? (
+                        <div className="mt-2">
+                          <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
+                            <FaGlobe className="text-blue-600" />
+                            <FormattedMessage id="UI.DIL_SECIN" />
+                            <span className="text-red-500">*</span>
+                          </label>
+                          <select
+                            value={trans.languageId || ''}
+                            onChange={e => handleTranslationChange(idx, 'languageId', Number(e.target.value) || '')}
+                            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm"
+                          >
+                            <option value="">{intl.formatMessage({ id: 'UI.DIL_SECIN_PLACEHOLDER' })}</option>
+                            {trans._countryLangs
+                              .sort((a, b) => (b.isPrimary ? 1 : 0) - (a.isPrimary ? 1 : 0))
+                              .map(cl => (
+                                <option key={cl.language.id} value={cl.language.id}>
+                                  {getLocalizedLanguageName(cl.language, intl)}{cl.isPrimary ? ` (${intl.formatMessage({ id: 'UI.BIRINCIL' })})` : ''}
+                                </option>
+                              ))}
+                          </select>
+                        </div>
+                      ) : trans.languageId ? (
                         <p className="mt-2 text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
                           <FaGlobe />
                           <span>
@@ -461,7 +490,7 @@ function AddArticle() {
                             <strong>{getLocalizedLanguageName(countries.find(c => c.id === trans.countryId)?.primaryLanguage, intl)}</strong>
                           </span>
                         </p>
-                      )}
+                      ) : null}
                     </div>
 
                     {/* Başlık */}
