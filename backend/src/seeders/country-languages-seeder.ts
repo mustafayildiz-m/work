@@ -77,6 +77,7 @@ const MULTILINGUAL_COUNTRIES: Record<string, string[]> = {
   TW: ['en'],                    // Taiwan: zh + en
 
   // ── East Asia ──
+  CN: ['ug'],                    // China: zh + Uyghur
   RU: ['tt', 'ba'],              // Russia: ru + Tatar, Bashkir
 
   // ── Africa ──
