@@ -245,13 +245,19 @@ function EditButton({ book, onUpdated }) {
     setForm({ ...form, categories: form.categories.filter(c => c !== cat) });
   };
 
+  const addCategory = () => {
+    const trimmed = categoryInput.trim();
+    if (!trimmed) return;
+    if (!form.categories.includes(trimmed)) {
+      setForm({ ...form, categories: [...form.categories, trimmed] });
+    }
+    setCategoryInput('');
+  };
+
   const handleCategoryKeyDown = (e) => {
-    if ((e.key === 'Tab' || e.key === 'Enter') && categoryInput.trim()) {
+    if ((e.key === 'Enter' || e.key === 'Tab' || e.keyCode === 13) && categoryInput.trim()) {
       e.preventDefault();
-      if (!form.categories.includes(categoryInput.trim())) {
-        setForm({ ...form, categories: [...form.categories, categoryInput.trim()] });
-      }
-      setCategoryInput('');
+      addCategory();
     }
   };
 
@@ -263,7 +269,12 @@ function EditButton({ book, onUpdated }) {
       const formData = new FormData();
       formData.append('author', form.author);
       formData.append('publishDate', form.publishDate);
-      form.categories.forEach((cat, idx) => {
+      const categoriesToSubmit = [...form.categories];
+      const pendingCategory = categoryInput.trim();
+      if (pendingCategory && !categoriesToSubmit.includes(pendingCategory)) {
+        categoriesToSubmit.push(pendingCategory);
+      }
+      categoriesToSubmit.forEach((cat, idx) => {
         formData.append(`category[${idx}]`, cat);
       });
       if (form.translations.length === 0 || form.translations.some(t => !t.language || !t.title)) {
@@ -353,14 +364,25 @@ function EditButton({ book, onUpdated }) {
                     </span>
                   ))}
                 </div>
-                <input
-                  type="text"
-                  value={categoryInput}
-                  onChange={handleCategoryInput}
-                  onKeyDown={handleCategoryKeyDown}
-                  placeholder="Kategori ekle... (Tab veya Enter ile ekle)"
-                  className="px-3 py-2 border rounded bg-white dark:bg-gray-800 w-full"
-                />
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={categoryInput}
+                    onChange={handleCategoryInput}
+                    onKeyDown={handleCategoryKeyDown}
+                    enterKeyHint="done"
+                    placeholder="Kategori ekle... (Enter, Tab veya Ekle)"
+                    className="flex-1 min-w-0 px-3 py-2 border rounded bg-white dark:bg-gray-800"
+                  />
+                  <button
+                    type="button"
+                    onClick={addCategory}
+                    disabled={!categoryInput.trim()}
+                    className="shrink-0 px-3 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <FormattedMessage id="UI.EKLE" />
+                  </button>
+                </div>
               </div>
               <div className="md:col-span-2">
                 <div className="flex items-center justify-between mb-3">
@@ -816,13 +838,19 @@ function AddBookModal({ open, onClose, onAdd }) {
     setForm({ ...form, categories: form.categories.filter(c => c !== cat) });
   };
 
+  const addCategory = () => {
+    const trimmed = categoryInput.trim();
+    if (!trimmed) return;
+    if (!form.categories.includes(trimmed)) {
+      setForm({ ...form, categories: [...form.categories, trimmed] });
+    }
+    setCategoryInput('');
+  };
+
   const handleCategoryKeyDown = (e) => {
-    if ((e.key === 'Tab' || e.key === 'Enter') && categoryInput.trim()) {
+    if ((e.key === 'Enter' || e.key === 'Tab' || e.keyCode === 13) && categoryInput.trim()) {
       e.preventDefault();
-      if (!form.categories.includes(categoryInput.trim())) {
-        setForm({ ...form, categories: [...form.categories, categoryInput.trim()] });
-      }
-      setCategoryInput('');
+      addCategory();
     }
   };
 
@@ -834,7 +862,12 @@ function AddBookModal({ open, onClose, onAdd }) {
       const formData = new FormData();
       formData.append('author', form.author);
       formData.append('publishDate', form.publishDate);
-      form.categories.forEach((cat, idx) => {
+      const categoriesToSubmit = [...form.categories];
+      const pendingCategory = categoryInput.trim();
+      if (pendingCategory && !categoriesToSubmit.includes(pendingCategory)) {
+        categoriesToSubmit.push(pendingCategory);
+      }
+      categoriesToSubmit.forEach((cat, idx) => {
         formData.append(`category[${idx}]`, cat);
       });
       if (form.translations.length === 0 || form.translations.some(t => !t.language || !t.title)) {
@@ -903,14 +936,25 @@ function AddBookModal({ open, onClose, onAdd }) {
                 </span>
               ))}
             </div>
-            <input
-              type="text"
-              value={categoryInput}
-              onChange={handleCategoryInput}
-              onKeyDown={handleCategoryKeyDown}
-              placeholder="Kategori ekle... (Tab veya Enter ile ekle)"
-              className="px-3 py-2 border rounded bg-white dark:bg-gray-800 w-full"
-            />
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={categoryInput}
+                onChange={handleCategoryInput}
+                onKeyDown={handleCategoryKeyDown}
+                enterKeyHint="done"
+                placeholder="Kategori ekle... (Enter, Tab veya Ekle)"
+                className="flex-1 min-w-0 px-3 py-2 border rounded bg-white dark:bg-gray-800"
+              />
+              <button
+                type="button"
+                onClick={addCategory}
+                disabled={!categoryInput.trim()}
+                className="shrink-0 px-3 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <FormattedMessage id="UI.EKLE" />
+              </button>
+            </div>
           </div>
           <div className="md:col-span-2">
             <div className="flex items-center justify-between mb-3">

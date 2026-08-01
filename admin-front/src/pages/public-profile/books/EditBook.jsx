@@ -185,13 +185,19 @@ function EditBook() {
     setForm({ ...form, categories: form.categories.filter(c => c !== cat) });
   };
 
+  const addCategory = () => {
+    const trimmed = categoryInput.trim();
+    if (!trimmed) return;
+    if (!form.categories.includes(trimmed)) {
+      setForm({ ...form, categories: [...form.categories, trimmed] });
+    }
+    setCategoryInput('');
+  };
+
   const handleCategoryKeyDown = (e) => {
-    if ((e.key === 'Tab' || e.key === 'Enter') && categoryInput.trim()) {
+    if ((e.key === 'Enter' || e.key === 'Tab' || e.keyCode === 13) && categoryInput.trim()) {
       e.preventDefault();
-      if (!form.categories.includes(categoryInput.trim())) {
-        setForm({ ...form, categories: [...form.categories, categoryInput.trim()] });
-      }
-      setCategoryInput('');
+      addCategory();
     }
   };
 
@@ -220,7 +226,12 @@ function EditBook() {
       }
 
       // Kategorileri ekle
-      form.categories.forEach(cat => {
+      const categoriesToSubmit = [...form.categories];
+      const pendingCategory = categoryInput.trim();
+      if (pendingCategory && !categoriesToSubmit.includes(pendingCategory)) {
+        categoriesToSubmit.push(pendingCategory);
+      }
+      categoriesToSubmit.forEach(cat => {
         formData.append('category[]', cat);
       });
 
@@ -448,14 +459,26 @@ function EditBook() {
                     ))
                   )}
                 </div>
-                <input
-                  type="text"
-                  value={categoryInput}
-                  onChange={handleCategoryInput}
-                  onKeyDown={handleCategoryKeyDown}
-                  placeholder={intl.formatMessage({ id: 'UI.KATEGORI_EKLEMEK_ICIN_YAZIP_ENTER_VEYA_T' })}
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition"
-                />
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={categoryInput}
+                    onChange={handleCategoryInput}
+                    onKeyDown={handleCategoryKeyDown}
+                    enterKeyHint="done"
+                    placeholder={intl.formatMessage({ id: 'UI.KATEGORI_EKLEMEK_ICIN_YAZIP_ENTER_VEYA_T' })}
+                    className="flex-1 min-w-0 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition"
+                  />
+                  <button
+                    type="button"
+                    onClick={addCategory}
+                    disabled={!categoryInput.trim()}
+                    className="shrink-0 px-4 py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center gap-2"
+                  >
+                    <FaPlus size={12} />
+                    <FormattedMessage id="UI.EKLE" />
+                  </button>
+                </div>
                 <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                   <FaInfoCircle className="inline mr-1" />
                   <FormattedMessage id="UI.KATEGORI_EKLEMEK_ICIN_YAZIP_ENTER_VEYA_T" />
