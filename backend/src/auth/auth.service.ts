@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, ServiceUnavailableException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
@@ -278,31 +278,37 @@ export class AuthService {
   }
 
   async forgotPassword(email: string) {
+    const genericMessage =
+      'Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.';
+
     const user = await this.usersService.findByEmail(email);
     if (!user) {
-      // Güvenlik için kullanıcı bulunamasa bile aynı mesajı dönebiliriz
-      // ama şu an geliştirme aşamasında olduğumuz için basit tutalım
-      throw new UnauthorizedException('Kullanıcı bulunamadı.');
+      return { message: genericMessage };
     }
 
     const resetToken = randomBytes(32).toString('hex');
     const resetExpires = new Date();
-    resetExpires.setHours(resetExpires.getHours() + 1); // 1 saat geçerli
+    resetExpires.setHours(resetExpires.getHours() + 1);
 
     await this.usersService.update(user.id, {
       resetPasswordToken: resetToken,
       resetPasswordExpires: resetExpires,
     } as any);
 
-    await this.mailService.sendPasswordResetEmail(
-      user.email,
-      user.firstName || user.username,
-      resetToken,
-    );
+    try {
+      await this.mailService.sendPasswordResetEmail(
+        user.email,
+        user.firstName || user.username,
+        resetToken,
+      );
+    } catch (error) {
+      console.error('Password reset mail failed:', error);
+      throw new ServiceUnavailableException(
+        'E-posta gönderilemedi. Lütfen daha sonra tekrar deneyin.',
+      );
+    }
 
-    return {
-      message: 'Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.',
-    };
+    return { message: genericMessage };
   }
 
   async resetPassword(token: string, newPassword: string) {
