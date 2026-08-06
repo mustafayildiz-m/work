@@ -9,13 +9,10 @@ import { AuthModule } from './auth/auth.module';
 import { ScholarsModule } from './scholars/scholars.module';
 import { LanguageModule } from './modules/language.module';
 import { CountryModule } from './modules/country.module';
-import { ArticlesModule } from './articles/articles.module';
 import { Scholar } from './scholars/entities/scholar.entity';
 import { Book } from './books/entities/book.entity';
 import { BookTranslation } from './books/entities/book-translation.entity';
 import { BookCategory } from './books/entities/book-category.entity';
-import { Article } from './articles/entities/article.entity';
-import { ArticleTranslation } from './articles/entities/article-translation.entity';
 import { ScholarPost } from './scholars/entities/scholar-post.entity';
 import { Language } from './languages/entities/language.entity';
 import { Country } from './countries/entities/country.entity';
@@ -50,7 +47,6 @@ import { CountryLanguagesSeeder } from './seeders/country-languages-seeder';
 import { RegionalBooksSeeder } from './seeders/regional-books-seeder';
 import { ReligiousBooksSeeder } from './seeders/religious-books-seeder';
 import { MultiLanguageBooksSeeder } from './seeders/multilanguage-books-seeder';
-import { MultiLanguageArticlesSeeder } from './seeders/multilanguage-articles-seeder';
 import { NewslettersSeeder } from './seeders/newsletters-seeder';
 import { PapersSeeder } from './seeders/papers-seeder';
 import { ScholarAlimImagesSeeder } from './seeders/scholar-alim-images-seeder';
@@ -104,8 +100,6 @@ const isProduction = process.env.NODE_ENV === 'production';
       StoryLike,
       BookTranslation,
       BookCategory,
-      Article,
-      ArticleTranslation,
       User,
       SystemSetting,
       Podcast,
@@ -115,7 +109,6 @@ const isProduction = process.env.NODE_ENV === 'production';
       UserPost,
     ]),
     BooksModule,
-    ArticlesModule,
     UploadModule,
     AuthModule,
     ScholarsModule,
@@ -157,7 +150,6 @@ const isProduction = process.env.NODE_ENV === 'production';
     RegionalBooksSeeder,
     ReligiousBooksSeeder,
     MultiLanguageBooksSeeder,
-    MultiLanguageArticlesSeeder,
     NewslettersSeeder,
     PapersSeeder,
     ScholarAlimImagesSeeder,

@@ -37,10 +37,6 @@ export class CreateUserPostDto {
 
   @IsInt()
   @IsOptional()
-  shared_article_id?: number;
-
-  @IsInt()
-  @IsOptional()
   shared_podcast_id?: number;
 
   @IsInt()

@@ -78,10 +78,6 @@ const LanguageDistributionChart = () => {
           {intl.formatMessage({ id: 'UI.KAYITLI_KITAPLAR' })}:{' '}
           <strong>{item.books}</strong>
         </p>
-        <p>
-          {intl.formatMessage({ id: 'UI.KAYITLI_MAKALE' })}:{' '}
-          <strong>{item.articles}</strong>
-        </p>
         <p className="text-muted-foreground mt-1">
           {intl.formatMessage({ id: 'UI.TOPLAM' })}: {item.total} ({item.percentage}%)
         </p>
@@ -169,12 +165,6 @@ const LanguageDistributionChart = () => {
                       <FormattedMessage
                         id="UI.LANGUAGE_DIST_BOOK_COUNT"
                         values={{ count: item.books }}
-                      />
-                    </span>
-                    <span className="inline-flex items-center rounded-md bg-orange-500/10 px-2 py-0.5 text-[11px] sm:text-xs font-medium text-orange-700 dark:text-orange-300 tabular-nums">
-                      <FormattedMessage
-                        id="UI.LANGUAGE_DIST_BOOKLET_COUNT"
-                        values={{ count: item.articles }}
                       />
                     </span>
                   </div>

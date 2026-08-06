@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""menu bölümündeki users, worldNews, articles, papers anahtarlarını DeepL ile çevirir."""
+"""menu bölümündeki users, worldNews, papers anahtarlarını DeepL ile çevirir."""
 import json
 import os
 import urllib.request
@@ -54,7 +54,7 @@ def main():
         tr_data = json.load(f)
 
     section_name = 'menu'
-    keys_to_translate = ['users', 'worldNews', 'articles', 'papers']
+    keys_to_translate = ['users', 'worldNews', 'papers']
     source_section = tr_data.get(section_name, {})
 
     json_files = [f for f in os.listdir('.') if f.endswith('.json') and f != 'tr.json']

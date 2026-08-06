@@ -6,7 +6,6 @@ let count = 0;
 const dict = {
     'Dashboard': 'Dashboard', 'İçerik Yönetimi': 'Content Management', 'Kitaplar': 'Books',
     'Kitap Ekle': 'Add Book', 'Tüm Kitaplar': 'All Books', 'Çeviri Dilleri': 'Translation Languages',
-    'Makaleler': 'Booklets', 'Makale Ekle': 'Add Booklet', 'Tüm Makaleler': 'All Booklets',
     'Podcast': 'Podcast', 'Podcast Ekle': 'Add Podcast', 'Tüm Podcast\\'ler': 'All Podcasts',
   'Alimler': 'Scholars', 'Alim Ekle': 'Add Scholar', 'Tüm Alimler': 'All Scholars',
     'İslamla Şereflenenler': 'Stories', 'Video Ekle': 'Add Video', 'Tüm Videolar': 'All Videos',

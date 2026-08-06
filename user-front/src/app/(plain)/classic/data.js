@@ -32,10 +32,6 @@ export const leftSidebarData = [{
   label: 'Kitaplar',
   url: '/profile/connections'
 }, {
-  icon: BsFileText,
-  label: 'Makaleler',
-  url: '/feed/articles'
-}, {
   icon: BsMicFill,
   label: 'Podcast',
   url: '/feed/podcasts'

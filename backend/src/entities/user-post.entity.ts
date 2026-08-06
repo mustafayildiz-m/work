@@ -48,9 +48,6 @@ export class UserPost {
   shared_book_id: number;
 
   @Column({ nullable: true })
-  shared_article_id: number;
-
-  @Column({ nullable: true })
   shared_podcast_id: number;
 
   @Column({ nullable: true })

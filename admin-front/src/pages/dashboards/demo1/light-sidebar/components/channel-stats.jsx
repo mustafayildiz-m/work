@@ -3,7 +3,7 @@ import { toAbsoluteUrl } from '@/lib/helpers';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { motion } from 'framer-motion';
-import { TrendingUp, TrendingDown, Minus, ScrollText } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 import { useIntl } from 'react-intl';
@@ -13,7 +13,6 @@ const ChannelStats = () => {
   const [stats, setStats] = useState({
     scholars: 0,
     books: 0,
-    articles: 0,
     posts: 0,
     languages: 0,
     countries: 0,
@@ -60,17 +59,6 @@ const ChannelStats = () => {
       iconBg: 'bg-blue-100 dark:bg-blue-900',
       trend: 'up',
       trendValue: '+8%',
-      trendText: intl.formatMessage({ id: 'UI.SON_AY' })
-    },
-    {
-      lucideIcon: ScrollText,
-      info: stats.articles,
-      desc: intl.formatMessage({ id: 'UI.KAYITLI_MAKALE' }),
-      color: 'from-orange-500 to-orange-600',
-      bgColor: 'bg-orange-50 dark:bg-orange-950',
-      iconBg: 'bg-orange-100 dark:bg-orange-900',
-      trend: 'up',
-      trendValue: '+6%',
       trendText: intl.formatMessage({ id: 'UI.SON_AY' })
     },
     {

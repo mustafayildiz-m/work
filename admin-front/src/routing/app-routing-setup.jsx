@@ -19,9 +19,6 @@ import StockTransferList from '@/pages/stok-transfer/liste';
 import AddStockTransferPage from '@/pages/stok-transfer/ekle';
 import EditStockTransferPage from '@/pages/stok-transfer/duzenle';
 import StockTransferDetail from '@/pages/stok-transfer/detay';
-import ArticleList from '@/pages/makaleler/liste';
-import AddArticle from '@/pages/makaleler/ekle';
-import EditArticle from '@/pages/makaleler/duzenle/[id]';
 import PodcastList from '@/pages/podcast/liste';
 import AddPodcast from '@/pages/podcast/ekle';
 import EditPodcast from '@/pages/podcast/duzenle/[id]';
@@ -92,9 +89,6 @@ export function AppRoutingSetup() {
           <Route path="/alim-hikayeleri/liste" element={<AlimHikayeleriListe />} />
           <Route path="/alim-hikayeleri/ekle" element={<AlimHikayesiEkle />} />
           <Route path="/alim-hikayeleri/duzenle/:id" element={<AlimHikayesiDuzenle />} />
-          <Route path="/makaleler/liste" element={<ArticleList />} />
-          <Route path="/makaleler/ekle" element={<AddArticle />} />
-          <Route path="/makaleler/duzenle/:id" element={<EditArticle />} />
           <Route path="/podcast/liste" element={<PodcastList />} />
           <Route path="/podcast/ekle" element={<AddPodcast />} />
           <Route path="/podcast/duzenle/:id" element={<EditPodcast />} />

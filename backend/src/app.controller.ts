@@ -4,18 +4,15 @@ import { Repository, LessThanOrEqual } from 'typeorm';
 import { Scholar } from './scholars/entities/scholar.entity';
 import { Book } from './books/entities/book.entity';
 import { ScholarPost } from './scholars/entities/scholar-post.entity';
-import { Inject } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { Language } from './languages/entities/language.entity';
 import { User } from './users/entities/user.entity';
-import { Article } from './articles/entities/article.entity';
 import { ScholarStory } from './entities/scholar-story.entity';
 import { Podcast } from './entities/podcast.entity';
 import { IslamicNews } from './entities/islamic-news.entity';
 import { Country } from './countries/entities/country.entity';
 import { UserPost, PostStatus } from './entities/user-post.entity';
 import { BookTranslation } from './books/entities/book-translation.entity';
-import { ArticleTranslation } from './articles/entities/article-translation.entity';
 
 @Controller()
 export class AppController {
@@ -30,8 +27,6 @@ export class AppController {
     private readonly languageRepository: Repository<Language>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    @InjectRepository(Article)
-    private readonly articleRepository: Repository<Article>,
     @InjectRepository(ScholarStory)
     private readonly scholarStoryRepository: Repository<ScholarStory>,
     @InjectRepository(Podcast)
@@ -44,8 +39,6 @@ export class AppController {
     private readonly userPostRepository: Repository<UserPost>,
     @InjectRepository(BookTranslation)
     private readonly bookTranslationRepository: Repository<BookTranslation>,
-    @InjectRepository(ArticleTranslation)
-    private readonly articleTranslationRepository: Repository<ArticleTranslation>,
   ) {}
 
   @Get('statistics/counts')
@@ -53,11 +46,10 @@ export class AppController {
   async getCounts() {
     const scholars = await this.scholarRepository.count();
     const books = await this.bookRepository.count();
-    const articles = await this.articleRepository.count();
     const posts = await this.scholarPostRepository.count();
     const languages = await this.languageRepository.count();
     const countries = await this.countryRepository.count();
-    return { scholars, books, articles, posts, languages, countries };
+    return { scholars, books, posts, languages, countries };
   }
 
   @Get('statistics/monthly')
@@ -84,14 +76,12 @@ export class AppController {
       name: string;
       alimler: number;
       kitaplar: number;
-      kitapciklar: number;
       gonderiler: number;
       ulkeler: number;
       diller: number;
       kullanicilar: number;
     }> = [];
 
-    // Son 6 ay — her ay sonu itibarıyla kümülatif toplam kayıt sayısı
     for (let i = 5; i >= 0; i--) {
       const month = now.getMonth() - i;
       const year = month < 0 ? currentYear - 1 : currentYear;
@@ -106,7 +96,6 @@ export class AppController {
       const [
         scholarsCount,
         booksCount,
-        articlesCount,
         postsCount,
         countriesCount,
         languagesCount,
@@ -114,7 +103,6 @@ export class AppController {
       ] = await Promise.all([
         this.countUntil(this.scholarRepository, endDate),
         this.countUntilWithPublishDate(this.bookRepository, 'book', endDate),
-        this.countUntilWithPublishDate(this.articleRepository, 'article', endDate),
         this.countUntil(this.scholarPostRepository, endDate),
         this.countUntil(this.countryRepository, endDate),
         this.countUntil(this.languageRepository, endDate),
@@ -125,7 +113,6 @@ export class AppController {
         name: monthNames[adjustedMonth],
         alimler: scholarsCount,
         kitaplar: booksCount,
-        kitapciklar: articlesCount,
         gonderiler: postsCount,
         ulkeler: countriesCount,
         diller: languagesCount,
@@ -136,7 +123,6 @@ export class AppController {
     return monthlyData;
   }
 
-  /** Kayıt tarihine göre belirli bir ana kadar toplam sayı */
   private countUntil<T extends { createdAt: Date }>(
     repository: Repository<T>,
     endDate: Date,
@@ -148,9 +134,8 @@ export class AppController {
     });
   }
 
-  /** Yayın tarihi varsa onu, yoksa oluşturulma tarihini baz al */
   private countUntilWithPublishDate(
-    repository: Repository<Book | Article>,
+    repository: Repository<Book>,
     alias: string,
     endDate: Date,
   ): Promise<number> {
@@ -166,31 +151,19 @@ export class AppController {
   @Get('statistics/pending-tasks')
   @UseGuards(JwtAuthGuard)
   async getPendingTasks() {
-    const [
-      pendingPosts,
-      articlesWithoutPdf,
-      articlesWithoutCover,
-      booksWithoutPdf,
-      scholarsWithoutPhoto,
-    ] = await Promise.all([
-      this.userPostRepository.count({
-        where: { status: PostStatus.PENDING },
-      }),
-      this.countArticlesWithoutPdf(),
-      this.articleRepository
-        .createQueryBuilder('article')
-        .where('article.coverImage IS NULL OR article.coverImage = :empty', {
-          empty: '',
-        })
-        .getCount(),
-      this.countBooksWithoutPdf(),
-      this.scholarRepository
-        .createQueryBuilder('scholar')
-        .where('scholar.photoUrl IS NULL OR scholar.photoUrl = :empty', {
-          empty: '',
-        })
-        .getCount(),
-    ]);
+    const [pendingPosts, booksWithoutPdf, scholarsWithoutPhoto] =
+      await Promise.all([
+        this.userPostRepository.count({
+          where: { status: PostStatus.PENDING },
+        }),
+        this.countBooksWithoutPdf(),
+        this.scholarRepository
+          .createQueryBuilder('scholar')
+          .where('scholar.photoUrl IS NULL OR scholar.photoUrl = :empty', {
+            empty: '',
+          })
+          .getCount(),
+      ]);
 
     const tasks = [
       {
@@ -198,18 +171,6 @@ export class AppController {
         count: pendingPosts,
         path: '/kullanicilar/post-onaylama',
         priority: 'high',
-      },
-      {
-        id: 'articles_no_pdf',
-        count: articlesWithoutPdf,
-        path: '/makaleler/liste',
-        priority: 'medium',
-      },
-      {
-        id: 'articles_no_cover',
-        count: articlesWithoutCover,
-        path: '/makaleler/liste',
-        priority: 'medium',
       },
       {
         id: 'books_no_pdf',
@@ -241,49 +202,28 @@ export class AppController {
       .groupBy('bt.languageId')
       .getRawMany<{ languageId: string; books: string }>();
 
-    const articleRows = await this.articleTranslationRepository
-      .createQueryBuilder('at')
-      .select('at.languageId', 'languageId')
-      .addSelect('COUNT(DISTINCT at.articleId)', 'articles')
-      .groupBy('at.languageId')
-      .getRawMany<{ languageId: string; articles: string }>();
-
     const languages = await this.languageRepository.find({
       where: { isActive: true },
       order: { name: 'ASC' },
     });
 
-    const countMap = new Map<
-      number,
-      { books: number; articles: number }
-    >();
+    const countMap = new Map<number, { books: number }>();
 
     for (const row of bookRows) {
       const languageId = Number(row.languageId);
-      const current = countMap.get(languageId) || { books: 0, articles: 0 };
-      current.books = Number(row.books) || 0;
-      countMap.set(languageId, current);
-    }
-
-    for (const row of articleRows) {
-      const languageId = Number(row.languageId);
-      const current = countMap.get(languageId) || { books: 0, articles: 0 };
-      current.articles = Number(row.articles) || 0;
-      countMap.set(languageId, current);
+      countMap.set(languageId, { books: Number(row.books) || 0 });
     }
 
     const distribution = languages
       .map((language) => {
-        const counts = countMap.get(language.id) || { books: 0, articles: 0 };
-        const total = counts.books + counts.articles;
+        const counts = countMap.get(language.id) || { books: 0 };
         return {
           languageId: language.id,
           code: language.code,
           name: language.name,
           flagUrl: language.flagUrl,
           books: counts.books,
-          articles: counts.articles,
-          total,
+          total: counts.books,
         };
       })
       .filter((item) => item.total > 0)
@@ -301,17 +241,6 @@ export class AppController {
       })),
       grandTotal,
     };
-  }
-
-  private countArticlesWithoutPdf(): Promise<number> {
-    return this.articleRepository
-      .createQueryBuilder('article')
-      .leftJoin('article.translations', 'translation')
-      .groupBy('article.id')
-      .having(
-        `SUM(CASE WHEN translation.pdfUrl IS NOT NULL AND translation.pdfUrl != '' THEN 1 ELSE 0 END) = 0`,
-      )
-      .getCount();
   }
 
   private countBooksWithoutPdf(): Promise<number> {
@@ -340,7 +269,6 @@ export class AppController {
         color: string;
       }> = [];
 
-      // Son eklenen kitapları al
       try {
         const recentBooks = await this.bookRepository.find({
           order: { createdAt: 'DESC' },
@@ -365,7 +293,6 @@ export class AppController {
         console.error('Error fetching recent books:', error);
       }
 
-      // Son eklenen âlimleri al
       try {
         const recentScholars = await this.scholarRepository.find({
           order: { createdAt: 'DESC' },
@@ -388,7 +315,6 @@ export class AppController {
         console.error('Error fetching recent scholars:', error);
       }
 
-      // Son gönderileri al (translations relation'ı olmayabilir)
       try {
         const recentPosts = await this.scholarPostRepository.find({
           order: { createdAt: 'DESC' },
@@ -397,7 +323,6 @@ export class AppController {
         });
 
         recentPosts.forEach((post) => {
-          // Translations tablosu yoksa sadece scholar bilgisini kullan
           const description = post.scholar?.fullName
             ? `${post.scholar.fullName} - Yeni gönderi`
             : 'Yeni gönderi';
@@ -407,7 +332,7 @@ export class AppController {
             entityType: 'post',
             entityId: post.id,
             title: 'Yeni gönderi',
-            description: description,
+            description,
             createdAt: post.createdAt,
             icon: 'FileText',
             color: 'bg-purple-500',
@@ -417,7 +342,6 @@ export class AppController {
         console.error('Error fetching recent posts:', error);
       }
 
-      // Son eklenen kullanıcıları al
       try {
         const recentUsers = await this.userRepository.find({
           order: { createdAt: 'DESC' },
@@ -444,33 +368,6 @@ export class AppController {
         console.error('Error fetching recent users:', error);
       }
 
-      // Son eklenen makaleleri al
-      try {
-        const recentArticles = await this.articleRepository.find({
-          order: { createdAt: 'DESC' },
-          take: 3,
-          relations: ['translations'],
-        });
-
-        recentArticles.forEach((article) => {
-          const articleTitle =
-            article.translations?.[0]?.title || `Makale #${article.id}`;
-          activities.push({
-            type: 'article',
-            entityType: 'article',
-            entityId: article.id,
-            title: 'Yeni makale eklendi',
-            description: articleTitle,
-            createdAt: article.createdAt,
-            icon: 'ScrollText',
-            color: 'bg-orange-500',
-          });
-        });
-      } catch (error) {
-        console.error('Error fetching recent articles:', error);
-      }
-
-      // Son eklenen podcastleri al
       try {
         const recentPodcasts = await this.podcastRepository.find({
           order: { createdAt: 'DESC' },
@@ -493,7 +390,6 @@ export class AppController {
         console.error('Error fetching recent podcasts:', error);
       }
 
-      // Son eklenen alim hikayelerini al
       try {
         const recentStories = await this.scholarStoryRepository.find({
           order: { created_at: 'DESC' },
@@ -520,7 +416,6 @@ export class AppController {
         console.error('Error fetching recent stories:', error);
       }
 
-      // Son eklenen haberleri al
       try {
         const recentNews = await this.islamicNewsRepository.find({
           order: { created_at: 'DESC' },
@@ -543,17 +438,14 @@ export class AppController {
         console.error('Error fetching recent news:', error);
       }
 
-      // Tarihe göre sırala (en yeni en üstte)
       activities.sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
 
-      // En son 10 aktiviteyi döndür
       return activities.slice(0, 10);
     } catch (error) {
       console.error('Error in getRecentActivities:', error);
-      // Hata durumunda boş array döndür
       return [];
     }
   }

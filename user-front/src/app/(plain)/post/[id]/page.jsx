@@ -40,7 +40,7 @@ const PublicPostPage = () => {
       platformTitle: 'İslami Topluluk Platformu',
       platformDesc: 'Müslümanların bir araya geldiği, bilgi paylaştığı ve birlikte öğrendiği modern dijital platform',
       islamicContent: 'İslami İçerik',
-      islamicContentDesc: 'Alimlerden güncel fetvalar, dersler ve makaleler',
+      islamicContentDesc: 'Alimlerden güncel fetvalar ve dersler',
       community: 'Topluluk',
       communityDesc: 'Müslümanlarla sohbet edin ve deneyimlerinizi paylaşın',
       learning: 'Öğrenme',

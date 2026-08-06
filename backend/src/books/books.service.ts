@@ -425,36 +425,6 @@ export class BooksService {
   }
 
   /**
-   * Belirli bir dilde makalesi olan kitapları döndürür
-   */
-  async getBooksWithArticles(languageId?: string): Promise<any[]> {
-    const query = `
-      SELECT DISTINCT 
-        b.id,
-        bt.title,
-        COUNT(DISTINCT a.id) as articleCount
-      FROM books b
-      INNER JOIN articles a ON a.bookId = b.id
-      INNER JOIN article_translations at ON at.articleId = a.id
-      INNER JOIN book_translations bt ON bt.bookId = b.id
-      WHERE bt.languageId = at.languageId
-      ${languageId ? 'AND bt.languageId = ?' : ''}
-      GROUP BY b.id, bt.title
-      HAVING COUNT(DISTINCT a.id) > 0
-      ORDER BY bt.title ASC
-    `;
-
-    const params = languageId ? [parseInt(languageId)] : [];
-    const results = await this.bookRepository.query(query, params);
-
-    return results.map((result) => ({
-      id: result.id,
-      title: result.title,
-      articleCount: parseInt(result.articleCount) || 0,
-    }));
-  }
-
-  /**
    * Sayfa bazlı çeviri ve önbellekleme.
    *
    * Akış:

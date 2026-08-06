@@ -58,11 +58,6 @@ export class BooksController {
     return this.booksService.findOne(id);
   }
 
-  @Get('with-articles')
-  getBooksWithArticles(@Query('languageId') languageId?: string) {
-    return this.booksService.getBooksWithArticles(languageId);
-  }
-
   @Get('categories')
   getCategories(@Query('languageId') languageId?: string) {
     return this.booksService.getCategories(languageId);

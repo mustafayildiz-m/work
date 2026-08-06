@@ -240,7 +240,6 @@ const MessageItem = memo(({
                             <Link href={
                               post.postType === 'story' ? `/blogs/story/${post.id}` :
                               post.postType === 'book' ? `/books/${post.id}` :
-                              post.postType === 'article' ? `/feed/articles/${post.id}` :
                               post.postType === 'podcast' ? `/feed/podcasts/${post.id}` :
                               post.postType === 'newsletter' ? `/feed/newsletters/${post.id}` :
                               post.authorId ? `${(getProfilePath(post.isUserPost ? 'user' : 'scholar', post.authorId, 'feed') || '')}#post-${post.id}` :

@@ -110,24 +110,6 @@ export const MENU_SIDEBAR = [
         ]
       },
       {
-        title: 'Kitapçık',
-        icon: ScrollText,
-        children: [
-          {
-            title: 'Kitapçık Ekle',
-            path: '/makaleler/ekle',
-            icon: Plus,
-            status: 'done'
-          },
-          {
-            title: 'Tüm Kitapçıklar',
-            path: '/makaleler/liste',
-            icon: LayoutList,
-            status: 'done'
-          }
-        ]
-      },
-      {
         title: 'Haber Bültenleri',
         icon: Newspaper,
         children: [

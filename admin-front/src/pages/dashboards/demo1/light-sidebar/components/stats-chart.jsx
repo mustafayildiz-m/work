@@ -29,12 +29,6 @@ const CHART_SERIES = [
     gradientId: 'colorKitaplar',
   },
   {
-    dataKey: 'kitapciklar',
-    color: '#f97316',
-    labelId: 'UI.KAYITLI_MAKALE',
-    gradientId: 'colorKitapciklar',
-  },
-  {
     dataKey: 'gonderiler',
     color: '#8b5cf6',
     labelId: 'UI.TOPLAM_GONDERILER',

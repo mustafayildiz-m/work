@@ -725,14 +725,6 @@
   }
 }
 
-/* Articles kitapçık selector — header rengi */
-.cs-card--articles .cs-header {
-  background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-}
-[data-bs-theme="green"] .cs-card--articles .cs-header {
-  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
-}
-
 /* Books selector — yeşil header */
 .cs-card--books .cs-header {
   background: linear-gradient(135deg, #2e7d32 0%, #43a047 50%, #66bb6a 100%);

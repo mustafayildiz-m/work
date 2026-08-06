@@ -44,10 +44,6 @@ export const profilePanelLinksData1 = [{
   nameKey: 'menu.books',
   link: '/feed/books'
 }, {
-  image: typeof clipboardImg === 'string' ? clipboardImg : clipboardImg.src,
-  nameKey: 'menu.articles',
-  link: '/feed/articles'
-}, {
   image: typeof microphoneImg === 'string' ? microphoneImg : microphoneImg.src,
   nameKey: 'menu.podcast',
   link: '/feed/podcasts'
