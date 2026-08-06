@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Country } from '../countries/entities/country.entity';
 import { CountryLanguage } from '../countries/entities/country-language.entity';
 import { Language } from '../languages/entities/language.entity';
+import { ETHNOLOGUE300_LANGUAGES } from './ethnologue300-languages.data';
 
 /**
  * Multilingual countries: alpha2 -> additional language codes (beyond the primary).
@@ -105,6 +106,33 @@ const MULTILINGUAL_COUNTRIES: Record<string, string[]> = {
   VU: ['fr'],                    // Vanuatu: en + fr
 };
 
+/** Ethnologue top-300 dillerinden türetilen ülke–dil ekleri (MULTILINGUAL_COUNTRIES ile birleştirilir). */
+function buildEthnologueCountryExtras(): Record<string, string[]> {
+  const map = new Map<string, Set<string>>();
+  for (const lang of ETHNOLOGUE300_LANGUAGES) {
+    for (const alpha2 of lang.countries) {
+      const key = alpha2.toUpperCase();
+      if (!map.has(key)) map.set(key, new Set());
+      map.get(key)!.add(lang.code.toLowerCase());
+    }
+  }
+  const result: Record<string, string[]> = {};
+  for (const [alpha2, codes] of map) {
+    result[alpha2] = [...codes];
+  }
+  return result;
+}
+
+function getMergedMultilingualCountries(): Record<string, string[]> {
+  const ethnologue = buildEthnologueCountryExtras();
+  const merged: Record<string, string[]> = { ...MULTILINGUAL_COUNTRIES };
+  for (const [alpha2, codes] of Object.entries(ethnologue)) {
+    const existing = merged[alpha2] ?? [];
+    merged[alpha2] = [...new Set([...existing, ...codes])];
+  }
+  return merged;
+}
+
 @Injectable()
 export class CountryLanguagesSeeder {
   constructor(
@@ -126,11 +154,12 @@ export class CountryLanguagesSeeder {
     }
 
     const countries = await this.countryRepository.find();
+    const mergedMultilingual = getMergedMultilingualCountries();
     let synced = 0;
     let multilingual = 0;
 
     for (const country of countries) {
-      const extra = MULTILINGUAL_COUNTRIES[country.alpha2];
+      const extra = mergedMultilingual[country.alpha2];
 
       const desiredRows: Partial<CountryLanguage>[] = [];
 
