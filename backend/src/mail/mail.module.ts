@@ -11,11 +11,17 @@ import { MailService } from './mail.service';
   imports: [
     MailerModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
+      useFactory: (config: ConfigService) => {
+        const port = Number(config.get('MAIL_PORT') || 587);
+        return {
         transport: {
           host: config.get('MAIL_HOST'),
-          port: config.get('MAIL_PORT'),
-          secure: config.get('MAIL_PORT') == 465, // SSL for 465
+          port,
+          secure: port === 465,
+          requireTLS: port === 587,
+          connectionTimeout: 10_000,
+          greetingTimeout: 10_000,
+          socketTimeout: 15_000,
           auth: {
             user: config.get('MAIL_USER'),
             pass: config.get('MAIL_PASS'),
@@ -33,7 +39,8 @@ import { MailService } from './mail.service';
             strict: true,
           },
         },
-      }),
+      };
+      },
     }),
   ],
   providers: [MailService],
