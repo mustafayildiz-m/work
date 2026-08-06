@@ -29,14 +29,12 @@
     "seed:countries": "ts-node scripts/seed-countries.ts",
     "seed:backfill-country-languages": "ts-node scripts/seed-backfill-country-languages.ts",
     "seed:multilanguage-books": "ts-node scripts/seed-multilanguage-books.ts",
-    "seed:multilanguage-articles": "ts-node scripts/seed-multilanguage-articles.ts",
     "seed:newsletters": "ts-node scripts/seed-newsletters.ts",
     "seed:papers": "ts-node scripts/seed-papers.ts",
     "seed:scholar-alim-images": "ts-node scripts/seed-scholar-alim-images.ts",
     "seed:book-covers": "ts-node scripts/seed-book-covers.ts",
     "report:book-covers": "ts-node scripts/report-book-covers.ts",
-    "import:kitapciklar": "ts-node scripts/import-kitapciklar.ts",
-    "seed:all": "npm run seed:languages && npm run seed:countries && npm run seed:backfill-country-languages && npm run seed:multilanguage-books && npm run seed:multilanguage-articles"
+    "seed:all": "npm run seed:languages && npm run seed:countries && npm run seed:backfill-country-languages && npm run seed:multilanguage-books"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^2.3.4",

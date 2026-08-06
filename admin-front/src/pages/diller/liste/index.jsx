@@ -294,7 +294,6 @@ const LanguageList = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [bookCounts, setBookCounts] = useState({});
-  const [articleCounts, setArticleCounts] = useState({});
   const [podcastCounts, setPodcastCounts] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -357,19 +356,14 @@ const LanguageList = () => {
         const token = localStorage.getItem('access_token');
         const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
 
-        const [bookRes, articleRes, podcastRes] = await Promise.all([
+        const [bookRes, podcastRes] = await Promise.all([
           fetch(`${API_URL}/book-counts`, { headers }).then(r => r.ok ? r.json() : []),
-          fetch(`${API_URL}/article-counts`, { headers }).then(r => r.ok ? r.json() : []),
           fetch(`${PODCAST_API_URL}?page=1&limit=9999`, { headers }).then(r => r.ok ? r.json() : {}),
         ]);
 
         const bMap = {};
         (Array.isArray(bookRes) ? bookRes : []).forEach(r => { bMap[r.languageId] = Number(r.bookCount || r.count || 0); });
         setBookCounts(bMap);
-
-        const aMap = {};
-        (Array.isArray(articleRes) ? articleRes : []).forEach(r => { aMap[r.languageId] = Number(r.articleCount || r.count || 0); });
-        setArticleCounts(aMap);
 
         const pMap = {};
         const podcasts = Array.isArray(podcastRes) ? podcastRes : (podcastRes?.podcasts || podcastRes?.data || []);
@@ -497,7 +491,6 @@ const LanguageList = () => {
         cell: ({ row }) => {
           const language = row.original;
           const bCount = bookCounts[language.id] || 0;
-          const aCount = articleCounts[language.id] || 0;
           const pCount = podcastCounts[(language.code || '').toLowerCase()] || 0;
 
           return (
@@ -509,13 +502,6 @@ const LanguageList = () => {
                 title={intl.formatMessage({ id: 'UI.KITAPLARI_GORUNTULE' })}
               >
                 <span>📚</span> {bCount} {intl.formatMessage({ id: 'UI.KITAP_2' })}
-              </button>
-              <button
-                type="button"
-                onClick={() => navigate(`/makaleler/liste?languageId=${language.id}`)}
-                className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700 transition hover:bg-green-100 dark:bg-green-900/30 dark:text-green-300 dark:hover:bg-green-900/50"
-              >
-                <span>📄</span> {aCount} {intl.formatMessage({ id: 'UI.MAKALE' })}
               </button>
               <button
                 type="button"
@@ -554,7 +540,7 @@ const LanguageList = () => {
         ),
       },
     ],
-    [bookCounts, articleCounts, podcastCounts, navigate]
+    [bookCounts, podcastCounts, navigate]
   );
 
   const table = useReactTable({

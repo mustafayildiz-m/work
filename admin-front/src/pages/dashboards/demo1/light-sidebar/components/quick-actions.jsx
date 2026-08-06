@@ -1,6 +1,6 @@
 import { FormattedMessage, useIntl } from "react-intl";
 import { motion } from 'framer-motion';
-import { Plus, BookOpen, Users, FileText, Podcast, Calendar, Package } from 'lucide-react';
+import { Plus, BookOpen, Users, Podcast, Calendar, Package } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -24,14 +24,6 @@ const QuickActions = () => {
       color: 'from-emerald-500 to-emerald-600',
       bgColor: 'bg-emerald-50 dark:bg-emerald-950',
       hoverColor: 'hover:bg-emerald-100 dark:hover:bg-emerald-900',
-    },
-    {
-      title: intl.formatMessage({ id: 'UI.YENI_MAKALE' }),
-      icon: FileText,
-      path: '/makaleler/ekle',
-      color: 'from-purple-500 to-purple-600',
-      bgColor: 'bg-purple-50 dark:bg-purple-950',
-      hoverColor: 'hover:bg-purple-100 dark:hover:bg-purple-900',
     },
     {
       title: intl.formatMessage({ id: 'UI.YENI_PODCAST' }),

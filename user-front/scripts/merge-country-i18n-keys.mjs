@@ -1,5 +1,5 @@
 /**
- * Adds common.countrySelector, books.untitledBook, articles.countrySelector,
+ * Adds common.countrySelector, books.untitledBook,
  * podcasts.countrySelector to locale JSON files where missing (merge-only).
  *
  * Usage: node scripts/merge-country-i18n-keys.mjs
@@ -22,12 +22,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Buch ohne Titel' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} Artikel',
-        buttonLabel: '{language} — Artikel anzeigen',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} Podcasts',
@@ -45,12 +39,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Livre sans titre' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} articles',
-        buttonLabel: '{language} — voir les articles',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} podcasts',
@@ -68,12 +56,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Libro sin título' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} artículos',
-        buttonLabel: '{language} — ver artículos',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} podcasts',
@@ -91,12 +73,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Libro senza titolo' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} articoli',
-        buttonLabel: '{language} — vedi articoli',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} podcast',
@@ -114,12 +90,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Livro sem título' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} artigos',
-        buttonLabel: '{language} — ver artigos',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} podcasts',
@@ -137,12 +107,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'كتاب بلا عنوان' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} مقال',
-        buttonLabel: '{language} — عرض المقالات',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} بودكاست',
@@ -160,12 +124,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Без названия' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} статей',
-        buttonLabel: '{language} — смотреть статьи',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} подкастов',
@@ -183,12 +141,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Без назви' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} статей',
-        buttonLabel: '{language} — переглянути статті',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} подкастів',
@@ -206,12 +158,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Książka bez tytułu' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} artykułów',
-        buttonLabel: '{language} — zobacz artykuły',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} podcastów',
@@ -229,12 +175,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Bez názvu' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} článků',
-        buttonLabel: '{language} — zobrazit články',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} podcastů',
@@ -252,12 +192,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Bez názvu' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} článkov',
-        buttonLabel: '{language} — zobraziť články',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} podcastov',
@@ -275,12 +209,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Brez naslova' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} člankov',
-        buttonLabel: '{language} — ogled člankov',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} podcastov',
@@ -298,12 +226,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Cím nélküli könyv' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} cikk',
-        buttonLabel: '{language} — cikkek megtekintése',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} podcast',
@@ -321,12 +243,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Carte fără titlu' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} articole',
-        buttonLabel: '{language} — vezi articolele',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} podcasturi',
@@ -344,12 +260,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Книга без заглавие' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} статии',
-        buttonLabel: '{language} — виж статии',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} подкаста',
@@ -367,12 +277,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Knjiga bez naslova' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} članaka',
-        buttonLabel: '{language} — pogledaj članke',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} podkasta',
@@ -390,12 +294,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Книга без наслов' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} написи',
-        buttonLabel: '{language} — види написи',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} подкасти',
@@ -413,12 +311,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Անանուն գիրք' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} հոդված',
-        buttonLabel: '{language} — դիտել հոդվածները',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} փոդքասթ',
@@ -436,12 +328,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'Pirtûkê bê sernav' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} gotar',
-        buttonLabel: '{language} — gotaran bibîne',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} podcast',
@@ -459,12 +345,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: '无标题图书' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} 篇文章',
-        buttonLabel: '{language} — 查看文章',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} 个播客',
@@ -482,12 +362,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'タイトルなし' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} 件の記事',
-        buttonLabel: '{language} — 記事を見る',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} 件のポッドキャスト',
@@ -505,12 +379,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: '제목 없는 도서' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count}개 글',
-        buttonLabel: '{language} — 글 보기',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count}개 팟캐스트',
@@ -528,12 +396,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'शीर्षकहीन पुस्तक' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} लेख',
-        buttonLabel: '{language} — लेख देखें',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} पॉडकास्ट',
@@ -551,12 +413,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'శీర్షిక లేని పుస్తకం' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} వ్యాసాలు',
-        buttonLabel: '{language} — వ్యాసాలను చూడండి',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} పాడ్‌కాస్ట్‌లు',
@@ -574,12 +430,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'ಶೀರ್ಷಿಕೆ ರಹಿತ ಪುಸ್ತಕ' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} ಲೇಖನಗಳು',
-        buttonLabel: '{language} — ಲೇಖನಗಳನ್ನು ನೋಡಿ',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} ಪಾಡ್ಕಾಸ್ಟ್‌ಗಳು',
@@ -597,12 +447,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'ശീർഷകമില്ലാത്ത പുസ്തകം' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} ലേഖനങ്ങൾ',
-        buttonLabel: '{language} — ലേഖനങ്ങൾ കാണുക',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} പോഡ്‌ക്കാസ്റ്റുകൾ',
@@ -620,12 +464,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'शीर्षक नसलेले पुस्तक' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} लेख',
-        buttonLabel: '{language} — लेख पहा',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} पॉडकास्ट',
@@ -643,12 +481,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'શીર્ષક વગરનું પુસ્તક' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} લેખો',
-        buttonLabel: '{language} — લેખ જુઓ',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} પોડકાસ્ટ',
@@ -666,12 +498,6 @@ const BY_LOCALE = {
       },
     },
     books: { untitledBook: 'ଶିରୋନାମାହିନ ବହି' },
-    articles: {
-      countrySelector: {
-        itemsCountPhrase: '{count} ପ୍ରବନ୍ଧ',
-        buttonLabel: '{language} — ପ୍ରବନ୍ଧ ଦେଖନ୍ତୁ',
-      },
-    },
     podcasts: {
       countrySelector: {
         itemsCountPhrase: '{count} ପଡ୍‌କାଷ୍ଟ',
@@ -682,7 +508,7 @@ const BY_LOCALE = {
   },
 };
 
-/** Shown in books / articles / podcasts country grid header (total API countries). */
+/** Shown in books / podcasts country grid header (total API countries). */
 const COMMON_TOTAL_COUNTRIES = {
   de: '{count} Länder',
   fr: '{count} pays',
@@ -763,12 +589,6 @@ const EN_FALLBACK = {
     },
   },
   books: { untitledBook: 'Untitled book' },
-  articles: {
-    countrySelector: {
-      itemsCountPhrase: '{count} articles',
-      buttonLabel: '{language} — view articles',
-    },
-  },
   podcasts: {
     countrySelector: {
       itemsCountPhrase: '{count} podcasts',

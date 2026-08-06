@@ -10,7 +10,6 @@ import { BsHandThumbsUpFill, BsShare, BsEye, BsDownload, BsX } from 'react-icons
 import CreatePostCard from '@/components/cards/CreatePostCard';
 import PostCard from '@/components/cards/PostCard';
 import SharedBookCard from '@/components/cards/SharedBookCard';
-import SharedArticleCard from '@/components/cards/SharedArticleCard';
 import SharedPodcastCard from '@/components/cards/SharedPodcastCard';
 import SharedStoryCard from '@/components/cards/SharedStoryCard';
 import SharedNewsletterCard from '@/components/cards/SharedNewsletterCard';
@@ -691,17 +690,6 @@ const UserFeedPage = () => {
             return (
               <SharedBookCard
                 key={`shared-book-${post.id}`}
-                post={post}
-                onDeletePost={isCurrentUser && (post.user_id === currentUserId || post.userId === currentUserId) ? (postId) => handleDeletePost(postId) : null}
-              />
-            );
-          }
-
-          // Check if this is a shared article post
-          if (post.type === 'shared_article' && post.shared_article_id) {
-            return (
-              <SharedArticleCard
-                key={`shared-article-${post.id}`}
                 post={post}
                 onDeletePost={isCurrentUser && (post.user_id === currentUserId || post.userId === currentUserId) ? (postId) => handleDeletePost(postId) : null}
               />

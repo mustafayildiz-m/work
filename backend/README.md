@@ -27,9 +27,6 @@ npm run seed:languages
 # Çok dilli kitap verilerini yükle (opsiyonel)
 npm run seed:multilanguage-books
 
-# Makale verilerini yükle (opsiyonel)
-npm run seed:multilanguage-articles
-
 # Tüm seed'leri çalıştır
 npm run seed:all
 ```
@@ -78,7 +75,6 @@ npm run test:cov
 
 ```
 src/
-├── articles/       # Makale yönetimi
 ├── auth/          # Kimlik doğrulama
 ├── books/         # Kitap yönetimi
 ├── chat/          # WebSocket chat sistemi

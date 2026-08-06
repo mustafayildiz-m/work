@@ -14,7 +14,6 @@ import postImg4 from '@/assets/images/post/3by2/03.jpg';
 import PostCard from '@/components/cards/PostCard';
 import SharedProfileCard from '@/components/cards/SharedProfileCard';
 import SharedBookCard from '@/components/cards/SharedBookCard';
-import SharedArticleCard from '@/components/cards/SharedArticleCard';
 import SharedPodcastCard from '@/components/cards/SharedPodcastCard';
 import SharedStoryCard from '@/components/cards/SharedStoryCard';
 import SharedNewsletterCard from '@/components/cards/SharedNewsletterCard';
@@ -557,42 +556,6 @@ const Feeds = ({ userId }) => {
       }
     } catch (error) {
       console.error('Error deleting shared podcast post:', error);
-    } finally {
-      setDeletingPostId(null);
-    }
-  };
-
-  // Separate handler for shared article posts - no confirmation dialog needed
-  const handleDeleteSharedArticlePost = async (postId) => {
-    try {
-      setDeletingPostId(postId);
-
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setDeletingPostId(null);
-        return;
-      }
-
-      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/user-posts/${postId}`;
-
-      const response = await fetch(apiUrl, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (response.ok) {
-        // Immediately remove the post from local state for instant UI update
-        removePost(postId);
-        // Also remove from pending posts if it exists there
-        setPendingPosts(prev => prev.filter(p => p.id !== postId));
-      } else {
-        console.error('Failed to delete shared article post:', response.status);
-      }
-    } catch (error) {
-      console.error('Error deleting shared article post:', error);
     } finally {
       setDeletingPostId(null);
     }
@@ -1173,17 +1136,6 @@ const Feeds = ({ userId }) => {
               key={`shared-book-${post.id}`}
               post={post}
               onDeletePost={handleDeleteSharedBookPost}
-            />
-          );
-        }
-
-        // Check if this is a shared article post
-        if (post.type === 'shared_article' && post.shared_article_id) {
-          return (
-            <SharedArticleCard
-              key={`shared-article-${post.id}`}
-              post={post}
-              onDeletePost={handleDeleteSharedArticlePost}
             />
           );
         }

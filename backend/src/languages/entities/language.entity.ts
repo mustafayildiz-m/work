@@ -7,7 +7,6 @@ import {
   OneToMany,
 } from 'typeorm';
 import { BookTranslation } from '../../books/entities/book-translation.entity';
-import { ArticleTranslation } from '../../articles/entities/article-translation.entity';
 
 @Entity('languages')
 export class Language {
@@ -31,12 +30,6 @@ export class Language {
     (bookTranslation) => bookTranslation.language,
   )
   bookTranslations: BookTranslation[];
-
-  @OneToMany(
-    () => ArticleTranslation,
-    (articleTranslation) => articleTranslation.language,
-  )
-  articleTranslations: ArticleTranslation[];
 
   @CreateDateColumn()
   createdAt: Date;

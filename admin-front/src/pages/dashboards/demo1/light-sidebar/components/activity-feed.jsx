@@ -131,7 +131,6 @@ const ActivityFeed = () => {
     const pathMap = {
       scholar: `/alimler/profile/${activity.entityId}`,
       book: `/kitaplar/duzenle/${activity.entityId}`,
-      article: `/makaleler/duzenle/${activity.entityId}`,
       podcast: `/podcast/duzenle/${activity.entityId}`,
       story: `/alim-hikayeleri/duzenle/${activity.entityId}`,
       user: '/kullanicilar/bireysel',

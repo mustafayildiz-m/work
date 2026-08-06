@@ -54,7 +54,6 @@ export class UserPostsService {
 
     // Kitapçık, kitap ve podcast paylaşımları onay beklemeden doğrudan yayınlansın
     const isSharedContent =
-      createUserPostDto.type === 'shared_article' ||
       createUserPostDto.type === 'shared_book' ||
       createUserPostDto.type === 'shared_podcast' ||
       createUserPostDto.type === 'shared_story' ||
@@ -175,16 +174,6 @@ export class UserPostsService {
   async removePostsBySharedNewsletterId(newsletterId: number): Promise<void> {
     const posts = await this.userPostRepository.find({
       where: { shared_newsletter_id: newsletterId },
-      select: ['id'],
-    });
-    for (const p of posts) {
-      await this.remove(p.id);
-    }
-  }
-
-  async removePostsBySharedArticleId(articleId: number): Promise<void> {
-    const posts = await this.userPostRepository.find({
-      where: { shared_article_id: articleId },
       select: ['id'],
     });
     for (const p of posts) {
@@ -474,8 +463,6 @@ export class UserPostsService {
         shared_profile_id: (p as any).shared_profile_id || null,
         // Shared book bilgileri
         shared_book_id: (p as any).shared_book_id || null,
-        // Shared article bilgileri
-        shared_article_id: (p as any).shared_article_id || null,
         // Shared podcast bilgileri
         shared_podcast_id: (p as any).shared_podcast_id || null,
         // Shared story bilgileri
@@ -689,7 +676,6 @@ export class UserPostsService {
         shared_profile_type: (post as any).shared_profile_type || null,
         shared_profile_id: (post as any).shared_profile_id || null,
         shared_book_id: (post as any).shared_book_id || null,
-        shared_article_id: (post as any).shared_article_id || null,
         shared_podcast_id: (post as any).shared_podcast_id || null,
         shared_story_id: (post as any).shared_story_id || null,
         shared_newsletter_id: (post as any).shared_newsletter_id || null,
@@ -836,7 +822,6 @@ export class UserPostsService {
       shared_profile_type: null,
       shared_profile_id: null,
       shared_book_id: null,
-      shared_article_id: null,
       shared_podcast_id: null,
       shared_story_id: null,
       shared_newsletter_id: null,

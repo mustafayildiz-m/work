@@ -6,8 +6,6 @@ import {
   BookOpen,
   CheckCircle2,
   ClipboardCheck,
-  ImageOff,
-  ScrollText,
   UserCircle,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,18 +19,6 @@ const TASK_META = {
     icon: ClipboardCheck,
     color: 'text-red-600 dark:text-red-400',
     bg: 'bg-red-50 dark:bg-red-950/50',
-  },
-  articles_no_pdf: {
-    labelId: 'UI.PENDING_TASK_ARTICLES_NO_PDF',
-    icon: ScrollText,
-    color: 'text-orange-600 dark:text-orange-400',
-    bg: 'bg-orange-50 dark:bg-orange-950/50',
-  },
-  articles_no_cover: {
-    labelId: 'UI.PENDING_TASK_ARTICLES_NO_COVER',
-    icon: ImageOff,
-    color: 'text-amber-600 dark:text-amber-400',
-    bg: 'bg-amber-50 dark:bg-amber-950/50',
   },
   books_no_pdf: {
     labelId: 'UI.PENDING_TASK_BOOKS_NO_PDF',

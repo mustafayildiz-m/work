@@ -181,7 +181,6 @@ export const options = {
           photoUrl: token.user.photoUrl,
           bio: token.user.bio,
           booksCount: token.user.booksCount,
-          articlesCount: token.user.articlesCount,
           visitsCount: token.user.visitsCount,
           language: token.user.language
         };
