@@ -44,6 +44,7 @@ import { LanguageFlagsSeeder } from './seeders/language-flags-seeder';
 import { CountriesSeeder } from './seeders/countries-seeder';
 import { BackfillCountryLanguagesSeeder } from './seeders/backfill-country-languages-seeder';
 import { CountryLanguagesSeeder } from './seeders/country-languages-seeder';
+import { Ethnologue300LanguagesSeeder } from './seeders/ethnologue300-languages-seeder';
 import { RegionalBooksSeeder } from './seeders/regional-books-seeder';
 import { ReligiousBooksSeeder } from './seeders/religious-books-seeder';
 import { MultiLanguageBooksSeeder } from './seeders/multilanguage-books-seeder';
@@ -147,6 +148,7 @@ const isProduction = process.env.NODE_ENV === 'production';
     CountriesSeeder,
     BackfillCountryLanguagesSeeder,
     CountryLanguagesSeeder,
+    Ethnologue300LanguagesSeeder,
     RegionalBooksSeeder,
     ReligiousBooksSeeder,
     MultiLanguageBooksSeeder,
