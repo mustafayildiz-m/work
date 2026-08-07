@@ -1,14 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardBody, CardHeader, CardTitle, Row, Col, Button, Form, Alert, Spinner } from 'react-bootstrap';
-import { Badge } from 'react-bootstrap';
-import { BsSearch, BsPerson, BsPeople, BsPlus, BsEye } from 'react-icons/bs';
+import { Button, Alert, Spinner } from 'react-bootstrap';
+import { BsSearch } from 'react-icons/bs';
 import bookOpenIcon from '@/assets/images/icon/book-open-outline-filled.svg';
 import Link from 'next/link';
 import Image from 'next/image';
 import avatar7 from '@/assets/images/avatar/07.jpg';
 import { useLanguage } from '@/context/useLanguageContext';
+import { getPersonCoverUrl, getPersonAvatarUrl, truncateBio } from '@/utils/peopleCard';
+import PeopleCoverCard from '@/components/cards/PeopleCoverCard';
 
 const ScholarsPage = () => {
   const { t } = useLanguage();
@@ -22,32 +23,25 @@ const ScholarsPage = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [isSearching, setIsSearching] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
-  const itemsPerPage = 12;
+  const itemsPerPage = 16;
 
   useEffect(() => {
     const fetchScholars = async () => {
-      // Don't fetch if we're in search mode
       if (isSearching) return;
 
       try {
         setLoading(true);
         const token = localStorage.getItem('token');
-        const headers = {
-          'Content-Type': 'application/json'
-        };
-        if (token) {
-          headers['Authorization'] = `Bearer ${token}`;
-        }
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/scholars?page=${currentPage}&limit=${itemsPerPage}`, {
-          method: 'GET',
-          headers: headers
-        });
-
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/scholars?page=${currentPage}&limit=${itemsPerPage}`,
+          { method: 'GET', headers }
+        );
 
         if (response.ok) {
           const data = await response.json();
-
           if (data.scholars && Array.isArray(data.scholars)) {
             setScholars(data.scholars);
             setFilteredScholars(data.scholars);
@@ -55,20 +49,19 @@ const ScholarsPage = () => {
             setTotalPages(data.totalPages || 1);
           }
         } else {
-          setError('Alimler yüklenirken bir hata oluştu.');
+          setError(t('scholars.loadingScholars'));
         }
-      } catch (error) {
-        console.error('Error fetching scholars:', error);
-        setError('Alimler yüklenirken bir hata oluştu.');
+      } catch (err) {
+        console.error('Error fetching scholars:', err);
+        setError(t('scholars.loadingScholars'));
       } finally {
         setLoading(false);
       }
     };
 
     fetchScholars();
-  }, [currentPage, isSearching]);
+  }, [currentPage, isSearching, t]);
 
-  // Debounced search effect
   useEffect(() => {
     const searchTimeout = setTimeout(async () => {
       if (searchQuery.trim()) {
@@ -77,21 +70,13 @@ const ScholarsPage = () => {
 
         try {
           const token = localStorage.getItem('token');
-          const headers = {
-            'Content-Type': 'application/json'
-          };
-          if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-          }
+          const headers = { 'Content-Type': 'application/json' };
+          if (token) headers['Authorization'] = `Bearer ${token}`;
 
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/scholars?search=${encodeURIComponent(searchQuery)}&page=${currentPage}&limit=${itemsPerPage}`,
-            {
-              method: 'GET',
-              headers: headers
-            }
+            { method: 'GET', headers }
           );
-
 
           if (response.ok) {
             const data = await response.json();
@@ -99,11 +84,10 @@ const ScholarsPage = () => {
             setTotalCount(data.totalCount || 0);
             setTotalPages(data.totalPages || 1);
           } else {
-            console.error('Search failed:', response.status);
             setFilteredScholars([]);
           }
-        } catch (error) {
-          console.error('Error performing search:', error);
+        } catch (err) {
+          console.error('Error performing search:', err);
           setFilteredScholars([]);
         } finally {
           setSearchLoading(false);
@@ -111,12 +95,11 @@ const ScholarsPage = () => {
       } else {
         setIsSearching(false);
       }
-    }, 500); // 500ms debounce
+    }, 500);
 
     return () => clearTimeout(searchTimeout);
   }, [searchQuery, currentPage]);
 
-  // Update filtered scholars when scholars change and not searching
   useEffect(() => {
     if (!isSearching && !searchQuery.trim()) {
       setFilteredScholars(scholars);
@@ -125,7 +108,7 @@ const ScholarsPage = () => {
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
-    setCurrentPage(1); // Reset to first page on new search
+    setCurrentPage(1);
   };
 
   const handlePageChange = (page) => {
@@ -136,7 +119,6 @@ const ScholarsPage = () => {
   const generatePaginationItems = () => {
     const items = [];
     const maxVisiblePages = 5;
-
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
     let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
@@ -146,46 +128,18 @@ const ScholarsPage = () => {
 
     if (startPage > 1) {
       items.push(
-        <Button
-          key="first"
-          variant="outline-primary"
-          size="sm"
-          onClick={() => handlePageChange(1)}
-          style={{
-            borderRadius: '8px',
-            minWidth: '40px',
-            padding: '0.5rem',
-            fontWeight: '500'
-          }}
-        >
-          1
-        </Button>
+        <Button key="first" variant="outline-primary" size="sm" onClick={() => handlePageChange(1)}>1</Button>
       );
-      if (startPage > 2) {
-        items.push(
-          <span key="ellipsis1" style={{
-            padding: '0 0.25rem',
-            color: '#64748b',
-            fontWeight: '600'
-          }}>...</span>
-        );
-      }
+      if (startPage > 2) items.push(<span key="ellipsis1" className="text-muted px-1">...</span>);
     }
 
     for (let i = startPage; i <= endPage; i++) {
       items.push(
         <Button
           key={i}
-          variant={i === currentPage ? "primary" : "outline-primary"}
+          variant={i === currentPage ? 'primary' : 'outline-primary'}
           size="sm"
           onClick={() => handlePageChange(i)}
-          style={{
-            borderRadius: '8px',
-            minWidth: '40px',
-            padding: '0.5rem',
-            fontWeight: '500',
-            transition: 'all 0.3s ease'
-          }}
         >
           {i}
         </Button>
@@ -193,28 +147,9 @@ const ScholarsPage = () => {
     }
 
     if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
-        items.push(
-          <span key="ellipsis2" style={{
-            padding: '0 0.25rem',
-            color: '#64748b',
-            fontWeight: '600'
-          }}>...</span>
-        );
-      }
+      if (endPage < totalPages - 1) items.push(<span key="ellipsis2" className="text-muted px-1">...</span>);
       items.push(
-        <Button
-          key="last"
-          variant="outline-primary"
-          size="sm"
-          onClick={() => handlePageChange(totalPages)}
-          style={{
-            borderRadius: '8px',
-            minWidth: '40px',
-            padding: '0.5rem',
-            fontWeight: '500'
-          }}
-        >
+        <Button key="last" variant="outline-primary" size="sm" onClick={() => handlePageChange(totalPages)}>
           {totalPages}
         </Button>
       );
@@ -223,357 +158,126 @@ const ScholarsPage = () => {
     return items;
   };
 
-  const getImageUrl = (photoUrl) => {
-    const defaultAvatar = typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg');
+  const defaultAvatar = typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg');
 
-    // If photoUrl is null, undefined, or empty, return default avatar
-    if (!photoUrl || photoUrl === 'null' || photoUrl === 'undefined' || photoUrl === '') {
-      return defaultAvatar;
-    }
-
-    // If photoUrl is an object (imported image), return its src property or the default avatar
-    if (typeof photoUrl === 'object') {
-      return photoUrl.src || defaultAvatar;
-    }
-
-    // Ensure photoUrl is a string before using string methods
-    if (typeof photoUrl !== 'string') {
-      return defaultAvatar;
-    }
-
-    // If it's already an absolute URL, return as is
-    if (photoUrl.startsWith('http://') || photoUrl.startsWith('https://') || photoUrl.startsWith('data:image/')) {
-      return photoUrl;
-    }
-
-    const apiBaseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
-
-    // Ensure we don't have double slashes if photoUrl starts with /
-    const cleanPhotoUrl = photoUrl.startsWith('/') ? photoUrl : `/${photoUrl}`;
-    return `${apiBaseUrl}${cleanPhotoUrl}`;
+  const handleAvatarError = (e) => {
+    e.target.src = defaultAvatar;
   };
-
-  const renderScholarCard = (scholar) => (
-    <Col lg={3} md={4} sm={6} xs={12} className="mb-3" key={scholar.id}>
-      <Card className="h-100 border-0 scholar-card" style={{
-        borderRadius: '18px',
-        overflow: 'hidden',
-        boxShadow: '0 6px 18px rgba(0, 0, 0, 0.05)',
-        transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-        backgroundColor: '#fff',
-        position: 'relative'
-      }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-6px)';
-          e.currentTarget.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.10)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = '0 6px 18px rgba(0, 0, 0, 0.05)';
-        }}
-      >
-        {/* Modern Header Gradient */}
-        <div style={{
-          height: '80px',
-          backgroundImage: scholar.coverImage ? `url(${getImageUrl(scholar.coverImage)})` : 'linear-gradient(135deg, #66BB6A 0%, #2E7D32 100%)',
-          backgroundPosition: 'center',
-          backgroundSize: 'cover',
-          position: 'relative',
-          overflow: 'hidden'
-        }}>
-          {/* Dekoratif Arka Plan Deseni (Opsiyonel: Opacity ile) */}
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            opacity: 0.1,
-            backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.8) 0%, transparent 20%), radial-gradient(circle at 80% 30%, rgba(255,255,255,0.8) 0%, transparent 20%)'
-          }} />
-        </div>
-
-        <div className="d-flex flex-column flex-grow-1 px-3 pb-3 pt-0 text-center position-relative">
-          {/* Avatar Container - Header'ın üzerine taşacak */}
-          <div className="mx-auto" style={{ marginTop: '-40px', marginBottom: '0.75rem' }}>
-            <div style={{
-              width: '78px',
-              height: '78px',
-              borderRadius: '50%',
-              padding: '3px',
-              background: '#fff',
-              boxShadow: '0 6px 14px rgba(0,0,0,0.1)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <div style={{
-                width: '72px',
-                height: '72px',
-                borderRadius: '50%',
-                overflow: 'hidden',
-                position: 'relative'
-              }}>
-                <Image
-                  src={getImageUrl(scholar.photoUrl)}
-                  alt={scholar.fullName}
-                  width={72}
-                  height={72}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover'
-                  }}
-                  onError={(e) => {
-                    const target = e.target;
-                    target.src = typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg');
-                    target.srcset = "";
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <CardTitle className="mb-1 fw-bold" style={{ color: '#2c3e50', fontSize: '0.95rem' }}>
-            {scholar.fullName || 'İsimsiz Alim'}
-          </CardTitle>
-
-          {scholar.biography && (
-            <p className="text-muted mb-3 flex-grow-1" style={{
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              fontSize: '0.8rem',
-              lineHeight: '1.4',
-              color: '#6c757d'
-            }}>
-              {scholar.biography}
-            </p>
-          )}
-
-          <div className="mt-auto pt-1">
-            {scholar.id ? (
-              <Link
-                href={`/profile/scholar/${scholar.id}`}
-                className="btn btn-outline-success w-100 rounded-pill fw-bold shadow-sm"
-                style={{
-                  padding: '0.42rem 0.9rem',
-                  borderWidth: '1px',
-                  transition: 'all 0.3s ease',
-                  fontSize: '0.8rem'
-                }}
-              >
-                {t('scholars.viewProfile')}
-              </Link>
-            ) : (
-              <Button
-                variant="outline-secondary"
-                className="w-100 rounded-pill fw-bold"
-                disabled
-              >
-                {t('scholars.viewProfile')}
-              </Button>
-            )}
-          </div>
-        </div>
-      </Card>
-    </Col>
-  );
 
   if (loading) {
     return (
-      <div className="col-lg-9 scholars-page">
-        <div className="text-center py-5">
-          <Spinner animation="border" variant="primary" />
-          <p className="mt-2 text-muted">{t('scholars.loadingScholars')}</p>
+      <div className="col-lg-9">
+        <div className="feed-people-page feed-scholars-page">
+          <div className="feed-people-loading">
+            <Spinner animation="border" size="sm" variant="primary" />
+            <p>{t('scholars.loadingScholars')}</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="col-lg-9 scholars-page" style={{ marginBottom: '2rem' }}>
-      <Card className="mb-3 mb-md-4 border-0 shadow-sm" style={{
-        borderRadius: '18px',
-        overflow: 'hidden',
-        marginBottom: '1.5rem'
-      }}>
-        <CardHeader style={{
-          background: 'linear-gradient(135deg, rgba(181, 231, 160, 0.05) 0%, rgba(181, 231, 160, 0.1) 100%)',
-          borderBottom: '1px solid rgba(181, 231, 160, 0.2)',
-          padding: '1.25rem'
-        }}>
-          <CardTitle className="mb-0 d-flex align-items-center flex-wrap" style={{
-            fontSize: '1.125rem',
-            fontWeight: '600',
-            color: '#1e293b'
-          }}>
-            <Image src={bookOpenIcon} alt="Scholar" width={24} height={24} className="me-2" />
-            <span className="flex-grow-1">{t('scholars.title')}</span>
-            <div
-              className="ms-2 d-flex align-items-center"
-              style={{
-                background: 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)',
-                color: '#1b5e20',
-                padding: '0.5rem 1rem',
-                borderRadius: '50rem',
-                fontSize: '0.85rem',
-                fontWeight: '600',
-                border: '1px solid #a5d6a7',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
-              }}
-            >
-              <Image src={bookOpenIcon} alt="Scholar" width={14} height={14} className="me-2" />
-              <span>{totalCount} {t('scholars.totalScholars') || 'Alim'}</span>
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardBody style={{
-          padding: '1.5rem',
-          paddingBottom: '2rem'
-        }}>
-          <Form.Group className="mb-4">
-            <div className="input-group input-group-lg" style={{
-              borderRadius: '12px',
-              overflow: 'hidden',
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
-            }}>
-              <span className="input-group-text" style={{
-                background: 'var(--bs-light)',
-                border: '1px solid rgba(181, 231, 160, 0.3)',
-                borderRight: 'none',
-                padding: '0.875rem 1rem'
-              }}>
-                {searchLoading ? (
-                  <Spinner animation="border" size="sm" />
-                ) : (
-                  <BsSearch size={20} className="text-primary" />
-                )}
-              </span>
-              <Form.Control
-                type="text"
-                placeholder={t('scholars.searchPlaceholder')}
-                value={searchQuery}
-                onChange={handleSearch}
-                style={{
-                  border: '1px solid rgba(181, 231, 160, 0.3)',
-                  borderLeft: 'none',
-                  fontSize: '1rem',
-                  padding: '0.875rem 1rem'
-                }}
-              />
-            </div>
-            {isSearching && (
-              <small className="text-muted mt-2 d-block" style={{
-                fontSize: '0.875rem',
-                fontWeight: '500'
-              }}>
-                "{searchQuery}" {t('whoToFollow.searchInDatabase')} <strong>{totalCount}</strong> {t('whoToFollow.resultsFound')}
-              </small>
+    <div className="col-lg-9 scholars-page">
+      <div className="feed-people-page feed-scholars-page">
+        <div className="feed-people-header">
+          <div>
+            <h5 className="feed-people-title">
+              <Image src={bookOpenIcon} alt="" width={18} height={18} />
+              {t('scholars.title')}
+            </h5>
+            <p className="feed-people-subtitle">
+              {totalCount} {t('scholars.totalScholars') || t('scholars.title')}
+            </p>
+          </div>
+        </div>
+
+        <div className="feed-people-toolbar">
+          <div className="feed-people-search">
+            {searchLoading ? (
+              <Spinner animation="border" size="sm" />
+            ) : (
+              <BsSearch />
             )}
-          </Form.Group>
+            <input
+              type="text"
+              placeholder={t('scholars.searchPlaceholder')}
+              value={searchQuery}
+              onChange={handleSearch}
+            />
+          </div>
+        </div>
 
-          {error && (
-            <Alert variant="danger" className="mb-3">
-              {error}
-            </Alert>
-          )}
+        {isSearching && (
+          <p className="feed-scholars-search-hint">
+            &quot;{searchQuery}&quot; — {totalCount} {t('whoToFollow.resultsFound')}
+          </p>
+        )}
 
-          {filteredScholars.length === 0 ? (
-            <div className="text-center py-5" style={{
-              padding: '3rem 1rem'
-            }}>
-              <div className="mb-4" style={{
-                width: '80px',
-                height: '80px',
-                margin: '0 auto',
-                borderRadius: '50%',
-                background: 'rgba(181, 231, 160, 0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <Image src={bookOpenIcon} alt="Scholar" width={40} height={40} />
-              </div>
-              <h5 className="mb-2" style={{
-                color: '#64748b',
-                fontWeight: '600',
-                fontSize: '1.125rem'
-              }}>
-                {t('scholars.noScholarsFound')}
-              </h5>
-              <p className="text-muted mb-0" style={{
-                fontSize: '0.95rem',
-                maxWidth: '400px',
-                margin: '0 auto'
-              }}>
-                {searchQuery ? t('scholars.noScholarsDescription') : t('scholars.noScholarsFound')}
-              </p>
+        {error && (
+          <Alert variant="danger" className="mx-3 mt-2 mb-0 py-2 small">
+            {error}
+          </Alert>
+        )}
+
+        {filteredScholars.length === 0 ? (
+          <div className="feed-people-empty">
+            <Image src={bookOpenIcon} alt="" width={32} height={32} className="opacity-50 mb-2" />
+            <h6>{t('scholars.noScholarsFound')}</h6>
+            <p>{searchQuery ? t('scholars.noScholarsDescription') : t('scholars.noScholarsFound')}</p>
+          </div>
+        ) : (
+          <>
+            <div className="feed-scholars-grid">
+              {filteredScholars.map((scholar) => {
+                const bio = truncateBio(scholar.biography);
+                const profileHref = scholar.id ? `/profile/scholar/${scholar.id}` : null;
+
+                return (
+                  <PeopleCoverCard
+                    key={scholar.id}
+                    coverUrl={getPersonCoverUrl(scholar)}
+                    avatarUrl={getPersonAvatarUrl(scholar.photoUrl, defaultAvatar)}
+                    name={scholar.fullName || t('scholars.title')}
+                    bio={bio || undefined}
+                    profileHref={profileHref}
+                    onAvatarError={handleAvatarError}
+                    footer={profileHref ? (
+                      <Link href={profileHref} className="feed-scholar-btn">
+                        {t('scholars.viewProfile')}
+                      </Link>
+                    ) : null}
+                  />
+                );
+              })}
             </div>
-          ) : (
-            <>
-              <Row className="g-3">
-                {filteredScholars.map(renderScholarCard)}
-              </Row>
 
-              {totalPages > 1 && (
-                <div className="d-flex justify-content-center mt-4 pt-3 pb-3 scholars-pagination" style={{
-                  borderTop: '1px solid rgba(181, 231, 160, 0.2)',
-                  marginBottom: '1rem'
-                }}>
-                  <div className="d-flex align-items-center flex-wrap justify-content-center pagination-wrapper" style={{
-                    gap: '0.5rem',
-                    width: '100%',
-                    padding: '0 0.5rem'
-                  }}>
-                    <Button
-                      variant="outline-primary"
-                      size="sm"
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className="pagination-btn"
-                      style={{
-                        borderRadius: '8px',
-                        padding: '0.5rem 1rem',
-                        fontWeight: '500',
-                        transition: 'all 0.3s ease',
-                        minWidth: '80px'
-                      }}
-                    >
-                      {t('pagination.previous')}
-                    </Button>
-
-                    <div className="d-flex align-items-center flex-wrap justify-content-center" style={{ gap: '0.5rem' }}>
-                      {generatePaginationItems()}
-                    </div>
-
-                    <Button
-                      variant="outline-primary"
-                      size="sm"
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                      className="pagination-btn"
-                      style={{
-                        borderRadius: '8px',
-                        padding: '0.5rem 1rem',
-                        fontWeight: '500',
-                        transition: 'all 0.3s ease',
-                        minWidth: '80px'
-                      }}
-                    >
-                      {t('pagination.next')}
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-        </CardBody>
-      </Card>
+            {totalPages > 1 && (
+              <div className="feed-people-pagination">
+                <Button
+                  variant="outline-primary"
+                  size="sm"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  {t('pagination.previous')}
+                </Button>
+                {generatePaginationItems()}
+                <Button
+                  variant="outline-primary"
+                  size="sm"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  {t('pagination.next')}
+                </Button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
 
 export default ScholarsPage;
-

@@ -2,8 +2,12 @@
  * Converts relative image URLs to absolute URLs
  * @param {string} imageUrl - The image URL from the API
  * @param {string} baseUrl - The base URL for the backend server
- * @returns {string} - The absolute image URL
+ * @returns {string|null} - The absolute image URL
  */
+const normalizeAssetBaseUrl = (baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000') => {
+  return String(baseUrl).replace(/\/$/, '').replace(/\/api\/?$/, '');
+};
+
 export const getImageUrl = (imageUrl, baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000') => {
   if (!imageUrl) return null;
 
@@ -14,24 +18,27 @@ export const getImageUrl = (imageUrl, baseUrl = process.env.NEXT_PUBLIC_API_URL 
 
   // Ensure it's a string from here on
   if (typeof imageUrl !== 'string') return null;
+  if (imageUrl === 'null' || imageUrl === 'undefined') return null;
+
+  const assetBase = normalizeAssetBaseUrl(baseUrl);
 
   // If it's already an absolute URL, return as is
-  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://') || imageUrl.startsWith('data:image/')) {
     return imageUrl;
   }
 
   // If it's a relative URL, prepend the base URL
   if (imageUrl.startsWith('/')) {
-    return `${baseUrl}${imageUrl}`;
+    return `${assetBase}${imageUrl}`;
   }
 
   // If it already starts with uploads/, just prepend the base URL
   if (imageUrl.startsWith('uploads/')) {
-    return `${baseUrl}/${imageUrl}`;
+    return `${assetBase}/${imageUrl}`;
   }
 
   // If it's just a filename, prepend the base URL and uploads path
-  return `${baseUrl}/uploads/${imageUrl}`;
+  return `${assetBase}/uploads/${imageUrl}`;
 };
 
 /**
@@ -58,19 +65,19 @@ export const getBookCoverUrl = (book, size = 'full', baseUrl = process.env.NEXT_
   if (img.startsWith('http')) return img;
 
   const normalized = img.startsWith('/') ? img : `/${img}`;
-  const fullUrl = `${baseUrl}${normalized}`;
+  const fullUrl = `${normalizeAssetBaseUrl(baseUrl)}${normalized}`;
 
   if (size !== 'thumb') return fullUrl;
 
   // uploads/books/ manuel kapaklar: .../books/X.png → .../books/thumbnails/X.jpg
   if (normalized.startsWith('/uploads/books/') && !normalized.includes('/thumbnails/')) {
     const thumbPath = normalized.replace(/\/uploads\/books\//, '/uploads/books/thumbnails/').replace(/\.[^.]+$/, '.jpg');
-    return `${baseUrl}${thumbPath}`;
+    return `${normalizeAssetBaseUrl(baseUrl)}${thumbPath}`;
   }
   // API yüklemeleri: /uploads/X.jpg → /uploads/thumbnails/X.jpg
   if (normalized.startsWith('/uploads/') && !normalized.includes('/thumbnails/') && !normalized.includes('/books/')) {
     const thumbPath = normalized.replace(/\/uploads\//, '/uploads/thumbnails/');
-    return `${baseUrl}${thumbPath}`;
+    return `${normalizeAssetBaseUrl(baseUrl)}${thumbPath}`;
   }
   return fullUrl;
 };
