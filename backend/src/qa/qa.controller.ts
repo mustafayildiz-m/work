@@ -160,7 +160,10 @@ export class QaController {
 
   @UseGuards(JwtAuthGuard)
   @Post('seed')
-  seedDummyData() {
+  seedDummyData(@Body() body?: { force?: boolean; full?: boolean }) {
+    if (body?.force || body?.full) {
+      return this.seederService.seedComprehensive(Boolean(body.force));
+    }
     return this.seederService.seedIfEmpty();
   }
 
