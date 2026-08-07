@@ -1,14 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { FaPlus, FaSearch, FaUser, FaUserPlus } from 'react-icons/fa';
+import { FaSearch, FaUser, FaUserPlus } from 'react-icons/fa';
 import { Spinner, Button } from 'react-bootstrap';
 import Link from 'next/link';
-import './who-to-follow.css';
 import { getUserIdFromToken, authFetch } from '../../../../../utils/auth';
 import { useLanguage } from '@/context/useLanguageContext';
 import { getProfilePath } from '@/utils/profileEncoder';
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
+import PeopleCoverCard from '@/components/cards/PeopleCoverCard';
+import { getPersonCoverUrl, getPersonAvatarUrl, truncateBio } from '@/utils/peopleCard';
 
 export default function WhoToFollowPage() {
   const { t } = useLanguage();
@@ -244,19 +245,10 @@ export default function WhoToFollowPage() {
     return items;
   };
 
-  const getImageUrl = (photoUrl) => {
-    if (!photoUrl || photoUrl === 'null' || photoUrl === 'undefined') return '/profile/profile.png';
-    const apiBaseUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000').replace(/\/$/, '');
-    if (photoUrl.startsWith('/uploads/')) {
-      return `${apiBaseUrl}${photoUrl}`;
-    }
-    if (photoUrl.startsWith('uploads/')) {
-      return `${apiBaseUrl}/${photoUrl}`;
-    }
-    return photoUrl;
+  const handleAvatarError = (e) => {
+    e.target.src = '/profile/profile.png';
   };
 
-  // Follow function
   const handleFollow = async (followerId, followerType) => {
     const followerKey = `${followerType}-${followerId}`;
     try {
@@ -396,269 +388,194 @@ export default function WhoToFollowPage() {
   if (loading) {
     return (
       <div className="col-lg-9">
-        <div className="loading-container">
-          <div className="loading-spinner"></div>
-          <p className="mt-3 text-muted">{t('whoToFollow.loadingUsers')}</p>
+        <div className="feed-people-page">
+          <div className="feed-people-loading">
+            <div className="spinner-border spinner-border-sm text-primary" role="status">
+              <span className="visually-hidden">{t('common.loading')}</span>
+            </div>
+            <p>{t('whoToFollow.loadingUsers')}</p>
+          </div>
         </div>
       </div>
     );
   }
 
+  const getRoleLabel = (user) => {
+    if (user.type === 'scholar') return t('whoToFollow.scholar');
+    if (user.role === 'admin') return t('whoToFollow.admin');
+    if (user.role === 'moderator') return t('whoToFollow.moderator');
+    return t('whoToFollow.user');
+  };
+
   return (
     <div className="col-lg-9">
-      <div className="card who-to-follow-card">
-        <div className="card-header who-to-follow-header border-0 pb-0" style={{ padding: '1.5rem 1.5rem 0.5rem' }}>
-          <div className="d-flex align-items-center justify-content-between">
-            <h5 className="mb-0 fs-5 fw-bold">
-              <FaUser className="me-2 text-primary" />
+      <div className="feed-people-page">
+        <div className="feed-people-header">
+          <div>
+            <h5 className="feed-people-title">
+              <FaUser />
               {t('whoToFollow.users')}
             </h5>
-            <span className="badge bg-light text-muted fw-normal" style={{ fontSize: '0.8rem', padding: '0.4rem 0.8rem', borderRadius: '10px' }}>
-              {isSearching ? (
-                <>
-                  <FaSearch className="me-1 small" />
-                  {totalCount} {t('whoToFollow.resultsFound')}
-                </>
-              ) : (
-                `${totalCount} ${t('whoToFollow.peopleFound')}`
-              )}
-            </span>
+            <p className="feed-people-subtitle">
+              {isSearching
+                ? `${totalCount} ${t('whoToFollow.resultsFound')}`
+                : `${totalCount} ${t('whoToFollow.peopleFound')}`}
+            </p>
           </div>
         </div>
 
-        <div className="search-filter-section">
-          <div className="row">
-            <div className="col-md-12">
-              <div className="input-group search-input-group shadow-sm">
-                <span className="input-group-text border-0 ps-3">
-                  {searchLoading ? (
-                    <div className="spinner-border spinner-border-sm text-success" role="status">
-                      <span className="visually-hidden">{t('search.searching')}</span>
-                    </div>
-                  ) : (
-                    <FaSearch style={{ color: '#81C784' }} />
-                  )}
-                </span>
-                <input
-                  type="text"
-                  className="form-control border-0 py-2 ps-2"
-                  placeholder={t('whoToFollow.searchUserPlaceholder')}
-                  value={searchTerm}
-                  onChange={handleSearchChange}
-                  style={{ fontSize: '0.9rem', outline: 'none', boxShadow: 'none' }}
-                />
+        <div className="feed-people-toolbar">
+          <div className="feed-people-search">
+            {searchLoading ? (
+              <div className="spinner-border spinner-border-sm text-success" role="status">
+                <span className="visually-hidden">{t('search.searching')}</span>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="users-grid">
-          <div className="row">
-            {filteredUsers.length > 0 ? (
-              filteredUsers.map((user) => (
-                <div key={`${user.type}-${user.id}`} className="user-card-col px-2 mb-4">
-                  <div className="card h-100 border-0 shadow-sm user-item-card">
-                    {/* Top Image Section - Edge to Edge */}
-                    <Link href={getProfilePath(user.type || 'user', user.id) || '#'} style={{ display: 'block', position: 'relative', width: '100%', aspectRatio: '1/1', overflow: 'hidden' }}>
-                      <img
-                        src={getImageUrl(user.photoUrl)}
-                        alt={user.name}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          transition: 'transform 0.5s ease'
-                        }}
-                        className="user-card-img"
-                        onError={(e) => {
-                          e.target.src = '/profile/profile.png';
-                        }}
-                      />
-                    </Link>
-
-                    {/* Content Section */}
-                    <div className="card-body p-3 d-flex flex-column text-center">
-                      <div className="d-flex justify-content-center mb-2">
-                        <span className={`role-badge ${user.type === 'scholar' ? 'bg-primary' : user.role === 'admin' ? 'bg-danger' : user.role === 'moderator' ? 'bg-info' : 'bg-secondary'}`}>
-                          <FaUser className="me-1" style={{ fontSize: '0.42rem' }} />
-                          {user.type === 'scholar'
-                            ? t('whoToFollow.scholar')
-                            : user.role === 'admin'
-                              ? t('whoToFollow.admin')
-                              : user.role === 'moderator'
-                                ? t('whoToFollow.moderator')
-                                : t('whoToFollow.user')}
-                        </span>
-                      </div>
-
-                      <h6 className="mb-2 user-card-name">
-                        <Link href={getProfilePath(user.type || 'user', user.id) || '#'} className="text-decoration-none text-dark dark:text-white">
-                          {user.name}
-                        </Link>
-                      </h6>
-
-                      <div className="mt-auto pt-2">
-                        {user.hasIncomingRequest || followRequests.some(req => (req.followerId == user.id || req.follower?.id == user.id)) ? (
-                          <div className="d-flex gap-2">
-                            <button
-                              className="btn btn-primary btn-sm flex-fill fw-bold"
-                              onClick={() => handleAcceptRequest(user.id)}
-                              disabled={followLoading[`user-${user.id}`]}
-                              style={{ borderRadius: '8px', padding: '0.4rem' }}
-                            >
-                              {followLoading[`user-${user.id}`] ? (
-                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                              ) : (
-                                'Kabul Et'
-                              )}
-                            </button>
-                            <button
-                              className="btn btn-danger-soft btn-sm flex-fill fw-bold"
-                              onClick={() => handleRejectRequest(user.id)}
-                              disabled={followLoading[`user-${user.id}`]}
-                              style={{ borderRadius: '8px', padding: '0.4rem' }}
-                            >
-                              {followLoading[`user-${user.id}`] ? (
-                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                              ) : (
-                                'Sil'
-                              )}
-                            </button>
-                          </div>
-                        ) : user.followStatus === 'pending' ? (
-                          <button
-                            className="btn btn-outline-secondary w-100 fw-bold"
-                            onClick={() => handleUnfollow(user.id, user.type)}
-                            disabled={followLoading[`${user.type}-${user.id}`]}
-                            style={{
-                              borderRadius: '8px',
-                              padding: '0.4rem 0.8rem',
-                              fontSize: '0.9rem',
-                              color: 'var(--bs-body-color)',
-                              borderColor: 'var(--bs-secondary)',
-                              backgroundColor: 'rgba(var(--bs-secondary-rgb), 0.18)'
-                            }}
-                          >
-                            {followLoading[`${user.type}-${user.id}`] ? (
-                              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            ) : (
-                              'İstek Gönderildi'
-                            )}
-                          </button>
-                        ) : user.isFollowing || user.followStatus === 'accepted' ? (
-                          <button
-                            className="unfollow-btn-custom"
-                            onClick={() => handleUnfollow(user.id, user.type)}
-                            disabled={followLoading[`${user.type}-${user.id}`]}
-                          >
-                            {followLoading[`${user.type}-${user.id}`] ? (
-                              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            ) : (
-                              t('whoToFollow.unfollow')
-                            )}
-                          </button>
-                        ) : (
-                          <button
-                            className="follow-btn-custom"
-                            onClick={() => handleFollow(user.id, user.type)}
-                            disabled={followLoading[`${user.type}-${user.id}`]}
-                          >
-                            {followLoading[`${user.type}-${user.id}`] ? (
-                              <span className="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true"></span>
-                            ) : (
-                              <>
-                                <svg
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="white"
-                                  strokeWidth="2.5"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  className="me-2"
-                                  style={{ display: 'inline-block', verticalAlign: 'middle' }}
-                                >
-                                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                  <circle cx="8.5" cy="7" r="4"></circle>
-                                  <line x1="20" y1="8" x2="20" y2="14"></line>
-                                  <line x1="23" y1="11" x2="17" y2="11"></line>
-                                </svg>
-                                <span>{t('whoToFollow.follow')}</span>
-                              </>
-                            )}
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))
             ) : (
-              <div className="col-12">
-                <div className="empty-state">
-                  <FaSearch className="empty-state-icon" />
-                  <h5 className="text-muted">{t('whoToFollow.noResultsTitle')}</h5>
-                  <p className="text-muted">
-                    {t('whoToFollow.noResultsDescription')}
-                  </p>
-                  <button
-                    className="btn clear-filters-btn"
-                    onClick={() => {
-                      setSearchTerm('');
-                      setIsSearching(false);
-                      setCurrentPage(1);
-                    }}
-                  >
-                    {t('whoToFollow.clearFilters')}
-                  </button>
-                </div>
-              </div>
+              <FaSearch />
             )}
+            <input
+              type="text"
+              placeholder={t('whoToFollow.searchUserPlaceholder')}
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
           </div>
-
-          {totalPages > 1 && (
-            <div className="d-flex justify-content-center mt-3 mt-md-4 pt-3" style={{
-              borderTop: '1px solid rgba(181, 231, 160, 0.2)'
-            }}>
-              <div className="d-flex align-items-center flex-wrap pagination-wrapper" style={{
-                gap: '0.5rem'
-              }}>
-                <Button
-                  variant="outline-primary"
-                  size="sm"
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  style={{
-                    borderRadius: '8px',
-                    padding: '0.5rem 1rem',
-                    fontWeight: '500',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  {t('pagination.previous')}
-                </Button>
-
-                {generatePaginationItems()}
-
-                <Button
-                  variant="outline-primary"
-                  size="sm"
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  style={{
-                    borderRadius: '8px',
-                    padding: '0.5rem 1rem',
-                    fontWeight: '500',
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  {t('pagination.next')}
-                </Button>
-              </div>
-            </div>
-          )}
         </div>
+
+        {filteredUsers.length > 0 ? (
+          <div className="feed-scholars-grid">
+            {filteredUsers.map((user) => {
+              const profileHref = getProfilePath(user.type || 'user', user.id) || null;
+              const loadingKey = `${user.type}-${user.id}`;
+              const isLoading = followLoading[loadingKey];
+              const hasIncoming = user.hasIncomingRequest || followRequests.some(
+                (req) => req.followerId == user.id || req.follower?.id == user.id
+              );
+              const bio = truncateBio(user.description || user.biography);
+
+              let footer = null;
+              if (hasIncoming) {
+                footer = (
+                  <>
+                    <button
+                      type="button"
+                      className="feed-people-btn btn-follow"
+                      onClick={() => handleAcceptRequest(user.id)}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" /> : 'Kabul Et'}
+                    </button>
+                    <button
+                      type="button"
+                      className="feed-people-btn btn-danger-soft"
+                      onClick={() => handleRejectRequest(user.id)}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" /> : 'Sil'}
+                    </button>
+                  </>
+                );
+              } else if (user.followStatus === 'pending') {
+                footer = (
+                  <button
+                    type="button"
+                    className="feed-people-btn btn-pending"
+                    onClick={() => handleUnfollow(user.id, user.type)}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" /> : 'İstek Gönderildi'}
+                  </button>
+                );
+              } else if (user.isFollowing || user.followStatus === 'accepted') {
+                footer = (
+                  <button
+                    type="button"
+                    className="feed-people-btn btn-unfollow"
+                    onClick={() => handleUnfollow(user.id, user.type)}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" /> : t('whoToFollow.unfollow')}
+                  </button>
+                );
+              } else {
+                footer = (
+                  <button
+                    type="button"
+                    className="feed-people-btn btn-follow"
+                    onClick={() => handleFollow(user.id, user.type)}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+                    ) : (
+                      <>
+                        <FaUserPlus className="me-1" />
+                        {t('whoToFollow.follow')}
+                      </>
+                    )}
+                  </button>
+                );
+              }
+
+              return (
+                <PeopleCoverCard
+                  key={loadingKey}
+                  coverUrl={getPersonCoverUrl(user)}
+                  avatarUrl={getPersonAvatarUrl(user.photoUrl)}
+                  name={user.name}
+                  meta={user.username ? `@${user.username}` : undefined}
+                  bio={bio || undefined}
+                  profileHref={profileHref}
+                  badge={{
+                    label: getRoleLabel(user),
+                    variant: user.type === 'scholar' ? 'is-scholar' : 'is-user',
+                  }}
+                  onAvatarError={handleAvatarError}
+                  footer={footer}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <div className="feed-people-empty">
+            <FaSearch className="empty-icon" />
+            <h6>{t('whoToFollow.noResultsTitle')}</h6>
+            <p>{t('whoToFollow.noResultsDescription')}</p>
+            <button
+              type="button"
+              className="feed-people-btn btn-outline"
+              onClick={() => {
+                setSearchTerm('');
+                setIsSearching(false);
+                setCurrentPage(1);
+              }}
+            >
+              {t('whoToFollow.clearFilters')}
+            </button>
+          </div>
+        )}
+
+        {totalPages > 1 && (
+          <div className="feed-people-pagination">
+            <Button
+              variant="outline-primary"
+              size="sm"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              {t('pagination.previous')}
+            </Button>
+            {generatePaginationItems()}
+            <Button
+              variant="outline-primary"
+              size="sm"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              {t('pagination.next')}
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

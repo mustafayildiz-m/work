@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { FaSearch, FaUser, FaGraduationCap, FaUsers, FaUserFriends } from 'react-icons/fa';
+import { FaSearch, FaGraduationCap, FaUsers, FaUserFriends } from 'react-icons/fa';
 import Link from 'next/link';
 import { getUserIdFromToken } from '../../../../../utils/auth';
 import { useLanguage } from '@/context/useLanguageContext';
 import { getProfilePath } from '@/utils/profileEncoder';
-import './following.css';
+import PeopleCoverCard from '@/components/cards/PeopleCoverCard';
+import { getPersonCoverUrl, getPersonAvatarUrl, truncateBio } from '@/utils/peopleCard';
 
 export default function FollowingPage() {
   const { t } = useLanguage();
@@ -94,13 +95,8 @@ export default function FollowingPage() {
     setFilteredData(filtered);
   }, [searchTerm, selectedType, followingData]);
 
-  const getImageUrl = (photoUrl) => {
-    if (!photoUrl || typeof photoUrl !== 'string' || photoUrl === 'null') return '/profile/profile.png';
-    if (photoUrl.startsWith('/uploads/')) {
-      const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-      return `${apiBaseUrl}${photoUrl}`;
-    }
-    return photoUrl;
+  const handleAvatarError = (e) => {
+    e.target.src = '/profile/profile.png';
   };
 
   // Unfollow function
@@ -179,12 +175,12 @@ export default function FollowingPage() {
   if (loading) {
     return (
       <div className="col-lg-9">
-        <div className="card following-card">
-          <div className="card-body text-center py-5">
-            <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">Loading...</span>
+        <div className="feed-people-page">
+          <div className="feed-people-loading">
+            <div className="spinner-border spinner-border-sm text-primary" role="status">
+              <span className="visually-hidden">{t('common.loading')}</span>
             </div>
-            <p className="mt-3">Takip edilenler yükleniyor...</p>
+            <p>{t('common.loading')}</p>
           </div>
         </div>
       </div>
@@ -193,154 +189,112 @@ export default function FollowingPage() {
 
   return (
     <div className="col-lg-9">
-      <div className="card following-card">
-        <div className="card-header following-header">
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <h5 className="mb-0">
-                <FaUserFriends className="me-2" />
-                Takip Edilenler
-              </h5>
-              <p className="text-muted mb-0 mt-2">
-                {t('feed.scholarsUsersFound', {
-                  scholars: filteredData.filter((i) => i.type === 'scholar').length,
-                  users: filteredData.filter((i) => i.type === 'user').length
-                })}
-              </p>
-            </div>
-            <div className="stats-badges">
-              <span className="badge bg-primary me-2">
-                <FaUsers className="me-1" />
-                {stats.followingUsersCount} Kullanıcı
-              </span>
-              <span className="badge bg-success">
-                <FaGraduationCap className="me-1" />
-                {stats.followingScholarsCount} Alim
-              </span>
-            </div>
+      <div className="feed-people-page">
+        <div className="feed-people-header">
+          <div>
+            <h5 className="feed-people-title">
+              <FaUserFriends />
+              {t('profileHeader.following')}
+            </h5>
+            <p className="feed-people-subtitle">
+              {t('feed.scholarsUsersFound', {
+                scholars: filteredData.filter((i) => i.type === 'scholar').length,
+                users: filteredData.filter((i) => i.type === 'user').length
+              })}
+            </p>
+          </div>
+          <div className="feed-people-stats">
+            <span className="feed-people-stat">
+              <FaUsers className="me-1" />
+              {stats.followingUsersCount} {t('followers.users')}
+            </span>
+            <span className="feed-people-stat">
+              <FaGraduationCap className="me-1" />
+              {stats.followingScholarsCount} {t('followers.scholars')}
+            </span>
           </div>
         </div>
 
-        <div className="search-filter-section">
-          <div className="row mb-4">
-            <div className="col-md-8">
-              <div className="input-group search-input-group">
-                <span className="input-group-text">
-                  <FaSearch />
-                </span>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Ad veya soyad ile ara..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+        <div className="feed-people-toolbar">
+          <div className="feed-people-search">
+            <FaSearch />
+            <input
+              type="text"
+              placeholder={t('followers.searchPlaceholder')}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <select
+            className="feed-people-filter"
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.target.value)}
+          >
+            <option value="all">{t('followers.filterAll')} ({stats.totalFollowingCount})</option>
+            <option value="user">{t('followers.filterUsers')} ({stats.followingUsersCount})</option>
+            <option value="scholar">{t('followers.filterScholars')} ({stats.followingScholarsCount})</option>
+          </select>
+        </div>
+
+        {filteredData.length > 0 ? (
+          <div className="feed-scholars-grid">
+            {filteredData.map((item) => {
+              const profileHref = item.id && item.id !== 'undefined'
+                ? getProfilePath(item.type || 'user', item.id) || null
+                : null;
+              const bio = truncateBio(item.biography || item.bio);
+              const followedMeta = item.followedDate
+                ? new Date(item.followedDate * 1000).toLocaleDateString('tr-TR')
+                : undefined;
+
+              return (
+                <PeopleCoverCard
+                  key={`${item.type}-${item.id}`}
+                  coverUrl={getPersonCoverUrl(item)}
+                  avatarUrl={getPersonAvatarUrl(item.photoUrl)}
+                  name={item.name || item.fullName}
+                  meta={item.username ? `@${item.username}` : followedMeta}
+                  bio={bio || undefined}
+                  profileHref={profileHref}
+                  badge={{
+                    label: item.type === 'scholar' ? t('followers.scholar') : t('followers.user'),
+                    variant: item.type === 'scholar' ? 'is-scholar' : 'is-user',
+                  }}
+                  onAvatarError={handleAvatarError}
+                  footer={(
+                    <button
+                      type="button"
+                      className="feed-people-btn btn-unfollow"
+                      onClick={() => handleUnfollow(item.id, item.type)}
+                      disabled={unfollowLoading[getFollowedKey(item)]}
+                    >
+                      {unfollowLoading[getFollowedKey(item)] ? (
+                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+                      ) : (
+                        t('whoToFollow.unfollow')
+                      )}
+                    </button>
+                  )}
                 />
-              </div>
-            </div>
-            <div className="col-md-4">
-              <select
-                className="form-select filter-select"
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-              >
-                <option value="all">Tümü ({stats.totalFollowingCount})</option>
-                <option value="user">Kullanıcılar ({stats.followingUsersCount})</option>
-                <option value="scholar">Alimler ({stats.followingScholarsCount})</option>
-              </select>
-            </div>
+              );
+            })}
           </div>
-        </div>
-
-        <div className="following-grid">
-          {filteredData.length > 0 ? (
-            <div className="row g-3">
-              {filteredData.map((item) => (
-                <div key={`${item.type}-${item.id}`} className="col-lg-4 col-md-6">
-                  <div className="card following-item-card">
-                    <div className="card-body d-flex flex-column text-center">
-                      <div className="item-avatar">
-                        <img
-                          src={getImageUrl(item.photoUrl)}
-                          alt={item.name || item.fullName}
-                          width={80}
-                          height={80}
-                          className="rounded-circle"
-                          onError={(e) => {
-                            e.target.src = '/profile/profile.png';
-                          }}
-                        />
-                        <span className={`badge item-badge ${item.type === 'scholar' ? 'bg-success' : 'bg-primary'}`}>
-                          {item.type === 'scholar' ? (
-                            <FaGraduationCap className="me-1" />
-                          ) : (
-                            <FaUser className="me-1" />
-                          )}
-                          {item.type === 'scholar' ? 'Alim' : 'Kullanıcı'}
-                        </span>
-                      </div>
-
-                      <h6 className="item-name">
-                        {item.id && item.id !== 'undefined' ? (
-                          <Link href={getProfilePath(item.type || 'user', item.id) || '#'} className="text-decoration-none">
-                            {item.name || item.fullName}
-                          </Link>
-                        ) : (
-                          <span className="text-decoration-none">{item.name || item.fullName}</span>
-                        )}
-                      </h6>
-
-                      {item.username && (
-                        <p className="item-username">@{item.username}</p>
-                      )}
-
-                      {item.biography && (
-                        <p className="item-biography">
-                          {item.biography.replace(/<[^>]*>/g, '').substring(0, 100)}
-                          {item.biography.length > 100 && '...'}
-                        </p>
-                      )}
-
-                      {item.followedDate && (
-                        <p className="item-followed-date text-muted small">
-                          {new Date(item.followedDate * 1000).toLocaleDateString('tr-TR')} tarihinden beri takip ediliyor
-                        </p>
-                      )}
-
-                      <button
-                        className="btn btn-outline-danger w-100 mt-auto"
-                        onClick={() => handleUnfollow(item.id, item.type)}
-                        disabled={unfollowLoading[getFollowedKey(item)]}
-                      >
-                        {unfollowLoading[getFollowedKey(item)] ? (
-                          <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                        ) : (
-                          'Takipten Çık'
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-5">
-              <div className="empty-state">
-                <FaUserFriends className="empty-icon" />
-                <h6 className="mt-3">Henüz kimseyi takip etmiyorsunuz</h6>
-                <p className="text-muted">
-                  {searchTerm || selectedType !== 'all'
-                    ? 'Arama kriterlerinize uygun takip edilen bulunamadı.'
-                    : 'Takip etmek istediğiniz kullanıcıları ve alimleri bulabilirsiniz.'}
-                </p>
-                {!searchTerm && selectedType === 'all' && (
-                  <a href="/feed/who-to-follow" className="btn btn-primary">
-                    Takip Edilecek Kişileri Gör
-                  </a>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
+        ) : (
+          <div className="feed-people-empty">
+            <FaUserFriends className="empty-icon" />
+            <h6>{t('whoToFollow.noResultsTitle')}</h6>
+            <p>
+              {searchTerm || selectedType !== 'all'
+                ? t('followers.noFollowersFound')
+                : t('whoToFollow.noResultsDescription')}
+            </p>
+            {!searchTerm && selectedType === 'all' && (
+              <Link href="/feed/who-to-follow" className="feed-people-btn btn-follow">
+                {t('followers.seeWhoToFollow')}
+              </Link>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

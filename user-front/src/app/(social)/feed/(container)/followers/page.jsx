@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { FaSearch, FaUser, FaGraduationCap, FaUsers, FaUserFriends } from 'react-icons/fa';
+import { FaSearch, FaGraduationCap, FaUsers, FaUserFriends } from 'react-icons/fa';
 import Link from 'next/link';
 import { getUserIdFromToken } from '../../../../../utils/auth';
 import { getProfilePath } from '@/utils/profileEncoder';
 import { useLanguage } from '../../../../../context/useLanguageContext';
-import './followers.css';
+import PeopleCoverCard from '@/components/cards/PeopleCoverCard';
+import { getPersonCoverUrl, getPersonAvatarUrl, truncateBio } from '@/utils/peopleCard';
 
 export default function FollowersPage() {
   const { t } = useLanguage();
@@ -151,13 +152,8 @@ export default function FollowersPage() {
     setFilteredData(filtered);
   }, [searchTerm, selectedType, followersData]);
 
-  const getImageUrl = (photoUrl) => {
-    if (!photoUrl || typeof photoUrl !== 'string' || photoUrl === 'null') return '/profile/profile.png';
-    if (photoUrl.startsWith('/uploads/')) {
-      const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-      return `${apiBaseUrl}${photoUrl}`;
-    }
-    return photoUrl;
+  const handleAvatarError = (e) => {
+    e.target.src = '/profile/profile.png';
   };
 
   // Helper function to determine follower type
@@ -181,12 +177,12 @@ export default function FollowersPage() {
   if (loading) {
     return (
       <div className="col-lg-9">
-        <div className="card followers-card">
-          <div className="card-body text-center py-5">
-            <div className="spinner-border text-primary" role="status">
+        <div className="feed-people-page">
+          <div className="feed-people-loading">
+            <div className="spinner-border spinner-border-sm text-primary" role="status">
               <span className="visually-hidden">{t('common.loading')}</span>
             </div>
-            <p className="mt-3">{t('followers.loadingFollowers')}</p>
+            <p>{t('followers.loadingFollowers')}</p>
           </div>
         </div>
       </div>
@@ -195,146 +191,99 @@ export default function FollowersPage() {
 
   return (
     <div className="col-lg-9">
-      <div className="card followers-card">
-        <div className="card-header followers-header">
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <h5 className="mb-0">
-                <FaUserFriends className="me-2" />
-                {t('followers.title')}
-              </h5>
-              <p className="text-muted mb-0 mt-2">
-                {filteredData.length} {t('followers.peopleFound')}
-              </p>
-            </div>
-            <div className="stats-badges">
-              <span className="badge bg-primary me-2">
-                <FaUsers className="me-1" />
-                {stats.followersUsersCount} {t('followers.users')}
-              </span>
-              <span className="badge bg-success">
-                <FaGraduationCap className="me-1" />
-                {stats.followersScholarsCount} {t('followers.scholars')}
-              </span>
-            </div>
+      <div className="feed-people-page">
+        <div className="feed-people-header">
+          <div>
+            <h5 className="feed-people-title">
+              <FaUserFriends />
+              {t('followers.title')}
+            </h5>
+            <p className="feed-people-subtitle">
+              {filteredData.length} {t('followers.peopleFound')}
+            </p>
+          </div>
+          <div className="feed-people-stats">
+            <span className="feed-people-stat">
+              <FaUsers className="me-1" />
+              {stats.followersUsersCount} {t('followers.users')}
+            </span>
+            <span className="feed-people-stat">
+              <FaGraduationCap className="me-1" />
+              {stats.followersScholarsCount} {t('followers.scholars')}
+            </span>
           </div>
         </div>
 
-        <div className="search-filter-section">
-          <div className="row mb-4">
-            <div className="col-md-8">
-              <div className="input-group search-input-group">
-                <span className="input-group-text">
-                  <FaSearch />
-                </span>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder={t('followers.searchPlaceholder')}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+        <div className="feed-people-toolbar">
+          <div className="feed-people-search">
+            <FaSearch />
+            <input
+              type="text"
+              placeholder={t('followers.searchPlaceholder')}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <select
+            className="feed-people-filter"
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.target.value)}
+          >
+            <option value="all">{t('followers.filterAll')} ({stats.totalFollowersCount})</option>
+            <option value="user">{t('followers.filterUsers')} ({stats.followersUsersCount})</option>
+            <option value="scholar">{t('followers.filterScholars')} ({stats.followersScholarsCount})</option>
+          </select>
+        </div>
+
+        {filteredData.length > 0 ? (
+          <div className="feed-scholars-grid">
+            {filteredData.map((follower) => {
+              const type = getFollowerType(follower);
+              const profileHref = follower.id && follower.id !== 'undefined'
+                ? getProfilePath(type, follower.id) || null
+                : null;
+              const displayName = getFollowerDisplayName(follower);
+              const bio = truncateBio(follower.bio || follower.biography);
+
+              return (
+                <PeopleCoverCard
+                  key={`${follower.type}-${follower.id}`}
+                  coverUrl={getPersonCoverUrl(follower)}
+                  avatarUrl={getPersonAvatarUrl(follower.photoUrl)}
+                  name={displayName}
+                  meta={follower.username ? `@${follower.username}` : undefined}
+                  bio={bio || undefined}
+                  profileHref={profileHref}
+                  badge={{
+                    label: type === 'scholar' ? t('followers.scholar') : t('followers.user'),
+                    variant: type === 'scholar' ? 'is-scholar' : 'is-user',
+                  }}
+                  onAvatarError={handleAvatarError}
+                  footer={profileHref ? (
+                    <Link href={profileHref} className="feed-scholar-btn">
+                      {t('followers.viewProfile')}
+                    </Link>
+                  ) : null}
                 />
-              </div>
-            </div>
-            <div className="col-md-4">
-              <select
-                className="form-select filter-select"
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-              >
-                <option value="all">{t('followers.filterAll')} ({stats.totalFollowersCount})</option>
-                <option value="user">{t('followers.filterUsers')} ({stats.followersUsersCount})</option>
-                <option value="scholar">{t('followers.filterScholars')} ({stats.followersScholarsCount})</option>
-              </select>
-            </div>
+              );
+            })}
           </div>
-        </div>
-
-        <div className="followers-grid">
-          {filteredData.length > 0 ? (
-            <div className="row g-3">
-              {filteredData.map((follower) => (
-                <div key={`${follower.type}-${follower.id}`} className="col-lg-4 col-md-6">
-                  <div className="card follower-item-card">
-                    <div className="card-body d-flex flex-column text-center">
-                      <div className="item-avatar">
-                        <img
-                          src={getImageUrl(follower.photoUrl)}
-                          alt={follower.name || follower.fullName}
-                          width={80}
-                          height={80}
-                          className="rounded-circle"
-                          onError={(e) => {
-                            e.target.src = '/profile/profile.png';
-                          }}
-                        />
-                        <span className={`badge item-badge ${getFollowerType(follower) === 'scholar' ? 'bg-success' : 'bg-primary'}`}>
-                          {getFollowerType(follower) === 'scholar' ? (
-                            <FaGraduationCap className="me-1" />
-                          ) : (
-                            <FaUser className="me-1" />
-                          )}
-                          {getFollowerType(follower) === 'scholar' ? t('followers.scholar') : t('followers.user')}
-                        </span>
-                      </div>
-
-                      <h6 className="item-name">
-                        {follower.id && follower.id !== 'undefined' ? (
-                          <Link href={getProfilePath(getFollowerType(follower), follower.id) || '#'} className="text-decoration-none">
-                            {getFollowerDisplayName(follower)}
-                          </Link>
-                        ) : (
-                          <span className="text-decoration-none">{getFollowerDisplayName(follower)}</span>
-                        )}
-                      </h6>
-
-                      {follower.username && (
-                        <p className="item-username">@{follower.username}</p>
-                      )}
-
-                      {follower.bio && (
-                        <p className="item-biography">
-                          {follower.bio.replace(/<[^>]*>/g, '').substring(0, 100)}
-                          {follower.bio.length > 100 && '...'}
-                        </p>
-                      )}
-
-
-
-                      <div className="mt-auto">
-                        {follower.id && follower.id !== 'undefined' && (
-                          <Link
-                            href={getProfilePath(getFollowerType(follower), follower.id) || '#'}
-                            className="btn btn-outline-primary w-100 me-2"
-                          >
-                            {t('followers.viewProfile')}
-                          </Link>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-5">
-              <div className="empty-state">
-                <FaUserFriends className="empty-icon" />
-                <h6 className="mt-3">{t('followers.noFollowersYet')}</h6>
-                <p className="text-muted">
-                  {searchTerm || selectedType !== 'all'
-                    ? t('followers.noFollowersFound')
-                    : t('followers.noFollowersDescription')}
-                </p>
-                {!searchTerm && selectedType === 'all' && (
-                  <a href="/feed/who-to-follow" className="btn btn-primary">
-                    {t('followers.seeWhoToFollow')}
-                  </a>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
+        ) : (
+          <div className="feed-people-empty">
+            <FaUserFriends className="empty-icon" />
+            <h6>{t('followers.noFollowersYet')}</h6>
+            <p>
+              {searchTerm || selectedType !== 'all'
+                ? t('followers.noFollowersFound')
+                : t('followers.noFollowersDescription')}
+            </p>
+            {!searchTerm && selectedType === 'all' && (
+              <Link href="/feed/who-to-follow" className="feed-people-btn btn-follow">
+                {t('followers.seeWhoToFollow')}
+              </Link>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
