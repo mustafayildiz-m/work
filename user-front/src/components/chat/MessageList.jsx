@@ -3,15 +3,16 @@
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 import { useAuthContext } from '@/context/useAuthContext';
 import { useEffect, useRef, useMemo, useCallback, memo, useState } from 'react';
-import { Card, Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 import { FaCheck, FaCheckDouble } from 'react-icons/fa';
 import Image from 'next/image';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { getToken } from '@/utils/auth';
 import placeholderImg from '@/assets/images/avatar/placeholder.jpg';
-import { useLanguage } from '@/context/useLanguageContext';
+import OnlineStatusDot from './OnlineStatusDot';
 import { getProfilePath } from '@/utils/profileEncoder';
+import { useLanguage } from '@/context/useLanguageContext';
 
 // Constants
 const MESSAGE_STATUSES = {
@@ -167,30 +168,28 @@ const MessageItem = memo(({
       )}
 
       {/* Message */}
-      <div className={clsx('message-item mb-3', {
+      <div className={clsx('message-item mb-2', {
         'text-end': isOwnMessage,
         'text-start': !isOwnMessage
       })}>
-        <div className={clsx('d-flex align-items-start', {
+        <div className={clsx('d-flex align-items-end', {
           'justify-content-end': isOwnMessage,
           'justify-content-start': !isOwnMessage
         })}>
-          {/* Avatar (other user) */}
           {!isOwnMessage && (
             <div className="flex-shrink-0 me-2">
               <Avatar
                 src={message.partnerAvatar || message.sender?.photoUrl || message.senderAvatar}
                 alt="Avatar"
-                size={32}
+                size={28}
                 profileHref={participantProfileHref}
               />
             </div>
           )}
 
-          {/* Message content */}
-          <div className="message-content" style={{ maxWidth: '75%' }}>
+          <div className="message-content" style={{ maxWidth: '72%' }}>
             <div
-              className={clsx('message-bubble p-3 rounded', {
+              className={clsx('message-bubble px-3 py-2 rounded-3', {
                 'bg-primary text-white': isOwnMessage,
                 'bg-body-tertiary text-body': !isOwnMessage
               })}
@@ -198,7 +197,7 @@ const MessageItem = memo(({
                 border: '1px solid var(--bs-border-color)'
               } : {}}
             >
-              <div className="message-text mb-1">
+              <div className="message-text mb-1" style={{ fontSize: '0.875rem', lineHeight: 1.45 }}>
                 {(() => {
                   try {
                     const parsed = JSON.parse(message.content);
@@ -271,13 +270,12 @@ const MessageItem = memo(({
             </div>
           </div>
 
-          {/* Avatar (own message) */}
           {isOwnMessage && (
             <div className="flex-shrink-0 ms-2">
               <Avatar
                 src={ownAvatar}
                 alt="Avatar"
-                size={32}
+                size={28}
                 profileHref={currentUserProfileHref}
               />
             </div>
@@ -314,35 +312,37 @@ const TypingIndicator = memo(({ participantAvatar }) => {
 // Memoized Header Component
 const MessageHeader = memo(({ activeConversation, onBackToConversations, isOnline, participantAvatar, participantProfileHref, t }) => {
   return (
-    <Card.Header className="border-0 bg-body-tertiary">
+    <div className="messaging-chat-header">
       <div className="d-flex align-items-center">
-        {/* Mobile back button - only visible on mobile */}
         <button
-          className="btn btn-link p-0 me-2 d-lg-none"
+          className="btn btn-link p-0 me-2 d-lg-none text-body"
           onClick={onBackToConversations}
           aria-label={t('messaging.backToConversations')}
           title={t('messaging.backToConversations')}
         >
-          <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
             <path fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
           </svg>
         </button>
 
-        <Avatar
-          src={participantAvatar}
-          alt="Avatar"
-          size={40}
-          className="me-3"
-          profileHref={participantProfileHref}
-        />
-        <div className="flex-grow-1">
-          <h6 className="mb-0">{activeConversation.participantName}</h6>
-          <small className="text-muted">
+        <div className="position-relative me-2 flex-shrink-0">
+          <Avatar
+            src={participantAvatar}
+            alt="Avatar"
+            size={36}
+            className=""
+            profileHref={participantProfileHref}
+          />
+          <OnlineStatusDot visible={isOnline} size={11} />
+        </div>
+        <div className="flex-grow-1 min-width-0">
+          <h6 className="mb-0 text-truncate small fw-semibold">{activeConversation.participantName}</h6>
+          <small className={isOnline ? 'text-success' : 'text-muted'} style={{ fontSize: '0.75rem' }}>
             {isOnline ? t('messaging.online') : t('messaging.offline')}
           </small>
         </div>
       </div>
-    </Card.Header>
+    </div>
   );
 });
 
@@ -353,6 +353,9 @@ const MessageList = ({ onBackToConversations }) => {
     messages,
     activeConversation,
     loading,
+    loadingOlderMessages,
+    hasMoreMessages,
+    loadOlderMessages,
     markMessageAsRead,
     typingUsers,
     selectConversation,
@@ -362,6 +365,11 @@ const MessageList = ({ onBackToConversations }) => {
   const { t, language } = useLanguage();
 
   const messagesEndRef = useRef(null);
+  const scrollContainerRef = useRef(null);
+  const scrollAnchorRef = useRef(null);
+  const loadOlderCooldownRef = useRef(false);
+  const prevConversationIdRef = useRef(null);
+  const prevLastMessageIdRef = useRef(null);
   const [ownAvatarFromProfile, setOwnAvatarFromProfile] = useState(null);
 
   // Memoized current user ID
@@ -451,11 +459,59 @@ const MessageList = ({ onBackToConversations }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
-  // Auto scroll effect - yeni mesaj geldiğinde en alta kaydır
+  // Scroll to bottom on new messages / conversation change (not when prepending older)
   useEffect(() => {
-    const timeoutId = setTimeout(scrollToBottom, 100);
-    return () => clearTimeout(timeoutId);
-  }, [processedMessages.length, scrollToBottom]);
+    const container = scrollContainerRef.current;
+    const conversationId = activeConversation?.id;
+    const lastMessageId = processedMessages[processedMessages.length - 1]?.id;
+    const conversationChanged = conversationId !== prevConversationIdRef.current;
+    const lastMessageChanged = lastMessageId !== prevLastMessageIdRef.current;
+
+    prevConversationIdRef.current = conversationId;
+    prevLastMessageIdRef.current = lastMessageId;
+
+    if (scrollAnchorRef.current && container) {
+      const { scrollHeight, scrollTop } = scrollAnchorRef.current;
+      container.scrollTop = scrollTop + (container.scrollHeight - scrollHeight);
+      scrollAnchorRef.current = null;
+      return undefined;
+    }
+
+    if (conversationChanged || (lastMessageChanged && !loadingOlderMessages)) {
+      const timeoutId = setTimeout(scrollToBottom, 100);
+      return () => clearTimeout(timeoutId);
+    }
+
+    return undefined;
+  }, [processedMessages, activeConversation?.id, loadingOlderMessages, scrollToBottom]);
+
+  const handleScroll = useCallback(() => {
+    const container = scrollContainerRef.current;
+    if (
+      !container ||
+      loadingOlderMessages ||
+      !hasMoreMessages ||
+      loadOlderCooldownRef.current
+    ) {
+      return;
+    }
+
+    if (container.scrollTop > 120) {
+      return;
+    }
+
+    loadOlderCooldownRef.current = true;
+    scrollAnchorRef.current = {
+      scrollHeight: container.scrollHeight,
+      scrollTop: container.scrollTop,
+    };
+
+    Promise.resolve(loadOlderMessages()).finally(() => {
+      window.setTimeout(() => {
+        loadOlderCooldownRef.current = false;
+      }, 400);
+    });
+  }, [hasMoreMessages, loadOlderMessages, loadingOlderMessages]);
 
   // Mark messages as read - optimized
   useEffect(() => {
@@ -537,33 +593,30 @@ const MessageList = ({ onBackToConversations }) => {
   // Loading state
   if (loading) {
     return (
-      <Card className="h-100 d-flex align-items-center justify-content-center">
-        <Card.Body className="text-center">
-          <Spinner animation="border" variant="primary" />
-          <p className="mt-2 text-muted">{t('messaging.loadingMessages')}</p>
-        </Card.Body>
-      </Card>
+      <div className="h-100 d-flex align-items-center justify-content-center">
+        <div className="text-center">
+          <Spinner animation="border" size="sm" variant="primary" />
+          <p className="mt-2 text-muted small mb-0">{t('messaging.loadingMessages')}</p>
+        </div>
+      </div>
     );
   }
 
-  // No conversation selected
   if (!activeConversation) {
     return (
-      <Card className="h-100 d-flex align-items-center justify-content-center">
-        <Card.Body className="text-center text-muted">
-          <div className="mb-3">
-            <i className="fas fa-comments fa-3x"></i>
-          </div>
+      <div className="h-100 d-flex align-items-center justify-content-center messaging-empty-state">
+        <div>
+          <div className="empty-icon">💬</div>
           <h5>{t('messaging.selectConversationTitle')}</h5>
-          <p className="mb-0">{t('messaging.selectConversationDesc')}</p>
-        </Card.Body>
-      </Card>
+          <p className="d-none d-lg-block">{t('messaging.selectConversationDesc')}</p>
+          <p className="d-lg-none">{t('messaging.selectConversationDescMobile')}</p>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card className="h-100 d-flex flex-column">
-      {/* Header */}
+    <div className="h-100 d-flex flex-column">
       <MessageHeader
         activeConversation={activeConversation}
         onBackToConversations={handleBackToConversations}
@@ -573,9 +626,25 @@ const MessageList = ({ onBackToConversations }) => {
         t={t}
       />
 
-      {/* Messages */}
-      <Card.Body className="flex-grow-1 p-0 message-list-body" style={{ overflowY: 'auto' }}>
-        <div className="messages-container p-3 d-flex flex-column justify-content-end" style={{ minHeight: '100%' }}>
+      <div
+        ref={scrollContainerRef}
+        className="flex-grow-1 p-0 message-list-body messaging-messages-area"
+        style={{ overflowY: 'auto', minHeight: 0 }}
+        onScroll={handleScroll}
+      >
+        <div className="messages-container px-3 py-2 d-flex flex-column justify-content-end" style={{ minHeight: '100%' }}>
+          {(loadingOlderMessages || hasMoreMessages) && processedMessages.length > 0 && (
+            <div className="text-center py-2">
+              {loadingOlderMessages ? (
+                <>
+                  <Spinner animation="border" size="sm" variant="primary" />
+                  <span className="ms-2 text-muted small">{t('messaging.loadingOlderMessages')}</span>
+                </>
+              ) : (
+                <span className="text-muted small">{t('messaging.loadOlderHint')}</span>
+              )}
+            </div>
+          )}
           {processedMessages.length === 0 ? (
             <div className="text-center text-muted py-5">
               <div className="mb-3">
@@ -609,19 +678,17 @@ const MessageList = ({ onBackToConversations }) => {
             </div>
           )}
         </div>
-      </Card.Body>
+      </div>
       <style jsx>{`
         .message-list-body {
           min-height: 0;
         }
 
-        @media (max-width: 991.98px) {
-          .messages-container {
-            padding: 0.85rem !important;
-          }
+        .min-width-0 {
+          min-width: 0;
         }
       `}</style>
-    </Card>
+    </div>
   );
 };
 

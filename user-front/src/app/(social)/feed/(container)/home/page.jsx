@@ -1,74 +1,56 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Card, CardBody, CardHeader, CardTitle, Col, Row } from 'react-bootstrap';
-import { useSession } from 'next-auth/react';
-import Stories from './components/Stories';
+import { Col } from 'react-bootstrap';
 import Feeds from './components/Feeds';
 import Followers from './components/Followers';
 import CreatePostCard from '@/components/cards/CreatePostCard';
-import Link from 'next/link';
-import LoadContentButton from '@/components/LoadContentButton';
+import { useSession } from 'next-auth/react';
 import { useLanguage } from '@/context/useLanguageContext';
 
 const Home = () => {
   const { t } = useLanguage();
-  const router = useRouter();
   const { data: session, status } = useSession();
   const [isChecking, setIsChecking] = useState(true);
 
-  // Get the authenticated user's ID from session
   const currentUserId = session?.user?.id || null;
 
-  // Check auth but don't redirect
   useEffect(() => {
     setIsChecking(false);
   }, []);
 
-  // Show loading while checking authentication
-  if (status === 'loading') {
+  if (status === 'loading' || isChecking) {
     return (
-      <div className="text-center py-5">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Yükleniyor...</span>
+      <Col md={8} lg={6} className="feed-home-main">
+        <div className="feed-loading-inline">
+          <div className="spinner-border spinner-border-sm text-primary" role="status">
+            <span className="visually-hidden">{t('common.loading')}</span>
+          </div>
+          <p>{t('common.loading')}</p>
         </div>
-        <p className="mt-3">Yükleniyor...</p>
-      </div>
+      </Col>
     );
   }
 
-  return <>
-    <Col md={8} lg={6} className="vstack gap-4">
-      {/* <Stories /> */}
-      <CreatePostCard />
-      <Feeds userId={currentUserId} />
-    </Col>
+  return (
+    <>
+      <Col md={8} lg={5} className="feed-home-main vstack gap-2">
+        <CreatePostCard />
+        <Feeds userId={currentUserId} />
+      </Col>
 
-    <Col 
-      lg={3} 
-      className="d-none d-lg-block sticky-right-panel"
-      style={{ 
-        position: 'sticky', 
-        top: '80px', 
-        alignSelf: 'flex-start',
-        maxHeight: 'calc(100vh - 80px)', 
-        overflowY: 'auto',
-        msOverflowStyle: 'none', 
-        scrollbarWidth: 'none',
-        zIndex: 10
-      }}
-    >
-      <style dangerouslySetInnerHTML={{__html: `
-        .sticky-right-panel::-webkit-scrollbar { display: none; }
-      `}} />
-      <Row className="g-4">
-        <Col sm={6} lg={12}>
-          <Followers />
-        </Col>
-      </Row>
-    </Col>
-  </>;
+      <Col
+        lg={4}
+        className="d-none d-lg-block sticky-right-panel feed-right-sidebar"
+        style={{
+          position: 'sticky',
+          alignSelf: 'flex-start',
+        }}
+      >
+        <Followers />
+      </Col>
+    </>
+  );
 };
 
 export default Home;

@@ -1,9 +1,19 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
-import { Plus, Pencil, Trash2, ChevronRight } from 'lucide-react';
+import { FaFolderOpen, FaCheckCircle, FaPlus, FaSitemap } from 'react-icons/fa';
+import { ChevronRight } from 'lucide-react';
 import { qaFetch, ensureArray } from '../../qa-api';
 import { useQaIntl } from '../../useQaIntl';
+import {
+  QaPageShell,
+  QaPageHeader,
+  QaPrimaryButton,
+  QaStatsGrid,
+  QaStatCard,
+  QaContentCard,
+  QaActionButtons,
+} from '../../QaPageLayout';
 
 function collectParentIds(categories) {
   const ids = new Set();
@@ -17,6 +27,20 @@ function collectParentIds(categories) {
   };
   walk(categories);
   return ids;
+}
+
+function countCategories(categories) {
+  let total = 0;
+  let active = 0;
+  const walk = (items) => {
+    for (const item of ensureArray(items)) {
+      total += 1;
+      if (item.isActive) active += 1;
+      if (item.children?.length) walk(item.children);
+    }
+  };
+  walk(categories);
+  return { total, active };
 }
 
 export default function QaCategoryList() {
@@ -43,6 +67,8 @@ export default function QaCategoryList() {
   };
 
   useEffect(() => { fetchCategories(); }, []);
+
+  const stats = useMemo(() => countCategories(categories.filter((c) => !c.parentId)), [categories]);
 
   const toggleExpand = useCallback((id) => {
     setExpandedIds((prev) => {
@@ -72,10 +98,10 @@ export default function QaCategoryList() {
     return (
       <div key={cat.id}>
         <div
-          className="flex items-center justify-between p-3 border-b hover:bg-gray-50 dark:hover:bg-gray-800"
-          style={{ paddingLeft: `${depth * 24 + 16}px` }}
+          className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          style={{ paddingLeft: `${depth * 24 + 24}px` }}
         >
-          <div className="flex items-center gap-2 min-w-0">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
             {hasChildren ? (
               <button
                 type="button"
@@ -84,9 +110,7 @@ export default function QaCategoryList() {
                 aria-label={isExpanded ? t('QA.COLLAPSE_CHILDREN') : t('QA.EXPAND_CHILDREN')}
                 aria-expanded={isExpanded}
               >
-                <ChevronRight
-                  className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}
-                />
+                <ChevronRight className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`} />
               </button>
             ) : (
               <span className="w-5 flex-shrink-0" aria-hidden="true" />
@@ -96,25 +120,17 @@ export default function QaCategoryList() {
               ({t('QA.LANG_COUNT', { count: cat.translations?.length || 0 })})
             </span>
             {!cat.isActive && (
-              <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded flex-shrink-0">{t('UI.PASIF')}</span>
+              <span className="text-xs bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 px-2 py-0.5 rounded-full flex-shrink-0">
+                {t('UI.PASIF')}
+              </span>
             )}
           </div>
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <button
-              type="button"
-              onClick={() => navigate(`/soru-cevap/kategoriler/ekle?edit=${cat.id}`)}
-              className="p-1.5 text-blue-600 hover:bg-blue-50 rounded"
-            >
-              <Pencil className="w-4 h-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => handleDelete(cat.id)}
-              className="p-1.5 text-red-600 hover:bg-red-50 rounded"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
-          </div>
+          <QaActionButtons
+            editLabel={t('UI.DUZENLE')}
+            deleteLabel={t('UI.SIL')}
+            onEdit={() => navigate(`/soru-cevap/kategoriler/ekle?edit=${cat.id}`)}
+            onDelete={() => handleDelete(cat.id)}
+          />
         </div>
         {hasChildren && isExpanded && ensureArray(cat.children).map((child) => renderCategory(child, depth + 1))}
       </div>
@@ -124,27 +140,51 @@ export default function QaCategoryList() {
   const rootCategories = ensureArray(categories).filter((c) => !c.parentId);
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('QA.CATEGORIES_TITLE')}</h1>
-        <button
-          type="button"
-          onClick={() => navigate('/soru-cevap/kategoriler/ekle')}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-        >
-          <Plus className="w-4 h-4" /> {t('QA.CATEGORY_NEW_BTN')}
-        </button>
-      </div>
+    <QaPageShell title={`${t('QA.CATEGORIES_TITLE')} - Islamic Windows Admin`}>
+      <QaPageHeader
+        title={t('QA.CATEGORIES_TITLE')}
+        subtitle={t('QA.CATEGORIES_SUBTITLE')}
+        icon={FaFolderOpen}
+        action={(
+          <QaPrimaryButton onClick={() => navigate('/soru-cevap/kategoriler/ekle')}>
+            <FaPlus /> {t('QA.CATEGORY_NEW_BTN')}
+          </QaPrimaryButton>
+        )}
+      />
+
+      <QaStatsGrid>
+        <QaStatCard
+          label={t('QA.STAT_TOTAL_CATEGORIES')}
+          value={stats.total}
+          gradient="from-blue-500 to-blue-600"
+          icon={FaSitemap}
+        />
+        <QaStatCard
+          label={t('UI.AKTIF')}
+          value={stats.active}
+          hint={t('QA.STAT_ACTIVE_CATEGORIES')}
+          gradient="from-green-500 to-green-600"
+          icon={FaCheckCircle}
+        />
+        <QaStatCard
+          label={t('UI.PASIF')}
+          value={stats.total - stats.active}
+          gradient="from-gray-500 to-gray-600"
+          icon={FaFolderOpen}
+        />
+      </QaStatsGrid>
 
       {loading ? (
-        <div className="text-center py-10 text-gray-500">{t('UI.YUKLENIYOR')}</div>
+        <QaContentCard>
+          <div className="text-center py-12 text-gray-500 dark:text-gray-400">{t('UI.YUKLENIYOR')}</div>
+        </QaContentCard>
       ) : rootCategories.length === 0 ? (
-        <div className="text-center py-10 text-gray-500">{t('QA.NO_CATEGORIES')}</div>
+        <QaContentCard>
+          <div className="text-center py-12 text-gray-500 dark:text-gray-400">{t('QA.NO_CATEGORIES')}</div>
+        </QaContentCard>
       ) : (
-        <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-          {rootCategories.map((cat) => renderCategory(cat))}
-        </div>
+        <QaContentCard>{rootCategories.map((cat) => renderCategory(cat))}</QaContentCard>
       )}
-    </div>
+    </QaPageShell>
   );
 }

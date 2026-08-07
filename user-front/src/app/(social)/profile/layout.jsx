@@ -1071,62 +1071,41 @@ const ProfileLayout = ({
     <main>
       <Container>
         <Row className="g-4">
-          <Col lg={pathName.includes('/profile/scholar/') || pathName.includes('/profile/user/') ? 12 : 8} className="vstack gap-4">
-            <Card className="shadow-sm border-0 profile-cover-card" style={{
-              borderRadius: '24px',
-              overflow: 'visible'
-            }}>
-              <div className="h-200px rounded-top" style={{
-                backgroundImage: `url(${profileData?.coverImage ? getImageUrl(profileData.coverImage) : background5.src})`,
-                backgroundPosition: 'center',
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-                borderRadius: '24px 24px 0 0'
-              }} />
+          <Col lg={pathName.includes('/profile/scholar/') || pathName.includes('/profile/user/') ? 12 : 8} className={`vstack ${pathName.includes('/profile/user/') || pathName.includes('/profile/scholar/') ? 'gap-2 profile-page-stack' : 'gap-4'}`}>
+            <Card className="shadow-sm border-0 profile-cover-card">
+              <div
+                className="profile-cover-banner rounded-top"
+                style={{
+                  backgroundImage: `url(${profileData?.coverImage ? getImageUrl(profileData.coverImage) : background5.src})`,
+                }}
+              />
 
-
-              <CardBody className="py-0" style={{ overflow: 'visible' }}>
-                <div className="d-sm-flex align-items-start text-center text-sm-start">
-                  <div>
+              <CardBody className="profile-cover-body py-0">
+                <div className="profile-header-inner">
+                <div className="profile-header-row d-sm-flex align-items-center text-center text-sm-start">
+                  <div className="profile-header-avatar-wrap">
                     <div className="position-relative d-inline-block">
                       <div
-                        className="avatar avatar-xxl mt-n5 mb-3 position-relative"
+                        className="profile-header-avatar position-relative"
                         style={{
                           cursor: isOwnProfile() ? 'pointer' : 'default',
-                          border: 'none',
-                          background: 'transparent',
-                          boxShadow: 'none'
                         }}
                         onClick={() => isOwnProfile() && setShowAvatarMenu(!showAvatarMenu)}
                       >
                         <img
-                          className="avatar-img rounded-circle"
+                          className="profile-header-avatar-img"
                           src={getImageUrl(profileData?.photoUrl || profileData?.photo_url)}
                           alt="avatar"
-                          width={120}
-                          height={120}
-                          style={{
-                            objectFit: 'cover',
-                            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.12)',
-                            border: 'none'
-                          }}
+                          width={96}
+                          height={96}
+                          style={{ objectFit: 'cover' }}
                           onError={(e) => {
                             e.target.src = typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg');
                           }}
                         />
                         {isOwnProfile() && (
-                          <div
-                            className="position-absolute rounded-circle d-flex align-items-center justify-content-center"
-                            style={{
-                              bottom: 0,
-                              right: 0,
-                              width: '36px',
-                              height: '36px',
-                              background: 'linear-gradient(135deg, #81C784 0%, #66BB6A 100%)',
-                              boxShadow: '0 2px 8px rgba(102, 187, 106, 0.4)'
-                            }}
-                          >
-                            <BsCamera className="text-white" size={16} />
+                          <div className="profile-avatar-camera-badge position-absolute rounded-circle d-flex align-items-center justify-content-center">
+                            <BsCamera className="text-white" size={14} />
                           </div>
                         )}
                       </div>
@@ -1165,21 +1144,23 @@ const ProfileLayout = ({
                       )}
                     </div>
                   </div>
-                  <div className="ms-sm-4 mt-sm-3">
-                    <h1 className="mb-0 fw-bold" style={{ fontSize: '1.75rem', letterSpacing: '-0.5px' }}>
-                      {loading ? (
-                        <div className="spinner-border spinner-border-sm me-2" role="status">
-                          <span className="visually-hidden">{t('common.loading')}</span>
-                        </div>
-                      ) : (
-                        <>
-                          {getProfileDisplayName()}
-                          <BsPatchCheckFill className="text-success ms-2" style={{ fontSize: '1.25rem' }} />
-                        </>
-                      )}
-                    </h1>
-                  </div>
-                  <div className="d-flex mt-3 justify-content-center ms-sm-auto">
+
+                  <div className="profile-header-body flex-grow-1 ms-sm-3">
+                    <div className="profile-header-top d-flex align-items-center justify-content-between flex-wrap gap-2">
+                      <h1 className="profile-header-name mb-0 fw-bold">
+                        {loading ? (
+                          <div className="spinner-border spinner-border-sm me-2" role="status">
+                            <span className="visually-hidden">{t('common.loading')}</span>
+                          </div>
+                        ) : (
+                          <>
+                            {getProfileDisplayName()}
+                            <BsPatchCheckFill className="text-success ms-1 profile-header-verified" />
+                          </>
+                        )}
+                      </h1>
+
+                      <div className="profile-header-actions d-flex justify-content-center flex-shrink-0">
                     {/* Follow Button - Only show for other users, not current user */}
                     {(() => {
                       // Check if this is the current user's profile
@@ -1374,52 +1355,29 @@ const ProfileLayout = ({
                         </DropdownItem>
                       </DropdownMenu>
                     </Dropdown>
-                  </div>
-                </div>
-                <ul className="list-inline mb-0 text-center text-sm-start mt-3 mt-sm-0" style={{ fontSize: '0.9rem' }}>
-                  <li className="list-inline-item me-3">
-                    <BsBriefcase className="me-2" style={{ color: '#66BB6A' }} />
-                    <span className="text-muted">
-                      {profileType === 'scholar'
-                        ? t('profileStatus.scholar')
-                        : (profileData?.role ? t(`userProfile.${profileData.role}`, profileData.role) : t('profileStatus.user'))}
-                    </span>
-                  </li>
-                  <li className="list-inline-item me-3">
-                    <BsGeoAlt className="me-2" style={{ color: '#66BB6A' }} />
-                    <span className="text-muted">{getProfileLocation()}</span>
-                  </li>
-                  <li className="list-inline-item">
-                    <BsCalendarDate className="me-2" style={{ color: '#66BB6A' }} />
-                    <span className="text-muted">{formatDateTime(profileData?.createdAt || profileData?.created_at || profileData?.joinDate)}</span>
-                  </li>
-                </ul>
+                      </div>
+                    </div>
 
-                {/* Takipçi ve Takip Edilen Sayıları */}
-                <div className="d-flex gap-4 justify-content-center mt-3">
-                  <Link href={(() => {
-                    try {
-                      const token = (typeof window !== 'undefined') ? localStorage.getItem('token') : null;
-                      if (token) {
-                        const payload = token.split('.')[1];
-                        const decodedPayload = JSON.parse(atob(payload));
-                        const currentUserId = decodedPayload.sub?.toString();
-                        if (profileType === 'user' && params?.id && resolvedProfileId != currentUserId && String(resolvedProfileId) !== String(currentUserId)) {
-                          return `/profile/user/${params.id}/followers`;
-                        }
-                        if (profileType === 'scholar' && params?.id) {
-                          return `/profile/scholar/${params.id}/followers`;
-                        }
-                      }
-                    } catch (e) { }
-                    return '/feed/followers';
-                  })()} className="text-decoration-none text-center">
-                    <h6 className="mb-0 fw-bold" style={{ fontSize: '1.25rem', color: '#2C3E50' }}>{followStats.followersCount}</h6>
-                    <small className="text-muted" style={{ fontSize: '0.85rem' }}>{t('profileHeader.followers')}</small>
-                  </Link>
-                  {profileType !== 'scholar' && (
-                    <>
-                      <div className="vr" style={{ opacity: 0.2 }} />
+                    <ul className="profile-header-meta list-inline mb-0 mt-1">
+                      <li className="list-inline-item me-2">
+                        <BsBriefcase className="me-1" />
+                        <span>
+                          {profileType === 'scholar'
+                            ? t('profileStatus.scholar')
+                            : (profileData?.role ? t(`userProfile.${profileData.role}`, profileData.role) : t('profileStatus.user'))}
+                        </span>
+                      </li>
+                      <li className="list-inline-item me-2">
+                        <BsGeoAlt className="me-1" />
+                        <span>{getProfileLocation()}</span>
+                      </li>
+                      <li className="list-inline-item">
+                        <BsCalendarDate className="me-1" />
+                        <span>{formatDateTime(profileData?.createdAt || profileData?.created_at || profileData?.joinDate)}</span>
+                      </li>
+                    </ul>
+
+                    <div className="profile-header-stats d-flex gap-3 flex-shrink-0 mt-2">
                       <Link href={(() => {
                         try {
                           const token = (typeof window !== 'undefined') ? localStorage.getItem('token') : null;
@@ -1428,21 +1386,47 @@ const ProfileLayout = ({
                             const decodedPayload = JSON.parse(atob(payload));
                             const currentUserId = decodedPayload.sub?.toString();
                             if (profileType === 'user' && params?.id && resolvedProfileId != currentUserId && String(resolvedProfileId) !== String(currentUserId)) {
-                              return `/profile/user/${params.id}/following`;
+                              return `/profile/user/${params.id}/followers`;
+                            }
+                            if (profileType === 'scholar' && params?.id) {
+                              return `/profile/scholar/${params.id}/followers`;
                             }
                           }
                         } catch (e) { }
-                        return '/feed/following';
-                      })()} className="text-decoration-none text-center">
-                        <h6 className="mb-0 fw-bold" style={{ fontSize: '1.25rem', color: '#2C3E50' }}>{followStats.followingCount}</h6>
-                        <small className="text-muted" style={{ fontSize: '0.85rem' }}>{t('profileHeader.following')}</small>
+                        return '/feed/followers';
+                      })()} className="profile-stat-link text-decoration-none text-center">
+                        <span className="profile-stat-count d-block fw-bold">{followStats.followersCount}</span>
+                        <small className="profile-stat-label">{t('profileHeader.followers')}</small>
                       </Link>
-                    </>
-                  )}
+                      {profileType !== 'scholar' && (
+                        <>
+                          <div className="profile-stat-divider" />
+                          <Link href={(() => {
+                            try {
+                              const token = (typeof window !== 'undefined') ? localStorage.getItem('token') : null;
+                              if (token) {
+                                const payload = token.split('.')[1];
+                                const decodedPayload = JSON.parse(atob(payload));
+                                const currentUserId = decodedPayload.sub?.toString();
+                                if (profileType === 'user' && params?.id && resolvedProfileId != currentUserId && String(resolvedProfileId) !== String(currentUserId)) {
+                                  return `/profile/user/${params.id}/following`;
+                                }
+                              }
+                            } catch (e) { }
+                            return '/feed/following';
+                          })()} className="profile-stat-link text-decoration-none text-center">
+                            <span className="profile-stat-count d-block fw-bold">{followStats.followingCount}</span>
+                            <small className="profile-stat-label">{t('profileHeader.following')}</small>
+                          </Link>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
                 </div>
               </CardBody>
-              <CardFooter className="card-footer mt-3 pt-0 pb-0 border-0" style={{ background: 'transparent' }}>
-                <ul className="nav nav-bottom-line align-items-center justify-content-center justify-content-md-start mb-0 border-0">
+              <CardFooter className="profile-cover-tabs card-footer pt-0 pb-0 border-0">
+                <ul className="nav nav-bottom-line align-items-center justify-content-center mb-0 border-0">
                   {getMenuItems().map((item, idx) => {
                     const dynamicUrl = buildDynamicUrl(item);
                     const isActive = pathName === dynamicUrl;
@@ -1453,15 +1437,8 @@ const ProfileLayout = ({
                     return (
                       <li className="nav-item" key={idx}>
                         <Link
-                          className="nav-link"
+                          className={`nav-link profile-tab-link${isActive ? ' active' : ''}`}
                           href={dynamicUrl}
-                          style={{
-                            borderBottom: isActive ? '3px solid #66BB6A' : '3px solid transparent',
-                            color: isActive ? '#66BB6A' : '#6c757d',
-                            fontWeight: isActive ? '600' : '500',
-                            padding: '1rem 1.25rem',
-                            transition: 'all 0.2s ease'
-                          }}
                         >
                           {item.label}
                           {item.key === 'profile-connections' && bookCount > 0 && (

@@ -46,20 +46,15 @@ const FeedLayout = ({
   }, []);
 
   return <>
-    <main>
+    <main className="feed-page-shell">
       <Container>
-        <Row ref={feedRowRef} className="g-4 feed-container-row align-items-start" style={{ marginTop: '0.5rem' }}>
+        <Row ref={feedRowRef} className="g-2 feed-container-row align-items-start">
           <Col 
             lg={3} 
-            className="sticky-left-panel"
+            className="sticky-left-panel feed-left-sidebar"
             style={{ 
               position: 'sticky', 
-              top: '80px', 
-              alignSelf: 'flex-start', 
-              maxHeight: 'calc(100vh - 80px)',
-              overflowY: 'auto',
-              msOverflowStyle: 'none',
-              scrollbarWidth: 'none',
+              alignSelf: 'flex-start',
               zIndex: 10 
             }}
           >
@@ -114,10 +109,6 @@ const FeedLayout = ({
     <MessagingBar />
     <style jsx global>{`
         @media (max-width: 991.98px) {
-          .feed-container-row {
-            margin-top: 0.25rem !important;
-          }
-          
           .profile-toggle-mobile {
             padding: 0.5rem 0.75rem;
           }
@@ -141,10 +132,6 @@ const FeedLayout = ({
         }
 
         @media (max-width: 575.98px) {
-          .feed-container-row {
-            margin-top: 0.15rem !important;
-          }
-          
           .profile-toggle-mobile {
             padding: 0.4rem 0.5rem;
           }

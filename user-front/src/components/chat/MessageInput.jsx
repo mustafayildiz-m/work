@@ -29,7 +29,7 @@ const TEXTAREA_MIN_HEIGHT = 40;
 // Emoji data cache - moved inside component for better control
 let emojiDataCache = null;
 
-const MessageInput = () => {
+const MessageInput = ({ compact = false }) => {
   const { t, language } = useLanguage();
   const notificationContext = useOptionalNotificationContext();
   const {
@@ -307,18 +307,22 @@ const MessageInput = () => {
     );
   }
 
+  const buttonSize = compact ? 36 : 42;
+  const sendButtonSize = compact ? 38 : 46;
+  const containerPadding = compact ? '0.65rem' : '0.75rem';
+
   return (
     <div
-      className="message-input-container p-3 position-relative"
+      className="message-input-container position-relative"
       style={{
         background:
           'linear-gradient(180deg, rgba(var(--bs-body-bg-rgb), 0.72) 0%, rgba(var(--bs-body-bg-rgb), 0.95) 100%)',
-        borderTop: '1px solid var(--bs-border-color)',
         backdropFilter: 'blur(10px)',
         position: 'sticky',
         bottom: 0,
         zIndex: 10,
-        paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))'
+        padding: containerPadding,
+        paddingBottom: `max(${containerPadding}, env(safe-area-inset-bottom))`
       }}
     >
       <form onSubmit={handleSubmit}>
@@ -341,9 +345,9 @@ const MessageInput = () => {
             aria-label={t('messaging.selectEmoji')}
             title={t('messaging.selectEmoji')}
             style={{
-              width: 42,
-              height: 42,
-              borderRadius: 14,
+              width: buttonSize,
+              height: buttonSize,
+              borderRadius: compact ? 12 : 14,
               border: '1px solid var(--bs-border-color)',
               background: isDarkTheme
                 ? 'linear-gradient(145deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.07) 100%)'
@@ -374,7 +378,7 @@ const MessageInput = () => {
                   : '0 8px 18px rgba(31, 51, 96, 0.12), inset 0 1px 0 rgba(255,255,255,0.9)';
             }}
           >
-            <BsEmojiSmileFill size={18} />
+            <BsEmojiSmileFill size={compact ? 16 : 18} />
           </button>
 
           {/* Message textarea */}
@@ -412,9 +416,9 @@ const MessageInput = () => {
             aria-label={t('messaging.sendMessage')}
             title={t('messaging.sendMessage')}
             style={{
-              width: 46,
-              height: 46,
-              borderRadius: 16,
+              width: sendButtonSize,
+              height: sendButtonSize,
+              borderRadius: compact ? 14 : 16,
               border: canSend
                 ? '1px solid rgba(87, 163, 255, 0.6)'
                 : '1px solid rgba(255,255,255,0.10)',

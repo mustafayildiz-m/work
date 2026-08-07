@@ -1,16 +1,7 @@
 'use client';
 
 import { useTimelinePosts } from '@/hooks/useTimelinePosts';
-import Image from 'next/image';
-import { Button, Card, CardBody, CardFooter, CardHeader, Dropdown, DropdownDivider, DropdownItem, DropdownMenu, DropdownToggle } from 'react-bootstrap';
-import { BsBookmark, BsBookmarkCheck, BsChatFill, BsEnvelope, BsFlag, BsHeart, BsHeartFill, BsInfoCircle, BsLink, BsPencilSquare, BsPersonX, BsReplyFill, BsSendFill, BsShare, BsSlashCircle, BsThreeDots, BsXCircle, BsBookmarkFill } from 'react-icons/bs';
-import People from './People';
-import avatar4 from '@/assets/images/avatar/04.jpg';
-import logo11 from '@/assets/images/logo/11.svg';
-import logo12 from '@/assets/images/logo/12.svg';
-import logo13 from '@/assets/images/logo/13.svg';
-import postImg2 from '@/assets/images/post/3by2/02.jpg';
-import postImg4 from '@/assets/images/post/3by2/03.jpg';
+import { BsPersonX } from 'react-icons/bs';
 import PostCard from '@/components/cards/PostCard';
 import SharedProfileCard from '@/components/cards/SharedProfileCard';
 import SharedBookCard from '@/components/cards/SharedBookCard';
@@ -24,156 +15,19 @@ import { useEffect, useState } from 'react';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useNotificationContext } from '@/context/useNotificationContext';
 
-// ActionMenu is now handled by PostCard component
-
-
-const CommonPost = ({
-  children
-}) => {
-  return <Card>
-    <CardHeader className="border-0 pb-0">
-      <div className="d-flex align-items-center justify-content-between">
-        <div className="d-flex align-items-center">
-          <div className="avatar me-2">
-            <span role="button">
-              {' '}
-              <Image className="avatar-img rounded-circle" src={avatar4} alt="image-4" width={40} height={40} style={{ objectFit: 'cover' }} />{' '}
-            </span>
-          </div>
-
-          <div>
-            <h6 className="card-title mb-0">
-              {' '}
-              <Link href=""> All in the Mind </Link>
-            </h6>
-            <p className="mb-0 small">9 November at 23:29</p>
-          </div>
-        </div>
-        {/* ActionMenu removed - now handled by PostCard */}
-      </div>
-    </CardHeader>
-
-    <CardBody className="pb-0">
-      <p>How do you protect your business against cyber-crime?</p>
-
-      {children}
-
-      <ul className="nav nav-divider mt-2 mb-0">
-        <li className="nav-item">
-          <Link className="nav-link" href="">
-            263 votes
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link" href="">
-            2d left
-          </Link>
-        </li>
-      </ul>
-
-      <ul className="nav nav-stack pb-2 small">
-        <li className="nav-item">
-          <Link className="nav-link active text-secondary" href="">
-            <span className="me-1 icon-xs bg-danger text-white rounded-circle">
-              <BsHeartFill size={10} />
-            </span>{' '}
-            Louis, Billy and 126 others{' '}
-          </Link>
-        </li>
-        <li className="nav-item ms-sm-auto">
-          <Link className="nav-link" href="">
-            {' '}
-            <BsChatFill size={18} className="pe-1" />
-            Comments (12)
-          </Link>
-        </li>
-      </ul>
-    </CardBody>
-
-    <div className="card-footer py-3">
-      <ul className="nav nav-fill nav-stack small">
-        <li className="nav-item">
-          <Link className="nav-link mb-0 active" href="">
-            {' '}
-            <BsHeart className="pe-1" size={18} />
-            Liked (56)
-          </Link>
-        </li>
-
-        <Dropdown className="nav-item">
-          <DropdownToggle as="a" className="nav-link mb-0 content-none cursor-pointer" id="cardShareAction6" aria-expanded="false">
-            <BsReplyFill className="flip-horizontal ps-1" size={18} />
-            Share (3)
-          </DropdownToggle>
-
-          <DropdownMenu className="dropdown-menu-end" aria-labelledby="cardShareAction6">
-            <li>
-              <DropdownItem href="">
-                {' '}
-                <BsEnvelope size={22} className="fa-fw pe-2" />
-                Send via Direct Message
-              </DropdownItem>
-            </li>
-            <li>
-              <DropdownItem href="">
-                {' '}
-                <BsBookmarkCheck size={22} className="fa-fw pe-2" />
-                Bookmark{' '}
-              </DropdownItem>
-            </li>
-            <li>
-              <DropdownItem href="">
-                {' '}
-                <BsLink size={22} className="fa-fw pe-2" />
-                Copy link to post
-              </DropdownItem>
-            </li>
-            <li>
-              <DropdownItem href="">
-                {' '}
-                <BsShare size={22} className="fa-fw pe-2" />
-                Share post via …
-              </DropdownItem>
-            </li>
-            <li>
-              <DropdownDivider />
-            </li>
-            <li>
-              <DropdownItem href="">
-                {' '}
-                <BsPencilSquare size={22} className="fa-fw pe-2" />
-                Share to News Feed
-              </DropdownItem>
-            </li>
-          </DropdownMenu>
-        </Dropdown>
-
-        <li className="nav-item">
-          <Link className="nav-link mb-0" href="">
-            {' '}
-            <BsSendFill className="pe-1" size={18} />
-            Send
-          </Link>
-        </li>
-      </ul>
-    </div>
-  </Card>;
-};
-
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 async function loadPendingPosts(userId) {
   const token = localStorage.getItem('token');
   if (!token) return [];
-  const response = await fetch(`${API_BASE}/user-posts/user/${userId}`, {
+  const response = await fetch(`${API_BASE}/user-posts/user/${userId}?status=pending`, {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
   });
   if (!response.ok) return [];
-  const data = await response.json();
-  return data.filter(post => post.status === 'pending');
+  return response.json();
 }
 
 const Feeds = ({ userId }) => {
@@ -938,32 +792,7 @@ const Feeds = ({ userId }) => {
     }
   };
 
-  const postData = [{
-    progress: 25,
-    title: 'We have cybersecurity insurance coverage'
-  }, {
-    progress: 15,
-    title: 'Our dedicated staff will protect us'
-  }, {
-    progress: 10,
-    title: 'We give regular training for best practices'
-  }, {
-    progress: 55,
-    title: 'Third-party vendor protection'
-  }];
-
-  // Debug information
-  useEffect(() => {
-
-    // Load comments only for user posts (not scholar posts)
-    if (timelinePosts && timelinePosts.length > 0) {
-      timelinePosts.forEach(post => {
-        if (post.user_id && !post.scholar_id) {
-          loadComments(post.id);
-        }
-      });
-    }
-  }, [timelinePosts]);
+  // Debug information removed — comments now load lazily via onLoadComments prop
 
   // Validate that userId is provided
   if (!userId) {
@@ -982,14 +811,11 @@ const Feeds = ({ userId }) => {
 
   if (loading) {
     return (
-      <div className="text-center py-4">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Gönderiler yükleniyor...</span>
+      <div className="feed-loading-inline">
+        <div className="spinner-border spinner-border-sm text-primary" role="status">
+          <span className="visually-hidden">{t('common.loading')}</span>
         </div>
-        <p className="mt-2 text-muted">Timeline gönderileri yükleniyor...</p>
-        <small className="text-muted">
-          API: {process.env.NEXT_PUBLIC_API_URL || 'Not configured'} | User ID: {userId}
-        </small>
+        <p>{t('feed.loadingTimeline')}</p>
       </div>
     );
   }
@@ -1066,11 +892,16 @@ const Feeds = ({ userId }) => {
       }}
     />
 
+    <div className="feed-timeline">
+      <div className="feed-timeline-header">
+        <h6>{t('menu.feed')}</h6>
+      </div>
+
     {/* User's Own Pending Posts (shown dimmed) */}
     {pendingPosts && pendingPosts.length > 0 && (
       pendingPosts.map((post) => {
         return (
-          <div key={`pending-${post.id}`} style={{ opacity: 0.6, filter: 'grayscale(0.3)' }}>
+          <div key={`pending-${post.id}`} className="feed-timeline-item feed-pending-post">
             <PostCard
               postId={post.id}
               createdAt={post.created_at}
@@ -1289,27 +1120,24 @@ const Feeds = ({ userId }) => {
         return null;
       })
     ) : (
-      <div className="text-center py-5">
-        <div className="mb-3">
-          <BsPersonX size={48} className="text-muted" />
-        </div>
-        <h6 className="text-muted">{t('feed.noPostsFound')}</h6>
-        <p className="text-muted mb-0">
-          {t('feed.noPostsDescription')}
-        </p>
+      <div className="feed-state-card">
+        <div className="feed-state-icon">📭</div>
+        <h6>{t('feed.noPostsFound')}</h6>
+        <p>{t('feed.noPostsDescription')}</p>
       </div>
     )}
     
     {/* Infinite Scroll Trigger & Loading More Spinner */}
-    <div id="infinite-scroll-trigger" className="text-center py-3" style={{ minHeight: '50px' }}>
+    <div id="infinite-scroll-trigger" className="text-center py-2" style={{ minHeight: '40px' }}>
       {loadingMore && (
         <div className="spinner-border text-primary spinner-border-sm" role="status">
-          <span className="visually-hidden">Daha fazla yükleniyor...</span>
+          <span className="visually-hidden">{t('common.loading')}</span>
         </div>
       )}
       {!hasMore && timelinePosts && timelinePosts.length > 0 && (
-        <p className="text-muted small">Başka gönderi yok.</p>
+        <div className="feed-end-marker">{t('feed.noMorePosts')}</div>
       )}
+    </div>
     </div>
   </>;
 };

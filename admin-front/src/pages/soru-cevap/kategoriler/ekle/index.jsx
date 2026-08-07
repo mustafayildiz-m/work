@@ -1,8 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { toast } from 'sonner';
+import { FaFolderOpen } from 'react-icons/fa';
 import { qaFetch, ensureArray, flattenCategories, categoryLabel } from '../../qa-api';
 import { useQaIntl } from '../../useQaIntl';
+import {
+  QaPageShell,
+  QaPageHeader,
+  QaFormCard,
+  QaPrimaryButton,
+  QaSecondaryButton,
+  qaInputClass,
+  qaSelectClass,
+  qaLabelClass,
+} from '../../QaPageLayout';
 
 export default function QaCategoryForm() {
   const { t } = useQaIntl();
@@ -112,82 +123,105 @@ export default function QaCategoryForm() {
   const flatCategories = ensureArray(categories);
 
   if (loading) {
-    return <div className="p-6 text-center text-gray-500">{t('UI.YUKLENIYOR')}</div>;
+    return (
+      <QaPageShell width="narrow">
+        <div className="text-center py-12 text-gray-500 dark:text-gray-400">{t('UI.YUKLENIYOR')}</div>
+      </QaPageShell>
+    );
   }
 
   return (
-    <div className="p-6 max-w-4xl">
-      <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
-        {isEdit ? t('QA.CATEGORY_EDIT') : t('QA.CATEGORY_NEW')}
-      </h1>
+    <QaPageShell
+      title={`${isEdit ? t('QA.CATEGORY_EDIT') : t('QA.CATEGORY_NEW')} - Islamic Windows Admin`}
+      width="narrow"
+    >
+      <QaPageHeader
+        title={isEdit ? t('QA.CATEGORY_EDIT') : t('QA.CATEGORY_NEW')}
+        subtitle={t('QA.CATEGORY_FORM_SUBTITLE')}
+        icon={FaFolderOpen}
+        backTo="/soru-cevap/kategoriler/liste"
+        backLabel={t('UI.LISTEYE_DON')}
+      />
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('QA.PARENT_CATEGORY')}</label>
-            <select value={form.parentId} onChange={(e) => setForm({ ...form, parentId: e.target.value })}
-              className="w-full border rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600">
-              <option value="">{t('QA.ROOT_CATEGORY')}</option>
-              {flatCategories.filter((c) => c.id !== Number(editId)).map((c) => (
-                <option key={c.id} value={c.id}>{categoryLabel(c, c.depth)}</option>
-              ))}
-            </select>
+      <QaFormCard>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className={qaLabelClass}>{t('QA.PARENT_CATEGORY')}</label>
+              <select
+                value={form.parentId}
+                onChange={(e) => setForm({ ...form, parentId: e.target.value })}
+                className={qaSelectClass}
+              >
+                <option value="">{t('QA.ROOT_CATEGORY')}</option>
+                {flatCategories.filter((c) => c.id !== Number(editId)).map((c) => (
+                  <option key={c.id} value={c.id}>{categoryLabel(c, c.depth)}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className={qaLabelClass}>{t('QA.ORDER')}</label>
+              <input
+                type="number"
+                value={form.order}
+                onChange={(e) => setForm({ ...form, order: e.target.value })}
+                className={qaInputClass}
+              />
+            </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('QA.ORDER')}</label>
-            <input type="number" value={form.order} onChange={(e) => setForm({ ...form, order: e.target.value })}
-              className="w-full border rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600" />
+
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={form.isActive}
+              onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
+              className="w-4 h-4 rounded border-gray-300"
+              id="isActive"
+            />
+            <label htmlFor="isActive" className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('UI.AKTIF')}</label>
           </div>
-        </div>
 
-        <div className="flex items-center gap-2">
-          <input type="checkbox" checked={form.isActive} onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
-            className="w-4 h-4" id="isActive" />
-          <label htmlFor="isActive" className="text-sm text-gray-700 dark:text-gray-300">{t('UI.AKTIF')}</label>
-        </div>
-
-        <div>
-          <h2 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-200">{t('QA.TRANSLATIONS')}</h2>
-          <div className="space-y-4">
-            {languages.map((lang) => {
-              const trans = form.translations.find((tr) => tr.languageId === lang.id) || {};
-              return (
-                <div key={lang.id} className="border rounded-lg p-4 dark:border-gray-700">
-                  <div className="flex items-center gap-2 mb-2">
-                    {lang.flagUrl && <img src={lang.flagUrl} alt="" className="w-5 h-4 object-cover rounded" />}
-                    <span className="font-medium text-sm text-gray-700 dark:text-gray-300">{lang.name}</span>
+          <div>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">{t('QA.TRANSLATIONS')}</h2>
+            <div className="space-y-4">
+              {languages.map((lang) => {
+                const trans = form.translations.find((tr) => tr.languageId === lang.id) || {};
+                return (
+                  <div key={lang.id} className="rounded-lg border border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-800/50">
+                    <div className="flex items-center gap-2 mb-3">
+                      {lang.flagUrl && <img src={lang.flagUrl} alt="" className="w-5 h-4 object-cover rounded" />}
+                      <span className="font-semibold text-sm text-gray-800 dark:text-gray-200">{lang.name}</span>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder={t('QA.CATEGORY_NAME')}
+                      value={trans.name || ''}
+                      onChange={(e) => handleTranslationChange(lang.id, 'name', e.target.value)}
+                      className={`${qaInputClass} mb-3`}
+                    />
+                    <textarea
+                      placeholder={t('QA.DESCRIPTION_OPTIONAL')}
+                      value={trans.description || ''}
+                      onChange={(e) => handleTranslationChange(lang.id, 'description', e.target.value)}
+                      className={qaInputClass}
+                      rows={2}
+                    />
                   </div>
-                  <input
-                    type="text"
-                    placeholder={t('QA.CATEGORY_NAME')}
-                    value={trans.name || ''}
-                    onChange={(e) => handleTranslationChange(lang.id, 'name', e.target.value)}
-                    className="w-full border rounded-lg px-3 py-2 mb-2 dark:bg-gray-800 dark:border-gray-600"
-                  />
-                  <textarea
-                    placeholder={t('QA.DESCRIPTION_OPTIONAL')}
-                    value={trans.description || ''}
-                    onChange={(e) => handleTranslationChange(lang.id, 'description', e.target.value)}
-                    className="w-full border rounded-lg px-3 py-2 dark:bg-gray-800 dark:border-gray-600"
-                    rows={2}
-                  />
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
 
-        <div className="flex gap-3">
-          <button type="submit" disabled={saving}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50">
-            {saving ? t('UI.KAYDEDILIYOR') : isEdit ? t('UI.GUNCELLE') : t('QA.CREATE')}
-          </button>
-          <button type="button" onClick={() => navigate('/soru-cevap/kategoriler/liste')}
-            className="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300">
-            {t('UI.IPTAL')}
-          </button>
-        </div>
-      </form>
-    </div>
+          <div className="flex gap-3 pt-2">
+            <QaPrimaryButton type="submit" disabled={saving}>
+              {saving ? t('UI.KAYDEDILIYOR') : isEdit ? t('UI.GUNCELLE') : t('QA.CREATE')}
+            </QaPrimaryButton>
+            <QaSecondaryButton type="button" onClick={() => navigate('/soru-cevap/kategoriler/liste')}>
+              {t('UI.IPTAL')}
+            </QaSecondaryButton>
+          </div>
+        </form>
+      </QaFormCard>
+    </QaPageShell>
   );
 }

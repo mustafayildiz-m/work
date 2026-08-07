@@ -419,9 +419,58 @@
   background: transparent !important;
 }
 
-:root:not([data-bs-theme="dark"]):not([data-bs-theme="green"]) [class*="feed"],
-:root:not([data-bs-theme="dark"]):not([data-bs-theme="green"]) [class*="Feed"] {
+:root:not([data-bs-theme="dark"]):not([data-bs-theme="green"]) [class*="feed"]:not([class*="-card"]):not(.card),
+:root:not([data-bs-theme="dark"]):not([data-bs-theme="green"]) [class*="Feed"]:not([class*="-card"]):not(.card) {
   background: transparent !important;
+}
+
+// Feed kartları opak kalsın (layout şeffaf, içerik kartları beyaz)
+:root:not([data-bs-theme="dark"]):not([data-bs-theme="green"]) {
+  .card.feed-surface-card,
+  .card.feed-compose-card,
+  .card.feed-sidebar-card,
+  .feed-profile-card,
+  .feed-profile-nav-card {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+  }
+
+  .card.feed-sidebar-card .feed-sidebar-header,
+  .card.feed-sidebar-card .feed-sidebar-body {
+    background-color: #ffffff !important;
+  }
+
+  .card.feed-post-card .card-header,
+  .card.feed-post-card .card-body,
+  .card.feed-post-card .feed-post-actions {
+    background-color: #ffffff !important;
+  }
+
+  // Compose kart — tek border, iç çizgi yok, hover zıplaması kapalı
+  .card.feed-compose-card {
+    border: 1px solid rgba(181, 231, 160, 0.3) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05) !important;
+    transform: none !important;
+
+    &:hover {
+      transform: none !important;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05) !important;
+      border-color: rgba(181, 231, 160, 0.3) !important;
+    }
+
+    .feed-compose-toolbar {
+      border-top: none !important;
+    }
+  }
+
+  .card.feed-sidebar-card {
+    transform: none !important;
+
+    &:hover {
+      transform: none !important;
+    }
+  }
 }
 
 :root:not([data-bs-theme="dark"]):not([data-bs-theme="green"]) .row,
@@ -2823,6 +2872,10 @@
   --bs-body-bg: #0f2410;
   --bs-body-color: #b8e0b8;
   --bs-body-color-rgb: 184, 224, 184;
+  --bs-secondary-color: #9bc99b;
+  --bs-secondary-bg: #234d2a;
+  --bs-tertiary-bg: rgba(45, 90, 45, 0.75);
+  --bs-emphasis-color: #e8f5e9;
   --bs-mode: #132d13;
   --bs-mode-rgb: 19, 45, 19;
   --bs-border-color: rgba(46, 125, 50, 0.4);

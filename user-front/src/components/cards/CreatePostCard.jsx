@@ -26,6 +26,7 @@ import ChoicesFormInput from '../form/ChoicesFormInput';
 import Link from 'next/link';
 import { useLanguage } from '@/context/useLanguageContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
+import { fetchUserProfile, invalidateProfileCache } from '@/utils/profileCache';
 
 const FilePreview = ({ fileUrls, onRemove }) => {
   const { t } = useLanguage();
@@ -150,23 +151,6 @@ const LoadingButton = ({ variant = "success", size = "sm", children, disabled = 
   );
 };
 
-async function fetchUserProfileById(userId) {
-  const token = localStorage.getItem('token');
-  if (!token) return null;
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
-  if (!response.ok) {
-    console.error('❌ Failed to fetch profile data:', response.status, response.statusText);
-    return null;
-  }
-  return response.json();
-}
-
 const CreatePostCard = () => {
   const { t } = useLanguage();
   const { theme } = useLayoutContext();
@@ -277,7 +261,7 @@ const CreatePostCard = () => {
     }
 
     setImageLoading(true);
-    fetchUserProfileById(userInfo.id)
+    fetchUserProfile(userInfo.id)
       .then(data => {
         if (data) {
           setProfileData(data);
@@ -306,8 +290,9 @@ const CreatePostCard = () => {
     const handleProfilePhotoUpdate = () => {
       if (!isAuthenticated || !userInfo?.id) return;
 
+      invalidateProfileCache(userInfo.id);
       setImageLoading(true);
-      fetchUserProfileById(userInfo.id)
+      fetchUserProfile(userInfo.id)
         .then(data => {
           if (data) {
             setProfileData(data);
@@ -509,122 +494,62 @@ const CreatePostCard = () => {
 
 
   return <>
-    <Card className="shadow-sm border-0" style={{ padding: '1rem', marginBottom: '1.5rem' }}>
-      <div className="d-flex mb-3">
-        <div className="me-3" style={{ flexShrink: 0 }}>
-          <span role="button">
-            {imageLoading && (
-              <div
-                className="position-absolute top-0 start-0 rounded-circle d-flex align-items-center justify-content-center"
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  backgroundColor: '#e9ecef',
-                  zIndex: 2
-                }}
-              >
-                <div className="spinner-border text-primary" role="status" style={{ width: '16px', height: '16px' }}>
-                  <span className="visually-hidden">Yükleniyor...</span>
-                </div>
+    <Card className="feed-surface-card feed-compose-card border-0">
+      <div className="feed-compose-top">
+        <div className="feed-compose-avatar-wrap">
+          {imageLoading && (
+            <div className="feed-compose-avatar-loader">
+              <div className="spinner-border text-primary" role="status" style={{ width: '14px', height: '14px' }}>
+                <span className="visually-hidden">{t('common.loading')}</span>
               </div>
-            )}
-            <img
-              className="rounded-circle"
-              src={getImageUrl(getUserAvatar(), false)}
-              alt={userInfo?.username || 'User'}
-              key={`create-post-avatar-${imageKey}`}
-              style={{
-                width: '40px',
-                height: '40px',
-                objectFit: 'cover',
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                cursor: 'pointer',
-                opacity: imageLoading ? 0 : 1
-              }}
-              onLoad={() => {
-                setImageLoading(false);
-              }}
-              onError={(e) => {
-                console.error('❌ Image failed to load:', e.target.src);
-                console.error('Error event:', e);
-                e.target.src = typeof avatar1 === 'string' ? avatar1 : (avatar1?.src || '/images/avatar/default.jpg');
-                setImageLoading(false);
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.05)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(181, 231, 160, 0.3)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
-            />
-          </span>
+            </div>
+          )}
+          <img
+            className="feed-compose-avatar"
+            src={getImageUrl(getUserAvatar(), false)}
+            alt={userInfo?.username || 'User'}
+            key={`create-post-avatar-${imageKey}`}
+            style={{ opacity: imageLoading ? 0 : 1 }}
+            onLoad={() => setImageLoading(false)}
+            onError={(e) => {
+              e.target.src = typeof avatar1 === 'string' ? avatar1 : (avatar1?.src || '/images/avatar/default.jpg');
+              setImageLoading(false);
+            }}
+          />
         </div>
 
-        <div className="w-100 d-flex align-items-start gap-2">
-          <form className="flex-grow-1">
-            <textarea
-              className="form-control pe-4 border-0"
-              rows={2}
-              data-autoresize
-              placeholder={t('feed.shareThoughts')}
-              value={postContent}
-              onChange={(e) => setPostContent(e.target.value)}
-              style={{ resize: 'none' }}
-            />
-          </form>
-
-
+        <div className="feed-compose-input-wrap">
+          <textarea
+            className="feed-compose-textarea"
+            rows={1}
+            data-autoresize
+            placeholder={t('feed.shareThoughts')}
+            value={postContent}
+            onChange={(e) => setPostContent(e.target.value)}
+          />
         </div>
       </div>
 
-      <div className="d-flex justify-content-between align-items-center mt-2">
-        <ul className="nav nav-pills nav-stack small fw-normal mb-0">
-          <li className="nav-item">
-            <a className="nav-link bg-light py-1 px-2 mb-0" onClick={togglePhotoModel} style={{ cursor: 'pointer' }}>
-              {' '}
-              <BsImageFill size={20} className="text-success pe-2" />
-              {t('post.photo')}
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link bg-light py-1 px-2 mb-0" onClick={toggleVideoModel} style={{ cursor: 'pointer' }}>
-              {' '}
-              <BsCameraReelsFill size={20} className="text-info pe-2" />
-              {t('post.video')}
-            </a>
-          </li>
-          {/* <li className="nav-item">
-              <a className="nav-link bg-light py-1 px-2 mb-0" onClick={toggleEvent} style={{ cursor: 'pointer' }}>
-                {' '}
-                <BsCalendar2EventFill size={20} className="text-danger pe-2" />
-                {t('post.event')}{' '}
-              </a>
-            </li> */}
-        </ul>
-
-        <div className="d-flex align-items-center gap-2">
-          {/* <select 
-              className="form-select form-select-sm" 
-              style={{ width: 'auto' }}
-              value={privacy}
-              onChange={(e) => setPrivacy(e.target.value)}
-            >
-              <option value="public">{t('post.privacyPublic')}</option>
-              <option value="friends">{t('post.privacyFriends')}</option>
-              <option value="private">{t('post.privacyPrivate')}</option>
-            </select> */}
-
-          <LoadingButton
-            onClick={handlePostSubmit}
-            disabled={!postContent.trim()}
-            className="px-3"
-            loading={loading}
-          >
-            {t('feed.share')}
-          </LoadingButton>
+      <div className="feed-compose-toolbar">
+        <div className="feed-compose-actions">
+          <button type="button" className="feed-action-btn feed-action-btn--photo" onClick={togglePhotoModel}>
+            <BsImageFill />
+            <span>{t('post.photo')}</span>
+          </button>
+          <button type="button" className="feed-action-btn feed-action-btn--video" onClick={toggleVideoModel}>
+            <BsCameraReelsFill />
+            <span>{t('post.video')}</span>
+          </button>
         </div>
+
+        <LoadingButton
+          onClick={handlePostSubmit}
+          disabled={!postContent.trim()}
+          className="feed-share-btn"
+          loading={loading}
+        >
+          {t('feed.share')}
+        </LoadingButton>
       </div>
     </Card>
 

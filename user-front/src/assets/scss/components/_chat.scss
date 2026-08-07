@@ -1,3 +1,153 @@
+// Messaging full page (/messaging)
+.messaging-page {
+  background: var(--bs-tertiary-bg);
+}
+
+.messaging-page-container {
+  max-width: 1320px;
+}
+
+.messaging-pane-card {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+
+.messaging-pane-header {
+  flex-shrink: 0;
+  padding: 0.75rem 0.875rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  background: var(--bs-body-bg);
+}
+
+.messaging-pane-header h6 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.messaging-search-input {
+  border-radius: 999px !important;
+  font-size: 0.8125rem !important;
+  height: 34px;
+  padding-left: 2.25rem !important;
+  background: var(--bs-secondary-bg) !important;
+  border: 1px solid var(--bs-border-color) !important;
+}
+
+.messaging-conversation-item {
+  padding: 0.625rem 0.75rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: var(--bs-tertiary-bg);
+  }
+
+  &.is-active {
+    background-color: rgba(var(--bs-primary-rgb), 0.08);
+  }
+}
+
+.messaging-conversation-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--bs-border-color);
+}
+
+.messaging-delete-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--bs-secondary-color);
+  border-radius: 8px;
+  opacity: 0;
+  transition: all 0.15s ease;
+
+  .messaging-conversation-item:hover & {
+    opacity: 1;
+  }
+
+  &:hover {
+    background: rgba(var(--bs-danger-rgb), 0.12);
+    color: var(--bs-danger);
+  }
+}
+
+.messaging-chat-header {
+  padding: 0.625rem 0.875rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  background: var(--bs-body-bg);
+}
+
+.messaging-messages-area {
+  background:
+    radial-gradient(circle at top right, rgba(var(--bs-primary-rgb), 0.04), transparent 42%),
+    var(--bs-body-bg);
+}
+
+.messaging-contact-item {
+  padding: 0.625rem 0.75rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: var(--bs-tertiary-bg);
+  }
+}
+
+.messaging-empty-state {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--bs-secondary-color);
+
+  .empty-icon {
+    font-size: 2rem;
+    opacity: 0.55;
+    margin-bottom: 0.75rem;
+  }
+
+  h5, h6 {
+    font-size: 0.95rem;
+    margin-bottom: 0.35rem;
+  }
+
+  p {
+    font-size: 0.8125rem;
+    margin: 0;
+  }
+}
+
+[data-bs-theme='dark'] .messaging-pane-card,
+[data-bs-theme='green'] .messaging-pane-card {
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+}
+
+[data-bs-theme='dark'] .messaging-page,
+[data-bs-theme='green'] .messaging-page {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.messaging-chat-column {
+  overflow: hidden;
+}
+
+.messaging-pane-card .messaging-conversation-avatar.border-primary {
+  border-color: var(--bs-primary) !important;
+}
+
 // Chat Styles
 .chat-container {
   height: calc(100vh - 100px);
@@ -158,6 +308,19 @@
 }
 
 // Online status indicator
+.messaging-online-dot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: block;
+  border-radius: 50%;
+  background-color: #22c55e;
+  border: 2px solid var(--bs-body-bg, #fff);
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.35);
+  z-index: 2;
+  pointer-events: none;
+}
+
 .status-online {
   position: relative;
   

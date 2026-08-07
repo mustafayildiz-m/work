@@ -1,12 +1,10 @@
 'use client';
 
 import { getWhoToFollow } from '@/helpers/data';
-import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button, Card, CardBody, CardHeader, CardTitle } from 'react-bootstrap';
-import { BsPersonCheckFill, BsArrowClockwise } from 'react-icons/bs';
-import { FaPlus } from 'react-icons/fa';
+import { Button, Card } from 'react-bootstrap';
+import { BsArrowClockwise } from 'react-icons/bs';
 import React, { useState, useEffect } from 'react';
 import { getUserIdFromToken } from '../../../../../../utils/auth';
 import { useLanguage } from '@/context/useLanguageContext';
@@ -28,11 +26,10 @@ const Followers = () => {
   const fetchScholars = async () => {
     try {
       setLoading(true);
-      const data = await getWhoToFollow('scholars', 50);
+      const data = await getWhoToFollow('scholars', 10);
       if (data && data.length > 0) {
-        // Shuffle the array and pick 15 random scholars
         const shuffled = [...data].sort(() => 0.5 - Math.random());
-        setWhoToFollowData(shuffled.slice(0, 15));
+        setWhoToFollowData(shuffled.slice(0, 8));
       } else {
         setWhoToFollowData([]);
       }
@@ -185,183 +182,118 @@ const Followers = () => {
       setFollowLoading(prev => ({ ...prev, [followerKey]: false }));
     }
   };
-  return <Card>
-    <CardHeader className="pb-0 border-0 d-flex justify-content-between align-items-center">
-      <CardTitle 
-        className="mb-0 text-truncate" 
-        style={{ fontSize: '0.95rem', fontWeight: 700, paddingRight: '10px' }}
-      >
-        {t('feed.suggestedScholars')}
-      </CardTitle>
-      <button 
-        className="btn-refresh-scholars"
-        onClick={fetchScholars}
-        disabled={loading}
-        title={t('common.refresh') || "Yenile"}
-        style={{
-          background: 'rgba(102, 187, 106, 0.1)',
-          border: '1px solid rgba(102, 187, 106, 0.25)',
-          backdropFilter: 'blur(4px)',
-          borderRadius: '50%',
-          width: '32px',
-          height: '32px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: '#66bb6a',
-          transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-          cursor: loading ? 'wait' : 'pointer',
-          padding: 0,
-          outline: 'none',
-          boxShadow: '0 2px 8px rgba(102, 187, 106, 0.15)'
-        }}
-      >
-        <BsArrowClockwise 
-          size={18} 
-          style={{ 
-            transition: 'transform 0.5s linear',
-            transform: loading ? 'rotate(360deg)' : 'none'
-          }} 
-        />
-      </button>
-      <style dangerouslySetInnerHTML={{__html: `
-        .btn-refresh-scholars:hover:not(:disabled) {
-          background: #66bb6a !important;
-          color: #fff !important;
-          transform: rotate(90deg) scale(1.1);
-          box-shadow: 0 4px 12px rgba(102, 187, 106, 0.4) !important;
-        }
-        .btn-refresh-scholars:active:not(:disabled) {
-          transform: rotate(180deg) scale(0.9);
-        }
-      `}} />
-    </CardHeader>
+  return (
+    <Card className="feed-surface-card feed-sidebar-card feed-sidebar-compact border-0">
+      <div className="feed-sidebar-header d-flex justify-content-between align-items-center">
+        <h6 className="feed-sidebar-title text-truncate pe-2">{t('feed.suggestedScholars')}</h6>
+        <button
+          type="button"
+          className="feed-refresh-btn"
+          onClick={fetchScholars}
+          disabled={loading}
+          title={t('common.refresh') || 'Yenile'}
+          aria-label={t('common.refresh') || 'Yenile'}
+        >
+          <BsArrowClockwise
+            size={16}
+            style={{
+              transition: 'transform 0.5s linear',
+              transform: loading ? 'rotate(360deg)' : 'none',
+            }}
+          />
+        </button>
+      </div>
 
-    <CardBody>
-      <div 
-        className="followers-scroll-container"
-        style={{ 
-          height: '640px', 
-          overflowY: 'auto', 
-          msOverflowStyle: 'none', 
-          scrollbarWidth: 'none' 
-        }}
-      >
-        <style dangerouslySetInnerHTML={{__html: `
-          .followers-scroll-container::-webkit-scrollbar { display: none; }
-        `}} />
-        {loading ? (
-          <div className="text-center py-3">
-            <div className="spinner-border spinner-border-sm text-primary" role="status">
-              <span className="visually-hidden">{t('common.loading')}</span>
-            </div>
-            <p className="text-muted mb-0 mt-2">{t('common.loading')}niyor...</p>
-          </div>
-        ) : whoToFollowData && whoToFollowData.length > 0 ? (
-          whoToFollowData.map((follower, idx) => <div className="hstack gap-2 mb-3" key={`${follower.type}-${follower.id}` || idx}>
-            <span role="button" style={{ flexShrink: 0 }}>
-              <div
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: '50%',
-                  overflow: 'hidden',
-                  backgroundColor: '#f8f9fa'
-                }}
-              >
-                <Image
-                  className="avatar-img"
-                  src={getImageUrl(follower.photoUrl)}
-                  alt={follower.name || follower.fullName}
-                  width={40}
-                  height={40}
-                  loading="eager"
-                  placeholder="blur"
-                  blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciPgogICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjMzMzIiBvZmZzZXQ9IjIwJSIgLz4KICAgICAgPHN0b3Agc3RvcC1jb2xvcj0iIzIyMiIgb2Zmc2V0PSI1MCUiIC8+CiAgICAgIDxzdG9wIHN0b3AtY29sb3I9IiMzMzMiIG9mZnNldD0iNzAlIiAvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjMzMzIiAvPgogIDxyZWN0IGlkPSJyIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIGZpbGw9InVybCgjZykiIC8+CiAgPGFuaW1hdGUgeGxpbms6aHJlZj0iI3IiIGF0dHJpYnV0ZU5hbWU9IngiIGZyb209Ii00MCIgdG89IjQwIiBkdXI9IjFzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgIC8+Cjwvc3ZnPg=="
-                  unoptimized={true}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.3s ease-in-out' }}
-                  onError={(e) => {
-                    e.target.src = '/profile/profile.png';
-                  }}
-                />
+      <div className="feed-sidebar-body">
+        <div className="feed-scholars-scroll">
+          {loading ? (
+            <div className="feed-loading-inline py-4">
+              <div className="spinner-border spinner-border-sm text-primary" role="status">
+                <span className="visually-hidden">{t('common.loading')}</span>
               </div>
-            </span>
-
-            <div className="overflow-hidden">
-              {follower.id && follower.id !== 'undefined' ? (
-                <Link
-                  className="h6 mb-0"
-                  href={getProfilePath(follower.type || 'scholar', follower.id) || '#'}
-                >
-                  {follower.name || follower.fullName}{' '}
-                </Link>
-              ) : (
-                <span className="h6 mb-0">
-                  {follower.name || follower.fullName}{' '}
-                </span>
-              )}
-              <p className="mb-0 small text-truncate">
-                {t('feed.scholar')}
-              </p>
+              <p className="mt-2 mb-0">{t('common.loading')}</p>
             </div>
+          ) : whoToFollowData && whoToFollowData.length > 0 ? (
+            whoToFollowData.map((follower, idx) => (
+              <div className="feed-scholar-row hstack gap-2 mb-2" key={`${follower.type}-${follower.id}` || idx}>
+                <span role="button" style={{ flexShrink: 0 }}>
+                  <Image
+                    className="feed-scholar-avatar"
+                    src={getImageUrl(follower.photoUrl)}
+                    alt={follower.name || follower.fullName}
+                    width={34}
+                    height={34}
+                    loading="eager"
+                    unoptimized
+                    onError={(e) => {
+                      e.target.src = '/profile/profile.png';
+                    }}
+                  />
+                </span>
 
-            {follower.isFollowing ? (
-              <Button
-                variant="outline-danger"
-                size="sm"
-                className="ms-auto px-2 py-1"
-                style={{
-                  fontSize: '0.75rem',
-                  minWidth: 'auto',
-                  whiteSpace: 'nowrap',
-                  lineHeight: '1'
-                }}
-                onClick={() => handleUnfollow(follower.id, follower.type)}
-                disabled={followLoading[getFollowerKey(follower)]}
-              >
-                {followLoading[getFollowerKey(follower)] ? (
-                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                ) : (
-                  t('feed.unfollow')
-                )}
-              </Button>
-            ) : (
-              <Button
-                variant="primary-soft"
-                size="sm"
-                className="ms-auto px-2 py-1"
-                style={{
-                  fontSize: '0.75rem',
-                  minWidth: 'auto',
-                  whiteSpace: 'nowrap',
-                  lineHeight: '1'
-                }}
-                onClick={() => handleFollow(follower.id, follower.type)}
-                disabled={followLoading[getFollowerKey(follower)]}
-              >
-                {followLoading[getFollowerKey(follower)] ? (
-                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                ) : (
-                  t('feed.follow')
-                )}
-              </Button>
-            )}
-          </div>)
-        ) : (
-          <div className="text-center py-3">
-            <p className="text-muted mb-0">{t('feed.noSuggestionsYet')}</p>
-          </div>
-        )}
-      </div>
+                <div className="overflow-hidden flex-grow-1">
+                  {follower.id && follower.id !== 'undefined' ? (
+                    <Link
+                      className="feed-scholar-name d-block text-truncate"
+                      href={getProfilePath(follower.type || 'scholar', follower.id) || '#'}
+                    >
+                      {follower.name || follower.fullName}
+                    </Link>
+                  ) : (
+                    <span className="feed-scholar-name d-block text-truncate">
+                      {follower.name || follower.fullName}
+                    </span>
+                  )}
+                  <p className="feed-scholar-role text-muted text-truncate">{t('feed.scholar')}</p>
+                </div>
 
-      <div className="d-grid mt-3">
-        <Link href="/feed/scholars">
-          <Button variant="primary-soft" size="sm" className="w-100">
-            {t('feed.viewAll')}
-          </Button>
-        </Link>
+                {follower.isFollowing ? (
+                  <Button
+                    variant="outline-danger"
+                    size="sm"
+                    className="feed-follow-btn ms-auto"
+                    onClick={() => handleUnfollow(follower.id, follower.type)}
+                    disabled={followLoading[getFollowerKey(follower)]}
+                  >
+                    {followLoading[getFollowerKey(follower)] ? (
+                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+                    ) : (
+                      t('feed.unfollow')
+                    )}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="primary-soft"
+                    size="sm"
+                    className="feed-follow-btn ms-auto"
+                    onClick={() => handleFollow(follower.id, follower.type)}
+                    disabled={followLoading[getFollowerKey(follower)]}
+                  >
+                    {followLoading[getFollowerKey(follower)] ? (
+                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+                    ) : (
+                      t('feed.follow')
+                    )}
+                  </Button>
+                )}
+              </div>
+            ))
+          ) : (
+            <div className="feed-state-card py-4">
+              <p className="mb-0">{t('feed.noSuggestionsYet')}</p>
+            </div>
+          )}
+        </div>
+
+        <div className="d-grid mt-2">
+          <Link href="/feed/scholars">
+            <Button variant="primary-soft" size="sm" className="w-100 rounded-pill feed-sidebar-footer-btn">
+              {t('feed.viewAll')}
+            </Button>
+          </Link>
+        </div>
       </div>
-    </CardBody>
-  </Card>;
+    </Card>
+  );
 };
-export default Followers;
+export default React.memo(Followers);

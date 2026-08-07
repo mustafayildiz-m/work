@@ -6,13 +6,15 @@ import Image from 'next/image';
 import { timeSince } from '@/utils/date';
 import placeholderImg from '@/assets/images/avatar/placeholder.jpg';
 import { useLanguage } from '@/context/useLanguageContext';
+import OnlineStatusDot from './OnlineStatusDot';
 
-const ConversationList = () => {
+const ConversationList = ({ onNewMessage }) => {
   const {
     conversations,
     activeConversation,
     selectConversation,
     onlineUsers,
+    isParticipantOnline,
     loading,
     searchMessages,
     deleteConversation
@@ -28,30 +30,9 @@ const ConversationList = () => {
   const [conversationToDelete, setConversationToDelete] = useState(null);
 
   // Online status check
-  const isUserOnline = useCallback((userId) => {
-    if (!onlineUsers || !userId) return false;
-    const participantId = String(userId?.participantId || '');
-    const participantUsername = String(userId?.participantUsername || '').toLowerCase();
-    const participantName = String(userId?.participantName || '').toLowerCase();
-    return onlineUsers.some((onlineUser) => {
-      if (onlineUser && typeof onlineUser === 'object') {
-        const onlineId = String(onlineUser.id || onlineUser.userId || '');
-        const onlineUsername = String(onlineUser.username || '').toLowerCase();
-        return (
-          (participantId && onlineId === participantId) ||
-          (participantUsername && onlineUsername === participantUsername) ||
-          (participantName && onlineUsername === participantName)
-        );
-      }
-
-      const value = String(onlineUser).toLowerCase();
-      return (
-        (participantId && value === participantId) ||
-        (participantUsername && value === participantUsername) ||
-        (participantName && value === participantName)
-      );
-    });
-  }, [onlineUsers]);
+  const isUserOnline = useCallback((conversation) => {
+    return isParticipantOnline(conversation, onlineUsers);
+  }, [isParticipantOnline, onlineUsers]);
 
   // Search function
   const handleSearch = useCallback(async (query) => {
@@ -183,10 +164,10 @@ const ConversationList = () => {
   // Loading state
   if (loading) {
     return (
-      <div className="card h-100">
-        <div className="card-body d-flex justify-content-center align-items-center">
+      <div className="messaging-pane-card h-100">
+        <div className="flex-grow-1 d-flex justify-content-center align-items-center">
           <div className="text-center">
-            <div className="spinner-border text-primary mb-2" role="status">
+            <div className="spinner-border spinner-border-sm text-primary mb-2" role="status">
               <span className="visually-hidden">{t('common.loading')}</span>
             </div>
             <div className="text-muted small">{t('messaging.loadingConversations')}</div>
@@ -197,37 +178,40 @@ const ConversationList = () => {
   }
 
   return (
-    <div className="card h-100">
-      {/* Header */}
-      <div className="card-header border-0 pb-0">
-        <div className="d-flex justify-content-between align-items-center">
-          <h6 className="mb-0">{t('messaging.conversations')}</h6>
-          <span className="badge bg-primary rounded-pill">
-            {sortedConversations.length}
-          </span>
+    <div className="messaging-pane-card h-100">
+      <div className="messaging-pane-header">
+        <div className="d-flex justify-content-between align-items-center gap-2">
+          <div className="d-flex align-items-center gap-2 min-width-0">
+            <h6 className="text-truncate">{t('messaging.conversations')}</h6>
+            <span className="badge bg-primary rounded-pill">
+              {sortedConversations.length}
+            </span>
+          </div>
+          <button
+            type="button"
+            className="btn btn-sm btn-primary rounded-pill flex-shrink-0 d-lg-none"
+            onClick={onNewMessage}
+            title={t('messaging.newMessage')}
+          >
+            {t('messaging.newMessage')}
+          </button>
         </div>
       </div>
 
-      {/* Search */}
-      <div className="p-3 border-bottom">
+      <div className="px-3 py-2 border-bottom">
         <div className="position-relative">
           <input
             type="text"
-            className="form-control form-control-sm"
-            placeholder={t('messaging.searchPlaceholder') + '...'}
+            className="form-control form-control-sm messaging-search-input"
+            placeholder={`${t('messaging.searchPlaceholder')}...`}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{
-              paddingLeft: '40px',
-              borderRadius: '20px',
-              fontSize: '14px'
-            }}
           />
           <div
-            className="position-absolute top-50 translate-middle-y"
+            className="position-absolute top-50 translate-middle-y text-muted"
             style={{ left: '12px' }}
           >
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
               <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
             </svg>
           </div>
@@ -300,19 +284,23 @@ const ConversationList = () => {
       )}
 
       {/* Conversations List */}
-      <div className="card-body p-0">
-        <div
-          className="conversations-list"
-          style={{
-            height: '100%',
-            overflowY: 'auto'
-          }}
-        >
+      <div className="flex-grow-1 min-height-0">
+        <div className="conversations-list h-100 overflow-auto">
           {sortedConversations.length === 0 ? (
-            <div className="p-4 text-center text-muted">
-              <div className="mb-3" style={{ fontSize: '48px' }}>💬</div>
-              <h6 className="mb-2">{t('messaging.noConversations')}</h6>
-              <p className="small mb-0">{t('messaging.startConversation')}</p>
+            <div className="messaging-empty-state">
+              <div className="empty-icon">💬</div>
+              <h6>{t('messaging.noConversations')}</h6>
+              <p className="mb-3 d-none d-lg-block">{t('messaging.startConversationHint')}</p>
+              <p className="mb-3 d-lg-none">{t('messaging.startConversationHintMobile')}</p>
+              {onNewMessage && (
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline-primary rounded-pill d-lg-none"
+                  onClick={onNewMessage}
+                >
+                  {t('messaging.pickContact')}
+                </button>
+              )}
             </div>
           ) : (
             sortedConversations.map((conversation) => {
@@ -323,76 +311,40 @@ const ConversationList = () => {
               return (
                 <div
                   key={conversation.id}
-                  className={`conversation-item p-3 border-bottom position-relative ${isActive ? 'bg-primary bg-opacity-10' : ''
-                    }`}
-                  style={{
-                    cursor: 'pointer',
-                    transition: 'all 0.15s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.backgroundColor = '#f8f9fa';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.backgroundColor = '';
-                    }
-                  }}
+                  className={`messaging-conversation-item position-relative ${isActive ? 'is-active' : ''}`}
                 >
                   <div className="d-flex align-items-center">
-                    {/* Avatar */}
-                    <div className="position-relative me-3 flex-shrink-0">
-                      <div
-                        className="position-relative overflow-hidden"
-                        style={{
-                          width: '52px',
-                          height: '52px',
-                          borderRadius: '50%',
-                          border: isActive ? '2px solid #0d6efd' : '2px solid var(--bs-border-color)'
+                    <div className="position-relative me-2 flex-shrink-0">
+                      <Image
+                        src={getDisplayAvatar(conversation)}
+                        alt={`${getDisplayName(conversation)} avatar`}
+                        width={40}
+                        height={40}
+                        className={`messaging-conversation-avatar ${isActive ? 'border-primary' : ''}`}
+                        onError={(e) => {
+                          e.target.src = placeholderImg.src || placeholderImg;
                         }}
-                      >
-                        <Image
-                          src={getDisplayAvatar(conversation)}
-                          alt={`${getDisplayName(conversation)} avatar`}
-                          width={52}
-                          height={52}
-                          style={{ objectFit: 'cover' }}
-                          onError={(e) => {
-                            e.target.src = placeholderImg.src || placeholderImg;
-                          }}
-                        />
-                      </div>
-                      {isOnline && (
-                        <div
-                          className="position-absolute bottom-0 end-0 bg-success rounded-circle border border-white"
-                          style={{
-                            width: '16px',
-                            height: '16px'
-                          }}
-                        />
-                      )}
+                      />
+                      <OnlineStatusDot visible={isOnline} size={11} />
                     </div>
 
-                    {/* Conversation Info - Clickable */}
                     <div
                       className="flex-grow-1 min-width-0"
                       onClick={() => handleConversationClick(conversation)}
                     >
                       <div className="d-flex justify-content-between align-items-start mb-1">
-                        <h6 className={`mb-0 text-truncate ${hasUnread ? 'fw-bold' : 'fw-semibold'}`}>
+                        <h6 className={`mb-0 text-truncate small ${hasUnread ? 'fw-bold' : 'fw-semibold'}`}>
                           {getDisplayName(conversation)}
                         </h6>
                         {conversation.lastMessageTime && (
-                          <small className="text-muted text-nowrap ms-2">
+                          <small className="text-muted text-nowrap ms-2" style={{ fontSize: '0.7rem' }}>
                             {timeSince(new Date(conversation.lastMessageTime))}
                           </small>
                         )}
                       </div>
 
                       <div className="d-flex justify-content-between align-items-center">
-                        <p className={`mb-0 small text-truncate me-2 ${hasUnread ? 'text-body-emphasis fw-medium' : 'text-muted'
-                          }`}>
+                        <p className={`mb-0 text-truncate me-2 ${hasUnread ? 'text-body-emphasis fw-medium' : 'text-muted'}`} style={{ fontSize: '0.8125rem' }}>
                           {(() => {
                             if (!conversation.lastMessage) return t('messaging.noMessage');
                             try {
@@ -405,48 +357,28 @@ const ConversationList = () => {
                           })()}
                         </p>
                         {hasUnread && (
-                          <span className="badge bg-danger rounded-pill">
+                          <span className="badge bg-danger rounded-pill" style={{ fontSize: '0.65rem' }}>
                             {conversation.unreadCount > 99 ? '99+' : conversation.unreadCount}
                           </span>
                         )}
                       </div>
                     </div>
 
-                    {/* Delete Button - Simple and Direct */}
-                    <div className="ms-3 flex-shrink-0">
-                      <button
-                        className="btn btn-outline-danger btn-sm rounded-circle d-flex align-items-center justify-content-center"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteClick(conversation);
-                        }}
-                        title={t('messaging.deleteConversation')}
-                        style={{
-                          width: '36px',
-                          height: '36px',
-                          padding: '0',
-                          borderWidth: '1px',
-                          transition: 'all 0.2s ease'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = '#dc3545';
-                          e.currentTarget.style.borderColor = '#dc3545';
-                          e.currentTarget.style.color = 'white';
-                          e.currentTarget.style.transform = 'scale(1.1)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = 'transparent';
-                          e.currentTarget.style.borderColor = '#dc3545';
-                          e.currentTarget.style.color = '#dc3545';
-                          e.currentTarget.style.transform = 'scale(1)';
-                        }}
-                      >
-                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                          <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-                          <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
-                        </svg>
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      className="messaging-delete-btn ms-2 flex-shrink-0 d-flex align-items-center justify-content-center"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteClick(conversation);
+                      }}
+                      title={t('messaging.deleteConversation')}
+                      aria-label={t('messaging.deleteConversation')}
+                    >
+                      <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                        <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                      </svg>
+                    </button>
                   </div>
                 </div>
               );
@@ -522,39 +454,25 @@ const ConversationList = () => {
           background-color: var(--bs-tertiary-bg);
         }
 
-        .conversation-item:hover {
-          background-color: var(--bs-tertiary-bg) !important;
+        .min-width-0 {
+          min-width: 0;
+        }
+
+        .min-height-0 {
+          min-height: 0;
         }
 
         .conversations-list::-webkit-scrollbar {
-          width: 6px;
+          width: 5px;
         }
 
         .conversations-list::-webkit-scrollbar-track {
-          background: var(--bs-secondary-bg);
+          background: transparent;
         }
 
         .conversations-list::-webkit-scrollbar-thumb {
           background: var(--bs-border-color);
           border-radius: 3px;
-        }
-
-        .conversations-list::-webkit-scrollbar-thumb:hover {
-          background: var(--bs-secondary-color);
-        }
-
-        .min-width-0 {
-          min-width: 0;
-        }
-
-        .card-body.p-0 {
-          min-height: 0;
-        }
-
-        @media (max-width: 991.98px) {
-          .conversation-item {
-            padding: 0.85rem !important;
-          }
         }
       `}</style>
     </div>

@@ -270,39 +270,8 @@ export class ChatService {
     return conversation;
   }
 
-  async getConversationMessages(
-    conversationId: string,
-    userId: number,
-    limit = 50,
-    offset = 0,
-  ): Promise<MessageResponse[]> {
-    // User'ın bu conversation'a erişim yetkisi var mı kontrol et
-    const conversation = await this.conversationRepository.findOne({
-      where: [
-        { id: conversationId, participant1Id: userId },
-        { id: conversationId, participant2Id: userId },
-      ],
-    });
-
-    if (!conversation) {
-      throw new NotFoundException('Conversation not found or access denied');
-    }
-
-    const messages = await this.messageRepository
-      .createQueryBuilder('message')
-      .leftJoinAndSelect('message.sender', 'sender')
-      .leftJoinAndSelect('message.receiver', 'receiver')
-      .where('message.conversationId = :conversationId', { conversationId })
-      .andWhere(
-        '(message.senderId = :userId AND message.deletedBySender = false) OR (message.receiverId = :userId AND message.deletedByReceiver = false)',
-        { userId },
-      )
-      .orderBy('message.createdAt', 'ASC')
-      .skip(offset)
-      .take(limit)
-      .getMany();
-
-    return messages.map((message) => ({
+  private mapMessageToResponse(message: Message): MessageResponse {
+    return {
       id: message.id,
       content: message.content,
       senderId: message.senderId,
@@ -321,7 +290,68 @@ export class ChatService {
         username: message.receiver.username,
         photoUrl: message.receiver.photoUrl || undefined,
       },
-    }));
+    };
+  }
+
+  async getConversationMessages(
+    conversationId: string,
+    userId: number,
+    limit = 50,
+    before?: string,
+  ): Promise<{ messages: MessageResponse[]; hasMore: boolean }> {
+    const conversation = await this.conversationRepository.findOne({
+      where: [
+        { id: conversationId, participant1Id: userId },
+        { id: conversationId, participant2Id: userId },
+      ],
+    });
+
+    if (!conversation) {
+      throw new NotFoundException('Conversation not found or access denied');
+    }
+
+    const visibilityFilter =
+      '(message.senderId = :userId AND message.deletedBySender = false) OR (message.receiverId = :userId AND message.deletedByReceiver = false)';
+
+    const query = this.messageRepository
+      .createQueryBuilder('message')
+      .leftJoinAndSelect('message.sender', 'sender')
+      .leftJoinAndSelect('message.receiver', 'receiver')
+      .where('message.conversationId = :conversationId', { conversationId })
+      .andWhere(visibilityFilter, { userId });
+
+    if (before) {
+      const cursor = await this.messageRepository
+        .createQueryBuilder('message')
+        .where('message.id = :before', { before })
+        .andWhere('message.conversationId = :conversationId', { conversationId })
+        .andWhere(visibilityFilter, { userId })
+        .getOne();
+
+      if (cursor) {
+        query.andWhere(
+          '(message.createdAt < :cursorAt OR (message.createdAt = :cursorAt AND message.id < :cursorId))',
+          {
+            cursorAt: cursor.createdAt,
+            cursorId: cursor.id,
+          },
+        );
+      }
+    }
+
+    const rows = await query
+      .orderBy('message.createdAt', 'DESC')
+      .addOrderBy('message.id', 'DESC')
+      .take(limit + 1)
+      .getMany();
+
+    const hasMore = rows.length > limit;
+    const page = (hasMore ? rows.slice(0, limit) : rows).reverse();
+
+    return {
+      messages: page.map((message) => this.mapMessageToResponse(message)),
+      hasMore,
+    };
   }
 
   async getUserConversations(userId: number): Promise<any[]> {

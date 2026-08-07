@@ -1,6 +1,5 @@
 'use client';
 
-import { Card, Col, Container, Row } from 'react-bootstrap';
 import ConversationList from '@/components/chat/ConversationList';
 import MessageList from '@/components/chat/MessageList';
 import MessageInput from '@/components/chat/MessageInput';
@@ -8,7 +7,6 @@ import OnlineUsers from '@/components/chat/OnlineUsers';
 import { useWebSocketChatContext } from '@/context/useWebSocketChatContext';
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
-
 import { useLanguage } from '@/context/useLanguageContext';
 
 const Messaging = () => {
@@ -19,7 +17,6 @@ const Messaging = () => {
   const searchParams = useSearchParams();
   const deepLinkHandled = useRef(false);
 
-  // Deep-link: open conversation from ?userId= query param (mobile redirect from profile)
   useEffect(() => {
     if (deepLinkHandled.current || chatLoading) return;
 
@@ -34,7 +31,7 @@ const Messaging = () => {
 
     const openConversation = async () => {
       const existingConv = conversations.find(
-        conv => String(conv.participantId) === String(userId)
+        (conv) => String(conv.participantId) === String(userId)
       );
 
       if (existingConv) {
@@ -56,30 +53,38 @@ const Messaging = () => {
     openConversation();
   }, [searchParams, conversations, chatLoading, selectConversation, createNewConversation]);
 
-  // Mobil cihazlarda conversation seçildiğinde listeyi gizle
   useEffect(() => {
     if (activeConversation && window.innerWidth < 992) {
       setShowConversationList(false);
     }
   }, [activeConversation]);
 
-  // Geri butonuna tıklandığında conversation listesini göster
   const handleBackToConversations = () => {
     setShowConversationList(true);
   };
 
+  const handleContactSelect = () => {
+    if (window.innerWidth < 992) {
+      setShowConversationList(false);
+    }
+  };
+
+  const handleNewMessage = () => {
+    if (window.innerWidth < 992) {
+      setMobileListView('users');
+      setShowConversationList(true);
+    }
+  };
+
   return (
-    <main className="messaging-main">
-      <Container fluid className="h-100 px-0 px-md-2">
-        <Row className="gx-0 h-100">
-          {/* Sol Sidebar - Conversation Listesi */}
-          <Col
-            lg={3}
-            xl={3}
-            className={`h-100 ${showConversationList ? 'd-block' : 'd-none d-lg-block'}`}
+    <main className="messaging-main messaging-page">
+      <div className="container-fluid messaging-page-container h-100 px-2 px-lg-3 py-2">
+        <div className="row gx-2 gx-lg-3 h-100">
+          <div
+            className={`col-lg-3 h-100 ${showConversationList ? 'd-block' : 'd-none d-lg-block'}`}
           >
             <div className="h-100 d-flex flex-column messaging-pane">
-              <div className="d-lg-none p-2 border-bottom bg-body-tertiary">
+              <div className="d-lg-none p-2 mb-2 messaging-pane-card">
                 <div className="btn-group w-100" role="group" aria-label={t('messaging.messagingListView')}>
                   <button
                     type="button"
@@ -98,39 +103,35 @@ const Messaging = () => {
                 </div>
               </div>
               {mobileListView === 'users' ? (
-                <div className="d-lg-none h-100" style={{ minHeight: 0 }}>
-                  <OnlineUsers />
+                <div className="d-lg-none flex-grow-1" style={{ minHeight: 0 }}>
+                  <OnlineUsers embedded onUserSelect={handleContactSelect} />
                 </div>
               ) : (
-                <ConversationList />
+                <div className="flex-grow-1" style={{ minHeight: 0 }}>
+                  <ConversationList onNewMessage={handleNewMessage} />
+                </div>
               )}
             </div>
-          </Col>
+          </div>
 
-          {/* Orta Alan - Mesaj Listesi */}
-          <Col
-            lg={showConversationList ? 6 : 9}
-            xl={showConversationList ? 6 : 9}
-            className={`h-100 ${!showConversationList ? 'd-block' : 'd-none d-lg-block'}`}
+          <div
+            className={`col-lg-6 h-100 ${!showConversationList ? 'd-block' : 'd-none d-lg-block'}`}
           >
-            <div className="h-100 d-flex flex-column messaging-pane">
+            <div className="h-100 d-flex flex-column messaging-pane-card messaging-chat-column">
               <div className="flex-grow-1" style={{ minHeight: 0 }}>
                 <MessageList onBackToConversations={handleBackToConversations} />
               </div>
               <div className="message-input-wrapper">
-                <MessageInput />
+                <MessageInput compact />
               </div>
             </div>
-          </Col>
+          </div>
 
-          {/* Sağ Sidebar - Online Kullanıcılar */}
-          <Col lg={3} xl={3} className="h-100 d-none d-lg-block">
-            <div className="h-100 messaging-pane">
-              <OnlineUsers />
-            </div>
-          </Col>
-        </Row>
-      </Container>
+          <div className="col-lg-3 h-100 d-none d-lg-block">
+            <OnlineUsers embedded onUserSelect={handleContactSelect} />
+          </div>
+        </div>
+      </div>
       <style jsx>{`
         .messaging-main {
           height: calc(100dvh - 64px);
@@ -138,7 +139,8 @@ const Messaging = () => {
           overflow: hidden;
         }
 
-        .messaging-pane {
+        .messaging-pane,
+        .messaging-chat-column {
           min-height: 0;
         }
 

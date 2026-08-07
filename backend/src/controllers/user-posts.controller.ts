@@ -124,12 +124,19 @@ export class UserPostsController {
 
   @Get('user/:userId')
   @UseGuards(JwtAuthGuard)
-  getUserPosts(@Param('userId', ParseIntPipe) userId: number, @Request() req) {
+  getUserPosts(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Query('status') status: string,
+    @Request() req,
+  ) {
     const currentUserId = req.user?.id;
-    // Eğer kullanıcı kendi postlarını görüyorsa, pending olanları da göster
-    const includePending =
-      currentUserId && Number(currentUserId) === Number(userId);
-    return this.userPostsService.getUserPosts(userId, includePending);
+    const isOwner = currentUserId && Number(currentUserId) === Number(userId);
+
+    if (status === 'pending' && isOwner) {
+      return this.userPostsService.getUserPostsByStatus(userId, 'pending');
+    }
+
+    return this.userPostsService.getUserPosts(userId, isOwner);
   }
 
   @Get(':id')
