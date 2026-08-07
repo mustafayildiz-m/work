@@ -1,0 +1,4783 @@
+{
+  "categories": [
+    {
+      "key": "ibadet",
+      "order": 1,
+      "names": {
+        "tr": {
+          "name": "İbadet",
+          "description": "Namaz, oruç, hac ve zekât"
+        },
+        "en": {
+          "name": "Worship",
+          "description": "Prayer, fasting, hajj and zakat"
+        },
+        "ar": {
+          "name": "العبادات",
+          "description": "الصلاة والصوم والحج والزكاة"
+        },
+        "de": {
+          "name": "Anbetung",
+          "description": "Gebet, Fasten, Hadsch und Zakat"
+        },
+        "es": {
+          "name": "Adoración",
+          "description": "Oración, ayuno, hajj y zakat"
+        },
+        "fr": {
+          "name": "Adoration",
+          "description": "Prière, jeûne, hajj et zakat"
+        },
+        "it": {
+          "name": "Adorazione",
+          "description": "Preghiera, digiuno, hajj e zakat"
+        },
+        "ru": {
+          "name": "Поклонение",
+          "description": "Молитва, пост, хадж и закят"
+        },
+        "zh": {
+          "name": "功修",
+          "description": "礼拜、斋戒、朝觐和天课"
+        },
+        "ja": {
+          "name": "宗教功修",
+          "description": "礼拝、断食、ハッジ、ザカート"
+        },
+        "ko": {
+          "name": "예배",
+          "description": "예배, 금식, 핫즈, 자카트"
+        },
+        "pt": {
+          "name": "Adoração",
+          "description": "Oração, jejum, hajj e zakat"
+        },
+        "pl": {
+          "name": "Kult",
+          "description": "Modlitwa, post, hadż i zakat"
+        },
+        "uk": {
+          "name": "Поклоніння",
+          "description": "Молитва, піст, хадж і закят"
+        },
+        "bg": {
+          "name": "Поклонение",
+          "description": "Молитва, пост, хадж и закят"
+        },
+        "cs": {
+          "name": "Uctívání",
+          "description": "Modlitba, půst, hadždž a zakat"
+        },
+        "hu": {
+          "name": "Ibadah",
+          "description": "Imádkozás, böjt, hajj és zakat"
+        },
+        "ro": {
+          "name": "Adorare",
+          "description": "Rugăciune, post, hajj și zakat"
+        },
+        "sk": {
+          "name": "Uctievanie",
+          "description": "Modlitba, pôst, hadždž a zakat"
+        },
+        "sl": {
+          "name": "Ibadat",
+          "description": "Molitev, post, hadž in zakat"
+        },
+        "sr": {
+          "name": "Ibadet",
+          "description": "Namaz, post, hadž i zekat"
+        },
+        "mk": {
+          "name": "Ибадет",
+          "description": "Намаз, пост, аџ и закат"
+        },
+        "ku": {
+          "name": "Ibadet",
+          "description": "Namaz, rojî, hac û zekat"
+        },
+        "hy": {
+          "name": "Worship",
+          "description": "Prayer, fasting, hajj and zakat"
+        },
+        "hi": {
+          "name": "Ibadat",
+          "description": "Namaz, roza, haj aur zakat"
+        },
+        "gu": {
+          "name": "Ibadat",
+          "description": "Namaz, roja, haj ane zakat"
+        },
+        "kn": {
+          "name": "Ibadat",
+          "description": "Namaz, roza, haj mattu zakat"
+        },
+        "ml": {
+          "name": "Ibadat",
+          "description": "Namaz, nomb, haj, zakat"
+        },
+        "mr": {
+          "name": "Ibadat",
+          "description": "Namaz, roza, haj ani zakat"
+        },
+        "or": {
+          "name": "Ibadat",
+          "description": "Namaz, roja, haj o zakat"
+        },
+        "te": {
+          "name": "Ibadat",
+          "description": "Namaz, roju, haj mariyu zakat"
+        }
+      }
+    },
+    {
+      "key": "namaz",
+      "order": 1,
+      "parentKey": "ibadet",
+      "names": {
+        "tr": {
+          "name": "Namaz",
+          "description": "Namaz ile ilgili sorular"
+        },
+        "en": {
+          "name": "Prayer",
+          "description": "Questions about salah"
+        },
+        "ar": {
+          "name": "الصلاة",
+          "description": "أسئلة حول الصلاة"
+        },
+        "de": {
+          "name": "Gebet",
+          "description": "Fragen zum Gebet"
+        },
+        "es": {
+          "name": "Oración",
+          "description": "Preguntas sobre la oración"
+        },
+        "fr": {
+          "name": "Prière",
+          "description": "Questions sur la prière"
+        },
+        "it": {
+          "name": "Preghiera",
+          "description": "Domande sulla preghiera"
+        },
+        "ru": {
+          "name": "Молитва",
+          "description": "Вопросы о намазе"
+        },
+        "zh": {
+          "name": "礼拜",
+          "description": "关于礼拜的问题"
+        },
+        "ja": {
+          "name": "礼拝",
+          "description": "礼拝に関する質問"
+        },
+        "ko": {
+          "name": "예배",
+          "description": "예배에 관한 질문"
+        },
+        "pt": {
+          "name": "Oração",
+          "description": "Perguntas sobre a oração"
+        },
+        "pl": {
+          "name": "Modlitwa",
+          "description": "Pytania o modlitwę"
+        },
+        "uk": {
+          "name": "Молитва",
+          "description": "Питання про намаз"
+        },
+        "bg": {
+          "name": "Молитва",
+          "description": "Въпроси за намаза"
+        },
+        "cs": {
+          "name": "Modlitba",
+          "description": "Otázky o modlitbě"
+        },
+        "hu": {
+          "name": "Imádság",
+          "description": "Kérdések az imáról"
+        },
+        "ro": {
+          "name": "Rugăciune",
+          "description": "Întrebări despre rugăciune"
+        },
+        "sk": {
+          "name": "Modlitba",
+          "description": "Otázky o modlitbe"
+        },
+        "sl": {
+          "name": "Molitev",
+          "description": "Vprašanja o molitvi"
+        },
+        "sr": {
+          "name": "Namaz",
+          "description": "Pitanja o namazu"
+        },
+        "mk": {
+          "name": "Намаз",
+          "description": "Прашања за намаз"
+        },
+        "ku": {
+          "name": "Namaz",
+          "description": "Pirsên derbarê namazê"
+        },
+        "hy": {
+          "name": "Prayer",
+          "description": "Questions about salah"
+        },
+        "hi": {
+          "name": "Namaz",
+          "description": "Namaz se judi sawal"
+        },
+        "gu": {
+          "name": "Namaz",
+          "description": "Namaz vishe prashno"
+        },
+        "kn": {
+          "name": "Namaz",
+          "description": "Namaz bagge prashne"
+        },
+        "ml": {
+          "name": "Namaz",
+          "description": "Namaz sambandhicha prashnam"
+        },
+        "mr": {
+          "name": "Namaz",
+          "description": "Namazabaddhle prashne"
+        },
+        "or": {
+          "name": "Namaz",
+          "description": "Namaz sambandhita prashna"
+        },
+        "te": {
+          "name": "Namaz",
+          "description": "Namaz gurinchi prashnalu"
+        }
+      }
+    },
+    {
+      "key": "akide",
+      "order": 2,
+      "names": {
+        "tr": {
+          "name": "Akide",
+          "description": "İman esasları ve inanç konuları"
+        },
+        "en": {
+          "name": "Creed",
+          "description": "Articles of faith and belief"
+        },
+        "ar": {
+          "name": "العقيدة",
+          "description": "أصول الإيمان والاعتقاد"
+        },
+        "de": {
+          "name": "Glaube",
+          "description": "Glaubensgrundsätze"
+        },
+        "es": {
+          "name": "Credo",
+          "description": "Artículos de fe"
+        },
+        "fr": {
+          "name": "Croyance",
+          "description": "Articles de foi"
+        },
+        "it": {
+          "name": "Credenza",
+          "description": "Articoli di fede"
+        },
+        "ru": {
+          "name": "Акыда",
+          "description": "Основы веры"
+        },
+        "zh": {
+          "name": "信仰",
+          "description": "信仰基础"
+        },
+        "ja": {
+          "name": "信仰",
+          "description": "信仰の根本"
+        },
+        "ko": {
+          "name": "신앙",
+          "description": "신앙의 근본"
+        },
+        "pt": {
+          "name": "Crença",
+          "description": "Artigos de fé"
+        },
+        "pl": {
+          "name": "Wiara",
+          "description": "Zasady wiary"
+        },
+        "uk": {
+          "name": "Акіда",
+          "description": "Основи віри"
+        },
+        "bg": {
+          "name": "Акида",
+          "description": "Основи на вярата"
+        },
+        "cs": {
+          "name": "Víra",
+          "description": "Zásady víry"
+        },
+        "hu": {
+          "name": "Hit",
+          "description": "Hit alapelvei"
+        },
+        "ro": {
+          "name": "Credință",
+          "description": "Principii de credință"
+        },
+        "sk": {
+          "name": "Viera",
+          "description": "Zásady viery"
+        },
+        "sl": {
+          "name": "Vera",
+          "description": "Temelji vere"
+        },
+        "sr": {
+          "name": "Akida",
+          "description": "Osnovi vere"
+        },
+        "mk": {
+          "name": "Акида",
+          "description": "Основи на верата"
+        },
+        "ku": {
+          "name": "Akîde",
+          "description": "Bingehên îmanê"
+        },
+        "hy": {
+          "name": "Faith",
+          "description": "Articles of belief"
+        },
+        "hi": {
+          "name": "Aqeedah",
+          "description": "Iman ke usool"
+        },
+        "gu": {
+          "name": "Aqeedah",
+          "description": "Iman na moolbhut tatvo"
+        },
+        "kn": {
+          "name": "Aqeedah",
+          "description": "Vishvasada moola tatvagalu"
+        },
+        "ml": {
+          "name": "Aqeedah",
+          "description": "Vishvasathinte adisthanangal"
+        },
+        "mr": {
+          "name": "Aqeedah",
+          "description": "Imanachya mooltatva"
+        },
+        "or": {
+          "name": "Aqeedah",
+          "description": "Biswasara mula"
+        },
+        "te": {
+          "name": "Aqeedah",
+          "description": "Visvasam moolalu"
+        }
+      }
+    },
+    {
+      "key": "ahlak",
+      "order": 3,
+      "names": {
+        "tr": {
+          "name": "Ahlak",
+          "description": "Güzel ahlak ve adab"
+        },
+        "en": {
+          "name": "Ethics",
+          "description": "Good character and manners"
+        },
+        "ar": {
+          "name": "الأخلاق",
+          "description": "حسن الخلق والآداب"
+        },
+        "de": {
+          "name": "Ethik",
+          "description": "Guter Charakter"
+        },
+        "es": {
+          "name": "Ética",
+          "description": "Buen carácter"
+        },
+        "fr": {
+          "name": "Éthique",
+          "description": "Bon caractère"
+        },
+        "it": {
+          "name": "Etica",
+          "description": "Buon carattere"
+        },
+        "ru": {
+          "name": "Нравы",
+          "description": "Хороший характер"
+        },
+        "zh": {
+          "name": "道德",
+          "description": "良好品德"
+        },
+        "ja": {
+          "name": "道徳",
+          "description": "良い品性"
+        },
+        "ko": {
+          "name": "윤리",
+          "description": "좋은 품성"
+        },
+        "pt": {
+          "name": "Ética",
+          "description": "Bom caráter"
+        },
+        "pl": {
+          "name": "Etyka",
+          "description": "Dobre obyczaje"
+        },
+        "uk": {
+          "name": "Мораль",
+          "description": "Гарний характер"
+        },
+        "bg": {
+          "name": "Нрави",
+          "description": "Добър характер"
+        },
+        "cs": {
+          "name": "Etika",
+          "description": "Dobrý charakter"
+        },
+        "hu": {
+          "name": "Erkölcs",
+          "description": "Jó jellem"
+        },
+        "ro": {
+          "name": "Etică",
+          "description": "Caracter bun"
+        },
+        "sk": {
+          "name": "Etika",
+          "description": "Dobrý charakter"
+        },
+        "sl": {
+          "name": "Etika",
+          "description": "Dober značaj"
+        },
+        "sr": {
+          "name": "Ahlak",
+          "description": "Lijepi karakter"
+        },
+        "mk": {
+          "name": "Морал",
+          "description": "Добар карактер"
+        },
+        "ku": {
+          "name": "Ahlak",
+          "description": "Xulqê baş"
+        },
+        "hy": {
+          "name": "Ethics",
+          "description": "Good manners"
+        },
+        "hi": {
+          "name": "Akhlaq",
+          "description": "Achhi akhlaq"
+        },
+        "gu": {
+          "name": "Akhlaq",
+          "description": "Saras akhlaq"
+        },
+        "kn": {
+          "name": "Akhlaq",
+          "description": "Olley charitra"
+        },
+        "ml": {
+          "name": "Akhlaq",
+          "description": "Nallatharam"
+        },
+        "mr": {
+          "name": "Akhlaq",
+          "description": "Changale sanskar"
+        },
+        "or": {
+          "name": "Akhlaq",
+          "description": "Bhala charitra"
+        },
+        "te": {
+          "name": "Akhlaq",
+          "description": "Manchi charitra"
+        }
+      }
+    },
+    {
+      "key": "aile",
+      "order": 4,
+      "names": {
+        "tr": {
+          "name": "Aile",
+          "description": "Aile hayatı ve ilişkiler"
+        },
+        "en": {
+          "name": "Family",
+          "description": "Family life and relations"
+        },
+        "ar": {
+          "name": "الأسرة",
+          "description": "حياة الأسرة والعلاقات"
+        },
+        "de": {
+          "name": "Familie",
+          "description": "Familienleben"
+        },
+        "es": {
+          "name": "Familia",
+          "description": "Vida familiar"
+        },
+        "fr": {
+          "name": "Famille",
+          "description": "Vie familiale"
+        },
+        "it": {
+          "name": "Famiglia",
+          "description": "Vita familiare"
+        },
+        "ru": {
+          "name": "Семья",
+          "description": "Семейная жизнь"
+        },
+        "zh": {
+          "name": "家庭",
+          "description": "家庭生活"
+        },
+        "ja": {
+          "name": "家族",
+          "description": "家族生活"
+        },
+        "ko": {
+          "name": "가족",
+          "description": "가족 생활"
+        },
+        "pt": {
+          "name": "Família",
+          "description": "Vida familiar"
+        },
+        "pl": {
+          "name": "Rodzina",
+          "description": "Życie rodzinne"
+        },
+        "uk": {
+          "name": "Сім'я",
+          "description": "Сімейне життя"
+        },
+        "bg": {
+          "name": "Семейство",
+          "description": "Семейен живот"
+        },
+        "cs": {
+          "name": "Rodina",
+          "description": "Rodinný život"
+        },
+        "hu": {
+          "name": "Család",
+          "description": "Családi élet"
+        },
+        "ro": {
+          "name": "Familie",
+          "description": "Viața de familie"
+        },
+        "sk": {
+          "name": "Rodina",
+          "description": "Rodinný život"
+        },
+        "sl": {
+          "name": "Družina",
+          "description": "Družinsko življenje"
+        },
+        "sr": {
+          "name": "Porodica",
+          "description": "Porodični život"
+        },
+        "mk": {
+          "name": "Семејство",
+          "description": "Семеен живот"
+        },
+        "ku": {
+          "name": "Malbat",
+          "description": "Jiyana malbatê"
+        },
+        "hy": {
+          "name": "Family",
+          "description": "Family life"
+        },
+        "hi": {
+          "name": "Parivar",
+          "description": "Parivarik jivan"
+        },
+        "gu": {
+          "name": "Parivar",
+          "description": "Parivarik jivan"
+        },
+        "kn": {
+          "name": "Kutumba",
+          "description": "Kutumba jivana"
+        },
+        "ml": {
+          "name": "Kudumbam",
+          "description": "Kudumba jeevitham"
+        },
+        "mr": {
+          "name": "Kutumb",
+          "description": "Kutumb jivan"
+        },
+        "or": {
+          "name": "Paribar",
+          "description": "Paribarika jibana"
+        },
+        "te": {
+          "name": "Kutumbam",
+          "description": "Kutumba jeevitam"
+        }
+      }
+    },
+    {
+      "key": "kuran",
+      "order": 5,
+      "names": {
+        "tr": {
+          "name": "Kuran",
+          "description": "Kuran-ı Kerim ve tilavet"
+        },
+        "en": {
+          "name": "Quran",
+          "description": "The Holy Quran and recitation"
+        },
+        "ar": {
+          "name": "القرآن",
+          "description": "القرآن الكريم و تلاوته"
+        },
+        "de": {
+          "name": "Koran",
+          "description": "Der Heilige Koran"
+        },
+        "es": {
+          "name": "Corán",
+          "description": "El Sagrado Corán"
+        },
+        "fr": {
+          "name": "Coran",
+          "description": "Le Saint Coran"
+        },
+        "it": {
+          "name": "Corano",
+          "description": "Il Sacro Corano"
+        },
+        "ru": {
+          "name": "Коран",
+          "description": "Священный Коран"
+        },
+        "zh": {
+          "name": "古兰经",
+          "description": "神圣的古兰经与诵读"
+        },
+        "ja": {
+          "name": "クルアーン",
+          "description": "聖クルアーンと朗誦"
+        },
+        "ko": {
+          "name": "꾸란",
+          "description": "성스러운 꾸란과 낭송"
+        },
+        "pt": {
+          "name": "Alcorão",
+          "description": "O Sagrado Alcorão"
+        },
+        "pl": {
+          "name": "Koran",
+          "description": "Święty Koran"
+        },
+        "uk": {
+          "name": "Коран",
+          "description": "Священний Коран"
+        },
+        "bg": {
+          "name": "Коран",
+          "description": "Светият Коран"
+        },
+        "cs": {
+          "name": "Korán",
+          "description": "Svatý Korán"
+        },
+        "hu": {
+          "name": "Korán",
+          "description": "A Szent Korán"
+        },
+        "ro": {
+          "name": "Coranul",
+          "description": "Coranul Sfânt"
+        },
+        "sk": {
+          "name": "Korán",
+          "description": "Svätý Korán"
+        },
+        "sl": {
+          "name": "Koran",
+          "description": "Sveti Koran"
+        },
+        "sr": {
+          "name": "Kuran",
+          "description": "Sveti Kuran"
+        },
+        "mk": {
+          "name": "Куран",
+          "description": "Светиот Куран"
+        },
+        "ku": {
+          "name": "Quran",
+          "description": "Quranê Pîroz"
+        },
+        "hy": {
+          "name": "Quran",
+          "description": "Holy Quran and recitation"
+        },
+        "hi": {
+          "name": "Quran",
+          "description": "Paak Quran aur tilawat"
+        },
+        "gu": {
+          "name": "Quran",
+          "description": "Paak Quran ane path"
+        },
+        "kn": {
+          "name": "Quran",
+          "description": "Pavitra Quran"
+        },
+        "ml": {
+          "name": "Quran",
+          "description": "Pavithramaya Quran"
+        },
+        "mr": {
+          "name": "Quran",
+          "description": "Pavitra Quran"
+        },
+        "or": {
+          "name": "Quran",
+          "description": "Pavitra Quran"
+        },
+        "te": {
+          "name": "Quran",
+          "description": "Pavitranga Quran"
+        }
+      }
+    },
+    {
+      "key": "ramazan",
+      "order": 6,
+      "names": {
+        "tr": {
+          "name": "Ramazan",
+          "description": "Ramazan ayı ibadetleri"
+        },
+        "en": {
+          "name": "Ramadan",
+          "description": "Ramadan worship practices"
+        },
+        "ar": {
+          "name": "رمضان",
+          "description": "عبادات شهر رمضان"
+        },
+        "de": {
+          "name": "Ramadan",
+          "description": "Ramadan-Gebete"
+        },
+        "es": {
+          "name": "Ramadán",
+          "description": "Prácticas de Ramadán"
+        },
+        "fr": {
+          "name": "Ramadan",
+          "description": "Pratiques du Ramadan"
+        },
+        "it": {
+          "name": "Ramadan",
+          "description": "Pratiche del Ramadan"
+        },
+        "ru": {
+          "name": "Рамадан",
+          "description": "Поклонение в Рамадан"
+        },
+        "zh": {
+          "name": "斋月",
+          "description": "斋月期间的功修"
+        },
+        "ja": {
+          "name": "ラマダン",
+          "description": "ラマダンの宗教的実践"
+        },
+        "ko": {
+          "name": "라마단",
+          "description": "라마단 예배와 실천"
+        },
+        "pt": {
+          "name": "Ramadã",
+          "description": "Práticas do Ramadã"
+        },
+        "pl": {
+          "name": "Ramadan",
+          "description": "Praktyki Ramadanu"
+        },
+        "uk": {
+          "name": "Рамадан",
+          "description": "Поклоніння в Рамадан"
+        },
+        "bg": {
+          "name": "Рамазан",
+          "description": "Поклонение в Рамазан"
+        },
+        "cs": {
+          "name": "Ramadán",
+          "description": "Praktiky Ramadánu"
+        },
+        "hu": {
+          "name": "Ramadán",
+          "description": "Ramadán imádkozás"
+        },
+        "ro": {
+          "name": "Ramadan",
+          "description": "Practici de Ramadan"
+        },
+        "sk": {
+          "name": "Ramadán",
+          "description": "Praktiky Ramadánu"
+        },
+        "sl": {
+          "name": "Ramadan",
+          "description": "Prakse Ramadana"
+        },
+        "sr": {
+          "name": "Ramazan",
+          "description": "Ramazanski ibadet"
+        },
+        "mk": {
+          "name": "Рамазан",
+          "description": "Рамазански ibadet"
+        },
+        "ku": {
+          "name": "Remezan",
+          "description": "Ibadetên Remezanê"
+        },
+        "hy": {
+          "name": "Ramadan",
+          "description": "Ramadan worship practices"
+        },
+        "hi": {
+          "name": "Ramzan",
+          "description": "Ramzan ki ibadat"
+        },
+        "gu": {
+          "name": "Ramzan",
+          "description": "Ramzan ni ibadat"
+        },
+        "kn": {
+          "name": "Ramzan",
+          "description": "Ramzan ibadat"
+        },
+        "ml": {
+          "name": "Ramzan",
+          "description": "Ramzan ibadat"
+        },
+        "mr": {
+          "name": "Ramzan",
+          "description": "Ramzan ibadat"
+        },
+        "or": {
+          "name": "Ramzan",
+          "description": "Ramzan ibadat"
+        },
+        "te": {
+          "name": "Ramzan",
+          "description": "Ramzan ibadat"
+        }
+      }
+    }
+  ],
+  "tags": [
+    {
+      "key": "namaz",
+      "names": {
+        "tr": "namaz",
+        "en": "prayer",
+        "ar": "صلاة",
+        "de": "gebet",
+        "es": "oración",
+        "fr": "prière",
+        "it": "preghiera",
+        "ru": "намаз",
+        "zh": "礼拜",
+        "ja": "礼拝",
+        "ko": "예배",
+        "pt": "oração",
+        "pl": "modlitwa",
+        "uk": "намаз",
+        "bg": "намаз",
+        "cs": "modlitba",
+        "hu": "ima",
+        "ro": "rugăciune",
+        "sk": "modlitba",
+        "sl": "molitev",
+        "sr": "namaz",
+        "mk": "намаз",
+        "ku": "namaz",
+        "hy": "prayer",
+        "hi": "namaz",
+        "gu": "namaz",
+        "kn": "namaz",
+        "ml": "namaz",
+        "mr": "namaz",
+        "or": "namaz",
+        "te": "namaz"
+      }
+    },
+    {
+      "key": "oruc",
+      "names": {
+        "tr": "oruç",
+        "en": "fasting",
+        "ar": "صوم",
+        "de": "fasten",
+        "es": "ayuno",
+        "fr": "jeûne",
+        "it": "digiuno",
+        "ru": "пост",
+        "zh": "斋戒",
+        "ja": "断食",
+        "ko": "금식",
+        "pt": "jejum",
+        "pl": "post",
+        "uk": "піст",
+        "bg": "пост",
+        "cs": "půst",
+        "hu": "böjt",
+        "ro": "post",
+        "sk": "pôst",
+        "sl": "post",
+        "sr": "post",
+        "mk": "пост",
+        "ku": "rojî",
+        "hy": "fasting",
+        "hi": "roza",
+        "gu": "roja",
+        "kn": "roza",
+        "ml": "nomb",
+        "mr": "roza",
+        "or": "roja",
+        "te": "roju"
+      }
+    },
+    {
+      "key": "zekat",
+      "names": {
+        "tr": "zekât",
+        "en": "zakat",
+        "ar": "زكاة",
+        "de": "zakat",
+        "es": "zakat",
+        "fr": "zakat",
+        "it": "zakat",
+        "ru": "закят",
+        "zh": "天课",
+        "ja": "ザカート",
+        "ko": "자카트",
+        "pt": "zakat",
+        "pl": "zakat",
+        "uk": "закят",
+        "bg": "закят",
+        "cs": "zakat",
+        "hu": "zakat",
+        "ro": "zakat",
+        "sk": "zakat",
+        "sl": "zakat",
+        "sr": "zekat",
+        "mk": "закат",
+        "ku": "zekat",
+        "hy": "zakat",
+        "hi": "zakat",
+        "gu": "zakat",
+        "kn": "zakat",
+        "ml": "zakat",
+        "mr": "zakat",
+        "or": "zakat",
+        "te": "zakat"
+      }
+    },
+    {
+      "key": "hac",
+      "names": {
+        "tr": "hac",
+        "en": "hajj",
+        "ar": "حج",
+        "de": "hadsch",
+        "es": "hajj",
+        "fr": "hajj",
+        "it": "hajj",
+        "ru": "хадж",
+        "zh": "朝觐",
+        "ja": "ハッジ",
+        "ko": "핫즈",
+        "pt": "hajj",
+        "pl": "hadż",
+        "uk": "хадж",
+        "bg": "хадж",
+        "cs": "hadždž",
+        "hu": "hajj",
+        "ro": "hajj",
+        "sk": "hadždž",
+        "sl": "hadž",
+        "sr": "hadž",
+        "mk": "аџ",
+        "ku": "hac",
+        "hy": "hajj",
+        "hi": "haj",
+        "gu": "haj",
+        "kn": "haj",
+        "ml": "haj",
+        "mr": "haj",
+        "or": "haj",
+        "te": "haj"
+      }
+    },
+    {
+      "key": "abdest",
+      "names": {
+        "tr": "abdest",
+        "en": "wudu",
+        "ar": "وضوء",
+        "de": "wudu",
+        "es": "wudu",
+        "fr": "wudu",
+        "it": "wudu",
+        "ru": "омовение",
+        "zh": "小净",
+        "ja": "ウドゥー",
+        "ko": "우두",
+        "pt": "wudu",
+        "pl": "wudu",
+        "uk": "омування",
+        "bg": "абdest",
+        "cs": "wudu",
+        "hu": "műndö",
+        "ro": "wudu",
+        "sk": "wudu",
+        "sl": "wudu",
+        "sr": "abdest",
+        "mk": "абdest",
+        "ku": "destnî",
+        "hy": "wudu",
+        "hi": "wuzu",
+        "gu": "wuzu",
+        "kn": "wuzu",
+        "ml": "wuzu",
+        "mr": "wuzu",
+        "or": "wuzu",
+        "te": "wuzu"
+      }
+    },
+    {
+      "key": "dua",
+      "names": {
+        "tr": "dua",
+        "en": "dua",
+        "ar": "دعاء",
+        "de": "dua",
+        "es": "dua",
+        "fr": "dua",
+        "it": "dua",
+        "ru": "дуа",
+        "zh": "祈祷",
+        "ja": "ドゥア",
+        "ko": "두아",
+        "pt": "dua",
+        "pl": "dua",
+        "uk": "дуа",
+        "bg": "дуа",
+        "cs": "dua",
+        "hu": "dua",
+        "ro": "dua",
+        "sk": "dua",
+        "sl": "dua",
+        "sr": "dua",
+        "mk": "дуа",
+        "ku": "dua",
+        "hy": "dua",
+        "hi": "dua",
+        "gu": "dua",
+        "kn": "dua",
+        "ml": "dua",
+        "mr": "dua",
+        "or": "dua",
+        "te": "dua"
+      }
+    },
+    {
+      "key": "kuran",
+      "names": {
+        "tr": "kuran",
+        "en": "quran",
+        "ar": "قرآن",
+        "de": "koran",
+        "es": "corán",
+        "fr": "coran",
+        "it": "corano",
+        "ru": "коран",
+        "zh": "古兰经",
+        "ja": "コーラン",
+        "ko": "꾸란",
+        "pt": "alcorão",
+        "pl": "koran",
+        "uk": "коран",
+        "bg": "коран",
+        "cs": "korán",
+        "hu": "korán",
+        "ro": "coran",
+        "sk": "korán",
+        "sl": "koran",
+        "sr": "kuran",
+        "mk": "куран",
+        "ku": "quran",
+        "hy": "quran",
+        "hi": "quran",
+        "gu": "quran",
+        "kn": "quran",
+        "ml": "quran",
+        "mr": "quran",
+        "or": "quran",
+        "te": "quran"
+      }
+    },
+    {
+      "key": "aile",
+      "names": {
+        "tr": "aile",
+        "en": "family",
+        "ar": "أسرة",
+        "de": "familie",
+        "es": "familia",
+        "fr": "famille",
+        "it": "famiglia",
+        "ru": "семья",
+        "zh": "家庭",
+        "ja": "家族",
+        "ko": "가족",
+        "pt": "família",
+        "pl": "rodzina",
+        "uk": "сім'я",
+        "bg": "семейство",
+        "cs": "rodina",
+        "hu": "család",
+        "ro": "familie",
+        "sk": "rodina",
+        "sl": "družina",
+        "sr": "porodica",
+        "mk": "семејство",
+        "ku": "malbat",
+        "hy": "family",
+        "hi": "parivar",
+        "gu": "parivar",
+        "kn": "kutumba",
+        "ml": "kudumbam",
+        "mr": "kutumb",
+        "or": "paribar",
+        "te": "kutumbam"
+      }
+    },
+    {
+      "key": "helal",
+      "names": {
+        "tr": "helal",
+        "en": "halal",
+        "ar": "حلال",
+        "de": "halal",
+        "es": "halal",
+        "fr": "halal",
+        "it": "halal",
+        "ru": "халяль",
+        "zh": "合法",
+        "ja": "ハラール",
+        "ko": "할랄",
+        "pt": "halal",
+        "pl": "halal",
+        "uk": "халяль",
+        "bg": "халял",
+        "cs": "halal",
+        "hu": "halal",
+        "ro": "halal",
+        "sk": "halal",
+        "sl": "halal",
+        "sr": "helal",
+        "mk": "халал",
+        "ku": "helal",
+        "hy": "halal",
+        "hi": "halal",
+        "gu": "halal",
+        "kn": "halal",
+        "ml": "halal",
+        "mr": "halal",
+        "or": "halal",
+        "te": "halal"
+      }
+    },
+    {
+      "key": "zikir",
+      "names": {
+        "tr": "zikir",
+        "en": "dhikr",
+        "ar": "ذكر",
+        "de": "dhikr",
+        "es": "dhikr",
+        "fr": "dhikr",
+        "it": "dhikr",
+        "ru": "зикр",
+        "zh": "记念",
+        "ja": "ズィクル",
+        "ko": "지크르",
+        "pt": "dhikr",
+        "pl": "dzikr",
+        "uk": "зікр",
+        "bg": "зикр",
+        "cs": "dhikr",
+        "hu": "dhikr",
+        "ro": "dhikr",
+        "sk": "dhikr",
+        "sl": "dhikr",
+        "sr": "zikir",
+        "mk": "зикр",
+        "ku": "zikr",
+        "hy": "dhikr",
+        "hi": "zikr",
+        "gu": "zikr",
+        "kn": "zikr",
+        "ml": "zikr",
+        "mr": "zikr",
+        "or": "zikr",
+        "te": "zikr"
+      }
+    },
+    {
+      "key": "peygamber",
+      "names": {
+        "tr": "peygamber",
+        "en": "prophet",
+        "ar": "نبي",
+        "de": "prophet",
+        "es": "profeta",
+        "fr": "prophète",
+        "it": "profeta",
+        "ru": "пророк",
+        "zh": "先知",
+        "ja": "預言者",
+        "ko": "선지자",
+        "pt": "profeta",
+        "pl": "prorok",
+        "uk": "пророк",
+        "bg": "пророк",
+        "cs": "prorok",
+        "hu": "próféta",
+        "ro": "profet",
+        "sk": "prorok",
+        "sl": "prerok",
+        "sr": "pejgamber",
+        "mk": "пророк",
+        "ku": "peyamber",
+        "hy": "prophet",
+        "hi": "nabi",
+        "gu": "nabi",
+        "kn": "nabi",
+        "ml": "nabi",
+        "mr": "nabi",
+        "or": "nabi",
+        "te": "nabi"
+      }
+    },
+    {
+      "key": "iman",
+      "names": {
+        "tr": "iman",
+        "en": "faith",
+        "ar": "إيمان",
+        "de": "glaube",
+        "es": "fe",
+        "fr": "foi",
+        "it": "fede",
+        "ru": "вера",
+        "zh": "信仰",
+        "ja": "信仰",
+        "ko": "信仰",
+        "pt": "fé",
+        "pl": "wiara",
+        "uk": "віра",
+        "bg": "вяра",
+        "cs": "víra",
+        "hu": "hit",
+        "ro": "credință",
+        "sk": "viera",
+        "sl": "vera",
+        "sr": "iman",
+        "mk": "вера",
+        "ku": "îman",
+        "hy": "faith",
+        "hi": "iman",
+        "gu": "iman",
+        "kn": "vishvasa",
+        "ml": "vishvasam",
+        "mr": "iman",
+        "or": "biswasa",
+        "te": "visvasam"
+      }
+    },
+    {
+      "key": "sadaka",
+      "names": {
+        "tr": "sadaka",
+        "en": "charity",
+        "ar": "صدقة",
+        "de": "spende",
+        "es": "caridad",
+        "fr": "aumône",
+        "it": "elemosina",
+        "ru": "садака",
+        "zh": "施舍",
+        "ja": "サダカ",
+        "ko": "사다카",
+        "pt": "caridade",
+        "pl": "jałmużna",
+        "uk": "садака",
+        "bg": "садака",
+        "cs": "sadaqa",
+        "hu": "adak",
+        "ro": "sadaqa",
+        "sk": "sadaqa",
+        "sl": "sadaqa",
+        "sr": "sadaka",
+        "mk": "садака",
+        "ku": "sadaqê",
+        "hy": "charity",
+        "hi": "sadqa",
+        "gu": "sadqa",
+        "kn": "sadqa",
+        "ml": "sadqa",
+        "mr": "sadqa",
+        "or": "sadqa",
+        "te": "sadqa"
+      }
+    },
+    {
+      "key": "teravih",
+      "names": {
+        "tr": "teravih",
+        "en": "tarawih",
+        "ar": "تراويح",
+        "de": "tarawih",
+        "es": "tarawih",
+        "fr": "tarawih",
+        "it": "tarawih",
+        "ru": "таравих",
+        "zh": "塔拉威",
+        "ja": "タラーウィーフ",
+        "ko": "타라위",
+        "pt": "tarawih",
+        "pl": "tarawih",
+        "uk": "таравіх",
+        "bg": "теравих",
+        "cs": "tarawih",
+        "hu": "teravih",
+        "ro": "tarawih",
+        "sk": "tarawih",
+        "sl": "taravih",
+        "sr": "teravih",
+        "mk": "терави",
+        "ku": "teravih",
+        "hy": "tarawih",
+        "hi": "tarawih",
+        "gu": "tarawih",
+        "kn": "tarawih",
+        "ml": "tarawih",
+        "mr": "tarawih",
+        "or": "tarawih",
+        "te": "tarawih"
+      }
+    },
+    {
+      "key": "fitre",
+      "names": {
+        "tr": "fitre",
+        "en": "fitrah",
+        "ar": "فطرة",
+        "de": "fitra",
+        "es": "fitra",
+        "fr": "fitra",
+        "it": "fitra",
+        "ru": "фитр",
+        "zh": "开斋捐",
+        "ja": "フィトラ",
+        "ko": "피트라",
+        "pt": "fitra",
+        "pl": "fitra",
+        "uk": "фітр",
+        "bg": "фитр",
+        "cs": "fitra",
+        "hu": "fitra",
+        "ro": "fitra",
+        "sk": "fitra",
+        "sl": "fitra",
+        "sr": "fitre",
+        "mk": "фитре",
+        "ku": "fitre",
+        "hy": "fitrah",
+        "hi": "fitra",
+        "gu": "fitra",
+        "kn": "fitra",
+        "ml": "fitra",
+        "mr": "fitra",
+        "or": "fitra",
+        "te": "fitra"
+      }
+    }
+  ],
+  "items": [
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "Temel İlmihal",
+      "sourceSection": "Abdest",
+      "question": "Abdest alırken hangi uzuvlar yıkanmalıdır?",
+      "answer": "Abdestte yüz, kollar dirseklerle birlikte, başın dörtte biri mesh edilerek ve ayaklar topuklarla birlikte yıkanır. Bu dört uzuv farz olan abdest organlarıdır. Abdest almadan namaz kılınmaz.",
+      "keywords": "abdest, farz, yüz, kol, mesh, ayak",
+      "langCode": "tr",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "Temel İlmihal",
+      "sourceSection": "Oruç",
+      "question": "Oruç bozan durumlar nelerdir?",
+      "answer": "Bilerek yemek, içmek ve cinsel ilişki orucu bozar. Kasten kusmak da orucu bozar. Unutarak yemek veya içmek orucu bozmaz; oruç geçerliliğini korur.",
+      "keywords": "oruç, bozulma, yemek, içmek, kusmak",
+      "langCode": "tr",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman"
+      ],
+      "sourceBookletName": "Akide Kitapçığı",
+      "sourceSection": "İman Esasları",
+      "question": "İmanın şartları kaçtır ve nelerdir?",
+      "answer": "İmanın altı şartı vardır: Allah'a, meleklerine, kitaplarına, peygamberlerine, ahiret gününe ve kadere iman etmek. Bunların tamamına inanmak imanın temelidir.",
+      "keywords": "iman, şart, melek, kitap, peygamber, kader",
+      "langCode": "tr",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "helal"
+      ],
+      "sourceBookletName": "Helal Haram Rehberi",
+      "sourceSection": "Helal Gıda",
+      "question": "Helal et nasıl anlaşılır?",
+      "answer": "Kesim usulüne uygun olarak Allah adı anılarak kesilen hayvan eti helaldir. Domuz eti ve ölü hayvan eti haramdır. Müslümanların tüketebileceği etlerin helal olduğundan emin olunmalıdır.",
+      "keywords": "helal, haram, et, kesim, domuz",
+      "langCode": "tr",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "Aile Rehberi",
+      "sourceSection": "Evlilik",
+      "question": "Eşler arasında karşılıklı haklar nelerdir?",
+      "answer": "Eşler birbirine merhamet, saygı ve güvenle davranmalıdır. Koca geçim sorumluluğunu üstlenir; eş ise evin huzuruna katkı sağlar. Karşılıklı sabır ve iletişim aile saadetinin temelidir.",
+      "keywords": "aile, evlilik, eş, hak, sorumluluk",
+      "langCode": "tr",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran"
+      ],
+      "sourceBookletName": "Kuran Okuma Rehberi",
+      "sourceSection": "Tilavet",
+      "question": "Kuran okurken abdest almak gerekir mi?",
+      "answer": "Kuran'ın mushafından okunması abdestli olmayı gerektirir. Abdest almadan mushafa dokunulmaz. Ezberden veya kalpten okumada abdest vacip olmakla birlikte daha faziletli kabul edilir.",
+      "keywords": "kuran, abdest, tilavet, mushaf, okuma",
+      "langCode": "tr",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "teravih",
+        "namaz"
+      ],
+      "sourceBookletName": "Ramazan İlmihali",
+      "sourceSection": "Teravih",
+      "question": "Teravih namazı kaç rekattır?",
+      "answer": "Hanefi mezhebine göre teravih namazı yirmi rekattır ve vitir ile tamamlanır. Ramazan gecelerinde cemaatle kılınması sünnettir. Kişi yirmi rekati tek tek veya ikişer rekât halinde kılabilir.",
+      "keywords": "teravih, ramazan, vitir, cemaat, hanefi",
+      "langCode": "tr",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat",
+        "sadaka"
+      ],
+      "sourceBookletName": "Zekât Rehberi",
+      "sourceSection": "Zekât",
+      "question": "Zekât kimlere verilir?",
+      "answer": "Zekât; fakir, miskin, borçlu, yolda kalmış, köle azat etmek isteyen, görevli toplayıcı ve Allah yolunda olanlara verilir. Anne-baba ve çocuklara zekât verilmez; akrabalara vermek sevaptır.",
+      "keywords": "zekat, sadaka, fakir, verme, nisap",
+      "langCode": "tr",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "Islamic FAQ",
+      "sourceSection": "Wudu",
+      "question": "Which body parts must be washed in wudu?",
+      "answer": "In wudu you wash the face, arms up to the elbows, wipe part of the head, and wash the feet up to the ankles. These are the obligatory parts of ablution before prayer.",
+      "keywords": "wudu, ablution, face, arms, feet, prayer",
+      "langCode": "en",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "hac"
+      ],
+      "sourceBookletName": "Hajj Guide",
+      "sourceSection": "Pillars",
+      "question": "What are the main pillars of Hajj?",
+      "answer": "The pillars of Hajj include ihram, standing at Arafat, tawaf of the Kaaba, and sa'i between Safa and Marwa. Missing a pillar invalidates Hajj and it must be repeated.",
+      "keywords": "hajj, arafat, tawaf, ihram, pillars",
+      "langCode": "en",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "peygamber",
+        "iman"
+      ],
+      "sourceBookletName": "Articles of Faith",
+      "sourceSection": "Prophethood",
+      "question": "Why is belief in all prophets required?",
+      "answer": "Muslims must believe in every prophet sent by Allah, from Adam to Muhammad (peace be upon them). Denying any prophet contradicts the unity of divine message and invalidates true faith.",
+      "keywords": "prophets, faith, revelation, messengers",
+      "langCode": "en",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "zikir"
+      ],
+      "sourceBookletName": "Good Character",
+      "sourceSection": "Dhikr",
+      "question": "What is the benefit of daily dhikr?",
+      "answer": "Remembering Allah with the tongue and heart brings tranquility and strengthens faith. The Prophet encouraged saying SubhanAllah, Alhamdulillah, and Allahu Akbar regularly throughout the day.",
+      "keywords": "dhikr, remembrance, patience, heart",
+      "langCode": "en",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile",
+        "dua"
+      ],
+      "sourceBookletName": "Family in Islam",
+      "sourceSection": "Parenting",
+      "question": "How should parents treat their children in Islam?",
+      "answer": "Parents should nurture children with mercy, fairness, and good education. Teaching prayer, honesty, and respect is a religious duty. Harshness without wisdom harms trust and moral growth.",
+      "keywords": "parenting, children, mercy, education",
+      "langCode": "en",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "dua"
+      ],
+      "sourceBookletName": "Quran Companion",
+      "sourceSection": "Recitation",
+      "question": "Should one say Bismillah before reciting the Quran?",
+      "answer": "It is recommended to begin recitation with Bismillah ar-Rahman ar-Rahim. At the start of a surah other than Al-Fatiha, saying Bismillah aloud is preferred according to many scholars.",
+      "keywords": "quran, bismillah, recitation, surah",
+      "langCode": "en",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "oruc",
+        "fitre"
+      ],
+      "sourceBookletName": "Ramadan Handbook",
+      "sourceSection": "Fasting",
+      "question": "Who is exempt from fasting in Ramadan?",
+      "answer": "The sick, travelers, pregnant or nursing women, and the elderly may be exempt with valid reason. They should make up missed days later or give fidya when unable to fast permanently.",
+      "keywords": "ramadan, fasting, exemption, fidya, travel",
+      "langCode": "en",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat"
+      ],
+      "sourceBookletName": "Zakat Basics",
+      "sourceSection": "Nisab",
+      "question": "When does zakat become obligatory?",
+      "answer": "Zakat is due when wealth reaches the nisab threshold and one lunar year passes while it is owned. Gold, silver, cash, and business goods are common zakatable assets.",
+      "keywords": "zakat, nisab, wealth, charity, obligation",
+      "langCode": "en",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "الفقه الميسر",
+      "sourceSection": "الوضوء",
+      "question": "ما هي أركان الوضوء؟",
+      "answer": "أركان الوضوء: غسل الوجه واليدين إلى المرفقين ومسح رأس وغسل الرجلين إلى الكعبين. الوضوء شرط لصحة الصلاة.",
+      "keywords": "وضوء, صلاة, وجه, يد, رجل",
+      "langCode": "ar",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "أحكام الصيام",
+      "sourceSection": "مفطرات الصوم",
+      "question": "ما الذي يفطر الصائم؟",
+      "answer": "الأكل والشرب والجماع عامداً يفطر الصائم، كما يفطر القيء عامداً. الأكل أو الشرب ناسياً لا يفطر.",
+      "keywords": "صوم, إفطار, أكل, شرب",
+      "langCode": "ar",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman"
+      ],
+      "sourceBookletName": "العقيدة الإسلامية",
+      "sourceSection": "أركان الإيمان",
+      "question": "كم ركناً للإيمان؟",
+      "answer": "أركان الإيمان ستة: الإيمان بالله وملائكته وكتبه ورسله واليوم الآخر والقدر خيره وشره. الإيمان بهذه الأركان واجب على كل مسلم.",
+      "keywords": "إيمان, أركان, قدر, ملائكة",
+      "langCode": "ar",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "helal"
+      ],
+      "sourceBookletName": "الأخلاق الإسلامية",
+      "sourceSection": "الحلال والحرام",
+      "question": "ما شروط ذبح الحيوان حلالاً؟",
+      "answer": "يذبح الحيوان على وجه التسمية لله تعالى وقطع الحلقوم والمريء. أكل لحم الخنزير وميتة البهيمة حرام.",
+      "keywords": "حلال, ذبح, تسمية, خنزير",
+      "langCode": "ar",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "الأسرة في الإسلام",
+      "sourceSection": "حقوق الزوجين",
+      "question": "ما حقوق الزوج على زوجته؟",
+      "answer": "على الزوج الإنفاق والمعاشرة بالمعروف وحفظ كرامة الزوجة. وللزوجة حق النفقة والسكن والعدل والاحترام.",
+      "keywords": "زوج, زوجة, نفقة, معروف",
+      "langCode": "ar",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran"
+      ],
+      "sourceBookletName": "آداب القرآن",
+      "sourceSection": "التلاوة",
+      "question": "هل يجب الوضوء لمس المصحف؟",
+      "answer": "لا يجوز لمن لم يتوضأ مس المصحف. قراءة القرآن من المصحف تستحب مع الطهارة. التلاوة من الحفظ أفضل مع الوضوء.",
+      "keywords": "قرآن, مصحف, وضوء, تلاوة",
+      "langCode": "ar",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "teravih"
+      ],
+      "sourceBookletName": "رمضانيات",
+      "sourceSection": "التراويح",
+      "question": "ما حكم صلاة التراويح؟",
+      "answer": "صلاة التراويح سنة مؤكدة في رمضان. يستحب إحياؤها جماعة في المسجد. عدد ركعاتها عشرون مع الوتر عند جمهور العلماء.",
+      "keywords": "تراويح, رمضان, سنة, وتر",
+      "langCode": "ar",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat"
+      ],
+      "sourceBookletName": "الزكاة",
+      "sourceSection": "مصارف الزكاة",
+      "question": "من هم مستحقو الزكاة؟",
+      "answer": "مصارف الزكاة ثمانية منها الفقير والمسكين والغارم وابن السبيل. لا تجوز الزكاة للوالدين والأولاد.",
+      "keywords": "زكاة, فقير, مسكين, مصارف",
+      "langCode": "ar",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "Islam FAQ Deutsch",
+      "sourceSection": "Wudu",
+      "question": "Wie viele Pflichtteile hat die Wudu?",
+      "answer": "Die Wudu hat vier Pflichtteile: Gesicht waschen, Arme bis zu den Ellbogen, Kopf teilweise abwischen und Füße bis zu den Knöcheln waschen. Ohne gültige Wudu ist das Gebet ungültig.",
+      "keywords": "wudu, gebet, pflicht, waschen",
+      "langCode": "de",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "Fasten im Islam",
+      "sourceSection": "Ramadan",
+      "question": "Wann beginnt und endet das tägliche Fasten?",
+      "answer": "Das Fasten beginnt mit dem Fajr-Gebetsruf und endet mit dem Maghrib-Gebet. Essen und Trinken ist in dieser Zeit nicht erlaubt. Die Absicht sollte vor dem Morgengrauen im Herzen vorliegen.",
+      "keywords": "fasten, fajr, maghrib, ramadan",
+      "langCode": "de",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman",
+        "peygamber"
+      ],
+      "sourceBookletName": "Glaubenslehre",
+      "sourceSection": "Iman",
+      "question": "Was bedeutet Glaube an das Jenseits?",
+      "answer": "Der Glaube ans Jenseits umfasst Auferstehung, Gericht, Paradies und Hölle. Wer daran fest glaubt, handelt verantwortungsbewusst und meidet Sünde aus Ehrfurcht vor Allah.",
+      "keywords": "jenseits, auferstehung, gericht, iman",
+      "langCode": "de",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "helal"
+      ],
+      "sourceBookletName": "Halal-Leben",
+      "sourceSection": "Ernährung",
+      "question": "Ist Gelatine aus Schwein immer haram?",
+      "answer": "Gelatine und Produkte aus Schweinefleisch sind grundsätzlich haram. Muslime sollten Zutatenlisten prüfen und halal-zertifizierte Lebensmittel bevorzugen.",
+      "keywords": "halal, haram, schwein, gelatine",
+      "langCode": "de",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "Familie im Islam",
+      "sourceSection": "Ehe",
+      "question": "Welche Pflichten hat ein Ehemann?",
+      "answer": "Der Ehemann ist für Unterhalt, Schutz und respektvollen Umgang verantwortlich. Er sollte seiner Frau Gerechtigkeit und Fürsorge erweisen und familiäre Harmonie pflegen.",
+      "keywords": "ehe, ehemann, unterhalt, familie",
+      "langCode": "de",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran"
+      ],
+      "sourceBookletName": "Koran-Lektüre",
+      "sourceSection": "Tajwid",
+      "question": "Warum ist korrekte Aussprache beim Koranlesen wichtig?",
+      "answer": "Die richtige Aussprache bewahrt die Bedeutung der Offenbarung. Tajwid-Regeln helfen, den Koran würdevoll zu rezitieren. Fehler können die Bedeutung von Wörtern verändern.",
+      "keywords": "koran, tajwid, rezitation, aussprache",
+      "langCode": "de",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "fitre",
+        "sadaka"
+      ],
+      "sourceBookletName": "Ramadan-Ratgeber",
+      "sourceSection": "Zakat al-Fitr",
+      "question": "Was ist die Fitra und wann wird sie gegeben?",
+      "answer": "Die Fitra ist eine obligatorische Spende am Ende des Ramadan vor dem Eid-Gebet. Sie reinigt das Fasten und hilft Bedürftigen am Festtag. Jeder Muslim sollte sie für sich und Angehörige entrichten.",
+      "keywords": "fitra, ramadan, spende, eid",
+      "langCode": "de",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "hac"
+      ],
+      "sourceBookletName": "Hadsch-Info",
+      "sourceSection": "Ihram",
+      "question": "Was ist Ihram beim Hadsch?",
+      "answer": "Ihram ist der heilige Zustand mit bestimmter Kleidung und Verhaltensregeln vor der Pilgerfahrt. Im Ihram sind Jagd, Parfüm und Streit verboten. Es markiert geistige Reinheit und Hingabe.",
+      "keywords": "hadsch, ihram, pilgerfahrt, verbote",
+      "langCode": "de",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz"
+      ],
+      "sourceBookletName": "Preguntas Islámicas",
+      "sourceSection": "Oración",
+      "question": "¿Cuántas oraciones obligatorias hay al día?",
+      "answer": "Hay cinco oraciones obligatorias: Fajr, Dhuhr, Asr, Maghrib e Isha. Cada una tiene su tiempo específico según el movimiento del sol. Omitirlas sin excusa válida es un grave pecado.",
+      "keywords": "oración, fajr, cinco, obligatoria",
+      "langCode": "es",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat"
+      ],
+      "sourceBookletName": "Guía de Zakat",
+      "sourceSection": "Obligación",
+      "question": "¿Qué bienes están sujetos al zakat?",
+      "answer": "El zakat aplica a oro, plata, dinero en efectivo, ganado y mercancías comerciales cuando alcanzan el nisab. Debe pagarse anualmente con intención sincera para purificar la riqueza.",
+      "keywords": "zakat, nisab, riqueza, obligación",
+      "langCode": "es",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman"
+      ],
+      "sourceBookletName": "Credo Musulmán",
+      "sourceSection": "Fe",
+      "question": "¿Qué significa creer en los ángeles?",
+      "answer": "Creer en los ángeles implica aceptar su existencia invisible creada por Allah para obedecerle. Cumplen funciones como registrar obras y transmitir la revelación.",
+      "keywords": "ángeles, fe, iman, creación",
+      "langCode": "es",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "dua"
+      ],
+      "sourceBookletName": "Buen Carácter",
+      "sourceSection": "Vecindad",
+      "question": "¿Cuáles son los derechos del vecino en el Islam?",
+      "answer": "El vecino tiene derecho a seguridad, respeto y ayuda en necesidad. El Profeta enfatizó tanto los derechos del vecino que los Compañeros pensaron que podría heredar.",
+      "keywords": "vecino, derechos, carácter, ayuda",
+      "langCode": "es",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "Familia Musulmana",
+      "sourceSection": "Matrimonio",
+      "question": "¿Es obligatorio el consentimiento en el matrimonio?",
+      "answer": "El matrimonio válido requiere consentimiento libre de la novia y su tutor conforme a la ley islámica. Forzar a alguien al matrimonio contradice la justicia y la misericordia del Islam.",
+      "keywords": "matrimonio, consentimiento, novia, validez",
+      "langCode": "es",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "zikir"
+      ],
+      "sourceBookletName": "El Corán",
+      "sourceSection": "Memorización",
+      "question": "¿Hay recompensa por memorizar el Corán?",
+      "answer": "Memorizar el Corán es una gran virtud. El Profeta mencionó que quien lo lleva en el corazón será elevado en el Día del Juicio. Debe acompañarse de comprensión y práctica.",
+      "keywords": "corán, memorización, hafiz, recompensa",
+      "langCode": "es",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "oruc",
+        "teravih"
+      ],
+      "sourceBookletName": "Ramadán Práctico",
+      "sourceSection": "Noches",
+      "question": "¿Qué se recomienda hacer en las noches de Ramadán?",
+      "answer": "Se recomienda orar tarawih, hacer du'a, leer Corán y compartir iftar en familia. Estas noches son oportunidades para acercarse a Allah y perdonar pecados.",
+      "keywords": "ramadán, tarawih, noche, du'a",
+      "langCode": "es",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "abdest",
+        "dua"
+      ],
+      "sourceBookletName": "Adoración Diaria",
+      "sourceSection": "Du'a",
+      "question": "¿Se puede hacer du'a sin wudu?",
+      "answer": "Sí, la du'a puede hacerse en cualquier estado de pureza. Sin embargo, estar en wudu y orientarse hacia la qibla aumenta la humildad y concentración al suplicar.",
+      "keywords": "du'a, wudu, súplica, qibla",
+      "langCode": "es",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "FAQ Islamique",
+      "sourceSection": "Ablutions",
+      "question": "Que faut-il faire si l'eau est indisponible pour le wudu?",
+      "answer": "En cas d'absence d'eau ou d'incapacité à l'utiliser, le tayammum avec de la terre propre remplace le wudu. Il permet de prier jusqu'à ce que l'eau redevienne accessible.",
+      "keywords": "tayammum, wudu, eau, prière",
+      "langCode": "fr",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "hac"
+      ],
+      "sourceBookletName": "Guide du Hajj",
+      "sourceSection": "Préparation",
+      "question": "Qui doit accomplir le hajj au moins une fois?",
+      "answer": "Le hajj devient obligatoire pour tout musulman adulte, sain d'esprit, capable physiquement et financièrement, et ayant un voyage sûr. C'est l'un des cinq piliers de l'Islam.",
+      "keywords": "hajj, pilier, obligation, capacité",
+      "langCode": "fr",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "peygamber"
+      ],
+      "sourceBookletName": "Croyance",
+      "sourceSection": "Prophètes",
+      "question": "Pourquoi Muhammad est-il le sceau des prophètes?",
+      "answer": "Muhammad est le dernier messager envoyé à toute l'humanité. Sa législation est finale et universelle. Croire en lui est indispensable à la foi musulmane.",
+      "keywords": "prophète, muhammad, messager, foi",
+      "langCode": "fr",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "sadaka"
+      ],
+      "sourceBookletName": "Éthique",
+      "sourceSection": "Charité",
+      "question": "Quelle est la différence entre sadaqa et zakat?",
+      "answer": "La zakat est une aumône obligatoire avec seuil et bénéficiaires définis. La sadaqa est volontaire et peut être donnée à tout moment pour toute bonne cause.",
+      "keywords": "sadaqa, zakat, charité, aumône",
+      "langCode": "fr",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile",
+        "dua"
+      ],
+      "sourceBookletName": "Famille",
+      "sourceSection": "Parents",
+      "question": "Comment honorer ses parents selon l'Islam?",
+      "answer": "Honorer ses parents est un devoir majeur après l'adoration d'Allah. Parler avec douceur, les aider financièrement et prier pour eux font partie du bon comportement.",
+      "keywords": "parents, honneur, famille, devoir",
+      "langCode": "fr",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran"
+      ],
+      "sourceBookletName": "Coran",
+      "sourceSection": "Lecture",
+      "question": "Peut-on écouter le Coran sans comprendre l'arabe?",
+      "answer": "Écouter le Coran apporte bénédiction même sans comprendre chaque mot. Toutefois, apprendre le sens approfondit la réflexion et la mise en pratique des enseignements.",
+      "keywords": "coran, écoute, récitation, sens",
+      "langCode": "fr",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "Ramadan",
+      "sourceSection": "Jeûne",
+      "question": "Le jeûne des enfants est-il obligatoire?",
+      "answer": "Le jeûne n'est obligatoire qu'à la puberté. On peut habituer les enfants progressivement avant cet âge pour les préparer spirituellement.",
+      "keywords": "jeûne, enfants, puberté, ramadan",
+      "langCode": "fr",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zikir"
+      ],
+      "sourceBookletName": "Adoration",
+      "sourceSection": "Dhikr",
+      "question": "Quels dhikr sont recommandés le matin et le soir?",
+      "answer": "Les invocations du matin et du soir protègent et apportent paix. Ayat al-Kursi, les trois dernières sourates et les formules de pardon sont largement recommandées.",
+      "keywords": "dhikr, matin, soir, protection",
+      "langCode": "fr",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz"
+      ],
+      "sourceBookletName": "Domande Islamiche",
+      "sourceSection": "Preghiera",
+      "question": "Cosa invalida la preghiera durante la sua esecuzione?",
+      "answer": "Parlare intenzionalmente, ridere ad alta voce o perdere un rukn invalida la preghiera. Dimenticanze minori possono essere corretti con sujud sahw secondo molti giuristi.",
+      "keywords": "preghiera, invalida, rukn, errore",
+      "langCode": "it",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "Digiuno",
+      "sourceSection": "Regolamento",
+      "question": "Il fumo invalida il digiuno?",
+      "answer": "Secondo la maggioranza degli studiosi, fumare durante il digiuno lo invalida perché introduce sostanze nel corpo. Il digiuno richiede astinenza da cibo, bevande e comportamenti che lo annullano.",
+      "keywords": "digiuno, fumo, invalida, ramadan",
+      "langCode": "it",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman"
+      ],
+      "sourceBookletName": "Fede",
+      "sourceSection": "Qadar",
+      "question": "Come conciliare libero arbitrio e destinazione?",
+      "answer": "Allah conosce tutto ma l'essere umano sceglie liberamente le proprie azioni. La fede nel qadar significa credere che nulla avviene senza il permesso divino.",
+      "keywords": "qadar, destino, libero arbitrio, fede",
+      "langCode": "it",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "helal"
+      ],
+      "sourceBookletName": "Halal",
+      "sourceSection": "Cibo",
+      "question": "Il vitello è halal se macellato correttamente?",
+      "answer": "Carne bovina e vitellina è halal se l'animale è sano e macellato nel nome di Allah con taglio valido. Musulmani devono evitare carni non certificate halal.",
+      "keywords": "halal, carne, macellazione, cibo",
+      "langCode": "it",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "Famiglia",
+      "sourceSection": "Divorzio",
+      "question": "Quali sono le regole islamiche sul divorzio?",
+      "answer": "Il divorzio è permesso ma è tra le cose più detestate ad Allah. Deve avvenire con giustizia, rispetto dei diritti della moglie e cura dei figli.",
+      "keywords": "divorzio, famiglia, diritti, figli",
+      "langCode": "it",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "dua"
+      ],
+      "sourceBookletName": "Corano",
+      "sourceSection": "Studio",
+      "question": "È obbligatorio imparare il tafsir del Corano?",
+      "answer": "Comprendere i significati base del Corano è essenziale per ogni musulmano. Lo studio approfondito del tafsir è fortemente raccomandato per evitare interpretazioni errate.",
+      "keywords": "corano, tafsir, studio, significato",
+      "langCode": "it",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "teravih"
+      ],
+      "sourceBookletName": "Ramadan",
+      "sourceSection": "Tarawih",
+      "question": "Si può pregare tarawih a casa da soli?",
+      "answer": "Sì, tarawih può essere pregata individualmente a casa. Pregare in congregazione in moschea è però più meritorio e rafforza l'unità della comunità.",
+      "keywords": "tarawih, ramadan, moschea, congregazione",
+      "langCode": "it",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat",
+        "sadaka"
+      ],
+      "sourceBookletName": "Zakat",
+      "sourceSection": "Calcolo",
+      "question": "La zakat si paga sui risparmi in banca?",
+      "answer": "Sì, i risparmi che raggiungono il nisab per un anno lunare sono soggetti a zakat. Il tasso standard è del 2,5% sul patrimonio netto zakatable.",
+      "keywords": "zakat, risparmi, banca, nisab",
+      "langCode": "it",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "Исламский справочник",
+      "sourceSection": "Омовение",
+      "question": "Что делать, если рана мешает мыть руку при омовении?",
+      "answer": "Если вода вредит ране, достаточно протереть поверх повязки. При полной невозможности используют tayammum. Главное — соблюдение возможного с искренним намерением.",
+      "keywords": "омовение, рана, tayammum, намаз",
+      "langCode": "ru",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "hac"
+      ],
+      "sourceBookletName": "Хадж",
+      "sourceSection": "Умра",
+      "question": "Чем умра отличается от хаджа?",
+      "answer": "Умра — малое паломничество, которое можно совершать в любое время. Хадж — большое паломничество в определённые дни года и является одним из столпов Ислама.",
+      "keywords": "хадж, умра, паломничество, столп",
+      "langCode": "ru",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman",
+        "peygamber"
+      ],
+      "sourceBookletName": "Акыда",
+      "sourceSection": "Книги",
+      "question": "Во что означает вера в божественные книги?",
+      "answer": "Мусульманин верит, что Аллах ниспослал Писания пророкам, включая Тору, Евангелие, Псалмы и Коран. Коран — последнее неизменное откровение.",
+      "keywords": "книги, откровение, коран, вера",
+      "langCode": "ru",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "zikir"
+      ],
+      "sourceBookletName": "Нравы",
+      "sourceSection": "Память",
+      "question": "Можно ли совершать зикр вслух в общественных местах?",
+      "answer": "Тихий или умеренный зикр допустим, если не мешает другим. Сердечное поминание Аллаha уместно в любое время и укрепляет терпение.",
+      "keywords": "зикр, поминание, терпение, сердце",
+      "langCode": "ru",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "Семья",
+      "sourceSection": "Брак",
+      "question": "Какой мahr и зачем он нужен?",
+      "answer": "Мahr — обязательный брачный дар от мужа жене, символ уважения и финансовой защиты. Его размер согласуется до брака и принадлежит только жене.",
+      "keywords": "mahr, брак, жена, дар",
+      "langCode": "ru",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran"
+      ],
+      "sourceBookletName": "Кoran",
+      "sourceSection": "Чтение",
+      "question": "Нужно ли стоять при чтении Корана из mushaf?",
+      "answer": "Сидя читать Коран более уместно и позволяет дольше сосредоточиться. Стоя читают при особых случаях; главное — уважение к словам Аллаha.",
+      "keywords": "кoran, чтение, mushaf, уважение",
+      "langCode": "ru",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "oruc",
+        "fitre"
+      ],
+      "sourceBookletName": "Рамадан",
+      "sourceSection": "Иftar",
+      "question": "Что лучше есть на iftar по сунне?",
+      "answer": "По сунне разрывают пост финиками и водой, затем совершают магриб. Умеренность при iftar помогает сохранить духовную пользу поста.",
+      "keywords": "iftar, финики, пост, сунна",
+      "langCode": "ru",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat"
+      ],
+      "sourceBookletName": "Закят",
+      "sourceSection": "Получатели",
+      "question": "Можно ли давать закят родственникам?",
+      "answer": "Закят нельзя давать родителям, детям и супругу, на которых уже есть обязанность содержания. Близким нуждающимся родственникам (кроме указанных) давать можно и это особенно наградно.",
+      "keywords": "закят, родственники, нужда, сadaqa",
+      "langCode": "ru",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "伊斯兰常见问题",
+      "sourceSection": "小净",
+      "question": "小净（乌杜）必须清洗哪些部位？",
+      "answer": "小净必须洗脸、洗至肘部的双手、抹头部一部分、洗至踝部的双脚。完成小净是礼拜有效的基本条件。",
+      "keywords": "小净, 乌杜, 礼拜, 清洗",
+      "langCode": "zh",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "斋戒指南",
+      "sourceSection": "开斋",
+      "question": "斋月中什么情况下可以不开斋？",
+      "answer": "真主允许病者、旅行者、孕妇和哺乳期妇女等因合理原因暂不封斋。有能力者应日后补斋，永久无法封斋者可出费达。",
+      "keywords": "斋戒, 豁免, 补斋, 费达",
+      "langCode": "zh",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman"
+      ],
+      "sourceBookletName": "信仰基础",
+      "sourceSection": "六大信仰",
+      "question": "穆斯林信仰的核心内容是什么？",
+      "answer": "信仰安拉、天使、经典、使者、后世和定数。完整接受这些信条是成为合格穆斯林的基础。",
+      "keywords": "信仰, 六大信条, 安拉, 后世",
+      "langCode": "zh",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "helal"
+      ],
+      "sourceBookletName": "清真生活",
+      "sourceSection": "饮食",
+      "question": "如何判断肉类是否清真？",
+      "answer": "清真肉需由穆斯林或经授权者以安拉之名合法屠宰，并排除猪肉及未按教法处理的死亡动物。购买时应查看清真认证。",
+      "keywords": "清真, _halal, 屠宰, 猪肉",
+      "langCode": "zh",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile",
+        "dua"
+      ],
+      "sourceBookletName": "家庭与伊斯兰",
+      "sourceSection": "孝道",
+      "question": "伊斯兰如何强调孝敬父母？",
+      "answer": "孝敬父母仅次于礼拜安拉。应温和对待父母、满足其合理需要并为其祈祷。忤逆父母是大罪。",
+      "keywords": "父母, 孝道, 家庭, 祈祷",
+      "langCode": "zh",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "zikir"
+      ],
+      "sourceBookletName": "古兰经导读",
+      "sourceSection": "诵读",
+      "question": "每天诵读古兰经有什么益处？",
+      "answer": "诵读古兰经带来心灵安宁与引导。即使每日读几节并思考含义，也能加强信仰并改善日常行为。",
+      "keywords": "古兰经, 诵读, 记念, 引导",
+      "langCode": "zh",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "teravih",
+        "oruc"
+      ],
+      "sourceBookletName": "斋月手册",
+      "sourceSection": "夜间礼拜",
+      "question": "塔拉威哈礼拜有什么意义？",
+      "answer": "塔拉威哈是斋月夜间自愿的集体礼拜，有助于延长对古兰经的聆听与记念。参加者可感受社区团结与灵性提升。",
+      "keywords": "塔拉威哈, 斋月, 夜间, 礼拜",
+      "langCode": "zh",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat",
+        "sadaka"
+      ],
+      "sourceBookletName": "天课须知",
+      "sourceSection": "天课",
+      "question": "天课与自愿施舍有何不同？",
+      "answer": "天课是达到尼萨布后满一年必须缴纳的财富义务，有固定比例和受赠对象。施舍（萨达卡）则是自愿的任意善行。",
+      "keywords": "天课, 施舍, 尼萨布, 义务",
+      "langCode": "zh",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz"
+      ],
+      "sourceBookletName": "イスラムFAQ",
+      "sourceSection": "礼拝",
+      "question": "礼拝の時間はどう決まりますか？",
+      "answer": "礼拝時間は日の出、正午、午後、日没、夜の五時で定まります。正確な時間表は地域の祈り時間に従います。時間内に礼拝することが義務です。",
+      "keywords": "礼拝, 時間, 五時, 義務",
+      "langCode": "ja",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "hac"
+      ],
+      "sourceBookletName": "ハッジガイド",
+      "sourceSection": "準備",
+      "question": "ハッジは誰に義務ですか？",
+      "answer": "身体的・経済的に可能な成人のムスリムに一生に一度ハッジが義務付けられます。安全な旅路と十分な資力が条件です。",
+      "keywords": "ハッジ, 義務, 巡礼, 条件",
+      "langCode": "ja",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "peygamber",
+        "iman"
+      ],
+      "sourceBookletName": "信仰の書",
+      "sourceSection": "預言者",
+      "question": "ムハンマドが最後の預言者である理由は？",
+      "answer": "彼は全人類に送られた最後の使者であり、その教えは完全で普遍的です。彼への信仰なく正しいイスラーム信仰は成立しません。",
+      "keywords": "預言者, ムハンマド, 使者, 信仰",
+      "langCode": "ja",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "sadaka"
+      ],
+      "sourceBookletName": "善い品性",
+      "sourceSection": "施し",
+      "question": "秘密の施しにはどんな美德がありますか？",
+      "answer": "人知れず施すことは偽善を防ぎ、清い意図を保ちます。アッラーは心の誠実さを最も重んじます。",
+      "keywords": "施し, サダカ, 誠実, 美德",
+      "langCode": "ja",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "家族のイスラーム",
+      "sourceSection": "結婚",
+      "question": "結婚における相互の権利とは？",
+      "answer": "夫婦は互いに尊重、誠実、協力し合うべきです。夫は生計を担い、妻は家庭の安らぎに寄与します。",
+      "keywords": "結婚, 夫婦, 権利, 家族",
+      "langCode": "ja",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran"
+      ],
+      "sourceBookletName": "クルアーン",
+      "sourceSection": "朗読",
+      "question": "クルアーンを読む前に清めが必要ですか？",
+      "answer": "写本に触れて読む場合はウドゥーが必要です。清めた状態での朗読はより敬意に満ち、報奨も大きいとされます。",
+      "keywords": "クルアーン, ウドゥー, 朗読, 清め",
+      "langCode": "ja",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "oruc",
+        "fitre"
+      ],
+      "sourceBookletName": "ラマダン",
+      "sourceSection": "断食",
+      "question": "フィトラ（開斎捐）とは何ですか？",
+      "answer": "ラマダン末に義務的に支払う施しで、断食の完成と祭日の困窮者支援を目的とします。自分と扶養家族分を支払います。",
+      "keywords": "フィトラ, ラマダン, 施し, 開斎",
+      "langCode": "ja",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "dua",
+        "zikir"
+      ],
+      "sourceBookletName": "日常の宗教実践",
+      "sourceSection": "ドゥアー",
+      "question": "ドゥアーはいつでもできますか？",
+      "answer": "はい、清めの有無に関わらずアッラーに祈ることは可能です。ただし礼拝中や不適切な言葉での祈りは避けます。",
+      "keywords": "ドゥアー, 祈り, 記念, 礼拝",
+      "langCode": "ja",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "이슬람 FAQ",
+      "sourceSection": "우두",
+      "question": "우두(소净)의 필수 부위는 무엇인가요?",
+      "answer": "얼굴, 팔꿈치까지의 팔, 머리 일부를 문지르기, 발목까지의 발을 씻는 것이 필수입니다. 유효한 우두 없이 예배는 성립하지 않습니다.",
+      "keywords": "우두, 예배, 필수, 세면",
+      "langCode": "ko",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "금식 안내",
+      "sourceSection": "라마단",
+      "question": "금식 중 물을 마시면 어떻게 되나요?",
+      "answer": "의도적으로 마시면 금식이 깨집니다. 실수로 마신 경우는 금식이 유효하며, 즉시 중단하고 계속 금식합니다.",
+      "keywords": "금식, 물, 의도, 실수",
+      "langCode": "ko",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman"
+      ],
+      "sourceBookletName": "신앙의 기초",
+      "sourceSection": "이ман",
+      "question": "이슬람의 여섯 가지 신앙 조건은?",
+      "answer": "알라, 천사, 성서, 선지자, 내세, 운명에 대한 믿음입니다. 이 여섯 가지를 온전히 믿는 것이 무슬림의 기본입니다.",
+      "keywords": "이ман, 신앙, 천사, 운명",
+      "langCode": "ko",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "helal"
+      ],
+      "sourceBookletName": "할랄 생활",
+      "sourceSection": "음식",
+      "question": "돼지고기가 금지된 이유는?",
+      "answer": "꾸란과 선지자의 가르침에 따라 돼지고기는 불결하고 금지되었습니다. 무슬림은 할랄 인증 식품을 선택해야 합니다.",
+      "keywords": "할랄, 돼지, 금지, 음식",
+      "langCode": "ko",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "가족과 이슬람",
+      "sourceSection": "양육",
+      "question": "자녀 교육에서 부모의 책임은?",
+      "answer": "부모는 자녀에게 예절, 정직, 예배를 가르칠 책임이 있습니다. 사랑과 공정함으로 양육하는 것이 종교적 의무입니다.",
+      "keywords": "가족, 자녀, 교육, 부모",
+      "langCode": "ko",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "dua"
+      ],
+      "sourceBookletName": "꾸란",
+      "sourceSection": "낭송",
+      "question": "꾸란을 외울 때의 보상은?",
+      "answer": "꾸란 암기는 큰 영광이며 심판의 날 높은 지위를 약속받습니다. 이해와 실천과 함께할 때 더 큰 의미가 있습니다.",
+      "keywords": "꾸란, 암기, 하피즈, 보상",
+      "langCode": "ko",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "teravih"
+      ],
+      "sourceBookletName": "라마단",
+      "sourceSection": "타라위",
+      "question": "타라위 예배는 어디서 드려도 되나요?",
+      "answer": "집에서 개인적으로 드릴 수 있으나, 모스크에서 공동체와 함께 드리는 것이 더 권장됩니다.",
+      "keywords": "타라위, 라마단, 모스크, 예배",
+      "langCode": "ko",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat"
+      ],
+      "sourceBookletName": "자카트",
+      "sourceSection": "니사브",
+      "question": "자카트는 언제 의무가 되나요?",
+      "answer": "재산이 니사브에 도달하고 한 해가 지나면 의무입니다. 현금, 금, 은, 상품 등이 해당될 수 있습니다.",
+      "keywords": "자카트, 니사브, 재산, 의무",
+      "langCode": "ko",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "FAQ Islâmico",
+      "sourceSection": "Wudu",
+      "question": "O que invalida o wudu?",
+      "answer": "Eliminar necessidades naturais, sono profundo ou perda de consciência invalida o wudu. Deve renovar-se antes da próxima oração.",
+      "keywords": "wudu, invalida, oração, pureza",
+      "langCode": "pt",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "hac"
+      ],
+      "sourceBookletName": "Guia do Hajj",
+      "sourceSection": "Rituais",
+      "question": "O que é o tawaf na Kaaba?",
+      "answer": "Tawaf é circunambular a Kaaba sete vezes em sentido anti-horário. É rito central do hajj e da umrah, simbolizando unidade em torno de Allah.",
+      "keywords": "tawaf, kaaba, hajj, umrah",
+      "langCode": "pt",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman",
+        "peygamber"
+      ],
+      "sourceBookletName": "Crença",
+      "sourceSection": "Livros",
+      "question": "Por que o Alcorão é a revelação final?",
+      "answer": "Allah preservou o Alcorão sem alteração como guia universal até o fim dos tempos. Crença nele como Palavra divina é pilar da fé.",
+      "keywords": "alcorão, revelação, fé, preservação",
+      "langCode": "pt",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "dua"
+      ],
+      "sourceBookletName": "Ética",
+      "sourceSection": "Honestidade",
+      "question": "Qual a importância da honestidade no comércio?",
+      "answer": "Enganar em pesos, preços ou qualidade é condenado. Comerciante muçulmano deve ser confiável e justo, pois a bênção está no comércio honesto.",
+      "keywords": "honestidade, comércio, ética, justiça",
+      "langCode": "pt",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "Família",
+      "sourceSection": "Casamento",
+      "question": "O que é mahr no casamento islâmico?",
+      "answer": "Mahr é dote obrigatório do marido para a esposa, acordado antes do casamento. Pertence exclusivamente a ela e simboliza respeito e proteção.",
+      "keywords": "mahr, casamento, esposa, dote",
+      "langCode": "pt",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "zikir"
+      ],
+      "sourceBookletName": "Alcorão",
+      "sourceSection": "Reflexão",
+      "question": "Deve-se refletir sobre o significado ao ler?",
+      "answer": "Sim, compreender o sentido transforma a leitura em orientação prática. Ler árabe sem entender ainda traz bênção, mas o tafsir enriquece a prática.",
+      "keywords": "alcorão, tafsir, leitura, reflexão",
+      "langCode": "pt",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "oruc",
+        "fitre"
+      ],
+      "sourceBookletName": "Ramadã",
+      "sourceSection": "Jejum",
+      "question": "Quem deve pagar zakat al-fitr?",
+      "answer": "Todo muçulmano solvente paga fitra por si e dependentes antes do Eid. Purifica o jejum e ajuda os pobres no dia festivo.",
+      "keywords": "fitra, ramadã, eid, caridade",
+      "langCode": "pt",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat",
+        "sadaka"
+      ],
+      "sourceBookletName": "Zakat",
+      "sourceSection": "Beneficiários",
+      "question": "Pode-se dar zakat a parentes pobres?",
+      "answer": "Sim, exceto pais, filhos e cônjuge sob sua responsabilidade direta. Ajudar parentes necessitados é especialmente recompensador.",
+      "keywords": "zakat, parentes, pobres, caridade",
+      "langCode": "pt",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz"
+      ],
+      "sourceBookletName": "Islam FAQ PL",
+      "sourceSection": "Modlitwa",
+      "question": "Czy można łączyć modlitwy w podróży?",
+      "answer": "Podróżny może skrócić cztery-rak'atowe modlitwy do dwóch zgodnie z przepisami szkoły prawnej. Skrócenie ułatwia zachowanie regularności w drodze.",
+      "keywords": "modlitwa, podróż, skrócenie, qasr",
+      "langCode": "pl",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "Post",
+      "sourceSection": "Ramadan",
+      "question": "Czy kobieta w miesiączce mości post?",
+      "answer": "Kobieta w okresie miesiączkowym nie posti, lecz powinna uzupełnić pominięte dni po zakończeniu cyklu. To wyjątek uznany przez uczonych.",
+      "keywords": "post, miesiączka, ramadan, uzupełnienie",
+      "langCode": "pl",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman"
+      ],
+      "sourceBookletName": "Wiara",
+      "sourceSection": "Anioły",
+      "question": "Jaka jest rola aniołów w islamie?",
+      "answer": "Aniołowie wykonują rozkazy Allaha, zapisują czyny i przekazują objawienie. Wiara w nich bez personifikacji jest częścią imanu.",
+      "keywords": "anioły, wiara, iman, objawienie",
+      "langCode": "pl",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "helal"
+      ],
+      "sourceBookletName": "Halal",
+      "sourceSection": "Jedzenie",
+      "question": "Czy alkohol w sosie czyni potrawę haram?",
+      "answer": "Potrawy z dodatkiem alkoholu lub ekstraktu z wieprzowiny są haram. Należy czytać skład i wybierać certyfikowane produkty halal.",
+      "keywords": "halal, alkohol, jedzenie, haram",
+      "langCode": "pl",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile",
+        "dua"
+      ],
+      "sourceBookletName": "Rodzina",
+      "sourceSection": "Rodzice",
+      "question": "Jak okazywać szacunek rodzicom?",
+      "answer": "Mówić łagodnie, pomagać w potrzebach i modlić się za nich. Nie wolno mówić im „uff” ani okazywać niecierpliwości.",
+      "keywords": "rodzice, szacunek, rodzina, modlitwa",
+      "langCode": "pl",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran"
+      ],
+      "sourceBookletName": "Koran",
+      "sourceSection": "Recytacja",
+      "question": "Czy kobieta może recytować Koran publicznie?",
+      "answer": "Tak, kobiety mogą recytować Koran i uczyć innych. Należy zachować skromność i właściwy adab zgodnie z tradycją.",
+      "keywords": "koran, recytacja, kobieta, adab",
+      "langCode": "pl",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "teravih",
+        "oruc"
+      ],
+      "sourceBookletName": "Ramadan",
+      "sourceSection": "Tarawih",
+      "question": "Ile rak'at ma tarawih?",
+      "answer": "W wielu meczetach modli się dwadzieścia rak'at tarawih plus witir. Liczba może się różnić, lecz regularność w Ramadanie jest kluczowa.",
+      "keywords": "tarawih, ramadan, witir, meczet",
+      "langCode": "pl",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat"
+      ],
+      "sourceBookletName": "Zakat",
+      "sourceSection": "Obowiązek",
+      "question": "Jaki procent stanowi zakat od oszczędności?",
+      "answer": "Standardowo 2,5% od majątku netto po osiągnięciu nisab i upływie roku księżycowego. Należy obliczyć uczciwie i z intencją.",
+      "keywords": "zakat, procent, nisab, oszczędności",
+      "langCode": "pl",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "Ісламський довідник",
+      "sourceSection": "Омовення",
+      "question": "Чи можна молитися без омовення після сну?",
+      "answer": "Легкий сон не скасовує омовення, але глибокий сон без свідомості його анулює. Перед наступною молитвою потрібно оновити омовення.",
+      "keywords": "омовення, сон, молитва, намаз",
+      "langCode": "uk",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "hac"
+      ],
+      "sourceBookletName": "Хадж",
+      "sourceSection": "Умра",
+      "question": "Що таке са'й між Safa та Marwa?",
+      "answer": "Са'й — семикратний рух між пагорбами Safa і Marwa, що нагадує про терпіння Хаджар. Це обов'язковий обряд хаджу та умри.",
+      "keywords": "са'й, safa, marwa, хадж",
+      "langCode": "uk",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "peygamber",
+        "iman"
+      ],
+      "sourceBookletName": "Акіда",
+      "sourceSection": "Посланці",
+      "question": "Чому важливо вірити у всіх пророків?",
+      "answer": "Заперечення будь-якого посланця означає заперечення єдності божественного послання. Мусульманин приймає всіх пророків від Адама до Мухаммада.",
+      "keywords": "пророки, віра, послання, іман",
+      "langCode": "uk",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "zikir"
+      ],
+      "sourceBookletName": "Мораль",
+      "sourceSection": "Зикр",
+      "question": "Як зикр допомагає у складні часи?",
+      "answer": "Пам'ятання Аллаха заспокоює серце та зміцнює терпіння. Регулярний зикр нагадує про залежність від Творця, а не від обставин.",
+      "keywords": "зикр, терпіння, серце, пам'ять",
+      "langCode": "uk",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "Сім'я",
+      "sourceSection": "Шлюб",
+      "question": "Які права має дружина в ісламі?",
+      "answer": "Дружина має право на утримання, гідне житло, повагу та справедливе ставлення. Чоловік зобов'язаний дбати про її матеріальні та моральні потреби.",
+      "keywords": "дружина, шлюб, права, утримання",
+      "langCode": "uk",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "dua"
+      ],
+      "sourceBookletName": "Кoran",
+      "sourceSection": "Читання",
+      "question": "Чи потрібен абдест для тримання mushaf?",
+      "answer": "Тримати Коран без омовення не дозволено. Читання з mushaf вимагає чистоти тіла, що проявляє повагу до Слова Аллаха.",
+      "keywords": "кoran, mushaf, омовення, повага",
+      "langCode": "uk",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "oruc",
+        "fitre"
+      ],
+      "sourceBookletName": "Рамадан",
+      "sourceSection": "Піст",
+      "question": "Коли починається і закінчується денний піст?",
+      "answer": "Піст триває від fajr до заходу сонця (maghrib). Намір має бути до світанку; їжа та пиття в цей час заборонені.",
+      "keywords": "піст, fajr, maghrib, рамадан",
+      "langCode": "uk",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat",
+        "sadaka"
+      ],
+      "sourceBookletName": "Закят",
+      "sourceSection": "Розрахунок",
+      "question": "Чи включається золото прикрас у закят?",
+      "answer": "Золото, що зберігається як заощадження і досягає nisab, оподатковується закятом. Особисті прикраси за деякими думками звільнені, якщо не для торгівлі.",
+      "keywords": "закят, золото, прикраси, nisab",
+      "langCode": "uk",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "Ислямски въпроси",
+      "sourceSection": "Абdest",
+      "question": "Колко задължителни части има абdestът?",
+      "answer": "Абdestът има четири задължителни части: лице, ръце до лактите, част от главата и крака до глезените. Без валиден абdest молитвата не е приета.",
+      "keywords": "абdest, молитва, намаз, умиене",
+      "langCode": "bg",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "Постене",
+      "sourceSection": "Рамазан",
+      "question": "Какво прекъсва поста умишлено?",
+      "answer": "Умишлено хранене, пиене и полово сношение прекъсват поста. Съзнателно повръщане също го прекъсва. Забравено хранене не прекъсва поста.",
+      "keywords": "post, ramazan, hrana, postene",
+      "langCode": "bg",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman"
+      ],
+      "sourceBookletName": "Акида",
+      "sourceSection": "Вяра",
+      "question": "Какво означава вяра в Съдния ден?",
+      "answer": "Вярата в Съдния ден включва възкресение, справедливо съдие и награда или наказание. Тя насърчава отговорно поведение и богобоязън.",
+      "keywords": "vяra, suden den, vazkresenie, iman",
+      "langCode": "bg",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "helal"
+      ],
+      "sourceBookletName": "Халал",
+      "sourceSection": "Храна",
+      "question": "Какво месо е халал за мюсюманите?",
+      "answer": "Халал е месо от животно, заклано по ислямски със споменаване на името на Аллах. Свинско месо и мъртва плът са haram.",
+      "keywords": "halal, meso, haram, svinско",
+      "langCode": "bg",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "Семейство",
+      "sourceSection": "Брак",
+      "question": "Какви са правата на съпруга и съпруга?",
+      "answer": "Съпрузите дължат взаимно уважение, подкрепа и справедливост. Мъжът осигурява издържание, а жената допринася за домашния мир.",
+      "keywords": "brak, supruzi, prava, semeistvo",
+      "langCode": "bg",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "zikir"
+      ],
+      "sourceBookletName": "Kuran",
+      "sourceSection": "Recitacija",
+      "question": "Zashto e vazhno da se chete Kuran s razbirane?",
+      "answer": "Razbirane na znachenieto pravi cheteneto praktichno rukovodstvo. Samo zvuk bez misal nosi polza, no tafsir zadlbochava verata.",
+      "keywords": "kuran, tafsir, chetene, zikir",
+      "langCode": "bg",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "teravih",
+        "fitre"
+      ],
+      "sourceBookletName": "Ramazan",
+      "sourceSection": "Teravih",
+      "question": "Kakvo e teravih namazat?",
+      "answer": "Teravih e nochna molitva v Ramazan, obiknoveno v dzhamiya. Podkrepya duhovnoto sabuzhdane i edinstvoto na obshtnostta.",
+      "keywords": "teravih, ramazan, molitva, dzhamiya",
+      "langCode": "bg",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat"
+      ],
+      "sourceBookletName": "Zakat",
+      "sourceSection": "Zadalzhitelnost",
+      "question": "Koga stava zakat zadalzhitelen?",
+      "answer": "Kogato imusat dostigne nisab i mine edna lunna godina. Standartniyat dolyu e 2,5% ot zakatable aktivite.",
+      "keywords": "zakat, nisab, imus, dolyu",
+      "langCode": "bg",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz"
+      ],
+      "sourceBookletName": "Islam FAQ CZ",
+      "sourceSection": "Modlitba",
+      "question": "Kolik povinných modliteb je za den?",
+      "answer": "Pět denních modliteb: Fajr, Dhuhr, Asr, Maghrib a Isha. Každá má svůj čas podle pohybu slunce. Zanedbání bez výmluvy je hřích.",
+      "keywords": "modlitba, fajr, pet, povinnost",
+      "langCode": "cs",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "hac"
+      ],
+      "sourceBookletName": "Hadždž",
+      "sourceSection": "Pilíře",
+      "question": "Co je ihram při hadždži?",
+      "answer": "Ihram je posvátný stav s pravidly chování a oděvem před poutí. V ihramu jsou zakázány lov, parfém a hádky.",
+      "keywords": "hadždž, ihram, pouť, pravidla",
+      "langCode": "cs",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "peygamber",
+        "iman"
+      ],
+      "sourceBookletName": "Víra",
+      "sourceSection": "Proroci",
+      "question": "Proč je Muhammad posledním prorokem?",
+      "answer": "Je posledním poslem pro celé lidstvo a jeho zákony jsou konečná. Víra v něj je nezbytná součástí islámu.",
+      "keywords": "prorok, muhammad, posel, víra",
+      "langCode": "cs",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "sadaka"
+      ],
+      "sourceBookletName": "Etika",
+      "sourceSection": "Charita",
+      "question": "Jaký je rozdíl mezi zakat a sadaqa?",
+      "answer": "Zakat je povinná dávka s pevnými pravidly. Sadaqa je dobrovolná a lze ji dát kdykoli komukoli potřebnému.",
+      "keywords": "zakat, sadaqa, charita, dobrovolnost",
+      "langCode": "cs",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile",
+        "dua"
+      ],
+      "sourceBookletName": "Rodina",
+      "sourceSection": "Rodiče",
+      "question": "Jak ctít rodiče v islámu?",
+      "answer": "Mluvit k nim jemně, pomáhat jim a modlit se za ně. Neucta k rodičům patří mezi největší hříchy.",
+      "keywords": "rodiče, úcta, rodina, dua",
+      "langCode": "cs",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran"
+      ],
+      "sourceBookletName": "Korán",
+      "sourceSection": "Recitace",
+      "question": "Je nutný wudu pro dotek mushafu?",
+      "answer": "Mushaf by se neměl dotýkat bez wudu. Recitace v čistotě projevuje úctu ke Koránu jako slovu Alláha.",
+      "keywords": "korán, wudu, mushaf, recitace",
+      "langCode": "cs",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "Ramadán",
+      "sourceSection": "Půst",
+      "question": "Kdo je osvobozen od půstu?",
+      "answer": "Nemocní, cestující, těhotné a kojící mohou půst odložit nebo zaplatit fidya. Náhrada se koná, když je to možné.",
+      "keywords": "půst, ramadán, výjimka, fidya",
+      "langCode": "cs",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "abdest",
+        "dua"
+      ],
+      "sourceBookletName": "Uctívání",
+      "sourceSection": "Du'a",
+      "question": "Lze konat du'a bez wudu?",
+      "answer": "Ano, du'a je možná kdykoli. Wudu a čisté místo však zvyšují soustředění a pokoru při prosbě.",
+      "keywords": "du'a, wudu, prosba, modlitba",
+      "langCode": "cs",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "Iszlám GYIK",
+      "sourceSection": "Műndö",
+      "question": "Mi történik, ha nincs víz a műndöhöz?",
+      "answer": "Ha nincs víz vagy használhatatlan, a tayammum tiszta földdel helyettesíti a műndöt. Így is lehet imádkozni, amíg a víz elérhetővé nem válik.",
+      "keywords": "műndö, tayammum, víz, ima",
+      "langCode": "hu",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "Böjt",
+      "sourceSection": "Ramadán",
+      "question": "Mikor kezdődik és ér véget a napi böjt?",
+      "answer": "A böjt a hajnal (fajr) kezdetétől napnyugtáig (maghrib) tart. Szándék a hajnal előtt szükséges; evés és ivás tilos.",
+      "keywords": "böjt, fajr, maghrib, ramadán",
+      "langCode": "hu",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman"
+      ],
+      "sourceBookletName": "Hit",
+      "sourceSection": "Angyalok",
+      "question": "Mit jelent hinni az angyalokban?",
+      "answer": "Az angyalok Allah engedelmes teremtményei, akik feladatokat látnak el, mint a cselekedetek feljegyzése. Hit beléjük az imán része.",
+      "keywords": "angyalok, hit, imán, teremtmény",
+      "langCode": "hu",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "helal"
+      ],
+      "sourceBookletName": "Halal",
+      "sourceSection": "Étel",
+      "question": "Mi tesz egy ételt halalná?",
+      "answer": "Halal az, amit Allah nevében jogosan vágottak, és nem tartalmaz tiltott összetevőt, mint sertéshús vagy alkohol.",
+      "keywords": "halal, étel, sertés, vágás",
+      "langCode": "hu",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "Család",
+      "sourceSection": "Házasság",
+      "question": "Mi a mahr jelentése?",
+      "answer": "A mahr kötelező ajándék a férjtől a feleségnek, amely kizárólag az övé. A házasság tiszteletét és anyagi védelmét szimbolizálja.",
+      "keywords": "mahr, házasság, feleség, ajándék",
+      "langCode": "hu",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "dua"
+      ],
+      "sourceBookletName": "Korán",
+      "sourceSection": "Olvasás",
+      "question": "Kell-e Bismillah a recitálás előtt?",
+      "answer": "Ajánlott Bismillah ar-Rahman ar-Rahim mondásával kezdeni. Ez tiszteletet és szándék tisztaságát fejezi ki.",
+      "keywords": "korán, bismillah, recitálás, kezdés",
+      "langCode": "hu",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "teravih"
+      ],
+      "sourceBookletName": "Ramadán",
+      "sourceSection": "Tarawih",
+      "question": "Otthon is imádkozható a teravih?",
+      "answer": "Igen, egyedül is tartható, de a mecsetben közösséggel végzett teravih nagyobb jutalommal jár.",
+      "keywords": "teravih, ramadán, mecset, ima",
+      "langCode": "hu",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat",
+        "sadaka"
+      ],
+      "sourceBookletName": "Zakat",
+      "sourceSection": "Kötelezettség",
+      "question": "Mikor válik kötelezővé a zakat?",
+      "answer": "Ha a vagyon eléri a nisab-ot és egy holdév eltelt. A standard arány 2,5% a zakatable vagyon után.",
+      "keywords": "zakat, nisab, vagyon, kötelezettség",
+      "langCode": "hu",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz"
+      ],
+      "sourceBookletName": "Întrebări Islamice",
+      "sourceSection": "Rugăciune",
+      "question": "Ce invalidează rugăciunea în timpul ei?",
+      "answer": "Vorbirea intenționată sau râsul tare invalidează rugăciunea. Greșelile minore pot fi corectate conform regulilor școlii juridice.",
+      "keywords": "rugăciune, invalidare, namaz, eroare",
+      "langCode": "ro",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "hac"
+      ],
+      "sourceBookletName": "Ghid Hajj",
+      "sourceSection": "Piloni",
+      "question": "Care sunt stâlpii Hajj-ului?",
+      "answer": "Printre stâlpii Hajj-ului se numără ihram, starea la Arafat, tawaf și sa'i. Lipsa unui stâlp invalidează Hajj-ul.",
+      "keywords": "hajj, arafat, tawaf, stâlp",
+      "langCode": "ro",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman",
+        "peygamber"
+      ],
+      "sourceBookletName": "Credință",
+      "sourceSection": "Cărți",
+      "question": "De ce Coranul este revelația finală?",
+      "answer": "Allah a păstrat Coranul nealterat ca ghid universal. Credința în el ca Cuvânt divin este esențială.",
+      "keywords": "coran, revelație, credință, ghid",
+      "langCode": "ro",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "dua"
+      ],
+      "sourceBookletName": "Etică",
+      "sourceSection": "Vecinătate",
+      "question": "Care sunt drepturile vecinului?",
+      "answer": "Vecinul are dreptul la siguranță, respect și ajutor. Profetul a subliniat mult drepturile vecinului.",
+      "keywords": "vecin, drepturi, etică, respect",
+      "langCode": "ro",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "Familie",
+      "sourceSection": "Căsătorie",
+      "question": "Este necesar consimțământul în căsătorie?",
+      "answer": "Căsătoria validă cere consimțământ liber al miresei și al tutorelui conform legii islamice. Forțarea este interzisă.",
+      "keywords": "căsătorie, consimțământ, mireasă, validitate",
+      "langCode": "ro",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "zikir"
+      ],
+      "sourceBookletName": "Coran",
+      "sourceSection": "Memorare",
+      "question": "Există răsplată pentru memorarea Coranului?",
+      "answer": "Memorarea Coranului este virtute mare. În Ziua Judecății, cel care îl poartă în inimă va fi ridicat.",
+      "keywords": "coran, memorare, hafiz, răsplată",
+      "langCode": "ro",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "oruc",
+        "fitre"
+      ],
+      "sourceBookletName": "Ramadan",
+      "sourceSection": "Post",
+      "question": "Ce este zakat al-fitr?",
+      "answer": "Este donația obligatorie la sfârșitul Ramadanului înainte de Eid. Purifică postul și ajută săracii.",
+      "keywords": "fitra, ramadan, eid, caritate",
+      "langCode": "ro",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat"
+      ],
+      "sourceBookletName": "Zakat",
+      "sourceSection": "Beneficiari",
+      "question": "Cui se poate da zakat?",
+      "answer": "Săracilor, datornicilor, călătorilor și altor categorii prevăzute. Nu se dă părinților, copiilor sau soțului aflat în întreținere.",
+      "keywords": "zakat, săraci, beneficiari, caritate",
+      "langCode": "ro",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "Islam FAQ SK",
+      "sourceSection": "Wudu",
+      "question": "Aké sú povinné časti wudu?",
+      "answer": "Tvár, ruky po lakte, časť hlavy a nohy po členky. Bez platného wudu modlitba nie je platná.",
+      "keywords": "wudu, modlitba, povinnosť, umývanie",
+      "langCode": "sk",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "Pôst",
+      "sourceSection": "Ramadán",
+      "question": "Ruší fajčenie pôst?",
+      "answer": "Podľa väčšiny učencov áno, pretože sa vnášajú látky do tela. Pôst vyžaduje zdržanie sa jedla, pitia a rušivých činov.",
+      "keywords": "pôst, fajčenie, ramadán, invalidácia",
+      "langCode": "sk",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman"
+      ],
+      "sourceBookletName": "Viera",
+      "sourceSection": "Určenie",
+      "question": "Ako chápať vieru v určenie (qadar)?",
+      "answer": "Allah všetko vie, no človek koná slobodne. Viera v qadar znamená prijať, že nič sa nestane bez Jeho dovolenia.",
+      "keywords": "qadar, určenie, viera, sloboda",
+      "langCode": "sk",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "helal"
+      ],
+      "sourceBookletName": "Halal",
+      "sourceSection": "Jedlo",
+      "question": "Je hovädzie mäso halal pri správnej porážke?",
+      "answer": "Áno, ak je zdravé zviera porazené v mene Allaha. Vyhnite sa necertifikovanému mäsu a bravčovine.",
+      "keywords": "halal, mäso, porážka, jedlo",
+      "langCode": "sk",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "Rodina",
+      "sourceSection": "Rozvod",
+      "question": "Aké sú pravidlá islamského rozvodu?",
+      "answer": "Rozvod je povolený, ale nepatrí medzi obľúbené veci. Musí prebehnúť spravodlivo s ohľadom na práva manželky a detí.",
+      "keywords": "rozvod, rodina, práva, deti",
+      "langCode": "sk",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran"
+      ],
+      "sourceBookletName": "Korán",
+      "sourceSection": "Štúdium",
+      "question": "Je dôležité učiť sa tafsir?",
+      "answer": "Základné chápanie významu je nevyhnutné. Hlbšie štúdium tafsiru pomáha predísť nesprávnym výkladom.",
+      "keywords": "korán, tafsir, štúdium, význam",
+      "langCode": "sk",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "teravih"
+      ],
+      "sourceBookletName": "Ramadán",
+      "sourceSection": "Tarawih",
+      "question": "Koľko rak'at má tarawih?",
+      "answer": "Bežne dvadsať rak'at plus vitir v mešite. Dôležitá je pravidelnosť počas Ramadánu.",
+      "keywords": "tarawih, ramadán, vitir, mešita",
+      "langCode": "sk",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat",
+        "sadaka"
+      ],
+      "sourceBookletName": "Zakat",
+      "sourceSection": "Výpočet",
+      "question": "Platí sa zakat z úspor v banke?",
+      "answer": "Áno, ak dosiahnu nisab po dobu roka. Štandardná sadzba je 2,5% z čistého zakatable majetku.",
+      "keywords": "zakat, úspory, banka, nisab",
+      "langCode": "sk",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz"
+      ],
+      "sourceBookletName": "Islam FAQ SL",
+      "sourceSection": "Molitev",
+      "question": "Kdaj se molitveni časi določijo?",
+      "answer": "Pet dnevnih molitev: Fajr, Dhuhr, Asr, Maghrib in Isha. Čas je vezan na sonce. Zamuda brez opravičila je greh.",
+      "keywords": "molitev, čas, fajr, obveza",
+      "langCode": "sl",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "hac"
+      ],
+      "sourceBookletName": "Hadž",
+      "sourceSection": "Priprava",
+      "question": "Komu je hadž obvezen?",
+      "answer": "Odraslemu muslimanu, ki je telesno in finančno sposoben ter ima varno pot. Hadž je eden od petih stebrov.",
+      "keywords": "hadž, obveza, potovanje, steber",
+      "langCode": "sl",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "peygamber"
+      ],
+      "sourceBookletName": "Vera",
+      "sourceSection": "Poslanstvo",
+      "question": "Zakaj je Muhammad zadnji prerok?",
+      "answer": "Je zadnji poslanec človeštvu in njegov zakon je dokončen. Vera vanj je bistvena za islam.",
+      "keywords": "prerok, muhammad, poslanec, vera",
+      "langCode": "sl",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "sadaka"
+      ],
+      "sourceBookletName": "Etika",
+      "sourceSection": "Dobrota",
+      "question": "Kakšna je vrednost skrivne sadaqe?",
+      "answer": "Skrivno darovanje ohranja iskrenost in preprečuje pohlep za pohvalo. Allah ceni čiste namere.",
+      "keywords": "sadaqa, darovanje, iskrenost, etika",
+      "langCode": "sl",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile",
+        "dua"
+      ],
+      "sourceBookletName": "Družina",
+      "sourceSection": "Starši",
+      "question": "Kako častiti starše?",
+      "answer": "Govoriti nežno, jim pomagati in moliti zanje. Nepoštenje do staršev je med največjimi grehi.",
+      "keywords": "starši, čast, družina, molitev",
+      "langCode": "sl",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "zikir"
+      ],
+      "sourceBookletName": "Koran",
+      "sourceSection": "Branje",
+      "question": "Ali je koristno brati koran vsak dan?",
+      "answer": "Redno branje prinaša mir in vodstvo. Tudi nekaj ayat z razmislekom krepi vero in obnašanje.",
+      "keywords": "koran, branje, zikir, vera",
+      "langCode": "sl",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "oruc",
+        "fitre"
+      ],
+      "sourceBookletName": "Ramadan",
+      "sourceSection": "Post",
+      "question": "Kaj je fitra?",
+      "answer": "Obvezna dobrodelna dajatev ob koncu Ramadana pred Eid molitvijo. Očisti post in pomaga revnim.",
+      "keywords": "fitra, ramadan, post, eid",
+      "langCode": "sl",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "dua",
+        "abdest"
+      ],
+      "sourceBookletName": "Ibadet",
+      "sourceSection": "Du'a",
+      "question": "Ali lahko molimo du'a brez wudu?",
+      "answer": "Da, du'a je dovoljena kadarkoli. Wudu pa poveča ponižnost in osredotočenost pri prošnji.",
+      "keywords": "du'a, wudu, prošnja, molitev",
+      "langCode": "sl",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "Islamski vodič",
+      "sourceSection": "Abdest",
+      "question": "Koje organe treba oprati pri abdestu?",
+      "answer": "Lice, ruke do lakata, trećina glave se maže i noge do članaka. Abdest je uslov za validan namaz.",
+      "keywords": "abdest, namaz, pranje, farz",
+      "langCode": "sr",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "Post",
+      "sourceSection": "Ramazan",
+      "question": "Šta ruši post namjerno?",
+      "answer": "Jelo, piće i odnos namjerno ruše post. Namjerno povraćanje takođe. Zaboravno jelo ne ruši post.",
+      "keywords": "post, rušenje, ramazan, iftar",
+      "langCode": "sr",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman"
+      ],
+      "sourceBookletName": "Akida",
+      "sourceSection": "Iman",
+      "question": "Koliko je uslova imana?",
+      "answer": "Šest uslova: vjerovanje u Allaha, meleke, knjige, poslanike, Sudnji dan i kader. Potpuna vjera u njih je osnova.",
+      "keywords": "iman, uslovi, kader, meleki",
+      "langCode": "sr",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "helal"
+      ],
+      "sourceBookletName": "Helal vodič",
+      "sourceSection": "Hrana",
+      "question": "Kako prepoznati helal meso?",
+      "answer": "Meso životinje zaklane uz spominjanje Allaha i ispravan rez. Svinjetina i mrtva životinja su haram.",
+      "keywords": "helal, meso, haram, svinjetina",
+      "langCode": "sr",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "Porodica",
+      "sourceSection": "Brak",
+      "question": "Koja su prava supružnika?",
+      "answer": "Uzajamno poštovanje, podrška i pravednost. Muž obezbeđuje izdržavanje, supruga doprinosi miru doma.",
+      "keywords": "brak, supruzi, prava, porodica",
+      "langCode": "sr",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran"
+      ],
+      "sourceBookletName": "Kuran",
+      "sourceSection": "Tilavet",
+      "question": "Da li treba abdest za dodir mushafa?",
+      "answer": "Mushaf se ne dodiruje bez abdesta. Čitanje u čistoći pokazuje poštovanje prema Kur'anu.",
+      "keywords": "kuran, mushaf, abdest, tilavet",
+      "langCode": "sr",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "teravih",
+        "namaz"
+      ],
+      "sourceBookletName": "Ramazan ilmihal",
+      "sourceSection": "Teravih",
+      "question": "Koliko rekata ima teravih?",
+      "answer": "Po hanefijskom mezhebu dvadeset rekata plus vitir. Klanja se u ramazanskim noćima, poželjno u džamiji.",
+      "keywords": "teravih, vitir, ramazan, džamija",
+      "langCode": "sr",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat",
+        "sadaka"
+      ],
+      "sourceBookletName": "Zekat",
+      "sourceSection": "Primalci",
+      "question": "Kome se daje zekat?",
+      "answer": "Sirotinji, siromašnom, dužniku, putniku i drugim kategorijama. Ne daje se roditeljima i djeci u direktnoj brizi.",
+      "keywords": "zekat, sadaka, sirotinja, primalac",
+      "langCode": "sr",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz"
+      ],
+      "sourceBookletName": "Исламски прашања",
+      "sourceSection": "Намаз",
+      "question": "Колку задолжителни намази има дневно?",
+      "answer": "Пет намази: Фаџр, Зухр, Аср, Магриб и Иша. Секој има свој време според движењето на сонцето.",
+      "keywords": "намаз, време, пет, farz",
+      "langCode": "mk",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "hac"
+      ],
+      "sourceBookletName": "Аџ",
+      "sourceSection": "Ихрам",
+      "question": "Што е ихрам при аџ?",
+      "answer": "Свето состояние со правила за одев и однесување пред аџ. Вo ихрам се забранети лов, парфем и сваѓа.",
+      "keywords": "аџ, ихрам, правила, паломничество",
+      "langCode": "mk",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "peygamber",
+        "iman"
+      ],
+      "sourceBookletName": "Акида",
+      "sourceSection": "Пророци",
+      "question": "Зошто е важно да се верува во сите пророци?",
+      "answer": "Негирањето на кој било пророк го негира единството на божјата порака. Муслиманот верува во сите од Адам до Мухамед.",
+      "keywords": "прорoci, вера, порака, иман",
+      "langCode": "mk",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "zikir"
+      ],
+      "sourceBookletName": "Морал",
+      "sourceSection": "Зикр",
+      "question": "Како зикрот помага во тешки времиња?",
+      "answer": "Спомнувањето на Аллах го смирува срцето и ја зајакнува трпеливоста. Редовен зикр го насочува кон Творецот.",
+      "keywords": "зикр, трпеливост, срце, спомен",
+      "langCode": "mk",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "Семејство",
+      "sourceSection": "Брак",
+      "question": "Што е mahr во исламскиот брак?",
+      "answer": "Задолжителен брачен дар од мажот на жената, договорен пред бракот. Припаѓа само на неа и ја симbolizира почитта.",
+      "keywords": "mahr, брак, жена, дар",
+      "langCode": "mk",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "dua"
+      ],
+      "sourceBookletName": "Куран",
+      "sourceSection": "Читање",
+      "question": "Дали треба да се стои при читање од mushaf?",
+      "answer": "Седење е погодно за подолго читање. Важно е почит кон Словото на Аллах, не само положбата.",
+      "keywords": "куран, читање, mushaf, почит",
+      "langCode": "mk",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "oruc",
+        "fitre"
+      ],
+      "sourceBookletName": "Рамазан",
+      "sourceSection": "Пост",
+      "question": "Што е fitre?",
+      "answer": "Задолжителна добротворна давка на крајот од Рамазан пред Eid. Го исчистува постот и им помага на сиромашните.",
+      "keywords": "fitre, рамазан, пост, eid",
+      "langCode": "mk",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat"
+      ],
+      "sourceBookletName": "Закат",
+      "sourceSection": "Нисап",
+      "question": "Кога станува закат задолжителен?",
+      "answer": "Кога имотот ќе достigne nisab и помине една лунарна година. Стандардна стapka е 2,5%.",
+      "keywords": "закат, nisab, имот, stapka",
+      "langCode": "mk",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "Pirsên Îslamê",
+      "sourceSection": "Destnî",
+      "question": "Di destnî de kîjan endam têne şûstin?",
+      "answer": "Rû, dest heta enîşk, çendek ji serê mêşkirin û ling heta goteke têne şûstin. Bê destnîya derbasdar namaz nabe.",
+      "keywords": "destnî, namaz, rû, ling, mêşkirin",
+      "langCode": "ku",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "Rojî",
+      "sourceSection": "Miftekirina rojî",
+      "question": "Çi tişt bi qasd rojîyê dişikînin?",
+      "answer": "Xwarin, vexwarin û têkilîya zayendî bi qasd rojîyê dişikînin. Qus kirina bi qasd jî rojîyê dişikîne. Ji bîr xwarin rojîyê naşikîne.",
+      "keywords": "rojî, şikandin, xwarin, vexwarin",
+      "langCode": "ku",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman"
+      ],
+      "sourceBookletName": "Akîde",
+      "sourceSection": "Îman",
+      "question": "Çend şertên îmanê hene?",
+      "answer": "Şeş şert hene: baweriya bi Xwedê, malakan, pirtûkan, peyamberan, roja dawî û qaderê. Baweriya bi wan bingeha îslamê ye.",
+      "keywords": "îman, şert, qader, peyamber",
+      "langCode": "ku",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "helal"
+      ],
+      "sourceBookletName": "Helal",
+      "sourceSection": "Xwarin",
+      "question": "Goştê helal çawa tê nasîn?",
+      "answer": "Goştê heywanê bi navê Xwedê hatî kuştin û bi awayekî rast hatî serrastkirin helal e. Goştê berazan û mirî haram e.",
+      "keywords": "helal, goşt, haram, beraz",
+      "langCode": "ku",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile",
+        "dua"
+      ],
+      "sourceBookletName": "Malbat",
+      "sourceSection": "Hevkarî",
+      "question": "Mafên hevjînên di îslamê de çi ne?",
+      "answer": "Hevdu rêz, alîkarî û dadwerî lazim e. Mêr nafaqeyê peyda dike, jin jî aştiya malê xurttir dike.",
+      "keywords": "malbat, hevjîn, maf, rêz",
+      "langCode": "ku",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran"
+      ],
+      "sourceBookletName": "Quran",
+      "sourceSection": "Xwendin",
+      "question": "Ji bo xwendina Quranê destnî hewce ye?",
+      "answer": "Ji mushafê xwendin bi destnî tê kirin. Ev rêz li gotinên Xwedê nîşan dide.",
+      "keywords": "quran, destnî, mushaf, xwendin",
+      "langCode": "ku",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "teravih"
+      ],
+      "sourceBookletName": "Remezan",
+      "sourceSection": "Teravih",
+      "question": "Teravih çi ye?",
+      "answer": "Namaza şevê ya Remezanê ye, bi gelemperî di mizgeftê de. Civata îbadetê xurttir dike.",
+      "keywords": "teravih, remezan, mizgeft, şev",
+      "langCode": "ku",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat",
+        "sadaka"
+      ],
+      "sourceBookletName": "Zekat",
+      "sourceSection": "Wergirtvan",
+      "question": "Zekat kîjan kesan distîne?",
+      "answer": "Belengaz, feqîr, deynkar û rêwiyan di nav de. Dayik-bav û zarokên di nafaqeya te de nayên dayîn.",
+      "keywords": "zekat, sadaqê, belengaz, feqîr",
+      "langCode": "ku",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "Islamic FAQ",
+      "sourceSection": "Wudu",
+      "question": "What are the four obligatory acts of wudu?",
+      "answer": "Washing the face, arms to elbows, wiping part of the head, and feet to ankles. Valid wudu is required before salah.",
+      "keywords": "wudu, salah, ablution, prayer",
+      "langCode": "hy",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "Fasting Guide",
+      "sourceSection": "Ramadan",
+      "question": "Does forgetful eating break the fast?",
+      "answer": "No, eating or drinking forgetfully does not break the fast. One should stop immediately and continue fasting for the rest of the day.",
+      "keywords": "fasting, ramadan, forgetful, iftar",
+      "langCode": "hy",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman",
+        "peygamber"
+      ],
+      "sourceBookletName": "Articles of Faith",
+      "sourceSection": "Books",
+      "question": "What does belief in divine books mean?",
+      "answer": "Muslims believe Allah revealed scriptures to prophets including the Torah, Gospel, Psalms, and Quran. The Quran is the final preserved revelation.",
+      "keywords": "faith, revelation, quran, prophets",
+      "langCode": "hy",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "helal"
+      ],
+      "sourceBookletName": "Halal Living",
+      "sourceSection": "Food",
+      "question": "Why is pork forbidden in Islam?",
+      "answer": "The Quran explicitly forbids pork as impure. Muslims should consume halal-certified meat slaughtered in Allah's name with proper method.",
+      "keywords": "halal, pork, haram, food",
+      "langCode": "hy",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "Family in Islam",
+      "sourceSection": "Marriage",
+      "question": "What is the purpose of mahr in marriage?",
+      "answer": "Mahr is a mandatory gift from husband to wife, agreed before marriage. It belongs solely to her and signifies respect and financial dignity.",
+      "keywords": "mahr, marriage, wife, gift",
+      "langCode": "hy",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "zikir"
+      ],
+      "sourceBookletName": "Quran Companion",
+      "sourceSection": "Recitation",
+      "question": "Is daily Quran recitation recommended?",
+      "answer": "Regular recitation brings tranquility and guidance. Even a few verses with reflection strengthens faith and improves daily conduct.",
+      "keywords": "quran, recitation, dhikr, reflection",
+      "langCode": "hy",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "teravih",
+        "oruc"
+      ],
+      "sourceBookletName": "Ramadan Handbook",
+      "sourceSection": "Nights",
+      "question": "What is tarawih prayer?",
+      "answer": "Tarawih is a voluntary congregational night prayer in Ramadan, often performed in the mosque. It fosters community worship and spiritual renewal.",
+      "keywords": "tarawih, ramadan, prayer, mosque",
+      "langCode": "hy",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat"
+      ],
+      "sourceBookletName": "Zakat Basics",
+      "sourceSection": "Obligation",
+      "question": "When does zakat become due?",
+      "answer": "When wealth reaches nisab and one lunar year passes while owned. The standard rate is 2.5% on net zakatable assets.",
+      "keywords": "zakat, nisab, wealth, charity",
+      "langCode": "hy",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "इस्लामी प्रश्न",
+      "sourceSection": "वुज़ू",
+      "question": "वुज़ू में कौन-से अंग धोने फ़र्ज़ हैं?",
+      "answer": "चेहरा, कोहनी तक बाज़ू, सिर का चौथाई हिस्सा मसह करना और टखनों तक पैर धोना फ़र्ज़ है। सही वुज़ू के बिना नमाज़ अदा नहीं होती।",
+      "keywords": "वुज़ू, नमाज़, अब्दест, फ़र्ज़",
+      "langCode": "hi",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "रोज़ा गाइड",
+      "sourceSection": "रोज़ा",
+      "question": "रोज़ा किन बातों से टूटता है?",
+      "answer": "जान-बूझकर खाना, पीना और संभोग रोज़ा तोड़ देता है। जान-बूझकर उल्टी भी रोज़ा तोड़ती है। भूलकर खाने-पीने से रोज़ा नहीं टूटता।",
+      "keywords": "रोज़ा, इफ्तार, सहरी, टूटना",
+      "langCode": "hi",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman"
+      ],
+      "sourceBookletName": "अक़ीदा",
+      "sourceSection": "ईमान",
+      "question": "ईमान की कितनी शर्तें हैं?",
+      "answer": "छह शर्तें हैं: अल्लाह, फ़रिश्तों, किताबों, रसूलों, आख़िरत और तक़दीर पर ईमान। इन सब पर पूरा यकीन ईमान की बुनियाद है।",
+      "keywords": "ईमान, अक़ीदा, तक़दीर, फ़रिश्ते",
+      "langCode": "hi",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "helal"
+      ],
+      "sourceBookletName": "हलाल जीवन",
+      "sourceSection": "खाना",
+      "question": "हलाल गोश्त की पहचान कैसे करें?",
+      "answer": "अल्लाह का नाम लेकर शरीयत के मुताबिक ज़बा किया गया गोश्त हलाल है। सुअर का गोश्त और मृत जानवर का गोश्त हराम है।",
+      "keywords": "हलाल, हराम, ज़बा, गोश्त",
+      "langCode": "hi",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile",
+        "dua"
+      ],
+      "sourceBookletName": "परिवार",
+      "sourceSection": "माता-पिता",
+      "question": "इस्लाम में माता-पितa की khidmat kya hai?",
+      "answer": "नरम बात करना, ज़रूरत पूरी करना और दुआ करना वाजिब है। माता-पिता की नाफ़रमानी बड़ा गुनाह है।",
+      "keywords": "माता-पिता, परिवार, दुआ, adab",
+      "langCode": "hi",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran"
+      ],
+      "sourceBookletName": "क़ुरआन",
+      "sourceSection": "तिलावत",
+      "question": "क़ुरआन पढ़ने से पहले वुज़ू ज़रूरी है?",
+      "answer": "मुस्हफ से पढ़ने के लिए वुज़ू ज़रूरी है। बगैर वुज़ू मुस्हफ को छूना मना है।",
+      "keywords": "क़ुरआन, तिलावत, मुस्हफ, वुज़ू",
+      "langCode": "hi",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "teravih",
+        "fitre"
+      ],
+      "sourceBookletName": "Ramzan",
+      "sourceSection": "तरावीह",
+      "question": "तरावीह नमाज़ क्या है?",
+      "answer": "Ramzan ki raaton ki sunnat namaz hai, aksar masjid mein jamaat se padhi jati hai. Ibadat aur ittehad ko mazboot karti hai.",
+      "keywords": "तरावीह, ramzan, fitra, masjid",
+      "langCode": "hi",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat",
+        "sadaka"
+      ],
+      "sourceBookletName": "ज़कात",
+      "sourceSection": "निसाब",
+      "question": "ज़कात कब farz hoti hai?",
+      "answer": "Jab maal nisab tak pahunche aur ek chand sal guzar jaye. Aam tor par 2.5% zakatable maal par ada hoti hai.",
+      "keywords": "ज़कात, निसाब, sadqa, farz",
+      "langCode": "hi",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz"
+      ],
+      "sourceBookletName": "Islamic Prashno",
+      "sourceSection": "Namaz",
+      "question": "D divas ma ketli farz namaz che?",
+      "answer": "Paanch farz namaz: Fajr, Zuhar, Asr, Maghrib ane Isha. Darek nu samay sury na gati pramane thay che. Vina valid karan namaz chhodi shakay nahi.",
+      "keywords": "namaz, fajr, panch, farz",
+      "langCode": "gu",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "hac"
+      ],
+      "sourceBookletName": "Hajj Margdarshika",
+      "sourceSection": "Hajj",
+      "question": "Hajj kon mate farz che?",
+      "answer": "Sharirik ane arthik rite saksham, balig muslim mate jivan ma ek vaar hajj farz che. Surakshit yatra ane samarthya jaruri che.",
+      "keywords": "hajj, farz, yatra, ihram",
+      "langCode": "gu",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "peygamber",
+        "iman"
+      ],
+      "sourceBookletName": "Aqeedah",
+      "sourceSection": "Paigambar",
+      "question": "Muhammad sachcha antim paigambar kem?",
+      "answer": "Te akhi manav jati mate antim paigambar che ane tenu shariyat akhi che. Tem par iman islam nu moolbhut hisso che.",
+      "keywords": "paigambar, muhammad, iman, aqeedah",
+      "langCode": "gu",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "sadaka"
+      ],
+      "sourceBookletName": "Saras Akhlaq",
+      "sourceSection": "Dan",
+      "question": "Zakat ane sadqa ma shu farak che?",
+      "answer": "Zakat farz chhe nisab pachi ane nishchit praptakarta sathe. Sadqa swachchhanda ane koi pan samaye api shakay che.",
+      "keywords": "zakat, sadqa, dan, farz",
+      "langCode": "gu",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "Parivar",
+      "sourceSection": "Lagn",
+      "question": "Islam ma mahr shu che?",
+      "answer": "Mahr pati taraf thi patni ne farz uphaar che, lagn pahela tay thay. Te khali patni nu che ane samman darshave che.",
+      "keywords": "mahr, lagn, patni, parivar",
+      "langCode": "gu",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "dua"
+      ],
+      "sourceBookletName": "Quran",
+      "sourceSection": "Vanchan",
+      "question": "Quran vanchva mate wuzu jaruri che?",
+      "answer": "Mushaf thi vanchva mate wuzu jaruri che. Shuddhata sathe vanchvu Allah na shabdo prati adar darshave che.",
+      "keywords": "quran, wuzu, mushaf, vanchan",
+      "langCode": "gu",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "Ramzan",
+      "sourceSection": "Roja",
+      "question": "Roja ma kon chhut che?",
+      "answer": "Bimar, musafir, garbhvati ane stanpan karati mahilao valid karan thi roja ma chhut shakay. Pachhi pura kari shakay ke fidya aapay.",
+      "keywords": "roja, ramzan, chhut, fidya",
+      "langCode": "gu",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "abdest",
+        "dua"
+      ],
+      "sourceBookletName": "Ibadat",
+      "sourceSection": "Dua",
+      "question": "Wuzu vina dua kari shakay?",
+      "answer": "Ha, dua koi pan samaye thai shakay. Pan wuzu ane tawajjuh dua ni qabooliyat mate upyogi che.",
+      "keywords": "dua, wuzu, ibadat, prarthna",
+      "langCode": "gu",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "Islamic Prashne",
+      "sourceSection": "Wuzu",
+      "question": "Wuzuvina yava angagalannu toleyabeku?",
+      "answer": "Mukh, mooleyavarege kayi, taleya bhagavannu masah maadi, kaalugalannu gulphuvarege toleyabeku. Sarai wuzu illade namaz sariyagilla.",
+      "keywords": "wuzu, namaz, mukh, kaalu",
+      "langCode": "kn",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "Roza Margadarshi",
+      "sourceSection": "Upavasa",
+      "question": "Roza yavaga muriyuttade?",
+      "answer": "Sankalpapurvaka tinnuvudu, kudiyuvudu mattu sambandha roza muriyuttade. Sankalpapurvaka vomit kooda roza muriyuttade. Maruvaagi tinnidare roza muriyuvudilla.",
+      "keywords": "roza, upavasa, muriyuvudu, ramzan",
+      "langCode": "kn",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman"
+      ],
+      "sourceBookletName": "Aqeedah",
+      "sourceSection": "Vishvasa",
+      "question": "Imanada etu shartugalu?",
+      "answer": "Aru shartugalu: Allah, devategalu, pustakagalu, dhootaru, antimadina mattu vidhi yavugala mele vishvasa. Ivu imanada aadhaara.",
+      "keywords": "iman, vishvasa, aqeedah, vidhi",
+      "langCode": "kn",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "helal"
+      ],
+      "sourceBookletName": "Halal Jivana",
+      "sourceSection": "Ahara",
+      "question": "Halal mamsavannu hege gurtisuvudu?",
+      "answer": "Allah hesaru heli shariyat anusara halalagi katuva mamsa halal. Handi mamsa mattu sattu prani mamsa haram.",
+      "keywords": "halal, haram, mamsa, ahara",
+      "langCode": "kn",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile",
+        "dua"
+      ],
+      "sourceBookletName": "Kutumba",
+      "sourceSection": "Mata-pita",
+      "question": "Islamalli tande-tayiyarannu hege gauravisuvudu?",
+      "answer": "Madhura vagi maataadu, avashyakate neraverisi mattu dua maaduvudu. Tande-tayiya anadara doodda aparadha.",
+      "keywords": "kutumba, tande, tayi, dua",
+      "langCode": "kn",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "zikir"
+      ],
+      "sourceBookletName": "Quran",
+      "sourceSection": "Odana",
+      "question": "Pratidina Quran oduvudu upayuktava?",
+      "answer": "Niyamitavagi oduvudu manassige shanti mattu margadarshana kodutte. Kelavu ayatugala chintane vishvasavannu balapadisutte.",
+      "keywords": "quran, odana, zikir, vishvasa",
+      "langCode": "kn",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "teravih"
+      ],
+      "sourceBookletName": "Ramzan",
+      "sourceSection": "Tarawih",
+      "question": "Tarawih namaz enu?",
+      "answer": "Ramzan ratriyalli masjidalli saamanyavagi oduva sunnat namaz. Samudayada ibadatannu balapadisutte.",
+      "keywords": "tarawih, ramzan, namaz, masjid",
+      "langCode": "kn",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat"
+      ],
+      "sourceBookletName": "Zakat",
+      "sourceSection": "Nisab",
+      "question": "Zakat yavaga farzagutte?",
+      "answer": "Sampattu nisab talupuvaga mattu ondu chandrika varsha dāyadagiddare. Saamanyavagi 2.5% nisab sampattininda.",
+      "keywords": "zakat, nisab, sampattu, farz",
+      "langCode": "kn",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz"
+      ],
+      "sourceBookletName": "Islamic Prashnam",
+      "sourceSection": "Namaz",
+      "question": "Dinam thorum etra farz namaz undu?",
+      "answer": "Anj farz namaz: Fajr, Zuhar, Asr, Maghrib, Isha. Suryodhayavum astamanavum anusarich samayam nirdharikkappedunnu.",
+      "keywords": "namaz, fajr, anj, farz",
+      "langCode": "ml",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "hac"
+      ],
+      "sourceBookletName": "Hajj Guide",
+      "sourceSection": "Hajj",
+      "question": "Hajj ar enthanu?",
+      "answer": "Kaaba valuthum Safa-Marvayum etti seyyunna pradhanamaya yathra. Sharirikavum malsya sambannavumaya muslimin avashyam aanu.",
+      "keywords": "hajj, kaaba, yathra, ihram",
+      "langCode": "ml",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "peygamber",
+        "iman"
+      ],
+      "sourceBookletName": "Aqeedah",
+      "sourceSection": "Nabi",
+      "question": "Muhammad aakhiri nabi ennaanu?",
+      "answer": "Avan manushyavargathekkulla aakhiri dhootan aanu. Avanile shariyathu poornnamayum avashishttam undu.",
+      "keywords": "nabi, muhammad, iman, aqeedah",
+      "langCode": "ml",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "dua"
+      ],
+      "sourceBookletName": "Nallatharam",
+      "sourceSection": "Neighbour",
+      "question": "Islamil pakkathu veetukarude avakashangal enthanu?",
+      "answer": "Suraksha, mariyatha, sahayam ennivay pakkathu veetukarude avakashangal. Nabi pakkathu veetukarude avakashathe vallare pradhanyathode paranjittund.",
+      "keywords": "pakkathu, mariyatha, nallatharam, sahayam",
+      "langCode": "ml",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "Kudumbam",
+      "sourceSection": "Vivaham",
+      "question": "Islamil mahr enthanu?",
+      "answer": "Bharyakk vivaham munpu bhartav nalkendathu anivarya danam aanu. Ath bharyyude swamiyathaanu.",
+      "keywords": "mahr, vivaham, kudumbam, bharya",
+      "langCode": "ml",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran"
+      ],
+      "sourceBookletName": "Quran",
+      "sourceSection": "Parayanam",
+      "question": "Mushaf vayikkan wuzu avashyamaano?",
+      "answer": "Mushaf thott wuzuvillathe vayikkarilla. Shuddhiyode vayikkal Allahuvinte vachanathil adarathinte pratheekaramaanu.",
+      "keywords": "quran, mushaf, wuzu, parayanam",
+      "langCode": "ml",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "oruc",
+        "fitre"
+      ],
+      "sourceBookletName": "Ramzan",
+      "sourceSection": "Nomb",
+      "question": "Nomb ethra samayam nilkunnu?",
+      "answer": "Fajr muthal maghrib vare. Bhakshanamum kudiyum ee samayath nishiddhamaanu. Ramzanil nomb farz aanu balarikalkalla.",
+      "keywords": "nomb, ramzan, fajr, maghrib",
+      "langCode": "ml",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat",
+        "sadaka"
+      ],
+      "sourceBookletName": "Zakat",
+      "sourceSection": "Nisab",
+      "question": "Zakat eppol anivaryamaakunnu?",
+      "answer": "Sampathu nisab etti oru chandrika varsham kazhinjal. 2.5% nisab sampathil ninnu nalkendathaanu.",
+      "keywords": "zakat, nisab, sadqa, sampathu",
+      "langCode": "ml",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "Islamic Prashne",
+      "sourceSection": "Wuzu",
+      "question": "Wuzumat kon kon ang dhutat?",
+      "answer": "Chehra, kohni-paryant hat, shepache bhag masah karne ani ghusparyant pay dhutat. Yoge wuzu shivay namaz valid nahi.",
+      "keywords": "wuzu, namaz, chehra, pay",
+      "langCode": "mr",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "Roza Margdarshika",
+      "sourceSection": "Upavas",
+      "question": "Roza kasa tutto?",
+      "answer": "Janun-bujun khane, pinyane ani sambandh roza tutto. Janun-bujun ulti pan roza tutto. Visaru khalle tar roza tutat nahi.",
+      "keywords": "roza, upavas, iftar, ramzan",
+      "langCode": "mr",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman"
+      ],
+      "sourceBookletName": "Aqeedah",
+      "sourceSection": "Iman",
+      "question": "Imanachya kiti shartha ahet?",
+      "answer": "Sahaa shartha: Allah, farishte, pustake, paigambar, aakhirat ani takdir var iman. He imanache mool ahet.",
+      "keywords": "iman, aqeedah, takdir, farishte",
+      "langCode": "mr",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "helal"
+      ],
+      "sourceBookletName": "Halal Jivan",
+      "sourceSection": "Ahara",
+      "question": "Halal mansa olakh kashi?",
+      "answer": "Allah cha nav gheun shariyat pramane halal khatle mansa halal. Dukkar mansa ani mrut prani mansa haram.",
+      "keywords": "halal, haram, mansa, ahara",
+      "langCode": "mr",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile",
+        "dua"
+      ],
+      "sourceBookletName": "Kutumb",
+      "sourceSection": "Pitru",
+      "question": "Pitru-pujan Islamat kase?",
+      "answer": "Madhur bhasha, garaj purna karne ani dua karne. Pitru-porva anadar motha pap ahe.",
+      "keywords": "kutumb, pitru, dua, adar",
+      "langCode": "mr",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "zikir"
+      ],
+      "sourceBookletName": "Quran",
+      "sourceSection": "Path",
+      "question": "Roj Quran path karne faydeshir?",
+      "answer": "Niyamit path manala shanti ani margadarshan deto. Kahi ayat chintun vachale tar iman majbut hote.",
+      "keywords": "quran, path, zikir, iman",
+      "langCode": "mr",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "teravih"
+      ],
+      "sourceBookletName": "Ramzan",
+      "sourceSection": "Tarawih",
+      "question": "Tarawih namaz kay ahe?",
+      "answer": "Ramzan ratri masjidat jamatine kelya jane sunnat namaz. Samudayik ibadat vadhte.",
+      "keywords": "tarawih, ramzan, namaz, masjid",
+      "langCode": "mr",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat"
+      ],
+      "sourceBookletName": "Zakat",
+      "sourceSection": "Nisab",
+      "question": "Zakat kevha farz hote?",
+      "answer": "Jevha mal nisab la pohocho ani ek chandrika varsha jate. Samany 2.5% zakatable malavar.",
+      "keywords": "zakat, nisab, mal, farz",
+      "langCode": "mr",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz"
+      ],
+      "sourceBookletName": "Islamic Prashna",
+      "sourceSection": "Namaz",
+      "question": "Dina re ketoti farz namaz achi?",
+      "answer": "Pancha farz namaz: Fajr, Zuhar, Asr, Maghrib, Isha. Pratyeka samay suryara gati anusare nirdharita hui thae.",
+      "keywords": "namaz, fajr, pancha, farz",
+      "langCode": "or",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "hac"
+      ],
+      "sourceBookletName": "Hajj Guide",
+      "sourceSection": "Hajj",
+      "question": "Ihram ki?",
+      "answer": "Hajj purbaru pabitra awastha jaha kichhi byabahar niyam achi. Ihram re shikar, perfume o kalaha nishedha.",
+      "keywords": "hajj, ihram, yatra, nishedha",
+      "langCode": "or",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "peygamber",
+        "iman"
+      ],
+      "sourceBookletName": "Aqeedah",
+      "sourceSection": "Nabi",
+      "question": "Muhammad sesa nabi kena?",
+      "answer": "Se samasta manav jati pain sesa duta. Tankara shariyat sampurna o sthayi.",
+      "keywords": "nabi, muhammad, iman, aqeedah",
+      "langCode": "or",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "sadaka"
+      ],
+      "sourceBookletName": "Naitikata",
+      "sourceSection": "Dan",
+      "question": "Zakat o sadqa re kana parthakya?",
+      "answer": "Zakat farz dan nisab pares o nirdharita grahi saha. Sadqa swachchhanda o kono samay deya jai.",
+      "keywords": "zakat, sadqa, dan, farz",
+      "langCode": "or",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile"
+      ],
+      "sourceBookletName": "Paribar",
+      "sourceSection": "Vivaha",
+      "question": "Islam re mahr ki?",
+      "answer": "Vivaha purbaru pati tarafaru patni ku farz upahara. Eha keval patninkara o sammana suchana kare.",
+      "keywords": "mahr, vivaha, patni, paribar",
+      "langCode": "or",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "dua"
+      ],
+      "sourceBookletName": "Quran",
+      "sourceSection": "Patha",
+      "question": "Mushaf padhiba pain wuzu darkar?",
+      "answer": "Mushaf sparsha kariba pain wuzu anivarya. Shuddhata sahita padhiba Allahanka sabda prati sammana.",
+      "keywords": "quran, mushaf, wuzu, patha",
+      "langCode": "or",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "oruc",
+        "fitre"
+      ],
+      "sourceBookletName": "Ramzan",
+      "sourceSection": "Roja",
+      "question": "Roja kebe tharu kebe sesa?",
+      "answer": "Fajr tharu maghrib paryanta. Khaiba o piba ei samayare nishedha. Ramzan re roja farz balika chhada.",
+      "keywords": "roja, ramzan, fajr, maghrib",
+      "langCode": "or",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "abdest",
+        "dua"
+      ],
+      "sourceBookletName": "Ibadat",
+      "sourceSection": "Dua",
+      "question": "Wuzu bina dua kari pariba?",
+      "answer": "Ha, dua kono samay kari pariba. Kintu wuzu o ekagrata dua re sahayaka.",
+      "keywords": "dua, wuzu, ibadat, prarthana",
+      "langCode": "or",
+      "order": 8
+    },
+    {
+      "categoryKey": "namaz",
+      "tagKeys": [
+        "namaz",
+        "abdest"
+      ],
+      "sourceBookletName": "Islamic Prashnalu",
+      "sourceSection": "Wuzu",
+      "question": "Wuzulo yemi angalu kadiyali?",
+      "answer": "Mukham, mokkellu varaku cheyyulu, talalo konni bhagalu masah chesi, mallellu varaku kaallu kadugali. Sariyaina wuzu lekunda namaz avadu.",
+      "keywords": "wuzu, namaz, mukham, kaalu",
+      "langCode": "te",
+      "order": 1
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "oruc"
+      ],
+      "sourceBookletName": "Roja Margadarshini",
+      "sourceSection": "Upavasam",
+      "question": "Roju yeppudu virigipotundi?",
+      "answer": "Sankalpapurvakam ga tinalu, tagatam mariyu sambandham roju virigipotundi. Marichipoi tinna roju viragadu.",
+      "keywords": "roju, upavasam, ramzan, iftar",
+      "langCode": "te",
+      "order": 2
+    },
+    {
+      "categoryKey": "akide",
+      "tagKeys": [
+        "iman"
+      ],
+      "sourceBookletName": "Aqeedah",
+      "sourceSection": "Vishvasam",
+      "question": "Iman ki enti shartulu?",
+      "answer": "Aaru shartulu: Allah, devatalu, pustakalu, pravaktalu, aakhar dinam mariyu vidhi meeda vishvasam. Ivi iman aadhaaram.",
+      "keywords": "iman, vishvasam, aqeedah, vidhi",
+      "langCode": "te",
+      "order": 3
+    },
+    {
+      "categoryKey": "ahlak",
+      "tagKeys": [
+        "helal"
+      ],
+      "sourceBookletName": "Halal Jeevitam",
+      "sourceSection": "Aaharam",
+      "question": "Halal mamsam ela gurtinchali?",
+      "answer": "Allah peru cheppi shariyat prakaram vadina mamsam halal. Pandi mamsam mariyu chanipina prani mamsam haram.",
+      "keywords": "halal, haram, mamsam, aaharam",
+      "langCode": "te",
+      "order": 4
+    },
+    {
+      "categoryKey": "aile",
+      "tagKeys": [
+        "aile",
+        "dua"
+      ],
+      "sourceBookletName": "Kutumbam",
+      "sourceSection": "Talli-tandri",
+      "question": "Islam lo talli-tandri ni ela gauravinchali?",
+      "answer": "Madhuranga matladali, avasaramulu neraverchali mariyu dua cheyali. Talli-tandri anadarana pedda aparadham.",
+      "keywords": "kutumbam, talli, tandri, dua",
+      "langCode": "te",
+      "order": 5
+    },
+    {
+      "categoryKey": "kuran",
+      "tagKeys": [
+        "kuran",
+        "zikir"
+      ],
+      "sourceBookletName": "Quran",
+      "sourceSection": "Chaduvu",
+      "question": "Prati roju Quran chaduvadam upayogapadutunda?",
+      "answer": "Niyamitam ga chaduvadam manasu shantini mariyu margadarshanam istundi. Konni ayatulu chintinchadam vishvasam balaparustundi.",
+      "keywords": "quran, chaduvu, zikir, vishvasam",
+      "langCode": "te",
+      "order": 6
+    },
+    {
+      "categoryKey": "ramazan",
+      "tagKeys": [
+        "teravih",
+        "fitre"
+      ],
+      "sourceBookletName": "Ramzan",
+      "sourceSection": "Tarawih",
+      "question": "Tarawih namaz enti?",
+      "answer": "Ramzan raatullo masjid lo jarige sunnat namaz. Samudaya ibadat ni balaparustundi.",
+      "keywords": "tarawih, ramzan, namaz, masjid",
+      "langCode": "te",
+      "order": 7
+    },
+    {
+      "categoryKey": "ibadet",
+      "tagKeys": [
+        "zekat",
+        "sadaka"
+      ],
+      "sourceBookletName": "Zakat",
+      "sourceSection": "Nisab",
+      "question": "Zakat eppudu farz avutundi?",
+      "answer": "Sampada nisab andu cheri oka chandrika samvatsaram aina taruvata. Sadharanam ga 2.5% zakatable sampada meeda.",
+      "keywords": "zakat, nisab, sadqa, sampada",
+      "langCode": "te",
+      "order": 8
+    }
+  ]
+}

@@ -35,6 +35,8 @@
     "seed:papers": "ts-node scripts/seed-papers.ts",
     "seed:scholar-alim-images": "ts-node scripts/seed-scholar-alim-images.ts",
     "seed:book-covers": "ts-node scripts/seed-book-covers.ts",
+    "seed:qa": "ts-node scripts/seed-qa.ts",
+    "seed:qa:force": "ts-node scripts/seed-qa.ts --force",
     "report:book-covers": "ts-node scripts/report-book-covers.ts",
     "seed:all": "npm run seed:languages && npm run seed:countries && npm run seed:backfill-country-languages && npm run seed:ethnologue300-languages && npm run seed:country-languages && npm run seed:multilanguage-books"
   },

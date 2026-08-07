@@ -11,10 +11,15 @@ export default function QaImportPage() {
   const [seeding, setSeeding] = useState(false);
   const [result, setResult] = useState(null);
 
-  const handleSeed = async () => {
+  const handleSeed = async (force = false) => {
+    if (force && !window.confirm(t('QA.SEED_FORCE_CONFIRM'))) return;
     setSeeding(true);
     try {
-      const data = await qaFetch('/qa/seed', { method: 'POST' });
+      const data = await qaFetch('/qa/seed', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(force ? { force: true, full: true } : {}),
+      });
       if (data.seeded) {
         toast.success(t('QA.SEED_SUCCESS', { categories: data.categories, items: data.items, tags: data.tags }));
       } else {
@@ -63,10 +68,16 @@ export default function QaImportPage() {
             <h2 className="font-semibold text-blue-900 dark:text-blue-100">{t('QA.SAMPLE_DATA')}</h2>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">{t('QA.SAMPLE_DATA_DESC')}</p>
           </div>
-          <button onClick={handleSeed} disabled={seeding}
-            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 whitespace-nowrap">
-            <Database className="w-4 h-4" /> {seeding ? t('QA.SEEDING') : t('QA.ADD_SAMPLE_DATA')}
-          </button>
+          <div className="flex flex-col gap-2 shrink-0">
+            <button onClick={() => handleSeed(false)} disabled={seeding}
+              className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 whitespace-nowrap">
+              <Database className="w-4 h-4" /> {seeding ? t('QA.SEEDING') : t('QA.ADD_SAMPLE_DATA')}
+            </button>
+            <button onClick={() => handleSeed(true)} disabled={seeding}
+              className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50 whitespace-nowrap text-sm">
+              <Database className="w-4 h-4" /> {seeding ? t('QA.SEEDING') : t('QA.FULL_SEED_BTN')}
+            </button>
+          </div>
         </div>
       </div>
 

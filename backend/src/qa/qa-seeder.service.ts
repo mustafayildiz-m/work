@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
+import * as fs from 'fs';
+import * as path from 'path';
 import { QaCategory } from './entities/qa-category.entity';
 import { QaCategoryTranslation } from './entities/qa-category-translation.entity';
 import { QaItem } from './entities/qa-item.entity';
@@ -8,6 +10,45 @@ import { QaItemTranslation } from './entities/qa-item-translation.entity';
 import { QaTag } from './entities/qa-tag.entity';
 import { QaTagTranslation } from './entities/qa-tag-translation.entity';
 import { Language } from '../languages/entities/language.entity';
+
+interface SeedCategoryDef {
+  key: string;
+  order: number;
+  parentKey?: string;
+  names: Record<string, { name: string; description?: string }>;
+}
+
+interface SeedTagDef {
+  key: string;
+  names: Record<string, string>;
+}
+
+interface SeedItemDef {
+  categoryKey: string;
+  langCode: string;
+  order: number;
+  tagKeys?: string[];
+  sourceBookletName?: string;
+  sourceSection?: string;
+  question: string;
+  answer: string;
+  keywords: string;
+}
+
+interface SeedContentFile {
+  categories: SeedCategoryDef[];
+  tags: SeedTagDef[];
+  items: SeedItemDef[];
+}
+
+export interface QaSeedResult {
+  seeded: boolean;
+  replaced: boolean;
+  categories: number;
+  items: number;
+  tags: number;
+  skippedLanguages?: string[];
+}
 
 @Injectable()
 export class QaSeederService {
@@ -28,221 +69,172 @@ export class QaSeederService {
     private languageRepo: Repository<Language>,
   ) {}
 
-  async seedIfEmpty(): Promise<{ seeded: boolean; categories: number; items: number; tags: number }> {
+  /** Eski davranış: yalnızca tablo boşsa küçük örnek set (geriye dönük uyumluluk). */
+  async seedIfEmpty(): Promise<QaSeedResult> {
     const existingItems = await this.itemRepo.count();
     if (existingItems > 0) {
-      return { seeded: false, categories: 0, items: 0, tags: 0 };
+      return { seeded: false, replaced: false, categories: 0, items: 0, tags: 0 };
+    }
+    return this.seedComprehensive(false);
+  }
+
+  /** 31 dil × 8 benzersiz soru — canlı ortam için tam seed. force=true mevcut QA verisini siler. */
+  async seedComprehensive(force = false): Promise<QaSeedResult> {
+    const existingItems = await this.itemRepo.count();
+    if (existingItems > 0 && !force) {
+      return { seeded: false, replaced: false, categories: 0, items: 0, tags: 0 };
     }
 
+    if (force && existingItems > 0) {
+      await this.clearAll();
+    }
+
+    const content = this.loadSeedContent();
     const langs = await this.languageRepo.find({ where: { isActive: true } });
-    const lang = (code: string) => langs.find((l) => l.code === code)?.id;
+    const langMap = new Map(langs.map((l) => [l.code, l.id]));
+    const fallbackLangId = langMap.get('en') ?? langMap.get('tr') ?? langs[0]?.id;
 
-    const trId = lang('tr');
-    const enId = lang('en');
-    const arId = lang('ar');
-    if (!trId) throw new Error('Türkçe dil kaydı bulunamadı');
+    if (!fallbackLangId) {
+      throw new Error('Aktif dil kaydı bulunamadı');
+    }
 
-    const ibadet = await this.createCategory(null, 1, {
-      tr: { name: 'İbadet', description: 'Namaz, oruç, hac ve zekât konuları' },
-      en: { name: 'Worship', description: 'Prayer, fasting, hajj and zakat' },
-      ar: { name: 'العبادات', description: 'الصلاة والصوم والحج والزكاة' },
-    }, trId, enId, arId);
+    const categoryIdByKey = new Map<string, number>();
+    const tagIdByKey = new Map<string, number>();
+    const skippedLanguages = new Set<string>();
 
-    const namaz = await this.createCategory(ibadet.id, 1, {
-      tr: { name: 'Namaz', description: 'Namaz ile ilgili sorular' },
-      en: { name: 'Prayer', description: 'Questions about salah' },
-      ar: { name: 'الصلاة', description: 'أسئلة حول الصلاة' },
-    }, trId, enId, arId);
+    for (const catDef of content.categories.sort((a, b) => a.order - b.order)) {
+      const parentId = catDef.parentKey ? categoryIdByKey.get(catDef.parentKey) ?? null : null;
+      const category = await this.categoryRepo.save(
+        this.categoryRepo.create({
+          parentId: parentId ?? undefined,
+          order: catDef.order,
+          isActive: true,
+        }),
+      );
+      categoryIdByKey.set(catDef.key, category.id);
 
-    const ahlak = await this.createCategory(null, 2, {
-      tr: { name: 'Ahlak', description: 'Güzel ahlak ve adab konuları' },
-      en: { name: 'Ethics', description: 'Good character and manners' },
-      ar: { name: 'الأخلاق', description: 'حسن الخلق والآداب' },
-    }, trId, enId, arId);
+      const translations: Partial<QaCategoryTranslation>[] = [];
+      for (const [code, val] of Object.entries(catDef.names)) {
+        const languageId = langMap.get(code) ?? fallbackLangId;
+        if (!langMap.has(code)) skippedLanguages.add(code);
+        translations.push({
+          categoryId: category.id,
+          languageId,
+          name: val.name,
+          description: val.description,
+        });
+      }
+      if (translations.length) {
+        await this.categoryTransRepo.save(
+          translations.map((t) => this.categoryTransRepo.create(t)),
+        );
+      }
+    }
 
-    const tagNamaz = await this.createTag({ tr: 'namaz', en: 'prayer', ar: 'صلاة' }, trId, enId, arId);
-    const tagAbdest = await this.createTag({ tr: 'abdest', en: 'wudu', ar: 'وضوء' }, trId, enId, arId);
-    const tagOruc = await this.createTag({ tr: 'oruç', en: 'fasting', ar: 'صوم' }, trId, enId, arId);
+    for (const tagDef of content.tags) {
+      const tag = await this.tagRepo.save(this.tagRepo.create());
+      tagIdByKey.set(tagDef.key, tag.id);
 
-    const items = [
-      {
-        categoryId: namaz.id,
-        order: 1,
-        sourceBookletName: 'Hanefi İlmihali',
-        sourceSection: 'Namaz Bölümü',
-        tagIds: [tagNamaz.id, tagAbdest.id],
-        translations: {
-          tr: {
-            question: 'Abdest alırken hangi uzuvlar yıkanmalıdır?',
-            answer: 'Abdestte yüz, kollar dirseklerle birlikte, başın dörtte biri mesh edilerek ve ayaklar topuklarla birlikte yıkanır. Bu dört uzuv, farz olan abdest organlarıdır.',
-            keywords: 'abdest, farz, yüz, kol, mesh, ayak',
-          },
-          en: {
-            question: 'Which limbs must be washed in wudu?',
-            answer: 'In wudu, the face, arms including elbows, a quarter of the head is wiped, and feet including ankles are washed. These are the obligatory parts of wudu.',
-            keywords: 'wudu, ablution, face, arms, wipe, feet',
-          },
-          ar: {
-            question: 'ما هي أعضاء الوضوء التي تُغسل؟',
-            answer: 'في الوضوء يُغسل الوجه واليدان إلى المرفقين ويُمسح ربع الرأس ويُغسل الرجلان إلى الكعبين، وهذه أركان الوضوء.',
-            keywords: 'وضوء, وجه, يد, مسح, رجل',
-          },
-        },
-      },
-      {
-        categoryId: namaz.id,
-        order: 2,
-        sourceBookletName: 'Hanefi İlmihali',
-        sourceSection: 'Namaz Bölümü',
-        tagIds: [tagNamaz.id],
-        translations: {
-          tr: {
-            question: 'Namazda Fatiha okumak farz mıdır?',
-            answer: 'Hanefi mezhebine göre namazda Fatiha okumak vaciptir; terk edilirse namaz bozulur ve kaza edilmesi gerekir.',
-            keywords: 'namaz, fatiha, vacip, hanefi',
-          },
-          en: {
-            question: 'Is reciting Al-Fatiha obligatory in prayer?',
-            answer: 'According to the Hanafi school, reciting Al-Fatiha in prayer is wajib; omitting it invalidates the prayer and requires make-up.',
-            keywords: 'prayer, fatiha, wajib, hanafi',
-          },
-          ar: {
-            question: 'هل قراءة الفاتحة في الصلاة واجبة؟',
-            answer: 'عند الحنفية قراءة الفاتحة في الصلاة واجبة، وتركها يبطل الصلاة ويجب قضاؤها.',
-            keywords: 'صلاة, فاتحة, واجب, حنفي',
-          },
-        },
-      },
-      {
-        categoryId: ibadet.id,
-        order: 3,
-        sourceBookletName: 'Temel İlmihal',
-        sourceSection: 'Oruç',
-        tagIds: [tagOruc.id],
-        translations: {
-          tr: {
-            question: 'Oruç bozan durumlar nelerdir?',
-            answer: 'Bilerek yemek, içmek ve cinsel ilişki orucu bozar. Ayrıca kasten kusmak da orucu bozar. Unutarak yemek-içmek orucu bozmaz.',
-            keywords: 'oruç, bozulma, yemek, içmek, kusmak',
-          },
-          en: {
-            question: 'What breaks the fast?',
-            answer: 'Deliberately eating, drinking, and sexual intercourse break the fast. Intentional vomiting also breaks it. Eating or drinking forgetfully does not.',
-            keywords: 'fasting, break, eat, drink, vomit',
-          },
-          ar: {
-            question: 'ما الذي يفطر الصائم؟',
-            answer: 'الأكل والشرب والجماع عامداً يفطر الصائم، كما يفطر القيء عامداً. الأكل والشرب ناسياً لا يفطر.',
-            keywords: 'صوم, إفطار, أكل, شرب',
-          },
-        },
-      },
-      {
-        categoryId: ahlak.id,
-        order: 1,
-        sourceBookletName: 'Ahlak Kitapçığı',
-        sourceSection: 'Güzel Ahlak',
-        tagIds: [],
-        translations: {
-          tr: {
-            question: 'Müslümanın komşuya karşı görevleri nelerdir?',
-            answer: 'Komşuya iyilik etmek, sıkıntılarına karşı ilgisiz kalmamak, yemekten tatmak, hastalandığında ziyaret etmek ve selam vermek güzel ahlakın gereğidir.',
-            keywords: 'ahlak, komşu, iyilik, selam',
-          },
-          en: {
-            question: 'What are a Muslim\'s duties toward neighbors?',
-            answer: 'Being kind to neighbors, not ignoring their hardships, sharing food, visiting when ill, and greeting them are part of good character.',
-            keywords: 'ethics, neighbor, kindness, greeting',
-          },
-          ar: {
-            question: 'ما واجبات المسلم تجاه جاره؟',
-            answer: 'من حسن الخلق الإحسان إلى الجار وعدم إهمال همومه وإطعامه وزيارته عند المرض وإسلام عليه.',
-            keywords: 'أخلاق, جار, إحسان',
-          },
-        },
-      },
+      const translations: Partial<QaTagTranslation>[] = [];
+      for (const [code, name] of Object.entries(tagDef.names)) {
+        const languageId = langMap.get(code) ?? fallbackLangId;
+        translations.push({ tagId: tag.id, languageId, name });
+      }
+      if (translations.length) {
+        await this.tagTransRepo.save(
+          translations.map((t) => this.tagTransRepo.create(t)),
+        );
+      }
+    }
+
+    let itemCount = 0;
+    for (const itemDef of content.items) {
+      const languageId = langMap.get(itemDef.langCode);
+      if (!languageId) {
+        skippedLanguages.add(itemDef.langCode);
+        continue;
+      }
+
+      const categoryId = categoryIdByKey.get(itemDef.categoryKey);
+      if (!categoryId) continue;
+
+      const item = await this.itemRepo.save(
+        this.itemRepo.create({
+          categoryId,
+          order: itemDef.order,
+          sourceBookletName: itemDef.sourceBookletName,
+          sourceSection: itemDef.sourceSection,
+          sourceReference: itemDef.sourceBookletName
+            ? `${itemDef.sourceBookletName}${itemDef.sourceSection ? ` / ${itemDef.sourceSection}` : ''}`
+            : undefined,
+          isActive: true,
+        }),
+      );
+
+      await this.itemTransRepo.save(
+        this.itemTransRepo.create({
+          qaItemId: item.id,
+          languageId,
+          question: itemDef.question,
+          answer: itemDef.answer,
+          keywords: itemDef.keywords,
+        }),
+      );
+
+      if (itemDef.tagKeys?.length) {
+        const tagIds = itemDef.tagKeys
+          .map((k) => tagIdByKey.get(k))
+          .filter((id): id is number => Boolean(id));
+        if (tagIds.length) {
+          const tags = await this.tagRepo.findBy({ id: In(tagIds) });
+          item.tags = tags;
+          await this.itemRepo.save(item);
+        }
+      }
+
+      itemCount += 1;
+    }
+
+    return {
+      seeded: true,
+      replaced: force,
+      categories: content.categories.length,
+      items: itemCount,
+      tags: content.tags.length,
+      skippedLanguages: skippedLanguages.size
+        ? Array.from(skippedLanguages).sort()
+        : undefined,
+    };
+  }
+
+  private loadSeedContent(): SeedContentFile {
+    const candidates = [
+      path.join(__dirname, 'data', 'qa-seed-content.json'),
+      path.join(process.cwd(), 'src', 'qa', 'data', 'qa-seed-content.json'),
+      path.join(process.cwd(), 'dist', 'qa', 'data', 'qa-seed-content.json'),
     ];
 
-    for (const entry of items) {
-      const item = this.itemRepo.create({
-        categoryId: entry.categoryId,
-        order: entry.order,
-        sourceBookletName: entry.sourceBookletName,
-        sourceSection: entry.sourceSection,
-        sourceReference: `${entry.sourceBookletName} / ${entry.sourceSection}`,
-        isActive: true,
-      });
-      const saved = await this.itemRepo.save(item);
-
-      const translations: Partial<QaItemTranslation>[] = [];
-      if (entry.translations.tr && trId) {
-        translations.push({
-          qaItemId: saved.id,
-          languageId: trId,
-          ...entry.translations.tr,
-        });
-      }
-      if (entry.translations.en && enId) {
-        translations.push({
-          qaItemId: saved.id,
-          languageId: enId,
-          ...entry.translations.en,
-        });
-      }
-      if (entry.translations.ar && arId) {
-        translations.push({
-          qaItemId: saved.id,
-          languageId: arId,
-          ...entry.translations.ar,
-        });
-      }
-      await this.itemTransRepo.save(translations.map((t) => this.itemTransRepo.create(t)));
-
-      if (entry.tagIds?.length) {
-        const tags = await this.tagRepo.findBy({ id: In(entry.tagIds) });
-        saved.tags = tags;
-        await this.itemRepo.save(saved);
+    for (const filePath of candidates) {
+      if (fs.existsSync(filePath)) {
+        return JSON.parse(fs.readFileSync(filePath, 'utf8')) as SeedContentFile;
       }
     }
 
-    return { seeded: true, categories: 3, items: items.length, tags: 3 };
+    throw new Error('qa-seed-content.json bulunamadı');
   }
 
-  private async createCategory(
-    parentId: number | null,
-    order: number,
-    names: Record<string, { name: string; description?: string }>,
-    trId: number,
-    enId?: number,
-    arId?: number,
-  ) {
-    const category = await this.categoryRepo.save(this.categoryRepo.create({
-      parentId: parentId ?? undefined,
-      order,
-      isActive: true,
-    }));
-
-    const translations: Partial<QaCategoryTranslation>[] = [];
-    if (names.tr) translations.push({ categoryId: category.id, languageId: trId, name: names.tr.name, description: names.tr.description });
-    if (names.en && enId) translations.push({ categoryId: category.id, languageId: enId, name: names.en.name, description: names.en.description });
-    if (names.ar && arId) translations.push({ categoryId: category.id, languageId: arId, name: names.ar.name, description: names.ar.description });
-
-    await this.categoryTransRepo.save(translations.map((t) => this.categoryTransRepo.create(t)));
-    return category;
-  }
-
-  private async createTag(
-    names: Record<string, string>,
-    trId: number,
-    enId?: number,
-    arId?: number,
-  ) {
-    const tag = await this.tagRepo.save(this.tagRepo.create());
-    const translations: Partial<QaTagTranslation>[] = [];
-    if (names.tr) translations.push({ tagId: tag.id, languageId: trId, name: names.tr });
-    if (names.en && enId) translations.push({ tagId: tag.id, languageId: enId, name: names.en });
-    if (names.ar && arId) translations.push({ tagId: tag.id, languageId: arId, name: names.ar });
-    await this.tagTransRepo.save(translations.map((t) => this.tagTransRepo.create(t)));
-    return tag;
+  private async clearAll() {
+    await this.itemRepo.query('DELETE FROM qa_item_tags');
+    await this.itemTransRepo.createQueryBuilder().delete().execute();
+    await this.itemRepo.createQueryBuilder().delete().execute();
+    await this.categoryTransRepo.createQueryBuilder().delete().execute();
+    await this.categoryRepo
+      .createQueryBuilder()
+      .delete()
+      .where('parentId IS NOT NULL')
+      .execute();
+    await this.categoryRepo.createQueryBuilder().delete().execute();
+    await this.tagTransRepo.createQueryBuilder().delete().execute();
+    await this.tagRepo.createQueryBuilder().delete().execute();
   }
 }
