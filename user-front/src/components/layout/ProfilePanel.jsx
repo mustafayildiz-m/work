@@ -13,6 +13,7 @@ import { useLayoutContext } from '@/context/useLayoutContext';
 import { getProfilePath } from '@/utils/profileEncoder';
 import { getToken } from '@/utils/auth';
 import { BsCamera, BsCheckCircleFill, BsEye, BsImage, BsShieldLock } from 'react-icons/bs';
+import { fetchUserProfile, invalidateProfileCache } from '@/utils/profileCache';
 
 
 const ProfilePanel = ({ links, onLinkClick }) => {
@@ -54,42 +55,28 @@ const ProfilePanel = ({ links, onLinkClick }) => {
         return prev;
       });
 
-      const fetchUserProfile = async () => {
+      const fetchUserProfile_panel = async () => {
         try {
           const token = getToken();
           if (!token || !session.user.id) return;
 
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${session.user.id}`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
-          });
-
-          if (response.ok) {
-            const responseText = await response.text();
-            if (responseText) {
-              try {
-                const userData = JSON.parse(responseText);
-                setUser(prev => ({
-                  ...prev,
-                  photoUrl: userData.photoUrl,
-                  firstName: userData.firstName,
-                  lastName: userData.lastName,
-                  username: userData.username,
-                  bio: userData.biography
-                }));
-              } catch (parseError) {
-                console.error('Error parsing user profile JSON:', parseError);
-              }
-            }
+          const userData = await fetchUserProfile(session.user.id);
+          if (userData) {
+            setUser(prev => ({
+              ...prev,
+              photoUrl: userData.photoUrl,
+              firstName: userData.firstName,
+              lastName: userData.lastName,
+              username: userData.username,
+              bio: userData.biography
+            }));
           }
         } catch (error) {
           console.error('Error fetching user profile:', error);
         }
       };
 
-      fetchUserProfile();
+      fetchUserProfile_panel();
     } else if (status === 'unauthenticated') {
       if (typeof window !== 'undefined') {
         const userData = localStorage.getItem('user');
@@ -326,6 +313,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
         setPhotoPreview(null);
 
         window.dispatchEvent(new Event('profilePhotoUpdated'));
+        invalidateProfileCache(session.user.id);
       } else {
         throw new Error(t('profile.profilePictureUpdateFailed'));
       }
@@ -356,82 +344,53 @@ const ProfilePanel = ({ links, onLinkClick }) => {
 
   if (status === 'loading') {
     return (
-      <div style={{
-        background: cardBg,
-        borderRadius: '16px',
-        padding: '2rem',
-        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.06)'
-      }}>
-        <div className="text-center">
-          <div className="spinner-border text-success" role="status">
+      <div className="feed-profile-panel">
+        <div className="feed-profile-card feed-loading-inline">
+          <div className="spinner-border spinner-border-sm text-success" role="status">
             <span className="visually-hidden">{t('common.loading')}</span>
           </div>
-          <p className="text-muted mt-3 mb-0">{t('common.loading')}</p>
+          <p>{t('common.loading')}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <>
+    <div className="feed-profile-panel">
       {/* Section 1: Profile Card */}
-      <div style={{
-        background: cardBg,
-        borderRadius: '16px',
-        overflow: 'hidden',
-        boxShadow: cardShadow,
-        border: `1px solid ${borderColor}`
-      }}>
-        {/* Cover Image */}
-        <div style={{
-          height: '74px',
-          backgroundImage: `url(${bgBannerImg.src})`,
-          backgroundPosition: 'center',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          position: 'relative'
-        }} />
+      <div className="feed-profile-card">
+        <div
+          className="feed-profile-cover"
+          style={{
+            backgroundImage: `url(${bgBannerImg.src})`,
+          }}
+        />
 
-        {/* Profile Content */}
-        <div style={{ padding: '0 1.5rem 1.5rem' }}>
+        <div className="feed-profile-body">
           <div className="text-center">
             {status === 'unauthenticated' ? (
               <div className="py-2">
                 <div className="mb-3">
-                  <div className="rounded-circle d-flex align-items-center justify-content-center mx-auto" style={{
-                    width: '60px',
-                    height: '60px',
-                    background: isDarkMode ? 'rgba(102,187,106,0.1)' : 'rgba(102,187,106,0.05)',
-                    border: `2px dashed ${isDarkMode ? 'rgba(102,187,106,0.3)' : 'rgba(102,187,106,0.2)'}`,
-                    marginTop: '20px'
-                  }}>
+                  <div
+                    className="rounded-circle d-flex align-items-center justify-content-center mx-auto feed-profile-login-icon"
+                    style={{
+                      width: '60px',
+                      height: '60px',
+                      marginTop: '20px',
+                    }}
+                  >
                     <BsShieldLock className="text-success" size={24} />
                   </div>
-
                 </div>
-                <h6 className="fw-bold mb-2" style={{ color: headingColor }}>
-                  {t('profile.loginRequired')}
-                </h6>
-                <p className="text-muted mb-3" style={{ fontSize: '0.8rem' }}>
-                  {t('profile.loginDescription')}
-                </p>
-                <Link
-                  href="/auth-advance/sign-in"
-                  className="btn btn-success btn-sm w-100 py-2 fw-semibold mb-3"
-                  style={{
-                    background: accentColor,
-                    border: 'none',
-                    borderRadius: '8px',
-                    transition: 'background-color 0.2s ease, transform 0.2s ease'
-                  }}
-                >
+                <h6 className="fw-bold mb-2">{t('profile.loginRequired')}</h6>
+                <p className="text-muted mb-3 small">{t('profile.loginDescription')}</p>
+                <Link href="/auth-advance/sign-in" className="feed-profile-view-btn">
                   {t('profile.loginAction')}
                 </Link>
               </div>
             ) : (
               <>
-                {/* Avatar */}
-                <div className="position-relative d-inline-block" style={{ marginTop: '-40px' }}>
+                <div className="position-relative d-inline-block feed-profile-avatar-wrap">
                   <div
                     className="position-relative"
                     onClick={() => setShowAvatarMenu(!showAvatarMenu)}
@@ -439,14 +398,8 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                   >
                     {imageLoading && (
                       <div
-                        className="position-absolute top-0 start-0 rounded-circle d-flex align-items-center justify-content-center"
-                        style={{
-                          width: '100px',
-                          height: '100px',
-                          backgroundColor: isGreenTheme ? '#2d5a2d' : (isDarkMode ? '#464950' : '#f5f5f5'),
-                          zIndex: 2,
-                          border: `5px solid ${cardBg}`
-                        }}
+                        className="position-absolute top-0 start-0 rounded-circle d-flex align-items-center justify-content-center feed-profile-avatar-skeleton"
+                        style={{ zIndex: 2 }}
                       >
                         <div className="spinner-border spinner-border-sm text-success" role="status">
                           <span className="visually-hidden">{t('common.loading')}</span>
@@ -456,39 +409,17 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                     <img
                       src={getImageUrl(user?.photoUrl, false)}
                       alt="avatar"
-                      className="rounded-circle"
+                      className="rounded-circle feed-profile-avatar"
                       key={imageKey}
-                      style={{
-                        width: '100px',
-                        height: '100px',
-                        transition: 'transform 0.3s ease',
-                        opacity: imageLoading ? 0 : 1,
-                        border: `5px solid ${cardBg}`,
-                        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)',
-                        objectFit: 'cover'
-                      }}
+                      style={{ opacity: imageLoading ? 0 : 1 }}
                       onLoad={() => setImageLoading(false)}
                       onError={(e) => {
                         e.target.src = typeof avatar7 === 'string' ? avatar7 : (avatar7?.src || '/images/avatar/default.jpg');
                         setImageLoading(false);
                       }}
-                      onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                      onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                     />
-                    <div
-                      className="position-absolute rounded-circle d-flex align-items-center justify-content-center"
-                      style={{
-                        width: '36px',
-                        height: '36px',
-                        bottom: '5px',
-                        right: '5px',
-                        background: accentColor,
-                        boxShadow: '0 4px 16px rgba(102, 187, 106, 0.5)',
-                        border: `3px solid ${cardBg}`,
-                        transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-                      }}
-                    >
-                      <BsCamera className="text-white" size={18} />
+                    <div className="position-absolute rounded-circle d-flex align-items-center justify-content-center feed-profile-camera-badge">
+                      <BsCamera className="text-white" size={16} />
                     </div>
                   </div>
 
@@ -551,15 +482,11 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                 </div>
 
                 {/* User Info */}
-                <h5 className="mb-1 mt-2 fw-bold" style={{ fontSize: '1.55rem', letterSpacing: '-0.01em' }}>
+                <h5 className="mb-1 feed-profile-name fw-bold">
                   {user?.id && user?.id !== 'undefined' ? (
                     <Link
                       href={getProfilePath('user', user.id) || '#'}
-                      className="text-decoration-none"
-                      style={{
-                        color: headingColor,
-                        transition: 'color 0.3s ease'
-                      }}
+                      className="feed-profile-name-link"
                       onClick={() => onLinkClick && onLinkClick()}
                     >
                       {user.firstName || user.lastName
@@ -568,7 +495,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                       }
                     </Link>
                   ) : (
-                    <span style={{ color: headingColor }}>
+                    <span>
                       {user ? (
                         (user.firstName || user.lastName)
                           ? `${user.firstName || ''} ${user.lastName || ''}`.trim()
@@ -577,26 +504,21 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                     </span>
                   )}
                 </h5>
-                <small style={{ color: textColor, fontSize: '0.88rem', fontWeight: 500 }}>
+                <small className="feed-profile-handle d-block">
                   @{user?.username || user?.email || t('profile.user')}
                 </small>
 
                 {user?.bio && (
-                  <div className="mt-2 mb-2">
-                    <p className="mb-1" style={{ color: textColor, fontSize: '0.9rem', lineHeight: '1.5', whiteSpace: 'pre-wrap' }}>
-                      {bioExpanded || user.bio.length <= 100
+                  <div className="mt-1 mb-1">
+                    <p className={`mb-0 feed-profile-bio ${bioExpanded ? 'is-expanded' : ''}`}>
+                      {bioExpanded || user.bio.length <= 70
                         ? user.bio
-                        : `${user.bio.slice(0, 100)}...`}
+                        : `${user.bio.slice(0, 70)}...`}
                     </p>
-                    {user.bio.length > 100 && (
+                    {user.bio.length > 70 && (
                       <button
                         onClick={() => setBioExpanded(!bioExpanded)}
-                        className="btn btn-link p-0 text-decoration-none"
-                        style={{
-                          fontSize: '0.8rem',
-                          color: accentColor,
-                          fontWeight: 500
-                        }}
+                        className="btn btn-link p-0 text-decoration-none text-success small fw-medium"
                       >
                         {bioExpanded ? t('profile.showLess') : t('profile.showMore')}
                       </button>
@@ -604,24 +526,15 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                   </div>
                 )}
 
-                {/* Stats - Pill Design */}
-                <div className="d-flex gap-2 justify-content-center mt-3 flex-nowrap">
+                <div className="d-flex gap-2 justify-content-center mt-2 flex-nowrap">
                   <Link
                     href="/feed/followers"
                     className="text-decoration-none"
                     onClick={() => onLinkClick && onLinkClick()}
                   >
-                    <div style={{
-                      padding: '0.5rem 0.7rem',
-                      borderRadius: '10px',
-                      background: isDarkMode ? 'rgba(255,255,255,0.04)' : '#f8fafc',
-                      border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(15,20,25,0.08)'}`,
-                      transition: 'background-color 0.2s ease, border-color 0.2s ease',
-                      cursor: 'pointer',
-                      whiteSpace: 'nowrap'
-                    }}>
-                      <span style={{ fontWeight: 700, color: headingColor, marginRight: '4px' }}>{followStats.followersCount}</span>
-                      <span style={{ fontSize: '0.8rem', color: isDarkMode ? '#999' : '#666' }}>{t('profile.followers')}</span>
+                    <div className="feed-profile-stat-pill">
+                      <span className="stat-value">{followStats.followersCount}</span>
+                      <span className="stat-label">{t('profile.followers')}</span>
                     </div>
                   </Link>
 
@@ -630,17 +543,9 @@ const ProfilePanel = ({ links, onLinkClick }) => {
                     className="text-decoration-none"
                     onClick={() => onLinkClick && onLinkClick()}
                   >
-                    <div style={{
-                      padding: '0.5rem 0.7rem',
-                      borderRadius: '10px',
-                      background: isDarkMode ? 'rgba(255,255,255,0.04)' : '#f8fafc',
-                      border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(15,20,25,0.08)'}`,
-                      transition: 'background-color 0.2s ease, border-color 0.2s ease',
-                      cursor: 'pointer',
-                      whiteSpace: 'nowrap'
-                    }}>
-                      <span style={{ fontWeight: 700, color: headingColor, marginRight: '4px' }}>{followStats.followingCount}</span>
-                      <span style={{ fontSize: '0.8rem', color: isDarkMode ? '#999' : '#666' }}>{t('profile.following')}</span>
+                    <div className="feed-profile-stat-pill">
+                      <span className="stat-value">{followStats.followingCount}</span>
+                      <span className="stat-label">{t('profile.following')}</span>
                     </div>
                   </Link>
                 </div>
@@ -648,59 +553,20 @@ const ProfilePanel = ({ links, onLinkClick }) => {
             )}
           </div>
         </div>
-      </div >
+      </div>
 
       {/* Section 2: Navigation Card */}
-      <div style={{
-        background: cardBg,
-        borderRadius: '16px',
-        marginTop: '12px',
-        padding: '0.75rem',
-        boxShadow: cardShadow,
-        border: `1px solid ${borderColor}`
-      }}>
+      <div className="feed-profile-nav-card">
         <Link
           href={user?.id && user?.id !== 'undefined' ? getProfilePath('user', user.id, 'feed') : '/profile/feed'}
-          className="d-block text-center text-decoration-none"
+          className="feed-profile-view-btn"
           onClick={(e) => handleLinkClick(e, '/profile/feed')}
-          style={{
-            padding: '0.5rem 0.75rem',
-            marginBottom: '0.2rem',
-            background: isDarkMode ? 'rgba(102,187,106,0.12)' : 'rgba(102,187,106,0.09)',
-            color: accentColor,
-            fontWeight: 600,
-            fontSize: '0.9rem',
-            borderRadius: '10px',
-            border: `1px solid ${isDarkMode ? 'rgba(102,187,106,0.2)' : 'rgba(102,187,106,0.15)'}`,
-            transition: 'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = accentColor;
-            e.currentTarget.style.color = 'white';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = isDarkMode ? 'rgba(102,187,106,0.1)' : 'rgba(102,187,106,0.08)';
-            e.currentTarget.style.color = accentColor;
-          }}
         >
           {t('profile.viewProfile')}
         </Link>
 
-        <ul className="nav flex-column" style={{ gap: '0px', padding: 0, margin: 0, listStyle: 'none' }}>
+        <ul className="nav flex-column p-0 m-0 list-unstyled">
           {links.map((item, idx) => {
-            const linkStyle = {
-              padding: '0.4rem 0.75rem',
-              borderRadius: '10px',
-              transition: 'background-color 0.2s ease, color 0.2s ease',
-              background: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))
-                ? accentColor
-                : 'transparent',
-              color: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))
-                ? 'white'
-                : textColor,
-              fontWeight: (pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link))) ? 600 : 500,
-              fontSize: '0.9rem'
-            };
             const isActive = pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link));
             const iconFilter = item.preserveIconColor
               ? 'none'
@@ -735,37 +601,19 @@ const ProfilePanel = ({ links, onLinkClick }) => {
               <li key={(item.nameKey || item.name || item.link) + idx}>
                 {item.external ? (
                   <a
-                    className={`d-flex align-items-center text-decoration-none ${isActive ? 'profile-nav-active' : ''}`}
+                    className={`feed-profile-nav-link d-flex align-items-center text-decoration-none ${isActive ? 'is-active' : ''}`}
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => handleLinkClick(e, item.link)}
-                    style={linkStyle}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'transparent';
-                    }}
                   >
                     {content}
                   </a>
                 ) : (
                   <Link
-                    className={`d-flex align-items-center text-decoration-none ${isActive ? 'profile-nav-active' : ''}`}
+                    className={`feed-profile-nav-link d-flex align-items-center text-decoration-none ${isActive ? 'is-active' : ''}`}
                     href={item.link}
                     onClick={(e) => handleLinkClick(e, item.link)}
-                    style={linkStyle}
-                    onMouseEnter={(e) => {
-                      if (!(pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))) {
-                        e.currentTarget.style.background = isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!(pathname === item.link || (item.link !== '/' && pathname?.startsWith(item.link)))) {
-                        e.currentTarget.style.background = 'transparent';
-                      }
-                    }}
                   >
                     {content}
                   </Link>
@@ -951,7 +799,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
           </ModalFooter>
         </div>
       </Modal >
-    </>
+    </div>
   );
 };
 

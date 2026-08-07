@@ -532,6 +532,16 @@ export class UserPostsService {
     return { posts, total: allPosts.length };
   }
 
+  async getUserPostsByStatus(userId: number, status: string) {
+    const statusEnum =
+      status === 'pending' ? PostStatus.PENDING : PostStatus.APPROVED;
+
+    return this.userPostRepository.find({
+      where: { user_id: userId, status: statusEnum },
+      order: { created_at: 'DESC' },
+    });
+  }
+
   async getUserPosts(userId: number, includePending: boolean = false) {
     const whereCondition: any = { user_id: userId };
 

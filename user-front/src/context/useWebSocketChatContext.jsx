@@ -75,6 +75,39 @@ const normalizeOnlineUser = (userData) => {
   };
 };
 
+const isParticipantOnline = (participant, onlineUsers = []) => {
+  if (!participant || !onlineUsers?.length) return false;
+
+  const participantId = String(
+    participant.participantId || participant.id || participant.userId || '',
+  );
+  const participantUsername = String(
+    participant.participantUsername || participant.username || '',
+  ).toLowerCase();
+  const participantName = String(
+    participant.participantName || participant.name || '',
+  ).toLowerCase();
+
+  return onlineUsers.some((onlineUser) => {
+    if (onlineUser && typeof onlineUser === 'object') {
+      const onlineId = String(onlineUser.id || onlineUser.userId || '');
+      const onlineUsername = String(onlineUser.username || '').toLowerCase();
+      return (
+        (participantId && onlineId === participantId) ||
+        (participantUsername && onlineUsername === participantUsername) ||
+        (participantName && onlineUsername === participantName)
+      );
+    }
+
+    const value = String(onlineUser).toLowerCase();
+    return (
+      (participantId && value === participantId) ||
+      (participantUsername && value === participantUsername) ||
+      (participantName && value === participantName)
+    );
+  });
+};
+
 const WebSocketChatContext = createContext(undefined);
 
 // Tarayıcı ses kilidini açmak için sessiz clip (notification.mp3 kullanılmamalı)
@@ -92,6 +125,18 @@ const isNotificationSoundEnabled = () => {
   } catch (error) {
     return true;
   }
+};
+
+const MESSAGE_PAGE_SIZE = 50;
+
+const parseMessagesResponse = (data) => {
+  if (Array.isArray(data)) {
+    return { messages: data, hasMore: false };
+  }
+  return {
+    messages: Array.isArray(data?.messages) ? data.messages : [],
+    hasMore: Boolean(data?.hasMore),
+  };
 };
 
 export const useWebSocketChatContext = () => {
@@ -112,6 +157,10 @@ export const useWebSocketChatContext = () => {
     sendMessage: () => Promise.resolve(),
     createNewConversation: () => Promise.resolve(),
     deleteConversation: () => Promise.resolve(),
+    loadOlderMessages: () => Promise.resolve(),
+    hasMoreMessages: false,
+    loadingOlderMessages: false,
+    isParticipantOnline: () => false,
   };
 };
 
@@ -121,7 +170,10 @@ export const WebSocketChatProvider = ({ children }) => {
   const [conversations, setConversations] = useState([]);
   const [activeConversation, setActiveConversation] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [hasMoreMessages, setHasMoreMessages] = useState(false);
+  const [loadingOlderMessages, setLoadingOlderMessages] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const onlineUsersRef = useRef([]);
   const [userMap, setUserMap] = useState({});
   const [typingUsers, setTypingUsers] = useState({});
   const [followRequests, setFollowRequests] = useState([]);
@@ -132,6 +184,21 @@ export const WebSocketChatProvider = ({ children }) => {
   const audioRef = useRef(null);
   const audioUnlockedRef = useRef(false);
   const canPlaySoundRef = useRef(false);
+  const loadingOlderRef = useRef(false);
+
+  useEffect(() => {
+    onlineUsersRef.current = onlineUsers;
+  }, [onlineUsers]);
+
+  useEffect(() => {
+    setConversations((prev) => {
+      if (!prev.length) return prev;
+      return prev.map((conversation) => ({
+        ...conversation,
+        isOnline: isParticipantOnline(conversation, onlineUsers),
+      }));
+    });
+  }, [onlineUsers]);
 
   useEffect(() => {
     const audio = new Audio('/sounds/notification.mp3');
@@ -345,12 +412,10 @@ export const WebSocketChatProvider = ({ children }) => {
           ? activeConversation
           : null;
 
-      const isOtherUserOnline = (onlineUsers || []).some((onlineUser) => {
-        if (onlineUser && typeof onlineUser === 'object') {
-          return String(onlineUser.id || onlineUser.userId || '') === String(otherUserId);
-        }
-        return String(onlineUser) === String(otherUserId);
-      });
+      const isOtherUserOnline = isParticipantOnline(
+        { participantId: otherUserId },
+        onlineUsersRef.current,
+      );
 
       const participantName = isFromCurrentUser
         ? activeConversationMatch?.participantName ||
@@ -557,6 +622,7 @@ export const WebSocketChatProvider = ({ children }) => {
           if (activeConversation?.id === conversationId) {
             setActiveConversation(null);
             setMessages([]);
+            setHasMoreMessages(false);
           }
         }
       });
@@ -722,29 +788,35 @@ export const WebSocketChatProvider = ({ children }) => {
 
       const data = await apiCall('/chat/conversations');
 
-      const formatted = data.map(conv => ({
-        id: conv.id || conv.conversationId,
-        participantId: conv.participant?.id || conv.participantId || conv.otherUserId,
-        participantFirstName: conv.participant?.firstName || conv.participantFirstName || null,
-        participantLastName: conv.participant?.lastName || conv.participantLastName || null,
-        participantUsername: conv.participant?.username || conv.participantUsername || null,
-        participantName:
-          conv.participantName ||
-          `${conv.participant?.firstName || ''} ${conv.participant?.lastName || ''}`.trim() ||
-          conv.participant?.username ||
-          'Bilinmeyen Kullanıcı',
-        participantAvatar:
-          conv.participant?.photoUrl ||
-          conv.participantAvatar ||
-          conv.participant?.avatar ||
-          conv.avatar ||
-          null,
-        lastMessage: conv.lastMessage || '',
-        lastMessageTime: parseTimestamp(conv.lastMessageAt || conv.lastMessageTime),
-        unreadCount: conv.unreadCount || 0,
-        isOnline: conv.isOnline || false,
-        createdAt: conv.createdAt
-      }));
+      const formatted = data.map(conv => {
+        const mapped = {
+          id: conv.id || conv.conversationId,
+          participantId: conv.participant?.id || conv.participantId || conv.otherUserId,
+          participantFirstName: conv.participant?.firstName || conv.participantFirstName || null,
+          participantLastName: conv.participant?.lastName || conv.participantLastName || null,
+          participantUsername: conv.participant?.username || conv.participantUsername || null,
+          participantName:
+            conv.participantName ||
+            `${conv.participant?.firstName || ''} ${conv.participant?.lastName || ''}`.trim() ||
+            conv.participant?.username ||
+            'Bilinmeyen Kullanıcı',
+          participantAvatar:
+            conv.participant?.photoUrl ||
+            conv.participantAvatar ||
+            conv.participant?.avatar ||
+            conv.avatar ||
+            null,
+          lastMessage: conv.lastMessage || '',
+          lastMessageTime: parseTimestamp(conv.lastMessageAt || conv.lastMessageTime),
+          unreadCount: conv.unreadCount || 0,
+          createdAt: conv.createdAt,
+        };
+
+        return {
+          ...mapped,
+          isOnline: isParticipantOnline(mapped, onlineUsersRef.current),
+        };
+      });
 
       const deduplicated = formatted.reduce((acc, conv) => {
         const existing = acc.find(c => c.participantId === conv.participantId);
@@ -772,6 +844,7 @@ export const WebSocketChatProvider = ({ children }) => {
   const fetchMessages = useCallback(async (conversationId) => {
     if (!conversationId || String(conversationId).startsWith('temp-')) {
       setMessages([]);
+      setHasMoreMessages(false);
       return [];
     }
 
@@ -779,20 +852,81 @@ export const WebSocketChatProvider = ({ children }) => {
       setLoading(true);
       setError(null);
 
-      const data = await apiCall(`/chat/conversations/${conversationId}/messages`);
-      const formattedMessages = data.map(formatMessage);
+      const data = await apiCall(
+        `/chat/conversations/${conversationId}/messages?limit=${MESSAGE_PAGE_SIZE}`,
+      );
+      const { messages: rawMessages, hasMore } = parseMessagesResponse(data);
+      const formattedMessages = rawMessages.map(formatMessage);
 
       setMessages(formattedMessages);
+      setHasMoreMessages(hasMore);
       return formattedMessages;
     } catch (error) {
       console.error('Error fetching messages:', error);
       setError('Mesajlar yüklenirken hata oluştu');
       setMessages([]);
+      setHasMoreMessages(false);
       return [];
     } finally {
       setLoading(false);
     }
   }, [apiCall, formatMessage]);
+
+  const loadOlderMessages = useCallback(async () => {
+    const conversationId = activeConversation?.id;
+    if (
+      !conversationId ||
+      String(conversationId).startsWith('temp-') ||
+      loadingOlderRef.current ||
+      !hasMoreMessages
+    ) {
+      return [];
+    }
+
+    const oldestMessage = messages.find(
+      (message) => message?.id && !String(message.id).startsWith('temp-'),
+    );
+    if (!oldestMessage?.id) {
+      return [];
+    }
+
+    loadingOlderRef.current = true;
+    setLoadingOlderMessages(true);
+
+    try {
+      const data = await apiCall(
+        `/chat/conversations/${conversationId}/messages?limit=${MESSAGE_PAGE_SIZE}&before=${encodeURIComponent(oldestMessage.id)}`,
+      );
+      const { messages: rawMessages, hasMore } = parseMessagesResponse(data);
+      const formattedMessages = rawMessages.map(formatMessage);
+
+      if (formattedMessages.length === 0) {
+        setHasMoreMessages(false);
+        return [];
+      }
+
+      setMessages((prev) => {
+        const existingIds = new Set(prev.map((message) => message.id));
+        const olderMessages = formattedMessages.filter(
+          (message) => !existingIds.has(message.id),
+        );
+        if (olderMessages.length === 0) {
+          return prev;
+        }
+        return [...olderMessages, ...prev].sort(
+          (a, b) => new Date(a.timestamp) - new Date(b.timestamp),
+        );
+      });
+      setHasMoreMessages(hasMore);
+      return formattedMessages;
+    } catch (error) {
+      console.error('Error loading older messages:', error);
+      return [];
+    } finally {
+      loadingOlderRef.current = false;
+      setLoadingOlderMessages(false);
+    }
+  }, [activeConversation?.id, hasMoreMessages, messages, apiCall, formatMessage]);
 
   const fetchOnlineUsers = useCallback(async () => {
     // Don't fetch if no token (prevents 401 on login screen)
@@ -905,9 +1039,11 @@ export const WebSocketChatProvider = ({ children }) => {
     }
 
     if (conversation && !conversation.isTemporary) {
+      setHasMoreMessages(false);
       await fetchMessages(conversation.id);
     } else {
       setMessages([]);
+      setHasMoreMessages(false);
     }
   }, [activeConversation, fetchMessages]);
 
@@ -1046,6 +1182,7 @@ export const WebSocketChatProvider = ({ children }) => {
       if (activeConversation?.id === conversationId) {
         setActiveConversation(null);
         setMessages([]);
+        setHasMoreMessages(false);
       }
     } catch (error) {
       console.error('Error deleting conversation:', error);
@@ -1136,6 +1273,8 @@ export const WebSocketChatProvider = ({ children }) => {
     conversations,
     activeConversation,
     messages,
+    hasMoreMessages,
+    loadingOlderMessages,
     onlineUsers,
     typingUsers,
     followRequests,
@@ -1167,8 +1306,10 @@ export const WebSocketChatProvider = ({ children }) => {
     },
     fetchConversations,
     fetchMessages,
+    loadOlderMessages,
     fetchOnlineUsers,
-    connectSocket
+    connectSocket,
+    isParticipantOnline,
   }), [
     socket,
     isConnected,
@@ -1177,6 +1318,8 @@ export const WebSocketChatProvider = ({ children }) => {
     conversations,
     activeConversation,
     messages,
+    hasMoreMessages,
+    loadingOlderMessages,
     onlineUsers,
     typingUsers,
     followRequests,
@@ -1189,6 +1332,7 @@ export const WebSocketChatProvider = ({ children }) => {
     deleteConversation,
     fetchConversations,
     fetchMessages,
+    loadOlderMessages,
     fetchOnlineUsers,
     connectSocket,
     apiCall

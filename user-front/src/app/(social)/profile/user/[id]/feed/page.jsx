@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { Card, CardBody, Col, Container, Row } from 'react-bootstrap';
+import { Card, CardBody } from 'react-bootstrap';
 import { useProfileHash } from '@/hooks/useProfileHash';
 import Image from 'next/image';
 import avatar7 from '@/assets/images/avatar/07.jpg';
-import { BsHandThumbsUpFill, BsShare, BsEye, BsDownload, BsX } from 'react-icons/bs';
+import { BsX } from 'react-icons/bs';
 import CreatePostCard from '@/components/cards/CreatePostCard';
 import PostCard from '@/components/cards/PostCard';
 import SharedBookCard from '@/components/cards/SharedBookCard';
@@ -17,6 +17,7 @@ import SharedProfileCard from '@/components/cards/SharedProfileCard';
 import CustomConfirmDialog from '@/components/CustomConfirmDialog';
 import EditPostModal from '@/components/EditPostModal';
 import { useLanguage } from '@/context/useLanguageContext';
+import { fetchUserProfile } from '@/utils/profileCache';
 
 const UserFeedPage = () => {
   const { t } = useLanguage();
@@ -49,28 +50,14 @@ const UserFeedPage = () => {
 
   const fetchUserInfo = async () => {
     try {
-      const userId = profileId;
-      if (userId) {
-        const token = localStorage.getItem('token');
-
-        // Kullanıcı bilgilerini çek
-        const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        });
-
-        if (userResponse.ok) {
-          const userData = await userResponse.json();
+      if (profileId) {
+        const userData = await fetchUserProfile(profileId);
+        if (userData) {
           setUserInfo(userData);
-        } else {
-          // console.error('User info not found');
         }
       }
     } catch (error) {
-      // console.error('Error fetching user info:', error);
+      // silently fail
     }
   };
 
@@ -161,14 +148,7 @@ const UserFeedPage = () => {
     return () => window.removeEventListener('newCommentInPost', handleNewComment);
   }, []);
 
-  // Load comments for posts
-  useEffect(() => {
-    if (posts && posts.length > 0) {
-      posts.forEach(post => {
-        loadComments(post.id);
-      });
-    }
-  }, [posts]);
+  // Comments load lazily via onLoadComments prop — no auto-fetch
 
   // Scroll to anchor post after page loads (e.g. from message "Gönderiyi Gör" link)
   useEffect(() => {
@@ -607,11 +587,12 @@ const UserFeedPage = () => {
 
   if (params.id && !isValid) {
     return (
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardBody className="text-center py-5">
-          <h4>Profil Bulunamadı</h4>
-          <p className="text-muted">Geçersiz profil linki veya bu profil mevcut değil.</p>
-          <a href="/feed" className="btn btn-primary">Ana Sayfaya Dön</a>
+          <div className="mb-3" style={{ fontSize: '3rem', opacity: 0.4 }}>🔍</div>
+          <h5 className="fw-semibold mb-2">{t('userProfile.notFound') || 'Profil Bulunamadı'}</h5>
+          <p className="text-muted small mb-3">{t('userProfile.invalidLink') || 'Geçersiz profil linki veya bu profil mevcut değil.'}</p>
+          <a href="/feed" className="btn btn-sm btn-primary rounded-pill px-4">{t('common.backToHome') || 'Ana Sayfaya Dön'}</a>
         </CardBody>
       </Card>
     );
@@ -619,11 +600,26 @@ const UserFeedPage = () => {
 
   if (loading) {
     return (
-      <div className="text-center py-5">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-        <p className="mt-3">Gönderiler yükleniyor...</p>
+      <div className="profile-feed-loading">
+        {[1, 2, 3].map(i => (
+          <Card key={i} className="mb-3 border-0 shadow-sm">
+            <CardBody>
+              <div className="d-flex align-items-center mb-3">
+                <div className="placeholder-glow me-3">
+                  <span className="placeholder rounded-circle" style={{ width: 42, height: 42, display: 'inline-block' }} />
+                </div>
+                <div className="flex-grow-1 placeholder-glow">
+                  <span className="placeholder col-4 rounded" />
+                  <span className="placeholder col-2 rounded d-block mt-1" style={{ height: 10 }} />
+                </div>
+              </div>
+              <div className="placeholder-glow">
+                <span className="placeholder col-12 rounded mb-2" />
+                <span className="placeholder col-8 rounded" />
+              </div>
+            </CardBody>
+          </Card>
+        ))}
       </div>
     );
   }
@@ -659,11 +655,12 @@ const UserFeedPage = () => {
 
       {/* Show CreatePostCard only for current user */}
       {isCurrentUser && (
-        <div className="mb-4" style={{ marginTop: '1rem' }}>
+        <div className="mb-3">
           <CreatePostCard />
         </div>
       )}
 
+      <div className="feed-timeline">
       {posts && posts.length > 0 ? (
         posts.map((post, index) => {
           // Check if this is a shared profile post
@@ -795,18 +792,20 @@ const UserFeedPage = () => {
           return null;
         })
       ) : (
-        <Card>
+        <Card className="border-0 shadow-sm">
           <CardBody className="text-center py-5">
-            <h4>Henüz Gönderi Yok</h4>
-            <p className="text-muted">
+            <div className="mb-3" style={{ fontSize: '3rem', opacity: 0.4 }}>📭</div>
+            <h5 className="fw-semibold mb-2">{t('feed.noPostsFound') || 'Henüz Gönderi Yok'}</h5>
+            <p className="text-muted small mb-0">
               {isCurrentUser
-                ? 'Henüz hiç gönderi paylaşmadınız. İlk gönderinizi paylaşmak için yukarıdaki formu kullanın.'
-                : 'Bu kullanıcı henüz hiç gönderi paylaşmamış.'
+                ? (t('feed.noPostsOwnProfile') || 'Henüz hiç gönderi paylaşmadınız. İlk gönderinizi paylaşmak için yukarıdaki formu kullanın.')
+                : (t('feed.noPostsOtherProfile') || 'Bu kullanıcı henüz hiç gönderi paylaşmamış.')
               }
             </p>
           </CardBody>
         </Card>
       )}
+      </div>
 
       {/* Image Modal */}
       {selectedImage && (

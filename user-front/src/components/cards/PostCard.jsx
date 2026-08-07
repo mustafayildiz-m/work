@@ -12,7 +12,7 @@ import postImg3 from '@/assets/images/post/1by1/03.jpg';
 import postImg1 from '@/assets/images/post/3by2/01.jpg';
 import postImg2 from '@/assets/images/post/3by2/02.jpg';
 import VideoPlayer from './components/VideoPlayer';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { getUserIdFromToken } from '@/utils/auth';
 import CustomConfirmDialog from '../CustomConfirmDialog';
 import { useLanguage } from '@/context/useLanguageContext';
@@ -614,13 +614,10 @@ const PostCard = ({
   const [commentToDelete, setCommentToDelete] = useState(null);
 
   return <>
-    <Card id={`post-${postId}`} style={{
-      borderRadius: isSharedPost ? '0 0 12px 12px' : '12px',
-      overflow: 'hidden'
-    }}>
+    <Card id={`post-${postId}`} className={`feed-surface-card feed-post-card border-0${isSharedPost ? ' is-shared-post' : ''}`}>
       {/* Shared Post Indicator - Facebook Style */}
       {isSharedPost && originalUser && (
-        <div className="shared-post-indicator px-3 py-3" style={{
+        <div className="shared-post-indicator px-3 py-2" style={{
           background: 'linear-gradient(135deg, var(--bs-tertiary-bg) 0%, var(--bs-secondary-bg) 100%)',
           borderBottom: '1px solid var(--bs-border-color)',
           borderTopLeftRadius: '12px',
@@ -628,29 +625,28 @@ const PostCard = ({
         }}>
           <div className="d-flex align-items-center justify-content-between">
             <div className="d-flex align-items-center">
-              <div className="me-3" style={{
-                width: '32px',
-                height: '32px',
+              <div className="me-2" style={{
+                width: '28px',
+                height: '28px',
                 borderRadius: '50%',
                 background: 'linear-gradient(135deg, #007bff 0%, #0056b3 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 2px 8px rgba(0, 123, 255, 0.3)'
+                boxShadow: '0 2px 6px rgba(0, 123, 255, 0.25)'
               }}>
-                <BsShare className="text-white" style={{ fontSize: '14px' }} />
+                <BsShare className="text-white" style={{ fontSize: '12px' }} />
               </div>
               <div>
                 <div className="d-flex align-items-center">
-                  <span className="fw-bold" style={{ fontSize: '14px', color: 'var(--bs-heading-color)' }}>
+                  <span className="fw-bold" style={{ fontSize: '0.8rem', color: 'var(--bs-heading-color)' }}>
                     {originalUser.firstName} {originalUser.lastName}
                   </span>
-                  <span className="text-muted ms-2" style={{ fontSize: '13px' }}>
+                  <span className="text-muted ms-2" style={{ fontSize: '0.75rem' }}>
                     {t('post.sharedBy')}
                   </span>
                 </div>
-                <div className="text-muted small" style={{ fontSize: '12px', marginTop: '2px' }}>
-                  <i className="fas fa-clock me-1"></i>
+                <div className="text-muted" style={{ fontSize: '0.7rem', marginTop: '1px' }}>
                   {createdAt ? getTimeSince(new Date(createdAt), t, locale) : t('time.justNow')}
                 </div>
               </div>
@@ -658,8 +654,8 @@ const PostCard = ({
             
             <div className="d-flex align-items-center gap-2">
               <button 
-                className="btn btn-sm rounded-circle d-flex align-items-center justify-content-center p-0" 
-                style={{ width: '32px', height: '32px', transition: 'all 0.2s', border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'}`, backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'transparent' }}
+                className="btn btn-sm rounded-circle feed-post-header-btn d-flex align-items-center justify-content-center p-0" 
+                style={{ transition: 'all 0.2s', border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'}`, backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'transparent' }}
                 title="Mesaj Olarak Gönder"
                 onClick={() => setShowShareMessageModal(true)}
                 onMouseEnter={(e) => {
@@ -678,10 +674,10 @@ const PostCard = ({
         </div>
       )}
 
-      <CardHeader className="border-0 pb-0">
+      <CardHeader className="feed-post-header border-0 pb-0">
         <div className="d-flex align-items-center justify-content-between">
           <div className="d-flex align-items-center">
-            <div className="me-3" style={{ flexShrink: 0 }}>
+            <div className="me-2" style={{ flexShrink: 0 }}>
               {socialUser?.id ? (
                 <Link
                   href={getProfilePath(isUserPost ? 'user' : 'scholar', socialUser?.id) || '#'}
@@ -690,14 +686,10 @@ const PostCard = ({
                   onClick={(e) => handleGuestInteraction(e)}
                 >
                   <img
-                    className="rounded-circle"
+                    className="rounded-circle feed-post-avatar"
                     src={getImageUrl(isUserPost ? socialUser?.avatar : socialUser?.photoUrl)}
                     alt={isUserPost ? (socialUser?.name || 'User') : (socialUser?.fullName || 'Scholar')}
                     style={{
-                      width: '44px',
-                      height: '44px',
-                      objectFit: 'cover',
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                       cursor: 'pointer',
                       display: 'block'
                     }}
@@ -720,14 +712,10 @@ const PostCard = ({
               ) : (
                 <span role="presentation">
                   <img
-                    className="rounded-circle"
+                    className="rounded-circle feed-post-avatar"
                     src={getImageUrl(isUserPost ? socialUser?.avatar : socialUser?.photoUrl)}
                     alt={isUserPost ? (socialUser?.name || 'User') : (socialUser?.fullName || 'Scholar')}
                     style={{
-                      width: '44px',
-                      height: '44px',
-                      objectFit: 'cover',
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                       cursor: 'default',
                       display: 'block'
                     }}
@@ -741,7 +729,7 @@ const PostCard = ({
 
             <div>
               <div className="nav nav-divider">
-                <h6 className="nav-item card-title mb-0 d-flex align-items-center gap-2">
+                <h6 className="nav-item card-title mb-0 d-flex align-items-center gap-2 feed-post-author">
                   {' '}
                   {socialUser?.id ? (
                     <Link
@@ -762,24 +750,22 @@ const PostCard = ({
                     </span>
                   )}
                 </h6>
-                <span className="nav-item small"> {createdAt ? getTimeSince(createdAt, t) : ''}</span>
+                <span className="nav-item feed-post-meta"> {createdAt ? getTimeSince(createdAt, t) : ''}</span>
               </div>
-              {/* Show "Kullanıcı" for user posts, "Alim" for scholar posts */}
-              {isUserPost ? (
-                <p className="mb-0 small">
-                  {socialUser?.role === 'admin' ? 'Yönetici' :
-                    socialUser?.role === 'moderator' ? 'Moderatör' :
-                      t('post.userRole')}
-                </p>
-              ) : (
-                <p className="mb-0 small">{t('post.scholarRole')}</p>
-              )}
+              <p className="mb-0 feed-post-role text-muted">
+                {isUserPost
+                  ? (socialUser?.role === 'admin' ? 'Yönetici' :
+                      socialUser?.role === 'moderator' ? 'Moderatör' :
+                        t('post.userRole'))
+                  : t('post.scholarRole')
+                }
+              </p>
             </div>
           </div>
           <div className="d-flex align-items-center gap-2">
             <button 
-              className="btn btn-sm rounded-circle d-flex align-items-center justify-content-center p-0" 
-              style={{ width: '32px', height: '32px', transition: 'all 0.2s', border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'}`, backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'transparent' }}
+              className="btn btn-sm rounded-circle feed-post-header-btn d-flex align-items-center justify-content-center p-0" 
+              style={{ transition: 'all 0.2s', border: `1px solid ${isDarkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'}`, backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'transparent' }}
               title="Mesaj Olarak Gönder"
               onClick={() => setShowShareMessageModal(true)}
               onMouseEnter={(e) => {
@@ -791,7 +777,7 @@ const PostCard = ({
                 e.currentTarget.querySelector('svg').style.color = 'var(--bs-primary)';
               }}
             >
-              <BsEnvelope size={15} className="text-primary" style={{ transition: 'color 0.2s' }} />
+              <BsEnvelope size={13} className="text-primary" style={{ transition: 'color 0.2s' }} />
             </button>
             {!isSharedPost && (
               <ActionMenu
@@ -837,9 +823,9 @@ const PostCard = ({
         }}
       />
 
-      <CardBody>
+      <CardBody className="feed-post-body">
         {title && (
-          <h6 className="mb-3 fw-bold">
+          <h6 className="fw-bold feed-post-title">
             <div
               dangerouslySetInnerHTML={{ __html: sanitizeHtml(title) }}
             />
@@ -848,21 +834,21 @@ const PostCard = ({
 
         {caption && (
           <div
-            className="mb-3"
+            className="feed-post-caption"
             dangerouslySetInnerHTML={{ __html: sanitizeHtml(caption) }}
           />
         )}
 
 
         {image && !video && (
-          <div className="mb-3" style={{ borderRadius: '12px', overflow: 'hidden', backgroundColor: '#f0f0f0' }}>
+          <div className="feed-post-media">
             <Image
               src={getImageUrl(image)}
               alt="Post"
-              width={800}
-              height={600}
-              className="w-100"
-              style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '12px', cursor: 'pointer', maxHeight: '600px', objectFit: 'contain' }}
+              width={480}
+              height={640}
+              className="feed-post-media-item"
+              style={{ display: 'block', cursor: 'pointer' }}
               onClick={() => setSelectedImage(getImageUrl(image))}
               onError={(e) => { e.target.style.display = 'none'; }}
             />
@@ -870,12 +856,12 @@ const PostCard = ({
         )}
 
         {video && (
-          <div className="mb-3" style={{ borderRadius: '12px', overflow: 'hidden' }}>
+          <div className="feed-post-media">
             <video
-              className="w-100"
+              className="feed-post-media-item"
               controls
               preload="metadata"
-              style={{ maxHeight: '420px', objectFit: 'contain', display: 'block', borderRadius: '12px', backgroundColor: '#000' }}
+              style={{ display: 'block', backgroundColor: '#000' }}
               onError={(e) => {
                 if (process.env.NODE_ENV === 'development') {}
               }}
@@ -899,15 +885,15 @@ const PostCard = ({
                 const isVid = isVideoFile(fileName);
 
                 return (
-                  <div key={index} style={{ width: '100%' }}>
+                  <div key={index}>
                     {isVid ? (
                       // Video files - inline player
-                      <div className="mb-2" style={{ borderRadius: '12px', overflow: 'hidden', backgroundColor: '#000' }}>
+                      <div className="feed-post-media mb-2">
                         <video
-                          className="w-100"
+                          className="feed-post-media-item"
                           controls
                           preload="metadata"
-                          style={{ maxHeight: '420px', objectFit: 'contain', display: 'block', borderRadius: '12px' }}
+                          style={{ display: 'block' }}
                         >
                           <source src={fullFileUrl} type={`video/${fileExtension === 'mov' ? 'mp4' : fileExtension}`} />
                           <source src={fullFileUrl} type="video/mp4" />
@@ -916,21 +902,16 @@ const PostCard = ({
                       </div>
                     ) : isImage ? (
                       // Image files
-                      <div className="mb-2" style={{ borderRadius: '12px', overflow: 'hidden', backgroundColor: '#f0f0f0' }}>
+                      <div className="feed-post-media mb-2">
                         <Image
                           src={fullFileUrl}
                           alt={fileName}
-                          width={800}
-                          height={600}
-                          className="w-100"
+                          width={480}
+                          height={640}
+                          className="feed-post-media-item"
                           style={{
-                            width: '100%',
-                            height: 'auto',
                             display: 'block',
-                            borderRadius: '12px',
                             cursor: 'pointer',
-                            maxHeight: '600px',
-                            objectFit: 'contain'
                           }}
                           onClick={() => setSelectedImage(fullFileUrl)}
                           onError={(e) => { e.target.style.display = 'none'; }}
@@ -1041,7 +1022,8 @@ const PostCard = ({
           </div>
         )}
 
-        <ul className="nav nav-stack py-3 small">
+        <div className="feed-post-actions">
+        <ul className="nav nav-stack small mb-0">
           {/* Like button removed temporarily */}
           {/**
            * <li className="nav-item">
@@ -1097,24 +1079,23 @@ const PostCard = ({
             </DropdownMenu>
           </Dropdown>
         </ul>
+        </div>
         {/* Show comment section only for user posts (not scholar posts) */}
         {isUserPost && (
           <div className="comment-section">
-            <div className="d-flex mb-3">
+            <div className="d-flex mb-2">
               <div className="me-2" style={{ flexShrink: 0 }}>
                 <span role="button">
                   <Image
-                    className="rounded-circle"
+                    className="rounded-circle feed-post-comment-avatar"
                     src={getCurrentUserAvatar()}
                     alt={userInfo?.username || userInfo?.name || 'User'}
-                    width={36}
-                    height={36}
+                    width={24}
+                    height={24}
                     style={{
-                      width: '36px',
-                      height: '36px',
+                      width: '24px',
+                      height: '24px',
                       objectFit: 'cover',
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      cursor: 'pointer'
                     }}
                     onError={(e) => {
                       e.target.onerror = null;
@@ -1436,4 +1417,4 @@ const PostCard = ({
   </>;
 };
 
-export default PostCard;
+export default memo(PostCard);

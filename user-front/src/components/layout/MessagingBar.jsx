@@ -15,6 +15,16 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import { hasValidToken } from '@/utils/auth';
 import SimplebarReactClient from '@/components/wrappers/SimplebarReactClient';
+import OnlineStatusDot from '@/components/chat/OnlineStatusDot';
+
+const PANEL_WIDTH = 300;
+const PANEL_GAP = 8;
+const HEADER_HEIGHT = 38;
+const PANEL_HEIGHT = 420;
+const MAX_PANEL_HEIGHT = 'min(420px, calc(100vh - 72px))';
+const AVATAR_SM = 24;
+const AVATAR_MD = 32;
+const AVATAR_LG = 36;
 
 const MessagingBar = () => {
     const { userInfo } = useAuthContext();
@@ -22,7 +32,7 @@ const MessagingBar = () => {
     const { locale, t } = useLanguage();
     const notificationContext = useOptionalNotificationContext();
     const { status, data: session } = useSession();
-    const { conversations, selectConversation, sendMessage, socket, fetchMessages, isConnected, markMessageAsRead, markConversationAsRead } = useWebSocketChatContext();
+    const { conversations, selectConversation, sendMessage, socket, fetchMessages, isConnected, markMessageAsRead, markConversationAsRead, onlineUsers, isParticipantOnline } = useWebSocketChatContext();
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [isNewMessageOpen, setIsNewMessageOpen] = useState(false);
@@ -642,7 +652,7 @@ const MessagingBar = () => {
             className="d-none d-lg-block position-fixed end-0 bottom-0 messaging-bar-widget"
             style={{
                 zIndex: 1050,
-                width: '420px',
+                width: `${PANEL_WIDTH}px`,
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
             }}
         >
@@ -650,10 +660,10 @@ const MessagingBar = () => {
             <div
                 className={clsx("overflow-hidden", isExpanded ? "d-block" : "d-none")}
                 style={{
-                    borderTopLeftRadius: '8px',
-                    borderTopRightRadius: '8px',
-                    height: '750px',
-                    maxHeight: 'calc(100vh - 60px)',
+                    borderTopLeftRadius: '10px',
+                    borderTopRightRadius: '10px',
+                    height: PANEL_HEIGHT,
+                    maxHeight: MAX_PANEL_HEIGHT,
                     backgroundColor: colors.bg,
                     display: 'flex',
                     flexDirection: 'column',
@@ -668,7 +678,7 @@ const MessagingBar = () => {
                     onClick={() => setIsExpanded(false)}
                     className="d-flex align-items-center justify-content-between px-3"
                     style={{
-                        height: '48px',
+                        height: `${HEADER_HEIGHT}px`,
                         cursor: 'pointer',
                         backgroundColor: colors.header,
                         color: colors.textMain,
@@ -681,37 +691,37 @@ const MessagingBar = () => {
                             <Image
                                 src={getDisplayAvatar(currentUserPhoto)}
                                 alt="User"
-                                width={32}
-                                height={32}
+                                width={AVATAR_MD}
+                                height={AVATAR_MD}
                                 className="rounded-circle"
                                 style={{ border: '1px solid rgba(255,255,255,0.2)', objectFit: 'cover' }}
                                 key={currentUserPhoto || 'default'}
                             />
-                            <div className="position-absolute bottom-0 end-0 bg-success rounded-circle" style={{ width: '10px', height: '10px', border: '2px solid #1d2226' }} />
+                            <div className="position-absolute bottom-0 end-0 bg-success rounded-circle" style={{ width: '8px', height: '8px', border: '2px solid #1d2226' }} />
                         </div>
-                        <span className="fw-bold ms-1" style={{ fontSize: '0.85rem' }}>{messagingTitle}</span>
+                        <span className="fw-semibold ms-1" style={{ fontSize: '0.8rem' }}>{messagingTitle}</span>
                     </div>
-                    <div className={clsx("d-flex align-items-center gap-3", iconClass)}>
-                        <BsPencilSquare size={16} className="hover-active" onClick={handleNewMessageClick} title={getLocalized('messaging.newMessage', 'Yeni Mesaj', 'New Message')} />
-                        <BsChevronDown size={18} className="hover-active" />
+                    <div className={clsx("d-flex align-items-center gap-2", iconClass)}>
+                        <BsPencilSquare size={14} className="hover-active" onClick={handleNewMessageClick} title={getLocalized('messaging.newMessage', 'Yeni Mesaj', 'New Message')} />
+                        <BsChevronDown size={16} className="hover-active" />
                     </div>
                 </div>
 
                 {/* Search Area */}
-                <div className="p-3" style={{ flexShrink: 0, borderBottom: `1px solid ${colors.border}` }}>
+                <div className="px-2 py-2" style={{ flexShrink: 0, borderBottom: `1px solid ${colors.border}` }}>
                     <div className="position-relative">
-                        <BsSearch className="position-absolute top-50 start-0 translate-middle-y ms-3" size={13} style={{ color: colors.textMuted }} />
+                        <BsSearch className="position-absolute top-50 start-0 translate-middle-y ms-2" size={12} style={{ color: colors.textMuted }} />
                         <input
                             type="text"
-                            className="form-control form-control-sm ps-5 pe-4 shadow-none"
+                            className="form-control form-control-sm ps-4 pe-3 shadow-none"
                             placeholder={getLocalized('messaging.searchPlaceholder', 'Mesajlarda ara', 'Search messages')}
                             style={{
                                 backgroundColor: colors.searchBg,
                                 border: 'none',
                                 color: colors.textMain,
-                                fontSize: '0.9rem',
-                                height: '36px',
-                                borderRadius: '4px'
+                                fontSize: '0.78rem',
+                                height: '32px',
+                                borderRadius: '6px'
                             }}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
@@ -727,37 +737,39 @@ const MessagingBar = () => {
                                 <div
                                     key={conv.id}
                                     onClick={() => handleConversationClick(conv)}
-                                    className="d-flex align-items-center p-3 border-bottom hover-bg"
+                                    className="d-flex align-items-center px-2 py-2 border-bottom hover-bg messaging-conv-item"
                                     style={{
                                         cursor: 'pointer',
                                         transition: 'background 0.2s',
-                                        minHeight: '84px',
+                                        minHeight: '56px',
                                         borderBottomColor: colors.border
                                     }}
                                 >
-                                    <div className="position-relative me-3 flex-shrink-0">
+                                    <div className="position-relative me-2 flex-shrink-0">
                                         <Image
                                             src={getDisplayAvatar(resolveConversationAvatar(conv))}
                                             alt={conv.participantName}
-                                            width={48}
-                                            height={48}
+                                            width={AVATAR_LG}
+                                            height={AVATAR_LG}
                                             className="rounded-circle"
                                             style={{ objectFit: 'cover' }}
                                         />
-                                        {conv.isOnline && (
-                                            <div className="position-absolute bottom-0 end-0 bg-success rounded-circle" style={{ width: '12px', height: '12px', border: `2px solid ${colors.bg}` }} />
-                                        )}
+                                        <OnlineStatusDot
+                                            visible={isParticipantOnline(conv, onlineUsers)}
+                                            size={10}
+                                            borderColor={colors.bg}
+                                        />
                                     </div>
                                     <div className="flex-grow-1 overflow-hidden">
-                                        <div className="d-flex justify-content-between align-items-baseline mb-1">
-                                            <span className="text-truncate" style={{ fontSize: '1rem', color: colors.textMain, fontWeight: (conv.unreadCount || 0) > 0 ? '700' : '500' }}>
+                                        <div className="d-flex justify-content-between align-items-baseline mb-0">
+                                            <span className="text-truncate" style={{ fontSize: '0.82rem', color: colors.textMain, fontWeight: (conv.unreadCount || 0) > 0 ? '700' : '500' }}>
                                                 {resolveConversationName(conv)}
                                             </span>
-                                            <span style={{ fontSize: '0.75rem', color: colors.textMuted }}>
+                                            <span style={{ fontSize: '0.68rem', color: colors.textMuted, flexShrink: 0, marginLeft: '6px' }}>
                                                 {formatDate(conv.lastMessageTime)}
                                             </span>
                                         </div>
-                                        <div className="text-truncate" style={{ fontSize: '0.85rem', lineHeight: '1.4', color: (conv.unreadCount || 0) > 0 ? colors.textMain : colors.textMuted, fontWeight: (conv.unreadCount || 0) > 0 ? '700' : '400' }}>
+                                        <div className="text-truncate" style={{ fontSize: '0.75rem', lineHeight: '1.3', color: (conv.unreadCount || 0) > 0 ? colors.textMain : colors.textMuted, fontWeight: (conv.unreadCount || 0) > 0 ? '600' : '400' }}>
                                             {(() => {
                                                 if (!conv.lastMessage) return getLocalized('messaging.noMessage', 'Mesaj bulunmuyor', 'No messages yet');
                                                 try {
@@ -787,9 +799,9 @@ const MessagingBar = () => {
                     onClick={() => setIsExpanded(true)}
                     className="d-flex align-items-center justify-content-between px-3"
                     style={{
-                        height: '48px',
-                        borderTopLeftRadius: '8px',
-                        borderTopRightRadius: '8px',
+                        height: `${HEADER_HEIGHT}px`,
+                        borderTopLeftRadius: '10px',
+                        borderTopRightRadius: '10px',
                         cursor: 'pointer',
                         transition: 'all 0.2s ease',
                         backgroundColor: colors.header,
@@ -811,8 +823,8 @@ const MessagingBar = () => {
                             <Image
                                 src={getDisplayAvatar(currentUserPhoto)}
                                 alt="User"
-                                width={32}
-                                height={32}
+                                width={AVATAR_MD}
+                                height={AVATAR_MD}
                                 className="rounded-circle"
                                 style={{ border: '1px solid rgba(255,255,255,0.2)', objectFit: 'cover' }}
                                 key={currentUserPhoto || 'default'}
@@ -820,20 +832,20 @@ const MessagingBar = () => {
                             <div
                                 className="position-absolute bottom-0 end-0 bg-success rounded-circle"
                                 style={{
-                                    width: '10px',
-                                    height: '10px',
+                                    width: '8px',
+                                    height: '8px',
                                     border: `2px solid ${colors.header}`
                                 }}
                             />
                         </div>
-                        <span className="fw-bold ms-1" style={{ fontSize: '0.85rem' }}>
+                        <span className="fw-semibold ms-1" style={{ fontSize: '0.8rem' }}>
                             {messagingTitle}
                         </span>
                     </div>
 
-                    <div className={clsx("d-flex align-items-center gap-3", iconClass)}>
-                        <BsPencilSquare size={16} className="hover-active" title={getLocalized('messaging.newMessage', 'Yeni Mesaj', 'New Message')} onClick={handleNewMessageClick} />
-                        <BsChevronUp size={18} className="hover-active" />
+                    <div className={clsx("d-flex align-items-center gap-2", iconClass)}>
+                        <BsPencilSquare size={14} className="hover-active" title={getLocalized('messaging.newMessage', 'Yeni Mesaj', 'New Message')} onClick={handleNewMessageClick} />
+                        <BsChevronUp size={16} className="hover-active" />
                     </div>
                 </div>
             )}
@@ -842,27 +854,27 @@ const MessagingBar = () => {
             {activeChats.map((chat, index) => (
                 <div
                     key={chat.user.id}
-                    className="position-absolute bottom-0 shadow-lg overflow-hidden d-flex flex-column"
+                    className="position-absolute bottom-0 shadow-lg overflow-hidden d-flex flex-column messaging-chat-window"
                     style={{
-                        right: `calc(100% + ${(index * 432) + (isNewMessageOpen ? 432 : 12)}px)`,
-                        width: '420px',
-                        height: chat.isExpanded ? '750px' : '48px',
-                        maxHeight: 'calc(100vh - 60px)',
+                        right: `calc(100% + ${(index * (PANEL_WIDTH + PANEL_GAP)) + (isNewMessageOpen ? PANEL_WIDTH + PANEL_GAP : PANEL_GAP)}px)`,
+                        width: `${PANEL_WIDTH}px`,
+                        height: chat.isExpanded ? PANEL_HEIGHT : `${HEADER_HEIGHT}px`,
+                        maxHeight: MAX_PANEL_HEIGHT,
                         backgroundColor: colors.bg,
                         border: `1px solid ${colors.border}`,
-                        borderTopLeftRadius: '8px',
-                        borderTopRightRadius: '8px',
+                        borderTopLeftRadius: '10px',
+                        borderTopRightRadius: '10px',
                         zIndex: 1060 - index,
                         boxShadow: colors.shadow,
-                        transition: 'all 0.3s ease'
+                        transition: 'height 0.25s ease, box-shadow 0.2s ease'
                     }}
                 >
                     {/* Window Header */}
                     <div
                         onClick={() => toggleChatWindow(chat.user.id)}
-                        className="d-flex align-items-center justify-content-between px-3"
+                        className="d-flex align-items-center justify-content-between px-2"
                         style={{
-                            height: '48px',
+                            height: `${HEADER_HEIGHT}px`,
                             backgroundColor: colors.header,
                             color: colors.textMain,
                             borderBottom: chat.isExpanded ? `1px solid ${colors.border}` : 'none',
@@ -875,29 +887,33 @@ const MessagingBar = () => {
                                 href={getProfilePath('user', chat.user.id) || '#'}
                                 onClick={(e) => e.stopPropagation()}
                                 className="position-relative me-2 flex-shrink-0"
-                                style={{ width: 32, height: 32, display: 'block' }}
+                                style={{ width: AVATAR_MD, height: AVATAR_MD, display: 'block' }}
                             >
                                 <Image
                                     src={getDisplayAvatar(chat.user.photoUrl)}
                                     alt={chat.user.firstName}
-                                    width={32}
-                                    height={32}
+                                    width={AVATAR_MD}
+                                    height={AVATAR_MD}
                                     className="rounded-circle"
                                     style={{ objectFit: 'cover' }}
                                 />
-                                <div className="position-absolute bottom-0 end-0 bg-success rounded-circle" style={{ width: '10px', height: '10px', border: `2px solid ${colors.header}` }} />
+                                <OnlineStatusDot
+                                    visible={isParticipantOnline(chat.user, onlineUsers)}
+                                    size={9}
+                                    borderColor={colors.header}
+                                />
                             </Link>
-                            <span className="fw-bold text-truncate" style={{ fontSize: '0.85rem' }}>
+                            <span className="fw-semibold text-truncate" style={{ fontSize: '0.78rem', maxWidth: '160px' }}>
                                 {chat.user.firstName} {chat.user.lastName}
                             </span>
                             {(chat.unreadCount || 0) > 0 && (
-                                <span className="ms-2 badge rounded-pill bg-danger" style={{ fontSize: '0.65rem', padding: '0.3em 0.6em' }}>
+                                <span className="ms-1 badge rounded-pill bg-danger" style={{ fontSize: '0.6rem', padding: '0.2em 0.45em' }}>
                                     {chat.unreadCount}
                                 </span>
                             )}
                         </div>
-                        <div className={clsx("d-flex align-items-center gap-2", iconClass)}>
-                            {chat.isExpanded ? <BsChevronDown size={18} /> : <BsChevronUp size={18} />}
+                        <div className={clsx("d-flex align-items-center gap-1", iconClass)}>
+                            {chat.isExpanded ? <BsChevronDown size={15} /> : <BsChevronUp size={15} />}
                             <div
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -905,7 +921,7 @@ const MessagingBar = () => {
                                 }}
                                 className="hover-active p-1 d-flex align-items-center"
                             >
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
                             </div>
                         </div>
                     </div>
@@ -916,51 +932,41 @@ const MessagingBar = () => {
                             <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: isGreen ? colors.chatAreaBg : colors.bg }}>
                                 <div style={{ flex: 1, minHeight: 0 }}>
                                     <SimplebarReactClient style={{ height: '100%' }}>
-                                        <div className="p-3">
-                                            {/* User Info Card */}
-                                            <div className="text-center mb-4">
-                                                <Link href={getProfilePath('user', chat.user.id) || '#'} className="d-inline-block mb-2">
-                                                    <Image
-                                                        src={getDisplayAvatar(chat.user.photoUrl)}
-                                                        alt={chat.user.firstName}
-                                                        width={80}
-                                                        height={80}
-                                                        className="rounded-circle"
-                                                        style={{ objectFit: 'cover' }}
-                                                    />
-                                                </Link>
-                                                <Link href={getProfilePath('user', chat.user.id) || '#'} className="text-decoration-none">
-                                                    <h5 className="mb-0 fw-bold" style={{ color: colors.textMain }}>{chat.user.firstName} {chat.user.lastName}</h5>
-                                                </Link>
-                                                {(chat.user.tagline || chat.user.role) && (
-                                                    <p className="text-muted small mb-0">{chat.user.tagline || chat.user.role}</p>
-                                                )}
-                                            </div>
-
-                                            {/* Messages */}
-                                            {chat.messages.map((msg) => (
-                                                <div key={msg.id} className={clsx("d-flex align-items-start mb-3", msg.isMe ? "flex-row-reverse" : "flex-row")}>
+                                        <div className="px-2 py-2">
+                                            {chat.messages.length === 0 ? (
+                                                <div className="text-center py-3 px-2">
+                                                    <Link href={getProfilePath('user', chat.user.id) || '#'} className="d-inline-block mb-1">
+                                                        <Image
+                                                            src={getDisplayAvatar(chat.user.photoUrl)}
+                                                            alt={chat.user.firstName}
+                                                            width={40}
+                                                            height={40}
+                                                            className="rounded-circle"
+                                                            style={{ objectFit: 'cover' }}
+                                                        />
+                                                    </Link>
+                                                    <div className="small text-muted" style={{ fontSize: '0.72rem' }}>
+                                                        {getLocalized('messaging.firstMessagePrompt', 'İlk mesajı göndererek sohbeti başlatın', 'Send a message to start chatting')}
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                chat.messages.map((msg) => (
+                                                <div key={msg.id} className={clsx("d-flex align-items-end mb-2", msg.isMe ? "flex-row-reverse" : "flex-row")}>
                                                     <Link
                                                         href={getProfilePath('user', msg.isMe ? (userInfo?.id || session?.user?.id) : chat.user.id) || '#'}
-                                                        className={clsx("flex-shrink-0", msg.isMe ? "ms-2" : "me-2")}
-                                                        style={{ width: 32, height: 32, display: 'block' }}
+                                                        className={clsx("flex-shrink-0", msg.isMe ? "ms-1" : "me-1")}
+                                                        style={{ width: AVATAR_SM, height: AVATAR_SM, display: 'block' }}
                                                     >
                                                         <Image
                                                             src={getDisplayAvatar(msg.isMe ? currentUserPhoto : chat.user.photoUrl)}
                                                             alt={msg.isMe ? getLocalized('messaging.me', 'Ben', 'Me') : chat.user.firstName}
-                                                            width={32}
-                                                            height={32}
+                                                            width={AVATAR_SM}
+                                                            height={AVATAR_SM}
                                                             className="rounded-circle"
-                                                            style={{ objectFit: 'cover', width: 32, height: 32 }}
+                                                            style={{ objectFit: 'cover', width: AVATAR_SM, height: AVATAR_SM }}
                                                         />
                                                     </Link>
-                                                    <div className={clsx("overflow-hidden d-flex flex-column", msg.isMe ? "align-items-end" : "align-items-start")}>
-                                                        <div className={clsx("d-flex align-items-center mb-1", msg.isMe ? "flex-row-reverse" : "flex-row")}>
-                                                            <span className={clsx("fw-bold text-truncate", msg.isMe ? "ms-2" : "me-2")} style={{ color: colors.textMain, fontSize: '0.85rem' }}>
-                                                                {msg.isMe ? getLocalized('messaging.you', 'Siz', 'You') : chat.user.firstName}
-                                                            </span>
-                                                            <span className="text-muted flex-shrink-0" style={{ fontSize: '0.7rem' }}>• {msg.time}</span>
-                                                        </div>
+                                                    <div className={clsx("overflow-hidden d-flex flex-column", msg.isMe ? "align-items-end" : "align-items-start")} style={{ maxWidth: '78%' }}>
                                                         {(() => {
                                                             let parsedData = null;
                                                             if (msg.text && typeof msg.text === 'string' && msg.text.includes('"type":"post_share"')) {
@@ -968,27 +974,22 @@ const MessagingBar = () => {
                                                                     parsedData = JSON.parse(msg.text);
                                                                 } catch (e) {}
                                                             }
-                                                            
+
                                                             if (parsedData && parsedData.type === 'post_share') {
                                                                 const post = parsedData.postData;
-                                                                
-                                                                // Helper: extract YouTube video ID
                                                                 const getYouTubeId = (url) => {
                                                                     if (!url) return null;
                                                                     const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
                                                                     return m ? m[1] : null;
                                                                 };
                                                                 const youtubeId = getYouTubeId(post.video_url);
-                                                                
+
                                                                 return (
-                                                                    <div style={{ maxWidth: '300px', borderRadius: '12px', overflow: 'hidden', border: `1px solid ${isDark || isGreen ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.1)'}`, backgroundColor: isDark ? '#1e2a32' : isGreen ? '#1a3a1e' : '#fff' }}>
-                                                                        {/* Author row */}
-                                                                        <div className="d-flex align-items-center px-2 py-2" style={{ borderBottom: `1px solid ${isDark || isGreen ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}` }}>
-                                                                            <img src={getDisplayAvatar(post.authorAvatar)} alt="author" className="rounded-circle me-2 flex-shrink-0" style={{width: 24, height: 24, objectFit: 'cover'}} />
-                                                                            <small className="fw-bold text-truncate" style={{ color: isDark || isGreen ? '#e0f0e0' : '#212529' }}>{post.authorName || 'Kullanıcı'}</small>
+                                                                    <div style={{ maxWidth: '240px', borderRadius: '10px', overflow: 'hidden', border: `1px solid ${isDark || isGreen ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.1)'}`, backgroundColor: isDark ? '#1e2a32' : isGreen ? '#1a3a1e' : '#fff' }}>
+                                                                        <div className="d-flex align-items-center px-2 py-1" style={{ borderBottom: `1px solid ${isDark || isGreen ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}` }}>
+                                                                            <img src={getDisplayAvatar(post.authorAvatar)} alt="author" className="rounded-circle me-2 flex-shrink-0" style={{ width: 20, height: 20, objectFit: 'cover' }} />
+                                                                            <small className="fw-bold text-truncate" style={{ fontSize: '0.72rem', color: isDark || isGreen ? '#e0f0e0' : '#212529' }}>{post.authorName || 'Kullanıcı'}</small>
                                                                         </div>
-                                                                        
-                                                                        {/* YouTube embed or image */}
                                                                         {youtubeId ? (
                                                                             <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
                                                                                 <iframe
@@ -1001,15 +1002,13 @@ const MessagingBar = () => {
                                                                                 />
                                                                             </div>
                                                                         ) : post.video_url ? (
-                                                                            <video src={getDisplayAvatar(post.video_url)} controls preload="metadata" className="w-100" style={{ maxHeight: '160px', objectFit: 'contain', backgroundColor: '#000', display: 'block' }} />
+                                                                            <video src={getDisplayAvatar(post.video_url)} controls preload="metadata" className="w-100" style={{ maxHeight: '120px', objectFit: 'contain', backgroundColor: '#000', display: 'block' }} />
                                                                         ) : post.image ? (
-                                                                            <img src={getDisplayAvatar(post.image)} alt="post" className="w-100" style={{maxHeight:'160px', objectFit:'cover', display:'block'}} />
+                                                                            <img src={getDisplayAvatar(post.image)} alt="post" className="w-100" style={{ maxHeight: '120px', objectFit: 'cover', display: 'block' }} />
                                                                         ) : null}
-                                                                        
-                                                                        {/* Info */}
                                                                         <div className="px-2 py-2">
-                                                                            {post.title && <h6 className="fw-bold text-truncate mb-1" style={{ fontSize: '13px', color: isDark || isGreen ? '#e0f0e0' : '#212529' }}>{post.title}</h6>}
-                                                                            {post.caption && <p className="mb-2" style={{fontSize: '11px', color: isDark || isGreen ? '#9bc99b' : '#666', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'}}>{post.caption.replace(/<[^>]+>/g, '')}</p>}
+                                                                            {post.title && <h6 className="fw-bold text-truncate mb-1" style={{ fontSize: '0.72rem', color: isDark || isGreen ? '#e0f0e0' : '#212529' }}>{post.title}</h6>}
+                                                                            {post.caption && <p className="mb-2" style={{ fontSize: '0.68rem', color: isDark || isGreen ? '#9bc99b' : '#666', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{post.caption.replace(/<[^>]+>/g, '')}</p>}
                                                                             <Link href={
                                                                                 post.postType === 'story' ? `/blogs/story/${post.id}` :
                                                                                 post.postType === 'book' ? `/books/${post.id}` :
@@ -1017,19 +1016,20 @@ const MessagingBar = () => {
                                                                                 post.postType === 'newsletter' ? `/feed/newsletters/${post.id}` :
                                                                                 post.authorId ? `${(getProfilePath(post.isUserPost ? 'user' : 'scholar', post.authorId, 'feed') || '')}#post-${post.id}` :
                                                                                 post.isUserPost ? `/feed/post/${post.id}?type=2` : `/feed/post/${post.id}?type=1`
-                                                                            } className="btn btn-sm btn-primary w-100 rounded-pill" style={{fontSize: '12px'}}>
+                                                                            } className="btn btn-sm btn-primary w-100 rounded-pill" style={{ fontSize: '0.68rem', padding: '0.2rem 0.5rem' }}>
                                                                                 Gönderiyi Gör
                                                                             </Link>
                                                                         </div>
                                                                     </div>
                                                                 );
                                                             }
-                                                            
+
                                                             return (
                                                                 <div
                                                                     style={{
                                                                         color: msg.isMe && isGreen ? '#fff' : colors.textMain,
-                                                                        fontSize: '0.9rem',
+                                                                        fontSize: '0.78rem',
+                                                                        lineHeight: 1.35,
                                                                         whiteSpace: 'pre-wrap',
                                                                         wordBreak: 'break-word',
                                                                         ...(msg.isMe && isGreen
@@ -1038,20 +1038,22 @@ const MessagingBar = () => {
                                                                                 backgroundColor: msg.isMe
                                                                                     ? (isDark ? '#057642' : '#e7f3ed')
                                                                                     : (isGreen ? 'rgba(45, 90, 45, 0.6)' : (isDark ? '#38434f' : '#f3f6f8'))
-                                                                              }),
-                                                                        padding: '8px 12px',
-                                                                        borderRadius: '12px',
-                                                                        borderTopRightRadius: msg.isMe ? '2px' : '12px',
-                                                                        borderTopLeftRadius: msg.isMe ? '12px' : '2px'
+                                                                            }),
+                                                                        padding: '6px 10px',
+                                                                        borderRadius: '10px',
+                                                                        borderTopRightRadius: msg.isMe ? '2px' : '10px',
+                                                                        borderTopLeftRadius: msg.isMe ? '10px' : '2px'
                                                                     }}
                                                                 >
                                                                     {msg.text}
+                                                                    <div style={{ fontSize: '0.62rem', opacity: 0.65, marginTop: '2px', textAlign: msg.isMe ? 'right' : 'left' }}>{msg.time}</div>
                                                                 </div>
                                                             );
                                                         })()}
                                                     </div>
                                                 </div>
-                                            ))}
+                                                ))
+                                            )}
                                             {/* Scroll anchor - en alta kaydırmak için */}
                                             <div
                                                 ref={(el) => {
@@ -1064,31 +1066,30 @@ const MessagingBar = () => {
                                 </div>
 
                                 {/* Input Area */}
-                                <div className="p-3" style={{ borderTop: `1px solid ${colors.border}`, backgroundColor: isGreen ? (colors.inputAreaBg || '#2d5a2d') : (isDark ? '#1d2226' : '#ffffff') }}>
+                                <div className="px-2 py-2" style={{ borderTop: `1px solid ${colors.border}`, backgroundColor: isGreen ? (colors.inputAreaBg || '#2d5a2d') : (isDark ? '#1d2226' : '#ffffff') }}>
                                     <div
-                                        className="rounded p-2 mb-2"
+                                        className="d-flex align-items-end gap-2 rounded-pill px-2 py-1"
                                         style={{
                                             backgroundColor: isGreen ? (colors.inputFieldBg || colors.searchBg) : colors.searchBg,
-                                            minHeight: '80px',
-                                            maxHeight: '140px',
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            overflow: 'hidden'
+                                            border: `1px solid ${colors.border}`,
                                         }}
                                     >
                                         <textarea
                                             ref={(el) => { if (el) chatTextareaRefs.current[chat.user.id] = el; }}
                                             placeholder={getLocalized('messaging.writeMessage', 'Bir mesaj yazın...', 'Write a message...')}
-                                            className="w-100 border-0 bg-transparent shadow-none"
+                                            className="flex-grow-1 border-0 bg-transparent shadow-none"
                                             style={{
                                                 color: colors.textMain,
-                                                fontSize: '0.9rem',
+                                                fontSize: '0.78rem',
                                                 resize: 'none',
                                                 outline: 'none',
-                                                minHeight: '60px',
-                                                maxHeight: '120px',
-                                                overflowY: 'auto'
+                                                minHeight: '32px',
+                                                maxHeight: '72px',
+                                                overflowY: 'auto',
+                                                lineHeight: 1.35,
+                                                padding: '4px 0',
                                             }}
+                                            rows={1}
                                             value={chat.input}
                                             onChange={(e) => updateChatInput(chat.user.id, e.target.value)}
                                             onKeyDown={(e) => {
@@ -1098,23 +1099,21 @@ const MessagingBar = () => {
                                                 }
                                             }}
                                         />
-                                        <div className="ms-auto">
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: 'rotate(180deg)', cursor: 'pointer', color: colors.textMuted }}><path d="M19 9l-7 7-7-7" /></svg>
-                                        </div>
-                                    </div>
-                                    <div className="d-flex align-items-center justify-content-end">
                                         <button
+                                            type="button"
                                             onClick={() => handleSendMessage(chat.user.id)}
-                                            className="btn btn-sm px-3 fw-bold shadow-none"
+                                            className="btn btn-sm fw-semibold shadow-none flex-shrink-0"
+                                            disabled={!chat.input?.trim()}
                                             style={{
                                                 ...(chat.input?.trim() && isGreen
                                                     ? { background: 'linear-gradient(135deg, #2e7d32 0%, #43a047 100%)' }
                                                     : { backgroundColor: chat.input?.trim() ? '#0a66c2' : 'transparent' }),
                                                 color: chat.input?.trim() ? '#ffffff' : colors.textMuted,
-                                                borderRadius: '16px',
-                                                pointerEvents: chat.input?.trim() ? 'auto' : 'none',
+                                                borderRadius: '999px',
                                                 border: 'none',
-                                                cursor: 'pointer'
+                                                fontSize: '0.72rem',
+                                                padding: '0.25rem 0.65rem',
+                                                opacity: chat.input?.trim() ? 1 : 0.5,
                                             }}
                                         >
                                             {getLocalized('messaging.send', 'Gönder', 'Send')}
@@ -1130,48 +1129,48 @@ const MessagingBar = () => {
             {/* LinkedIn Style New Message Search Popup */}
             {isNewMessageOpen && (
                 <div
-                    className="position-absolute bottom-0 shadow-lg overflow-hidden d-flex flex-column"
+                    className="position-absolute bottom-0 shadow-lg overflow-hidden d-flex flex-column messaging-new-message-panel"
                     style={{
                         right: '100%',
-                        marginRight: '12px',
-                        width: '420px',
-                        height: '750px',
-                        maxHeight: 'calc(100vh - 60px)',
+                        marginRight: `${PANEL_GAP}px`,
+                        width: `${PANEL_WIDTH}px`,
+                        height: PANEL_HEIGHT,
+                        maxHeight: MAX_PANEL_HEIGHT,
                         backgroundColor: colors.bg,
                         border: `1px solid ${colors.border}`,
-                        borderTopLeftRadius: '8px',
-                        borderTopRightRadius: '8px',
+                        borderTopLeftRadius: '10px',
+                        borderTopRightRadius: '10px',
                         zIndex: 1060,
                         boxShadow: colors.shadow
                     }}
                 >
                     {/* Popup Header */}
                     <div
-                        className="d-flex align-items-center justify-content-between px-3"
+                        className="d-flex align-items-center justify-content-between px-2"
                         style={{
-                            height: '48px',
+                            height: `${HEADER_HEIGHT}px`,
                             backgroundColor: colors.header,
                             color: colors.textMain,
                             borderBottom: `1px solid ${colors.border}`,
                             flexShrink: 0
                         }}
                     >
-                        <span className="fw-bold" style={{ fontSize: '0.9rem' }}>{getLocalized('messaging.newMessage', 'Yeni Mesaj', 'New Message')}</span>
-                        <div className={clsx("d-flex align-items-center gap-3", iconClass)}>
+                        <span className="fw-semibold" style={{ fontSize: '0.8rem' }}>{getLocalized('messaging.newMessage', 'Yeni Mesaj', 'New Message')}</span>
+                        <div className={clsx("d-flex align-items-center gap-2", iconClass)}>
                             <div onClick={() => setIsNewMessageOpen(false)} className="hover-active d-flex align-items-center" style={{ cursor: 'pointer' }}>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
                             </div>
                         </div>
                     </div>
 
                     {/* Search Field */}
-                    <div className="px-3 py-2 d-flex flex-wrap align-items-center gap-2" style={{ borderBottom: `1px solid ${colors.border}`, minHeight: '52px', backgroundColor: colors.bg }}>
+                    <div className="px-2 py-2 d-flex flex-wrap align-items-center gap-2" style={{ borderBottom: `1px solid ${colors.border}`, minHeight: '44px', backgroundColor: colors.bg }}>
                         <input
                             type="text"
                             autoFocus
                             placeholder={getLocalized('messaging.newMessageSearchPlaceholder', 'Bir veya birden fazla ad yazın', 'Type one or more names')}
                             className="flex-grow-1 border-0 bg-transparent shadow-none"
-                            style={{ color: colors.textMain, fontSize: '0.95rem', height: '40px', outline: 'none' }}
+                            style={{ color: colors.textMain, fontSize: '0.78rem', height: '32px', outline: 'none' }}
                             value={newMessageQuery}
                             onChange={(e) => setNewMessageQuery(e.target.value)}
                         />
@@ -1180,7 +1179,7 @@ const MessagingBar = () => {
                     {/* Suggestions list */}
                     <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', backgroundColor: colors.bg }}>
                         <SimplebarReactClient style={{ height: '100%' }}>
-                            <div className="px-3 py-2 text-muted fw-bold" style={{ fontSize: '0.75rem', textTransform: 'uppercase' }}>
+                            <div className="px-2 py-1 text-muted fw-semibold" style={{ fontSize: '0.68rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                                 {getLocalized('messaging.suggested', 'Önerilen', 'Suggested')}
                             </div>
                             {suggestedUsers.length > 0 ? (
@@ -1188,29 +1187,29 @@ const MessagingBar = () => {
                                     <div
                                         key={u.id}
                                         onClick={() => handleSelectUser(u)}
-                                        className="d-flex align-items-center p-3 hover-bg"
+                                        className="d-flex align-items-center px-2 py-2 hover-bg"
                                         style={{ cursor: 'pointer', borderBottom: `1px solid ${colors.border}` }}
                                     >
                                         <Image
                                             src={getDisplayAvatar(u.photoUrl)}
                                             alt={u.firstName}
-                                            width={48}
-                                            height={48}
-                                            className="rounded-circle me-3"
+                                            width={AVATAR_LG}
+                                            height={AVATAR_LG}
+                                            className="rounded-circle me-2"
                                             style={{ objectFit: 'cover' }}
                                         />
                                         <div className="flex-grow-1 overflow-hidden">
-                                            <div className="fw-bold text-truncate" style={{ color: colors.textMain }}>
+                                            <div className="fw-semibold text-truncate" style={{ fontSize: '0.8rem', color: colors.textMain }}>
                                                 {u.firstName} {u.lastName}
                                             </div>
-                                            <div className="text-muted text-truncate small">
+                                            <div className="text-muted text-truncate" style={{ fontSize: '0.72rem' }}>
                                                 {u.tagline || u.role || getLocalized('messaging.userFallback', 'Kullanıcı', 'User')}
                                             </div>
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                <div className="p-4 text-center small text-muted">{getLocalized('messaging.noSearchResults', 'Arama sonucu bulunamadı.', 'No search results found.')}</div>
+                                <div className="p-3 text-center small text-muted">{getLocalized('messaging.noSearchResults', 'Arama sonucu bulunamadı.', 'No search results found.')}</div>
                             )}
                         </SimplebarReactClient>
                     </div>
@@ -1227,10 +1226,14 @@ const MessagingBar = () => {
                 .hover-bg:hover {
                     background-color: ${colors.itemHover} !important;
                 }
-                :global(.simplebar-content-wrapper) {
+                :global(.messaging-bar-widget .messaging-chat-window:hover) {
+                    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18) !important;
+                }
+                :global(.messaging-bar-widget .simplebar-content-wrapper) {
                     background-color: ${colors.bg} !important;
                 }
-                input::placeholder {
+                input::placeholder,
+                textarea::placeholder {
                     color: ${colors.textMuted} !important;
                 }
             `}</style>

@@ -31,16 +31,16 @@ export class ChatController {
     @Param('conversationId') conversationId: string,
     @Request() req,
     @Query('limit') limit = '50',
-    @Query('offset') offset = '0',
+    @Query('before') before?: string,
   ) {
     const userId = req.user.id;
     const limitNum = Math.min(Math.max(parseInt(limit, 10) || 50, 1), 100);
-    const offsetNum = Math.max(parseInt(offset, 10) || 0, 0);
+    const beforeId = before?.trim() || undefined;
     return this.chatService.getConversationMessages(
       conversationId,
       userId,
       limitNum,
-      offsetNum,
+      beforeId,
     );
   }
 

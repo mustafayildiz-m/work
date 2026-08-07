@@ -8,6 +8,7 @@ import Image from 'next/image';
 import placeholderImg from '@/assets/images/avatar/placeholder.jpg';
 import { getToken } from '@/utils/auth';
 import { useLanguage } from '@/context/useLanguageContext';
+import OnlineStatusDot from './OnlineStatusDot';
 
 // Helper functions
 const getDisplayAvatar = (photoUrl, apiBaseUrl) => {
@@ -166,7 +167,7 @@ const useUsersAPI = () => {
   };
 };
 
-const OnlineUsers = () => {
+const OnlineUsers = ({ embedded = false, onUserSelect }) => {
   const {
     conversations,
     selectConversation,
@@ -219,7 +220,9 @@ const OnlineUsers = () => {
     }
 
     try {
-      messagingOffcanvas.toggle();
+      if (!embedded) {
+        messagingOffcanvas.toggle();
+      }
 
       let conversation = null;
 
@@ -246,37 +249,43 @@ const OnlineUsers = () => {
         });
       }
 
-      conversationPanel.toggle();
+      if (embedded) {
+        onUserSelect?.();
+      } else {
+        conversationPanel.toggle();
+      }
 
     } catch (error) {
       console.error('Error handling user click:', error);
     }
-  }, [conversations, selectConversation, createNewConversation, messagingOffcanvas, conversationPanel]);
+  }, [conversations, selectConversation, createNewConversation, messagingOffcanvas, conversationPanel, embedded, onUserSelect]);
 
   const handleImageError = useCallback((e) => {
     e.target.src = placeholderImg.src || placeholderImg;
   }, []);
 
   return (
-    <div className="card h-100">
-      <div className="card-header border-0 pb-0">
+    <div className="messaging-pane-card h-100">
+      <div className="messaging-pane-header">
         <div className="d-flex justify-content-between align-items-center">
-          <h6 className="mb-0">
+          <h6>
             {t('messaging.contacts')}
-            <span className="badge bg-success ms-2">
+            <span className="badge bg-success ms-2" style={{ fontSize: '0.65rem' }}>
               {combinedUserDetails.filter(u => u.isOnline).length} {t('messaging.online')}
             </span>
           </h6>
           <button
-            className="btn btn-sm btn-outline-secondary"
+            type="button"
+            className="btn btn-sm btn-link text-body p-1"
             onClick={refetch}
             disabled={loading}
             title={t('messaging.refresh')}
+            aria-label={t('messaging.refresh')}
           >
             {loading ? (
               <div className="spinner-border spinner-border-sm" role="status" />
             ) : (
-              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
                 <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z" />
                 <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z" />
               </svg>
@@ -285,14 +294,8 @@ const OnlineUsers = () => {
         </div>
       </div>
 
-      <div className="card-body p-0">
-        <div
-          className="online-users-list"
-          style={{
-            height: '100%',
-            overflowY: 'auto'
-          }}
-        >
+      <div className="flex-grow-1 min-height-0">
+        <div className="online-users-list h-100 overflow-auto">
           {loading && allUsers.length === 0 ? (
             <div className="p-3 text-center">
               <div className="spinner-border spinner-border-sm text-primary" role="status" />
@@ -317,66 +320,46 @@ const OnlineUsers = () => {
               </div>
             </div>
           ) : combinedUserDetails.length === 0 ? (
-            <div className="p-3 text-center text-muted">
-              <p className="mb-0">{t('messaging.noUsersFound')}</p>
+            <div className="messaging-empty-state">
+              <p>{t('messaging.noUsersFound')}</p>
             </div>
           ) : (
             combinedUserDetails.map((user) => (
               <div
                 key={user.id}
-                className={`online-user-item p-3 border-bottom ${user.isCurrentUser ? 'bg-body-tertiary' : ''
-                  }`}
+                className={`messaging-contact-item ${user.isCurrentUser ? 'bg-body-tertiary' : ''}`}
                 onClick={() => handleUserClick(user)}
                 style={{
                   cursor: user.isCurrentUser ? 'default' : 'pointer',
                   opacity: user.isCurrentUser ? 0.7 : 1
                 }}
                 title={user.isCurrentUser ? t('messaging.thisIsYou') : t('messaging.chatWith', { name: user.name })}
-                onMouseEnter={(e) => {
-                  if (!user.isCurrentUser) {
-                    e.currentTarget.style.backgroundColor = 'var(--bs-tertiary-bg)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!user.isCurrentUser) {
-                    e.currentTarget.style.backgroundColor = '';
-                  }
-                }}
               >
                 <div className="d-flex align-items-center">
-                  <div className="position-relative me-3">
+                  <div className="position-relative me-2 flex-shrink-0">
                     <Image
                       src={user.avatar}
                       alt={`${user.name} avatar`}
-                      width={40}
-                      height={40}
-                      className="rounded-circle"
+                      width={36}
+                      height={36}
+                      className="rounded-circle messaging-conversation-avatar"
                       onError={handleImageError}
                       priority={false}
                     />
-                    {user.isOnline && (
-                      <div
-                        className="position-absolute bottom-0 end-0 bg-success rounded-circle"
-                        style={{
-                          width: '10px',
-                          height: '10px',
-                          border: '2px solid var(--bs-body-bg)'
-                        }}
-                      />
-                    )}
+                    <OnlineStatusDot visible={user.isOnline} size={10} />
                   </div>
 
-                  <div className="flex-grow-1">
-                    <h6 className="mb-0">
+                  <div className="flex-grow-1 min-width-0">
+                    <h6 className="mb-0 text-truncate small fw-semibold">
                       {user.name}
                       {user.isCurrentUser && (
-                        <span className="text-muted ms-2 small">{t('messaging.youSuffix')}</span>
+                        <span className="text-muted ms-1 fw-normal" style={{ fontSize: '0.75rem' }}>{t('messaging.youSuffix')}</span>
                       )}
                     </h6>
                     {user.isOnline ? (
-                      <small className="text-success">{t('messaging.online')}</small>
+                      <small className="text-success" style={{ fontSize: '0.75rem' }}>{t('messaging.online')}</small>
                     ) : (
-                      <small className="text-muted">{t('messaging.offline')}</small>
+                      <small className="text-muted" style={{ fontSize: '0.75rem' }}>{t('messaging.offline')}</small>
                     )}
                   </div>
                 </div>
@@ -385,6 +368,24 @@ const OnlineUsers = () => {
           )}
         </div>
       </div>
+      <style jsx>{`
+        .min-height-0 {
+          min-height: 0;
+        }
+
+        .min-width-0 {
+          min-width: 0;
+        }
+
+        .online-users-list::-webkit-scrollbar {
+          width: 5px;
+        }
+
+        .online-users-list::-webkit-scrollbar-thumb {
+          background: var(--bs-border-color);
+          border-radius: 3px;
+        }
+      `}</style>
     </div>
   );
 };
