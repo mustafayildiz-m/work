@@ -434,7 +434,8 @@
     "languageSelection": "Dil Seçimi",
     "notificationSounds": "Bildirim Sesleri",
     "on": "Açık",
-    "off": "Kapalı"
+    "off": "Kapalı",
+    "qa": "Soru-Cevap"
   },
   "theme": {
     "themeSelection": "Tema Seçimi",
@@ -1080,5 +1081,16 @@
     "sendMessage": "Mesaj gönder",
     "backToConversations": "Konuşmalara geri dön",
     "messagingListView": "Mesajlaşma liste görünümü"
+  },
+  "qa": {
+    "title": "Soru & Cevap",
+    "subtitle": "Aradığınız soruların cevaplarını bulun",
+    "searchPlaceholder": "Soru veya anahtar kelime arayın...",
+    "allCategories": "Tümü",
+    "noResults": "Bu dilde henüz soru-cevap bulunmamaktadır.",
+    "loadMore": "Daha Fazla Göster",
+    "loading": "Yükleniyor...",
+    "results": "sonuç",
+    "errorLoading": "Veriler yüklenemedi."
   }
 }

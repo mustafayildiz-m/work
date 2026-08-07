@@ -349,7 +349,8 @@
     "papers": "Академични публикации",
     "askAboutIslam": "www.askaboutislam.ai",
     "askMariam": "www.askmariam.com",
-    "languageSelection": "Избор на език"
+    "languageSelection": "Избор на език",
+    "qa": "Въпроси и отговори"
   },
   "theme": {
     "themeSelection": "Избор на тема",
@@ -1002,5 +1003,16 @@
     "noDownloadOption": "За тази книга няма възможност за изтегляне.",
     "downloadError": "По време на изтеглянето е възникнала грешка. Моля, опитайте отново.",
     "downloadFileNotFound": "Не е намерен файл за изтегляне."
+  },
+  "qa": {
+    "title": "Въпроси и отговори",
+    "subtitle": "Намерете отговори на вашите въпроси",
+    "searchPlaceholder": "Търсене на въпрос или ключова дума...",
+    "allCategories": "Всички",
+    "noResults": "Все още няма въпроси на този език.",
+    "loadMore": "Зареди още",
+    "loading": "Зареждане...",
+    "results": "резултата",
+    "errorLoading": "Данните не можаха да бъдат заредени."
   }
 }

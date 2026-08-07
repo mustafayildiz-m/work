@@ -349,7 +349,8 @@
     "papers": "Akadémiai kiadványok",
     "askAboutIslam": "www.askaboutislam.ai",
     "askMariam": "www.askmariam.com",
-    "languageSelection": "Nyelvválasztás"
+    "languageSelection": "Nyelvválasztás",
+    "qa": "Kérdések és válaszok"
   },
   "theme": {
     "themeSelection": "Téma kiválasztása",
@@ -1002,5 +1003,16 @@
     "noDownloadOption": "Ehhez a könyvhöz nincs letöltési lehetőség.",
     "downloadError": "Hiba történt a letöltés során. Kérjük, próbálja meg újra.",
     "downloadFileNotFound": "Letöltési fájl nem található."
+  },
+  "qa": {
+    "title": "Kérdések és válaszok",
+    "subtitle": "Találja meg kérdéseire a válaszokat",
+    "searchPlaceholder": "Kérdés vagy kulcsszó keresése...",
+    "allCategories": "Összes",
+    "noResults": "Ezen a nyelven még nincsenek kérdések.",
+    "loadMore": "Továbbiak",
+    "loading": "Betöltés...",
+    "results": "eredmény",
+    "errorLoading": "Az adatok betöltése sikertelen."
   }
 }

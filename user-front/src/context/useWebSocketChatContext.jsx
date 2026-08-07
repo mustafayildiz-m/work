@@ -77,6 +77,11 @@ const normalizeOnlineUser = (userData) => {
 
 const WebSocketChatContext = createContext(undefined);
 
+// Tarayıcı ses kilidini açmak için sessiz clip (notification.mp3 kullanılmamalı)
+const SILENT_UNLOCK_AUDIO =
+  'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
+const NOTIFICATION_SOUND_GRACE_MS = 2000;
+
 const isNotificationSoundEnabled = () => {
   if (typeof window === 'undefined') return true;
   try {
@@ -125,35 +130,46 @@ export const WebSocketChatProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   const audioRef = useRef(null);
+  const audioUnlockedRef = useRef(false);
+  const canPlaySoundRef = useRef(false);
 
   useEffect(() => {
     const audio = new Audio('/sounds/notification.mp3');
-    audio.load();
+    audio.preload = 'auto';
     audioRef.current = audio;
 
-    // Modern tarayıcılar için ses kilidini açma fonksiyonu
+    // Sayfa yenilemesinden hemen sonra gelen socket olaylarında ses çalma
+    canPlaySoundRef.current = false;
+    const graceTimer = setTimeout(() => {
+      canPlaySoundRef.current = true;
+    }, NOTIFICATION_SOUND_GRACE_MS);
+
+    // Tarayıcı autoplay kısıtı: ilk kullanıcı etkileşiminde sessiz sesle kilidi aç
     const unlockAudio = () => {
-      if (!isNotificationSoundEnabled()) {
+      if (audioUnlockedRef.current) {
         document.removeEventListener('click', unlockAudio);
         document.removeEventListener('keydown', unlockAudio);
         return;
       }
-      if (audioRef.current) {
-        audioRef.current.play()
-          .then(() => {
-            audioRef.current.pause();
-            audioRef.current.currentTime = 0;
-          })
-          .catch(e => console.log('Audio unlock failed:', e));
-      }
+
+      const silent = new Audio(SILENT_UNLOCK_AUDIO);
+      silent.play()
+        .then(() => {
+          silent.pause();
+          silent.currentTime = 0;
+          audioUnlockedRef.current = true;
+        })
+        .catch(() => {});
+
       document.removeEventListener('click', unlockAudio);
       document.removeEventListener('keydown', unlockAudio);
     };
 
-    document.addEventListener('click', unlockAudio);
-    document.addEventListener('keydown', unlockAudio);
+    document.addEventListener('click', unlockAudio, { once: false });
+    document.addEventListener('keydown', unlockAudio, { once: false });
 
     return () => {
+      clearTimeout(graceTimer);
       document.removeEventListener('click', unlockAudio);
       document.removeEventListener('keydown', unlockAudio);
     };
@@ -162,11 +178,12 @@ export const WebSocketChatProvider = ({ children }) => {
   const playNotificationSound = useCallback(() => {
     try {
       if (!isNotificationSoundEnabled()) return;
+      if (!canPlaySoundRef.current) return;
+      if (!audioUnlockedRef.current) return;
       if (audioRef.current) {
         audioRef.current.currentTime = 0;
         audioRef.current.play()
-          .catch(e => {
-            // Fallback: Try fresh audio object if ref fails
+          .catch(() => {
             const fallbackAudio = new Audio('/sounds/notification.mp3');
             fallbackAudio.play().catch(() => { });
           });
@@ -490,14 +507,13 @@ export const WebSocketChatProvider = ({ children }) => {
         );
       });
 
-      socketInstance.on('typing', ({ userId, conversationId, isTyping }) => {
-        // Kendi yazma durumumuzu gösterme - odak kaybını önler
+      socketInstance.on('userTyping', ({ userId, isTyping }) => {
         const currentUser = getCurrentUserInfo();
         if (currentUser && String(userId) === String(currentUser.id)) return;
 
-        setTypingUsers(prev => ({
+        setTypingUsers((prev) => ({
           ...prev,
-          [conversationId]: isTyping ? userId : null
+          [userId]: isTyping ? userId : null,
         }));
       });
 
@@ -511,24 +527,15 @@ export const WebSocketChatProvider = ({ children }) => {
         let deletedByUsername = data.deletedByUsername;
 
         if (!deletedByUsername) {
-          // Try to find username from conversations list
-          const conversation = conversations?.find(conv => conv.id === conversationId);
-          if (conversation) {
-            deletedByUsername = conversation.participantName || conversation.participantUsername;
+          const conversation = conversations?.find((conv) => conv.id === conversationId);
+          if (conversation && String(deletedBy) === String(conversation.participantId)) {
+            deletedByUsername =
+              conversation.participantName || conversation.participantUsername;
           }
         }
 
         if (!deletedByUsername) {
-          // Try to find username from userMap (it's an object, not array)
-          const user = userMap?.[deletedBy];
-          if (user) {
-            deletedByUsername = user.username || user.name || user;
-          }
-        }
-
-        // Fallback
-        if (!deletedByUsername) {
-          deletedByUsername = 'Bir kullanıcı';
+          deletedByUsername = data.deletedByUsername || 'Bir kullanıcı';
         }
 
         // Sadece karşı tarafın silme işlemi için bildirim göster
@@ -555,10 +562,14 @@ export const WebSocketChatProvider = ({ children }) => {
       });
 
       socketInstance.on('newFollowRequest', (request) => {
+        let isNew = false;
         setFollowRequests(prev => {
           if (prev.some(r => r.id === request.id)) return prev;
+          isNew = true;
           return [request, ...prev];
         });
+        if (!isNew) return;
+
         playNotificationSound();
 
         if (notificationContext?.showNotification) {
@@ -652,10 +663,12 @@ export const WebSocketChatProvider = ({ children }) => {
           },
         };
 
+        let isNew = false;
         setNotifications((prev) => {
           if (prev.some((existing) => existing.id === formattedNotification.id)) {
             return prev;
           }
+          isNew = true;
           const next = [formattedNotification, ...prev];
           // Sekme başlığı için hemen event - React render beklemeden (Firefox uyumluluğu)
           if (typeof window !== 'undefined' && document.visibilityState === 'hidden') {
@@ -666,6 +679,8 @@ export const WebSocketChatProvider = ({ children }) => {
           }
           return next;
         });
+        if (!isNew) return;
+
         playNotificationSound();
 
         if (notificationContext?.showNotification) {
@@ -1019,20 +1034,9 @@ export const WebSocketChatProvider = ({ children }) => {
       const isTemporary = conversationId.startsWith('temp-');
 
       if (!isTemporary) {
-        // API call to soft delete conversation (only for current user)
         await apiCall(`/chat/conversations/${conversationId}`, {
-          method: 'DELETE'
+          method: 'DELETE',
         });
-
-        // Emit WebSocket event to notify other participants
-        if (socket && isConnected) {
-          const currentUser = getCurrentUserInfo();
-          socket.emit('deleteConversation', {
-            conversationId,
-            deletedBy: currentUser?.id,
-            deletedByUsername: currentUser?.username || 'Bilinmeyen Kullanıcı'
-          });
-        }
       }
 
       // Remove from local state (only current user's view)
@@ -1139,9 +1143,12 @@ export const WebSocketChatProvider = ({ children }) => {
     notifications,
     setNotifications,
     sendMessage,
-    sendTypingStatus: (conversationId, isTyping) => {
-      if (socket && isConnected) {
-        socket.emit('typing', { conversationId, isTyping });
+    sendTypingStatus: (participantId, isTyping) => {
+      if (socket && isConnected && participantId) {
+        socket.emit('typing', {
+          receiverId: Number(participantId),
+          isTyping,
+        });
       }
     },
     markMessageAsRead,

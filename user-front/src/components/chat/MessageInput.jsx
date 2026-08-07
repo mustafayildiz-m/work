@@ -100,7 +100,7 @@ const MessageInput = () => {
 
     // Only send if status changed
     if (lastTypingStatusRef.current !== isTyping) {
-      sendTypingStatus(activeConversation.id, isTyping);
+      sendTypingStatus(activeConversation.participantId, isTyping);
       lastTypingStatusRef.current = isTyping;
       isTypingRef.current = isTyping;
     }

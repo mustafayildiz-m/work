@@ -616,17 +616,9 @@ const MessagingBar = () => {
         try {
             await sendMessage(chat.input, userId);
 
-            const newMessage = {
-                id: Date.now(),
-                senderId: userInfo?.id || session?.user?.id,
-                text: chat.input,
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                isMe: true
-            };
-
             setActiveChats(prev => prev.map(c =>
                 c.user.id === userId
-                    ? { ...c, messages: [...c.messages, newMessage], input: '' }
+                    ? { ...c, input: '' }
                     : c
             ));
         } catch (error) {

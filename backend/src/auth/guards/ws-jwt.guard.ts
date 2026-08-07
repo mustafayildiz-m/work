@@ -1,11 +1,11 @@
 import { CanActivate, Injectable } from '@nestjs/common';
 import { WsException } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
-import { JwtService } from '@nestjs/jwt';
+import { ChatService } from '../../chat/chat.service';
 
 @Injectable()
 export class WsJwtGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+  constructor(private readonly chatService: ChatService) {}
 
   async canActivate(context: any): Promise<boolean> {
     try {
@@ -16,18 +16,19 @@ export class WsJwtGuard implements CanActivate {
         throw new WsException('Token not found');
       }
 
-      const payload = this.jwtService.verify(token);
-      // Store user in both places for compatibility
-      client.data.user = payload;
-      (client as any).user = {
-        id: payload.sub,
-        username: payload.username,
-        email: payload.email,
-        role: payload.role,
-      };
+      const user = await this.chatService.validateToken(token);
+      if (!user) {
+        throw new WsException('Invalid token');
+      }
+
+      client.data.user = user;
+      (client as any).user = user;
 
       return true;
     } catch (err) {
+      if (err instanceof WsException) {
+        throw err;
+      }
       throw new WsException('Invalid token');
     }
   }

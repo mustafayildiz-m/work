@@ -349,7 +349,8 @@
     "papers": "学术出版物",
     "askAboutIslam": "www.askaboutislam.ai",
     "askMariam": "www.askmariam.com",
-    "languageSelection": "语言选择"
+    "languageSelection": "语言选择",
+    "qa": "问答"
   },
   "theme": {
     "themeSelection": "主题选择",
@@ -1014,5 +1015,16 @@
     "noDownloadOption": "本书没有下载选项。",
     "downloadError": "下载过程中出现错误。请重试。",
     "downloadFileNotFound": "未找到下载文件。"
+  },
+  "qa": {
+    "title": "问答",
+    "subtitle": "查找您问题的答案",
+    "searchPlaceholder": "搜索问题或关键词...",
+    "allCategories": "全部",
+    "noResults": "此语言暂无问答内容。",
+    "loadMore": "加载更多",
+    "loading": "加载中...",
+    "results": "条结果",
+    "errorLoading": "数据加载失败。"
   }
 }

@@ -421,7 +421,8 @@
     "languageSelection": "भाषा निवड",
     "notificationSounds": "सूचना ध्वनी",
     "on": "चालू",
-    "off": "बंद"
+    "off": "बंद",
+    "qa": "प्रश्नोत्तरे"
   },
   "theme": {
     "themeSelection": "थीम निवड",
@@ -1059,5 +1060,16 @@
     "sendMessage": "संदेश पाठवा",
     "backToConversations": "संभाषणांकडे परत",
     "messagingListView": "संदेशन सूची दृश्य"
+  },
+  "qa": {
+    "title": "प्रश्न आणि उत्तरे",
+    "subtitle": "आपल्या प्रश्नांची उत्तरे शोधा",
+    "searchPlaceholder": "प्रश्न किंवा कीवर्ड शोधा...",
+    "allCategories": "सर्व",
+    "noResults": "या भाषेत अद्याप प्रश्न नाहीत.",
+    "loadMore": "अजून दाखवा",
+    "loading": "लोड होत आहे...",
+    "results": "निकाल",
+    "errorLoading": "डेटा लोड होऊ शकला नाही."
   }
 }

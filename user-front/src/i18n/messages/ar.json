@@ -352,7 +352,8 @@
     "newsletters": "النشرات الإخبارية",
     "askAboutIslam": "www.askaboutislam.ai",
     "askMariam": "www.askmariam.com",
-    "languageSelection": "اختيار اللغة"
+    "languageSelection": "اختيار اللغة",
+    "qa": "سؤال وجواب"
   },
   "theme": {
     "themeSelection": "اختيار السمة",
@@ -1017,5 +1018,16 @@
     "noDownloadOption": "لا يوجد خيار تنزيل لهذا الكتاب.",
     "downloadError": "حدث خطأ أثناء التنزيل. يرجى المحاولة مرة أخرى.",
     "downloadFileNotFound": "ملف التنزيل غير موجود."
+  },
+  "qa": {
+    "title": "أسئلة وأجوبة",
+    "subtitle": "ابحث عن إجابات لأسئلتك",
+    "searchPlaceholder": "ابحث عن سؤال أو كلمة مفتاحية...",
+    "allCategories": "الكل",
+    "noResults": "لا توجد أسئلة بهذه اللغة بعد.",
+    "loadMore": "عرض المزيد",
+    "loading": "جاري التحميل...",
+    "results": "نتيجة",
+    "errorLoading": "تعذر تحميل البيانات."
   }
 }

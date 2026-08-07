@@ -58,6 +58,14 @@ import UlkelerList from '@/pages/ulkeler/liste';
 import AlimHikayesiEkle from '@/pages/alim-hikayeleri/ekle';
 import AlimHikayeleriListe from '@/pages/alim-hikayeleri/liste';
 import AlimHikayesiDuzenle from '@/pages/alim-hikayeleri/duzenle';
+import QaCategoryList from '@/pages/soru-cevap/kategoriler/liste';
+import QaCategoryForm from '@/pages/soru-cevap/kategoriler/ekle';
+import QaItemList from '@/pages/soru-cevap/sorular/liste';
+import QaItemAdd from '@/pages/soru-cevap/sorular/ekle';
+import QaItemEdit from '@/pages/soru-cevap/sorular/duzenle/[id]';
+import QaTagList from '@/pages/soru-cevap/etiketler/liste';
+import QaImportPage from '@/pages/soru-cevap/import';
+import QaExportPage from '@/pages/soru-cevap/export';
 import { Navigate, Route, Routes } from 'react-router';
 
 export function AppRoutingSetup() {
@@ -102,6 +110,14 @@ export function AppRoutingSetup() {
           <Route path="/kullanicilar/editorler" element={<EditorlerPage />} />
           <Route path="/kullanicilar/bireysel" element={<BireyselKullanicilarPage />} />
           <Route path="/kullanicilar/post-onaylama" element={<PostOnaylamaPage />} />
+          <Route path="/soru-cevap/kategoriler/liste" element={<QaCategoryList />} />
+          <Route path="/soru-cevap/kategoriler/ekle" element={<QaCategoryForm />} />
+          <Route path="/soru-cevap/sorular/liste" element={<QaItemList />} />
+          <Route path="/soru-cevap/sorular/ekle" element={<QaItemAdd />} />
+          <Route path="/soru-cevap/sorular/duzenle/:id" element={<QaItemEdit />} />
+          <Route path="/soru-cevap/etiketler/liste" element={<QaTagList />} />
+          <Route path="/soru-cevap/import" element={<QaImportPage />} />
+          <Route path="/soru-cevap/export" element={<QaExportPage />} />
         </Route>
       </Route>
       <Route path="error/*" element={<ErrorRouting />} />

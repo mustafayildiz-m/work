@@ -430,7 +430,8 @@
     "languageSelection": "Language Selection",
     "notificationSounds": "Notification Sounds",
     "on": "On",
-    "off": "Off"
+    "off": "Off",
+    "qa": "Q&A"
   },
   "theme": {
     "themeSelection": "Theme Selection",
@@ -1094,5 +1095,16 @@
     "sendMessage": "Send message",
     "backToConversations": "Back to conversations",
     "messagingListView": "Messaging list view"
+  },
+  "qa": {
+    "title": "Questions & Answers",
+    "subtitle": "Find answers to your questions",
+    "searchPlaceholder": "Search for a question or keyword...",
+    "allCategories": "All",
+    "noResults": "No questions found in this language yet.",
+    "loadMore": "Load More",
+    "loading": "Loading...",
+    "results": "results",
+    "errorLoading": "Failed to load data."
   }
 }
