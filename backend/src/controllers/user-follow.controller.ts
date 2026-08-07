@@ -17,13 +17,13 @@ export class UserFollowController {
   constructor(private readonly userFollowService: UserFollowService) { }
 
   @Post('follow')
-  follow(@Body() body: { follower_id: number; following_id: number }) {
-    return this.userFollowService.follow(body.follower_id, body.following_id);
+  follow(@Body() body: { following_id: number }, @Request() req) {
+    return this.userFollowService.follow(req.user.id, body.following_id);
   }
 
   @Delete('unfollow')
-  unfollow(@Body() body: { follower_id: number; following_id: number }) {
-    return this.userFollowService.unfollow(body.follower_id, body.following_id);
+  unfollow(@Body() body: { following_id: number }, @Request() req) {
+    return this.userFollowService.unfollow(req.user.id, body.following_id);
   }
 
   @Post('accept-request')

@@ -56,6 +56,8 @@ export class ChatService {
     private jwtService: JwtService,
   ) {}
 
+  private static readonly MAX_MESSAGE_LENGTH = 5000;
+
   async validateToken(
     token: string,
   ): Promise<{ id: number; username: string } | null> {
@@ -67,10 +69,23 @@ export class ChatService {
       }
 
       const payload = this.jwtService.verify(cleanToken);
+      const userId = parseInt(payload.sub, 10);
+      if (!userId || Number.isNaN(userId)) {
+        return null;
+      }
+
+      const user = await this.userRepository.findOne({
+        where: { id: userId },
+        select: ['id', 'username', 'isActive'],
+      });
+
+      if (!user?.isActive) {
+        return null;
+      }
 
       return {
-        id: parseInt(payload.sub),
-        username: payload.username,
+        id: user.id,
+        username: user.username,
       };
     } catch (error) {
       console.error('Token validation error:', error.message);
@@ -78,8 +93,71 @@ export class ChatService {
     }
   }
 
+  async canUsersMessage(user1Id: number, user2Id: number): Promise<boolean> {
+    const [aFollowsB, bFollowsA] = await Promise.all([
+      this.userFollowRepository.findOne({
+        where: {
+          follower_id: user1Id,
+          following_id: user2Id,
+          status: 'accepted',
+        },
+      }),
+      this.userFollowRepository.findOne({
+        where: {
+          follower_id: user2Id,
+          following_id: user1Id,
+          status: 'accepted',
+        },
+      }),
+    ]);
+    return Boolean(aFollowsB && bFollowsA);
+  }
+
+  async userHasConversationAccess(
+    conversationId: string,
+    userId: number,
+  ): Promise<boolean> {
+    const conversation = await this.conversationRepository.findOne({
+      where: [
+        { id: conversationId, participant1Id: userId },
+        { id: conversationId, participant2Id: userId },
+      ],
+      select: ['id'],
+    });
+    return Boolean(conversation);
+  }
+
+  async getMutualConnectionUserIds(userId: number): Promise<number[]> {
+    const following = await this.userFollowRepository.find({
+      where: { follower_id: userId, status: 'accepted' },
+      select: ['following_id'],
+    });
+    if (!following.length) return [];
+
+    const followingIds = following.map((f) => f.following_id);
+    const mutual = await this.userFollowRepository.find({
+      where: followingIds.map((followingId) => ({
+        follower_id: followingId,
+        following_id: userId,
+        status: 'accepted',
+      })),
+      select: ['follower_id'],
+    });
+    return mutual.map((m) => m.follower_id);
+  }
+
   async createMessage(createMessageDto: CreateMessageDto): Promise<Message> {
     const { senderId, receiverId, content } = createMessageDto;
+    const trimmedContent = content?.trim();
+
+    if (!trimmedContent) {
+      throw new BadRequestException('Message content cannot be empty');
+    }
+    if (trimmedContent.length > ChatService.MAX_MESSAGE_LENGTH) {
+      throw new BadRequestException(
+        `Message content cannot exceed ${ChatService.MAX_MESSAGE_LENGTH} characters`,
+      );
+    }
 
     // Sender ve receiver'ın var olduğunu kontrol et
     const sender = await this.userRepository.findOne({
@@ -93,25 +171,7 @@ export class ChatService {
       throw new NotFoundException('Sender or receiver not found');
     }
 
-    // Mesajlaşmak için karşılıklı kabul edilmiş takip ilişkisi gerekli
-    const [senderFollowsReceiver, receiverFollowsSender] = await Promise.all([
-      this.userFollowRepository.findOne({
-        where: {
-          follower_id: senderId,
-          following_id: receiverId,
-          status: 'accepted',
-        },
-      }),
-      this.userFollowRepository.findOne({
-        where: {
-          follower_id: receiverId,
-          following_id: senderId,
-          status: 'accepted',
-        },
-      }),
-    ]);
-
-    if (!senderFollowsReceiver || !receiverFollowsSender) {
+    if (!(await this.canUsersMessage(senderId, receiverId))) {
       throw new ForbiddenException('FOLLOW_REQUIRED');
     }
 
@@ -123,7 +183,7 @@ export class ChatService {
 
     // Mesajı oluştur
     const message = this.messageRepository.create({
-      content,
+      content: trimmedContent,
       senderId,
       receiverId,
       conversationId: conversation.id,
@@ -350,6 +410,34 @@ export class ChatService {
     await this.messageRepository.save(message);
   }
 
+  async markConversationAsRead(
+    conversationId: string,
+    userId: number,
+  ): Promise<number> {
+    const conversation = await this.conversationRepository.findOne({
+      where: [
+        { id: conversationId, participant1Id: userId },
+        { id: conversationId, participant2Id: userId },
+      ],
+    });
+
+    if (!conversation) {
+      throw new NotFoundException('Conversation not found or access denied');
+    }
+
+    const result = await this.messageRepository
+      .createQueryBuilder()
+      .update(Message)
+      .set({ status: MessageStatus.READ })
+      .where('conversationId = :conversationId', { conversationId })
+      .andWhere('receiverId = :userId', { userId })
+      .andWhere('status != :readStatus', { readStatus: MessageStatus.READ })
+      .andWhere('deletedByReceiver = false')
+      .execute();
+
+    return result.affected || 0;
+  }
+
   async getMessageById(messageId: string): Promise<Message | null> {
     return this.messageRepository.findOne({ where: { id: messageId } });
   }
@@ -396,10 +484,12 @@ export class ChatService {
     }
   }
 
-  async getOnlineUsers(): Promise<
-    Array<{ id: number; username: string; photoUrl?: string }>
-  > {
-    // Online kullanıcıların ID, username ve photoUrl'lerini döndür
+  async getOnlineUsers(
+    requestingUserId: number,
+  ): Promise<Array<{ id: number; username: string; photoUrl?: string }>> {
+    const allowedIds = new Set(
+      await this.getMutualConnectionUserIds(requestingUserId),
+    );
     const onlineUsers: Array<{
       id: number;
       username: string;
@@ -407,7 +497,8 @@ export class ChatService {
     }> = [];
 
     for (const [userId, userInfo] of this.onlineUsers.entries()) {
-      // User'ın güncel bilgilerini veritabanından al (photoUrl için)
+      if (!allowedIds.has(userId)) continue;
+
       const user = await this.userRepository.findOne({ where: { id: userId } });
 
       onlineUsers.push({
@@ -462,7 +553,10 @@ export class ChatService {
         '(message.senderId = :userId OR message.receiverId = :userId) AND message.content LIKE :query',
         { userId, query: `%${query}%` },
       )
-      .andWhere('message.isDeleted = :isDeleted', { isDeleted: false })
+      .andWhere(
+        '(message.senderId = :userId AND message.deletedBySender = false) OR (message.receiverId = :userId AND message.deletedByReceiver = false)',
+        { userId },
+      )
       .orderBy('message.createdAt', 'DESC')
       .getMany();
 

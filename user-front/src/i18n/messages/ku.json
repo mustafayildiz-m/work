@@ -420,7 +420,8 @@
     "languageSelection": "Hilbijartina Ziman",
     "notificationSounds": "Dengên Daxuyaniyê",
     "on": "Vekirî",
-    "off": "Girtî"
+    "off": "Girtî",
+    "qa": "Pirs û Bersiv"
   },
   "theme": {
     "themeSelection": "Hilbijartina Mijarê",
@@ -1058,5 +1059,16 @@
     "sendMessage": "Peyam bişîne",
     "backToConversations": "Vegere axivînan",
     "messagingListView": "Dîtina lîsteya peyamdanê"
+  },
+  "qa": {
+    "title": "Pirs û Bersiv",
+    "subtitle": "Bersivên pirsgirêkên xwe bibînin",
+    "searchPlaceholder": "Pirs an bihayekî lêgerîn...",
+    "allCategories": "Hemû",
+    "noResults": "Bi vî zimanî hê pirs tune ne.",
+    "loadMore": "Zêdetir nîşan bide",
+    "loading": "Tê barkirin...",
+    "results": "encam",
+    "errorLoading": "Daneyên nehatin barkirin."
   }
 }

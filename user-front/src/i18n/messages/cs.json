@@ -349,7 +349,8 @@
     "papers": "Akademické publikace",
     "askAboutIslam": "www.askaboutislam.ai",
     "askMariam": "www.askmariam.com",
-    "languageSelection": "Výběr jazyka"
+    "languageSelection": "Výběr jazyka",
+    "qa": "Otázky a odpovědi"
   },
   "theme": {
     "themeSelection": "Výběr tématu",
@@ -1002,5 +1003,16 @@
     "noDownloadOption": "U této knihy není možnost stažení.",
     "downloadError": "Při stahování došlo k chybě. Zkuste to prosím znovu.",
     "downloadFileNotFound": "Soubor ke stažení nebyl nalezen."
+  },
+  "qa": {
+    "title": "Otázky a odpovědi",
+    "subtitle": "Najděte odpovědi na své otázky",
+    "searchPlaceholder": "Hledat otázku nebo klíčové slovo...",
+    "allCategories": "Vše",
+    "noResults": "V tomto jazyce zatím nejsou žádné otázky.",
+    "loadMore": "Načíst více",
+    "loading": "Načítání...",
+    "results": "výsledků",
+    "errorLoading": "Data se nepodařilo načíst."
   }
 }

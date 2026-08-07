@@ -349,7 +349,8 @@
     "papers": "Академічні публікації",
     "askAboutIslam": "www.askaboutislam.ai",
     "askMariam": "www.askmariam.com",
-    "languageSelection": "Вибір мови"
+    "languageSelection": "Вибір мови",
+    "qa": "Питання та відповіді"
   },
   "theme": {
     "themeSelection": "Вибір теми",
@@ -1002,5 +1003,16 @@
     "noDownloadOption": "Для цієї книги немає можливості завантажити її.",
     "downloadError": "Під час завантаження сталася помилка. Будь ласка, спробуйте ще раз.",
     "downloadFileNotFound": "Файл для завантаження не знайдено."
+  },
+  "qa": {
+    "title": "Питання та відповіді",
+    "subtitle": "Знайдіть відповіді на свої запитання",
+    "searchPlaceholder": "Пошук питання або ключового слова...",
+    "allCategories": "Усі",
+    "noResults": "Цією мовою ще немає питань.",
+    "loadMore": "Завантажити ще",
+    "loading": "Завантаження...",
+    "results": "результатів",
+    "errorLoading": "Не вдалося завантажити дані."
   }
 }

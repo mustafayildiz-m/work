@@ -348,7 +348,8 @@
     "papers": "Akademische Veröffentlichungen",
     "askAboutIslam": "www.askaboutislam.ai",
     "askMariam": "www.askmariam.com",
-    "languageSelection": "Sprachauswahl"
+    "languageSelection": "Sprachauswahl",
+    "qa": "Fragen & Antworten"
   },
   "theme": {
     "themeSelection": "Themenauswahl",
@@ -1013,5 +1014,16 @@
     "noDownloadOption": "Für dieses Buch gibt es keine Download-Option.",
     "downloadError": "Beim Herunterladen ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
     "downloadFileNotFound": "Download-Datei nicht gefunden."
+  },
+  "qa": {
+    "title": "Fragen & Antworten",
+    "subtitle": "Finden Sie Antworten auf Ihre Fragen",
+    "searchPlaceholder": "Frage oder Stichwort suchen...",
+    "allCategories": "Alle",
+    "noResults": "In dieser Sprache wurden noch keine Fragen gefunden.",
+    "loadMore": "Mehr laden",
+    "loading": "Laden...",
+    "results": "Ergebnisse",
+    "errorLoading": "Daten konnten nicht geladen werden."
   }
 }

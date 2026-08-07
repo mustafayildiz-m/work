@@ -349,7 +349,8 @@
     "papers": "Akademske publikacije",
     "askAboutIslam": "www.askaboutislam.ai",
     "askMariam": "www.askmariam.com",
-    "languageSelection": "Izbira jezika"
+    "languageSelection": "Izbira jezika",
+    "qa": "Vprašanja in odgovori"
   },
   "theme": {
     "themeSelection": "Izbor teme",
@@ -1002,5 +1003,16 @@
     "noDownloadOption": "Za to knjigo ni možnosti prenosa.",
     "downloadError": "Med prenosom je prišlo do napake. Prosimo, poskusite znova.",
     "downloadFileNotFound": "Datoteka za prenos ni bila najdena."
+  },
+  "qa": {
+    "title": "Vprašanja in odgovori",
+    "subtitle": "Poiščite odgovore na svoja vprašanja",
+    "searchPlaceholder": "Iskanje vprašanja ali ključne besede...",
+    "allCategories": "Vse",
+    "noResults": "V tem jeziku še ni vprašanj.",
+    "loadMore": "Naloži več",
+    "loading": "Nalaganje...",
+    "results": "rezultatov",
+    "errorLoading": "Podatkov ni bilo mogoče naložiti."
   }
 }

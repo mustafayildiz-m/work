@@ -421,7 +421,8 @@
     "languageSelection": "Избор језика",
     "notificationSounds": "Звукови обавештења",
     "on": "Он",
-    "off": "Офф"
+    "off": "Офф",
+    "qa": "Питања и одговори"
   },
   "theme": {
     "themeSelection": "Избор теме",
@@ -1059,5 +1060,16 @@
     "sendMessage": "Пошаљи поруку",
     "backToConversations": "Назад на разговоре",
     "messagingListView": "Приказ листе порука"
+  },
+  "qa": {
+    "title": "Питања и одговори",
+    "subtitle": "Пronađite odgovore na svoja pitanja",
+    "searchPlaceholder": "Pretražite pitanje ili ključnu reč...",
+    "allCategories": "Sve",
+    "noResults": "Još nema pitanja na ovom jeziku.",
+    "loadMore": "Učitaj više",
+    "loading": "Učitavanje...",
+    "results": "rezultata",
+    "errorLoading": "Podaci nisu učitani."
   }
 }

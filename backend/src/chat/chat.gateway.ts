@@ -21,7 +21,8 @@ interface AuthenticatedSocket extends Socket {
 
 @WebSocketGateway({
   cors: {
-    origin: '*',
+    origin: process.env.FRONTEND_URL?.split(',') || true,
+    credentials: true,
   },
   namespace: '/chat',
 })
@@ -63,58 +64,53 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
+  private extractHandshakeToken(client: AuthenticatedSocket): string | undefined {
+    const auth =
+      client.handshake.auth?.token || client.handshake.headers?.authorization;
+    if (!auth || typeof auth !== 'string') return undefined;
+    return auth.startsWith('Bearer ') ? auth.substring(7) : auth;
+  }
+
   async handleConnection(client: AuthenticatedSocket) {
     try {
-      // WsJwtGuard already set client.user, so we can use it directly
-      if (client.user) {
-        this.connectedUsers.set(client.user.id, client.id);
-
-        // User'ı online olarak işaretle
-        await this.chatService.setUserOnline(client.user.id, true);
-
-        // Online olan user'ları broadcast et
-        this.server.emit('userOnline', {
-          userId: client.user.id,
-          username: client.user.username,
-        });
-      } else {
-        // Fallback: JWT token'dan user bilgisini al
-        const token =
-          client.handshake.auth.token || client.handshake.headers.authorization;
-
-        if (token) {
-          const user = await this.chatService.validateToken(token);
-
-          if (user) {
-            client.user = user;
-            this.connectedUsers.set(user.id, client.id);
-
-            // User'ı online olarak işaretle
-            await this.chatService.setUserOnline(user.id, true);
-
-            // Online olan user'ları broadcast et
-            this.server.emit('userOnline', {
-              userId: user.id,
-              username: user.username,
-            });
-          }
-        }
+      const token = this.extractHandshakeToken(client);
+      if (!token) {
+        client.disconnect(true);
+        return;
       }
+
+      const user = await this.chatService.validateToken(token);
+      if (!user) {
+        client.disconnect(true);
+        return;
+      }
+
+      client.user = user;
+      this.connectedUsers.set(user.id, client.id);
+      await this.chatService.setUserOnline(user.id, true);
+
+      const connectionIds = await this.chatService.getMutualConnectionUserIds(
+        user.id,
+      );
+      this.broadcastToUsers(connectionIds, 'userOnline', {
+        userId: user.id,
+        username: user.username,
+      });
     } catch (error) {
       console.error('Connection error:', error);
-      client.disconnect();
+      client.disconnect(true);
     }
   }
 
   async handleDisconnect(client: AuthenticatedSocket) {
     if (client.user) {
       this.connectedUsers.delete(client.user.id);
-
-      // User'ı offline olarak işaretle
       await this.chatService.setUserOnline(client.user.id, false);
 
-      // Offline olan user'ı broadcast et
-      this.server.emit('userOffline', {
+      const connectionIds = await this.chatService.getMutualConnectionUserIds(
+        client.user.id,
+      );
+      this.broadcastToUsers(connectionIds, 'userOffline', {
         userId: client.user.id,
         username: client.user.username,
       });
@@ -131,15 +127,20 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     try {
+      const receiverId = Number(data.receiverId);
+      if (!receiverId || Number.isNaN(receiverId)) {
+        return { error: 'Invalid receiver' };
+      }
+
       const message = await this.chatService.createMessage({
         senderId: client.user.id,
-        receiverId: data.receiverId,
+        receiverId,
         content: data.content,
       });
 
       const [sender, receiver] = await Promise.all([
         this.chatService.getUserBasic(client.user.id),
-        this.chatService.getUserBasic(data.receiverId),
+        this.chatService.getUserBasic(receiverId),
       ]);
 
       const senderFullName =
@@ -151,7 +152,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         receiver?.username ||
         '';
 
-      // Mesaj objesini hazırla
       const messageData = {
         id: message.id,
         content: message.content,
@@ -172,20 +172,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         conversationId: message.conversationId,
       };
 
-      // Receiver'a mesajı gönder
-      const receiverSocketId = this.connectedUsers.get(data.receiverId);
+      const receiverSocketId = this.connectedUsers.get(receiverId);
       if (receiverSocketId) {
         this.server.to(receiverSocketId).emit('newMessage', messageData);
       }
 
-      // Sender'a confirmation gönder (aynı mesaj formatında)
       client.emit('messageSent', messageData);
-
-      // Broadcast to all connected clients in the same conversation
-      this.server.emit('messageUpdate', {
-        type: 'new',
-        message: messageData,
-      });
 
       return { success: true, messageId: message.id };
     } catch (error) {
@@ -213,7 +205,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     try {
       await this.chatService.markMessageAsRead(data.messageId, client.user.id);
 
-      // Sender'a read status'u bildir
       const message = await this.chatService.getMessageById(data.messageId);
       if (message) {
         const senderSocketId = this.connectedUsers.get(message.senderId);
@@ -234,13 +225,22 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('typing')
-  handleTyping(
+  async handleTyping(
     @MessageBody() data: { receiverId: number; isTyping: boolean },
     @ConnectedSocket() client: AuthenticatedSocket,
   ) {
     if (!client.user) return;
 
-    const receiverSocketId = this.connectedUsers.get(data.receiverId);
+    const receiverId = Number(data.receiverId);
+    if (!receiverId || Number.isNaN(receiverId)) return;
+
+    const canMessage = await this.chatService.canUsersMessage(
+      client.user.id,
+      receiverId,
+    );
+    if (!canMessage) return;
+
+    const receiverSocketId = this.connectedUsers.get(receiverId);
     if (receiverSocketId) {
       this.server.to(receiverSocketId).emit('userTyping', {
         userId: client.user.id,
@@ -251,11 +251,17 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('joinConversation')
-  handleJoinConversation(
+  async handleJoinConversation(
     @MessageBody() data: { conversationId: string },
     @ConnectedSocket() client: AuthenticatedSocket,
   ) {
-    if (!client.user) return;
+    if (!client.user || !data.conversationId) return;
+
+    const hasAccess = await this.chatService.userHasConversationAccess(
+      data.conversationId,
+      client.user.id,
+    );
+    if (!hasAccess) return;
 
     client.join(`conversation_${data.conversationId}`);
   }
@@ -285,7 +291,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         client.user.id,
       );
 
-      // Conversation'ı silen kullanıcıya confirmation gönder
       client.emit('conversationDeleted', {
         conversationId: data.conversationId,
         deletedBy: result.deletedBy,
@@ -294,28 +299,19 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         wasHardDeleted: result.wasHardDeleted,
       });
 
-      // Eğer hard delete yapılmadıysa, diğer katılımcıya da bildirim gönder
       if (!result.wasHardDeleted && result.conversation) {
         const otherParticipantId =
           result.conversation.participant1Id === client.user.id
             ? result.conversation.participant2Id
             : result.conversation.participant1Id;
 
-        const otherParticipantSocketId =
-          this.connectedUsers.get(otherParticipantId);
-        if (otherParticipantSocketId) {
-          this.server.to(otherParticipantSocketId).emit('conversationDeleted', {
-            conversationId: data.conversationId,
-            deletedBy: result.deletedBy,
-            deletedByUsername: result.deletedByUsername,
-            deletedAt: new Date(),
-            wasHardDeleted: false,
-          });
-        }
-      } else if (result.wasHardDeleted) {
-        // Hard delete yapıldıysa, tüm katılımcılara bildirim gönder
-        // (Bu durumda conversation artık yok, bu yüzden mevcut katılımcıları bulamayız)
-        // Bu durumda sadece silen kullanıcıya bildirim yeterli
+        this.sendToUser(otherParticipantId, 'conversationDeleted', {
+          conversationId: data.conversationId,
+          deletedBy: result.deletedBy,
+          deletedByUsername: result.deletedByUsername,
+          deletedAt: new Date(),
+          wasHardDeleted: false,
+        });
       }
 
       return {

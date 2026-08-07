@@ -349,7 +349,8 @@
     "papers": "학술 간행물",
     "askAboutIslam": "www.askaboutislam.ai",
     "askMariam": "www.askmariam.com",
-    "languageSelection": "언어 선택"
+    "languageSelection": "언어 선택",
+    "qa": "Q&A"
   },
   "theme": {
     "themeSelection": "테마 선택",
@@ -1014,5 +1015,16 @@
     "noDownloadOption": "이 책에는 다운로드 옵션이 없습니다.",
     "downloadError": "다운로드하는 동안 오류가 발생했습니다. 다시 시도해 주세요.",
     "downloadFileNotFound": "다운로드 파일을 찾을 수 없습니다."
+  },
+  "qa": {
+    "title": "질문과 답변",
+    "subtitle": "궁금한 점에 대한 답변을 찾아보세요",
+    "searchPlaceholder": "질문 또는 키워드 검색...",
+    "allCategories": "전체",
+    "noResults": "이 언어로 된 질문이 아직 없습니다.",
+    "loadMore": "더 보기",
+    "loading": "로딩 중...",
+    "results": "개 결과",
+    "errorLoading": "데이터를 불러오지 못했습니다."
   }
 }

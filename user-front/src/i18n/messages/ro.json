@@ -349,7 +349,8 @@
     "papers": "Publicații academice",
     "askAboutIslam": "www.askaboutislam.ai",
     "askMariam": "www.askmariam.com",
-    "languageSelection": "Selectarea limbii"
+    "languageSelection": "Selectarea limbii",
+    "qa": "Întrebări și răspunsuri"
   },
   "theme": {
     "themeSelection": "Selectarea temei",
@@ -1002,5 +1003,16 @@
     "noDownloadOption": "Nu există nicio opțiune de descărcare pentru această carte.",
     "downloadError": "A apărut o eroare în timpul descărcării. Vă rugăm să încercați din nou.",
     "downloadFileNotFound": "Fișierul de descărcare nu a fost găsit."
+  },
+  "qa": {
+    "title": "Întrebări și răspunsuri",
+    "subtitle": "Găsiți răspunsuri la întrebările dvs.",
+    "searchPlaceholder": "Căutați o întrebare sau cuvânt cheie...",
+    "allCategories": "Toate",
+    "noResults": "Nu există încă întrebări în această limbă.",
+    "loadMore": "Încarcă mai mult",
+    "loading": "Se încarcă...",
+    "results": "rezultate",
+    "errorLoading": "Datele nu au putut fi încărcate."
   }
 }

@@ -421,7 +421,8 @@
     "languageSelection": "ભાષાની પસંદગી",
     "notificationSounds": "સૂચના અવાજો",
     "on": "ચાલુ",
-    "off": "બંધ"
+    "off": "બંધ",
+    "qa": "પ્રશ્નોત્તર"
   },
   "theme": {
     "themeSelection": "થીમ પસંદગી",
@@ -1059,5 +1060,16 @@
     "sendMessage": "સંદેશ મોકલો",
     "backToConversations": "Back to conversations",
     "messagingListView": "Messaging list view"
+  },
+  "qa": {
+    "title": "પ્રશ્નો અને જવાબો",
+    "subtitle": "તમારા પ્રશ્નોના જવાબ શોધો",
+    "searchPlaceholder": "પ્રશ્ન અથવા કીવર્ડ શોધો...",
+    "allCategories": "બધા",
+    "noResults": "આ ભાષામાં હજુ પ્રશ્નો નથી.",
+    "loadMore": "વધુ લોડ કરો",
+    "loading": "લોડ થઈ રહ્યું છે...",
+    "results": "પરિણામો",
+    "errorLoading": "ડેટા લોડ થઈ શક્યો નહીં."
   }
 }

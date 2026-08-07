@@ -77,6 +77,10 @@ import {
   UserPlus,
   Boxes,
   LayoutList,
+  HelpCircle as QaIcon,
+  Tag,
+  Import,
+  FileDown,
 } from 'lucide-react';
 
 export const MENU_SIDEBAR = [
@@ -188,6 +192,32 @@ export const MENU_SIDEBAR = [
         ],
       },
 
+    ],
+  },
+  {
+    title: 'Soru-Cevap',
+    icon: QaIcon,
+    status: 'done',
+    children: [
+      {
+        title: 'Kategoriler',
+        icon: LayoutList,
+        children: [
+          { title: 'Kategori Ekle', path: '/soru-cevap/kategoriler/ekle', icon: Plus, status: 'done' },
+          { title: 'Tüm Kategoriler', path: '/soru-cevap/kategoriler/liste', icon: LayoutList, status: 'done' },
+        ],
+      },
+      {
+        title: 'Sorular',
+        icon: QaIcon,
+        children: [
+          { title: 'Soru Ekle', path: '/soru-cevap/sorular/ekle', icon: Plus, status: 'done' },
+          { title: 'Tüm Sorular', path: '/soru-cevap/sorular/liste', icon: LayoutList, status: 'done' },
+        ],
+      },
+      { title: 'Etiketler', path: '/soru-cevap/etiketler/liste', icon: Tag, status: 'done' },
+      { title: 'Toplu Import', path: '/soru-cevap/import', icon: Import, status: 'done' },
+      { title: 'Export', path: '/soru-cevap/export', icon: FileDown, status: 'done' },
     ],
   },
   {

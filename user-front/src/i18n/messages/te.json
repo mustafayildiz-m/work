@@ -421,7 +421,8 @@
     "languageSelection": "భాష ఎంపిక",
     "notificationSounds": "నోటిఫికేషన్ సౌండ్స్",
     "on": "ఆన్",
-    "off": "ఆఫ్"
+    "off": "ఆఫ్",
+    "qa": "ప్రశ్నోత్తరాలు"
   },
   "theme": {
     "themeSelection": "థీమ్ ఎంపిక",
@@ -1059,5 +1060,16 @@
     "sendMessage": "సందేశం పంపండి",
     "backToConversations": "తిరిగి సంభాషణలకు",
     "messagingListView": "సందేశ జాబితా వీక్షణ"
+  },
+  "qa": {
+    "title": "ప్రశ్నలు & సమాధానాలు",
+    "subtitle": "మీ ప్రశ్నలకు సమాధానాలు కనుగొనండి",
+    "searchPlaceholder": "ప్రశ్న లేదా కీవర్డ్ వెతకండి...",
+    "allCategories": "అన్నీ",
+    "noResults": "ఈ భాషలో ఇంకా ప్రశ్నలు లేవు.",
+    "loadMore": "మరిన్ని చూపించు",
+    "loading": "లోడ్ అవుతోంది...",
+    "results": "ఫలితాలు",
+    "errorLoading": "డేటా లోడ్ కాలేదు."
   }
 }

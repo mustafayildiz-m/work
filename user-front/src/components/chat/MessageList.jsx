@@ -479,7 +479,7 @@ const MessageList = ({ onBackToConversations }) => {
 
   // Check if user is typing
   const isTyping = useMemo(() => {
-    return activeConversation?.id && typingUsers[activeConversation.id];
+    return activeConversation?.participantId && typingUsers[activeConversation.participantId];
   }, [activeConversation, typingUsers]);
 
   const isConversationOnline = useMemo(() => {

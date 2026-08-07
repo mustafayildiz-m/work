@@ -9,6 +9,7 @@ import { Message } from '../entities/message.entity';
 import { Conversation } from '../entities/conversation.entity';
 import { User } from '../users/entities/user.entity';
 import { UserFollow } from '../entities/user-follow.entity';
+import { WsJwtGuard } from '../auth/guards/ws-jwt.guard';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { UserFollow } from '../entities/user-follow.entity';
     }),
   ],
   controllers: [ChatController],
-  providers: [ChatGateway, ChatService],
+  providers: [ChatGateway, ChatService, WsJwtGuard],
   exports: [ChatService, ChatGateway],
 })
 export class ChatModule { }

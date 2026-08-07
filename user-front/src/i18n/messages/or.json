@@ -421,7 +421,8 @@
     "languageSelection": "ଭାଷା ଚୟନ",
     "notificationSounds": "ବିଜ୍ଞପ୍ତି ଶବ୍ଦ |",
     "on": "ଅନ୍",
-    "off": "ବନ୍ଦ"
+    "off": "ବନ୍ଦ",
+    "qa": "ପ୍ରଶ୍ନୋତ୍ତର"
   },
   "theme": {
     "themeSelection": "ଥିମ୍ ଚୟନ",
@@ -1059,5 +1060,16 @@
     "sendMessage": "ବାର୍ତ୍ତା ପଠାନ୍ତୁ |",
     "backToConversations": "ବାର୍ତ୍ତାଳାପକୁ ଫେରନ୍ତୁ |",
     "messagingListView": "ମେସେଜିଂ ତାଲିକା ଦୃଶ୍ୟ |"
+  },
+  "qa": {
+    "title": "ପ୍ରଶ୍ନ ଏବଂ ଉତ୍ତର",
+    "subtitle": "ଆପଣଙ୍କ ପ୍ରଶ୍ନର ଉତ୍ତର ଖୋଜନ୍ତୁ",
+    "searchPlaceholder": "ପ୍ରଶ୍ନ କିମ୍ବା କୀୱର୍ଡ ଖୋଜନ୍ତୁ...",
+    "allCategories": "ସବୁ",
+    "noResults": "ଏହି ଭାଷାରେ ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ପ୍ରଶ୍ନ ନାହିଁ।",
+    "loadMore": "ଅଧିକ ଦେଖାନ୍ତୁ",
+    "loading": "ଲୋଡ୍ ହେଉଛି...",
+    "results": "ଫଳାଫଳ",
+    "errorLoading": "ଡାଟା ଲୋଡ୍ ହୋଇପାରିଲା ନାହିଁ।"
   }
 }

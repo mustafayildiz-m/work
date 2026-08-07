@@ -15,6 +15,7 @@ const publicPages = [
   '/feed/scholars',
   '/feed/books',
   '/feed/podcasts',
+  '/feed/qa',
   '/profile/scholar'
 ];
 
