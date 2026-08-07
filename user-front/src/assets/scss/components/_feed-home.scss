@@ -69,7 +69,7 @@ header.fixed-top + main.feed-page-shell {
 }
 
 .feed-compose-card {
-  background-color: #ffffff !important;
+  background-color: var(--bs-body-bg) !important;
   --compose-input-bg: var(--bs-secondary-bg);
   --compose-input-color: var(--bs-body-color);
   --compose-input-placeholder: var(--bs-secondary-color);
@@ -303,16 +303,16 @@ header.fixed-top + main.feed-page-shell {
   .card-header,
   .card-body,
   .feed-post-actions {
-    background-color: #ffffff !important;
+    background-color: var(--bs-body-bg) !important;
   }
 }
 
 .feed-sidebar-card {
-  background-color: #ffffff !important;
+  background-color: var(--bs-body-bg) !important;
 
   .feed-sidebar-header,
   .feed-sidebar-body {
-    background-color: #ffffff !important;
+    background-color: var(--bs-body-bg) !important;
   }
 
   .feed-sidebar-header {
@@ -857,6 +857,49 @@ header.fixed-top + main.feed-page-shell {
 
 .feed-post-comment-avatar {
   flex-shrink: 0;
+}
+
+// Dark theme — feed cards
+[data-bs-theme='dark'] {
+  .feed-compose-card,
+  .feed-sidebar-card,
+  .feed-sidebar-card .feed-sidebar-header,
+  .feed-sidebar-card .feed-sidebar-body {
+    background-color: #151a22 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .feed-post-card {
+    .card-header,
+    .card-body,
+    .feed-post-actions {
+      background-color: #151a22 !important;
+    }
+  }
+
+  .feed-surface-card {
+    background-color: #151a22 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+}
+
+// Green theme — feed cards
+[data-bs-theme='green'] {
+  .feed-compose-card,
+  .feed-sidebar-card,
+  .feed-sidebar-card .feed-sidebar-header,
+  .feed-sidebar-card .feed-sidebar-body,
+  .feed-post-card .card-header,
+  .feed-post-card .card-body,
+  .feed-post-card .feed-post-actions {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
+
+  .feed-surface-card {
+    background: linear-gradient(180deg, #2d5a2d 0%, #234d2a 100%) !important;
+    border-color: rgba(67, 160, 71, 0.35) !important;
+  }
 }
 
 [data-bs-theme='green'] .feed-post-card.card:hover,
