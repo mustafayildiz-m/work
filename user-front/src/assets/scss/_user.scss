@@ -419,8 +419,8 @@
   background: transparent !important;
 }
 
-:root:not([data-bs-theme="dark"]):not([data-bs-theme="green"]) [class*="feed"]:not([class*="-card"]):not(.card),
-:root:not([data-bs-theme="dark"]):not([data-bs-theme="green"]) [class*="Feed"]:not([class*="-card"]):not(.card) {
+:root:not([data-bs-theme="dark"]):not([data-bs-theme="green"]) [class*="feed"]:not([class*="-card"]):not(.card):not([class*="-link"]):not([class*="-btn"]),
+:root:not([data-bs-theme="dark"]):not([data-bs-theme="green"]) [class*="Feed"]:not([class*="-card"]):not(.card):not([class*="-link"]):not([class*="-btn"]) {
   background: transparent !important;
 }
 
@@ -469,6 +469,18 @@
 
     &:hover {
       transform: none !important;
+    }
+  }
+
+  // Sidebar nav — active item must keep green background (not transparent)
+  .feed-profile-nav-link {
+    &.is-active {
+      background: #22c55e !important;
+      color: #ffffff !important;
+
+      span {
+        color: #ffffff !important;
+      }
     }
   }
 }

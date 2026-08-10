@@ -1070,6 +1070,21 @@
     "loadMore": "మరిన్ని చూపించు",
     "loading": "లోడ్ అవుతోంది...",
     "results": "ఫలితాలు",
-    "errorLoading": "డేటా లోడ్ కాలేదు."
+    "errorLoading": "డేటా లోడ్ కాలేదు.",
+    "statsLanguages": "Languages",
+    "statsActive": "Active",
+    "statsQuestions": "Questions",
+    "languageSearchPlaceholder": "Search language... (e.g. العربية, Türkçe, English)",
+    "languageSearchAria": "Search languages",
+    "searching": "Searching...",
+    "noLanguagesFound": "No languages found",
+    "browserDetected": "Detected from your browser:",
+    "popularLanguages": "Popular languages:",
+    "showAllLanguages": "Show all languages",
+    "allLanguages": "All languages:",
+    "backToLanguages": "Back to Languages",
+    "qaCount": "{count} Q&A",
+    "languageNotFound": "Language not found",
+    "failedToLoadLanguage": "Failed to load language"
   }
 }

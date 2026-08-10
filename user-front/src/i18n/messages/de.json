@@ -1024,6 +1024,21 @@
     "loadMore": "Mehr laden",
     "loading": "Laden...",
     "results": "Ergebnisse",
-    "errorLoading": "Daten konnten nicht geladen werden."
+    "errorLoading": "Daten konnten nicht geladen werden.",
+    "statsLanguages": "Sprachen",
+    "statsActive": "Aktiv",
+    "statsQuestions": "Fragen",
+    "languageSearchPlaceholder": "Sprache suchen... (z. B. العربية, Türkçe, English)",
+    "languageSearchAria": "Sprachen suchen",
+    "searching": "Suche...",
+    "noLanguagesFound": "Keine Sprachen gefunden",
+    "browserDetected": "Vom Browser erkannt:",
+    "popularLanguages": "Beliebte Sprachen:",
+    "showAllLanguages": "Alle Sprachen anzeigen",
+    "allLanguages": "Alle Sprachen:",
+    "backToLanguages": "Zurück zu Sprachen",
+    "qaCount": "{count} Fragen & Antworten",
+    "languageNotFound": "Sprache nicht gefunden",
+    "failedToLoadLanguage": "Sprache konnte nicht geladen werden"
   }
 }

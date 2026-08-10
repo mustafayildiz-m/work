@@ -1024,6 +1024,21 @@
     "loadMore": "もっと見る",
     "loading": "読み込み中...",
     "results": "件",
-    "errorLoading": "データの読み込みに失敗しました。"
+    "errorLoading": "データの読み込みに失敗しました。",
+    "statsLanguages": "言語",
+    "statsActive": "アクティブ",
+    "statsQuestions": "質問",
+    "languageSearchPlaceholder": "言語を検索...（例：العربية、Türkçe、English）",
+    "languageSearchAria": "言語を検索",
+    "searching": "検索中...",
+    "noLanguagesFound": "言語が見つかりません",
+    "browserDetected": "ブラウザから検出:",
+    "popularLanguages": "人気の言語:",
+    "showAllLanguages": "すべての言語を表示",
+    "allLanguages": "すべての言語:",
+    "backToLanguages": "言語一覧に戻る",
+    "qaCount": "{count} 件のQ&A",
+    "languageNotFound": "言語が見つかりません",
+    "failedToLoadLanguage": "言語の読み込みに失敗しました"
   }
 }

@@ -1028,6 +1028,21 @@
     "loadMore": "عرض المزيد",
     "loading": "جاري التحميل...",
     "results": "نتيجة",
-    "errorLoading": "تعذر تحميل البيانات."
+    "errorLoading": "تعذر تحميل البيانات.",
+    "statsLanguages": "اللغات",
+    "statsActive": "نشطة",
+    "statsQuestions": "الأسئلة",
+    "languageSearchPlaceholder": "ابحث عن لغة... (مثل العربية، Türkçe، English)",
+    "languageSearchAria": "البحث عن اللغات",
+    "searching": "جاري البحث...",
+    "noLanguagesFound": "لم يتم العثور على لغات",
+    "browserDetected": "تم الاكتشاف من متصفحك:",
+    "popularLanguages": "اللغات الشائعة:",
+    "showAllLanguages": "عرض جميع اللغات",
+    "allLanguages": "جميع اللغات:",
+    "backToLanguages": "العودة إلى اللغات",
+    "qaCount": "{count} سؤال وجواب",
+    "languageNotFound": "اللغة غير موجودة",
+    "failedToLoadLanguage": "تعذر تحميل اللغة"
   }
 }

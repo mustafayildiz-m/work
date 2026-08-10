@@ -1025,6 +1025,21 @@
     "loadMore": "Загрузить ещё",
     "loading": "Загрузка...",
     "results": "результатов",
-    "errorLoading": "Не удалось загрузить данные."
+    "errorLoading": "Не удалось загрузить данные.",
+    "statsLanguages": "Языки",
+    "statsActive": "Активные",
+    "statsQuestions": "Вопросы",
+    "languageSearchPlaceholder": "Поиск языка... (напр. العربية, Türkçe, English)",
+    "languageSearchAria": "Поиск языков",
+    "searching": "Поиск...",
+    "noLanguagesFound": "Языки не найдены",
+    "browserDetected": "Определено браузером:",
+    "popularLanguages": "Популярные языки:",
+    "showAllLanguages": "Показать все языки",
+    "allLanguages": "Все языки:",
+    "backToLanguages": "Назад к языкам",
+    "qaCount": "{count} вопросов и ответов",
+    "languageNotFound": "Язык не найден",
+    "failedToLoadLanguage": "Не удалось загрузить язык"
   }
 }

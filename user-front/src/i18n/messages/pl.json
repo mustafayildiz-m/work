@@ -1013,6 +1013,21 @@
     "loadMore": "Załaduj więcej",
     "loading": "Ładowanie...",
     "results": "wyników",
-    "errorLoading": "Nie udało się załadować danych."
+    "errorLoading": "Nie udało się załadować danych.",
+    "statsLanguages": "Języki",
+    "statsActive": "Aktywne",
+    "statsQuestions": "Pytania",
+    "languageSearchPlaceholder": "Szukaj języka... (np. العربية, Türkçe, English)",
+    "languageSearchAria": "Szukaj języków",
+    "searching": "Wyszukiwanie...",
+    "noLanguagesFound": "Nie znaleziono języków",
+    "browserDetected": "Wykryto z przeglądarki:",
+    "popularLanguages": "Popularne języki:",
+    "showAllLanguages": "Pokaż wszystkie języki",
+    "allLanguages": "Wszystkie języki:",
+    "backToLanguages": "Powrót do języków",
+    "qaCount": "{count} pytań i odpowiedzi",
+    "languageNotFound": "Nie znaleziono języka",
+    "failedToLoadLanguage": "Nie udało się załadować języka"
   }
 }

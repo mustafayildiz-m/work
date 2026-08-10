@@ -1025,6 +1025,21 @@
     "loadMore": "加载更多",
     "loading": "加载中...",
     "results": "条结果",
-    "errorLoading": "数据加载失败。"
+    "errorLoading": "数据加载失败。",
+    "statsLanguages": "语言",
+    "statsActive": "活跃",
+    "statsQuestions": "问题",
+    "languageSearchPlaceholder": "搜索语言...（例如：العربية、Türkçe、English）",
+    "languageSearchAria": "搜索语言",
+    "searching": "搜索中...",
+    "noLanguagesFound": "未找到语言",
+    "browserDetected": "从浏览器检测到：",
+    "popularLanguages": "热门语言：",
+    "showAllLanguages": "显示所有语言",
+    "allLanguages": "所有语言：",
+    "backToLanguages": "返回语言列表",
+    "qaCount": "{count} 问答",
+    "languageNotFound": "未找到语言",
+    "failedToLoadLanguage": "语言加载失败"
   }
 }

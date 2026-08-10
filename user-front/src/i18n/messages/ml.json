@@ -1070,6 +1070,21 @@
     "loadMore": "കൂടുതൽ കാണിക്കുക",
     "loading": "ലോഡ് ചെയ്യുന്നു...",
     "results": "ഫലങ്ങൾ",
-    "errorLoading": "ഡാറ്റ ലോഡ് ചെയ്യാൻ കഴിഞ്ഞില്ല."
+    "errorLoading": "ഡാറ്റ ലോഡ് ചെയ്യാൻ കഴിഞ്ഞില്ല.",
+    "statsLanguages": "Languages",
+    "statsActive": "Active",
+    "statsQuestions": "Questions",
+    "languageSearchPlaceholder": "Search language... (e.g. العربية, Türkçe, English)",
+    "languageSearchAria": "Search languages",
+    "searching": "Searching...",
+    "noLanguagesFound": "No languages found",
+    "browserDetected": "Detected from your browser:",
+    "popularLanguages": "Popular languages:",
+    "showAllLanguages": "Show all languages",
+    "allLanguages": "All languages:",
+    "backToLanguages": "Back to Languages",
+    "qaCount": "{count} Q&A",
+    "languageNotFound": "Language not found",
+    "failedToLoadLanguage": "Failed to load language"
   }
 }

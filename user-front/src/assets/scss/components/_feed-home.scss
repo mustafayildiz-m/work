@@ -668,6 +668,15 @@ header.fixed-top + main.feed-page-shell {
   }
 }
 
+.feed-profile-nav-link--external {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+
+  span {
+    color: inherit;
+  }
+}
+
 // Timeline posts
 .feed-timeline-header {
   display: flex;
@@ -979,7 +988,21 @@ header.fixed-top + main.feed-page-shell {
     }
 
     &.is-active {
+      background: #43a047 !important;
       color: #fff !important;
+
+      span {
+        color: #ffffff !important;
+      }
+    }
+
+    &--external {
+      color: #a5d6a7 !important;
+
+      &:hover:not(.is-active) {
+        color: #e8f5e9 !important;
+        text-decoration: underline !important;
+      }
     }
   }
 }
@@ -1090,7 +1113,7 @@ header.fixed-top + main.feed-page-shell {
   }
 
   .feed-profile-nav-link {
-    color: #536471 !important;
+    color: #334155 !important;
 
     &:hover:not(.is-active) {
       background: #f0fdf4 !important;
@@ -1100,6 +1123,25 @@ header.fixed-top + main.feed-page-shell {
     &.is-active {
       background: #22c55e !important;
       color: #ffffff !important;
+
+      span {
+        color: #ffffff !important;
+      }
+    }
+
+    &--external {
+      color: #15803d !important;
+
+      span {
+        color: inherit !important;
+      }
+
+      &:hover:not(.is-active) {
+        color: #166534 !important;
+        background: #ecfdf5 !important;
+        text-decoration: underline !important;
+        text-underline-offset: 2px;
+      }
     }
   }
 }
