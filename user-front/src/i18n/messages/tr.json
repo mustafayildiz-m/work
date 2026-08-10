@@ -1099,6 +1099,21 @@
     "loadMore": "Daha Fazla Göster",
     "loading": "Yükleniyor...",
     "results": "sonuç",
-    "errorLoading": "Veriler yüklenemedi."
+    "errorLoading": "Veriler yüklenemedi.",
+    "statsLanguages": "Diller",
+    "statsActive": "Aktif",
+    "statsQuestions": "Sorular",
+    "languageSearchPlaceholder": "Dil ara... (örn. العربية, Türkçe, English)",
+    "languageSearchAria": "Dil ara",
+    "searching": "Aranıyor...",
+    "noLanguagesFound": "Dil bulunamadı",
+    "browserDetected": "Tarayıcınızdan algılandı:",
+    "popularLanguages": "Popüler diller:",
+    "showAllLanguages": "Tüm dilleri göster",
+    "allLanguages": "Tüm diller:",
+    "backToLanguages": "Dillere dön",
+    "qaCount": "{count} Soru-Cevap",
+    "languageNotFound": "Dil bulunamadı",
+    "failedToLoadLanguage": "Dil yüklenemedi"
   }
 }

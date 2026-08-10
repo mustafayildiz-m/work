@@ -1025,6 +1025,21 @@
     "loadMore": "Carica altro",
     "loading": "Caricamento...",
     "results": "risultati",
-    "errorLoading": "Impossibile caricare i dati."
+    "errorLoading": "Impossibile caricare i dati.",
+    "statsLanguages": "Lingue",
+    "statsActive": "Attive",
+    "statsQuestions": "Domande",
+    "languageSearchPlaceholder": "Cerca lingua... (es. العربية, Türkçe, English)",
+    "languageSearchAria": "Cerca lingue",
+    "searching": "Ricerca...",
+    "noLanguagesFound": "Nessuna lingua trovata",
+    "browserDetected": "Rilevato dal browser:",
+    "popularLanguages": "Lingue popolari:",
+    "showAllLanguages": "Mostra tutte le lingue",
+    "allLanguages": "Tutte le lingue:",
+    "backToLanguages": "Torna alle lingue",
+    "qaCount": "{count} D&R",
+    "languageNotFound": "Lingua non trovata",
+    "failedToLoadLanguage": "Impossibile caricare la lingua"
   }
 }

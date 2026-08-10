@@ -1,23 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
+import { isPublicRoute } from './config/publicRoutes';
 
-// Public sayfalar - authentication gerektirmeyen sayfalar
-const publicPages = [
-  '/auth-advance/sign-in',
-  '/auth/sign-in',
-  '/auth/sign-up',
-  '/auth/verify',
-  '/auth/forgot-pass',
-  '/api/auth',
-  '/_next',
-  '/favicon.ico',
-  '/blogs',
-  '/feed/scholars',
-  '/feed/books',
-  '/feed/podcasts',
-  '/feed/qa',
-  '/profile/scholar'
-];
+const INFRA_PUBLIC_PREFIXES = ['/_next', '/favicon.ico', '/api/auth'];
 
 // Protected sayfalar - authentication gerektiren sayfalar
 const protectedPages = [
@@ -47,8 +32,10 @@ export async function middleware(request) {
     }
   }
 
-  // Public sayfalar için middleware çalıştırma
-  if (publicPages.some(page => pathname === page || pathname.startsWith(page + '/'))) {
+  if (
+    isPublicRoute(pathname)
+    || INFRA_PUBLIC_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(prefix))
+  ) {
     return NextResponse.next();
   }
 

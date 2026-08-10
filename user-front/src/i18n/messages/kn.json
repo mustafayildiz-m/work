@@ -1070,6 +1070,21 @@
     "loadMore": "ಇನ್ನಷ್ಟು ತೋರಿಸಿ",
     "loading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
     "results": "ಫಲಿತಾಂಶಗಳು",
-    "errorLoading": "ಡೇಟಾ ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ."
+    "errorLoading": "ಡೇಟಾ ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+    "statsLanguages": "Languages",
+    "statsActive": "Active",
+    "statsQuestions": "Questions",
+    "languageSearchPlaceholder": "Search language... (e.g. العربية, Türkçe, English)",
+    "languageSearchAria": "Search languages",
+    "searching": "Searching...",
+    "noLanguagesFound": "No languages found",
+    "browserDetected": "Detected from your browser:",
+    "popularLanguages": "Popular languages:",
+    "showAllLanguages": "Show all languages",
+    "allLanguages": "All languages:",
+    "backToLanguages": "Back to Languages",
+    "qaCount": "{count} Q&A",
+    "languageNotFound": "Language not found",
+    "failedToLoadLanguage": "Failed to load language"
   }
 }

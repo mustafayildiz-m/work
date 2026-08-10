@@ -7,6 +7,7 @@ import { useLanguage } from '@/context/useLanguageContext';
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { useLanguages } from '@/hooks/useLanguages';
 import { getFlagImageUrl } from '@/utils/language';
+import { getTranslatedLanguageNameForUiLocale } from '@/utils/uiLanguageDisplay';
 import './LanguageSwitcher.css';
 
 const MenuList = (props) => {
@@ -268,52 +269,7 @@ const LanguageSwitcher = ({ variant = 'dropdown', compact = false }) => {
     return <span style={{ fontSize: `${size}px`, lineHeight: 1 }}>{getFlagEmoji(code)}</span>;
   };
 
-  // Dil kodundan Türkçe ismini döndür (backend'deki isim)
-  const getTurkishLanguageName = (code) => {
-    const nameMap = {
-      'tr': 'Türkçe',
-      'en': 'İngilizce',
-      'ar': 'Arapça',
-      'de': 'Almanca',
-      'fr': 'Fransızca',
-      'ja': 'Japonca',
-      'zh': 'Çince',
-      'hi': 'Hintçe',
-      'es': 'İspanyolca',
-      'pt': 'Portekizce',
-      'ru': 'Rusça',
-      'it': 'İtalyanca',
-      'ko': 'Korece',
-      'uk': 'Ukraynaca',
-      'ku': 'Kürtçe',
-      'ro': 'Rumence',
-      'bg': 'Bulgarca',
-      'sr': 'Sırpça',
-      'hu': 'Macarca',
-      'cs': 'Çekçe',
-      'pl': 'Lehçe',
-      'sk': 'Slovakça',
-      'sl': 'Slovence',
-      'mk': 'Makedonca',
-      'hy': 'Ermenice',
-      'mr': 'Marathi',
-      'te': 'Telugu',
-      'gu': 'Gujarati',
-      'ml': 'Malayalam',
-      'kn': 'Kannada',
-      'or': 'Odia'
-    };
-    return nameMap[code] || code.toUpperCase();
-  };
-
-  // Seçili dile göre çevrilmiş dil ismini döndür
-  const getTranslatedLanguageName = (code) => {
-    const turkishName = getTurkishLanguageName(code);
-    // Translation dosyasından çeviriyi al
-    const translated = t(`books.languages.${turkishName}`);
-    // Eğer çeviri bulunamazsa, Türkçe ismi döndür
-    return translated && translated !== `books.languages.${turkishName}` ? translated : turkishName;
-  };
+  const getTranslatedLanguageName = (code) => getTranslatedLanguageNameForUiLocale(code, t);
 
   // Desteklenen tüm dilleri oluştur
   const languageOptions = useMemo(() => {

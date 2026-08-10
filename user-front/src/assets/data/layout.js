@@ -46,7 +46,7 @@ export const profilePanelLinksData1 = [{
 }, {
   image: typeof bulbImg === 'string' ? bulbImg : bulbImg.src,
   nameKey: 'menu.qa',
-  link: '/feed/qa'
+  link: '/feed/questions'
 }, {
   image: typeof microphoneImg === 'string' ? microphoneImg : microphoneImg.src,
   nameKey: 'menu.podcast',

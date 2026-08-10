@@ -1013,6 +1013,21 @@
     "loadMore": "Завантажити ще",
     "loading": "Завантаження...",
     "results": "результатів",
-    "errorLoading": "Не вдалося завантажити дані."
+    "errorLoading": "Не вдалося завантажити дані.",
+    "statsLanguages": "Мови",
+    "statsActive": "Активні",
+    "statsQuestions": "Питання",
+    "languageSearchPlaceholder": "Пошук мови... (напр. العربية, Türkçe, English)",
+    "languageSearchAria": "Пошук мов",
+    "searching": "Пошук...",
+    "noLanguagesFound": "Мови не знайдено",
+    "browserDetected": "Визначено браузером:",
+    "popularLanguages": "Популярні мови:",
+    "showAllLanguages": "Показати всі мови",
+    "allLanguages": "Усі мови:",
+    "backToLanguages": "Назад до мов",
+    "qaCount": "{count} запитань і відповідей",
+    "languageNotFound": "Мову не знайдено",
+    "failedToLoadLanguage": "Не вдалося завантажити мову"
   }
 }

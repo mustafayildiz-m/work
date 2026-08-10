@@ -601,7 +601,7 @@ const ProfilePanel = ({ links, onLinkClick }) => {
               <li key={(item.nameKey || item.name || item.link) + idx}>
                 {item.external ? (
                   <a
-                    className={`feed-profile-nav-link d-flex align-items-center text-decoration-none ${isActive ? 'is-active' : ''}`}
+                    className={`feed-profile-nav-link feed-profile-nav-link--external d-flex align-items-center text-decoration-none ${isActive ? 'is-active' : ''}`}
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"

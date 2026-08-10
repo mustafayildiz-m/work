@@ -7,6 +7,8 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  Headers,
   ParseIntPipe,
   UseGuards,
   UploadedFile,
@@ -19,6 +21,12 @@ import * as fs from 'fs';
 import { LanguageService } from '../services/language.service';
 import { CreateLanguageDto } from '../dto/create-language.dto';
 import { UpdateLanguageDto } from '../dto/update-language.dto';
+import {
+  LanguageSearchDto,
+  UpdateLanguageStatusDto,
+  BulkUpdateStatusDto,
+  LanguageDashboardQueryDto,
+} from '../dto/language-search.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('languages')
@@ -82,6 +90,51 @@ export class LanguageController {
   getBookCounts() {
     return this.languageService.getBookCounts();
   }
+
+  // ─── QA 300 Endpoints ─────────────────────────────────────
+
+  @Get('qa/search')
+  qaSearch(@Query() dto: LanguageSearchDto) {
+    return this.languageService.qaSearch(dto);
+  }
+
+  @Get('qa/suggested')
+  qaSuggested(@Headers('accept-language') acceptLang?: string) {
+    return this.languageService.qaSuggested(acceptLang);
+  }
+
+  @Get('qa/grouped')
+  qaGrouped() {
+    return this.languageService.qaGrouped();
+  }
+
+  @Get('qa/stats')
+  qaStats() {
+    return this.languageService.qaStats();
+  }
+
+  @Get('qa/admin')
+  @UseGuards(AuthGuard('jwt'))
+  qaAdminDashboard(@Query() query: LanguageDashboardQueryDto) {
+    return this.languageService.getAdminDashboard(query);
+  }
+
+  @Patch('qa/:id/status')
+  @UseGuards(AuthGuard('jwt'))
+  updateStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateLanguageStatusDto,
+  ) {
+    return this.languageService.updateStatus(id, dto);
+  }
+
+  @Patch('qa/bulk-status')
+  @UseGuards(AuthGuard('jwt'))
+  bulkUpdateStatus(@Body() dto: BulkUpdateStatusDto) {
+    return this.languageService.bulkUpdateStatus(dto);
+  }
+
+  // ─── END QA 300 Endpoints ─────────────────────────────────
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {

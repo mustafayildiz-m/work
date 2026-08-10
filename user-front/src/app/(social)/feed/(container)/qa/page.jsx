@@ -1,10 +1,5 @@
-import QaPageClient from './components/QaPageClient';
-
-export const metadata = {
-  title: 'Soru-Cevap | Islamic Windows',
-  description: 'İslami konularda soru ve cevaplar',
-};
+import { redirect } from 'next/navigation';
 
 export default function QaPage() {
-  return <QaPageClient />;
+  redirect('/feed/questions');
 }

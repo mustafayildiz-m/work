@@ -4,6 +4,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { Suspense, useEffect, useRef } from 'react';
 import { hasValidToken, isTokenExpired } from '@/utils/auth';
+import { isPublicRoute } from '@/config/publicRoutes';
 import FallbackLoading from '../FallbackLoading';
 
 const AuthProtectionWrapper = ({
@@ -12,17 +13,7 @@ const AuthProtectionWrapper = ({
   const pathname = usePathname();
   const isRedirecting = useRef(false);
 
-  const publicPages = [
-    '/auth-advance',
-    '/auth',
-    '/blogs',
-    '/feed/scholars',
-    '/feed/books',
-    '/feed/podcasts',
-    '/profile/scholar'
-  ];
-
-  const isPublicPage = publicPages.some(page => pathname === page || pathname.startsWith(page + '/'));
+  const isPublicPage = isPublicRoute(pathname);
 
   const { status, data: session } = useSession();
 

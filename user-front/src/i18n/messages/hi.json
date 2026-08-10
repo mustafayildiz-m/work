@@ -1070,6 +1070,21 @@
     "loadMore": "और देखें",
     "loading": "लोड हो रहा है...",
     "results": "परिणाम",
-    "errorLoading": "डेटा लोड नहीं हो सका।"
+    "errorLoading": "डेटा लोड नहीं हो सका।",
+    "statsLanguages": "भाषाएँ",
+    "statsActive": "सक्रिय",
+    "statsQuestions": "प्रश्न",
+    "languageSearchPlaceholder": "भाषा खोजें... (जैसे العربية, Türkçe, English)",
+    "languageSearchAria": "भाषाएँ खोजें",
+    "searching": "खोज रहे हैं...",
+    "noLanguagesFound": "कोई भाषा नहीं मिली",
+    "browserDetected": "आपके ब्राउज़र से पहचानी गई:",
+    "popularLanguages": "लोकप्रिय भाषाएँ:",
+    "showAllLanguages": "सभी भाषाएँ दिखाएँ",
+    "allLanguages": "सभी भाषाएँ:",
+    "backToLanguages": "भाषाओं पर वापस",
+    "qaCount": "{count} प्रश्नोत्तर",
+    "languageNotFound": "भाषा नहीं मिली",
+    "failedToLoadLanguage": "भाषा लोड नहीं हो सकी"
   }
 }

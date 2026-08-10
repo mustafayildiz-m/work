@@ -1013,6 +1013,21 @@
     "loadMore": "Încarcă mai mult",
     "loading": "Se încarcă...",
     "results": "rezultate",
-    "errorLoading": "Datele nu au putut fi încărcate."
+    "errorLoading": "Datele nu au putut fi încărcate.",
+    "statsLanguages": "Languages",
+    "statsActive": "Active",
+    "statsQuestions": "Questions",
+    "languageSearchPlaceholder": "Search language... (e.g. العربية, Türkçe, English)",
+    "languageSearchAria": "Search languages",
+    "searching": "Searching...",
+    "noLanguagesFound": "No languages found",
+    "browserDetected": "Detected from your browser:",
+    "popularLanguages": "Popular languages:",
+    "showAllLanguages": "Show all languages",
+    "allLanguages": "All languages:",
+    "backToLanguages": "Back to Languages",
+    "qaCount": "{count} Q&A",
+    "languageNotFound": "Language not found",
+    "failedToLoadLanguage": "Failed to load language"
   }
 }

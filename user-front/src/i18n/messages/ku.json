@@ -1069,6 +1069,21 @@
     "loadMore": "Zêdetir nîşan bide",
     "loading": "Tê barkirin...",
     "results": "encam",
-    "errorLoading": "Daneyên nehatin barkirin."
+    "errorLoading": "Daneyên nehatin barkirin.",
+    "statsLanguages": "Languages",
+    "statsActive": "Active",
+    "statsQuestions": "Questions",
+    "languageSearchPlaceholder": "Search language... (e.g. العربية, Türkçe, English)",
+    "languageSearchAria": "Search languages",
+    "searching": "Searching...",
+    "noLanguagesFound": "No languages found",
+    "browserDetected": "Detected from your browser:",
+    "popularLanguages": "Popular languages:",
+    "showAllLanguages": "Show all languages",
+    "allLanguages": "All languages:",
+    "backToLanguages": "Back to Languages",
+    "qaCount": "{count} Q&A",
+    "languageNotFound": "Language not found",
+    "failedToLoadLanguage": "Failed to load language"
   }
 }
