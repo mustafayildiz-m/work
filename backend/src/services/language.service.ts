@@ -400,8 +400,8 @@ export class LanguageService {
   /** Eski dil kayıtlarında nativeName/iso639_3 boş olabilir — QA API için normalize et */
   private normalizeQaLanguage(lang: Language): Language {
     // `name` = Turkish UI label key; do not copy into nativeName/englishName
-    lang.nativeName = lang.nativeName || lang.englishName || lang.code || undefined;
-    lang.englishName = lang.englishName || lang.nativeName || lang.code || undefined;
+    lang.nativeName = lang.nativeName || lang.englishName || lang.code || null;
+    lang.englishName = lang.englishName || lang.nativeName || lang.code || null;
     if (!lang.iso639_3 && lang.code) {
       lang.iso639_3 = lang.code;
     }
