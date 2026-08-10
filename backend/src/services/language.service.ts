@@ -7,7 +7,7 @@ import {
   Inject,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Not, In } from 'typeorm';
+import { Repository, Not, In, Raw } from 'typeorm';
 import { Language } from '../languages/entities/language.entity';
 import { BookTranslation } from '../books/entities/book-translation.entity';
 import { CreateLanguageDto } from '../dto/create-language.dto';
@@ -269,9 +269,12 @@ export class LanguageService {
       if (cached) return cached;
     }
 
+    // QA catalog: 3-letter code entries (tur, eng…) — exclude legacy 2-letter book rows (tr, en…)
     const [totalLanguages, activeLanguages, inProgressLanguages] =
       await Promise.all([
-        this.languageRepository.count(),
+        this.languageRepository.count({
+          where: { code: Raw((alias) => `CHAR_LENGTH(${alias}) = 3`) },
+        }),
         this.languageRepository.count({ where: { status: 'active' } }),
         this.languageRepository.count({ where: { status: 'in_progress' } }),
       ]);
