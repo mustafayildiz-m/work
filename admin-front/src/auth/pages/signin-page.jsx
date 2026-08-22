@@ -60,7 +60,7 @@ export function SignInPage() {
         setError(intl.formatMessage({ id: 'AUTH.EMAIL_PASSWORD_REQUIRED' }));
         return;
       }
-      await login(values.email, values.password);
+      await login(values.email, values.password, values.rememberMe);
       const nextPath = searchParams.get('next') || '/';
       setTimeout(() => {
         navigate(nextPath, { replace: true });
