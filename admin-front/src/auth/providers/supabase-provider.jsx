@@ -9,6 +9,15 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [auth, setAuth] = useState(() => {
     const token = localStorage.getItem('access_token');
+    const rememberMe = localStorage.getItem('remember_me');
+    // rememberMe === 'false' means the token should not survive a full browser
+    // restart; session_active only lives in sessionStorage, so its absence
+    // here means the browser was closed and reopened since the last login.
+    if (token && rememberMe === 'false' && !sessionStorage.getItem('session_active')) {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('remember_me');
+      return null;
+    }
     return token ? { access_token: token } : null;
   });
   const [currentUser, setCurrentUser] = useState();
@@ -34,22 +43,30 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const saveAuth = (auth) => {
+  const saveAuth = (auth, rememberMe = true) => {
     setAuth(auth);
     if (auth?.access_token) {
       localStorage.setItem('access_token', auth.access_token);
+      localStorage.setItem('remember_me', rememberMe ? 'true' : 'false');
+      if (rememberMe) {
+        sessionStorage.removeItem('session_active');
+      } else {
+        sessionStorage.setItem('session_active', 'true');
+      }
     } else {
       localStorage.removeItem('access_token');
+      localStorage.removeItem('remember_me');
+      sessionStorage.removeItem('session_active');
     }
   };
 
-  const login = async (email, password) => {
+  const login = async (email, password, rememberMe = true) => {
     try {
       const auth = await SupabaseAdapter.login(email, password);
       if (auth.user?.role === 'user') {
         throw new Error('Yetkisiz giriş: Bu alana sadece yöneticiler erişebilir.');
       }
-      saveAuth(auth);
+      saveAuth(auth, rememberMe);
       const user = await getUser();
       if (user?.role === 'user') {
         saveAuth(undefined);
