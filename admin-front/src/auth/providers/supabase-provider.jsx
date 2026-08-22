@@ -62,7 +62,7 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password, rememberMe = true) => {
     try {
-      const auth = await SupabaseAdapter.login(email, password);
+      const auth = await SupabaseAdapter.login(email, password, rememberMe);
       if (auth.user?.role === 'user') {
         throw new Error('Yetkisiz giriş: Bu alana sadece yöneticiler erişebilir.');
       }

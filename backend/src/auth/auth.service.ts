@@ -84,7 +84,7 @@ export class AuthService {
     return result;
   }
 
-  async login(user: any) {
+  async login(user: any, rememberMe = false) {
     const payload = {
       email: user.email,
       username: user.username,
@@ -92,7 +92,9 @@ export class AuthService {
       role: user.role,
     };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload, {
+        expiresIn: rememberMe ? '30d' : '1d',
+      }),
       user: {
         id: user.id,
         email: user.email,
