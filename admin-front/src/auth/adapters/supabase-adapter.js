@@ -37,12 +37,12 @@ export const SupabaseAdapter = {
   /**
    * Login with email and password
    */
-  async login(email, password) {
+  async login(email, password, rememberMe = false) {
     try {
       const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password, rememberMe })
       });
       
       // Response'un içeriğini kontrol et

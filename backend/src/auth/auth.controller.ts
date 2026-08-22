@@ -17,6 +17,7 @@ import { AuthService } from './auth.service';
 export class LoginDto {
   email: string;
   password: string;
+  rememberMe?: boolean;
 }
 
 export class RegisterDto {
@@ -42,7 +43,7 @@ export class AuthController {
       loginDto.email,
       loginDto.password,
     );
-    return this.authService.login(user);
+    return this.authService.login(user, loginDto.rememberMe);
   }
 
   @Post('register')
