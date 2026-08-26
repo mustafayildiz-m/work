@@ -43,9 +43,17 @@ export class KitapAramaService implements OnModuleInit {
     private readonly documentsService: DocumentsService,
   ) {}
 
+  /** Arapça-Hint (٠-٩) ve Farsça (۰-۹) rakamlarını Latin rakama çevirir.
+   *  Dosya adlarında "الفقه ... ١" yazarken başlıkta "... 1" geçiyor. */
+  private static rakamlariCevir(s: string): string {
+    return s
+      .replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660))
+      .replace(/[\u06F0-\u06F9]/g, (d) => String(d.charCodeAt(0) - 0x06f0));
+  }
+
   /** Aksan, apostrof, noktalama ve büyük/küçük harf farklarını siler. */
   static normalize(s: string): string {
-    return s
+    return KitapAramaService.rakamlariCevir(s)
       .normalize('NFKD')
       .replace(/[̀-ͯ]/g, '')      // aksan
       .toLowerCase()

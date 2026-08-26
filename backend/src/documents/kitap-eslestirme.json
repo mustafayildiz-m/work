@@ -1,5 +1,5 @@
 {
- "aciklama": "Karsi tarafin Drive'daki PDF dosya adlari -> bizim kitap ID eslestirmesi. Kaynak: 2026-08-26 tarihli Drive dokumu (419 pdf / 72 dil klasoru).",
+ "aciklama": "Karsi tarafin Drive'daki PDF dosya adlari -> bizim kitap ID eslestirmesi. Kaynak: 2026-08-26 tarihli Drive dokumu (419 pdf / 72 dil klasoru). guven='elle' olan kayitlar insan onaylidir; tablo yeniden uretilse de korunmalidir.",
  "uretim": "2026-08-26",
  "kayitSayisi": 359,
  "kayitlar": [
@@ -108,35 +108,20 @@
   {
    "dosya": "AR- الفقه على المذاهب الأربعة ١.pdf",
    "dil": "ar",
-   "kitapId": null,
-   "guven": "belirsiz",
-   "adaylar": [
-    327,
-    328,
-    329
-   ]
+   "kitapId": 327,
+   "guven": "elle"
   },
   {
    "dosya": "AR- الفقه على المذاهب الأربعة ٢.pdf",
    "dil": "ar",
-   "kitapId": null,
-   "guven": "belirsiz",
-   "adaylar": [
-    327,
-    328,
-    329
-   ]
+   "kitapId": 328,
+   "guven": "elle"
   },
   {
    "dosya": "AR- الفقه على المذاهب الأربعة ٣.pdf",
    "dil": "ar",
-   "kitapId": null,
-   "guven": "belirsiz",
-   "adaylar": [
-    327,
-    328,
-    329
-   ]
+   "kitapId": 329,
+   "guven": "elle"
   },
   {
    "dosya": "AR- القول الفصل شرح الفقه الأكبر للامام الاعظم.pdf",
@@ -495,12 +480,8 @@
   {
    "dosya": "মুসলিমদের প্রতি হিতোপদেশ-BN.pdf",
    "dil": "bn",
-   "kitapId": null,
-   "guven": "belirsiz",
-   "adaylar": [
-    273,
-    451
-   ]
+   "kitapId": 451,
+   "guven": "elle"
   },
   {
    "dosya": "সুন্নিপথ-BN.pdf",
@@ -811,22 +792,14 @@
   {
    "dosya": "The Proof of Prophethood-EN.pdf",
    "dil": "en",
-   "kitapId": null,
-   "guven": "belirsiz",
-   "adaylar": [
-    197,
-    471
-   ]
+   "kitapId": 471,
+   "guven": "elle"
   },
   {
    "dosya": "The Rising and the Hereafter-EN.pdf",
    "dil": "en",
-   "kitapId": null,
-   "guven": "belirsiz",
-   "adaylar": [
-    207,
-    467
-   ]
+   "kitapId": 467,
+   "guven": "elle"
   },
   {
    "dosya": "The Sunni Path-EN.pdf",
@@ -861,13 +834,8 @@
   {
    "dosya": "islam and the woman-EN.pdf",
    "dil": "en",
-   "kitapId": null,
-   "guven": "belirsiz",
-   "adaylar": [
-    200,
-    204,
-    215
-   ]
+   "kitapId": 215,
+   "guven": "elle"
   },
   {
    "dosya": "jealousy-EN.pdf",
@@ -1010,22 +978,14 @@
   {
    "dosya": "FA- مكتوبات امام رباني (١-دفتر اول).pdf",
    "dil": "fa",
-   "kitapId": null,
-   "guven": "belirsiz",
-   "adaylar": [
-    275,
-    276
-   ]
+   "kitapId": 275,
+   "guven": "elle"
   },
   {
    "dosya": "FA- مكتوبات امام رباني (٢-دفتر دوم و سوم).pdf",
    "dil": "fa",
-   "kitapId": null,
-   "guven": "belirsiz",
-   "adaylar": [
-    275,
-    276
-   ]
+   "kitapId": 276,
+   "guven": "elle"
   },
   {
    "dosya": "FA- مناهج العباد إلى المعاد.pdf",
@@ -1066,12 +1026,8 @@
   {
    "dosya": "FA-مكتوبات إمام رباني.pdf",
    "dil": "fa",
-   "kitapId": null,
-   "guven": "belirsiz",
-   "adaylar": [
-    275,
-    276
-   ]
+   "kitapId": 275,
+   "guven": "elle"
   },
   {
    "dosya": "FA-پيامبر عزيزم صلى اللّٰه عليه و سلم.pdf",
@@ -1160,12 +1116,8 @@
   {
    "dosya": "RÉFUTATION EXCELLENTE (Ar-radd al Jamil)-FR.pdf",
    "dil": "fr",
-   "kitapId": null,
-   "guven": "belirsiz",
-   "adaylar": [
-    222,
-    421
-   ]
+   "kitapId": 421,
+   "guven": "elle"
   },
   {
    "dosya": "IMANI DA MUSLUNCI-HA.pdf",
@@ -1392,12 +1344,8 @@
   {
    "dosya": "Жанұя-KK.pdf",
    "dil": "kk",
-   "kitapId": null,
-   "guven": "belirsiz",
-   "adaylar": [
-    164,
-    476
-   ]
+   "kitapId": 476,
+   "guven": "elle"
   },
   {
    "dosya": "ЖӘННАТ ЖОЛЫ ІЛІМХАЛЫ-KK.pdf",
@@ -1510,22 +1458,14 @@
   {
    "dosya": "Хазрети Мухаммед алейхиссаламдын өмүрү-KY.pdf",
    "dil": "ky",
-   "kitapId": null,
-   "guven": "belirsiz",
-   "adaylar": [
-    152,
-    561
-   ]
+   "kitapId": 561,
+   "guven": "elle"
   },
   {
    "dosya": "менин кымбаттуу пайгамбар Хазрети Мухаммед алейхиссаламдын өмүрү-KY.pdf",
    "dil": "ky",
-   "kitapId": null,
-   "guven": "belirsiz",
-   "adaylar": [
-    152,
-    561
-   ]
+   "kitapId": 561,
+   "guven": "elle"
   },
   {
    "dosya": "Үй-бүлө-KY.pdf",
