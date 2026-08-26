@@ -1,7 +1,7 @@
 import { FormattedMessage, useIntl } from "react-intl";
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { getLocalizedLanguageName } from '@/utils/languageUtils';
+import { getLocalizedLanguageName, dedupeLanguages } from '@/utils/languageUtils';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
 import Select from 'react-select';
@@ -115,7 +115,8 @@ function EditBook() {
         });
         if (!response.ok) throw new Error('Diller yüklenirken bir hata oluştu');
         const data = await response.json();
-        setAvailableLanguages(data);
+        // Mükerrer dil kayıtları (ör. Endonezyaca/Indonesian) tek satıra indirgenir
+        setAvailableLanguages(dedupeLanguages(data));
       } catch (error) {
         toast.error('Diller yüklenirken bir hata oluştu');
       } finally {

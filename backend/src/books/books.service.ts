@@ -14,6 +14,7 @@ import { PdfOcrService } from '../services/pdf-ocr.service';
 import { BookPage } from './entities/book-page.entity';
 import { BookPageTranslation } from './entities/book-page-translation.entity';
 import { Language } from '../languages/entities/language.entity';
+import { CountryLanguage } from '../countries/entities/country-language.entity';
 import { UserPostsService } from '../services/user-posts.service';
 
 @Injectable()
@@ -35,6 +36,8 @@ export class BooksService {
     private bookPageTranslationRepository: Repository<BookPageTranslation>,
     @InjectRepository(Language)
     private languageRepository: Repository<Language>,
+    @InjectRepository(CountryLanguage)
+    private countryLanguageRepository: Repository<CountryLanguage>,
     private uploadService: UploadService,
     private translationService: TranslationService,
     private pdfOcrService: PdfOcrService,
@@ -102,13 +105,55 @@ export class BooksService {
     return this.findOne(savedBook.id);
   }
 
+  /**
+   * Bir ülkeye bağlı dillerin ID listesini döndürür (country_languages).
+   * Ülkenin hiç dili yoksa boş dizi döner.
+   */
+  private async getLanguageIdsByCountry(countryId: number): Promise<number[]> {
+    const rows = await this.countryLanguageRepository.find({
+      where: { countryId },
+      order: { isPrimary: 'DESC', displayOrder: 'ASC' },
+    });
+    return rows.map((row) => row.languageId);
+  }
+
   async findAll(
     languageId?: string,
     search?: string,
     category?: string,
     page: number = 1,
     limit: number = 12,
+    countryId?: string,
   ): Promise<any> {
+    const emptyResult = {
+      data: [],
+      pagination: {
+        currentPage: page,
+        limit: limit,
+        totalCount: 0,
+        totalPages: 0,
+        hasNextPage: false,
+        hasPreviousPage: false,
+      },
+    };
+
+    // Ülke filtresi: ülkenin dillerini çözüp dil ID listesine çevir.
+    // Dil filtresi de verilmişse, dil ülkenin dilleri arasında olmalı.
+    let countryLanguageIds: number[] | null = null;
+    if (countryId) {
+      const parsedCountryId = parseInt(countryId, 10);
+      if (Number.isNaN(parsedCountryId)) {
+        return emptyResult;
+      }
+      countryLanguageIds = await this.getLanguageIdsByCountry(parsedCountryId);
+      if (countryLanguageIds.length === 0) {
+        return emptyResult;
+      }
+      if (languageId && !countryLanguageIds.includes(parseInt(languageId, 10))) {
+        return emptyResult;
+      }
+    }
+
     // Subquery ile önce filtrelenmiş kitap ID'lerini bul
     let subQuery = this.bookRepository
       .createQueryBuilder('book')
@@ -120,6 +165,10 @@ export class BooksService {
     if (languageId) {
       subQuery = subQuery.andWhere('language.id = :languageId', {
         languageId: parseInt(languageId),
+      });
+    } else if (countryLanguageIds) {
+      subQuery = subQuery.andWhere('language.id IN (:...countryLanguageIds)', {
+        countryLanguageIds,
       });
     }
 

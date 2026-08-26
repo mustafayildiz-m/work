@@ -3,11 +3,24 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { toast } from 'sonner';
-import { getLocalizedLanguageName } from '@/utils/languageUtils';
+import {
+  getLocalizedLanguageName,
+  getLocalizedCountryName,
+  dedupeLanguages,
+} from '@/utils/languageUtils';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 const API_URL = API_BASE_URL + '/books';
 const LANGUAGES_API_URL = API_BASE_URL + '/languages';
+const COUNTRIES_API_URL = API_BASE_URL + '/countries';
+
+// Bayrak/görsel yolunu tam URL'ye çevirir (ulkeler/liste sayfasıyla aynı davranış)
+const getMediaUrl = (filePath) => {
+  if (!filePath) return '';
+  if (filePath.startsWith('http://') || filePath.startsWith('https://')) return filePath;
+  const baseUrl = API_BASE_URL.replace(/\/$/, '');
+  return `${baseUrl}${filePath.startsWith('/') ? filePath : `/${filePath}`}`;
+};
 
 const getBookImage = (book) => {
   if (book.coverImage) {
@@ -194,15 +207,19 @@ const BookListCards = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialLanguageId = searchParams.get('languageId') || '';
-  const initialLanguageName = searchParams.get('languageName') || '';
+  const initialCountryId = searchParams.get('countryId') || '';
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLanguageId, setSelectedLanguageId] = useState(initialLanguageId);
-  const [selectedLanguageName, setSelectedLanguageName] = useState(initialLanguageName);
+  const [selectedCountryId, setSelectedCountryId] = useState(initialCountryId);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [languages, setLanguages] = useState([]);
+  const [countries, setCountries] = useState([]);
+  // Seçili ülkenin dilleri (country_languages): ana dil önce, sonra displayOrder
+  const [countryLanguages, setCountryLanguages] = useState([]);
+  const [countryLanguagesLoading, setCountryLanguagesLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20);
@@ -225,12 +242,39 @@ const BookListCards = () => {
     }, searchQuery ? 500 : 0); // Arama varsa 500ms bekle
 
     return () => clearTimeout(timeoutId);
-  }, [currentPage, itemsPerPage, selectedCategory, searchQuery, selectedLanguageId]);
+  }, [currentPage, itemsPerPage, selectedCategory, searchQuery, selectedLanguageId, selectedCountryId]);
 
   useEffect(() => {
     fetchCategories();
     fetchLanguages();
+    fetchCountries();
   }, []);
+
+  // Ülke değiştiğinde o ülkenin dillerini çek; ülke yoksa listeyi boşalt.
+  // Seçili dil yeni ülkenin dilleri arasında değilse dil filtresi düşer.
+  useEffect(() => {
+    if (!selectedCountryId) {
+      setCountryLanguages([]);
+      return;
+    }
+
+    let cancelled = false;
+    (async () => {
+      const list = await fetchCountryLanguages(selectedCountryId);
+      if (cancelled || !selectedLanguageId) return;
+      const stillValid = list.some(
+        (lang) => String(lang.id) === String(selectedLanguageId),
+      );
+      if (!stillValid) {
+        setSelectedLanguageId('');
+        setSearchParams({ countryId: String(selectedCountryId) });
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedCountryId]);
 
   // viewMode değiştiğinde localStorage'a kaydet
   useEffect(() => {
@@ -276,6 +320,49 @@ const BookListCards = () => {
     }
   };
 
+  const fetchCountries = async () => {
+    try {
+      const token = localStorage.getItem('access_token');
+      const response = await fetch(COUNTRIES_API_URL, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const list = Array.isArray(data) ? data : (data?.data || []);
+        setCountries(list.filter((country) => country?.isActive !== false));
+      }
+    } catch (err) {
+      // Error handled silently
+    }
+  };
+
+  const fetchCountryLanguages = async (countryId) => {
+    setCountryLanguagesLoading(true);
+    try {
+      const token = localStorage.getItem('access_token');
+      const response = await fetch(`${COUNTRIES_API_URL}/${countryId}/languages`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const list = Array.isArray(data) ? data : [];
+        setCountryLanguages(list);
+        return list;
+      }
+      setCountryLanguages([]);
+      return [];
+    } catch (err) {
+      setCountryLanguages([]);
+      return [];
+    } finally {
+      setCountryLanguagesLoading(false);
+    }
+  };
+
   const fetchBooks = async () => {
     setLoading(true);
     setError(null);
@@ -300,6 +387,10 @@ const BookListCards = () => {
       if (selectedLanguageId) {
         params.append('languageId', selectedLanguageId);
       }
+      // Ülke seçiliyse backend country_languages üzerinden ülkenin tüm dillerini kapsar
+      if (selectedCountryId) {
+        params.append('countryId', selectedCountryId);
+      }
 
       const response = await fetch(`${API_URL}?${params.toString()}`, {
         headers: {
@@ -311,34 +402,6 @@ const BookListCards = () => {
 
       const result = await response.json();
       let booksData = Array.isArray(result) ? result : (result?.data || []);
-
-      // Dil filtresi ile sonuç boş dönerse backend languageId desteklemiyor olabilir.
-      // Bu durumda fallback olarak daha geniş liste çekip client-side filtre uygula.
-      if (selectedLanguageId && booksData.length === 0) {
-        const fallbackParams = new URLSearchParams({
-          page: '1',
-          limit: '500',
-        });
-        if (selectedCategory) {
-          fallbackParams.append('category', selectedCategory);
-        }
-
-        const fallbackRes = await fetch(`${API_URL}?${fallbackParams.toString()}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (fallbackRes.ok) {
-          const fallbackResult = await fallbackRes.json();
-          const fallbackBooks = Array.isArray(fallbackResult) ? fallbackResult : (fallbackResult?.data || []);
-          booksData = fallbackBooks.filter((book) =>
-            (book.translations || []).some((trans) =>
-              String(trans?.language?.id || trans?.languageId) === String(selectedLanguageId)
-            )
-          );
-        }
-      }
 
       // Pagination bilgisini kaydet
       if (result?.pagination) {
@@ -362,12 +425,8 @@ const BookListCards = () => {
         summary: book.translations?.[0]?.summary || '',
       }));
 
-      // Dil filtresi aktifken fallback sonrasında sayfalamayı frontend'de uygula
-      const pagedBooks = selectedLanguageId
-        ? transformedBooks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-        : transformedBooks;
-
-      setBooks(pagedBooks);
+      // Filtreleme ve sayfalama tamamen backend'de yapılıyor
+      setBooks(transformedBooks);
     } catch (err) {
       setError(err.message);
       toast.error(intl.formatMessage({ id: 'UI.KITAPLAR_YUKLENIRKEN_HATA_OLUSTU' }));
@@ -424,30 +483,64 @@ const BookListCards = () => {
     setCurrentPage(1); // İlk sayfaya dön
   };
 
-  const clearLanguageFilter = () => {
+  // Dil dropdown'ının kaynağı: ülke seçiliyse o ülkenin dilleri (ana dil önce),
+  // değilse tüm diller (panel diline göre alfabetik).
+  const availableLanguages = selectedCountryId
+    ? dedupeLanguages(countryLanguages)
+    : dedupeLanguages(languages).sort((a, b) =>
+        getLocalizedLanguageName(a, intl).localeCompare(
+          getLocalizedLanguageName(b, intl),
+          intl.locale,
+        ),
+      );
+
+  // Ad her zaman ID'den çözülür; URL'den gelen serbest metne güvenilmez.
+  const selectedLanguage =
+    availableLanguages.find((lang) => String(lang.id) === String(selectedLanguageId)) ||
+    languages.find((lang) => String(lang.id) === String(selectedLanguageId)) ||
+    null;
+  const selectedLanguageName = selectedLanguage
+    ? getLocalizedLanguageName(selectedLanguage, intl)
+    : '';
+
+  // Ülkeler panel diline göre adlandırılır ve o dilin alfabesine göre sıralanır
+  const localizedCountries = countries
+    .map((country) => ({ ...country, displayName: getLocalizedCountryName(country, intl) }))
+    .sort((a, b) => a.displayName.localeCompare(b.displayName, intl.locale));
+
+  const selectedCountry =
+    countries.find((country) => String(country.id) === String(selectedCountryId)) || null;
+  const selectedCountryName = selectedCountry
+    ? getLocalizedCountryName(selectedCountry, intl)
+    : '';
+
+  const syncFilterParams = (countryId, languageId) => {
+    const params = {};
+    if (countryId) params.countryId = String(countryId);
+    if (languageId) params.languageId = String(languageId);
+    setSearchParams(params);
+  };
+
+  const clearFilters = () => {
     setSelectedLanguageId('');
-    setSelectedLanguageName('');
+    setSelectedCountryId('');
     setCurrentPage(1);
     setSearchParams({});
   };
 
+  const handleCountryChange = (value) => {
+    const countryId = value || '';
+    setSelectedCountryId(countryId);
+    setCurrentPage(1);
+    // Dil geçerliliği ülke dilleri yüklendikten sonra effect içinde doğrulanır
+    syncFilterParams(countryId, selectedLanguageId);
+  };
+
   const handleLanguageChange = (value) => {
     const selectedId = value || '';
-    const selectedLanguage = languages.find((lang) => String(lang.id) === String(selectedId));
-    const selectedName = selectedLanguage?.name || '';
-
     setSelectedLanguageId(selectedId);
-    setSelectedLanguageName(selectedName);
     setCurrentPage(1);
-
-    if (selectedId) {
-      setSearchParams({
-        languageId: String(selectedId),
-        languageName: selectedName,
-      });
-    } else {
-      setSearchParams({});
-    }
+    syncFilterParams(selectedCountryId, selectedId);
   };
 
   return (
@@ -502,15 +595,35 @@ const BookListCards = () => {
 
         {/* Search and Filter */}
         <div className="mb-6 space-y-4">
-          {selectedLanguageId && selectedLanguageName && (
+          {(selectedCountryId || selectedLanguageId) && (
             <div className="flex items-center justify-between gap-3 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm text-blue-900 dark:border-blue-800 dark:bg-blue-900/20 dark:text-blue-100">
-              <span>
-                <FormattedMessage id="UI.DIL_FILTRESI_AKTIF" /> <strong>{selectedLanguageName}</strong>
+              <span className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                {selectedCountryId && selectedCountryName && (
+                  <span className="flex items-center gap-1.5">
+                    {selectedCountry?.flagUrl && (
+                      <img
+                        src={getMediaUrl(selectedCountry.flagUrl)}
+                        alt={selectedCountryName}
+                        className="h-4 w-6 rounded-sm object-cover"
+                        loading="lazy"
+                      />
+                    )}
+                    <FormattedMessage id="UI.ULKE_FILTRESI_AKTIF" /> <strong>{selectedCountryName}</strong>
+                  </span>
+                )}
+                <span>
+                  <FormattedMessage id="UI.DIL_FILTRESI_AKTIF" />{' '}
+                  <strong>
+                    {selectedLanguageId && selectedLanguageName
+                      ? selectedLanguageName
+                      : intl.formatMessage({ id: 'UI.ULKENIN_TUM_DILLERI' })}
+                  </strong>
+                </span>
               </span>
               <button
                 type="button"
-                onClick={clearLanguageFilter}
-                className="rounded bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-700"
+                onClick={clearFilters}
+                className="shrink-0 rounded bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-700"
               >
                 <FormattedMessage id="UI.FILTREYI_TEMIZLE" />
               </button>
@@ -532,23 +645,59 @@ const BookListCards = () => {
             )}
           </div>
 
-          {/* Language Filter */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-            <label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-white">
-              <FormattedMessage id="UI.DILE_GORE_FILTRELE" />
-            </label>
-            <select
-              value={selectedLanguageId}
-              onChange={(e) => handleLanguageChange(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-            >
-              <option value="">{intl.formatMessage({ id: 'UI.TUM_DILLER' })}</option>
-              {languages.map((language) => (
-                <option key={language.id} value={language.id}>
-                  {getLocalizedLanguageName(language, intl)}
+          {/* Country + Language Filter */}
+          <div className="grid gap-4 bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:grid-cols-2">
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-white">
+                <FormattedMessage id="UI.ULKEYE_GORE_FILTRELE" />
+              </label>
+              <select
+                value={selectedCountryId}
+                onChange={(e) => handleCountryChange(e.target.value)}
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+              >
+                <option value="">{intl.formatMessage({ id: 'UI.TUM_ULKELER' })}</option>
+                {localizedCountries.map((country) => (
+                  <option key={country.id} value={country.id}>
+                    {country.displayName}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-white">
+                <FormattedMessage id="UI.DILE_GORE_FILTRELE" />
+              </label>
+              <select
+                value={selectedLanguageId}
+                onChange={(e) => handleLanguageChange(e.target.value)}
+                disabled={Boolean(selectedCountryId) && countryLanguagesLoading}
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-60 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+              >
+                <option value="">
+                  {selectedCountryId
+                    ? intl.formatMessage({ id: 'UI.ULKENIN_TUM_DILLERI' })
+                    : intl.formatMessage({ id: 'UI.TUM_DILLER' })}
                 </option>
-              ))}
-            </select>
+                {availableLanguages.map((language) => (
+                  <option key={language.id} value={language.id}>
+                    {getLocalizedLanguageName(language, intl)}
+                    {language.isPrimary ? ` (${intl.formatMessage({ id: 'UI.ANA_DIL' })})` : ''}
+                  </option>
+                ))}
+              </select>
+              {selectedCountryId && countryLanguagesLoading && (
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  <FormattedMessage id="UI.ULKE_DILLERI_YUKLENIYOR" />
+                </p>
+              )}
+              {selectedCountryId && !countryLanguagesLoading && availableLanguages.length === 0 && (
+                <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
+                  <FormattedMessage id="UI.ULKENIN_DILI_YOK" />
+                </p>
+              )}
+            </div>
           </div>
 
           {/* Category Filter - Collapsible */}
@@ -654,7 +803,7 @@ const BookListCards = () => {
         {!loading && !error && filteredBooks.length === 0 && (
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-8 text-center">
             <p className="text-blue-800 dark:text-blue-200 text-lg">
-              {selectedLanguageId
+              {selectedLanguageId || selectedCountryId
                 ? intl.formatMessage({ id: 'UI.SECILEN_DIL_ICIN_KITAP_BULUNAMADI' })
                 : (searchQuery || selectedCategory ? intl.formatMessage({ id: 'UI.ARAMA_SONUCU_BULUNAMADI' }) : intl.formatMessage({ id: 'UI.HENUZ_KITAP_EKLENMEMIS' }))}
             </p>

@@ -497,7 +497,7 @@ const LanguageList = () => {
             <div className="flex items-center gap-2 flex-wrap">
               <button
                 type="button"
-                onClick={() => navigate(`/kitaplar/liste?languageId=${language.id}&languageName=${encodeURIComponent(language.name)}`)}
+                onClick={() => navigate(`/kitaplar/liste?languageId=${language.id}`)}
                 className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 transition hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50"
                 title={intl.formatMessage({ id: 'UI.KITAPLARI_GORUNTULE' })}
               >

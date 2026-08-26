@@ -76,6 +76,51 @@ export class CountryService {
     }
   }
 
+  /**
+   * Bir ülkenin dillerini döndürür: önce ana dil, sonra displayOrder sırasıyla.
+   * Kitap/QA filtrelerinde ülke → dil çözümlemesi için kullanılır.
+   */
+  async findLanguages(countryId: number): Promise<
+    {
+      id: number;
+      name: string;
+      code: string;
+      iso639_3: string | null;
+      nativeName: string | null;
+      englishName: string | null;
+      flagUrl: string | null;
+      isPrimary: boolean;
+      displayOrder: number;
+    }[]
+  > {
+    const country = await this.countryRepository.findOne({
+      where: { id: countryId },
+    });
+    if (!country) {
+      throw new NotFoundException(`Country with id ${countryId} not found`);
+    }
+
+    const rows = await this.countryLanguageRepository.find({
+      where: { countryId },
+      relations: ['language'],
+      order: { isPrimary: 'DESC', displayOrder: 'ASC' },
+    });
+
+    return rows
+      .filter((row) => row.language)
+      .map((row) => ({
+        id: row.language.id,
+        name: row.language.name,
+        code: row.language.code,
+        iso639_3: row.language.iso639_3,
+        nativeName: row.language.nativeName,
+        englishName: row.language.englishName,
+        flagUrl: row.language.flagUrl,
+        isPrimary: row.isPrimary,
+        displayOrder: row.displayOrder,
+      }));
+  }
+
   async findAll(): Promise<Country[]> {
     return this.countryRepository.find({
       where: { isActive: true },

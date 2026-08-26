@@ -70,6 +70,7 @@ export class BooksController {
     @Query('category') category?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
+    @Query('countryId') countryId?: string,
   ) {
     const pageNumber = page ? parseInt(page, 10) : 1;
     const limitNumber = limit ? parseInt(limit, 10) : 12;
@@ -79,6 +80,7 @@ export class BooksController {
       category,
       pageNumber,
       limitNumber,
+      countryId,
     );
   }
 

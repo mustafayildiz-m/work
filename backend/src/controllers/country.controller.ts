@@ -66,6 +66,11 @@ export class CountryController {
     return this.countryService.findOne(id);
   }
 
+  @Get(':id/languages')
+  findLanguages(@Param('id', ParseIntPipe) id: number) {
+    return this.countryService.findLanguages(id);
+  }
+
   @Post()
   @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(FileInterceptor('flag', flagUploadOptions))
