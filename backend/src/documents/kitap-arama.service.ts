@@ -10,7 +10,7 @@ type Kayit = {
   dosya: string;
   dil: string;
   kitapId: number | null;
-  guven: 'kesin' | 'yuksek' | 'belirsiz';
+  guven: 'kesin' | 'yuksek' | 'belirsiz' | 'elle';
   adaylar?: number[];
 };
 
