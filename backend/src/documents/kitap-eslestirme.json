@@ -1,0 +1,2431 @@
+{
+ "aciklama": "Karsi tarafin Drive'daki PDF dosya adlari -> bizim kitap ID eslestirmesi. Kaynak: 2026-08-26 tarihli Drive dokumu (419 pdf / 72 dil klasoru).",
+ "uretim": "2026-08-26",
+ "kayitSayisi": 359,
+ "kayitlar": [
+  {
+   "dosya": " AR- الايمان والإسلام.pdf",
+   "dil": "ar",
+   "kitapId": 445,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- إعْتِرَافَاتُ الْجَاسُوسِ الإِنْكْلِيزِي وَعَدَاوَتُهُمْ لِلْإِسْلاَمِ.pdf",
+   "dil": "ar",
+   "kitapId": 351,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- الادلّة القواطع على الزام العربيّة فى التّوابع ويليه فتاوى علماء الهند على منع الخطبة بغير العربية.pdf",
+   "dil": "ar",
+   "kitapId": 330,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- الاستاد المودودي ويليه كَشْفُ الشُّبُةِ عَنِ الْجَمَاعَةِ التَّبِيَةِ.pdf",
+   "dil": "ar",
+   "kitapId": 325,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- الأنوار المحمدية من المواهب اللدنية.pdf",
+   "dil": "ar",
+   "kitapId": 336,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- البريقة شرح الطريقة  ١.pdf",
+   "dil": "ar",
+   "kitapId": 331,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- البريقة شرح الطريقة  ٢  ويليه منهل الواردين.pdf",
+   "dil": "ar",
+   "kitapId": 332,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- البصائر لمنكري التوسل باهل المقابر.pdf",
+   "dil": "ar",
+   "kitapId": 314,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- التوسل بالنبي وبالصالحين.pdf",
+   "dil": "ar",
+   "kitapId": 320,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- الحبل المتين في إتباع السلف الصالحين.pdf",
+   "dil": "ar",
+   "kitapId": 318,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- الحديقة الندية شرح الطريقة المحمدية.pdf",
+   "dil": "ar",
+   "kitapId": 304,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- الحقائق الإسلامية في الرد على المزاعم الوهابية.pdf",
+   "dil": "ar",
+   "kitapId": 344,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- الدرر السنية في الردّ على الوهابية.pdf",
+   "dil": "ar",
+   "kitapId": 321,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- الدولة العثمانية من كتاب الفتوحات الإسلامية.pdf",
+   "dil": "ar",
+   "kitapId": 341,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- السعادة الأبدية فيما جاء به النقشبندية.pdf",
+   "dil": "ar",
+   "kitapId": 333,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- الصواعق المحرقة في الردّ على أهل البدع والزندقة و تَطْهِيرِ الجِنَانِ وَاللِّسَانِ عَنِ الخُطورٍ وَالتَّفَوُهِ بِثَلْبِ سَيّدِنَا مُعَاوِيَةَ بْنِ أَبِي سُفْيَانْ .pdf",
+   "dil": "ar",
+   "kitapId": 343,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- الفجر الصادق في الرد على منكري التوسل....pdf",
+   "dil": "ar",
+   "kitapId": 317,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- الفقه على المذاهب الأربعة ١.pdf",
+   "dil": "ar",
+   "kitapId": null,
+   "guven": "belirsiz",
+   "adaylar": [
+    327,
+    328,
+    329
+   ]
+  },
+  {
+   "dosya": "AR- الفقه على المذاهب الأربعة ٢.pdf",
+   "dil": "ar",
+   "kitapId": null,
+   "guven": "belirsiz",
+   "adaylar": [
+    327,
+    328,
+    329
+   ]
+  },
+  {
+   "dosya": "AR- الفقه على المذاهب الأربعة ٣.pdf",
+   "dil": "ar",
+   "kitapId": null,
+   "guven": "belirsiz",
+   "adaylar": [
+    327,
+    328,
+    329
+   ]
+  },
+  {
+   "dosya": "AR- القول الفصل شرح الفقه الأكبر للامام الاعظم.pdf",
+   "dil": "ar",
+   "kitapId": 349,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- المستند المعتمد بناء نجاة الأبد.pdf",
+   "dil": "ar",
+   "kitapId": 324,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- المنتخبات من المكتوبات للإمام الرّباني.pdf",
+   "dil": "ar",
+   "kitapId": 309,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- المنحة الوهبية في ردّ الوهابية.pdf",
+   "dil": "ar",
+   "kitapId": 313,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- الناهية عن طعن امير المؤمنين معاوية.pdf",
+   "dil": "ar",
+   "kitapId": 311,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- النعمة الكبرى على العالم في مولد سيد ولد آدم.pdf",
+   "dil": "ar",
+   "kitapId": 339,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- إثبات النبوة ويليه الدولة المكية بالمادة الغيبية.pdf",
+   "dil": "ar",
+   "kitapId": 338,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- تسهيل المنافع في الطب و الحكمة وبهامشه الطب النبوي.pdf",
+   "dil": "ar",
+   "kitapId": 340,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- تطهير الفؤاد ويليه شفاء السقام.pdf",
+   "dil": "ar",
+   "kitapId": 316,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- جَالِيَةُ الْأَكْدَارِ وَالسَّيْفُ البَتَّارُ فِي الصَّلَاَةِ عَلَى الْمُخْتَارِ.pdf",
+   "dil": "ar",
+   "kitapId": 350,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- حجة الله على العالمين في معجزات سيد المرسلين.pdf",
+   "dil": "ar",
+   "kitapId": 337,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- خلاصة التحقيق في بيان حكم التقليد والتلفيق.pdf",
+   "dil": "ar",
+   "kitapId": 312,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- خلاصة الكلام في أمراء البلد الحرام لزيني دحلان.pdf",
+   "dil": "ar",
+   "kitapId": 319,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- سبيل النجاة عن بدعة أهل الزيغ والضلالة.pdf",
+   "dil": "ar",
+   "kitapId": 322,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- طريق النجاة ويليه المنتخبات من المكتوبات المعصومية.pdf",
+   "dil": "ar",
+   "kitapId": 309,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- علماء المسلمين وجهلة الوهابيين.pdf",
+   "dil": "ar",
+   "kitapId": 305,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- فتنة الوهابية والصواعق الالهية.pdf",
+   "dil": "ar",
+   "kitapId": 315,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- كتاب الأَيْمَان.pdf",
+   "dil": "ar",
+   "kitapId": 326,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- كتاب الإنصاف ويليه عقد الجيد.pdf",
+   "dil": "ar",
+   "kitapId": 323,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- مختصر (التحفة الاثنى عشرية).pdf",
+   "dil": "ar",
+   "kitapId": 310,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- مفاتيح الجنان شرح شرعة الإسلام.pdf",
+   "dil": "ar",
+   "kitapId": 335,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- مفتاح الفلاح ويليه خطبة عيد الفطر.pdf",
+   "dil": "ar",
+   "kitapId": 334,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- نخبة اللآلي لشرح بدء الأمالي.pdf",
+   "dil": "ar",
+   "kitapId": 303,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR- نور الإسلام تأليف الشيخ عبد الكريم المدرس البغدادي.pdf",
+   "dil": "ar",
+   "kitapId": 345,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR- هدية المهديين.pdf",
+   "dil": "ar",
+   "kitapId": 307,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AR-الصراط المستقيم في رد النصارى.pdf",
+   "dil": "ar",
+   "kitapId": 346,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR-المُنْقذ منَ الضلال وَالْمُوصِلُ إِلَى ذِي الْعِزَّةِ وَالْجَلَاَلْ ويليه إِلْجَامُ الْعَوَامِ عَنْ عِلْمِ ٱلْكَلاَمِ.pdf",
+   "dil": "ar",
+   "kitapId": 308,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR-فَتَاوَى الحَرَمَيْنِ بِرَجْفِ نُدْوَةِ المَيْنِ ويليه الدرّة المضيئة في الرّدّ على ابن تيمية.pdf",
+   "dil": "ar",
+   "kitapId": 306,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "AR-كتاب الصلاة.pdf",
+   "dil": "ar",
+   "kitapId": 342,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "CƏNNƏT YOLU ELMİHALI-AZ.pdf",
+   "dil": "az",
+   "kitapId": 106,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "EY OĞUL ELMİHALI-AZ.pdf",
+   "dil": "az",
+   "kitapId": 105,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "İSLAM ƏXLAQI-AZ.pdf",
+   "dil": "az",
+   "kitapId": 104,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "NAMAZ KİTABI-AZ.pdf",
+   "dil": "az",
+   "kitapId": 103,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "SEVGİLİ PEYĞƏMBƏRİM-AZ.pdf",
+   "dil": "az",
+   "kitapId": 365,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "SƏADƏTİ ƏBƏDİYYƏ-AZ.pdf",
+   "dil": "az",
+   "kitapId": 366,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ВЯРАТА, НУЖНА НА ВСЕКИ от Мевля̄на̄ Ха̄лид-и Багда̄дӣ-BG.pdf",
+   "dil": "bg",
+   "kitapId": 498,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "ЖИВОТЪТ НА ЛЮБИМИЯ МИ ПРОРОК МУХАММЕД (саллялла̄ху алейхи ве селлем)-BG.pdf",
+   "dil": "bg",
+   "kitapId": 499,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Животът и наставленията на великия ислямски учен имам Мухаммед Газали-BG.pdf",
+   "dil": "bg",
+   "kitapId": 502,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "ЗАЩО СТАНАЛИ МЮСЮЛМАНИ-BG.pdf",
+   "dil": "bg",
+   "kitapId": 500,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ИСЛЯМЪТ  И ХРИСТИЯНСТВОТО_BG (1).pdf",
+   "dil": "bg",
+   "kitapId": 504,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ИСЛЯМЪТ  И ХРИСТИЯНСТВОТО_BG.pdf",
+   "dil": "bg",
+   "kitapId": 504,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ИСЛЯМЪТ И ХРИСТИЯНСТВОТО-BG.pdf",
+   "dil": "bg",
+   "kitapId": 504,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ИСЛЯМЪТ, ХРИСТИЯНСТВОТО, ЮДАИЗМЪТ И ДРУГИТЕ РЕЛИГИИ 1-BG.pdf",
+   "dil": "bg",
+   "kitapId": 503,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "КНИГА ЗА НАМĀЗА-BG.pdf",
+   "dil": "bg",
+   "kitapId": 505,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "НАСТАВЛЕНИЯ ЗА МЮСЮЛМАНИНА-BG.pdf",
+   "dil": "bg",
+   "kitapId": 508,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Най- забележителните учени и евлии в исляма I-BG.pdf",
+   "dil": "bg",
+   "kitapId": 506,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Най- забележителните учени и евлии в исляма II-BG.pdf",
+   "dil": "bg",
+   "kitapId": 507,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Нуман бин Сабит Куфии Имам а’зам Ебу Ханифе-BG.pdf",
+   "dil": "bg",
+   "kitapId": 501,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "О, синко! (наставления)-BG.pdf",
+   "dil": "bg",
+   "kitapId": 509,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ПЪТЯТ КЪМ ДЖЕННЕТА-BG.pdf",
+   "dil": "bg",
+   "kitapId": 512,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Признанията на английския шпионин и ислямската вражда на англичаните-BG.pdf",
+   "dil": "bg",
+   "kitapId": 510,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "СЪДНИЯТ ДЕН И ОТВЪДНИЯТ ЖИВОТ-BG.pdf",
+   "dil": "bg",
+   "kitapId": 514,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Светът на пророците-BG.pdf",
+   "dil": "bg",
+   "kitapId": 513,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "“Мектубат” на Имам Ахмед Раббани-BG.pdf",
+   "dil": "bg",
+   "kitapId": 497,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "ইসলামের শত্রুমের জন্য জবাব-BN.pdf",
+   "dil": "bn",
+   "kitapId": 107,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ঈমান ও ইসলাম-BN.pdf",
+   "dil": "bn",
+   "kitapId": 108,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "নবুওয়াতের প্রমাণ-BN.pdf",
+   "dil": "bn",
+   "kitapId": 109,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "নামােজর বই-BN.pdf",
+   "dil": "bn",
+   "kitapId": 450,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "মিফতাহুল জান্নাহ-BN.pdf",
+   "dil": "bn",
+   "kitapId": 274,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "মুসলিমদের প্রতি হিতোপদেশ-BN.pdf",
+   "dil": "bn",
+   "kitapId": null,
+   "guven": "belirsiz",
+   "adaylar": [
+    273,
+    451
+   ]
+  },
+  {
+   "dosya": "সুন্নিপথ-BN.pdf",
+   "dil": "bn",
+   "kitapId": 274,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "IMAN I ISLAM ANOTIRANI PRUEVOD KNJIGE I_TIKADNAMA-BS.pdf",
+   "dil": "bs",
+   "kitapId": 490,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "ISPOVIJESTI JEDNOG ENGLESKOG ŠPIJUNA i ENGLESKO NEPRIJATELJSTVO PROTIV ISLAMA-BS.pdf",
+   "dil": "bs",
+   "kitapId": 491,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Knjiga O Namazu-BS.pdf",
+   "dil": "bs",
+   "kitapId": 492,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Nije Mogao Odgovoriti-BS.pdf",
+   "dil": "bs",
+   "kitapId": 493,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Odgovor Neprijatelju Islama-BS.pdf",
+   "dil": "bs",
+   "kitapId": 494,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "POSLJEDNJI ALLAHOV POSLANIK Sallallahu alejhi ve sellem-BS.pdf",
+   "dil": "bs",
+   "kitapId": 495,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Put Ehl-i Sunneta-BS.pdf",
+   "dil": "bs",
+   "kitapId": 496,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ÎMÂN I ISLAM (İman ve İslam).pdf",
+   "dil": "ca",
+   "kitapId": 429,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "VÍRA A ISLÁM KOMENTOVANÝ PŘEKLAD Z I’TIQÂD-NÂMA-CS.pdf",
+   "dil": "cs",
+   "kitapId": 516,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "FAİDELİ BİLGİLER DANCA (DEN SUNNI VEJ)_DA.pdf",
+   "dil": "da",
+   "kitapId": 441,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "İman ve İslam(TRO OG ISLAM).pdf",
+   "dil": "da",
+   "kitapId": 443,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Min Elskede Profet (sall-Allahu ‘alaihi wa sallam)-DA.pdf",
+   "dil": "da",
+   "kitapId": 442,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "BELEGE FÜR DAS WAHRE WORT (EVIDENCE OF THE TRUE WORD)-DE.pdf",
+   "dil": "de",
+   "kitapId": 92,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "BEWEISE FÜR DAS PROPHETENTUM (EVIDENCE OF PROPHETRY)-DE.pdf",
+   "dil": "de",
+   "kitapId": 93,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "DAS GEBETSBUCH (Prayer Book)-DE.pdf",
+   "dil": "de",
+   "kitapId": 94,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "DER JÜNGSTE TAG UND DAS JENSEITS (THE JUDGMENT AND THE AFTERLIFE)-DE.pdf",
+   "dil": "de",
+   "kitapId": 95,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "DER WEG DER AHLUS-SUNNA (The way of the Ahlus-Sunnah)-DE.pdf",
+   "dil": "de",
+   "kitapId": 96,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "DIE EDLEN GEFÄHRTEN (THE NOBLE COMPANIONS)-DE.pdf",
+   "dil": "de",
+   "kitapId": 97,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Die Ewige Glückseligkeit(AS-SAʿĀDA AL-ABADIYYA)-DE.pdf",
+   "dil": "de",
+   "kitapId": 98,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "GLAUBE UND ISLAM (İman ve İslam)-DE.pdf",
+   "dil": "de",
+   "kitapId": 100,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ISLAM UND CHRISTENTUM (ISLAM AND CHRISTIANITY)-DE.pdf",
+   "dil": "de",
+   "kitapId": 101,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ISLAMISCHE ETHIK (Ethics of Islam)-DE.pdf",
+   "dil": "de",
+   "kitapId": 102,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Mein geliebter Prophet (My Beloved Prophet)-DE.pdf",
+   "dil": "de",
+   "kitapId": 372,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Η ΚΑΤΗΧΗΣΗ ΤΟΥ ΔΡΟΜΟΥ ΠΡΟΣ ΤΟΝ ΠΑΡΑΔΕΙΣΟ-EL.pdf",
+   "dil": "el",
+   "kitapId": 112,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ΙΜΑΝ ΚΑΙ ΙΣΛΑΜ-EL.pdf",
+   "dil": "el",
+   "kitapId": 110,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ΧΡΗΣΙΜΕΣ ΠΛΗΡΟΦΟΡΙΕΣ ΠΡΟΛΟΓΟΣ-EL.pdf",
+   "dil": "el",
+   "kitapId": 111,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "A BIOGRAPHY of IMÂM-I- AHMAD RABBÂNÎ ‘quddisa sirruh’-EN.pdf",
+   "dil": "en",
+   "kitapId": 394,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Advice For The Muslim-EN.pdf",
+   "dil": "en",
+   "kitapId": 199,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Answer to an enemy of İslam-EN .pdf",
+   "dil": "en",
+   "kitapId": 198,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Belief and Islam-EN.pdf",
+   "dil": "en",
+   "kitapId": 464,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Book of Namaz-EN.pdf",
+   "dil": "en",
+   "kitapId": 396,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Confessions of a British Spy-EN.pdf",
+   "dil": "en",
+   "kitapId": 202,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Could not Answer-EN.pdf",
+   "dil": "en",
+   "kitapId": 201,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Documents of the Right Word-EN.pdf",
+   "dil": "en",
+   "kitapId": 203,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Endless Bliss Fifth Fascicle ( Seâdet-i Ebediyye) 5-EN.pdf",
+   "dil": "en",
+   "kitapId": 195,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Endless Bliss First Fascicle ( Seâdet-i Ebediyye) 1-EN.pdf",
+   "dil": "en",
+   "kitapId": 191,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Endless Bliss Fourth Fascicle (Seâdet-i Ebediyye) 4-EN.pdf",
+   "dil": "en",
+   "kitapId": 194,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Endless Bliss Second Fascicle ( Seâdet-i Ebediyye) 2-EN.pdf",
+   "dil": "en",
+   "kitapId": 192,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Endless Bliss Sixth Fascicle ( Seâdet-i Ebediyye) 6-EN.pdf",
+   "dil": "en",
+   "kitapId": 196,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Endless Bliss Third Fascicle ( Seâdet-i Ebediyye) 3-EN.pdf",
+   "dil": "en",
+   "kitapId": 383,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Ethics of Islam-EN.pdf",
+   "dil": "en",
+   "kitapId": 204,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "İslam and Christianity-EN.pdf",
+   "dil": "en",
+   "kitapId": 200,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "İslams Reformers-EN.pdf",
+   "dil": "en",
+   "kitapId": 206,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Muslim ritual prayers-EN.pdf",
+   "dil": "en",
+   "kitapId": 213,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "My Beloved Prophet-EN.pdf",
+   "dil": "en",
+   "kitapId": 385,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "O Son-EN.pdf",
+   "dil": "en",
+   "kitapId": 209,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "SHAWÂHID-UN NUBUWWA The Glad Tidings of Prophethood-EN.pdf",
+   "dil": "en",
+   "kitapId": null,
+   "guven": "belirsiz",
+   "adaylar": [
+    214,
+    397
+   ]
+  },
+  {
+   "dosya": "SUPREME EPISTLES (Maktûbât Sharif)-EN.pdf",
+   "dil": "en",
+   "kitapId": 386,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Sahaba The Blessed-EN.pdf",
+   "dil": "en",
+   "kitapId": 205,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "THE NAMÂZ OF ’IYD-EN.pdf",
+   "dil": "en",
+   "kitapId": 470,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "The Proof of Prophethood-EN.pdf",
+   "dil": "en",
+   "kitapId": null,
+   "guven": "belirsiz",
+   "adaylar": [
+    197,
+    471
+   ]
+  },
+  {
+   "dosya": "The Rising and the Hereafter-EN.pdf",
+   "dil": "en",
+   "kitapId": null,
+   "guven": "belirsiz",
+   "adaylar": [
+    207,
+    467
+   ]
+  },
+  {
+   "dosya": "The Sunni Path-EN.pdf",
+   "dil": "en",
+   "kitapId": 217,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "WHY DID THEY BECOME MUSLIMS-EN.pdf",
+   "dil": "en",
+   "kitapId": 219,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Way to paradise Miftah-ul janna-EN.pdf",
+   "dil": "en",
+   "kitapId": 208,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "conceit-pride-kibr-EN.pdf",
+   "dil": "en",
+   "kitapId": 211,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "fasting in ramadan-EN.pdf",
+   "dil": "en",
+   "kitapId": 212,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "islam and the woman-EN.pdf",
+   "dil": "en",
+   "kitapId": null,
+   "guven": "belirsiz",
+   "adaylar": [
+    200,
+    204,
+    215
+   ]
+  },
+  {
+   "dosya": "jealousy-EN.pdf",
+   "dil": "en",
+   "kitapId": 216,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Creencia e Islam-ES.pdf",
+   "dil": "es",
+   "kitapId": 179,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "LIBRO DEL NAMAZ-ES.pdf",
+   "dil": "es",
+   "kitapId": 183,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "La Llave del Paraíso-ES.pdf",
+   "dil": "es",
+   "kitapId": 182,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "MI AMADO PROFETA-ES.pdf",
+   "dil": "es",
+   "kitapId": 374,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "MIFTAH-UL-ŶANNA (La Llave del Paraíso)-ES.pdf",
+   "dil": "es",
+   "kitapId": 182,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "NO PUDIERON RESPONDER-ES.pdf",
+   "dil": "es",
+   "kitapId": 184,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Sa’âdat-i-Abadiyya LA FELICIDAD ETERNA SEXTO FASCÍCULO-ES.pdf",
+   "dil": "es",
+   "kitapId": 181,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "el-camino-sunni-ES.pdf",
+   "dil": "es",
+   "kitapId": 180,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "FA- إنِبِّتُ الطَالِبِيْنَ و عَدْةٌ السَّالِكِينَ.pdf",
+   "dil": "fa",
+   "kitapId": 398,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "FA- اعترافات جاسوس انگليسى.pdf",
+   "dil": "fa",
+   "kitapId": 299,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "FA- الأصول الأربعة في ترديد الوهّابيّة.pdf",
+   "dil": "fa",
+   "kitapId": 285,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "FA- تَرْغِيبُ الصَّلاَة و تَيْسِيرُ الْأَحْكَامِ.pdf",
+   "dil": "fa",
+   "kitapId": 295,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "FA- حقوق الإسلام.pdf",
+   "dil": "fa",
+   "kitapId": 292,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "FA- درّ المعارف.pdf",
+   "dil": "fa",
+   "kitapId": 283,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "FA- رسالهء تورپشتى.pdf",
+   "dil": "fa",
+   "kitapId": 294,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "FA- رياض النّاصحين.pdf",
+   "dil": "fa",
+   "kitapId": 281,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "FA- شواهد النبوة لتقوية يقين اهل الفتوة.pdf",
+   "dil": "fa",
+   "kitapId": 297,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "FA- عمدة المقامات.pdf",
+   "dil": "fa",
+   "kitapId": 298,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "FA- مبدأ ومعاد.pdf",
+   "dil": "fa",
+   "kitapId": 279,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "FA- مفتاح النجاة.pdf",
+   "dil": "fa",
+   "kitapId": 287,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "FA- مقامات مظهريه.pdf",
+   "dil": "fa",
+   "kitapId": 289,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "FA- مكاتيب شريفه.pdf",
+   "dil": "fa",
+   "kitapId": 282,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "FA- مكتوبات امام رباني (١-دفتر اول).pdf",
+   "dil": "fa",
+   "kitapId": null,
+   "guven": "belirsiz",
+   "adaylar": [
+    275,
+    276
+   ]
+  },
+  {
+   "dosya": "FA- مكتوبات امام رباني (٢-دفتر دوم و سوم).pdf",
+   "dil": "fa",
+   "kitapId": null,
+   "guven": "belirsiz",
+   "adaylar": [
+    275,
+    276
+   ]
+  },
+  {
+   "dosya": "FA- مناهج العباد إلى المعاد.pdf",
+   "dil": "fa",
+   "kitapId": 290,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "FA- منتخبات از مكتوبات امام رباني.pdf",
+   "dil": "fa",
+   "kitapId": 277,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "FA- ميزان الموازين فى امر الدين.pdf",
+   "dil": "fa",
+   "kitapId": 288,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "FA- مَسْمُوعَاتٍ مِيْرْ عَبْدُ الْأَوَّلْ النِّيشَابُورِي.pdf",
+   "dil": "fa",
+   "kitapId": 293,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "FA-راه سنت.pdf",
+   "dil": "fa",
+   "kitapId": 400,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "FA-كتاب نماز.pdf",
+   "dil": "fa",
+   "kitapId": 301,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "FA-مكتوبات إمام رباني.pdf",
+   "dil": "fa",
+   "kitapId": null,
+   "guven": "belirsiz",
+   "adaylar": [
+    275,
+    276
+   ]
+  },
+  {
+   "dosya": "FA-پيامبر عزيزم صلى اللّٰه عليه و سلم.pdf",
+   "dil": "fa",
+   "kitapId": 399,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "FA_ بركات أحمديه.pdf",
+   "dil": "fa",
+   "kitapId": 286,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "FA_أنيس الطَالِبِيْنَ و عَدةُ السَّالِكِينَ.pdf",
+   "dil": "fa",
+   "kitapId": 296,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "USKO JA ISLAM KOMMENTOITU KÄÄNNÖS TEOKSESTA I’TIQÂD-NÂMA-FI.pdf",
+   "dil": "fi",
+   "kitapId": 446,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Al-Munqid Min Addalâl-FR.pdf",
+   "dil": "fr",
+   "kitapId": 223,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Foi et Islam (İman and İslam)-FR.pdf",
+   "dil": "fr",
+   "kitapId": 224,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ISLAM et CHRISTIANISME (İslam and Christiyanity)-FR.pdf",
+   "dil": "fr",
+   "kitapId": 226,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "LES CONFESSIONS DE L’ESPION BRITANNIQUE (THE CONFESSIONS OF A BRITISH SPY)-FR.pdf",
+   "dil": "fr",
+   "kitapId": 228,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "LIVRE DE LA PRIÈRE (PRAYER BOOK)-FR.pdf",
+   "dil": "fr",
+   "kitapId": 225,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "L_Éthique Islamique (Ethics of İslam)-FR.pdf",
+   "dil": "fr",
+   "kitapId": 373,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "La Résurrection et l_au-Delà (The Resurrection and the Afterlife)-FR.pdf",
+   "dil": "fr",
+   "kitapId": 227,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "La Voie d_ Ahlus-Sunna(Ehli Sunnet Yolu)-FR.pdf",
+   "dil": "fr",
+   "kitapId": 220,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "L’évidence de la Prophétie (The Evidence of Prophecy)-FR.pdf",
+   "dil": "fr",
+   "kitapId": 221,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Mon bien-aimé Prophète (My Beloved Prophet)-FR.pdf",
+   "dil": "fr",
+   "kitapId": 427,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "RÉFUTATION EXCELLENTE (Ar-radd al Jamil)-FR.pdf",
+   "dil": "fr",
+   "kitapId": null,
+   "guven": "belirsiz",
+   "adaylar": [
+    222,
+    421
+   ]
+  },
+  {
+   "dosya": "IMANI DA MUSLUNCI-HA.pdf",
+   "dil": "ha",
+   "kitapId": 553,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "IMANI DA MUSULUNCI WALLAFAR FASSARAR LITTAFIN I’TIQÂD-NÂMA-HA.pdf",
+   "dil": "ha",
+   "kitapId": 553,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "MIFTAH-UL-JANNA (Mabuɗin Shiga Aljanna)-HA.pdf",
+   "dil": "ha",
+   "kitapId": 554,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ƊABI’O’IN MUSULUNCI-HA.pdf",
+   "dil": "ha",
+   "kitapId": 552,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "अंग्रेज़ जासूस के एतराफ़ात और अंग्रेज़ों की इस्लाम के ख़िलाफ़ दुश्मनी-HI.pdf",
+   "dil": "hi",
+   "kitapId": 185,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "इस्लाम को इल्म-ओ-अख़लाक़-HI.pdf",
+   "dil": "hi",
+   "kitapId": 187,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "किताब-उस-सलात नमाज़ की किताब-HI.pdf",
+   "dil": "hi",
+   "kitapId": 190,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "नबूवत का सबूत-HI.pdf",
+   "dil": "hi",
+   "kitapId": 189,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "मानव और इस्लाम-HI.pdf",
+   "dil": "hi",
+   "kitapId": 186,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "मिफ़्ताह-उल-जन्नत-HI.pdf",
+   "dil": "hi",
+   "kitapId": 188,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "IMAN VE ISLAM-HR.pdf",
+   "dil": "hr",
+   "kitapId": 515,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "IMAN I ISLAM-HU.pdf",
+   "dil": "hu",
+   "kitapId": 521,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "AKHLAQ-AKHLAQ DALAM ISLAM-ID.pdf",
+   "dil": "id",
+   "kitapId": 246,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "IMAN DAN ISLAM-ID.pdf",
+   "dil": "id",
+   "kitapId": 236,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ISLAM dan KRISTEN-ID.pdf",
+   "dil": "id",
+   "kitapId": 244,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ITSBAT AN-NUBUWWA-ID.pdf",
+   "dil": "id",
+   "kitapId": 238,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "JALAN ISLAM SUNNI-ID.pdf",
+   "dil": "id",
+   "kitapId": 242,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "KIAMAT DAN AKHIRAT-ID.pdf",
+   "dil": "id",
+   "kitapId": 241,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "MENGAPA MEREKA MENJADI MUSLIM-ID.pdf",
+   "dil": "id",
+   "kitapId": 245,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "MIFTAHUL JANNAH-ID.pdf",
+   "dil": "id",
+   "kitapId": 237,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Nabiku Tercinta Sallallahu Alaihi Wa’Sallam-ID.pdf",
+   "dil": "id",
+   "kitapId": 410,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "PARA REFORMİS ISLAM-ID.pdf",
+   "dil": "id",
+   "kitapId": 247,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "PENGAKUAN SEORANG MATA-MATA INGGRIS-ID.pdf",
+   "dil": "id",
+   "kitapId": 239,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "TERJEMAHAN-BUKU-SHALAT-LENGKAP-ID.pdf",
+   "dil": "id",
+   "kitapId": 240,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "NKWENYE NA ISLAM (İman ve İslam).pdf",
+   "dil": "ig",
+   "kitapId": 549,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "TRÚ OG ÍSLAM (İman ve İslam).pdf",
+   "dil": "is",
+   "kitapId": 522,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ÎMÂN E ISLÂM-IT.pdf",
+   "dil": "it",
+   "kitapId": 177,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Mio Amato Profeta-IT.pdf",
+   "dil": "it",
+   "kitapId": 376,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "イーマーンとイスラーム ： 信仰 実践-JA.pdf",
+   "dil": "ja",
+   "kitapId": 174,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "ハキ―カトゥ出版 皆が必要とする信仰-JA.pdf",
+   "dil": "ja",
+   "kitapId": 175,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "天国の道 イルミハー-JA.pdf",
+   "dil": "ja",
+   "kitapId": 172,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "愛すべき預言者 ムハンマド様-JA.pdf",
+   "dil": "ja",
+   "kitapId": 428,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "皆が必要とする信仰-JA.pdf",
+   "dil": "ja",
+   "kitapId": 175,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ნამაზის წიგნი-KA.pdf",
+   "dil": "ka",
+   "kitapId": 518,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "საყვარელი მუჰამმედ შუამავალი-KA.pdf",
+   "dil": "ka",
+   "kitapId": 519,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "АҒЫЛШЫН ТЫҢШЫСЫНЫҢ МОЙЫНДАУЛАРЫ-KK.pdf",
+   "dil": "kk",
+   "kitapId": 162,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ЖИЗНЬ ПРОРОКА МУХАММЕДА (САЛЛАЛЛАХУ АЛЕЙХИ ВА САЛЛЯМ)-KK.pdf",
+   "dil": "kk",
+   "kitapId": 165,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Жанұя-KK.pdf",
+   "dil": "kk",
+   "kitapId": null,
+   "guven": "belirsiz",
+   "adaylar": [
+    164,
+    476
+   ]
+  },
+  {
+   "dosya": "ЖӘННАТ ЖОЛЫ ІЛІМХАЛЫ-KK.pdf",
+   "dil": "kk",
+   "kitapId": 477,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ИСЛАМ АХЛАҚЫ-KK.pdf",
+   "dil": "kk",
+   "kitapId": 166,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ИСЛАМ ДІНІ-KK.pdf",
+   "dil": "kk",
+   "kitapId": 167,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "НАМАЗ КІТАБЫ-KK.pdf",
+   "dil": "kk",
+   "kitapId": 169,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ХАЗРЕТІ МҰХАММЕД АЛЕЙҺИССАЛАМНЫҢ ӨМІРІ-KK.pdf",
+   "dil": "kk",
+   "kitapId": 170,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ҒИБРАТТЫ ОҚИҒАЛАР-KK.pdf",
+   "dil": "kk",
+   "kitapId": 163,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ҚИЯМЕТ ЖӘНЕ АХИРЕТ-KK.pdf",
+   "dil": "kk",
+   "kitapId": 168,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "ӘЙ, ҰЛЫМ ІЛІМХАЛЫ-KK.pdf",
+   "dil": "kk",
+   "kitapId": 475,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "나의 사랑하는 예언자 (살랄라후 알라히 와살람)-KO.pdf",
+   "dil": "ko",
+   "kitapId": 430,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "믿음과 이슬람-KO.pdf",
+   "dil": "ko",
+   "kitapId": 148,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ЖАННАТ ЖОЛУ ИЛМИХАЛЫ-KY.pdf",
+   "dil": "ky",
+   "kitapId": 155,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ИСЛАМ АХЛАГЫ-KY.pdf",
+   "dil": "ky",
+   "kitapId": 157,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ИСЛАМ ДИНИ-KY.pdf",
+   "dil": "ky",
+   "kitapId": 158,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Ибреттүү окуялар-KY.pdf",
+   "dil": "ky",
+   "kitapId": 156,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "КУРАНИ КАРИМДЕ КЫЯМАТ жана АКЫРЕТ-KY.pdf",
+   "dil": "ky",
+   "kitapId": 151,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "НАМАЗ КИТЕБИ-KY.pdf",
+   "dil": "ky",
+   "kitapId": 159,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "СИЛСИЛЕ-И АЛИЙЙА-KY.pdf",
+   "dil": "ky",
+   "kitapId": 160,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Сукбаттар-KY.pdf",
+   "dil": "ky",
+   "kitapId": 161,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Хазрети Мухаммед алейхиссаламдын өмүрү-KY.pdf",
+   "dil": "ky",
+   "kitapId": null,
+   "guven": "belirsiz",
+   "adaylar": [
+    152,
+    561
+   ]
+  },
+  {
+   "dosya": "менин кымбаттуу пайгамбар Хазрети Мухаммед алейхиссаламдын өмүрү-KY.pdf",
+   "dil": "ky",
+   "kitapId": null,
+   "guven": "belirsiz",
+   "adaylar": [
+    152,
+    561
+   ]
+  },
+  {
+   "dosya": "Үй-бүлө-KY.pdf",
+   "dil": "ky",
+   "kitapId": 153,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "“ЭЙ, БАЛАМ” илмихалы-KY.pdf",
+   "dil": "ky",
+   "kitapId": 149,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "MIFTAH-UL-JANNA (Ekisumuluzo ky’eJjana)-LG.pdf",
+   "dil": "lg",
+   "kitapId": 147,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "TICĪBA UN ISLĀMS  (İman ve İslam).pdf",
+   "dil": "lv",
+   "kitapId": 523,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ИМАН и ИСЛАМ (İman ve İslam).pdf",
+   "dil": "mk",
+   "kitapId": 539,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ПАТОТ КОН РАЈОТ (Cennet Yolu İlmihali).pdf",
+   "dil": "mk",
+   "kitapId": 540,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "СУНИТСКИОТ ПАТ ОД ХУСЕИН ХИЛМИ ИШИК (Faideli bilgiler).pdf",
+   "dil": "mk",
+   "kitapId": 541,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "ХҮН БҮХЭНД ХЭРЭГТЭЙ ИТГЭЛ ҮНЭМШИЛ-MN.pdf",
+   "dil": "mn",
+   "kitapId": 402,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "хайрт бошиглогч минь-MN.pdf",
+   "dil": "mn",
+   "kitapId": 401,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "IMAN DAN ISLAM-MS.pdf",
+   "dil": "ms",
+   "kitapId": 146,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Nabiku Tercinta Sallallahu Alaihi Wa’Sallam-MS.pdf",
+   "dil": "ms",
+   "kitapId": 420,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "အစ္စလာမ် နှင့် ယုံကြည်မှုအကြောင် (IMAN VE ISLA).pdf",
+   "dil": "my",
+   "kitapId": 529,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "BEKENTENISSEN VAN EEN BRITSE SPION-NL.pdf",
+   "dil": "nl",
+   "kitapId": 431,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "DE LAATSTE DAG EN HET HIERNAMAALS-NL.pdf",
+   "dil": "nl",
+   "kitapId": 433,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "GELOOF EN ISLAM-NL.pdf",
+   "dil": "nl",
+   "kitapId": 434,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "HET GEBEDSBOEK-NL.pdf",
+   "dil": "nl",
+   "kitapId": 432,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "HET PAD VAN DE AHL AL-SOENNA-NL.pdf",
+   "dil": "nl",
+   "kitapId": 435,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "TRO OG ISLAM En kommentert oversettelse av ITIQAD-NAMA-NO.pdf",
+   "dil": "no",
+   "kitapId": 440,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "BELIEF AND ISLAM (İman ve İslam).pdf",
+   "dil": "pcm",
+   "kitapId": 551,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "MÓJ UMIŁOWANY PROROK-PL.pdf",
+   "dil": "pl",
+   "kitapId": 531,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "NIE POTRAFIŁ ODPOWIEDZIEĆ-PL.pdf",
+   "dil": "pl",
+   "kitapId": 532,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "WIARA I ISLAM-PL.pdf",
+   "dil": "pl",
+   "kitapId": 533,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "PS-ايمان او اسلام.pdf",
+   "dil": "ps",
+   "kitapId": 137,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Crença e Islam-PT.pdf",
+   "dil": "pt",
+   "kitapId": 134,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "MEU AMAD PROPHETA (salalahu _alaihi ua salam)-PT.pdf",
+   "dil": "pt",
+   "kitapId": 437,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "MIFTAH-UL-JANNA (A Chave do Paraíso)-PT.pdf",
+   "dil": "pt",
+   "kitapId": 136,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "O CAMINHO SUNNI-PT.pdf",
+   "dil": "pt",
+   "kitapId": 135,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "IMÂN ADDE ISLÂM DÓRMÓ I’TIQÂD-NÂMA-RHG.pdf",
+   "dil": "rhg",
+   "kitapId": 133,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "CALEA EHL-I SUNNET-RO.pdf",
+   "dil": "ro",
+   "kitapId": 524,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "CARTE DE RUGĂCIUNE-RO.pdf",
+   "dil": "ro",
+   "kitapId": 528,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "CHEIA PORȚII CĂTRE PARADIS-RO.pdf",
+   "dil": "ro",
+   "kitapId": 525,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "CREDINȚA ȘI ISLAMUL-RO.pdf",
+   "dil": "ro",
+   "kitapId": 526,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Dragul Meu Profet-RO.pdf",
+   "dil": "ro",
+   "kitapId": 527,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "АЙЙУХАЛЬ ВАЛЯД (О сын)-RU.pdf",
+   "dil": "ru",
+   "kitapId": 124,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ВЕРА НЕОБХОДИМАЯ КАЖДОМУ-RU.pdf",
+   "dil": "ru",
+   "kitapId": 424,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Ваххабитская смута-RU.pdf",
+   "dil": "ru",
+   "kitapId": 126,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ЖИЗНЬ ПРОРОКА МУХАММЕДА-RU.pdf",
+   "dil": "ru",
+   "kitapId": 426,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ИМАН И ИСЛАМ-RU.pdf",
+   "dil": "ru",
+   "kitapId": 131,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ИСЛАМСКАЯ ЭТИКА-RU.pdf",
+   "dil": "ru",
+   "kitapId": 132,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "КИТАБ-УС-САЛАТ МОЛИТВЕННИК (Книга о намазе)-RU.pdf",
+   "dil": "ru",
+   "kitapId": 125,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "ЛЮДИ СУННЫ И СОГЛАСИЯ - КТО ОНИ-RU.pdf",
+   "dil": "ru",
+   "kitapId": 128,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "МУХТАСАР ИЛЬМИХАЛ MUHTASAR İLMİHAL-RU.pdf",
+   "dil": "ru",
+   "kitapId": 127,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Мой дорогой Пророк салляллаху алейхи ва саллям-RU.pdf",
+   "dil": "ru",
+   "kitapId": 377,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "О, СЫН МОЙ!-RU.pdf",
+   "dil": "ru",
+   "kitapId": 130,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ПРИЗНАНИЯ АНГЛИЙСКОГО ШПИОНА-RU.pdf",
+   "dil": "ru",
+   "kitapId": 129,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Религия Ислам-RU.pdf",
+   "dil": "ru",
+   "kitapId": 122,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ව ිශ්වාසය සහ ඉස්ලාම් (İMAN VE İSLAM).pdf",
+   "dil": "si",
+   "kitapId": 538,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Viera a Islam (İMAN VE İSLM).pdf",
+   "dil": "sk",
+   "kitapId": 535,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "VEROVANJE IN ISLAM-SL.pdf",
+   "dil": "sl",
+   "kitapId": 537,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "FURAHA JANNADA Buugga Yar ee Ku Saabsan Jidka Jannada-SO.pdf",
+   "dil": "so",
+   "kitapId": 542,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "IIMAANKA IYO ISLAAMKA-SO.pdf",
+   "dil": "so",
+   "kitapId": 543,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "QIRASHADII JAAJUUSKA INGIRIISKA Iyo Cadawtinimada Ingiriiska ee Islaamka u hayo-SO.pdf",
+   "dil": "so",
+   "kitapId": 544,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "WADDADA SUNNIGA-SO.pdf",
+   "dil": "so",
+   "kitapId": 545,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Besimi Dhe Islâmi-SQ.pdf",
+   "dil": "sq",
+   "kitapId": 414,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "ILMIHALI RRUGA E XHENNETIT-SQ.pdf",
+   "dil": "sq",
+   "kitapId": 415,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "IMANI I NEVOJSHËM PËR TË GJITHË-SQ.pdf",
+   "dil": "sq",
+   "kitapId": 417,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Im I Dashur I Dërguari i Allahut-SQ.pdf",
+   "dil": "sq",
+   "kitapId": 416,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Libri Namazit-SQ.pdf",
+   "dil": "sq",
+   "kitapId": 418,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "MORALI ISLAM_SQ.pdf",
+   "dil": "sq",
+   "kitapId": 413,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Rrefimet E Agjentit Anglez Dhe Armiqësia E Anglezëve Ndaj Islamit-SQ.pdf",
+   "dil": "sq",
+   "kitapId": 419,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": " SUNNIVÄGEN-SV.pdf",
+   "dil": "sv",
+   "kitapId": 178,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Min älskade Profet-SV.pdf",
+   "dil": "sv",
+   "kitapId": 375,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "DINI YA KIISLAM_SW.pdf",
+   "dil": "sw",
+   "kitapId": 461,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Iman na Uislam Tafsiri ya ITIQAD-NAMA-SW.pdf",
+   "dil": "sw",
+   "kitapId": 463,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Maadili ya Uislamu-SW.pdf",
+   "dil": "sw",
+   "kitapId": 118,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "NJIA YA PEPONI-SW.pdf",
+   "dil": "sw",
+   "kitapId": 119,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "இஸ்லாமிய வாழ்க்கை நெறி-TA.pdf",
+   "dil": "ta",
+   "kitapId": 121,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ஜன்னத் வழி -TA.pdf",
+   "dil": "ta",
+   "kitapId": 555,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "ИМОНИ БА ҲАМА ЛОЗИМ-TG(1).pdf",
+   "dil": "tg",
+   "kitapId": 546,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ИМОНИ БА ҲАМА ЛОЗИМ-TG.pdf",
+   "dil": "tg",
+   "kitapId": 546,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "นบีที่รัก (ศ็อลลลลอฮุอะลยฮุวะซัลลม) (Sevgili Peygamberim).pdf",
+   "dil": "th",
+   "kitapId": 408,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ศรัทธาและอิสลาม (İman ve İslam).pdf",
+   "dil": "th",
+   "kitapId": 407,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "НАМАЗ КИТАБЫ-TK.pdf",
+   "dil": "tk",
+   "kitapId": 116,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ХЕМПЕР СЫРЛАРЫНЫ АЧЯР-TK.pdf",
+   "dil": "tk",
+   "kitapId": 368,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Cevâb Veremedi-TR.pdf",
+   "dil": "tr",
+   "kitapId": 249,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Copy of Fâideli Bilgiler-TR.pdf",
+   "dil": "tr",
+   "kitapId": 254,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Dînî Sözlük TR.pdf",
+   "dil": "tr",
+   "kitapId": 387,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Dürr-ül me’ârif-TR.pdf",
+   "dil": "tr",
+   "kitapId": 250,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "EY OĞUL-TR.pdf",
+   "dil": "tr",
+   "kitapId": 253,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Eshâb-ı Kirâm-TR.pdf",
+   "dil": "tr",
+   "kitapId": 252,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Fâideli Bilgiler-TR.pdf",
+   "dil": "tr",
+   "kitapId": 254,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Gençlerin Rehberi-TR.pdf",
+   "dil": "tr",
+   "kitapId": 255,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Hak Sözün Vesîkaları-TR.pdf",
+   "dil": "tr",
+   "kitapId": 256,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Hanımlara Rehber Bilgiler-TR.pdf",
+   "dil": "tr",
+   "kitapId": 257,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Herkese Lâzım Olan Îmân-TR.pdf",
+   "dil": "tr",
+   "kitapId": 258,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "İslâm Ahlâkı-TR.pdf",
+   "dil": "tr",
+   "kitapId": 260,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Kıyâmet ve Âhıret-TR.pdf",
+   "dil": "tr",
+   "kitapId": 261,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Kıymetsiz Yazılar-TR.pdf",
+   "dil": "tr",
+   "kitapId": 262,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "MEKTÛBÂT TERCEMESI-TR.pdf",
+   "dil": "tr",
+   "kitapId": 264,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Mahzen-ül-ulûm-TR.pdf",
+   "dil": "tr",
+   "kitapId": 263,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Menâkıb-ı Çihâr Yâr-i Güzîn-TR.pdf",
+   "dil": "tr",
+   "kitapId": 381,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Mızrakli İlmihal-TR.pdf",
+   "dil": "tr",
+   "kitapId": 392,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "Namaz Kitabı-TR.pdf",
+   "dil": "tr",
+   "kitapId": 248,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Şevâhid-ün Nübüvve-TR.pdf",
+   "dil": "tr",
+   "kitapId": 267,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Tam İlmihâl Se`âdet-i Ebediyye-TR.pdf",
+   "dil": "tr",
+   "kitapId": 382,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "UG-ئىمان ۋە ئىسلام.pdf",
+   "dil": "ug",
+   "kitapId": 558,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "UR-  الخيرات الحسان و جواهر البيان .pdf",
+   "dil": "ur",
+   "kitapId": 270,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "UR- ہر کسی کیلئے لازم ایمان.pdf",
+   "dil": "ur",
+   "kitapId": 547,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "UR-المدارج السنية في الرّدّ على الوهابية.pdf",
+   "dil": "ur",
+   "kitapId": 272,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "UR-مفتاح الجنة.pdf",
+   "dil": "ur",
+   "kitapId": 548,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Жизнь Пророка Мухаммеда (Саллаллаху алейхи уа саллам)-UZ.pdf",
+   "dil": "uz",
+   "kitapId": 138,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "ИСЛОМ АХЛОҚИ-UZ.pdf",
+   "dil": "uz",
+   "kitapId": 141,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Ибратли воқеалар-UZ.pdf",
+   "dil": "uz",
+   "kitapId": 139,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Инглиз жосусининг эътирофлари-UZ.pdf",
+   "dil": "uz",
+   "kitapId": 140,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Намоз китоби-UZ.pdf",
+   "dil": "uz",
+   "kitapId": 142,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Оила ва Никоҳ (OİLA VA NİKOH)-UZ.pdf",
+   "dil": "uz",
+   "kitapId": 143,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "СИЛСИЛАИ ОЛИЯ-UZ.pdf",
+   "dil": "uz",
+   "kitapId": 144,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "NIỀM TIN VÀ HỒI GIÁO-VI.pdf",
+   "dil": "vi",
+   "kitapId": 113,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "Vị tiên tri Kính yêu của tôi (sall-Allahu ‘alaihi wa sallam)-VI.pdf",
+   "dil": "vi",
+   "kitapId": 460,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "伊斯兰教道德规范-ZH.pdf",
+   "dil": "zh",
+   "kitapId": 233,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "信仰和伊斯兰教-ZH.pdf",
+   "dil": "zh",
+   "kitapId": 234,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "天园之路-ZH.pdf",
+   "dil": "zh",
+   "kitapId": 232,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "学习礼拜指南-ZH.pdf",
+   "dil": "zh",
+   "kitapId": 231,
+   "guven": "kesin"
+  },
+  {
+   "dosya": "教爱的光知 （愿主福安之）-ZH.pdf",
+   "dil": "zh",
+   "kitapId": 384,
+   "guven": "yuksek"
+  },
+  {
+   "dosya": "有利的知识-ZH.pdf",
+   "dil": "zh",
+   "kitapId": 235,
+   "guven": "kesin"
+  }
+ ],
+ "katalogdaYok": [
+  {
+   "dosya": "    ް ާ ނ ކ މ ލ އި އިސ މ ކ ނ އީމ-DV- .pdf",
+   "dil": "DV"
+  },
+  {
+   "dosya": "እምነት እና እስልምና ለሰብአዊ ሕይወት የሚሰጥ ጥቅም እምነት [እምነት እና እስልምና-ET.pdf",
+   "dil": "am"
+  },
+  {
+   "dosya": "AR - نبينا الحبيب.pdf",
+   "dil": "ar"
+  },
+  {
+   "dosya": "AR-الرَّدُّ الْجَمِيِلُ لِإِلَهِيَّةِ عِيسَى بِصَريح الإنجيل ويليه أَيّهَا الْوَلَدُ.pdf",
+   "dil": "ar"
+  },
+  {
+   "dosya": "ИСЛЯМЪТ, ХРИСТИЯНСТВОТО, ЮДАИЗМЪТ И ДРУГИТЕ РЕЛИГИИ 2-BG.pdf",
+   "dil": "bg"
+  },
+  {
+   "dosya": "ПЪЛЕН ИЛМИХА̄ Л СЕ’А̄ ДЕТ-И ЕБЕДИЙЙЕ-BG.pdf",
+   "dil": "bg"
+  },
+  {
+   "dosya": "ПЪЛЕН ИЛМИХАЛ СЕ’АДЕТ-И ЕБЕ- ДИЙЙЕ (Вечното щастие) II-BG.pdf",
+   "dil": "bg"
+  },
+  {
+   "dosya": "СЕ’А̄ ДЕТ-И ЕБЕДИЙЙЕ-BG.pdf",
+   "dil": "bg"
+  },
+  {
+   "dosya": "имам Мухаммад Газали_BG.pdf",
+   "dil": "bg"
+  },
+  {
+   "dosya": "(Cennet Yolu) Bogen Vejen til Paradis_DA.pdf",
+   "dil": "da"
+  },
+  {
+   "dosya": "GESTÄNDNISSE EINES BRITISCHEN SPIONS (CONFESSIONS OF A BRITISH SPY)-DE.pdf",
+   "dil": "de"
+  },
+  {
+   "dosya": "Αγαπητός ο προφήτηςμου-EL.pdf",
+   "dil": "el"
+  },
+  {
+   "dosya": "Guide Information for Women_EN.pdf",
+   "dil": "en"
+  },
+  {
+   "dosya": "FA-  ردّ وهابيه بحجة الإسلام.pdf",
+   "dil": "fa"
+  },
+  {
+   "dosya": "FA- تحفهء اثنى عشريه.pdf",
+   "dil": "fa"
+  },
+  {
+   "dosya": "FA- كيمياى سعادت.pdf",
+   "dil": "fa"
+  },
+  {
+   "dosya": "FA- مكتوبات معصوميه.pdf",
+   "dil": "fa"
+  },
+  {
+   "dosya": "FA-إعتقاد نامه.pdf",
+   "dil": "fa"
+  },
+  {
+   "dosya": "FA-بَرَكَاتِ حَمَدِيَةَ نام دكر زُبَدَة المَقَامَ.pdf",
+   "dil": "fa"
+  },
+  {
+   "dosya": "A MINDENKINEK SZÜKSÉGES HIT-HU.pdf",
+   "dil": "hu"
+  },
+  {
+   "dosya": "JAWABAN KEPADA SEORANG MUSUH ISLAM-ID.pdf",
+   "dil": "id"
+  },
+  {
+   "dosya": "ミフターフルジュンナ-JA.pdf",
+   "dil": "ja"
+  },
+  {
+   "dosya": "有益 知識-JA.pdf",
+   "dil": "ja"
+  },
+  {
+   "dosya": "礼 拝 の 書-JA.pdf",
+   "dil": "ja"
+  },
+  {
+   "dosya": "БИР АГЕНТТИН МОЮНДООЛОРУ-KY.pdf",
+   "dil": "ky"
+  },
+  {
+   "dosya": "ВЕРБА КОЈА ИМ Е ПОТРЕБНА НА СИТЕ-MK.pdf",
+   "dil": "mk"
+  },
+  {
+   "dosya": "НАМАЗИЙН HOM-MN.pdf",
+   "dil": "mn"
+  },
+  {
+   "dosya": "НАМАЗЫН HOM-MN.pdf",
+   "dil": "mn"
+  },
+  {
+   "dosya": "BOEK DER GEBED-NL.pdf",
+   "dil": "nl"
+  },
+  {
+   "dosya": "HET SOENNITISCHE PAD-NL.pdf",
+   "dil": "nl"
+  },
+  {
+   "dosya": "මගේ ආදරණීය නබි (සල්ලල්ලාහු අලෙයිහි වසල්ලම්) (My Beloved Prophet).pdf",
+   "dil": "si"
+  },
+  {
+   "dosya": "Çelësi i Xhenetit_SQ.pdf",
+   "dil": "sq"
+  },
+  {
+   "dosya": "ஈமான் உடன் இஸ் லாம்-TA.pdf",
+   "dil": "ta"
+  },
+  {
+   "dosya": "உளவாளி ஒத்த வாதங்கள்-TA.pdf",
+   "dil": "ta"
+  },
+  {
+   "dosya": "ணது அன்தரர்ந்பி (மல்னல்னரயு அனஹி மல்னம்)-TA.pdf",
+   "dil": "ta"
+  },
+  {
+   "dosya": "ความศ&ทธา)_กคน-องการ (Herkese lazim olan İman).pdf",
+   "dil": "th"
+  },
+  {
+   "dosya": "Susi Ng Daan Patungong Paraiso_PH.pdf",
+   "dil": "tl"
+  },
+  {
+   "dosya": "El-münkızü mined-dalâl-TR.pdf",
+   "dil": "tr"
+  },
+  {
+   "dosya": "İngiliz Câsûsunun İ`tirâfları-TR.pdf",
+   "dil": "tr"
+  },
+  {
+   "dosya": "İslâm Âlimleri ve Evliyâlar Biyogrofisi-TR.pdf",
+   "dil": "tr"
+  },
+  {
+   "dosya": "OSMANLICA/OTA-منتخبات از امام رباني.pdf",
+   "dil": "tr"
+  },
+  {
+   "dosya": "Sevgili_peygamberim-TR.pdf",
+   "dil": "tr"
+  },
+  {
+   "dosya": "Türkçe kutub-i-sitte-TR.pdf",
+   "dil": "tr"
+  },
+  {
+   "dosya": "UG-تبتقادنامه.pdf",
+   "dil": "ug"
+  },
+  {
+   "dosya": "UG-سويوملوك پهيغه مبريم (سه لله للاهو ئه له يهى وهسه للهم).pdf",
+   "dil": "ug"
+  },
+  {
+   "dosya": "UR- اعترافات جاسوس انگليسى.pdf",
+   "dil": "ur"
+  },
+  {
+   "dosya": "UR- عَقَائِدِ نِظَامِيَّه شَرْحِ فِقْهِ اكْبَرْ.pdf",
+   "dil": "ur"
+  },
+  {
+   "dosya": "Ҳазрати Муҳаммад (алайҳиссалом) ҳаёти-UZ.pdf",
+   "dil": "uz"
+  },
+  {
+   "dosya": "Olufẹ mi Anobi (sallallahu ‘alaihi wa sallam)  (Sevgili Peygamberim).pdf",
+   "dil": "yo"
+  },
+  {
+   "dosya": "ÌGBÀGBỌÀTI ISLAM (Belief and Islam).pdf",
+   "dil": "yo"
+  },
+  {
+   "dosya": "末日与来世-ZH.pdf",
+   "dil": "zh"
+  }
+ ]
+}

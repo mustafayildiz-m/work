@@ -6,7 +6,16 @@
     "deleteOutDir": true,
     "assets": [
       "mail/templates/**/*",
-      { "include": "qa/data/**/*.json", "outDir": "dist", "watchAssets": true }
+      {
+        "include": "qa/data/**/*.json",
+        "outDir": "dist",
+        "watchAssets": true
+      },
+      {
+        "include": "documents/**/*.json",
+        "outDir": "dist",
+        "watchAssets": true
+      }
     ],
     "watchAssets": true
   }
