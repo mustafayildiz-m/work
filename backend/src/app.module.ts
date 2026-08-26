@@ -68,6 +68,7 @@ import { NewsletterModule } from './modules/newsletter.module';
 import { Paper } from './entities/paper.entity';
 import { PaperModule } from './modules/paper.module';
 import { QaModule } from './qa/qa.module';
+import { DocumentsModule } from './documents/documents.module';
 import { UserPost } from './entities/user-post.entity';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -141,6 +142,7 @@ const isProduction = process.env.NODE_ENV === 'production';
     NewsletterModule,
     PaperModule,
     QaModule,
+    DocumentsModule,
   ],
   controllers: [AppController],
   providers: [
