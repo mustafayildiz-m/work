@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Col, Form, Spinner } from 'react-bootstrap';
 import { BsSearch, BsBook } from 'react-icons/bs';
 import Link from 'next/link';
@@ -19,8 +20,13 @@ const getFlagImageUrl = (flagUrl) => {
 
 const BooksPage = () => {
   const { t } = useLanguage();
-  const [query, setQuery] = useState('');
-  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const searchParams = useSearchParams();
+  // Dış linkler (ör. /api/kitap-ac yönlendirmesi) arama ve dil filtresini URL ile geçirir
+  const urlSearch = searchParams?.get('search') || '';
+  const languageId = searchParams?.get('languageId') || '';
+  const languageName = decodeURIComponent(searchParams?.get('languageName') || '');
+  const [query, setQuery] = useState(urlSearch);
+  const [debouncedQuery, setDebouncedQuery] = useState(urlSearch);
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -45,15 +51,18 @@ const BooksPage = () => {
   }, []);
 
   const fetchBooks = useCallback(async (search) => {
-    if (!search || search.length < 2) {
+    const hasSearch = !!search && search.length >= 2;
+    // Dil filtresi varsa arama olmadan da listele: kullanıcı gezinebilsin
+    if (!hasSearch && !languageId) {
       setBooks([]);
       return;
     }
     setLoading(true);
     try {
-      const res = await fetch(
-        `${API_BASE_URL}/books?search=${encodeURIComponent(search)}&limit=12&page=1`
-      );
+      const params = new URLSearchParams({ limit: '12', page: '1' });
+      if (hasSearch) params.set('search', search);
+      if (languageId) params.set('languageId', languageId);
+      const res = await fetch(`${API_BASE_URL}/books?${params.toString()}`);
       const json = await res.json();
       const data = json.data || [];
       setBooks(
@@ -75,7 +84,7 @@ const BooksPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [pickBestTranslation, t]);
+  }, [pickBestTranslation, t, languageId]);
 
   useEffect(() => {
     fetchBooks(debouncedQuery);
@@ -94,7 +103,7 @@ const BooksPage = () => {
     return `/feed/books/${book.id}`;
   };
 
-  const showResults = debouncedQuery.length >= 2;
+  const showResults = debouncedQuery.length >= 2 || !!languageId;
 
   return (
     <Col lg={9} className="feed-main-col feed-main-col--stacked">
@@ -128,6 +137,14 @@ const BooksPage = () => {
             </div>
           </div>
         </div>
+
+        {/* Dil filtresi aktifse göster */}
+        {languageId && languageName && (
+          <div className="mt-2 d-flex align-items-center gap-2 small text-muted">
+            <BsBook className="opacity-75" />
+            <span>{languageName}</span>
+          </div>
+        )}
 
         {/* Sonuçlar - yazdıkça altta */}
         {showResults && (
