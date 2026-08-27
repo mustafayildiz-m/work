@@ -23,15 +23,53 @@ function publicBaseUrl(req: Request): string {
 }
 
 /**
- * Dış sistemler için: kitap adı + dil ile PDF'i doğrudan açar.
+ * Dış sistemler için: kitap adı + dil ile kitabı sitede açar.
  *
- *   GET /kitap-ac?ad=My Beloved Prophet-EN         -> 302 redirect, PDF açılır
- *   GET /kitap-ac?ad=My Beloved Prophet&dil=en     -> aynı
- *   GET /kitap-ac?ad=...&json=1                    -> yönlendirme yerine JSON
+ *   GET /kitap-ac?ad=My Beloved Prophet-EN   -> 302 /feed/books/385  (detay sayfası)
+ *   GET /kitap-ac?ad=bulunmayan bir kitap    -> 302 /feed/books?...  (dil filtreli liste)
+ *   GET /kitap-ac?ad=...&json=1              -> yönlendirme yerine JSON
+ *
+ * Kullanıcı PDF'e değil siteye düşer; böylece diğer kitapları ve modülleri
+ * keşfedebilir. PDF'in kendisi detay sayfasındaki okuyucudan açılıyor,
+ * doğrudan /documents/{hash}.pdf linkleri de çalışmaya devam ediyor.
  */
 @Controller('kitap-ac')
 export class KitapAramaController {
   constructor(private readonly arama: KitapAramaService) {}
+
+  /** Kitap detay sayfası. Dil paramları detay sayfasının "geri" linkini besliyor. */
+  private detayUrl(base: string, kitapId: number): string {
+    const dil = this.arama.dilBilgisi(kitapId);
+    const qs = new URLSearchParams();
+    if (dil?.dilId) {
+      qs.set('languageId', String(dil.dilId));
+      qs.set('languageName', dil.dilAdi);
+      qs.set('languageCode', dil.dilKodu);
+    }
+    const ek = qs.toString();
+    return `${base}/feed/books/${kitapId}${ek ? `?${ek}` : ''}`;
+  }
+
+  /**
+   * Kitap bulunamadığında gidilecek liste sayfası.
+   *
+   * `ad` yalnızca eşleşme ihtimali varken geçilir. Katalogda olmayan bir kitabın
+   * adını arama olarak göndermek kullanıcıyı garanti "Sonuç bulunamadı" ekranına
+   * düşürür; o durumda sadece dil filtresi verilir ki o dildeki kitaplar listelenip
+   * kullanıcı gezinebilsin.
+   */
+  private listeUrl(base: string, ad: string, dilKodu: string): string {
+    const qs = new URLSearchParams();
+    if (ad) qs.set('search', ad);
+    const dil = dilKodu ? this.arama.dilKodundanId(dilKodu) : null;
+    if (dil?.dilId) {
+      qs.set('languageId', String(dil.dilId));
+      qs.set('languageName', dil.dilAdi);
+      qs.set('languageCode', dilKodu.toLowerCase());
+    }
+    const ek = qs.toString();
+    return `${base}/feed/books${ek ? `?${ek}` : ''}`;
+  }
 
   @Get()
   async ac(
@@ -44,20 +82,28 @@ export class KitapAramaController {
       throw new BadRequestException("'ad' parametresi zorunlu");
     }
 
-    const sonuc = await this.arama.ara(ad.trim(), dil);
+    const arananAd = ad.trim();
+    const sonuc = await this.arama.ara(arananAd, dil);
     const base = publicBaseUrl(res.req);
+    const dilKodu = (dil || KitapAramaService.dilKodu(arananAd) || '').toLowerCase();
+
+    // Liste sayfasına giderken arama kutusuna dosya adı değil, temiz başlık yazılsın
+    const aramaMetni = KitapAramaService.adaylar(arananAd)[0] || arananAd;
 
     if (sonuc.durum === 'bulundu') {
-      const link = await this.arama.kisaLink(sonuc.kitapId, base);
-      if (!link) {
-        res.status(404).json({ durum: 'bulunamadi', mesaj: 'Kitabın PDF dosyası yok.' });
-        return;
-      }
+      const url = this.detayUrl(base, sonuc.kitapId);
+      const pdfUrl = await this.arama.kisaLink(sonuc.kitapId, base);
       if (json === '1') {
-        res.json({ durum: 'bulundu', kitapId: sonuc.kitapId, guven: sonuc.guven, url: link });
+        res.json({
+          durum: 'bulundu',
+          kitapId: sonuc.kitapId,
+          guven: sonuc.guven,
+          url,
+          pdfUrl,
+        });
         return;
       }
-      res.redirect(302, link); // tarayıcı PDF'i doğrudan açar
+      res.redirect(302, url);
       return;
     }
 
@@ -66,32 +112,50 @@ export class KitapAramaController {
         sonuc.adaylar.map(async (a) => ({
           kitapId: a.kitapId,
           baslik: a.baslik,
-          url: await this.arama.kisaLink(a.kitapId, base),
+          url: this.detayUrl(base, a.kitapId),
+          pdfUrl: await this.arama.kisaLink(a.kitapId, base),
         })),
       );
-      res.status(300).json({
-        durum: 'belirsiz',
-        mesaj: 'Birden fazla kitap eşleşti; doğru olanı seçin.',
-        adaylar,
-      });
+      if (json === '1') {
+        res.status(300).json({
+          durum: 'belirsiz',
+          mesaj: 'Birden fazla kitap eşleşti.',
+          adaylar,
+        });
+        return;
+      }
+      // Adaylar gerçekten var, arama metni sonuç getirir
+      res.redirect(302, this.listeUrl(base, aramaMetni, dilKodu));
       return;
     }
 
-    if (sonuc.durum === 'katalogda-yok') {
+    // Bulunamadı / katalogda yok: arama metni GEÇİLMEZ (bkz. listeUrl),
+    // o dildeki kitaplar listelenir ve kullanıcı gezinir
+    const listeUrl = this.listeUrl(base, '', dilKodu);
+
+    if (json === '1') {
+      const oneriler =
+        sonuc.durum === 'bulunamadi'
+          ? await Promise.all(
+              sonuc.oneriler.map(async (o) => ({
+                kitapId: o.kitapId,
+                baslik: o.baslik,
+                url: this.detayUrl(base, o.kitapId),
+              })),
+            )
+          : [];
       res.status(404).json({
-        durum: 'katalogda-yok',
-        mesaj: 'Bu kitap sizin listenizde var ancak bizim katalogumuzda bulunmuyor.',
+        durum: sonuc.durum,
+        mesaj:
+          sonuc.durum === 'katalogda-yok'
+            ? 'Bu kitap sizin listenizde var ancak bizim katalogumuzda bulunmuyor.'
+            : 'Kitap bulunamadı.',
+        url: listeUrl,
+        oneriler,
       });
       return;
     }
 
-    const oneriler = await Promise.all(
-      sonuc.oneriler.map(async (o) => ({
-        kitapId: o.kitapId,
-        baslik: o.baslik,
-        url: await this.arama.kisaLink(o.kitapId, base),
-      })),
-    );
-    res.status(404).json({ durum: 'bulunamadi', mesaj: 'Kitap bulunamadı.', oneriler });
+    res.redirect(302, listeUrl);
   }
 }

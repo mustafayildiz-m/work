@@ -35,7 +35,14 @@ export class KitapAramaService implements OnModuleInit {
   private readonly logger = new Logger(KitapAramaService.name);
   private tablo = new Map<string, Kayit>();
   private katalogdaYok = new Set<string>();
-  private basliklar: { kitapId: number; dil: string; baslik: string; pdfUrl: string }[] = [];
+  private basliklar: {
+    kitapId: number;
+    dil: string;
+    dilId: number | null;
+    dilAdi: string;
+    baslik: string;
+    pdfUrl: string;
+  }[] = [];
 
   constructor(
     @InjectRepository(BookTranslation)
@@ -139,6 +146,8 @@ export class KitapAramaService implements OnModuleInit {
       .map((s) => ({
         kitapId: s.bookId,
         dil: (s.language?.code || '').toLowerCase(),
+        dilId: s.languageId ?? null,
+        dilAdi: s.language?.name || '',
         baslik: s.title || '',
         pdfUrl: s.pdfUrl,
       }));
@@ -154,6 +163,19 @@ export class KitapAramaService implements OnModuleInit {
 
   private baslikOf(kitapId: number): string {
     return this.basliklar.find((b) => b.kitapId === kitapId)?.baslik || `#${kitapId}`;
+  }
+
+  /** Kitabın dil bilgisi — detay sayfasındaki geri dönüş filtresi için. */
+  dilBilgisi(kitapId: number): { dilId: number | null; dilAdi: string; dilKodu: string } | null {
+    const b = this.basliklar.find((x) => x.kitapId === kitapId);
+    return b ? { dilId: b.dilId, dilAdi: b.dilAdi, dilKodu: b.dil } : null;
+  }
+
+  /** Dil kodundan languageId — kitap listesini filtrelemek için. */
+  dilKodundanId(kod: string): { dilId: number | null; dilAdi: string } | null {
+    if (!kod) return null;
+    const b = this.basliklar.find((x) => x.dil === kod.toLowerCase());
+    return b ? { dilId: b.dilId, dilAdi: b.dilAdi } : null;
   }
 
   async ara(ad: string, dilParam?: string): Promise<AramaSonucu> {
