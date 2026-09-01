@@ -449,6 +449,7 @@
   },
   "scholars": {
     "title": "Islamische Gelehrte",
+    "brandLabel": "Windows of Islam",
     "searchPlaceholder": "Gelehrter suchen (Name oder Biografie)...",
     "totalScholars": "Gelehrte",
     "noScholarsFound": "Keine Gelehrten gefunden",

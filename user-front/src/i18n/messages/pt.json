@@ -450,6 +450,7 @@
   },
   "scholars": {
     "title": "Académicos islâmicos",
+    "brandLabel": "Windows of Islam",
     "searchPlaceholder": "Procurar académico (nome ou biografia)...",
     "totalScholars": "Académicos",
     "noScholarsFound": "Nenhum académico encontrado",

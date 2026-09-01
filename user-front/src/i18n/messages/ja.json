@@ -449,6 +449,7 @@
   },
   "scholars": {
     "title": "イスラム学者",
+    "brandLabel": "Windows of Islam",
     "searchPlaceholder": "学者を検索（名前または自己紹介）...",
     "totalScholars": "学者",
     "noScholarsFound": "学者が見つかりません",

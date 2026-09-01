@@ -522,6 +522,7 @@
   },
   "scholars": {
     "title": "Իսլամ գիտնականներ",
+    "brandLabel": "Windows of Islam",
     "searchPlaceholder": "Որոնել գիտնական (անուն կամ կենսագրություն)...",
     "totalScholars": "Գիտնականներ",
     "noScholarsFound": "Ոչ մի գիտնական չի գտնվել",

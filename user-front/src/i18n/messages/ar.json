@@ -453,6 +453,7 @@
   },
   "scholars": {
     "title": "العلماء الإسلاميون",
+    "brandLabel": "Windows of Islam",
     "searchPlaceholder": "ابحث عن عالم (الاسم أو السيرة الذاتية)...",
     "totalScholars": "عالم",
     "noScholarsFound": "لم يتم العثور على علماء",

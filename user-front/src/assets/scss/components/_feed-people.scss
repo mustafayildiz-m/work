@@ -38,6 +38,15 @@
   margin: 0.15rem 0 0;
 }
 
+.feed-people-brand {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--bs-secondary-color);
+  white-space: nowrap;
+  margin-left: auto;
+}
+
 .feed-people-stats {
   display: flex;
   gap: 0.375rem;
@@ -387,6 +396,10 @@
   .feed-people-meta,
   .feed-people-bio {
     color: #9bc99b !important;
+  }
+
+  .feed-people-brand {
+    color: #c8e6c9 !important;
   }
 
   .feed-people-item:hover {

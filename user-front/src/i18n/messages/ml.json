@@ -522,6 +522,7 @@
   },
   "scholars": {
     "title": "ഇസ്ലാമിക പണ്ഡിതന്മാർ",
+    "brandLabel": "Windows of Islam",
     "searchPlaceholder": "പണ്ഡിതനെ തിരയുക (പേര് അല്ലെങ്കിൽ ജീവചരിത്രം)...",
     "totalScholars": "പണ്ഡിതന്മാർ",
     "noScholarsFound": "പണ്ഡിതന്മാരെ കണ്ടെത്തിയില്ല",

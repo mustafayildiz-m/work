@@ -438,6 +438,7 @@
   },
   "scholars": {
     "title": "Cercetători islamici",
+    "brandLabel": "Windows of Islam",
     "searchPlaceholder": "Căutați cercetător (nume sau biografie)...",
     "totalScholars": "Cercetători",
     "noScholarsFound": "Nu s-au găsit cercetători",

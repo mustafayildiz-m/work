@@ -450,6 +450,7 @@
   },
   "scholars": {
     "title": "Studiosi islamici",
+    "brandLabel": "Windows of Islam",
     "searchPlaceholder": "Cerca uno studioso (nome o biografia)...",
     "totalScholars": "Studiosi",
     "noScholarsFound": "Nessuno studioso trovato",

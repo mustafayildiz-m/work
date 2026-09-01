@@ -449,6 +449,7 @@
   },
   "scholars": {
     "title": "Érudits islamiques",
+    "brandLabel": "Windows of Islam",
     "searchPlaceholder": "Rechercher un érudit (nom ou biographie)...",
     "totalScholars": "Érudits",
     "noScholarsFound": "Aucun érudit trouvé",

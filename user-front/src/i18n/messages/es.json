@@ -450,6 +450,7 @@
   },
   "scholars": {
     "title": "Eruditos islámicos",
+    "brandLabel": "Windows of Islam",
     "searchPlaceholder": "Buscar erudito (nombre o biografía)...",
     "totalScholars": "Becarios",
     "noScholarsFound": "No se han encontrado estudiosos",

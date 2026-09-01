@@ -522,6 +522,7 @@
   },
   "scholars": {
     "title": "Исламски учењаци",
+    "brandLabel": "Windows of Islam",
     "searchPlaceholder": "Претражите научника (име или биографију)...",
     "totalScholars": "Сцхоларс",
     "noScholarsFound": "Нису пронађени научници",
