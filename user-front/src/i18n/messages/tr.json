@@ -537,6 +537,7 @@
   },
   "scholars": {
     "title": "İslam Alimleri",
+    "brandLabel": "Windows of Islam",
     "searchPlaceholder": "Alim ara (isim veya biyografi)...",
     "totalScholars": "Alim",
     "noScholarsFound": "Alim bulunamadı",

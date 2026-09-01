@@ -450,6 +450,7 @@
   },
   "scholars": {
     "title": "이슬람 학자",
+    "brandLabel": "Windows of Islam",
     "searchPlaceholder": "학자(이름 또는 약력) 검색...",
     "totalScholars": "학자",
     "noScholarsFound": "학자 없음",

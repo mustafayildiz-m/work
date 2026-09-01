@@ -438,6 +438,7 @@
   },
   "scholars": {
     "title": "Iszlám tudósok",
+    "brandLabel": "Windows of Islam",
     "searchPlaceholder": "Keresés tudós (név vagy életrajz)...",
     "totalScholars": "Ösztöndíjasok",
     "noScholarsFound": "Nem találtak tudósokat",

@@ -450,6 +450,7 @@
   },
   "scholars": {
     "title": "伊斯兰学者",
+    "brandLabel": "Windows of Islam",
     "searchPlaceholder": "搜索学者（姓名或简历）...",
     "totalScholars": "学者",
     "noScholarsFound": "未找到学者",

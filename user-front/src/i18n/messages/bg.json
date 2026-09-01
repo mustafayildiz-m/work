@@ -438,6 +438,7 @@
   },
   "scholars": {
     "title": "Ислямски учени",
+    "brandLabel": "Windows of Islam",
     "searchPlaceholder": "Търсене на учен (име или биография)...",
     "totalScholars": "Ученици",
     "noScholarsFound": "Не са намерени учени",

@@ -190,6 +190,7 @@ const ScholarsPage = () => {
               {totalCount} {t('scholars.totalScholars') || t('scholars.title')}
             </p>
           </div>
+          <span className="feed-people-brand">{t('scholars.brandLabel')}</span>
         </div>
 
         <div className="feed-people-toolbar">

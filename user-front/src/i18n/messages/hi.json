@@ -522,6 +522,7 @@
   },
   "scholars": {
     "title": "इस्लामी विद्वान",
+    "brandLabel": "Windows of Islam",
     "searchPlaceholder": "विद्वान खोजें (नाम या जीवनी)...",
     "totalScholars": "विद्वानों",
     "noScholarsFound": "कोई विद्वान नहीं मिला",
