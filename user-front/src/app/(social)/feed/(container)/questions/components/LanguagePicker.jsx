@@ -1,10 +1,15 @@
 'use client';
 
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
-import { Card, CardBody, Form, InputGroup, ListGroup, Badge } from 'react-bootstrap';
-import { BsSearch, BsGlobe } from 'react-icons/bs';
+import { Card, CardBody, Form, ListGroup, Badge } from 'react-bootstrap';
+import { BsSearch, BsGlobe, BsChevronRight, BsXLg, BsInboxes } from 'react-icons/bs';
 import { useLanguage } from '@/context/useLanguageContext';
-import { getQaLanguageLabels, isSystemUiLanguage, UI_LOCALE_CODES, resolveUiLocaleFromQaLanguage } from '@/utils/uiLanguageDisplay';
+import {
+  getQaLanguageLabels,
+  isSystemUiLanguage,
+  UI_LOCALE_CODES,
+  resolveUiLocaleFromQaLanguage,
+} from '@/utils/uiLanguageDisplay';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 const MIN_SEARCH_LENGTH = 2;
@@ -53,6 +58,12 @@ export default function LanguagePicker({ suggested, onSelect, embedded = false }
     [search],
   );
 
+  const handleClear = useCallback(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    setQuery('');
+    setResults([]);
+  }, []);
+
   const handleShowAll = useCallback(async () => {
     if (allLanguages.length > 0) {
       setShowAll(true);
@@ -92,84 +103,117 @@ export default function LanguagePicker({ suggested, onSelect, embedded = false }
     const { primary, secondary, showSecondary } = getQaLanguageLabels(lang, t);
 
     return (
-    <ListGroup.Item
-      key={lang.id || slug}
-      action
-      onClick={() => onSelect({ ...lang, iso639_3: slug })}
-      className={`questions-lang-item d-flex justify-content-between align-items-center${nested ? ' ps-4' : ''}`}
-      data-testid={`lang-item-${slug}`}
-      dir={lang.direction === 'rtl' ? 'rtl' : 'ltr'}
-    >
-      <div>
-        <span className={`${nested ? 'fw-semibold' : 'fw-bold fs-5'} questions-lang-native`}>{primary}</span>
-        {showSecondary && (
-          <>
-            <br />
-            <small className="questions-lang-english">{secondary}</small>
-          </>
+      <ListGroup.Item
+        key={lang.id || slug}
+        action
+        onClick={() => onSelect({ ...lang, iso639_3: slug })}
+        className={`questions-lang-item d-flex align-items-center gap-3${nested ? ' questions-lang-item--nested' : ''}`}
+        data-testid={`lang-item-${slug}`}
+        dir={lang.direction === 'rtl' ? 'rtl' : 'ltr'}
+      >
+        {lang.flagUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={lang.flagUrl} alt="" aria-hidden="true" className="questions-lang-flag" />
+        ) : (
+          <span className="questions-lang-flag d-grid place-items-center" aria-hidden="true" />
         )}
-      </div>
-      {lang.questionCount > 0 && (
-        <Badge className="questions-lang-badge">{lang.questionCount}</Badge>
-      )}
-    </ListGroup.Item>
+
+        <span className="flex-grow-1 min-w-0">
+          <span
+            className={`questions-lang-native d-block text-truncate ${nested ? '' : 'fs-6'}`}
+          >
+            {primary}
+          </span>
+          {showSecondary && (
+            <small className="questions-lang-english d-block text-truncate">{secondary}</small>
+          )}
+        </span>
+
+        {lang.questionCount > 0 && (
+          <Badge className="questions-lang-badge">{lang.questionCount.toLocaleString()}</Badge>
+        )}
+        <BsChevronRight size={12} className="questions-lang-chevron" aria-hidden="true" />
+      </ListGroup.Item>
     );
   };
 
   const content = (
     <>
-      <InputGroup className="mb-3 qa-search-group">
-        <InputGroup.Text className="qa-search-icon">
-          <BsSearch />
-        </InputGroup.Text>
+      <div className="questions-search">
+        <BsSearch size={16} className="questions-search__icon" aria-hidden="true" />
         <Form.Control
           type="text"
           placeholder={t('qa.languageSearchPlaceholder')}
           value={query}
           onChange={handleInputChange}
-          className="qa-search-input"
+          className="questions-search__input"
           data-testid="language-search-input"
           aria-label={t('qa.languageSearchAria')}
         />
-      </InputGroup>
+        {query && (
+          <button
+            type="button"
+            className="questions-search__clear"
+            onClick={handleClear}
+            aria-label={t('qa.clear') || 'Clear'}
+          >
+            <BsXLg size={11} />
+          </button>
+        )}
+      </div>
 
       {query.length >= MIN_SEARCH_LENGTH && (
         <div data-testid="search-results">
           {searching ? (
-            <p className="text-center text-muted py-3">{t('qa.searching')}</p>
+            <div className="questions-list">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="questions-skeleton" style={{ height: '3.1rem' }}>
+                  <span className="visually-hidden">{t('qa.searching')}</span>
+                </div>
+              ))}
+            </div>
           ) : results.length > 0 ? (
-            <ListGroup className="mb-3 questions-lang-list">{results.map(renderLanguageItem)}</ListGroup>
+            <ListGroup className="mb-3 questions-lang-list">
+              {results.map((lang) => renderLanguageItem(lang))}
+            </ListGroup>
           ) : (
-            <p className="text-center text-muted py-3" data-testid="no-results">
-              {t('qa.noLanguagesFound')}
-            </p>
+            <div className="questions-empty" data-testid="no-results">
+              <span className="questions-empty__icon">
+                <BsInboxes size={24} />
+              </span>
+              <p className="questions-empty__title">{t('qa.noLanguagesFound')}</p>
+            </div>
           )}
         </div>
       )}
 
       {!query && suggested?.browserSuggested && (
         <div className="mb-3" data-testid="browser-suggested">
-          <small className="text-muted d-block mb-1">{t('qa.browserDetected')}</small>
-          <ListGroup className="questions-lang-list">{renderLanguageItem(suggested.browserSuggested)}</ListGroup>
+          <div className="questions-label">{t('qa.browserDetected')}</div>
+          <ListGroup className="questions-lang-list">
+            {renderLanguageItem(suggested.browserSuggested)}
+          </ListGroup>
         </div>
       )}
 
       {!query && !showAll && popularSystemLanguages.length > 0 && (
         <div className="mb-3" data-testid="popular-languages">
-          <small className="text-muted d-block mb-2">{t('qa.popularLanguages')}</small>
-          <ListGroup className="questions-lang-list">{popularSystemLanguages.map(renderLanguageItem)}</ListGroup>
+          <div className="questions-label">{t('qa.popularLanguages')}</div>
+          <ListGroup className="questions-lang-list">
+            {popularSystemLanguages.map((lang) => renderLanguageItem(lang))}
+          </ListGroup>
         </div>
       )}
 
       {!query && !showAll && (
-        <div className="text-center">
+        <div className="text-center mt-3">
           <button
             type="button"
-            className="btn qa-load-more-btn btn-sm"
+            className="questions-btn"
             onClick={handleShowAll}
             data-testid="show-all-btn"
           >
-            <BsGlobe className="me-1" />
+            <BsGlobe size={14} />
             {t('qa.showAllLanguages')}
           </button>
         </div>
@@ -177,12 +221,16 @@ export default function LanguagePicker({ suggested, onSelect, embedded = false }
 
       {showAll && allLanguages.length > 0 && (
         <div data-testid="all-languages">
-          <small className="text-muted d-block mb-2">{t('qa.allLanguages')}</small>
+          <div className="questions-label">{t('qa.allLanguages')}</div>
           <ListGroup className="questions-lang-list">
             {allLanguages.map((parent) => (
-              <div key={parent.id || parent.iso639_3}>
+              <div
+                key={parent.id || parent.iso639_3}
+                className="d-flex flex-column gap-1"
+                style={{ marginBottom: '0.375rem' }}
+              >
                 {renderLanguageItem(parent)}
-                  {parent.children?.map((child) => renderLanguageItem(child, { nested: true }))}
+                {parent.children?.map((child) => renderLanguageItem(child, { nested: true }))}
               </div>
             ))}
           </ListGroup>
