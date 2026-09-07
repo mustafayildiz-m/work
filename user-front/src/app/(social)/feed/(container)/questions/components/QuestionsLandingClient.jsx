@@ -42,7 +42,7 @@ export default function QuestionsLandingClient() {
       <Col lg={9} className="feed-main-col questions-page">
         <div className="questions-shell">
           <div className="questions-hero">
-            <div className="d-flex align-items-center gap-3">
+            <div className="questions-hero__row">
               <span className="questions-hero__icon">
                 <BsQuestionCircle size={22} />
               </span>
@@ -92,8 +92,8 @@ export default function QuestionsLandingClient() {
   return (
     <Col lg={9} className="feed-main-col questions-page">
       <div className="questions-shell" data-testid="questions-landing">
-        <header className="questions-hero">
-          <div className="d-flex align-items-start gap-3">
+        <div className="questions-hero">
+          <div className="questions-hero__row align-items-start">
             <span className="questions-hero__icon">
               <BsQuestionCircle size={22} />
             </span>
@@ -107,13 +107,13 @@ export default function QuestionsLandingClient() {
               </p>
             </div>
           </div>
-        </header>
+        </div>
 
         <div className="questions-body">
           {stats && (
             <div className="questions-stats" data-testid="stats-row">
               {statTiles.map((tile) => (
-                <div key={tile.label} className="questions-stat">
+                <div key={tile.label} className="questions-stat questions-reveal">
                   <span className="questions-stat__icon">{tile.icon}</span>
                   <p className="questions-stat__value">{tile.value}</p>
                   <small className="questions-stat__label">{tile.label}</small>

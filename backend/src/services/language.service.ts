@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Not, In, Raw } from 'typeorm';
 import { Language } from '../languages/entities/language.entity';
 import { BookTranslation } from '../books/entities/book-translation.entity';
+import { QaItemTranslation } from '../qa/entities/qa-item-translation.entity';
 import { CreateLanguageDto } from '../dto/create-language.dto';
 import { UpdateLanguageDto } from '../dto/update-language.dto';
 import {
@@ -23,6 +24,7 @@ import { CacheService } from './cache.service';
 const CACHE_TTL_SUGGESTED = 300; // 5 minutes
 const CACHE_TTL_GROUPED = 600; // 10 minutes
 const CACHE_TTL_STATS = 120; // 2 minutes
+const CACHE_TTL_COUNTS = 120; // 2 minutes
 
 @Injectable()
 export class LanguageService {
@@ -31,6 +33,8 @@ export class LanguageService {
     private languageRepository: Repository<Language>,
     @InjectRepository(BookTranslation)
     private bookTranslationRepository: Repository<BookTranslation>,
+    @InjectRepository(QaItemTranslation)
+    private qaItemTranslationRepository: Repository<QaItemTranslation>,
     @Optional() @Inject(CacheService) private cacheService?: CacheService,
   ) {}
 
@@ -159,7 +163,8 @@ export class LanguageService {
         ],
       });
       if (isoMatch) {
-        return [this.normalizeQaLanguage(isoMatch)];
+        const counts = await this.getLiveQuestionCounts();
+        return [this.normalizeQaLanguage(isoMatch, counts)];
       }
     }
 
@@ -170,11 +175,14 @@ export class LanguageService {
         '(LOWER(l.nativeName) LIKE :pattern OR LOWER(l.englishName) LIKE :pattern OR LOWER(l.name) LIKE :pattern OR l.iso639_3 = :exact OR l.code = :exact OR LOWER(l.aliases) LIKE :pattern)',
         { pattern: `%${q}%`, exact: q },
       )
-      .orderBy('l.questionCount', 'DESC')
       .take(limit);
 
+    // Ordered on the live count, so `take` cannot be skewed by the stale column.
     const results = await qb.getMany();
-    return results.map((l) => this.normalizeQaLanguage(l));
+    const counts = await this.getLiveQuestionCounts();
+    return results
+      .map((l) => this.normalizeQaLanguage(l, counts))
+      .sort((a, b) => b.questionCount - a.questionCount);
   }
 
   async qaSuggested(acceptLanguage?: string): Promise<{
@@ -193,10 +201,15 @@ export class LanguageService {
           ],
         });
         if (match) {
-          browserSuggested = this.normalizeQaLanguage(match);
+          browserSuggested = match;
           break;
         }
       }
+    }
+
+    const counts = await this.getLiveQuestionCounts();
+    if (browserSuggested) {
+      browserSuggested = this.normalizeQaLanguage(browserSuggested, counts);
     }
 
     // Cache popular languages
@@ -205,16 +218,23 @@ export class LanguageService {
     if (this.cacheService) {
       popular = await this.cacheService.get<Language[]>(cacheKey);
       if (popular) {
-        popular = popular.map((l) => this.normalizeQaLanguage(l));
+        // Counts are refreshed on read, so re-sort: the cached order was built
+        // from whatever the counts were when the entry was written.
+        popular = popular
+          .map((l) => this.normalizeQaLanguage(l, counts))
+          .sort((a, b) => b.questionCount - a.questionCount);
       }
     }
     if (!popular) {
-      popular = await this.languageRepository.find({
+      // Sorted in JS on the live count rather than by the stale column, so the
+      // top 12 is actually the top 12.
+      const candidates = await this.languageRepository.find({
         where: { status: Not('not_published') },
-        order: { questionCount: 'DESC' },
-        take: 12,
       });
-      popular = popular.map((l) => this.normalizeQaLanguage(l));
+      popular = candidates
+        .map((l) => this.normalizeQaLanguage(l, counts))
+        .sort((a, b) => b.questionCount - a.questionCount)
+        .slice(0, 12);
       if (this.cacheService) {
         await this.cacheService.set(cacheKey, popular, CACHE_TTL_SUGGESTED);
       }
@@ -233,17 +253,20 @@ export class LanguageService {
     const languages = await this.languageRepository.find({
       where: { status: Not('not_published'), parentLanguageId: null as any },
       relations: ['children'],
-      order: { questionCount: 'DESC' },
     });
 
-    const result = languages.map((lang) => {
-      if (lang.children) {
-        lang.children = lang.children
-          .filter((c) => c.status !== 'not_published')
-          .map((c) => this.normalizeQaLanguage(c));
-      }
-      return this.normalizeQaLanguage(lang);
-    });
+    const counts = await this.getLiveQuestionCounts();
+    const result = languages
+      .map((lang) => {
+        if (lang.children) {
+          lang.children = lang.children
+            .filter((c) => c.status !== 'not_published')
+            .map((c) => this.normalizeQaLanguage(c, counts))
+            .sort((a, b) => b.questionCount - a.questionCount);
+        }
+        return this.normalizeQaLanguage(lang, counts);
+      })
+      .sort((a, b) => b.questionCount - a.questionCount);
 
     if (this.cacheService) {
       await this.cacheService.set(cacheKey, result, CACHE_TTL_GROUPED);
@@ -279,30 +302,29 @@ export class LanguageService {
         this.languageRepository.count({ where: { status: 'in_progress' } }),
       ]);
 
-    const totalQuestionsResult = await this.languageRepository
-      .createQueryBuilder('l')
-      .select('SUM(l.questionCount)', 'total')
-      .getRawOne();
+    // Counted live; SUM(l.questionCount) undercounts as soon as the column drifts.
+    const counts = await this.getLiveQuestionCounts();
+    const totalQuestions = [...counts.values()].reduce((a, b) => a + b, 0);
 
-    const topLanguages = await this.languageRepository.find({
+    const topCandidates = await this.languageRepository.find({
       where: { status: Not('not_published') },
-      order: { questionCount: 'DESC' },
-      take: 10,
-      select: ['iso639_3', 'englishName', 'questionCount'],
+      select: ['id', 'iso639_3', 'englishName'],
     });
 
     const result = {
       totalLanguages,
       activeLanguages,
       inProgressLanguages,
-      totalQuestions: parseInt(totalQuestionsResult?.total || '0', 10),
-      topLanguages: topLanguages
+      totalQuestions,
+      topLanguages: topCandidates
         .filter((l) => l.iso639_3 && l.englishName)
         .map((l) => ({
           iso639_3: l.iso639_3 as string,
           englishName: l.englishName as string,
-          questionCount: l.questionCount,
-        })),
+          questionCount: counts.get(l.id) ?? 0,
+        }))
+        .sort((a, b) => b.questionCount - a.questionCount)
+        .slice(0, 10),
     };
 
     if (this.cacheService) {
@@ -401,12 +423,55 @@ export class LanguageService {
   }
 
   /** Eski dil kayıtlarında nativeName/iso639_3 boş olabilir — QA API için normalize et */
-  private normalizeQaLanguage(lang: Language): Language {
+  /**
+   * Live Q&A translation count per language id.
+   *
+   * `languages.questionCount` is a denormalized column that only the seeder
+   * refreshes, so it drifts the moment content is added — Turkish read 8 while
+   * the table actually held 184. Counting here keeps every QA endpoint
+   * consistent with what /qa/items/search returns, so the same `isActive`
+   * filter is applied.
+   */
+  private async getLiveQuestionCounts(): Promise<Map<number, number>> {
+    const cacheKey = 'qa:counts:byLanguage';
+    if (this.cacheService) {
+      const cached =
+        await this.cacheService.get<Array<[number, number]>>(cacheKey);
+      if (cached) return new Map(cached);
+    }
+
+    const rows = await this.qaItemTranslationRepository
+      .createQueryBuilder('t')
+      .innerJoin('t.qaItem', 'item', 'item.isActive = :active', {
+        active: true,
+      })
+      .select('t.languageId', 'languageId')
+      .addSelect('COUNT(*)', 'count')
+      .groupBy('t.languageId')
+      .getRawMany<{ languageId: number; count: string }>();
+
+    const counts = new Map<number, number>(
+      rows.map((r) => [Number(r.languageId), Number(r.count)]),
+    );
+
+    if (this.cacheService) {
+      await this.cacheService.set(cacheKey, [...counts], CACHE_TTL_COUNTS);
+    }
+    return counts;
+  }
+
+  private normalizeQaLanguage(
+    lang: Language,
+    counts?: Map<number, number>,
+  ): Language {
     // `name` = Turkish UI label key; do not copy into nativeName/englishName
     lang.nativeName = lang.nativeName || lang.englishName || lang.code || null;
     lang.englishName = lang.englishName || lang.nativeName || lang.code || null;
     if (!lang.iso639_3 && lang.code) {
       lang.iso639_3 = lang.code;
+    }
+    if (counts) {
+      lang.questionCount = counts.get(lang.id) ?? 0;
     }
     return lang;
   }

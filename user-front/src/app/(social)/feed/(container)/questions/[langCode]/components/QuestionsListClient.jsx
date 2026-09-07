@@ -53,7 +53,7 @@ function buildPageWindow(current, totalPages) {
 }
 
 export default function QuestionsListClient({ langCode }) {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const [language, setLanguage] = useState(null);
   const [items, setItems] = useState([]);
   const [total, setTotal] = useState(0);
@@ -211,8 +211,8 @@ export default function QuestionsListClient({ langCode }) {
       data-testid="questions-list-page"
     >
       <div className="questions-shell">
-        <header className="questions-hero">
-          <div className="d-flex align-items-center gap-3">
+        <div className="questions-hero" lang={locale}>
+          <div className="questions-hero__row">
             <Link
               href="/feed/questions"
               className="questions-hero__back"
@@ -254,7 +254,7 @@ export default function QuestionsListClient({ langCode }) {
               {t('qa.qaCount', { count: total })}
             </span>
           </div>
-        </header>
+        </div>
 
         <div className="questions-body">
           <div className="questions-search" ref={listTopRef}>
@@ -307,13 +307,14 @@ export default function QuestionsListClient({ langCode }) {
           {!loading && items.length > 0 && (
             <div className="questions-list qa-accordion-list" data-testid="questions-list">
               {items.map((item, index) => (
-                <QuestionItem
-                  key={item.id}
+                <div className="questions-reveal" key={item.id}>
+                  <QuestionItem
                   item={item}
-                  index={(page - 1) * LIMIT + index}
-                  isRTL={isRTL}
-                  languageId={language?.id}
-                />
+                    index={(page - 1) * LIMIT + index}
+                    isRTL={isRTL}
+                    languageId={language?.id}
+                  />
+                </div>
               ))}
             </div>
           )}
