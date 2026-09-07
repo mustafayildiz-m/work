@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { LanguageService } from './language.service';
 import { Language } from '../languages/entities/language.entity';
 import { BookTranslation } from '../books/entities/book-translation.entity';
+import { QaItemTranslation } from '../qa/entities/qa-item-translation.entity';
 import {
   LanguageSearchDto,
   UpdateLanguageStatusDto,
@@ -30,11 +31,17 @@ const mockLanguage = (overrides = {}): Partial<Language> => ({
   ...overrides,
 });
 
+// Ordered as the repository returns them; QA endpoints re-sort by live count.
 const mockLanguageArray = [
   mockLanguage(),
   mockLanguage({ id: 2, name: 'Arabic', code: 'ara', nativeName: 'العربية', englishName: 'Arabic', iso639_3: 'ara', direction: 'rtl', questionCount: 100 }),
   mockLanguage({ id: 3, name: 'English', code: 'eng', nativeName: 'English', englishName: 'English', iso639_3: 'eng', questionCount: 200 }),
 ];
+
+// Highest question count first — what the QA endpoints are expected to return.
+const byQuestionCountDesc = [...mockLanguageArray].sort(
+  (a, b) => (b.questionCount as number) - (a.questionCount as number),
+);
 
 describe('LanguageService – QA 300 Methods', () => {
   let service: LanguageService;
@@ -51,6 +58,20 @@ describe('LanguageService – QA 300 Methods', () => {
     getMany: jest.fn().mockResolvedValue(mockLanguageArray),
     getCount: jest.fn().mockResolvedValue(3),
     getRawOne: jest.fn().mockResolvedValue({ total: '350' }),
+  };
+
+  // The service derives questionCount from qa_item_translations, so the mock
+  // counts must match the fixtures' questionCount values above.
+  const mockCountQueryBuilder = {
+    innerJoin: jest.fn().mockReturnThis(),
+    select: jest.fn().mockReturnThis(),
+    addSelect: jest.fn().mockReturnThis(),
+    groupBy: jest.fn().mockReturnThis(),
+    getRawMany: jest.fn().mockResolvedValue([
+      { languageId: 1, count: '50' },
+      { languageId: 2, count: '100' },
+      { languageId: 3, count: '200' },
+    ]),
   };
 
   beforeEach(async () => {
@@ -76,6 +97,12 @@ describe('LanguageService – QA 300 Methods', () => {
             createQueryBuilder: jest.fn(),
           },
         },
+        {
+          provide: getRepositoryToken(QaItemTranslation),
+          useValue: {
+            createQueryBuilder: jest.fn().mockReturnValue(mockCountQueryBuilder),
+          },
+        },
       ],
     }).compile();
 
@@ -92,7 +119,7 @@ describe('LanguageService – QA 300 Methods', () => {
       const dto: LanguageSearchDto = { q: 'turk', limit: 10 };
       const result = await service.qaSearch(dto);
 
-      expect(result).toEqual(mockLanguageArray);
+      expect(result).toEqual(byQuestionCountDesc);
       expect(languageRepo.createQueryBuilder).toHaveBeenCalledWith('l');
     });
 
@@ -134,7 +161,7 @@ describe('LanguageService – QA 300 Methods', () => {
       const result = await service.qaSuggested('tr-TR,tr;q=0.9,en;q=0.8');
 
       expect(result.browserSuggested).toBeTruthy();
-      expect(result.popular).toEqual(mockLanguageArray);
+      expect(result.popular).toEqual(byQuestionCountDesc);
     });
 
     it('should return null browserSuggested when no header', async () => {
@@ -167,6 +194,63 @@ describe('LanguageService – QA 300 Methods', () => {
 
       expect(result[0].children).toHaveLength(1);
       expect(result[0].children[0].status).not.toBe('not_published');
+    });
+  });
+
+  // Regression guard: questionCount used to be read straight off the
+  // languages column, which the seeder alone refreshed — Turkish reported 8
+  // while qa_item_translations held 184.
+  describe('live questionCount', () => {
+    const staleColumn = mockLanguage({ id: 1, questionCount: 8 }) as Language;
+
+    beforeEach(() => {
+      mockCountQueryBuilder.getRawMany.mockResolvedValue([
+        { languageId: 1, count: '184' },
+      ]);
+    });
+
+    afterEach(() => {
+      mockCountQueryBuilder.getRawMany.mockResolvedValue([
+        { languageId: 1, count: '50' },
+        { languageId: 2, count: '100' },
+        { languageId: 3, count: '200' },
+      ]);
+    });
+
+    it('reports the counted total, not the stale column, on an exact ISO match', async () => {
+      jest.spyOn(languageRepo, 'findOne').mockResolvedValueOnce(staleColumn);
+
+      const [lang] = await service.qaSearch({ q: 'tur' } as LanguageSearchDto);
+
+      expect(lang.questionCount).toBe(184);
+    });
+
+    it('reports the counted total in qaGrouped', async () => {
+      jest.spyOn(languageRepo, 'find').mockResolvedValueOnce([staleColumn]);
+
+      const result = await service.qaGrouped();
+
+      expect(result[0].questionCount).toBe(184);
+    });
+
+    it('sums the counted totals in qaStats', async () => {
+      jest.spyOn(languageRepo, 'count')
+        .mockResolvedValueOnce(300)
+        .mockResolvedValueOnce(50)
+        .mockResolvedValueOnce(30);
+
+      const result = await service.qaStats();
+
+      expect(result.totalQuestions).toBe(184);
+    });
+
+    it('reports 0 for a language with no translations', async () => {
+      jest.spyOn(languageRepo, 'findOne')
+        .mockResolvedValueOnce(mockLanguage({ id: 99, questionCount: 8 }) as Language);
+
+      const [lang] = await service.qaSearch({ q: 'zzz' } as LanguageSearchDto);
+
+      expect(lang.questionCount).toBe(0);
     });
   });
 
