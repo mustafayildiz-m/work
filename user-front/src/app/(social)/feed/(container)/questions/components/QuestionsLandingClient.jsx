@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardBody, CardHeader, Col, Row, Spinner } from 'react-bootstrap';
-import { BsQuestionCircle } from 'react-icons/bs';
+import { Col } from 'react-bootstrap';
+import { BsQuestionCircle, BsGlobe2, BsPatchCheck, BsChatQuote } from 'react-icons/bs';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/context/useLanguageContext';
 import LanguagePicker from './LanguagePicker';
@@ -39,55 +39,87 @@ export default function QuestionsLandingClient() {
 
   if (loading) {
     return (
-      <Col lg={9} className="feed-main-col qa-page-col">
-        <div className="d-flex justify-content-center py-5" data-testid="loading-spinner">
-          <Spinner animation="border" variant="success" />
+      <Col lg={9} className="feed-main-col questions-page">
+        <div className="questions-shell">
+          <div className="questions-hero">
+            <div className="d-flex align-items-center gap-3">
+              <span className="questions-hero__icon">
+                <BsQuestionCircle size={22} />
+              </span>
+              <div>
+                <span className="questions-hero__eyebrow">Islamic Windows</span>
+                <h1 className="questions-hero__title">{t('qa.title') || 'Questions & Answers'}</h1>
+              </div>
+            </div>
+          </div>
+          <div className="questions-body" data-testid="loading-spinner">
+            <div className="questions-stats">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="questions-skeleton" style={{ height: '5.5rem' }} />
+              ))}
+            </div>
+            <div className="questions-list">
+              {[0, 1, 2, 3, 4].map((i) => (
+                <div key={i} className="questions-skeleton" />
+              ))}
+            </div>
+          </div>
         </div>
       </Col>
     );
   }
 
+  const statTiles = stats
+    ? [
+        {
+          icon: <BsGlobe2 size={15} />,
+          value: stats.totalLanguages?.toLocaleString(),
+          label: t('qa.statsLanguages'),
+        },
+        {
+          icon: <BsPatchCheck size={15} />,
+          value: stats.activeLanguages?.toLocaleString(),
+          label: t('qa.statsActive'),
+        },
+        {
+          icon: <BsChatQuote size={15} />,
+          value: stats.totalQuestions?.toLocaleString(),
+          label: t('qa.statsQuestions'),
+        },
+      ]
+    : [];
+
   return (
-    <Col lg={9} className="feed-main-col qa-page-col">
-      <Card className="qa-page-card questions-landing-card" data-testid="questions-landing">
-        <CardHeader className="qa-page-card__header border-0">
-          <div className="d-flex align-items-center gap-2">
-            <span className="qa-page-card__icon">
-              <BsQuestionCircle size={20} />
+    <Col lg={9} className="feed-main-col questions-page">
+      <div className="questions-shell" data-testid="questions-landing">
+        <header className="questions-hero">
+          <div className="d-flex align-items-start gap-3">
+            <span className="questions-hero__icon">
+              <BsQuestionCircle size={22} />
             </span>
-            <div>
-              <h1 className="qa-page-card__title" data-testid="landing-title">
+            <div className="min-w-0">
+              <span className="questions-hero__eyebrow">Islamic Windows</span>
+              <h1 className="questions-hero__title" data-testid="landing-title">
                 {t('qa.title') || 'Questions & Answers'}
               </h1>
-              <p className="qa-page-card__subtitle">
+              <p className="questions-hero__subtitle">
                 {t('qa.subtitle') || 'Select your language to browse Islamic Q&A content'}
               </p>
             </div>
           </div>
-        </CardHeader>
+        </header>
 
-        <CardBody className="qa-page-card__body">
+        <div className="questions-body">
           {stats && (
-            <Row className="mb-4 g-3" data-testid="stats-row">
-              <Col xs={6} md={4}>
-                <div className="questions-stat-card text-center h-100">
-                  <h3 className="fw-bold mb-0">{stats.totalLanguages}</h3>
-                  <small className="text-muted">{t('qa.statsLanguages')}</small>
+            <div className="questions-stats" data-testid="stats-row">
+              {statTiles.map((tile) => (
+                <div key={tile.label} className="questions-stat">
+                  <span className="questions-stat__icon">{tile.icon}</span>
+                  <p className="questions-stat__value">{tile.value}</p>
+                  <small className="questions-stat__label">{tile.label}</small>
                 </div>
-              </Col>
-              <Col xs={6} md={4}>
-                <div className="questions-stat-card text-center h-100">
-                  <h3 className="fw-bold mb-0">{stats.activeLanguages}</h3>
-                  <small className="text-muted">{t('qa.statsActive')}</small>
-                </div>
-              </Col>
-              <Col xs={12} md={4}>
-                <div className="questions-stat-card text-center h-100">
-                  <h3 className="fw-bold mb-0">{stats.totalQuestions?.toLocaleString()}</h3>
-                  <small className="text-muted">{t('qa.statsQuestions')}</small>
-                </div>
-              </Col>
-            </Row>
+              ))}
+            </div>
           )}
 
           <LanguagePicker
@@ -98,8 +130,8 @@ export default function QuestionsLandingClient() {
               if (slug) router.push(`/feed/questions/${slug}`);
             }}
           />
-        </CardBody>
-      </Card>
+        </div>
+      </div>
     </Col>
   );
 }

@@ -641,7 +641,9 @@
 }
 
 @media (min-width: 992px) {
-  .feed-main-col {
+  /* Scoped to --stacked (books page). A bare .feed-main-col rule here leaks
+     globally and clips every other feed page's content to the sidebar height. */
+  .feed-main-col--stacked {
     display: flex;
     flex-direction: column;
     align-self: flex-start;
