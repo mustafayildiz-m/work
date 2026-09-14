@@ -146,11 +146,15 @@ describe('LanguageService – QA 300 Methods', () => {
       expect(languageRepo.createQueryBuilder).toHaveBeenCalled();
     });
 
-    it('should use default limit of 20 when not specified', async () => {
+    it('should cap results at the default limit of 20 when none is specified', async () => {
       const dto: LanguageSearchDto = { q: 'arabic' };
-      await service.qaSearch(dto);
 
-      expect(mockQueryBuilder.take).toHaveBeenCalledWith(20);
+      const result = await service.qaSearch(dto);
+
+      // The limit is applied after the live-count sort, not by the query
+      // builder, so assert on the returned slice rather than on `take`.
+      expect(mockQueryBuilder.take).not.toHaveBeenCalled();
+      expect(result.length).toBeLessThanOrEqual(20);
     });
   });
 

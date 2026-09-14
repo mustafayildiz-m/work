@@ -174,15 +174,17 @@ export class LanguageService {
       .andWhere(
         '(LOWER(l.nativeName) LIKE :pattern OR LOWER(l.englishName) LIKE :pattern OR LOWER(l.name) LIKE :pattern OR l.iso639_3 = :exact OR l.code = :exact OR LOWER(l.aliases) LIKE :pattern)',
         { pattern: `%${q}%`, exact: q },
-      )
-      .take(limit);
+      );
 
-    // Ordered on the live count, so `take` cannot be skewed by the stale column.
+    // No DB-side take: the stale questionCount column cannot order the rows, so
+    // limiting here would hand back an arbitrary slice. Fetch every match, sort
+    // on the live count, then cut to `limit`.
     const results = await qb.getMany();
     const counts = await this.getLiveQuestionCounts();
     return results
       .map((l) => this.normalizeQaLanguage(l, counts))
-      .sort((a, b) => b.questionCount - a.questionCount);
+      .sort((a, b) => b.questionCount - a.questionCount)
+      .slice(0, limit);
   }
 
   async qaSuggested(acceptLanguage?: string): Promise<{
