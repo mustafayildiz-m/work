@@ -4,6 +4,26 @@ import GoogleProvider from 'next-auth/providers/google';
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 
+const getApiUrl = () =>
+  process.env.BACKEND_API_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  'http://localhost:3000';
+
+const SIGN_IN_PAGE = '/auth-advance/sign-in';
+const THIRTY_DAYS = 30 * 24 * 60 * 60;
+
+const toBoolean = (value) =>
+  value === true || value === 'true' || value === '1' || value === 1;
+
+const mapBackendError = (message) => {
+  const text = (message || '').toString();
+  if (text.includes('devre dışı') || text.includes('disabled')) return 'auth.accountDisabled';
+  if (text.includes('Geçersiz') || text.includes('geçersiz') || text.includes('Invalid') || text.includes('invalid')) {
+    return 'auth.invalidCredentials';
+  }
+  return text || 'auth.invalidCredentials';
+};
+
 export const options = {
   debug: process.env.NODE_ENV === 'development',
   providers: [
@@ -28,28 +48,34 @@ export const options = {
         email: {
           label: 'Email:',
           type: 'text',
-          placeholder: 'Enter your username'
+          placeholder: 'Enter your email'
         },
         password: {
           label: 'Password',
           type: 'password'
+        },
+        rememberMe: {
+          label: 'Remember me',
+          type: 'text'
         }
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         try {
-          // Server-side'da Docker network içinden backend'e erişim için
-          // Docker içindeyse 'backend' hostname'ini, değilse NEXT_PUBLIC_API_URL'i kullan
-          const apiUrl = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-          const response = await fetch(`${apiUrl}/auth/callback/credentials`, {
+          const response = await fetch(`${getApiUrl()}/auth/callback/credentials`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
               email: credentials?.email,
-              password: credentials?.password
+              password: credentials?.password,
+              rememberMe: toBoolean(credentials?.rememberMe),
             })
           });
+
+          if (response.status === 429) {
+            throw new Error('auth.tooManyAttempts');
+          }
 
           const text = await response.text();
           if (!text) {
@@ -59,7 +85,6 @@ export const options = {
           const data = JSON.parse(text);
 
           if (response.ok && data.ok && data.user) {
-            // API'den dönen kullanıcı bilgilerini NextAuth formatına çevir
             return {
               id: data.user.id.toString(),
               email: data.user.email,
@@ -73,94 +98,69 @@ export const options = {
             };
           }
 
-          // Giriş başarısız - Backend'den gelen hata mesajını al
           const errorMessage = data.message || 'auth.invalidCredentials';
           console.error('Authentication failed:', errorMessage);
-
-          // Error message'ı i18n key olarak döndür
-          if (errorMessage.includes('devre dışı') || errorMessage.includes('disabled')) {
-            throw new Error('auth.accountDisabled');
-          } else if (errorMessage.includes('Geçersiz') || errorMessage.includes('Invalid')) {
-            throw new Error('auth.invalidCredentials');
-          }
-          throw new Error(errorMessage);
+          throw new Error(mapBackendError(errorMessage));
         } catch (error) {
           console.error('Authentication error:', error);
-          // Backend'den gelen hata mesajını kullan veya fallback
-          const errorMsg = error.message || 'auth.invalidCredentials';
-          throw new Error(errorMsg);
+          throw new Error(error.message || 'auth.invalidCredentials');
         }
       }
     })
   ],
   secret: process.env.NEXTAUTH_SECRET || 'islamic_windows_jwt_test',
   pages: {
-    signIn: '/auth-advance/sign-in'
+    signIn: SIGN_IN_PAGE
   },
   // Trust proxy for production (HTTPS handled by Nginx)
   trustHost: true,
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      return true;
-    },
-    async jwt({ token, user, account }) {
-      // Debug log for production (check with docker logs)
-      if (account?.provider === 'google' && typeof window === 'undefined') {
-        console.log(`Google login attempt for email: ${token.email}`);
+    /**
+     * Google girişinde backend'den JWT alınamazsa oturum HİÇ açılmaz;
+     * kullanıcı hata koduyla giriş sayfasına geri gönderilir.
+     * Başarılıysa backend kullanıcı bilgisi `user` nesnesine eklenir ve
+     * aynı nesne jwt() callback'ine ulaşır.
+     */
+    async signIn({ user, account }) {
+      if (account?.provider !== 'google') {
+        return true;
       }
 
-      // Google OAuth login: exchange Google id_token for our backend JWT
-      if (account?.provider === 'google') {
-        try {
-          const apiUrl =
-            process.env.BACKEND_API_URL ||
-            process.env.NEXT_PUBLIC_API_URL ||
-            'http://localhost:3000';
+      let errorCode = 'GoogleBackendError';
+      try {
+        const response = await fetch(`${getApiUrl()}/auth/callback/google`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken: account?.id_token }),
+        });
 
-          const response = await fetch(`${apiUrl}/auth/callback/google`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              idToken: account?.id_token,
-            }),
+        const text = await response.text();
+        const data = text ? JSON.parse(text) : null;
+
+        if (response.ok && data?.access_token && data?.user) {
+          Object.assign(user, {
+            ...data.user,
+            id: data.user.id?.toString?.() ?? data.user.id,
+            access_token: data.access_token,
           });
-
-          const text = await response.text();
-          if (!text) {
-            console.error('Empty response from backend during Google auth');
-            token.error = 'Google ile giriş başarısız';
-            return token;
-          }
-          const data = JSON.parse(text);
-
-          if (response.ok && data?.access_token && data?.user) {
-            token.user = {
-              ...data.user,
-              id: data.user.id?.toString?.() ?? data.user.id,
-              access_token: data.access_token,
-            };
-            token.access_token = data.access_token;
-            delete token.error;
-            if (typeof window === 'undefined') console.log(`Google login SUCCESS for email: ${token.email}`);
-          } else {
-            token.error = data?.message || 'Google ile giriş başarısız';
-            if (typeof window === 'undefined') console.log(`Google login FAILED for email: ${token.email}. Error: ${token.error}`);
-          }
-        } catch (err) {
-          token.error = 'Google ile giriş başarısız';
-          if (typeof window === 'undefined') console.log(`Google login ERROR for email: ${token.email}. Error: ${err.message}`);
+          console.log(`Google login SUCCESS for email: ${data.user.email}`);
+          return true;
         }
 
-        return token;
+        const message = data?.message || '';
+        if (message.includes('devre dışı') || message.includes('disabled')) {
+          errorCode = 'AccountDisabled';
+        }
+        console.error(`Google login FAILED for email: ${user?.email}. Error: ${message}`);
+      } catch (err) {
+        console.error(`Google login ERROR for email: ${user?.email}. Error: ${err.message}`);
       }
 
-      // JWT token'a kullanıcı bilgilerini ekle
+      return `${SIGN_IN_PAGE}?error=${errorCode}`;
+    },
+    async jwt({ token, user }) {
       if (user) {
         token.user = user;
-
-        // Eğer access_token varsa, bunu da token'a ekle
         if (user.access_token) {
           token.access_token = user.access_token;
         }
@@ -168,7 +168,6 @@ export const options = {
       return token;
     },
     async session({ session, token }) {
-      // Session'a kullanıcı bilgilerini ekle
       if (token.user) {
         session.user = {
           id: token.user.id,
@@ -185,24 +184,22 @@ export const options = {
           language: token.user.language
         };
 
-        // Access token'ı session'a da ekle (client-side'da kullanmak için)
         if (token.access_token) {
           session.access_token = token.access_token;
         }
       }
-
-      if (token.error) {
-        session.error = token.error;
-      }
       return session;
     }
   },
+  // Çerez ömrü 30 gün; asıl oturum süresini backend JWT belirler
+  // (rememberMe yoksa 1 gün, varsa 30 gün). useAuth backend JWT'si
+  // dolunca kullanıcıyı otomatik çıkarır.
   session: {
     strategy: 'jwt',
-    maxAge: 24 * 60 * 60, // 24 saat (saniye cinsinden)
-    updateAge: 60 * 60, // 1 saat (saniye cinsinden)
+    maxAge: THIRTY_DAYS,
+    updateAge: 60 * 60,
   },
   jwt: {
-    maxAge: 24 * 60 * 60, // 24 saat (saniye cinsinden)
+    maxAge: THIRTY_DAYS,
   }
 };

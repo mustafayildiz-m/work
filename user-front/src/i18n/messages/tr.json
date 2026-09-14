@@ -123,7 +123,10 @@
     "pathToLightP3": "Îmân ve islâm demek, (Kur'ân-ı kerîm) ve (Hadîs-i şerîf)lere inanmak demekdir. Onun bildirdiklerine inanmıyan, Allah kelâmına inanmamış olur. Muhammed aleyhisselâm Allahü teâlânın bildirdiklerini Eshâbına bildirdi. Onlar da, talebelerine bildirdi. Bunlar da, kitâblarına yazdılar. Bu kitâbları yazan âlimlere (Ehl-i sünnet âlimi) denir. Ehl-i sünnet kitâblarına inanan, Allah kelâmına inanmış olur. Müslimân olur.",
     "pathToLightP4": "Bizde sizleri ilim ve sevgi yolundan bu kıymetli kitaplarla ve bu kitapları hazırlayan mübarek İslam Alimleri ile tanıştırmak istiyoruz.",
     "authQuote": "İlim öğrenmek her Müslümana farzdır.",
-    "authQuoteSource": "Hadis-i Şerif"
+    "authQuoteSource": "Hadis-i Şerif",
+    "googleLoginFailed": "Google ile giriş yapılamadı. Lütfen tekrar deneyin.",
+    "loginFailedTitle": "Giriş başarısız",
+    "tooManyAttempts": "Çok fazla deneme yaptınız. Lütfen bir dakika sonra tekrar deneyin."
   },
   "navigation": {
     "home": "Ana Sayfa",

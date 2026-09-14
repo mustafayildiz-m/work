@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Controller } from 'react-hook-form';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button, FormCheck } from 'react-bootstrap';
@@ -88,11 +89,20 @@ const LoginForm = () => {
         </div>
         <div className="mb-2 d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
           <div>
-            <FormCheck
-              type="checkbox"
-              label={t('auth.rememberMe')}
-              id="rememberCheck"
-              style={{ fontSize: '0.95rem' }}
+            <Controller
+              name="rememberMe"
+              control={control}
+              render={({ field }) => (
+                <FormCheck
+                  type="checkbox"
+                  label={t('auth.rememberMe')}
+                  id="rememberCheck"
+                  style={{ fontSize: '0.95rem' }}
+                  checked={!!field.value}
+                  onChange={(e) => field.onChange(e.target.checked)}
+                  onBlur={field.onBlur}
+                />
+              )}
             />
           </div>
           <Link

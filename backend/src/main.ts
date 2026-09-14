@@ -10,6 +10,10 @@ async function bootstrap() {
     rawBody: true,
   });
 
+  // Nginx arkasında gerçek istemci IP'sini (X-Forwarded-For) kullan;
+  // rate limit (Throttler) buna göre kullanıcı başına çalışır.
+  app.getHttpAdapter().getInstance().set('trust proxy', 1);
+
   // Body parser için limit artırma
   app.use(express.json({ limit: '200mb' }));
   app.use(express.urlencoded({ limit: '200mb', extended: true }));

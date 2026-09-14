@@ -28,17 +28,18 @@ const useSignIn = () => {
   } = useForm({
     resolver: yupResolver(loginFormSchema),
     defaultValues: {
-      email: 'user@demo.com',
-      password: '123456'
+      email: '',
+      password: ''
     }
   });
   const login = handleSubmit(async values => {
     setLoading(true);
-    signIn('credentials', {
-      redirect: false,
-      email: values?.email,
-      password: values?.password
-    }).then(res => {
+    try {
+      const res = await signIn('credentials', {
+        redirect: false,
+        email: values?.email,
+        password: values?.password
+      });
       if (res?.ok) {
         dispatchThemeAfterLogin('green');
         push(queryParams['redirectTo'] ?? '/feed/home');
@@ -52,8 +53,9 @@ const useSignIn = () => {
           variant: 'danger'
         });
       }
-    });
-    setLoading(false);
+    } finally {
+      setLoading(false);
+    }
   });
   return {
     loading,
