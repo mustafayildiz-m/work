@@ -156,12 +156,15 @@
   opacity: 0.7;
 }
 
+/* NOTE: `color` and `font-weight` carry !important on purpose. The light
+   theme in _user.scss forces every h1–h6 to a dark slate with !important,
+   which would render this title near-black on the dark green hero. */
 .questions-hero__title {
   font-size: clamp(1.65rem, 4vw, 2.5rem);
-  font-weight: 700;
+  font-weight: 700 !important;
   letter-spacing: -0.025em;
   line-height: 1.1;
-  color: #fff;
+  color: #fff !important;
   margin: 0;
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.22);
 }

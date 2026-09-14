@@ -985,8 +985,16 @@
   }
 }
 
-// Typography Enhancements
-:root:not([data-bs-theme="dark"]):not([data-bs-theme="green"]) {
+// Light-theme heading defaults.
+//
+// The theme guard is wrapped in :where() so it contributes NO specificity,
+// leaving this rule at the weight of a bare `h1`. It still beats every
+// ordinary declaration because of !important, but a component can now opt
+// out with its own !important colour — which is what white titles sitting
+// on a dark banner need (Bootstrap's .text-white, .questions-hero__title).
+// Without :where() this selector scored higher than any single class and
+// forced every such title to dark slate on top of its own dark background.
+:where(:root:not([data-bs-theme="dark"]):not([data-bs-theme="green"])) {
 
   h1,
   h2,
@@ -997,6 +1005,10 @@
     font-weight: 600 !important;
     color: #1e293b !important;
   }
+}
+
+// Typography Enhancements
+:root:not([data-bs-theme="dark"]):not([data-bs-theme="green"]) {
 
   .fw-bold {
     font-weight: 600 !important;
