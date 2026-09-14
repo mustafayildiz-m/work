@@ -107,23 +107,8 @@ const LoginForm = () => {
           </div>
           <Link
             href="/auth-advance/forgot-pass"
-            style={{
-              color: '#059669',
-              fontWeight: '600',
-              textDecoration: 'none',
-              fontSize: '0.95rem',
-              transition: 'color 0.2s ease, text-decoration 0.2s ease',
-              padding: '0.5rem 0',
-              display: 'inline-block'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.color = '#047857';
-              e.target.style.textDecoration = 'underline';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.color = '#059669';
-              e.target.style.textDecoration = 'none';
-            }}
+            className={styles.cardLink}
+            style={{ fontSize: '0.9rem' }}
           >
             {t('auth.forgotPassword')}?
           </Link>
@@ -134,14 +119,6 @@ const LoginForm = () => {
             type="submit"
             disabled={loading || showSuccess}
             className={`w-100 ${styles.submitButton}`}
-            style={{
-              borderRadius: '24px',
-              minHeight: '52px',
-              fontWeight: '600',
-              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-              border: 'none',
-              color: 'white'
-            }}
           >
             {loading ? (
               <>
@@ -164,7 +141,7 @@ const LoginForm = () => {
           <FormCheck
             type="checkbox"
             id="ageConfirmCheck"
-            label={<span style={{ fontSize: '0.85rem', color: ageConfirmError ? '#dc2626' : '#64748b' }}>{t('auth.ageConfirm')}</span>}
+            label={<span style={{ fontSize: '0.85rem', color: ageConfirmError ? '#fca5a5' : 'rgba(242, 251, 247, 0.68)' }}>{t('auth.ageConfirm')}</span>}
             checked={ageConfirmed}
             onChange={(e) => {
               setAgeConfirmed(e.target.checked);
@@ -200,10 +177,6 @@ const LoginForm = () => {
               });
             }}
             className={styles.providerButton}
-            style={{
-              opacity: 1, // Keep it visible to allow click notification
-              transition: 'all 0.3s ease'
-            }}
             aria-label={t('auth.signInWithGoogle')}
           >
             <span className={styles.providerIcon} aria-hidden="true">
@@ -217,7 +190,7 @@ const LoginForm = () => {
           <Button
             size="lg"
             type="button"
-            variant="success"
+            variant="light"
             disabled={loading || showSuccess}
             onClick={() => window.location.href = '/'}
             className={styles.guestButton}
