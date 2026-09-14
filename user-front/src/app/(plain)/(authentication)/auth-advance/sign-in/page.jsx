@@ -19,6 +19,10 @@ const SignIn = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const message = searchParams.get('message');
+  const authError = searchParams.get('error');
+  const authErrorKey = authError
+    ? (authError === 'AccountDisabled' ? 'auth.accountDisabled' : 'auth.googleLoginFailed')
+    : null;
 
   // Eğer zaten giriş yapılmışsa ana sayfaya yönlendir
   useEffect(() => {
@@ -72,6 +76,17 @@ const SignIn = () => {
                         <div>
                           <h6 className="mb-1 fw-bold">{t('feed.authRequired')}</h6>
                           <p className="mb-0" style={{ fontSize: '0.85rem' }}>{t('feed.pleaseLogin')}</p>
+                        </div>
+                      </div>
+                    </Alert>
+                  )}
+                  {authErrorKey && (
+                    <Alert variant="danger" className="mb-4 border-0 shadow-sm" style={{ borderRadius: '12px' }}>
+                      <div className="d-flex align-items-center">
+                        <i className="bi bi-x-circle-fill me-2" style={{ fontSize: '1.2rem' }}></i>
+                        <div>
+                          <h6 className="mb-1 fw-bold">{t('auth.loginFailedTitle')}</h6>
+                          <p className="mb-0" style={{ fontSize: '0.85rem' }}>{t(authErrorKey)}</p>
                         </div>
                       </div>
                     </Alert>

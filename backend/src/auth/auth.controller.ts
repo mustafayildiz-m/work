@@ -7,38 +7,46 @@ import {
   Query,
   UseInterceptors,
   UploadedFile,
+  UseGuards,
+  ValidationPipe,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import * as fs from 'fs';
 import { AuthService } from './auth.service';
+import {
+  ForgotPasswordDto,
+  GoogleLoginDto,
+  LoginDto,
+  RegisterDto,
+  ResetPasswordDto,
+} from './dto/auth.dto';
 
-export class LoginDto {
-  email: string;
-  password: string;
-  rememberMe?: boolean;
-}
+export { LoginDto, RegisterDto, GoogleLoginDto } from './dto/auth.dto';
 
-export class RegisterDto {
-  email: string;
-  password: string;
-  username: string;
-  firstName?: string;
-  lastName?: string;
-  photoUrl?: string;
-}
+// Sadece DTO'da tanımlı alanları kabul et, fazlalıkları at
+const bodyValidation = new ValidationPipe({
+  whitelist: true,
+  transform: true,
+  forbidUnknownValues: false,
+});
 
-export class GoogleLoginDto {
-  idToken: string;
-}
+// Brute-force koruması: hassas uçlar için dakikada 10 deneme
+const LOGIN_THROTTLE = { default: { limit: 10, ttl: 60_000 } };
+// Kayıt / mail gönderen uçlar için saatte 5 deneme
+const MAIL_THROTTLE = { default: { limit: 5, ttl: 60 * 60_000 } };
 
 @Controller('auth')
+@UseGuards(ThrottlerGuard)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  async login(@Body() loginDto: LoginDto) {
+  @Throttle(LOGIN_THROTTLE)
+  async login(@Body(bodyValidation) loginDto: LoginDto) {
     const user = await this.authService.validateUser(
       loginDto.email,
       loginDto.password,
@@ -47,6 +55,7 @@ export class AuthController {
   }
 
   @Post('register')
+  @Throttle(MAIL_THROTTLE)
   @UseInterceptors(
     FileInterceptor('profilePhoto', {
       storage: diskStorage({
@@ -66,7 +75,7 @@ export class AuthController {
     }),
   )
   async register(
-    @Body() registerDto: RegisterDto,
+    @Body(bodyValidation) registerDto: RegisterDto,
     @UploadedFile() profilePhoto: Express.Multer.File,
   ) {
     // Eğer profil fotoğrafı yüklendiyse, dosya yolunu ayarla
@@ -80,69 +89,32 @@ export class AuthController {
   @Get('me')
   async me(@Headers('authorization') authHeader: string) {
     if (!authHeader) {
-      return { message: 'Token gerekli' };
+      throw new UnauthorizedException('Token gerekli');
     }
 
-    // Check if the header starts with 'Bearer '
     if (!authHeader.startsWith('Bearer ')) {
-      return { message: 'Geçersiz token formatı. Bearer token gerekli.' };
+      throw new UnauthorizedException(
+        'Geçersiz token formatı. Bearer token gerekli.',
+      );
     }
 
-    const token = authHeader.replace('Bearer ', '');
+    const token = authHeader.slice('Bearer '.length).trim();
     if (!token) {
-      return { message: 'Token boş olamaz' };
+      throw new UnauthorizedException('Token boş olamaz');
     }
 
     return this.authService.me(token);
   }
 
-  @Get('test')
-  async test() {
-    return { message: 'Test endpoint working' };
-  }
-
-  @Get('test-jwt')
-  async testJwt() {
-    // Create a test token
-    const testPayload = {
-      email: 'test@example.com',
-      username: 'testuser',
-      sub: 1,
-      role: 'user',
-    };
-
-    try {
-      // Use the auth service to create a token
-      const result = await this.authService.login(testPayload);
-      return {
-        message: 'JWT test successful',
-        token: result.access_token,
-        secret: process.env.JWT_SECRET ? 'Set' : 'Not set (using default)',
-      };
-    } catch (error) {
-      return {
-        message: 'JWT test failed',
-        error: error.message,
-      };
-    }
-  }
-
   @Post('callback/credentials')
-  async nextAuthCallback(@Body() body: any) {
+  @Throttle(LOGIN_THROTTLE)
+  async nextAuthCallback(@Body(bodyValidation) body: LoginDto) {
     try {
-      const { email, password } = body;
-
-      if (!email || !password) {
-        return {
-          error: 'CredentialsSignin',
-          message: 'Email ve şifre gereklidir',
-          ok: false,
-          status: 401,
-        };
-      }
-
-      const user = await this.authService.validateUser(email, password);
-      const loginResult = await this.authService.login(user);
+      const user = await this.authService.validateUser(
+        body.email,
+        body.password,
+      );
+      const loginResult = await this.authService.login(user, body.rememberMe);
 
       return {
         ok: true,
@@ -150,8 +122,7 @@ export class AuthController {
         access_token: loginResult.access_token,
       };
     } catch (error) {
-      console.log('Error in nextAuthCallback:', error);
-      // Hata mesajını döndür
+      // NextAuth authorize() hata mesajını gövdeden okur, bu yüzden 200 ile dönülür
       return {
         error: 'CredentialsSignin',
         message: error.message || 'Giriş başarısız',
@@ -162,9 +133,9 @@ export class AuthController {
   }
 
   @Post('callback/google')
-  async googleCallback(@Body() body: GoogleLoginDto) {
-    const { idToken } = body || {};
-    return this.authService.loginWithGoogleIdToken(idToken);
+  @Throttle(LOGIN_THROTTLE)
+  async googleCallback(@Body(bodyValidation) body: GoogleLoginDto) {
+    return this.authService.loginWithGoogleIdToken(body.idToken);
   }
 
   @Get('verify')
@@ -173,17 +144,21 @@ export class AuthController {
     @Headers('token') headerToken: string,
   ) {
     const token = queryToken || headerToken;
+    if (!token) {
+      throw new UnauthorizedException('Doğrulama tokenı gerekli');
+    }
     return this.authService.verifyEmail(token);
   }
 
   @Post('forgot-password')
-  async forgotPassword(@Body('email') email: string) {
-    return this.authService.forgotPassword(email);
+  @Throttle(MAIL_THROTTLE)
+  async forgotPassword(@Body(bodyValidation) body: ForgotPasswordDto) {
+    return this.authService.forgotPassword(body.email);
   }
 
   @Post('reset-password')
-  async resetPassword(@Body() body: any) {
-    const { token, password } = body;
-    return this.authService.resetPassword(token, password);
+  @Throttle(LOGIN_THROTTLE)
+  async resetPassword(@Body(bodyValidation) body: ResetPasswordDto) {
+    return this.authService.resetPassword(body.token, body.password);
   }
 }

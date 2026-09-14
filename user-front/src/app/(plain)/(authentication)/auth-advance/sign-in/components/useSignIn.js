@@ -35,14 +35,19 @@ const useSignIn = () => {
     resolver: yupResolver(loginFormSchema),
     defaultValues: {
       email: '',
-      password: ''
+      password: '',
+      rememberMe: false
     }
   });
 
   const handleLogin = handleSubmit(async values => {
     setLoading(true);
     try {
-      const result = await login(values);
+      const result = await login({
+        email: values.email,
+        password: values.password,
+        rememberMe: values.rememberMe ? 'true' : 'false',
+      });
 
       if (result.success) {
         // Başarılı giriş - Animasyonu göster
@@ -77,7 +82,9 @@ const useSignIn = () => {
           } else {
             // Backend'den gelen error mesajını kontrol et
             const error = result.error.toLowerCase();
-            if (error.includes('devre dışı') || error.includes('disabled')) {
+            if (error.includes('toomanyattempts') || error.includes('too many')) {
+              errorMessage = t('auth.tooManyAttempts');
+            } else if (error.includes('devre dışı') || error.includes('disabled')) {
               errorMessage = t('auth.accountDisabled');
             } else if (error.includes('geçersiz') || error.includes('invalid')) {
               errorMessage = t('auth.invalidCredentials');

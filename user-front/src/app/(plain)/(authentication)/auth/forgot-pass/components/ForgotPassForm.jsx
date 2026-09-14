@@ -33,7 +33,7 @@ const ForgotPassForm = () => {
       </div>
       <div className="mb-3">
         <p>
-          Geri dön, <Link href="/auth/sign-in">giriş yap</Link>
+          Geri dön, <Link href="/auth-advance/sign-in">giriş yap</Link>
         </p>
       </div>
       <div className="d-grid">

@@ -9,7 +9,7 @@ const SignUp = () => {
       <div className="text-center">
         <h1 className="mb-2">Kaydol</h1>
         <span className="d-block">
-        Zaten bir hesabınız var mı? <Link href="/auth/sign-in">Giriş yapın</Link>
+        Zaten bir hesabınız var mı? <Link href="/auth-advance/sign-in">Giriş yapın</Link>
         </span>
       </div>
       <SignUpForm />

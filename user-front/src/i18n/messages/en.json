@@ -123,7 +123,10 @@
     "pathToLightP3": "Îmân and Islam mean to believe in the (Qur'an al-karim) and the (Hadith ash-sharif). One who does not believe in what he communicated will not have believed in the Word of Allah ﷻ. Muhammad (Sallallahu Alayhi wa Sallam) conveyed what Allah ﷻ revealed to his Companions (Radiyallahu Anhum). They, in turn, conveyed it to their students. These also wrote them in their books. The scholars who wrote these books are called (Ahl as-Sunnah scholars). One who believes in the books of Ahl as-Sunnah will have believed in the Word of Allah ﷻ. He becomes a Muslim.",
     "pathToLightP4": "Inshaallah, we also wish to introduce you to these valuable books and the blessed Islamic scholars who prepared them through the path of knowledge and love.",
     "authQuote": "Seeking knowledge is obligatory upon every Muslim.",
-    "authQuoteSource": "Hadith"
+    "authQuoteSource": "Hadith",
+    "googleLoginFailed": "Sign in with Google failed. Please try again.",
+    "loginFailedTitle": "Sign in failed",
+    "tooManyAttempts": "Too many attempts. Please try again in a minute."
   },
   "navigation": {
     "home": "Home",

@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { OAuth2Client } from 'google-auth-library';
-import { randomBytes } from 'crypto';
+import { createHash, randomBytes } from 'crypto';
 
 import { MailService } from '../mail/mail.service';
 
@@ -14,6 +14,11 @@ export class AuthService {
     private jwtService: JwtService,
     private mailService: MailService,
   ) {}
+
+  /** Sıfırlama tokenları DB'de düz metin yerine SHA-256 özeti olarak tutulur. */
+  private hashToken(token: string): string {
+    return createHash('sha256').update(token).digest('hex');
+  }
 
   private getGoogleClientId(): string {
     const clientId = process.env.GOOGLE_CLIENT_ID;
@@ -293,7 +298,7 @@ export class AuthService {
     resetExpires.setHours(resetExpires.getHours() + 1);
 
     await this.usersService.update(user.id, {
-      resetPasswordToken: resetToken,
+      resetPasswordToken: this.hashToken(resetToken),
       resetPasswordExpires: resetExpires,
     } as any);
 
@@ -314,8 +319,11 @@ export class AuthService {
   }
 
   async resetPassword(token: string, newPassword: string) {
+    if (!token) {
+      throw new UnauthorizedException('INVALID_RESET_TOKEN');
+    }
     const user = await (this.usersService as any).usersRepository.findOne({
-      where: { resetPasswordToken: token },
+      where: { resetPasswordToken: this.hashToken(token) },
     });
 
     if (!user) {
