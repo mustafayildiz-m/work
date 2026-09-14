@@ -263,35 +263,9 @@ const SignUpForm = () => {
         <Button
           size="lg"
           type="button"
-          variant="outline-primary"
+          variant="light"
           onClick={() => window.location.href = '/'}
-          style={{
-            borderRadius: '12px',
-            minHeight: '52px',
-            fontWeight: '700',
-            border: '2px solid #764ba2',
-            color: '#764ba2',
-            backgroundColor: 'rgba(118, 75, 162, 0.05)',
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '10px',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-            fontSize: '1rem'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#764ba2';
-            e.currentTarget.style.color = 'white';
-            e.currentTarget.style.transform = 'translateY(-2px)';
-            e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(118, 75, 162, 0.3)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'rgba(118, 75, 162, 0.05)';
-            e.currentTarget.style.color = '#764ba2';
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
-          }}
+          className={styles.guestButton}
         >
           <BsPerson size={22} />
           <span>{t('auth.visitAsGuest')}</span>
