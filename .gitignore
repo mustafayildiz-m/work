@@ -12,11 +12,22 @@ build/
 .next/
 out/
 
-# Environment variables (keeping .env in git, but ignore local variants)
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Environment variables - ASLA commit edilmez.
+# Sunucudaki gercek degerler /root/env_backup altinda tutulur, deploy.sh oradan kopyalar.
+# Yeni kurulum icin .env.example dosyalarini kopyalayip doldurun.
+.env
+.env.*
+!.env.example
+!.env.*.example
+backend/.env
+backend/.env.*
+!backend/.env.example
+admin-front/.env
+admin-front/.env.*
+!admin-front/.env.example
+user-front/.env
+user-front/.env.*
+!user-front/.env.example
 
 # IDE
 .idea/
