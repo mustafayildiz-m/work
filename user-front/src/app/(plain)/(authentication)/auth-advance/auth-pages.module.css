@@ -137,7 +137,9 @@
   font-weight: 600;
   letter-spacing: 0.01em;
   line-height: 1.2;
-  color: var(--iw-text);
+  /* Açık tema h1..h6'yı koyu slate'e zorluyor (_user.scss); o kural :where()
+     ile sarılı olduğu için burada !important ile geri alınabiliyor. */
+  color: var(--iw-text) !important;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.8);
   margin: 0 0 var(--iw-s2);
 }
@@ -212,7 +214,8 @@
   font-size: 1.75rem;
   font-weight: 600;
   letter-spacing: 0.01em;
-  color: var(--iw-text);
+  /* Aynı gerekçe: açık temadaki global h2 rengini geçersiz kıl. */
+  color: var(--iw-text) !important;
   margin: 0;
 }
 
