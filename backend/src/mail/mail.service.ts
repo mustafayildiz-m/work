@@ -1,13 +1,48 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class MailService {
+export class MailService implements OnModuleInit {
+  private readonly logger = new Logger(MailService.name);
+
   constructor(
     private mailerService: MailerService,
     private configService: ConfigService,
   ) {}
+
+  /**
+   * Açılışta SMTP bağlantısını doğrular. Amaç: app password süresi dolduğunda
+   * ya da MAIL_* değişkenleri eksik/eski kaldığında hatayı ilk mail denemesine
+   * kadar saklamak yerine, boot log'unda hemen görünür kılmak.
+   */
+  async onModuleInit() {
+    const missing = ['MAIL_HOST', 'MAIL_USER', 'MAIL_PASS', 'MAIL_FROM'].filter(
+      (key) => !this.configService.get<string>(key),
+    );
+    if (missing.length) {
+      this.logger.error(
+        `SMTP yapılandırması eksik: ${missing.join(', ')} tanımlı değil. Mail gönderimi çalışmayacak.`,
+      );
+      return;
+    }
+
+    try {
+      const transporter = (
+        this.mailerService as unknown as {
+          transporter: { verify: () => Promise<unknown> };
+        }
+      ).transporter;
+      await transporter.verify();
+      this.logger.log(
+        `SMTP bağlantısı doğrulandı (${this.configService.get('MAIL_HOST')}:${this.configService.get('MAIL_PORT')}, kullanıcı: ${this.configService.get('MAIL_USER')})`,
+      );
+    } catch (error) {
+      this.logger.error(
+        `SMTP bağlantısı doğrulanamadı (${this.configService.get('MAIL_HOST')}:${this.configService.get('MAIL_PORT')}, kullanıcı: ${this.configService.get('MAIL_USER')}): ${(error as Error).message}. Gmail app password'ü yenilenmiş olabilir — .env içindeki MAIL_PASS'i güncelleyip commit'leyin.`,
+      );
+    }
+  }
 
   async sendWelcomeEmail(email: string, recipientName: string) {
     await this.mailerService.sendMail({
