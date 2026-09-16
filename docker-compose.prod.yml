@@ -63,7 +63,7 @@ services:
       MAIL_PASS: ${MAIL_PASS}
       MAIL_FROM: ${MAIL_FROM}
       DEEPL_API_KEY: ${DEEPL_API_KEY}
-      DEEPL_API_URL: ${DEEPL_API_URL:-https://api-free.deepl.com/v2/translate}
+      DEEPL_API_URL: ${DEEPL_API_URL:-https://api.deepl.com/v2/translate}
     volumes:
       - ./backend/uploads:/app/uploads
     depends_on:

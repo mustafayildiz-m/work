@@ -69,7 +69,7 @@ export class TranslationService {
   private get DEEPL_API_URL(): string {
     return (
       this.configService.get<string>('DEEPL_API_URL') ||
-      'https://api-free.deepl.com/v2/translate'
+      'https://api.deepl.com/v2/translate'
     );
   }
 

@@ -56,7 +56,7 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       DEEPL_API_KEY: ${DEEPL_API_KEY}
-      DEEPL_API_URL: ${DEEPL_API_URL:-https://api-free.deepl.com/v2/translate}
+      DEEPL_API_URL: ${DEEPL_API_URL:-https://api.deepl.com/v2/translate}
       FRONTEND_URL: http://localhost:3001
     env_file:
       - ./backend/.env
