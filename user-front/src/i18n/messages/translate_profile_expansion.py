@@ -7,8 +7,11 @@ import urllib.parse
 import time
 
 # DeepL API bilgileri
-DEEPL_API_KEY = "***REMOVED_DEEPL_KEY***"
-DEEPL_API_URL = "https://api-free.deepl.com/v2/translate"
+DEEPL_API_KEY = os.environ.get("DEEPL_API_KEY", "")
+DEEPL_API_URL = os.environ.get("DEEPL_API_URL", "https://api.deepl.com/v2/translate")
+
+if not DEEPL_API_KEY:
+    raise SystemExit("DEEPL_API_KEY tanimli degil. Ornek: export DEEPL_API_KEY=... && python3 " + __file__)
 
 # DeepL'in desteklediği diller (ücretsiz API)
 DEEPL_SUPPORTED_LANGUAGES = {
