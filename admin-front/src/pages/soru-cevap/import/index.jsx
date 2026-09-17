@@ -19,14 +19,15 @@ export default function QaImportPage() {
   const [seeding, setSeeding] = useState(false);
   const [result, setResult] = useState(null);
 
-  const handleSeed = async (force = false) => {
-    if (force && !window.confirm(t('QA.SEED_FORCE_CONFIRM'))) return;
+  // Force/full seed mevcut tum Q&A verisini siliyordu ve tek tikla tetiklenebiliyordu.
+  // Buton kaldirildi; buradan sadece "veritabani bossa ekle" davranisi cagrilir.
+  const handleSeed = async () => {
     setSeeding(true);
     try {
       const data = await qaFetch('/qa/seed', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(force ? { force: true, full: true } : {}),
+        body: JSON.stringify({}),
       });
       if (data.seeded) {
         toast.success(t('QA.SEED_SUCCESS', { categories: data.categories, items: data.items, tags: data.tags }));
@@ -81,11 +82,8 @@ export default function QaImportPage() {
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{t('QA.SAMPLE_DATA_DESC')}</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 shrink-0">
-            <QaPrimaryButton onClick={() => handleSeed(false)} disabled={seeding}>
+            <QaPrimaryButton onClick={handleSeed} disabled={seeding}>
               <FaDatabase /> {seeding ? t('QA.SEEDING') : t('QA.ADD_SAMPLE_DATA')}
-            </QaPrimaryButton>
-            <QaPrimaryButton onClick={() => handleSeed(true)} disabled={seeding} className="bg-indigo-600 hover:bg-indigo-700">
-              <FaDatabase /> {seeding ? t('QA.SEEDING') : t('QA.FULL_SEED_BTN')}
             </QaPrimaryButton>
           </div>
         </div>

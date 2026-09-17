@@ -13,6 +13,7 @@ import {
   UseInterceptors,
   UploadedFile,
   Res,
+  BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
@@ -27,6 +28,8 @@ import { CreateQaItemDto } from './dto/create-qa-item.dto';
 import { UpdateQaItemDto } from './dto/update-qa-item.dto';
 import { CreateQaTagDto, UpdateQaTagDto } from './dto/create-qa-tag.dto';
 import { QaFilterDto } from './dto/qa-filter.dto';
+
+const SEED_WIPE_CONFIRM = 'TUM-QA-VERISINI-SIL';
 
 @Controller('qa')
 export class QaController {
@@ -158,11 +161,24 @@ export class QaController {
 
   // ─── IMPORT / EXPORT ─────────────────────────────────────────
 
+  /**
+   * force=true mevcut TUM soru-cevap verisini siler (bkz. QaSeederService.clearAll).
+   * Bu yikici yol daha once tek tikla tetiklenebiliyordu ve canlida veri kaybina
+   * yol acti; artik ayrica confirm ifadesi gonderilmeden calismaz.
+   */
   @UseGuards(JwtAuthGuard)
   @Post('seed')
-  seedDummyData(@Body() body?: { force?: boolean; full?: boolean }) {
-    if (body?.force || body?.full) {
-      return this.seederService.seedComprehensive(Boolean(body.force));
+  seedDummyData(@Body() body?: { force?: boolean; full?: boolean; confirm?: string }) {
+    if (body?.force) {
+      if (body.confirm !== SEED_WIPE_CONFIRM) {
+        throw new BadRequestException(
+          `Bu islem tum soru-cevap verisini siler. Devam etmek icin confirm: "${SEED_WIPE_CONFIRM}" gonderin.`,
+        );
+      }
+      return this.seederService.seedComprehensive(true);
+    }
+    if (body?.full) {
+      return this.seederService.seedComprehensive(false);
     }
     return this.seederService.seedIfEmpty();
   }
