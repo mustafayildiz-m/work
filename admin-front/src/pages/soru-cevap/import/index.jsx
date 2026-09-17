@@ -59,6 +59,7 @@ export default function QaImportPage() {
 
       setResult(data);
       if (data.imported > 0) toast.success(t('QA.IMPORT_SUCCESS', { count: data.imported }));
+      if (data.skipped > 0) toast.info(t('QA.IMPORT_SKIPPED', { count: data.skipped }));
       if (data.errors?.length) toast.warning(t('QA.IMPORT_ERRORS', { count: data.errors.length }));
     } catch (err) {
       toast.error(err.message || t('QA.IMPORT_FAILED'));
@@ -147,11 +148,25 @@ export default function QaImportPage() {
               <span className="text-3xl font-bold text-green-700 dark:text-green-400">{result.imported}</span>
               <p className="text-sm text-green-600 dark:text-green-300">{t('QA.SUCCESS')}</p>
             </div>
+            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl px-6 py-4">
+              <span className="text-3xl font-bold text-amber-700 dark:text-amber-400">{result.skipped || 0}</span>
+              <p className="text-sm text-amber-600 dark:text-amber-300">{t('QA.SKIPPED')}</p>
+            </div>
             <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl px-6 py-4">
               <span className="text-3xl font-bold text-red-700 dark:text-red-400">{result.errors?.length || 0}</span>
               <p className="text-sm text-red-600 dark:text-red-300">{t('QA.ERRORS')}</p>
             </div>
           </div>
+          {result.skippedRows?.length > 0 && (
+            <div className="max-h-60 overflow-y-auto space-y-1 mb-4">
+              {result.skippedRows.map((msg, i) => (
+                <div key={i} className="flex items-start gap-2 text-sm text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-900/20 rounded-lg px-3 py-2">
+                  <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                  <span>{msg}</span>
+                </div>
+              ))}
+            </div>
+          )}
           {result.errors?.length > 0 && (
             <div className="max-h-60 overflow-y-auto space-y-1">
               {result.errors.map((err, i) => (

@@ -9,6 +9,15 @@ import { QaTag } from './entities/qa-tag.entity';
 import { QaTagTranslation } from './entities/qa-tag-translation.entity';
 import { Language } from '../languages/entities/language.entity';
 
+export interface ImportResult {
+  imported: number;
+  /** Zaten var olan ya da dosya icinde tekrar eden, bu yuzden yazilmayan satir sayisi. */
+  skipped: number;
+  errors: string[];
+  /** Atlanan satirlarin aciklamasi; hata degil, bilgi amaclidir. */
+  skippedRows: string[];
+}
+
 interface ImportRow {
   question: string;
   answer: string;
@@ -38,9 +47,15 @@ export class QaImportService {
     private tagTransRepo: Repository<QaTagTranslation>,
   ) {}
 
-  async importFromJson(data: ImportRow[], languageMap: Map<string, number>): Promise<{ imported: number; errors: string[] }> {
+  async importFromJson(data: ImportRow[], languageMap: Map<string, number>): Promise<ImportResult> {
     const errors: string[] = [];
+    const skippedRows: string[] = [];
     let imported = 0;
+    let skipped = 0;
+
+    // Ayni soru ayni dilde iki kez yazilmasin: hem veritabanindaki mevcut
+    // kayitlar hem de dosyanin kendi icindeki tekrarlar ayni kumede tutulur.
+    const seen = await this.loadExistingQuestionKeys(data, languageMap);
 
     for (let i = 0; i < data.length; i++) {
       const row = data[i];
@@ -55,6 +70,14 @@ export class QaImportService {
           errors.push(`Row ${i + 1}: Unknown language code "${row.language_code}"`);
           continue;
         }
+
+        const key = this.duplicateKey(languageId, row.question);
+        if (seen.has(key)) {
+          skipped++;
+          skippedRows.push(`Row ${i + 1}: Already exists, skipped ("${row.question.trim().slice(0, 60)}")`);
+          continue;
+        }
+        seen.add(key);
 
         let categoryId: number | null = null;
         if (row.category) {
@@ -97,17 +120,49 @@ export class QaImportService {
       }
     }
 
-    return { imported, errors };
+    return { imported, skipped, errors, skippedRows };
   }
 
-  async importFromCsv(csvContent: string, languageMap: Map<string, number>): Promise<{ imported: number; errors: string[] }> {
+  /**
+   * Mukerrer karsilastirma anahtari. Kullanicilar ayni soruyu farkli
+   * buyuk/kucuk harf ya da fazladan bosluklarla gonderebiliyor; bunlar ayni
+   * soru sayilir. Dil bazlidir: ayni metin baska dilde mukerrer degildir.
+   */
+  private duplicateKey(languageId: number, question: string): string {
+    const normalized = question.trim().replace(/\s+/g, ' ').toLocaleLowerCase();
+    return `${languageId}::${normalized}`;
+  }
+
+  /** Dosyada gecen diller icin veritabanindaki mevcut sorulari tek sorguda ceker. */
+  private async loadExistingQuestionKeys(
+    data: ImportRow[],
+    languageMap: Map<string, number>,
+  ): Promise<Set<string>> {
+    const languageIds = [
+      ...new Set(
+        data
+          .map((row) => languageMap.get(row?.language_code))
+          .filter((id): id is number => typeof id === 'number'),
+      ),
+    ];
+
+    const keys = new Set<string>();
+    if (!languageIds.length) return keys;
+
+    const existing = await this.itemTransRepo.find({
+      where: { languageId: In(languageIds) },
+      select: ['languageId', 'question'],
+    });
+    existing.forEach((t) => keys.add(this.duplicateKey(t.languageId, t.question)));
+    return keys;
+  }
+
+  async importFromCsv(csvContent: string, languageMap: Map<string, number>): Promise<ImportResult> {
     const rows = this.parseCsv(csvContent);
     return this.importFromJson(rows, languageMap);
   }
 
-  async importFromFile(
-    file: Express.Multer.File,
-  ): Promise<{ imported: number; errors: string[] }> {
+  async importFromFile(file: Express.Multer.File): Promise<ImportResult> {
     const languageMap = await this.getLanguageMap();
 
     const filename = file.originalname.toLowerCase();
@@ -135,7 +190,7 @@ export class QaImportService {
   private async importFromExcel(
     buffer: Buffer,
     languageMap: Map<string, number>,
-  ): Promise<{ imported: number; errors: string[] }> {
+  ): Promise<ImportResult> {
     let ExcelJS: any;
     try {
       ExcelJS = await import('exceljs' as any);
