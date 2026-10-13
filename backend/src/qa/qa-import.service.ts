@@ -8,6 +8,17 @@ import { QaCategoryTranslation } from './entities/qa-category-translation.entity
 import { QaTag } from './entities/qa-tag.entity';
 import { QaTagTranslation } from './entities/qa-tag-translation.entity';
 import { Language } from '../languages/entities/language.entity';
+import * as JSZip from 'jszip';
+
+const OLE_SIGNATURE = Buffer.from([0xd0, 0xcf, 0x11, 0xe0]);
+
+// Etiketleri onekli yazilabilen OOXML ad alanlari: SpreadsheetML (transitional + strict)
+// ve paket iliskileri (.rels).
+const PREFIXABLE_NAMESPACES = [
+  'http://schemas\\.openxmlformats\\.org/spreadsheetml/2006/main',
+  'http://purl\\.oclc\\.org/ooxml/spreadsheetml/main',
+  'http://schemas\\.openxmlformats\\.org/package/2006/relationships',
+];
 
 export interface ImportResult {
   imported: number;
@@ -198,8 +209,7 @@ export class QaImportService {
       throw new BadRequestException('Excel support requires exceljs package. Install it with: npm install exceljs');
     }
 
-    const workbook = new ExcelJS.Workbook();
-    await workbook.xlsx.load(buffer);
+    const workbook = await this.loadWorkbook(ExcelJS, buffer);
 
     const worksheet = workbook.getWorksheet(1);
     if (!worksheet) {
@@ -223,6 +233,56 @@ export class QaImportService {
     });
 
     return this.importFromJson(rows, languageMap);
+  }
+
+  private async loadWorkbook(ExcelJS: any, buffer: Buffer): Promise<any> {
+    // Excel 97-2003 .xls dosyalari zip degil, OLE imzasiyla baslar; exceljs bunlari okuyamaz.
+    if (buffer.subarray(0, 4).equals(OLE_SIGNATURE)) {
+      throw new BadRequestException(
+        'Eski Excel 97-2003 (.xls) bicimi desteklenmiyor. Dosyayi Excel\'de acip "Excel Calisma Kitabi (.xlsx)" olarak kaydedin.',
+      );
+    }
+
+    try {
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.load(buffer);
+      return workbook;
+    } catch {
+      // Excel disindaki bazi araclar etiketleri <x:workbook> gibi onekli yazar; exceljs
+      // yalnizca oneksiz etiket adlarini tanidigi icin onekleri kaldirip bir kez daha deniyoruz.
+    }
+
+    try {
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.load(await this.stripSpreadsheetPrefixes(buffer));
+      return workbook;
+    } catch {
+      throw new BadRequestException(
+        'Excel dosyasi okunamadi. Dosyayi Excel\'de acip "Excel Calisma Kitabi (.xlsx)" olarak yeniden kaydedip tekrar deneyin.',
+      );
+    }
+  }
+
+  private async stripSpreadsheetPrefixes(buffer: Buffer): Promise<Buffer> {
+    const zip = await JSZip.loadAsync(buffer);
+    for (const name of Object.keys(zip.files)) {
+      const entry = zip.files[name];
+      if (entry.dir || !/\.(xml|rels)$/.test(name)) continue;
+
+      let xml = await entry.async('string');
+      const declarations = new RegExp(`xmlns:([A-Za-z_][\\w.-]*)="(${PREFIXABLE_NAMESPACES.join('|')})"`, 'g');
+      const prefixes = new Set([...xml.matchAll(declarations)].map((m) => m[1]));
+      if (prefixes.size === 0) continue;
+
+      for (const rawPrefix of prefixes) {
+        const prefix = rawPrefix.replace(/[.-]/g, '\\$&');
+        xml = xml
+          .replace(new RegExp(`xmlns:${prefix}=`, 'g'), 'xmlns=')
+          .replace(new RegExp(`<(/?)${prefix}:`, 'g'), '<$1');
+      }
+      zip.file(name, xml);
+    }
+    return zip.generateAsync({ type: 'nodebuffer' });
   }
 
   private parseCsv(content: string): ImportRow[] {
