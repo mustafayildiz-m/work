@@ -1,0 +1,54 @@
+name: Deploy (production)
+
+# main'e her birlesmede (PR merge) canliya otomatik deploy.
+# Elle tetiklemek icin: Actions -> Deploy (production) -> Run workflow.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Ust uste iki merge olursa deploy'lar sirayla calisir, yarida kesilmez.
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    steps:
+      - name: SSH anahtarini hazirla
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      # Sunucudaki anahtar scripts/deploy-gate.sh'a kilitli; "deploy" disinda komut calistiramaz.
+      - name: Sunucuda deploy.sh calistir
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            -o StrictHostKeyChecking=yes \
+            -o ServerAliveInterval=30 \
+            -o ServerAliveCountMax=10 \
+            "root@${DEPLOY_HOST}" deploy
+
+      - name: Site ayakta mi?
+        run: |
+          for i in $(seq 1 12); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' https://islamicwindows.com/api/languages || true)
+            echo "deneme $i: /api/languages -> $code"
+            [ "$code" = "200" ] && exit 0
+            sleep 10
+          done
+          echo "Deploy sonrasi API 2 dakika icinde 200 donmedi" >&2
+          exit 1
